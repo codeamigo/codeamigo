@@ -1,7 +1,14 @@
 # codeamigo
 
-### Dev
+### Installation
 ```
+cd server
+yarn
+```
+
+### Dev/Server
+```
+cd server
 yarn watch // ts => js
 yarn dev // run index.js
 brew services start postgresql // start our db
