@@ -42,7 +42,9 @@
     "ioredis": "^4.19.2",
     "nodemailer": "^6.4.16",
     "pg": "^8.5.1",
+    "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
+    "typeorm": "^0.2.29",
     "uuid": "^8.3.2"
   },
   "mikro-orm": {
