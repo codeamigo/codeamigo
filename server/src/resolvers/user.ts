@@ -13,7 +13,19 @@ import { MyContext } from "../types";
 import argon2 from "argon2";
 
 @InputType()
-class UsernamePasswordInput {
+class RegisterInput {
+  @Field()
+  email: string;
+  @Field()
+  username: string;
+  @Field()
+  password: string;
+}
+
+@InputType()
+class LoginInput {
+  @Field({ nullable: true })
+  email: string;
   @Field()
   username: string;
   @Field()
@@ -40,21 +52,19 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   @Query(() => User, { nullable: true })
-  async me(
-    @Ctx() { req, em }: MyContext
-  ): Promise<User | null> {
+  async me(@Ctx() { req, em }: MyContext): Promise<User | null> {
     if (!req.session.userId) {
-      return null
+      return null;
     }
 
-    const user = await em.findOne(User, { id: req.session.userId })
+    const user = await em.findOne(User, { id: req.session.userId });
 
-    return user
+    return user;
   }
-  
+
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: RegisterInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
@@ -70,13 +80,14 @@ export class UserResolver {
 
     const hashedPw = await argon2.hash(options.password);
     const user = em.create(User, {
+      email: options.email,
       username: options.username,
       password: hashedPw,
     });
     try {
       await em.persistAndFlush(user);
     } catch (e) {
-      if (e.detail.includes("already exists")) {
+      if (e.detail && e.detail.includes("already exists")) {
         return {
           errors: [
             {
@@ -88,7 +99,7 @@ export class UserResolver {
       }
     }
 
-    req.session.userId = user.id
+    req.session.userId = user.id;
 
     return {
       user,
@@ -97,7 +108,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
+    @Arg("options") options: LoginInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
@@ -116,7 +127,7 @@ export class UserResolver {
       };
     }
 
-    req.session.userId = user.id
+    req.session.userId = user.id;
 
     return {
       user,

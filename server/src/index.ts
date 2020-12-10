@@ -12,7 +12,11 @@ import { __prod__ } from "./constants";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
 
+// import { sendEmail } from "./utils/sendEmail";
+
 const main = async () => {
+  // sendEmail('philip.n.london@gmail.com', 'Hello there!')
+  
   const orm = await MikroORM.init(mikroConfig);
   await orm.getMigrator().up();
 
