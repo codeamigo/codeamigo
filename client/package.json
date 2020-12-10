@@ -18,6 +18,7 @@
     "next-apollo": "^5.0.4",
     "postcss": "^8.2.0",
     "react": "17.0.1",
+    "react-apollo": "^3.1.5",
     "react-dom": "17.0.1",
     "tailwindcss": "^2.0.1"
   },

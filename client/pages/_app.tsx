@@ -1,10 +1,15 @@
 import "../styles/globals.css";
 
-import { withApollo } from "next-apollo";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "../utils/withApollo";
 
 function MyApp({ Component, pageProps }: { Component: any; pageProps: any }) {
-  return <Component {...pageProps} />;
+  return (
+    <ApolloProvider client={client}>
+      {" "}
+      <Component {...pageProps} />
+    </ApolloProvider>
+  );
 }
 
 export default MyApp;

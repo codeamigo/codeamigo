@@ -9,8 +9,12 @@ import {
   Resolver,
 } from "type-graphql";
 import { User } from "../entities/User";
-import { MyContext } from "../types";
 import argon2 from "argon2";
+import { v4 } from "uuid";
+
+import { MyContext } from "../types";
+import { FORGOT_PASSWORD_PREFIX } from "../constants";
+import { sendEmail } from "../utils/sendEmail";
 
 @InputType()
 class RegisterInput {
@@ -109,11 +113,13 @@ export class UserResolver {
     @Arg("options") options: LoginInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-
     let user = await em.findOne(User, { username: options.usernameOrEmail });
     if (!user) {
       user = await em.findOne(User, { email: options.usernameOrEmail });
     }
+
+    console.log(options)
+    console.log(user)
 
     if (!user) {
       return {
@@ -134,5 +140,64 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  @Mutation(() => FieldError, { nullable: true })
+  async forgotPassword(
+    @Arg("email") email: string,
+    @Ctx() { em, redis }: MyContext
+  ): Promise<boolean | { errors: FieldError[] }> {
+    const user = await em.findOne(User, { email });
+
+    if (!user) {
+      return {
+        errors: [{ field: "user", message: "User does not exist." }],
+      };
+    }
+
+    const token = v4();
+
+    await redis.set(
+      FORGOT_PASSWORD_PREFIX + token,
+      user.id,
+      "ex",
+      1000 * 60 * 60 * 24 * 3
+    );
+
+    // TODO, ENV
+    const action = `<a href="http://localhost:3000/change-password/${token}">Reset password</a>`;
+
+    await sendEmail(email, action);
+
+    return true;
+  }
+
+  @Mutation(() => UserResponse)
+  async changePassword(
+    @Arg("token") token: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { em, redis }: MyContext
+  ): Promise<UserResponse> {
+    const userId = await redis.get(FORGOT_PASSWORD_PREFIX + token);
+
+    if (!userId) {
+      return {
+        errors: [{ field: "token", message: "Invalid token." }],
+      };
+    }
+
+    const user = await em.findOne(User, { id: parseInt(userId) });
+
+    if (!user) {
+      return {
+        errors: [{ field: "token", message: "Could not find user." }],
+      };
+    }
+
+    user.password = await argon2.hash(newPassword)
+    await em.persistAndFlush(user)
+
+    return { user };
   }
 }
