@@ -1,9 +1,20 @@
-import Head from 'next/head'
+import Head from "next/head";
+import { usePostsQuery } from "../generated/graphql";
+import withApollo from "../utils/withApollo";
 
-export default function Home() {
+const Home = () => {
+  const { loading, error, data } = usePostsQuery();
+
+  if (loading) return <>Loading...</>;
+  if (error) return <>Error</>;
+
   return (
     <div>
-      Home
+      {data?.posts.map((post) => {
+        return <div key={post.id}>{post.title}</div>;
+      })}
     </div>
-  )
+  );
 }
+
+export default withApollo({ ssr: true })(Home);

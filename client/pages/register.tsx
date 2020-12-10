@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import InputField from "../components/form/InputField";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils";
+import withApollo from "../utils/withApollo";
 
 const Register: React.FC<Props> = () => {
   const router = useRouter();
@@ -60,4 +61,4 @@ const Register: React.FC<Props> = () => {
 
 type Props = {};
 
-export default Register;
+export default withApollo({ ssr: false })(Register);

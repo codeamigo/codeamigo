@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import InputField from "../components/form/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils";
+import withApollo from "../utils/withApollo";
 
 const Login: React.FC<Props> = () => {
   const router = useRouter();
@@ -58,4 +59,4 @@ const Login: React.FC<Props> = () => {
 
 type Props = {};
 
-export default Login;
+export default withApollo({ ssr: false })(Login);
