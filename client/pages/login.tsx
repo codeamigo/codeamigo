@@ -9,13 +9,13 @@ import withApollo from "../utils/withApollo";
 
 const Login: React.FC<Props> = () => {
   const router = useRouter();
-  const [register, { data }] = useLoginMutation();
+  const [login, { data }] = useLoginMutation();
 
   return (
     <Formik
-      initialValues={{ username: "", password: "" }}
+      initialValues={{ usernameOrEmail: "", password: "" }}
       onSubmit={async (values, { setErrors }) => {
-        const { data } = await register({ variables: values });
+        const { data } = await login({ variables: values });
         if (data?.login.errors) {
           setErrors(toErrorMap(data.login.errors));
         }
@@ -32,7 +32,7 @@ const Login: React.FC<Props> = () => {
             <div className="shadow overflow-hidden sm:rounded-md">
               <div className="px-4 py-5 bg-white sm:p-6">
                 <div className="grid gap-6">
-                  <InputField label="Username" name="username" type="text" />
+                  <InputField label="Email or username" name="usernameOrEmail" type="text" />
                   <InputField
                     label="Password"
                     name="password"

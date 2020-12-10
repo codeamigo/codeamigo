@@ -24,10 +24,8 @@ class RegisterInput {
 
 @InputType()
 class LoginInput {
-  @Field({ nullable: true })
-  email: string;
   @Field()
-  username: string;
+  usernameOrEmail: string;
   @Field()
   password: string;
 }
@@ -111,7 +109,11 @@ export class UserResolver {
     @Arg("options") options: LoginInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, { username: options.username });
+
+    let user = await em.findOne(User, { username: options.usernameOrEmail });
+    if (!user) {
+      user = await em.findOne(User, { email: options.usernameOrEmail });
+    }
 
     if (!user) {
       return {
