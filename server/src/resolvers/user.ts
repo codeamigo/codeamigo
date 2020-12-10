@@ -118,9 +118,6 @@ export class UserResolver {
       user = await em.findOne(User, { email: options.usernameOrEmail });
     }
 
-    console.log(options)
-    console.log(user)
-
     if (!user) {
       return {
         errors: [{ field: "username", message: "User does not exist." }],
@@ -143,17 +140,14 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  @Mutation(() => FieldError, { nullable: true })
   async forgotPassword(
     @Arg("email") email: string,
     @Ctx() { em, redis }: MyContext
-  ): Promise<boolean | { errors: FieldError[] }> {
+  ): Promise<boolean> {
     const user = await em.findOne(User, { email });
 
     if (!user) {
-      return {
-        errors: [{ field: "user", message: "User does not exist." }],
-      };
+      return false;
     }
 
     const token = v4();
@@ -195,8 +189,8 @@ export class UserResolver {
       };
     }
 
-    user.password = await argon2.hash(newPassword)
-    await em.persistAndFlush(user)
+    user.password = await argon2.hash(newPassword);
+    await em.persistAndFlush(user);
 
     return { user };
   }
