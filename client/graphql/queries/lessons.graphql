@@ -1,0 +1,13 @@
+query Lessons {
+  lessons {
+    createdAt
+    description
+    id
+    title
+    updatedAt
+    owner {
+      id
+      username
+    }
+  }
+}

@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "create:migration": "mikro-orm migration:create",
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,10 +24,6 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@mikro-orm/cli": "^4.3.3",
-    "@mikro-orm/core": "^4.3.3",
-    "@mikro-orm/migrations": "^4.3.3",
-    "@mikro-orm/postgresql": "^4.3.3",
     "@types/ioredis": "^4.17.8",
     "@types/nodemailer": "^6.4.0",
     "@types/uuid": "^8.3.0",
@@ -46,12 +41,5 @@
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.29",
     "uuid": "^8.3.2"
-  },
-  "mikro-orm": {
-    "useTsNode": true,
-    "configPaths": [
-      "./src/mikro-orm.config.ts",
-      "./dist/mikro-orm.config.js"
-    ]
   }
 }

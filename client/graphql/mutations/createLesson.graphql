@@ -1,0 +1,11 @@
+mutation CreateLesson($title: String!, $description: String!) {
+  createLesson(options: { title: $title, description: $description }) {
+    description
+    likes
+    owner {
+      id
+      username
+    }
+    title
+  }
+}

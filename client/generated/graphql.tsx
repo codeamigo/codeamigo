@@ -15,22 +15,25 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  posts: Array<Post>;
-  post?: Maybe<Post>;
+  lessons: Array<Lesson>;
+  lesson?: Maybe<Lesson>;
   me?: Maybe<User>;
 };
 
 
-export type QueryPostArgs = {
+export type QueryLessonArgs = {
   id: Scalars['Int'];
 };
 
-export type Post = {
-  __typename?: 'Post';
+export type Lesson = {
+  __typename?: 'Lesson';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
+  description: Scalars['String'];
+  likes: Scalars['Float'];
+  owner: User;
 };
 
 export type User = {
@@ -44,9 +47,9 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createPost: Post;
-  updatePost?: Maybe<Post>;
-  deletePost: Scalars['Boolean'];
+  createLesson: Lesson;
+  updateLesson?: Maybe<Lesson>;
+  deleteLesson: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
@@ -54,18 +57,18 @@ export type Mutation = {
 };
 
 
-export type MutationCreatePostArgs = {
-  title: Scalars['String'];
+export type MutationCreateLessonArgs = {
+  options: LessonInput;
 };
 
 
-export type MutationUpdatePostArgs = {
+export type MutationUpdateLessonArgs = {
   title: Scalars['String'];
   id: Scalars['Float'];
 };
 
 
-export type MutationDeletePostArgs = {
+export type MutationDeleteLessonArgs = {
   id: Scalars['Float'];
 };
 
@@ -88,6 +91,11 @@ export type MutationForgotPasswordArgs = {
 export type MutationChangePasswordArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
+};
+
+export type LessonInput = {
+  title: Scalars['String'];
+  description: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -135,6 +143,24 @@ export type ChangePasswordMutation = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     )> }
+  ) }
+);
+
+export type CreateLessonMutationVariables = Exact<{
+  title: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type CreateLessonMutation = (
+  { __typename?: 'Mutation' }
+  & { createLesson: (
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'description' | 'likes' | 'title'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    ) }
   ) }
 );
 
@@ -189,6 +215,21 @@ export type RegisterMutation = (
   ) }
 );
 
+export type LessonsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LessonsQuery = (
+  { __typename?: 'Query' }
+  & { lessons: Array<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'createdAt' | 'description' | 'id' | 'title' | 'updatedAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    ) }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -197,17 +238,6 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
-  )> }
-);
-
-export type PostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type PostsQuery = (
-  { __typename?: 'Query' }
-  & { posts: Array<(
-    { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'createdAt' | 'updatedAt' | 'title'>
   )> }
 );
 
@@ -256,6 +286,45 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const CreateLessonDocument = gql`
+    mutation CreateLesson($title: String!, $description: String!) {
+  createLesson(options: {title: $title, description: $description}) {
+    description
+    likes
+    owner {
+      id
+      username
+    }
+    title
+  }
+}
+    `;
+export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutation, CreateLessonMutationVariables>;
+
+/**
+ * __useCreateLessonMutation__
+ *
+ * To run a mutation, you first call `useCreateLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLessonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLessonMutation, { data, loading, error }] = useCreateLessonMutation({
+ *   variables: {
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions<CreateLessonMutation, CreateLessonMutationVariables>) {
+        return Apollo.useMutation<CreateLessonMutation, CreateLessonMutationVariables>(CreateLessonDocument, baseOptions);
+      }
+export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
+export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
+export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -369,6 +438,46 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const LessonsDocument = gql`
+    query Lessons {
+  lessons {
+    createdAt
+    description
+    id
+    title
+    updatedAt
+    owner {
+      id
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useLessonsQuery__
+ *
+ * To run a query within a React component, call `useLessonsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLessonsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLessonsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLessonsQuery(baseOptions?: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+        return Apollo.useQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, baseOptions);
+      }
+export function useLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+          return Apollo.useLazyQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, baseOptions);
+        }
+export type LessonsQueryHookResult = ReturnType<typeof useLessonsQuery>;
+export type LessonsLazyQueryHookResult = ReturnType<typeof useLessonsLazyQuery>;
+export type LessonsQueryResult = Apollo.QueryResult<LessonsQuery, LessonsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -402,38 +511,3 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
-export const PostsDocument = gql`
-    query Posts {
-  posts {
-    id
-    createdAt
-    updatedAt
-    title
-  }
-}
-    `;
-
-/**
- * __usePostsQuery__
- *
- * To run a query within a React component, call `usePostsQuery` and pass it any options that fit your needs.
- * When your component renders, `usePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePostsQuery({
- *   variables: {
- *   },
- * });
- */
-export function usePostsQuery(baseOptions?: Apollo.QueryHookOptions<PostsQuery, PostsQueryVariables>) {
-        return Apollo.useQuery<PostsQuery, PostsQueryVariables>(PostsDocument, baseOptions);
-      }
-export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsQuery, PostsQueryVariables>) {
-          return Apollo.useLazyQuery<PostsQuery, PostsQueryVariables>(PostsDocument, baseOptions);
-        }
-export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
-export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
-export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;

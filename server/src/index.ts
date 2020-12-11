@@ -9,9 +9,9 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 
 import { __prod__ } from "./constants";
-import { PostResolver } from "./resolvers/post";
+import { LessonResolver } from "./resolvers/lesson";
 import { UserResolver } from "./resolvers/user";
-import { Post } from "./entities/Post";
+import { Lesson } from "./entities/Lesson";
 import { User } from "./entities/User";
 
 const main = async () => {
@@ -22,7 +22,7 @@ const main = async () => {
     password: 'postgres',
     logging: true,
     synchronize: true,
-    entities: [Post, User]
+    entities: [User, Lesson]
   })
 
 
@@ -59,7 +59,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [PostResolver, UserResolver],
+      resolvers: [LessonResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),

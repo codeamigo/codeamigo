@@ -4,13 +4,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Post extends BaseEntity {
+export class Lesson extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -26,4 +28,21 @@ export class Post extends BaseEntity {
   @Field()
   @Column()
   title!: string;
+
+  @Field()
+  @Column()
+  description!: string;
+
+  @Field()
+  @Column({ type: 'int', default: 0 })
+  likes!: number
+
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.lessons, { nullable: true })
+  owner: User;
+
+  // TODO
+  // @Field()
+  // @Column()
+  // steps!: [Step];
 }
