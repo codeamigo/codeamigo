@@ -1,15 +1,18 @@
 import { Field, Form, Formik } from "formik";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import Editor from "@monaco-editor/react";
+import { ControlledEditor } from "@monaco-editor/react";
 
 import { useCreateLessonMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils";
 import withApollo from "../utils/withApollo";
+import ReactMarkdown from "react-markdown";
+import gfm from "remark-gfm";
 
 const CreateLesson: React.FC<Props> = () => {
   let input: any;
   const router = useRouter();
+  const [markdown, setMarkdown] = useState(``);
   const [createLesson, { data }] = useCreateLessonMutation();
   const inputElement = useRef(null);
 
@@ -58,14 +61,17 @@ const CreateLesson: React.FC<Props> = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full px-8">
+            <div className="flex w-full px-8">
               <div className="w-2/4">
-                <Editor
+                <ControlledEditor
                   height="300px"
+                  onChange={(_, value) => setMarkdown(value || '')}
                   options={{ minimap: { enabled: false } }}
                 />
               </div>
-              <div className="w-2/4"></div>
+              <div className="w-2/4">
+                <ReactMarkdown children={markdown} plugins={[gfm]} />
+              </div>
             </div>
           </>
         </Form>
