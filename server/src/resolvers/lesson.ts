@@ -26,12 +26,12 @@ class LessonInput {
 export class LessonResolver {
   @Query(() => [Lesson])
   lessons(): Promise<Lesson[]> {
-    return Lesson.find({ relations: ['owner'] });
+    return Lesson.find({ relations: ["owner", "steps"] });
   }
 
   @Query(() => Lesson, { nullable: true })
   lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
-    return Lesson.findOne(id);
+    return Lesson.findOne(id, { relations: ["owner"] });
   }
 
   @Mutation(() => Lesson)

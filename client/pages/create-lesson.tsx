@@ -17,16 +17,18 @@ const CreateLesson: React.FC<Props> = () => {
       onSubmit={async (values, { setErrors }) => {
         try {
           const { data } = await createLesson({ variables: values });
-          router.push('/')
+          router.push("/");
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       }}
     >
       {({ isSubmitting }) => (
         <Form>
           <div className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
-          <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">Create Lesson</h1>
+            <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">
+              Create Lesson
+            </h1>
             <div className="shadow overflow-hidden sm:rounded-md">
               <div className="px-4 py-5 bg-white sm:p-6">
                 <div className="grid gap-6">

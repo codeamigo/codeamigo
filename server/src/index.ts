@@ -9,10 +9,15 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 
 import { __prod__ } from "./constants";
-import { LessonResolver } from "./resolvers/lesson";
-import { UserResolver } from "./resolvers/user";
+import { Checkpoint } from './entities/Checkpoint';
 import { Lesson } from "./entities/Lesson";
 import { User } from "./entities/User";
+import { Step } from './entities/Step';
+
+import { LessonResolver } from "./resolvers/lesson";
+import { UserResolver } from "./resolvers/user";
+import { StepResolver } from './resolvers/step';
+import { CheckpointResolver } from './resolvers/checkpoint';
 
 const main = async () => {
   await createConnection({
@@ -22,7 +27,7 @@ const main = async () => {
     password: 'postgres',
     logging: true,
     synchronize: true,
-    entities: [User, Lesson]
+    entities: [Checkpoint, Lesson, Step, User]
   })
 
 
@@ -59,7 +64,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [LessonResolver, UserResolver],
+      resolvers: [CheckpointResolver, LessonResolver, StepResolver, UserResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),

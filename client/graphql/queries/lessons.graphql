@@ -6,7 +6,6 @@ query Lessons {
     title
     updatedAt
     owner {
-      id
       username
     }
   }

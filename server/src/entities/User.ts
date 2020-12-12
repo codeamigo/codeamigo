@@ -36,6 +36,7 @@ export class User extends BaseEntity {
   @Column({ type: "text" })
   password!: string;
 
+  @Field(() => [Lesson])
   @OneToMany(() => Lesson, (lesson) => lesson.owner)
   lessons: Lesson[];
 }

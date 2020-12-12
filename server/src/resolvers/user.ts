@@ -59,7 +59,9 @@ export class UserResolver {
       return null;
     }
 
-    return await User.findOne(req.session.userId);
+    console.log(await User.findOne(req.session.userId, { relations: ['lessons'] }))
+    
+    return await User.findOne(req.session.userId, { relations: ['lessons'] });
   }
 
   @Mutation(() => UserResponse)
@@ -101,8 +103,6 @@ export class UserResolver {
         };
       }
     }
-
-    console.log(user)
 
     if (!user) {
       return {

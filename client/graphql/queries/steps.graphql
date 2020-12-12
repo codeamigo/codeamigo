@@ -1,0 +1,6 @@
+query Steps {
+  steps {
+    title
+    description
+  }
+}
