@@ -1,15 +1,26 @@
-import { Form, Formik } from "formik";
-import React from "react";
+import { Field, Form, Formik } from "formik";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import Editor from "@monaco-editor/react";
 
-import InputField from "../components/form/InputField";
 import { useCreateLessonMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils";
 import withApollo from "../utils/withApollo";
 
 const CreateLesson: React.FC<Props> = () => {
+  let input: any;
   const router = useRouter();
   const [createLesson, { data }] = useCreateLessonMutation();
+  const inputElement = useRef(null);
+
+  useEffect(() => {
+    if (inputElement.current) {
+      // @ts-ignore
+      inputElement.current.focus();
+    }
+  }, []);
+
+  // handle
 
   return (
     <Formik
@@ -25,32 +36,38 @@ const CreateLesson: React.FC<Props> = () => {
     >
       {({ isSubmitting }) => (
         <Form>
-          <div className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
-            <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">
-              Create Lesson
-            </h1>
-            <div className="shadow overflow-hidden sm:rounded-md">
+          <>
+            <div className="max-w-2xl px-8">
               <div className="px-4 py-5 bg-white sm:p-6">
-                <div className="grid gap-6">
-                  <InputField label="Title" name="title" type="text" />
-                  <InputField
-                    label="Description"
+                <div className="grid gap-1">
+                  <input
+                    autoFocus={true}
+                    ref={inputElement}
+                    name="title"
+                    type="text"
+                    placeholder="Lesson title"
+                    onBlur={console.log}
+                    className="border-0 focus:ring-0 text-2xl"
+                  />
+                  <input
                     name="description"
                     type="text"
+                    placeholder="Add a description"
+                    className="border-0 focus:ring-0 text-lg"
                   />
                 </div>
               </div>
-              <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
-                >
-                  Create Lesson
-                </button>
-              </div>
             </div>
-          </div>
+            <div className="w-full px-8">
+              <div className="w-2/4">
+                <Editor
+                  height="300px"
+                  options={{ minimap: { enabled: false } }}
+                />
+              </div>
+              <div className="w-2/4"></div>
+            </div>
+          </>
         </Form>
       )}
     </Formik>
