@@ -19,9 +19,7 @@ const originalMarkdown = `## Step \#
 You can also write code in blocks.
 \`\`\`
 
-[//]: <> (Checkpoints will show up here.)
-
-### Checkpoints
+Remember to be short and sweet. 😘
 `;
 
 const CreateLesson: React.FC<Props> = () => {
