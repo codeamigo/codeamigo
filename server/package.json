@@ -29,6 +29,7 @@
     "@types/uuid": "^8.3.0",
     "apollo-server-express": "^2.19.0",
     "argon2": "^0.27.0",
+    "codesandbox": "^2.2.1",
     "connect-redis": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",

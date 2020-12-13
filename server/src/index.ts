@@ -19,7 +19,7 @@ import { UserResolver } from "./resolvers/user";
 import { StepResolver } from './resolvers/step';
 import { CheckpointResolver } from './resolvers/checkpoint';
 
-const main = async () => {
+const main = async () => {  
   await createConnection({
     type: 'postgres',
     database: 'codeamigo',
