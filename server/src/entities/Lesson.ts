@@ -32,8 +32,8 @@ export class Lesson extends BaseEntity {
   title!: string;
 
   @Field()
-  @Column()
-  description!: string;
+  @Column({ nullable: true })
+  description: string;
 
   @Field()
   @Column({ type: 'int', default: 0 })

@@ -85,8 +85,7 @@ export type Checkpoint = {
 export type Mutation = {
   __typename?: 'Mutation';
   createLesson: Lesson;
-  updateLessonTitle?: Maybe<Lesson>;
-  updateLessonDescription?: Maybe<Lesson>;
+  updateLesson?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
@@ -106,14 +105,8 @@ export type MutationCreateLessonArgs = {
 };
 
 
-export type MutationUpdateLessonTitleArgs = {
-  title: Scalars['String'];
-  id: Scalars['Float'];
-};
-
-
-export type MutationUpdateLessonDescriptionArgs = {
-  description: Scalars['String'];
+export type MutationUpdateLessonArgs = {
+  options: LessonInput;
   id: Scalars['Float'];
 };
 
@@ -310,31 +303,18 @@ export type RegisterMutation = (
   ) }
 );
 
-export type UpdateLessonTitleMutationVariables = Exact<{
+export type UpdateLessonMutationVariables = Exact<{
   id: Scalars['Float'];
   title: Scalars['String'];
-}>;
-
-
-export type UpdateLessonTitleMutation = (
-  { __typename?: 'Mutation' }
-  & { updateLessonTitle?: Maybe<(
-    { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'title'>
-  )> }
-);
-
-export type UpdateLessonDescriptionMutationVariables = Exact<{
-  id: Scalars['Float'];
   description: Scalars['String'];
 }>;
 
 
-export type UpdateLessonDescriptionMutation = (
+export type UpdateLessonMutation = (
   { __typename?: 'Mutation' }
-  & { updateLessonDescription?: Maybe<(
+  & { updateLesson?: Maybe<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'description'>
+    & Pick<Lesson, 'id' | 'title'>
   )> }
 );
 
@@ -592,74 +572,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const UpdateLessonTitleDocument = gql`
-    mutation UpdateLessonTitle($id: Float!, $title: String!) {
-  updateLessonTitle(id: $id, title: $title) {
+export const UpdateLessonDocument = gql`
+    mutation UpdateLesson($id: Float!, $title: String!, $description: String!) {
+  updateLesson(id: $id, options: {title: $title, description: $description}) {
     id
     title
   }
 }
     `;
-export type UpdateLessonTitleMutationFn = Apollo.MutationFunction<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>;
+export type UpdateLessonMutationFn = Apollo.MutationFunction<UpdateLessonMutation, UpdateLessonMutationVariables>;
 
 /**
- * __useUpdateLessonTitleMutation__
+ * __useUpdateLessonMutation__
  *
- * To run a mutation, you first call `useUpdateLessonTitleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateLessonTitleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateLessonTitleMutation, { data, loading, error }] = useUpdateLessonTitleMutation({
+ * const [updateLessonMutation, { data, loading, error }] = useUpdateLessonMutation({
  *   variables: {
  *      id: // value for 'id'
  *      title: // value for 'title'
- *   },
- * });
- */
-export function useUpdateLessonTitleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>) {
-        return Apollo.useMutation<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>(UpdateLessonTitleDocument, baseOptions);
-      }
-export type UpdateLessonTitleMutationHookResult = ReturnType<typeof useUpdateLessonTitleMutation>;
-export type UpdateLessonTitleMutationResult = Apollo.MutationResult<UpdateLessonTitleMutation>;
-export type UpdateLessonTitleMutationOptions = Apollo.BaseMutationOptions<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>;
-export const UpdateLessonDescriptionDocument = gql`
-    mutation UpdateLessonDescription($id: Float!, $description: String!) {
-  updateLessonDescription(id: $id, description: $description) {
-    id
-    description
-  }
-}
-    `;
-export type UpdateLessonDescriptionMutationFn = Apollo.MutationFunction<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
-
-/**
- * __useUpdateLessonDescriptionMutation__
- *
- * To run a mutation, you first call `useUpdateLessonDescriptionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateLessonDescriptionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateLessonDescriptionMutation, { data, loading, error }] = useUpdateLessonDescriptionMutation({
- *   variables: {
- *      id: // value for 'id'
  *      description: // value for 'description'
  *   },
  * });
  */
-export function useUpdateLessonDescriptionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>) {
-        return Apollo.useMutation<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>(UpdateLessonDescriptionDocument, baseOptions);
+export function useUpdateLessonMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonMutation, UpdateLessonMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonMutation, UpdateLessonMutationVariables>(UpdateLessonDocument, baseOptions);
       }
-export type UpdateLessonDescriptionMutationHookResult = ReturnType<typeof useUpdateLessonDescriptionMutation>;
-export type UpdateLessonDescriptionMutationResult = Apollo.MutationResult<UpdateLessonDescriptionMutation>;
-export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
+export type UpdateLessonMutationHookResult = ReturnType<typeof useUpdateLessonMutation>;
+export type UpdateLessonMutationResult = Apollo.MutationResult<UpdateLessonMutation>;
+export type UpdateLessonMutationOptions = Apollo.BaseMutationOptions<UpdateLessonMutation, UpdateLessonMutationVariables>;
 export const LessonDocument = gql`
     query Lesson($id: Int!) {
   lesson(id: $id) {

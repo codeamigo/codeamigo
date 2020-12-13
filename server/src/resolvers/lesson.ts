@@ -18,7 +18,7 @@ import { isAuth } from "../middleware/isAuth";
 class LessonInput {
   @Field()
   title: string;
-  @Field()
+  @Field({ nullable: true })
   description: string;
 }
 
@@ -48,14 +48,14 @@ export class LessonResolver {
   @Mutation(() => Lesson, { nullable: true })
   async updateLesson(
     @Arg("id") id: number,
-    @Arg("title") title: string
+    @Arg("options") options: LessonInput,
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
       return null;
     }
 
-    await Lesson.update({ id }, { title });
+    await Lesson.update({ id }, { ...lesson, ...options });
 
     return lesson;
   }

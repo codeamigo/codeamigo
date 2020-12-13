@@ -58,8 +58,6 @@ export class UserResolver {
     if (!req.session.userId) {
       return null;
     }
-
-    console.log(await User.findOne(req.session.userId, { relations: ['lessons'] }))
     
     return await User.findOne(req.session.userId, { relations: ['lessons'] });
   }

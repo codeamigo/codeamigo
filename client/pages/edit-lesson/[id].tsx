@@ -1,13 +1,11 @@
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { ControlledEditor } from "@monaco-editor/react";
 
 import {
-  useCreateLessonMutation,
   useLessonQuery,
-  useUpdateLessonDescriptionMutation,
-  useUpdateLessonTitleMutation,
+  useUpdateLessonMutation,
 } from "../../generated/graphql";
 import withApollo from "../../utils/withApollo";
 import ReactMarkdown from "react-markdown";
@@ -37,54 +35,49 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
 
   const { loading, error, data } = useLessonQuery({ variables: { id } });
 
-  const [updateLessonTitle] = useUpdateLessonTitleMutation();
-  const [updateLessonDescription] = useUpdateLessonDescriptionMutation();
-  const inputElement = useRef(null);
+  const [updateLesson] = useUpdateLessonMutation();
 
-  useEffect(() => {
-    if (inputElement.current) {
-      // @ts-ignore
-      inputElement.current.focus();
-    }
-  }, []);
-
-  const handleBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
-    await updateLessonTitle({
-      variables: { title: event.currentTarget.value, id },
-    });
-  };
+  if (!data) return null;
 
   return (
     <Formik
-      initialValues={{ title: "", description: "" }}
+      initialValues={{
+        title: data?.lesson?.title || "",
+        description: data?.lesson?.description || "",
+      }}
       onSubmit={async (values, { setErrors }) => {
-        return;
+        // TODO handle error
+        return await updateLesson({ variables: { id, ...values } });
       }}
     >
       {({ isSubmitting }) => (
         <Form>
           <>
-            <div className="max-w-2xl px-8">
+            <div className="flex w-full px-8 justify-between">
               <div className="px-4 py-5 bg-white sm:p-6">
                 <div className="grid gap-2">
-                  <input
-                    autoFocus={true}
-                    ref={inputElement}
+                  <Field
                     name="title"
                     type="text"
                     placeholder="Lesson title"
-                    onBlur={(event) => handleBlur(event)}
                     className="border-0 focus:ring-0 p-0 text-2xl"
-                    defaultValue={data?.lesson?.title}
                   />
-                  <input
+                  <Field
                     name="description"
                     type="text"
                     placeholder="Add a description"
                     className="border-0 focus:ring-0 p-0 text-lg"
-                    defaultValue={data?.lesson?.description}
                   />
                 </div>
+              </div>
+              <div className="px-4 py-5 bg-white sm:p-6">
+                <button
+                  disabled={isSubmitting}
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                  type="submit"
+                >
+                  Save
+                </button>
               </div>
             </div>
             <div className="flex w-full px-8">
