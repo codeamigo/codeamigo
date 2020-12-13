@@ -1,0 +1,10 @@
+query Lesson($id: Int!) {
+  lesson(id: $id) {
+    id
+    title
+    description
+    owner {
+      username
+    }
+  }
+}

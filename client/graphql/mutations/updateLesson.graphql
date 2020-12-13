@@ -1,0 +1,13 @@
+mutation UpdateLessonTitle($id: Float!, $title: String!) {
+  updateLessonTitle(id: $id, title: $title) {
+    id
+    title
+  }
+}
+
+mutation UpdateLessonDescription($id: Float!, $description: String!) {
+  updateLessonDescription(id: $id, description: $description) {
+    id
+    description
+  }
+}

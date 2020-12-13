@@ -3,10 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { ControlledEditor } from "@monaco-editor/react";
 
-import { useCreateLessonMutation } from "../generated/graphql";
-import withApollo from "../utils/withApollo";
+import {
+  useCreateLessonMutation,
+  useLessonQuery,
+  useUpdateLessonDescriptionMutation,
+  useUpdateLessonTitleMutation,
+} from "../../generated/graphql";
+import withApollo from "../../utils/withApollo";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
+import { NextPage } from "next";
 
 const originalMarkdown = `## Step \#
 
@@ -22,14 +28,17 @@ You can also write code in blocks.
 Remember to be short and sweet. 😘
 `;
 
-const CreateLesson: React.FC<Props> = () => {
+const EditLesson: NextPage<{ id: string }> = (props) => {
+  const id = parseInt(props.id);
   const router = useRouter();
   const [markdown, setMarkdown] = useState(originalMarkdown);
   const [preview, setPreview] = useState(false);
   const [code, setCode] = useState<string>("");
-  const [evalCode, setEvalCode] = useState("");
 
-  const [createLesson, { data }] = useCreateLessonMutation();
+  const { loading, error, data } = useLessonQuery({ variables: { id } });
+
+  const [updateLessonTitle] = useUpdateLessonTitleMutation();
+  const [updateLessonDescription] = useUpdateLessonDescriptionMutation();
   const inputElement = useRef(null);
 
   useEffect(() => {
@@ -39,26 +48,17 @@ const CreateLesson: React.FC<Props> = () => {
     }
   }, []);
 
-  useEffect(() => {
-    try {
-      console.log(code)
-    } catch (e) {
-      console.log(e);
-    }
-  }, [code]);
-
-  // handle
+  const handleBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
+    await updateLessonTitle({
+      variables: { title: event.currentTarget.value, id },
+    });
+  };
 
   return (
     <Formik
       initialValues={{ title: "", description: "" }}
       onSubmit={async (values, { setErrors }) => {
-        try {
-          const { data } = await createLesson({ variables: values });
-          router.push("/");
-        } catch (e) {
-          console.log(e);
-        }
+        return;
       }}
     >
       {({ isSubmitting }) => (
@@ -73,14 +73,16 @@ const CreateLesson: React.FC<Props> = () => {
                     name="title"
                     type="text"
                     placeholder="Lesson title"
-                    onBlur={console.log}
+                    onBlur={(event) => handleBlur(event)}
                     className="border-0 focus:ring-0 p-0 text-2xl"
+                    defaultValue={data?.lesson?.title}
                   />
                   <input
                     name="description"
                     type="text"
                     placeholder="Add a description"
                     className="border-0 focus:ring-0 p-0 text-lg"
+                    defaultValue={data?.lesson?.description}
                   />
                 </div>
               </div>
@@ -155,7 +157,6 @@ const CreateLesson: React.FC<Props> = () => {
                     onChange={(_, value) => setCode(value || "")}
                   />
                 </div>
-                {code && <div>{evalCode}</div>}
               </div>
             </div>
           </>
@@ -165,6 +166,8 @@ const CreateLesson: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+EditLesson.getInitialProps = ({ query }) => ({
+  id: query.id as string,
+});
 
-export default withApollo({ ssr: false })(CreateLesson);
+export default EditLesson;

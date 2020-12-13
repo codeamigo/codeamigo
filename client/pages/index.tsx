@@ -19,7 +19,7 @@ const Home = () => {
             >
               <h2 className="text-xl">{lesson.title}</h2>
               <h3 className="text-xs">By: {lesson.owner.username}</h3>
-              <div className="text-base mt-4 leading-tight">{lesson.description}</div>
+              {/* <div className="text-base mt-4 leading-tight">{lesson.description}</div> */}
               <h6 className="text-xs mt-4">
                 {new Date(parseInt(lesson.createdAt)).toLocaleDateString()}
               </h6>

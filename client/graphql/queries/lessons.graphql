@@ -1,7 +1,6 @@
 query Lessons {
   lessons {
     createdAt
-    description
     id
     title
     updatedAt

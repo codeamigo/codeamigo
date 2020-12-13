@@ -1,11 +1,11 @@
-mutation CreateLesson($title: String!, $description: String!) {
-  createLesson(options: { title: $title, description: $description }) {
-    description
+mutation CreateLesson($title: String!) {
+  createLesson(options: { title: $title }) {
+    id
     likes
+    title
     owner {
       id
       username
     }
-    title
   }
 }
