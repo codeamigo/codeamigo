@@ -29,13 +29,10 @@ export class Step extends BaseEntity {
 
   @Field()
   @Column()
-  title!: string;
-
-  @Field()
-  @Column()
-  description!: string;
+  instructions!: string;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps)
+  @Field(() => Lesson)
   lesson: Lesson;
 
   @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.step)

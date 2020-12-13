@@ -66,8 +66,8 @@ export type Step = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  title: Scalars['String'];
-  description: Scalars['String'];
+  instructions: Scalars['String'];
+  lesson: Lesson;
   checkpoints?: Maybe<Array<Checkpoint>>;
 };
 
@@ -91,8 +91,7 @@ export type Mutation = {
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
-  createStep: Step;
-  updateStep?: Maybe<Step>;
+  createOrUpdateStep: Step;
   deleteStep: Scalars['Boolean'];
   createCheckpoint: Checkpoint;
   updateCheckpoint?: Maybe<Checkpoint>;
@@ -137,14 +136,8 @@ export type MutationChangePasswordArgs = {
 };
 
 
-export type MutationCreateStepArgs = {
+export type MutationCreateOrUpdateStepArgs = {
   options: StepInput;
-};
-
-
-export type MutationUpdateStepArgs = {
-  title: Scalars['String'];
-  id: Scalars['Float'];
 };
 
 
@@ -197,9 +190,9 @@ export type LoginInput = {
 };
 
 export type StepInput = {
+  id?: Maybe<Scalars['Float']>;
   lessonId: Scalars['Float'];
-  title: Scalars['String'];
-  description: Scalars['String'];
+  instructions: Scalars['String'];
 };
 
 export type CheckpointInput = {
@@ -249,6 +242,21 @@ export type CreateLessonMutation = (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     ) }
+  ) }
+);
+
+export type CreateOrUpdateStepMutationVariables = Exact<{
+  id: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  instructions: Scalars['String'];
+}>;
+
+
+export type CreateOrUpdateStepMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrUpdateStep: (
+    { __typename?: 'Step' }
+    & Pick<Step, 'id' | 'createdAt' | 'instructions'>
   ) }
 );
 
@@ -331,7 +339,10 @@ export type LessonQuery = (
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
-    ) }
+    ), steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+    )>> }
   )> }
 );
 
@@ -372,7 +383,7 @@ export type StepsQuery = (
   { __typename?: 'Query' }
   & { steps: Array<(
     { __typename?: 'Step' }
-    & Pick<Step, 'title' | 'description'>
+    & Pick<Step, 'instructions' | 'createdAt'>
   )> }
 );
 
@@ -459,6 +470,44 @@ export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
+export const CreateOrUpdateStepDocument = gql`
+    mutation CreateOrUpdateStep($id: Float!, $lessonId: Float!, $instructions: String!) {
+  createOrUpdateStep(
+    options: {id: $id, lessonId: $lessonId, instructions: $instructions}
+  ) {
+    id
+    createdAt
+    instructions
+  }
+}
+    `;
+export type CreateOrUpdateStepMutationFn = Apollo.MutationFunction<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>;
+
+/**
+ * __useCreateOrUpdateStepMutation__
+ *
+ * To run a mutation, you first call `useCreateOrUpdateStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrUpdateStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrUpdateStepMutation, { data, loading, error }] = useCreateOrUpdateStepMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      lessonId: // value for 'lessonId'
+ *      instructions: // value for 'instructions'
+ *   },
+ * });
+ */
+export function useCreateOrUpdateStepMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>) {
+        return Apollo.useMutation<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>(CreateOrUpdateStepDocument, baseOptions);
+      }
+export type CreateOrUpdateStepMutationHookResult = ReturnType<typeof useCreateOrUpdateStepMutation>;
+export type CreateOrUpdateStepMutationResult = Apollo.MutationResult<CreateOrUpdateStepMutation>;
+export type CreateOrUpdateStepMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -616,6 +665,11 @@ export const LessonDocument = gql`
     owner {
       username
     }
+    steps {
+      id
+      createdAt
+      instructions
+    }
   }
 }
     `;
@@ -722,8 +776,8 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const StepsDocument = gql`
     query Steps {
   steps {
-    title
-    description
+    instructions
+    createdAt
   }
 }
     `;

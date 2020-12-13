@@ -1,0 +1,13 @@
+mutation CreateOrUpdateStep(
+  $id: Float!
+  $lessonId: Float!
+  $instructions: String!
+) {
+  createOrUpdateStep(
+    options: { id: $id, lessonId: $lessonId, instructions: $instructions }
+  ) {
+    id
+    createdAt
+    instructions
+  }
+}

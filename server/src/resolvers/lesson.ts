@@ -31,7 +31,7 @@ export class LessonResolver {
 
   @Query(() => Lesson, { nullable: true })
   lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
-    return Lesson.findOne(id, { relations: ["owner"] });
+    return Lesson.findOne(id, { relations: ["owner", "steps"] });
   }
 
   @Mutation(() => Lesson)

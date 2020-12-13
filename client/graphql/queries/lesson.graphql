@@ -6,5 +6,10 @@ query Lesson($id: Int!) {
     owner {
       username
     }
+    steps {
+      id
+      createdAt
+      instructions
+    }
   }
 }
