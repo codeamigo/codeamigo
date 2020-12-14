@@ -13,6 +13,8 @@ import {
   StepsQuery,
 } from "../../../generated/graphql";
 
+import Editor from "./editor";
+
 const defaultMD = `## Step \#
 
 ### Instructions
@@ -32,18 +34,17 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
   const sortedSteps = steps
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-  
+
   const [code, setCode] = useState<string>("");
   const [step, setStep] = useState(sortedSteps[stepIdx]);
   const [markdown, setMarkdown] = useState(step?.instructions || defaultMD);
 
   const lessonId = lesson!.id;
-  const stepId = step!.id;
 
   useEffect(() => {
-    console.log(stepIdx)
-    setMarkdown(sortedSteps[stepIdx].instructions)
-  }, [stepIdx])
+    setStep(sortedSteps[stepIdx]);
+    setMarkdown(sortedSteps[stepIdx].instructions);
+  }, [stepIdx]);
 
   const [updateLesson] = useUpdateLessonMutation();
   const [createOrUpdateStep] = useCreateOrUpdateStepMutation();
@@ -61,12 +62,12 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
           });
           await createOrUpdateStep({
             variables: {
-              id: stepId,
+              id: step.id,
               lessonId: lessonId,
               instructions: markdown,
             },
           });
-          refetch()
+          refetch();
         } catch (e) {
           console.log(e);
         }
@@ -76,7 +77,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
         <Form className="w-11/12 w-full">
           <>
             <div className="flex w-full justify-between">
-              <div className="px-4 py-5 bg-white sm:p-6">
+              <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
                 <div className="grid gap-2">
                   <Field
                     name="title"
@@ -112,6 +113,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
                     value={markdown}
                     onChange={(_, value) => setMarkdown(value || "")}
                     options={{
+                      wordWrap: "on",
                       minimap: { enabled: false },
                     }}
                   />
@@ -125,33 +127,9 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
                 />
               </div>
             </div>
-            <div className="flex w-full">
-              <div className="w-2/4 pl-4 bg-white sm:pl-6">
-                <h1>Code</h1>
-                <div className="w-2/4 pr-4 bg-white sm:pr-6">
-                  <ul className="list-reset flex pl-2">
-                    <li className="list-none relative cursor-pointer">
-                      <a
-                        className={`border-gray-200 text-gray-700 bg-white inline-block text-sm py-2 px-4 font-medium border border-b-0 rounded-t hover:text-gray-700`}
-                      >
-                        Initial Code
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="rounded-md border border-gray-200">
-                    <ControlledEditor
-                      height="300px"
-                      width="100%"
-                      language="typescript"
-                      options={{
-                        iframe: true,
-                        minimap: { enabled: false },
-                      }}
-                      onChange={(_, value) => setCode(value || "")}
-                    />
-                  </div>
-                </div>
-              </div>
+            <div className="flex flex-col w-full">
+              <h1>Checkpoint #1</h1>
+              <Editor setCode={setCode} />
             </div>
           </>
         </Form>
@@ -163,7 +141,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
 type Props = {
   lesson: LessonQuery["lesson"];
   stepIdx: number;
-  refetch: any
+  refetch: any;
 };
 
 export default StepForm;

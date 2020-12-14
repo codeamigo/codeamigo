@@ -1,9 +1,11 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useLessonsQuery } from "../generated/graphql";
 import withApollo from "../utils/withApollo";
 
 const Home = () => {
   const { loading, error, data } = useLessonsQuery();
+  const router = useRouter();
 
   if (loading) return <>Loading...</>;
   if (error) return <>Error</>;
@@ -14,7 +16,8 @@ const Home = () => {
         {data?.lessons.map((lesson) => {
           return (
             <div
-              className="p-3 rounded-lg border-gray-200 border-2"
+              className="p-3 rounded-lg border-gray-200 border-2 cursor-pointer"
+              onClick={() => router.push(`/edit-lesson/${lesson.id}`)}
               key={lesson.id}
             >
               <h2 className="text-xl">{lesson.title}</h2>

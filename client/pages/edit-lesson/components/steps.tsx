@@ -6,7 +6,7 @@ const Steps: React.FC<Props> = ({ data, handleClick }) => {
     <ol className="w-1/12 px-4 py-5 bg-white sm:p-6">
       {data.lesson?.steps &&
         data.lesson.steps.map((step, i) => {
-          return <li onClick={() => handleClick(i)}>Step: {i + 1}</li>;
+          return <li key={step.id} onClick={() => handleClick(i)}>Step: {i + 1}</li>;
         })}
     </ol>
   );
