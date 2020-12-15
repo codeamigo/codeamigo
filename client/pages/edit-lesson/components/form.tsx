@@ -15,20 +15,6 @@ import {
 
 import Editor from "./editor";
 
-const defaultMD = `## Step \#
-
-### Instructions
-1. Add instructions for the step here.
-2. You can use markdown to add [links](https://google.com)
-3. Or use it to add \`code\` snippets.
-
-\`\`\`
-You can also write code in blocks.
-\`\`\`
-
-Remember to be short and sweet. 😘
-`;
-
 const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
   const steps = lesson!.steps || [];
   const sortedSteps = steps
@@ -37,13 +23,13 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
 
   const [code, setCode] = useState<string>("");
   const [step, setStep] = useState(sortedSteps[stepIdx]);
-  const [markdown, setMarkdown] = useState(step?.instructions || defaultMD);
+  const [markdown, setMarkdown] = useState(step?.instructions);
 
   const lessonId = lesson!.id;
 
   useEffect(() => {
     setStep(sortedSteps[stepIdx]);
-    setMarkdown(sortedSteps[stepIdx].instructions);
+    setMarkdown(sortedSteps[stepIdx]?.instructions);
   }, [stepIdx]);
 
   const [updateLesson] = useUpdateLessonMutation();

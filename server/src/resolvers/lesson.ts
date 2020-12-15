@@ -13,6 +13,21 @@ import {
 import { MyContext } from "../types";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
+import { Step } from "../entities/Step";
+
+const DEFAULT_MD = `## Step \#
+
+### Instructions
+1. Add instructions for the step here.
+2. You can use markdown to add [links](https://google.com)
+3. Or use it to add \`code\` snippets.
+
+\`\`\`
+You can also write code in blocks.
+\`\`\`
+
+Remember to be short and sweet. 😘
+`;
 
 @InputType()
 class LessonInput {
@@ -41,8 +56,11 @@ export class LessonResolver {
     @Ctx() { req }: MyContext
   ): Promise<Lesson> {
     const owner = await User.findOne({ id: req.session.userId });
+    const step = await Step.create({ instructions: DEFAULT_MD }).save()
 
-    return Lesson.create({ ...options, owner }).save();
+    const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();
+
+    return lesson
   }
 
   @Mutation(() => Lesson, { nullable: true })
