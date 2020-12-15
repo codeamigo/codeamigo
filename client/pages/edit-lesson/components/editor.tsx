@@ -6,37 +6,12 @@ import { monacoFileLanguage } from "../../../utils";
 
 const FILES: { [key in string]: string } = {
   "app.tsx": ``.trim(),
-  "index.html": `<div id="root"></div>`.trim(),
-};
-
-const transformCode = (code: string, path: string) => {
-  return babel.transform(code, {
-    presets: ["es2015", "typescript", "react"],
-    filename: path,
-  });
-};
-
-const runCode = (files: typeof FILES, runPath: string) => {
-  const code = files[runPath];
-  const babelOutput = transformCode(code, runPath);
-
-  const require = (path: string) => {
-    return runCode(files, path);
-  };
-  const exports = {};
-  const module = { exports };
-
-  eval(babelOutput.code);
-
-  return module.exports;
+  "game.tsx": ``.trim(),
 };
 
 const Editor: React.FC<Props> = ({ setCode }) => {
   const [currentPath, setPath] = React.useState("app.tsx");
   const [files, setFiles] = React.useState(FILES);
-
-  const currentCode = files[currentPath];
-  const [outputCode, setOutputCode] = React.useState("");
 
   const updateFile = (path: string, code: string) => {
     setFiles({
@@ -44,16 +19,6 @@ const Editor: React.FC<Props> = ({ setCode }) => {
       [path]: code,
     });
   };
-
-  useEffect(() => {
-    try {
-      const { code } = transformCode(currentCode, currentPath);
-
-      setOutputCode(code);
-    } catch (e) {
-      setOutputCode(e.message);
-    }
-  }, [currentCode, currentPath]);
 
   return (
     <div className="flex w-full">
@@ -87,10 +52,27 @@ const Editor: React.FC<Props> = ({ setCode }) => {
         </div>
       </div>
       <div className="w-2/4 pr-4 bg-white sm:pr-6">
-        <button type="button" onClick={() => runCode(files, currentPath)}>
-          Run Code
-        </button>
-        <div>{outputCode}</div>
+        <iframe
+          srcDoc={`
+          <!doctype html>
+            <html lang="en-us">
+              <head>
+                  <title>React JSX Babel-Standalone Import/Export Problem</title>
+                  <meta charset="utf-8">
+              </head>
+              <body>
+                <div id="root"></div>
+                <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+                <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+                <script data-plugins="transform-es2015-modules-umd" type="text/babel">
+                  ${files['app.tsx']}
+                </script>
+              </body>
+            </html>
+          `}
+        ></iframe>
       </div>
     </div>
   );
