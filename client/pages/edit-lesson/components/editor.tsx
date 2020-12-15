@@ -5,7 +5,7 @@ import React, { useEffect } from "react";
 import { monacoFileLanguage } from "../../../utils";
 
 const FILES: { [key in string]: any } = {
-  "app.tsx": ``.trim()
+  "app.tsx": ``.trim(),
 };
 
 const transformCode = (code: string, path: string) => {
@@ -40,7 +40,7 @@ const Editor: React.FC<Props> = ({ setCode }) => {
   const updateFile = (path: string, code: string) => {
     setFiles({
       ...files,
-      [path]: code
+      [path]: code,
     });
   };
 
@@ -54,12 +54,29 @@ const Editor: React.FC<Props> = ({ setCode }) => {
     }
   }, [currentCode, currentPath]);
 
+  useEffect(() => {
+    async function getDeps() {
+      const dep1 = await fetch(
+        "https://prod-packager-packages.codesandbox.io/v2/packages/moment/2.29.1.json"
+      ).then((res) => res.json());
+
+      console.log(dep1)
+
+      setFiles({
+        ...files,
+        moment: dep1.contents["/node_modules/moment/moment.js"].content,
+      });
+    }
+
+    getDeps()
+  }, []);
+
   return (
     <div className="flex w-full">
       <div className="w-2/4 pr-4 bg-white sm:pr-6">
         <div className="flex rounded-md border border-gray-200">
           <div>
-            {Object.keys(FILES).map((path) => (
+            {Object.keys(files).map((path) => (
               <button
                 className="text-xs"
                 key={path}
@@ -72,7 +89,7 @@ const Editor: React.FC<Props> = ({ setCode }) => {
           <ControlledEditor
             height="300px"
             width="100%"
-            language={monacoFileLanguage(currentPath.split('.')[1])}
+            language={'typescript'}
             value={files[currentPath]}
             options={{
               iframe: true,
@@ -83,7 +100,9 @@ const Editor: React.FC<Props> = ({ setCode }) => {
         </div>
       </div>
       <div className="w-2/4 pr-4 bg-white sm:pr-6">
-        <button type='button' onClick={() => runCode(files, currentPath)}>Run</button>
+        <button type="button" onClick={() => runCode(files, currentPath)}>
+          Run
+        </button>
         <div>{outputCode}</div>
       </div>
     </div>
