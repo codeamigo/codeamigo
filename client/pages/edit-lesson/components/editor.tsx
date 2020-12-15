@@ -4,21 +4,55 @@ import { ControlledEditor } from "@monaco-editor/react";
 import React, { useEffect } from "react";
 import { monacoFileLanguage } from "../../../utils";
 
-const FILES: { [key in string]: string } = {
-  "app.tsx": ``.trim(),
-  "game.tsx": ``.trim(),
+const FILES: { [key in string]: any } = {
+  "app.tsx": ``.trim()
+};
+
+const transformCode = (code: string, path: string) => {
+  return babel.transform(code, {
+    presets: ["es2015", "typescript", "react"],
+    filename: path,
+  });
+};
+
+const runCode = (files: typeof FILES, runPath: string) => {
+  const code = files[runPath];
+  const babelOutput = transformCode(code, runPath);
+
+  const require = (path: string) => {
+    return runCode(files, path);
+  };
+  const exports = {};
+  const module = { exports };
+
+  eval(babelOutput.code);
+
+  return module.exports;
 };
 
 const Editor: React.FC<Props> = ({ setCode }) => {
   const [currentPath, setPath] = React.useState("app.tsx");
   const [files, setFiles] = React.useState(FILES);
 
+  const currentCode = files[currentPath];
+  const [outputCode, setOutputCode] = React.useState("");
+
   const updateFile = (path: string, code: string) => {
     setFiles({
       ...files,
-      [path]: code,
+      [path]: code
     });
   };
+
+  useEffect(() => {
+    try {
+      const { code } = transformCode(currentCode, currentPath);
+
+      setOutputCode(code);
+    } catch (e) {
+      setOutputCode(e.message);
+    }
+  }, [currentCode, currentPath]);
 
   return (
     <div className="flex w-full">
@@ -30,7 +64,6 @@ const Editor: React.FC<Props> = ({ setCode }) => {
                 className="text-xs"
                 key={path}
                 onClick={() => setPath(path)}
-                type="button"
               >
                 {path}
               </button>
@@ -39,40 +72,19 @@ const Editor: React.FC<Props> = ({ setCode }) => {
           <ControlledEditor
             height="300px"
             width="100%"
-            language={monacoFileLanguage(currentPath.split(".")[1])}
+            language={monacoFileLanguage(currentPath.split('.')[1])}
+            value={files[currentPath]}
             options={{
               iframe: true,
               minimap: { enabled: false },
             }}
-            value={files[currentPath]}
-            onChange={(_, value) => {
-              updateFile(currentPath, value || "");
-            }}
+            onChange={(_, value) => updateFile(currentPath, value || "")}
           />
         </div>
       </div>
       <div className="w-2/4 pr-4 bg-white sm:pr-6">
-        <iframe
-          srcDoc={`
-          <!doctype html>
-            <html lang="en-us">
-              <head>
-                  <title>React JSX Babel-Standalone Import/Export Problem</title>
-                  <meta charset="utf-8">
-              </head>
-              <body>
-                <div id="root"></div>
-                <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
-                <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-                <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-
-                <script data-plugins="transform-es2015-modules-umd" type="text/babel">
-                  ${files['app.tsx']}
-                </script>
-              </body>
-            </html>
-          `}
-        ></iframe>
+        <button type='button' onClick={() => runCode(files, currentPath)}>Run</button>
+        <div>{outputCode}</div>
       </div>
     </div>
   );
