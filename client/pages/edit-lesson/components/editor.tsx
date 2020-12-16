@@ -27,12 +27,12 @@ const runCode = (files: { [key in string]: string }, runPath: string) => {
 
 const Editor: React.FC<Props> = ({ setCode, step }) => {
   const [files, setFiles] = React.useState({});
-  const [codeModules, setCodeModules] = React.useState({})
+  const [codeModules, setCodeModules] = React.useState({});
   const [currentPath, setPath] = React.useState("app.tsx");
-  const [currentCode, setCurrentCode] = React.useState("")
+  const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data } = useStepQuery({ variables: { id: step.id } })
+  const { data } = useStepQuery({ variables: { id: step.id } });
 
   const updateFile = (path: string, code: string) => {
     setFiles({
@@ -46,7 +46,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       value: code,
     });
 
-    setCurrentCode(code)
+    setCurrentCode(code);
   };
 
   useEffect(() => {
@@ -55,9 +55,9 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       {}
     ) || {
       "app.tsx": "",
-    }
+    };
 
-    setFiles(mods)
+    setFiles(mods);
   }, [data?.step?.codeModules]);
 
   useEffect(() => {
@@ -86,13 +86,19 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
 
       const monacoInstance = await monaco.init();
 
+      // validation settings
+      monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false,
+      });
+
       // compiler options
-      monacoInstance.languages.typescript.javascriptDefaults.setCompilerOptions(
-        {
-          allowSyntheticDefaultImports: true,
-          allowNonTsExtensions: true,
-        }
-      );
+      monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
+        allowSyntheticDefaultImports: true,
+        allowNonTsExtensions: true,
+        typeRoots: ["node_modules/@types"]
+      });
 
       const fakeFiles = {
         "moment.d.ts": dep2.files["/moment/moment.d.ts"].module.code,
@@ -104,7 +110,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
         monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
           // @ts-ignore
           fakeFiles[fileName],
-          fakePath
+          fakePath,
         );
       }
 
