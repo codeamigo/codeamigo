@@ -6,11 +6,9 @@ import gfm from "remark-gfm";
 
 import {
   useUpdateLessonMutation,
-  useCreateOrUpdateStepMutation,
+  useUpdateStepMutation,
   LessonQuery,
-  Step,
-  Lesson,
-  StepsQuery,
+  useUpdateCodeModuleMutation,
 } from "../../../generated/graphql";
 
 import Editor from "./editor";
@@ -21,7 +19,9 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<{ id: number; name: string; value: string }>(
+    {} as any
+  );
   const [step, setStep] = useState(sortedSteps[stepIdx]);
   const [markdown, setMarkdown] = useState(step?.instructions);
 
@@ -33,7 +33,8 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
   }, [stepIdx]);
 
   const [updateLesson] = useUpdateLessonMutation();
-  const [createOrUpdateStep] = useCreateOrUpdateStepMutation();
+  const [updateStep] = useUpdateStepMutation();
+  const [updateCodeModule] = useUpdateCodeModuleMutation();
 
   return (
     <Formik
@@ -46,11 +47,16 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
           await updateLesson({
             variables: { id: lessonId, ...values },
           });
-          await createOrUpdateStep({
+          await updateStep({
             variables: {
               id: step.id,
-              lessonId: lessonId,
-              instructions: markdown,
+              instructions: markdown || "",
+            },
+          });
+          console.log(code);
+          await updateCodeModule({
+            variables: {
+              ...code,
             },
           });
           refetch();
@@ -108,13 +114,13 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
               <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
                 <ReactMarkdown
                   className="markdown-body px-6 py-4"
-                  children={markdown}
+                  children={markdown || ""}
                   plugins={[gfm]}
                 />
               </div>
             </div>
             <div className="flex flex-col w-full">
-              <Editor setCode={setCode} />
+              <Editor setCode={setCode} step={step} />
             </div>
           </>
         </Form>

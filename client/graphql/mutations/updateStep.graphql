@@ -1,0 +1,15 @@
+mutation UpdateStep(
+  $id: Float!
+  $instructions: String!
+) {
+  updateStep(
+    options: {
+      id: $id
+      instructions: $instructions
+    }
+  ) {
+    id
+    createdAt
+    instructions
+  }
+}

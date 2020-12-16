@@ -20,8 +20,6 @@ class CheckpointInput {
   @Field()
   description: string;
   @Field()
-  initialCode: string;
-  @Field()
   userCode: string;
   @Field()
   test: string;

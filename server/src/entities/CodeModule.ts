@@ -12,7 +12,7 @@ import { Step } from "./Step";
 
 @ObjectType()
 @Entity()
-export class Checkpoint extends BaseEntity {
+export class CodeModule extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -25,18 +25,15 @@ export class Checkpoint extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field()
+  @Field(() => String, { defaultValue: 'app.tsx' })
   @Column()
-  description!: string;
+  name!: string;
 
-  @Field()
+  @Field(() => String, { defaultValue: `` })
   @Column()
-  userCode!: string;
+  value!: string;
 
-  @Field()
-  @Column()
-  test!: string;
-
-  @ManyToOne(() => Step, (step) => step.checkpoints)
+  @ManyToOne(() => Step, (step) => step.codeModules)
+  @Field(() => Step)
   step: Step;
 }

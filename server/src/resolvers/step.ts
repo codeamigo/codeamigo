@@ -11,14 +11,11 @@ import {
 import { isAuth } from "../middleware/isAuth";
 
 import { Step } from "../entities/Step";
-import { Lesson } from "../entities/Lesson";
 
 @InputType()
 class StepInput {
   @Field({ nullable: true })
   id: number;
-  @Field()
-  lessonId: number;
   @Field()
   instructions: string;
 }
@@ -27,29 +24,25 @@ class StepInput {
 export class StepResolver {
   @Query(() => [Step])
   steps(): Promise<Step[]> {
-    return Step.find({ relations: ["lesson", "checkpoints"] });
+    return Step.find({ relations: ["lesson", "checkpoints", "codeModules"] });
   }
 
   @Query(() => Step, { nullable: true })
   step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
-    return Step.findOne(id, { relations: ["lesson"] });
+    return Step.findOne(id, { relations: ["lesson", "codeModules"] });
   }
 
-  @Mutation(() => Step)
+  @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
-  async createOrUpdateStep(@Arg("options") options: StepInput): Promise<Step> {
-    const lesson = await Lesson.findOne({ id: options.lessonId });
-    let step = await Step.findOne({ id: options.id });
-
+  async updateStep(@Arg("options") options: StepInput): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
     if (!step) {
-      return Step.create({ ...options, lesson }).save();
-    } else {
-      await Step.update(
-        { id: options.id },
-        { instructions: options.instructions }
-      );
-      return step;
+      return null;
     }
+
+    await Step.update({ id: options.id }, { ...step, ...options });
+
+    return step
   }
 
   @Mutation(() => Boolean)

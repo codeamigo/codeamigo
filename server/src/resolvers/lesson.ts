@@ -14,6 +14,7 @@ import { MyContext } from "../types";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { Step } from "../entities/Step";
+import { CodeModule } from "../entities/CodeModule";
 
 const DEFAULT_MD = `## Step \#
 
@@ -56,17 +57,21 @@ export class LessonResolver {
     @Ctx() { req }: MyContext
   ): Promise<Lesson> {
     const owner = await User.findOne({ id: req.session.userId });
-    const step = await Step.create({ instructions: DEFAULT_MD }).save()
+    const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
+    const step = await Step.create({
+      instructions: DEFAULT_MD,
+      codeModules: [code],
+    }).save();
 
     const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();
 
-    return lesson
+    return lesson;
   }
 
   @Mutation(() => Lesson, { nullable: true })
   async updateLesson(
     @Arg("id") id: number,
-    @Arg("options") options: LessonInput,
+    @Arg("options") options: LessonInput
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {

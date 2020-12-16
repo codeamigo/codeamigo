@@ -1,10 +1,7 @@
 import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco, Monaco } from "@monaco-editor/react";
 import React, { useEffect } from "react";
-
-const FILES: { [key in string]: any } = {
-  "app.tsx": ``.trim(),
-};
+import { CodeModule, Step } from "../../../generated/graphql";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
@@ -13,7 +10,7 @@ const transformCode = (code: string, path: string) => {
   });
 };
 
-const runCode = (files: typeof FILES, runPath: string) => {
+const runCode = (files: { [key in string]: string }, runPath: string) => {
   const code = files[runPath];
   const babelOutput = transformCode(code, runPath);
 
@@ -28,20 +25,34 @@ const runCode = (files: typeof FILES, runPath: string) => {
   return module.exports;
 };
 
-const Editor: React.FC<Props> = ({ setCode }) => {
+const Editor: React.FC<Props> = ({ setCode, step }) => {
+  const mods: { [key in string]: string } = step.codeModules?.reduce(
+    (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+    {}
+  ) || {
+    "app.tsx": "",
+  };
   const [currentPath, setPath] = React.useState("app.tsx");
-  const [files, setFiles] = React.useState(FILES);
+  const [files, setFiles] = React.useState(mods);
 
   const currentCode = files[currentPath];
+  console.log(step.codeModules)
   const [outputCode, setOutputCode] = React.useState("");
 
   const updateFile = (path: string, code: string) => {
-    console.log(files);
     setFiles({
       ...files,
       [path]: code,
     });
+
+    setCode({
+      id: 2,
+      name: path,
+      value: code,
+    });
   };
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     try {
@@ -64,7 +75,7 @@ const Editor: React.FC<Props> = ({ setCode }) => {
 
       setFiles({
         ...files,
-        'moment': dep1.contents["/node_modules/moment/moment.js"].content,
+        moment: dep1.contents["/node_modules/moment/moment.js"].content,
       });
 
       const monacoInstance = await monaco.init();
@@ -76,10 +87,6 @@ const Editor: React.FC<Props> = ({ setCode }) => {
           allowNonTsExtensions: true,
         }
       );
-
-      monacoInstance.editor.onDidCreateModel(() => {
-        // updateFile("app.tsx", initialCode);
-      });
 
       const fakeFiles = {
         "moment.d.ts": dep2.files["/moment/moment.d.ts"].module.code,
@@ -153,7 +160,17 @@ const Editor: React.FC<Props> = ({ setCode }) => {
 };
 
 type Props = {
-  setCode: (value: string) => void;
+  setCode: (value: { id: number; name: string; value: string }) => void;
+  step: {
+    __typename?: "Step" | undefined;
+  } & Pick<Step, "id" | "createdAt" | "instructions"> & {
+      codeModules?:
+        | ({
+            __typename?: "CodeModule" | undefined;
+          } & Pick<CodeModule, "id" | "name" | "value">)[]
+        | null
+        | undefined;
+    };
 };
 
 export default Editor;
