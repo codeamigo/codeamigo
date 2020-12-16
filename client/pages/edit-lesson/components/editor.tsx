@@ -1,7 +1,7 @@
 import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco, Monaco } from "@monaco-editor/react";
 import React, { useEffect } from "react";
-import { CodeModule, Step } from "../../../generated/graphql";
+import { CodeModule, Step, useStepQuery } from "../../../generated/graphql";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
@@ -26,18 +26,13 @@ const runCode = (files: { [key in string]: string }, runPath: string) => {
 };
 
 const Editor: React.FC<Props> = ({ setCode, step }) => {
-  const mods: { [key in string]: string } = step.codeModules?.reduce(
-    (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-    {}
-  ) || {
-    "app.tsx": "",
-  };
+  const [files, setFiles] = React.useState({});
+  const [codeModules, setCodeModules] = React.useState({})
   const [currentPath, setPath] = React.useState("app.tsx");
-  const [files, setFiles] = React.useState(mods);
-
-  const currentCode = files[currentPath];
-  console.log(step.codeModules)
+  const [currentCode, setCurrentCode] = React.useState("")
   const [outputCode, setOutputCode] = React.useState("");
+
+  const { data } = useStepQuery({ variables: { id: step.id } })
 
   const updateFile = (path: string, code: string) => {
     setFiles({
@@ -50,9 +45,20 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       name: path,
       value: code,
     });
+
+    setCurrentCode(code)
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const mods: { [key in string]: string } = data?.step?.codeModules?.reduce(
+      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+      {}
+    ) || {
+      "app.tsx": "",
+    }
+
+    setFiles(mods)
+  }, [data?.step?.codeModules]);
 
   useEffect(() => {
     try {
@@ -109,7 +115,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       );
 
       const model = monacoInstance.editor.createModel(
-        ``,
+        files[currentPath],
         "typescript",
         monacoInstance.Uri.parse("file:///app.tsx")
       );
@@ -131,6 +137,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
                 className="text-xs"
                 key={path}
                 onClick={() => setPath(path)}
+                type="button"
               >
                 {path}
               </button>
