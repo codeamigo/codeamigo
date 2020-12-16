@@ -1,8 +1,6 @@
 import * as babel from "@babel/standalone";
-
-import { ControlledEditor } from "@monaco-editor/react";
+import { ControlledEditor, monaco, Monaco } from "@monaco-editor/react";
 import React, { useEffect } from "react";
-import { monacoFileLanguage } from "../../../utils";
 
 const FILES: { [key in string]: any } = {
   "app.tsx": ``.trim(),
@@ -38,6 +36,7 @@ const Editor: React.FC<Props> = ({ setCode }) => {
   const [outputCode, setOutputCode] = React.useState("");
 
   const updateFile = (path: string, code: string) => {
+    console.log(files);
     setFiles({
       ...files,
       [path]: code,
@@ -54,26 +53,70 @@ const Editor: React.FC<Props> = ({ setCode }) => {
     }
   }, [currentCode, currentPath]);
 
-  useEffect(() => {
+  const editorDidMount = (_, editor) => {
     async function getDeps() {
       const dep1 = await fetch(
         "https://prod-packager-packages.codesandbox.io/v2/packages/moment/2.29.1.json"
       ).then((res) => res.json());
-
-      console.log(dep1)
+      const dep2 = await fetch(
+        "https://prod-packager-packages.codesandbox.io/v1/typings/moment/2.29.1.json"
+      ).then((res) => res.json());
 
       setFiles({
         ...files,
-        moment: dep1.contents["/node_modules/moment/moment.js"].content,
+        'moment': dep1.contents["/node_modules/moment/moment.js"].content,
       });
+
+      const monacoInstance = await monaco.init();
+
+      // compiler options
+      monacoInstance.languages.typescript.javascriptDefaults.setCompilerOptions(
+        {
+          allowSyntheticDefaultImports: true,
+          allowNonTsExtensions: true,
+        }
+      );
+
+      monacoInstance.editor.onDidCreateModel(() => {
+        // updateFile("app.tsx", initialCode);
+      });
+
+      const fakeFiles = {
+        "moment.d.ts": dep2.files["/moment/moment.d.ts"].module.code,
+      };
+
+      for (const fileName in fakeFiles) {
+        const fakePath = `file:///node_modules/@types/${fileName}`;
+
+        monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
+          // @ts-ignore
+          fakeFiles[fileName],
+          fakePath
+        );
+      }
+
+      const fakePath = "file:///moment.js";
+      monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
+        dep1.contents["/node_modules/moment/moment.js"].content.trim(),
+        fakePath
+      );
+
+      const model = monacoInstance.editor.createModel(
+        ``,
+        "typescript",
+        monacoInstance.Uri.parse("file:///app.tsx")
+      );
+
+      editor.setModel(model);
     }
 
-    getDeps()
-  }, []);
+    getDeps();
+  };
 
   return (
     <div className="flex w-full">
-      <div className="w-2/4 pr-4 bg-white sm:pr-6">
+      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
+        <h3>Initial Code</h3>
         <div className="flex rounded-md border border-gray-200">
           <div>
             {Object.keys(files).map((path) => (
@@ -89,17 +132,17 @@ const Editor: React.FC<Props> = ({ setCode }) => {
           <ControlledEditor
             height="300px"
             width="100%"
-            language={'typescript'}
+            language={"typescript"}
             value={files[currentPath]}
             options={{
-              iframe: true,
               minimap: { enabled: false },
             }}
+            editorDidMount={editorDidMount}
             onChange={(_, value) => updateFile(currentPath, value || "")}
           />
         </div>
       </div>
-      <div className="w-2/4 pr-4 bg-white sm:pr-6">
+      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
         <button type="button" onClick={() => runCode(files, currentPath)}>
           Run
         </button>

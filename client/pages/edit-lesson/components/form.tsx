@@ -90,8 +90,8 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
               </div>
             </div>
             <div className="flex w-full">
-              <div className="w-2/4 pl-4 bg-white sm:pl-6">
-                <h1>Instructions</h1>
+              <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
+                <h3>Instructions</h3>
                 <div className="rounded-md border border-gray-200">
                   <ControlledEditor
                     height="300px"
@@ -105,7 +105,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
                   />
                 </div>
               </div>
-              <div className="w-2/4 pl-4 bg-white sm:pl-6">
+              <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
                 <ReactMarkdown
                   className="markdown-body px-6 py-4"
                   children={markdown}
@@ -114,7 +114,6 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
               </div>
             </div>
             <div className="flex flex-col w-full">
-              <h1>Checkpoint #1</h1>
               <Editor setCode={setCode} />
             </div>
           </>
