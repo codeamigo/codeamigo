@@ -1,7 +1,6 @@
 mutation CreateLesson($title: String!) {
   createLesson(options: { title: $title }) {
     id
-    likes
     title
     owner {
       id

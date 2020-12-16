@@ -1,5 +1,5 @@
-import 'reflect-metadata'
-import { createConnection } from 'typeorm'
+import "reflect-metadata";
+import { createConnection } from "typeorm";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
@@ -9,27 +9,28 @@ import connectRedis from "connect-redis";
 import cors from "cors";
 
 import { __prod__ } from "./constants";
-import { Checkpoint } from './entities/Checkpoint';
+import { Checkpoint } from "./entities/Checkpoint";
 import { Lesson } from "./entities/Lesson";
 import { User } from "./entities/User";
-import { Step } from './entities/Step';
+import { Step } from "./entities/Step";
 
 import { LessonResolver } from "./resolvers/lesson";
 import { UserResolver } from "./resolvers/user";
-import { StepResolver } from './resolvers/step';
-import { CheckpointResolver } from './resolvers/checkpoint';
+import { StepResolver } from "./resolvers/step";
+import { CheckpointResolver } from "./resolvers/checkpoint";
+import { CodeModule } from "./entities/CodeModule";
+import { CodeModuleResolver } from "./resolvers/codeModule";
 
-const main = async () => {  
+const main = async () => {
   await createConnection({
-    type: 'postgres',
-    database: 'codeamigo',
-    username: 'postgres',
-    password: 'postgres',
+    type: "postgres",
+    database: "codeamigo",
+    username: "postgres",
+    password: "postgres",
     logging: true,
     synchronize: true,
-    entities: [Checkpoint, Lesson, Step, User]
-  })
-
+    entities: [Checkpoint, CodeModule, Lesson, Step, User],
+  });
 
   const app = express();
 
@@ -64,7 +65,13 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [CheckpointResolver, LessonResolver, StepResolver, UserResolver],
+      resolvers: [
+        CheckpointResolver,
+        CodeModuleResolver,
+        LessonResolver,
+        StepResolver,
+        UserResolver,
+      ],
       validate: false,
     }),
     context: ({ req, res }) => ({ req, res, redis }),

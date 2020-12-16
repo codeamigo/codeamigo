@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Checkpoint } from "./Checkpoint";
+import { CodeModule } from "./CodeModule";
 import { Lesson } from "./Lesson";
 
 @ObjectType()
@@ -27,13 +28,17 @@ export class Step extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field()
+  @Field(() => String, { defaultValue: `` })
   @Column()
   instructions!: string;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps)
   @Field(() => Lesson)
   lesson: Lesson;
+
+  @OneToMany(() => CodeModule, (codeModule) => codeModule.step)
+  @Field(() => [CodeModule], { defaultValue: [] })
+  codeModules!: CodeModule[];
 
   @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.step)
   @Field(() => [Checkpoint], { defaultValue: [] })

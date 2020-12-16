@@ -6,28 +6,12 @@ import gfm from "remark-gfm";
 
 import {
   useUpdateLessonMutation,
-  useCreateOrUpdateStepMutation,
+  useUpdateStepMutation,
   LessonQuery,
-  Step,
-  Lesson,
-  StepsQuery,
+  useUpdateCodeModuleMutation,
 } from "../../../generated/graphql";
 
 import Editor from "./editor";
-
-const defaultMD = `## Step \#
-
-### Instructions
-1. Add instructions for the step here.
-2. You can use markdown to add [links](https://google.com)
-3. Or use it to add \`code\` snippets.
-
-\`\`\`
-You can also write code in blocks.
-\`\`\`
-
-Remember to be short and sweet. 😘
-`;
 
 const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
   const steps = lesson!.steps || [];
@@ -35,19 +19,22 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-  const [code, setCode] = useState<string>("");
+  const [code, setCode] = useState<{ id: number; name: string; value: string }>(
+    {} as any
+  );
   const [step, setStep] = useState(sortedSteps[stepIdx]);
-  const [markdown, setMarkdown] = useState(step?.instructions || defaultMD);
+  const [markdown, setMarkdown] = useState(step?.instructions);
 
   const lessonId = lesson!.id;
 
   useEffect(() => {
     setStep(sortedSteps[stepIdx]);
-    setMarkdown(sortedSteps[stepIdx].instructions);
+    setMarkdown(sortedSteps[stepIdx]?.instructions);
   }, [stepIdx]);
 
   const [updateLesson] = useUpdateLessonMutation();
-  const [createOrUpdateStep] = useCreateOrUpdateStepMutation();
+  const [updateStep] = useUpdateStepMutation();
+  const [updateCodeModule] = useUpdateCodeModuleMutation();
 
   return (
     <Formik
@@ -60,11 +47,16 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
           await updateLesson({
             variables: { id: lessonId, ...values },
           });
-          await createOrUpdateStep({
+          await updateStep({
             variables: {
               id: step.id,
-              lessonId: lessonId,
-              instructions: markdown,
+              instructions: markdown || "",
+            },
+          });
+          console.log(code);
+          await updateCodeModule({
+            variables: {
+              ...code,
             },
           });
           refetch();
@@ -104,8 +96,8 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
               </div>
             </div>
             <div className="flex w-full">
-              <div className="w-2/4 pl-4 bg-white sm:pl-6">
-                <h1>Instructions</h1>
+              <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
+                <h3>Instructions</h3>
                 <div className="rounded-md border border-gray-200">
                   <ControlledEditor
                     height="300px"
@@ -119,17 +111,16 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
                   />
                 </div>
               </div>
-              <div className="w-2/4 pl-4 bg-white sm:pl-6">
+              <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
                 <ReactMarkdown
                   className="markdown-body px-6 py-4"
-                  children={markdown}
+                  children={markdown || ""}
                   plugins={[gfm]}
                 />
               </div>
             </div>
             <div className="flex flex-col w-full">
-              <h1>Checkpoint #1</h1>
-              <Editor setCode={setCode} />
+              <Editor setCode={setCode} step={step} />
             </div>
           </>
         </Form>

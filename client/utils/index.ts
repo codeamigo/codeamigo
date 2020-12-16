@@ -7,3 +7,14 @@ export const toErrorMap = (errors: FieldError[]) => {
   });
   return errorMap;
 };
+
+export const monacoFileLanguage = (ext: string) => {
+  switch (ext) {
+    case "tsx":
+      return "javascript";
+    case "ts":
+      return "typescript";
+    default:
+      return ext;
+  }
+};

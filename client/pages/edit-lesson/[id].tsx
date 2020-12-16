@@ -12,6 +12,8 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
 
   const { loading, error, data, refetch } = useLessonQuery({ variables: { id } });
 
+  console.log(error)
+
   if (!data) return null;
   if (!data.lesson) return null;
 

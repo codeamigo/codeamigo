@@ -1,0 +1,9 @@
+query Step($id: Int!) {
+  step(id: $id) {
+    codeModules {
+      id
+      name
+      value
+    }
+  }
+}

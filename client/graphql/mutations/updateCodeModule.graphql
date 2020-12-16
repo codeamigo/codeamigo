@@ -1,0 +1,12 @@
+mutation UpdateCodeModule(
+  $id: Float!
+  $name: String!
+  $value: String!
+) {
+  updateCodeModule(
+    id: $id
+    options: { name: $name, value: $value }
+  ) {
+    id
+  }
+}

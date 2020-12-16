@@ -22,6 +22,8 @@ export type Query = {
   step?: Maybe<Step>;
   checkpoints: Array<Checkpoint>;
   checkpoint?: Maybe<Checkpoint>;
+  codeModules: Array<CodeModule>;
+  codeModule?: Maybe<CodeModule>;
 };
 
 
@@ -39,13 +41,18 @@ export type QueryCheckpointArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryCodeModuleArgs = {
+  id: Scalars['Int'];
+};
+
 export type Lesson = {
   __typename?: 'Lesson';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
   owner: User;
   steps?: Maybe<Array<Step>>;
@@ -66,9 +73,20 @@ export type Step = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  instructions: Scalars['String'];
+  instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
+  codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
+};
+
+export type CodeModule = {
+  __typename?: 'CodeModule';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  step: Step;
 };
 
 export type Checkpoint = {
@@ -77,7 +95,6 @@ export type Checkpoint = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   description: Scalars['String'];
-  initialCode: Scalars['String'];
   userCode: Scalars['String'];
   test: Scalars['String'];
 };
@@ -91,11 +108,13 @@ export type Mutation = {
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
-  createOrUpdateStep: Step;
+  updateStep?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
   createCheckpoint: Checkpoint;
   updateCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
+  updateCodeModule?: Maybe<CodeModule>;
+  deleteCodeModule: Scalars['Boolean'];
 };
 
 
@@ -136,7 +155,7 @@ export type MutationChangePasswordArgs = {
 };
 
 
-export type MutationCreateOrUpdateStepArgs = {
+export type MutationUpdateStepArgs = {
   options: StepInput;
 };
 
@@ -158,6 +177,17 @@ export type MutationUpdateCheckpointArgs = {
 
 
 export type MutationDeleteCheckpointArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationUpdateCodeModuleArgs = {
+  options: CodeModuleInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteCodeModuleArgs = {
   id: Scalars['Float'];
 };
 
@@ -191,16 +221,19 @@ export type LoginInput = {
 
 export type StepInput = {
   id?: Maybe<Scalars['Float']>;
-  lessonId: Scalars['Float'];
   instructions: Scalars['String'];
 };
 
 export type CheckpointInput = {
   stepId: Scalars['Float'];
   description: Scalars['String'];
-  initialCode: Scalars['String'];
   userCode: Scalars['String'];
   test: Scalars['String'];
+};
+
+export type CodeModuleInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type RegularErrorFragment = (
@@ -237,26 +270,11 @@ export type CreateLessonMutation = (
   { __typename?: 'Mutation' }
   & { createLesson: (
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'likes' | 'title'>
+    & Pick<Lesson, 'id' | 'title'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     ) }
-  ) }
-);
-
-export type CreateOrUpdateStepMutationVariables = Exact<{
-  id: Scalars['Float'];
-  lessonId: Scalars['Float'];
-  instructions: Scalars['String'];
-}>;
-
-
-export type CreateOrUpdateStepMutation = (
-  { __typename?: 'Mutation' }
-  & { createOrUpdateStep: (
-    { __typename?: 'Step' }
-    & Pick<Step, 'id' | 'createdAt' | 'instructions'>
   ) }
 );
 
@@ -311,6 +329,21 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateCodeModuleMutationVariables = Exact<{
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type UpdateCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCodeModule?: Maybe<(
+    { __typename?: 'CodeModule' }
+    & Pick<CodeModule, 'id'>
+  )> }
+);
+
 export type UpdateLessonMutationVariables = Exact<{
   id: Scalars['Float'];
   title: Scalars['String'];
@@ -323,6 +356,20 @@ export type UpdateLessonMutation = (
   & { updateLesson?: Maybe<(
     { __typename?: 'Lesson' }
     & Pick<Lesson, 'id' | 'title'>
+  )> }
+);
+
+export type UpdateStepMutationVariables = Exact<{
+  id: Scalars['Float'];
+  instructions: Scalars['String'];
+}>;
+
+
+export type UpdateStepMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStep?: Maybe<(
+    { __typename?: 'Step' }
+    & Pick<Step, 'id' | 'createdAt' | 'instructions'>
   )> }
 );
 
@@ -342,6 +389,10 @@ export type LessonQuery = (
     ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+      & { codeModules?: Maybe<Array<(
+        { __typename?: 'CodeModule' }
+        & Pick<CodeModule, 'id' | 'name' | 'value'>
+      )>> }
     )>> }
   )> }
 );
@@ -373,6 +424,22 @@ export type MeQuery = (
       { __typename?: 'Lesson' }
       & Pick<Lesson, 'id'>
     )> }
+  )> }
+);
+
+export type StepQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type StepQuery = (
+  { __typename?: 'Query' }
+  & { step?: Maybe<(
+    { __typename?: 'Step' }
+    & { codeModules?: Maybe<Array<(
+      { __typename?: 'CodeModule' }
+      & Pick<CodeModule, 'id' | 'name' | 'value'>
+    )>> }
   )> }
 );
 
@@ -436,7 +503,6 @@ export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!) {
   createLesson(options: {title: $title}) {
     id
-    likes
     title
     owner {
       id
@@ -470,44 +536,6 @@ export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
-export const CreateOrUpdateStepDocument = gql`
-    mutation CreateOrUpdateStep($id: Float!, $lessonId: Float!, $instructions: String!) {
-  createOrUpdateStep(
-    options: {id: $id, lessonId: $lessonId, instructions: $instructions}
-  ) {
-    id
-    createdAt
-    instructions
-  }
-}
-    `;
-export type CreateOrUpdateStepMutationFn = Apollo.MutationFunction<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>;
-
-/**
- * __useCreateOrUpdateStepMutation__
- *
- * To run a mutation, you first call `useCreateOrUpdateStepMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOrUpdateStepMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOrUpdateStepMutation, { data, loading, error }] = useCreateOrUpdateStepMutation({
- *   variables: {
- *      id: // value for 'id'
- *      lessonId: // value for 'lessonId'
- *      instructions: // value for 'instructions'
- *   },
- * });
- */
-export function useCreateOrUpdateStepMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>) {
-        return Apollo.useMutation<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>(CreateOrUpdateStepDocument, baseOptions);
-      }
-export type CreateOrUpdateStepMutationHookResult = ReturnType<typeof useCreateOrUpdateStepMutation>;
-export type CreateOrUpdateStepMutationResult = Apollo.MutationResult<CreateOrUpdateStepMutation>;
-export type CreateOrUpdateStepMutationOptions = Apollo.BaseMutationOptions<CreateOrUpdateStepMutation, CreateOrUpdateStepMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
@@ -621,6 +649,40 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateCodeModuleDocument = gql`
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
+  updateCodeModule(id: $id, options: {name: $name, value: $value}) {
+    id
+  }
+}
+    `;
+export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
+
+/**
+ * __useUpdateCodeModuleMutation__
+ *
+ * To run a mutation, you first call `useUpdateCodeModuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCodeModuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCodeModuleMutation, { data, loading, error }] = useUpdateCodeModuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useUpdateCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>) {
+        return Apollo.useMutation<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>(UpdateCodeModuleDocument, baseOptions);
+      }
+export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCodeModuleMutation>;
+export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
+export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 export const UpdateLessonDocument = gql`
     mutation UpdateLesson($id: Float!, $title: String!, $description: String!) {
   updateLesson(id: $id, options: {title: $title, description: $description}) {
@@ -656,6 +718,41 @@ export function useUpdateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateLessonMutationHookResult = ReturnType<typeof useUpdateLessonMutation>;
 export type UpdateLessonMutationResult = Apollo.MutationResult<UpdateLessonMutation>;
 export type UpdateLessonMutationOptions = Apollo.BaseMutationOptions<UpdateLessonMutation, UpdateLessonMutationVariables>;
+export const UpdateStepDocument = gql`
+    mutation UpdateStep($id: Float!, $instructions: String!) {
+  updateStep(options: {id: $id, instructions: $instructions}) {
+    id
+    createdAt
+    instructions
+  }
+}
+    `;
+export type UpdateStepMutationFn = Apollo.MutationFunction<UpdateStepMutation, UpdateStepMutationVariables>;
+
+/**
+ * __useUpdateStepMutation__
+ *
+ * To run a mutation, you first call `useUpdateStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStepMutation, { data, loading, error }] = useUpdateStepMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      instructions: // value for 'instructions'
+ *   },
+ * });
+ */
+export function useUpdateStepMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStepMutation, UpdateStepMutationVariables>) {
+        return Apollo.useMutation<UpdateStepMutation, UpdateStepMutationVariables>(UpdateStepDocument, baseOptions);
+      }
+export type UpdateStepMutationHookResult = ReturnType<typeof useUpdateStepMutation>;
+export type UpdateStepMutationResult = Apollo.MutationResult<UpdateStepMutation>;
+export type UpdateStepMutationOptions = Apollo.BaseMutationOptions<UpdateStepMutation, UpdateStepMutationVariables>;
 export const LessonDocument = gql`
     query Lesson($id: Int!) {
   lesson(id: $id) {
@@ -669,6 +766,11 @@ export const LessonDocument = gql`
       id
       createdAt
       instructions
+      codeModules {
+        id
+        name
+        value
+      }
     }
   }
 }
@@ -773,6 +875,43 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const StepDocument = gql`
+    query Step($id: Int!) {
+  step(id: $id) {
+    codeModules {
+      id
+      name
+      value
+    }
+  }
+}
+    `;
+
+/**
+ * __useStepQuery__
+ *
+ * To run a query within a React component, call `useStepQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStepQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStepQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useStepQuery(baseOptions: Apollo.QueryHookOptions<StepQuery, StepQueryVariables>) {
+        return Apollo.useQuery<StepQuery, StepQueryVariables>(StepDocument, baseOptions);
+      }
+export function useStepLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StepQuery, StepQueryVariables>) {
+          return Apollo.useLazyQuery<StepQuery, StepQueryVariables>(StepDocument, baseOptions);
+        }
+export type StepQueryHookResult = ReturnType<typeof useStepQuery>;
+export type StepLazyQueryHookResult = ReturnType<typeof useStepLazyQuery>;
+export type StepQueryResult = Apollo.QueryResult<StepQuery, StepQueryVariables>;
 export const StepsDocument = gql`
     query Steps {
   steps {
