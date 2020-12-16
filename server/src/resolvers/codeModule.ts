@@ -6,12 +6,9 @@ import {
   Mutation,
   Query,
   Resolver,
-  UseMiddleware,
 } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
 
 import { CodeModule } from "../entities/CodeModule";
-import { Step } from "../entities/Step";
 
 @InputType()
 class CodeModuleInput {
