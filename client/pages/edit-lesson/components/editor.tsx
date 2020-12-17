@@ -2,6 +2,7 @@ import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco, Monaco } from "@monaco-editor/react";
 import React, { useEffect } from "react";
 import { CodeModule, Step, useStepQuery } from "../../../generated/graphql";
+import { CodeSandboxV1ResponseI, CodeSandboxV2ResponseI } from "../../api/types";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
@@ -72,53 +73,55 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
 
   const editorDidMount = (_, editor) => {
     async function getDeps() {
-      const dep1 = await fetch(
-        "https://prod-packager-packages.codesandbox.io/v2/packages/moment/2.29.1.json"
+      const dep1: CodeSandboxV2ResponseI = await fetch(
+        "https://prod-packager-packages.codesandbox.io/v2/packages/jest-lite/1.0.0-alpha.4.json"
       ).then((res) => res.json());
-      const dep2 = await fetch(
+      const dep2: CodeSandboxV1ResponseI = await fetch(
         "https://prod-packager-packages.codesandbox.io/v1/typings/moment/2.29.1.json"
       ).then((res) => res.json());
 
+      const fileToAdd = dep1.contents['/node_modules/jest-lite/dist/core.js'].content
+
       setFiles({
         ...files,
-        moment: dep1.contents["/node_modules/moment/moment.js"].content,
+        'checkpoint.spec.ts': ``,
+        [dep1.dependency.name]: fileToAdd
       });
 
       const monacoInstance = await monaco.init();
 
       // validation settings
-      monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-        noSemanticValidation: true,
-        noSyntaxValidation: false,
-      });
+      monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
+        {
+          noSemanticValidation: true,
+          noSyntaxValidation: false,
+        }
+      );
 
       // compiler options
-      monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-        target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
-        allowSyntheticDefaultImports: true,
-        allowNonTsExtensions: true,
-        typeRoots: ["node_modules/@types"]
-      });
-
-      const fakeFiles = {
-        "moment.d.ts": dep2.files["/moment/moment.d.ts"].module.code,
-      };
-
-      for (const fileName in fakeFiles) {
-        const fakePath = `file:///node_modules/@types/${fileName}`;
-
-        monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
-          // @ts-ignore
-          fakeFiles[fileName],
-          fakePath,
-        );
-      }
-
-      const fakePath = "file:///moment.js";
-      monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
-        dep1.contents["/node_modules/moment/moment.js"].content.trim(),
-        fakePath
+      monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions(
+        {
+          target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
+          allowSyntheticDefaultImports: true,
+          allowNonTsExtensions: true,
+          typeRoots: ["node_modules/@types"],
+        }
       );
+
+      // const fakeFiles = Object.keys(dep1.contents).reduce((acc, curr) => ({
+      //   ...acc,
+      //   [curr]: dep1.contents[curr].content
+      // }), {})
+
+      // for (const fileName in fakeFiles) {
+      //   const fakePath = `file:///node_modules/@types/${fileName}`;
+
+      //   monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
+      //     // @ts-ignore
+      //     fakeFiles[fileName],
+      //     fakePath
+      //   );
+      // }
 
       const model = monacoInstance.editor.createModel(
         files[currentPath],
