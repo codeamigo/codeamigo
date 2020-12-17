@@ -29,7 +29,7 @@ const runCode = (files: { [key in string]: string }, runPath: string) => {
 const Editor: React.FC<Props> = ({ setCode, step }) => {
   const [files, setFiles] = React.useState({});
   const [codeModules, setCodeModules] = React.useState({});
-  const [currentPath, setPath] = React.useState("app.tsx");
+  const [currentPath, setPath] = React.useState("");
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
@@ -55,7 +55,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) || {
-      "app.tsx": "",
+      "app.ts": "",
     };
 
     setFiles(mods);
@@ -76,15 +76,12 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       const dep1: CodeSandboxV2ResponseI = await fetch(
         "https://prod-packager-packages.codesandbox.io/v2/packages/jest-lite/1.0.0-alpha.4.json"
       ).then((res) => res.json());
-      const dep2: CodeSandboxV1ResponseI = await fetch(
-        "https://prod-packager-packages.codesandbox.io/v1/typings/moment/2.29.1.json"
-      ).then((res) => res.json());
 
       const fileToAdd = dep1.contents['/node_modules/jest-lite/dist/core.js'].content
 
       setFiles({
         ...files,
-        'checkpoint.spec.ts': ``,
+        'app.ts': ``,
         [dep1.dependency.name]: fileToAdd
       });
 
@@ -122,14 +119,6 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
       //     fakePath
       //   );
       // }
-
-      const model = monacoInstance.editor.createModel(
-        files[currentPath],
-        "typescript",
-        monacoInstance.Uri.parse("file:///app.tsx")
-      );
-
-      editor.setModel(model);
     }
 
     getDeps();
