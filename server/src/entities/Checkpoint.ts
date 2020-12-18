@@ -33,6 +33,10 @@ export class Checkpoint extends BaseEntity {
   @Column()
   test!: string;
 
+  @Field()
+  @Column()
+  moduleId!: number;
+
   @ManyToOne(() => Step, (step) => step.checkpoints)
   step: Step;
 }

@@ -62,22 +62,25 @@ export class CheckpointResolver {
   async createCheckpoint(
     @Arg("options") options: CreateCheckpointInput
   ): Promise<Checkpoint | null> {
-    let step = await Step.findOne({ id: options.stepId }, { relations: ['codeModules'] });
+    let step = await Step.findOne(
+      { id: options.stepId },
+      { relations: ["codeModules"] }
+    );
 
     if (!step) {
       return null;
     }
 
-    const test = `checkpoint-${options.checkpointId}.ts`
+    const test = `checkpoint-${options.checkpointId}.ts`;
     const newModule = await CodeModule.create({
       name: test,
       value: DEFAULT_TEST,
     }).save();
 
-    step.codeModules.push(newModule)
-    await step.save()
+    step.codeModules.push(newModule);
+    await step.save();
 
-    return Checkpoint.create({ test, step }).save();
+    return Checkpoint.create({ test, step, moduleId: newModule.id }).save();
   }
 
   @Mutation(() => Checkpoint, { nullable: true })
@@ -97,7 +100,14 @@ export class CheckpointResolver {
 
   @Mutation(() => Boolean)
   async deleteCheckpoint(@Arg("id") id: number): Promise<boolean> {
+    const checkpoint = await Checkpoint.findOne(id);
+
+    if (!checkpoint) {
+      return false;
+    }
+
     await Checkpoint.delete(id);
+    await CodeModule.delete(checkpoint.moduleId);
     return true;
   }
 }

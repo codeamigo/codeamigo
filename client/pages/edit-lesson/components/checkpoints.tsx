@@ -1,37 +1,61 @@
 import React, { useEffect, useState } from "react";
 import {
-  CodeModule,
   RegularCheckpointFragment,
   RegularStepFragment,
-  Step,
+  useDeleteCheckpointMutation,
   useCreateCheckpointMutation,
   useStepQuery,
 } from "../../../generated/graphql";
 
 const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   const { data, refetch } = useStepQuery({ variables: { id: step.id } });
-  const [createCheckpoint] = useCreateCheckpointMutation();
+  const [createCheckpointM] = useCreateCheckpointMutation();
+  const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [checkpoints, setCheckpoints] = useState(
     [] as Array<RegularCheckpointFragment>
   );
 
   useEffect(() => {
-    console.log(data)
+    console.log(data);
     setCheckpoints(data?.step?.checkpoints || []);
   }, [data?.step?.checkpoints]);
 
-  const addCheckpoint = async () => {
+  const createCheckpoint = async () => {
     const len = data?.step?.checkpoints?.length || 0;
 
-    await createCheckpoint({ variables: { stepId: step.id, checkpointId: len + 1 } });
-    refetch()
+    await createCheckpointM({
+      variables: { stepId: step.id, checkpointId: len + 1 },
+    });
+
+    refetch();
+  };
+
+  const deleteCheckpoint = async (id: number) => {
+    await deleteCheckpointM({ variables: { id } });
+
+    refetch();
   };
 
   return (
     <>
-      {checkpoints.length ? <div>checkpoints!</div> : null}
+      {checkpoints.length
+        ? checkpoints.map((checkpoint, i) => {
+            return (
+              <div>
+                <h3>Checkpoint {i + 1}</h3>
+                <div>Markdown editor</div>
+
+                {i === checkpoints.length - 1 ? (
+                  <button onClick={() => deleteCheckpoint(checkpoint.id)}>
+                    Delete Checkpoint
+                  </button>
+                ) : null}
+              </div>
+            );
+          })
+        : null}
       <div>
-        <button type="button" onClick={addCheckpoint}>
+        <button type="button" onClick={createCheckpoint}>
           Add Checkpoint
         </button>
       </div>
