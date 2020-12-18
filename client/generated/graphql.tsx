@@ -15,11 +15,11 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
+  steps: Array<Step>;
+  step?: Maybe<Step>;
   lessons: Array<Lesson>;
   lesson?: Maybe<Lesson>;
   me?: Maybe<User>;
-  steps: Array<Step>;
-  step?: Maybe<Step>;
   checkpoints: Array<Checkpoint>;
   checkpoint?: Maybe<Checkpoint>;
   codeModules: Array<CodeModule>;
@@ -27,12 +27,12 @@ export type Query = {
 };
 
 
-export type QueryLessonArgs = {
+export type QueryStepArgs = {
   id: Scalars['Int'];
 };
 
 
-export type QueryStepArgs = {
+export type QueryLessonArgs = {
   id: Scalars['Int'];
 };
 
@@ -44,6 +44,17 @@ export type QueryCheckpointArgs = {
 
 export type QueryCodeModuleArgs = {
   id: Scalars['Int'];
+};
+
+export type Step = {
+  __typename?: 'Step';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  instructions?: Maybe<Scalars['String']>;
+  lesson: Lesson;
+  codeModules?: Maybe<Array<CodeModule>>;
+  checkpoints?: Maybe<Array<Checkpoint>>;
 };
 
 export type Lesson = {
@@ -68,17 +79,6 @@ export type User = {
   lessons: Array<Lesson>;
 };
 
-export type Step = {
-  __typename?: 'Step';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  instructions?: Maybe<Scalars['String']>;
-  lesson: Lesson;
-  codeModules?: Maybe<Array<CodeModule>>;
-  checkpoints?: Maybe<Array<Checkpoint>>;
-};
-
 export type CodeModule = {
   __typename?: 'CodeModule';
   id: Scalars['Float'];
@@ -101,6 +101,9 @@ export type Checkpoint = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createStep?: Maybe<Step>;
+  updateStep?: Maybe<Step>;
+  deleteStep: Scalars['Boolean'];
   createLesson: Lesson;
   updateLesson?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
@@ -108,13 +111,26 @@ export type Mutation = {
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
-  updateStep?: Maybe<Step>;
-  deleteStep: Scalars['Boolean'];
   createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
   updateCodeModule?: Maybe<CodeModule>;
   deleteCodeModule: Scalars['Boolean'];
+};
+
+
+export type MutationCreateStepArgs = {
+  options: CreateStepInput;
+};
+
+
+export type MutationUpdateStepArgs = {
+  options: StepInput;
+};
+
+
+export type MutationDeleteStepArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -155,16 +171,6 @@ export type MutationChangePasswordArgs = {
 };
 
 
-export type MutationUpdateStepArgs = {
-  options: StepInput;
-};
-
-
-export type MutationDeleteStepArgs = {
-  id: Scalars['Float'];
-};
-
-
 export type MutationCreateCheckpointArgs = {
   options: CreateCheckpointInput;
 };
@@ -189,6 +195,15 @@ export type MutationUpdateCodeModuleArgs = {
 
 export type MutationDeleteCodeModuleArgs = {
   id: Scalars['Float'];
+};
+
+export type CreateStepInput = {
+  lessonId?: Maybe<Scalars['Float']>;
+};
+
+export type StepInput = {
+  id?: Maybe<Scalars['Float']>;
+  instructions: Scalars['String'];
 };
 
 export type LessonInput = {
@@ -217,11 +232,6 @@ export type RegisterInput = {
 export type LoginInput = {
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
-};
-
-export type StepInput = {
-  id?: Maybe<Scalars['Float']>;
-  instructions: Scalars['String'];
 };
 
 export type CreateCheckpointInput = {
@@ -307,6 +317,19 @@ export type CreateLessonMutation = (
       & Pick<User, 'id' | 'username'>
     ) }
   ) }
+);
+
+export type CreateStepMutationVariables = Exact<{
+  lessonId: Scalars['Float'];
+}>;
+
+
+export type CreateStepMutation = (
+  { __typename?: 'Mutation' }
+  & { createStep?: Maybe<(
+    { __typename?: 'Step' }
+    & RegularStepFragment
+  )> }
 );
 
 export type DeleteCheckpointMutationVariables = Exact<{
@@ -630,6 +653,38 @@ export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
+export const CreateStepDocument = gql`
+    mutation CreateStep($lessonId: Float!) {
+  createStep(options: {lessonId: $lessonId}) {
+    ...RegularStep
+  }
+}
+    ${RegularStepFragmentDoc}`;
+export type CreateStepMutationFn = Apollo.MutationFunction<CreateStepMutation, CreateStepMutationVariables>;
+
+/**
+ * __useCreateStepMutation__
+ *
+ * To run a mutation, you first call `useCreateStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createStepMutation, { data, loading, error }] = useCreateStepMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useCreateStepMutation(baseOptions?: Apollo.MutationHookOptions<CreateStepMutation, CreateStepMutationVariables>) {
+        return Apollo.useMutation<CreateStepMutation, CreateStepMutationVariables>(CreateStepDocument, baseOptions);
+      }
+export type CreateStepMutationHookResult = ReturnType<typeof useCreateStepMutation>;
+export type CreateStepMutationResult = Apollo.MutationResult<CreateStepMutation>;
+export type CreateStepMutationOptions = Apollo.BaseMutationOptions<CreateStepMutation, CreateStepMutationVariables>;
 export const DeleteCheckpointDocument = gql`
     mutation DeleteCheckpoint($id: Float!) {
   deleteCheckpoint(id: $id)

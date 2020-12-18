@@ -16,19 +16,7 @@ import { isAuth } from "../middleware/isAuth";
 import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
 
-const DEFAULT_MD = `## Step \#
-
-### Instructions
-1. Add instructions for the step here.
-2. You can use markdown to add [links](https://google.com)
-3. Or use it to add \`code\` snippets.
-
-\`\`\`
-You can also write code in blocks.
-\`\`\`
-
-Remember to be short and sweet. 😘
-`;
+import { DEFAULT_MD } from './step'
 
 @InputType()
 class LessonInput {

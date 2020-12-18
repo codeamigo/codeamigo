@@ -11,6 +11,22 @@ import {
 import { isAuth } from "../middleware/isAuth";
 
 import { Step } from "../entities/Step";
+import { CodeModule } from "../entities/CodeModule";
+import { Lesson } from "../entities/Lesson";
+
+export const DEFAULT_MD = `## Step \#
+
+### Instructions
+1. Add instructions for the step here.
+2. You can use markdown to add [links](https://google.com)
+3. Or use it to add \`code\` snippets.
+
+\`\`\`
+You can also write code in blocks.
+\`\`\`
+
+Remember to be short and sweet. 😘
+`;
 
 @InputType()
 class StepInput {
@@ -18,6 +34,12 @@ class StepInput {
   id: number;
   @Field()
   instructions: string;
+}
+
+@InputType()
+class CreateStepInput {
+  @Field({ nullable: true })
+  lessonId: number;
 }
 
 @Resolver()
@@ -29,7 +51,37 @@ export class StepResolver {
 
   @Query(() => Step, { nullable: true })
   step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
-    return Step.findOne(id, { relations: ["lesson", "codeModules", "checkpoints"] });
+    return Step.findOne(id, {
+      relations: ["lesson", "codeModules", "checkpoints"],
+    });
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  async createStep(
+    @Arg("options") options: CreateStepInput
+  ): Promise<Step | null> {
+    const lesson = await Lesson.findOne(
+      { id: options.lessonId },
+      { relations: ["steps"] }
+    );
+
+    if (!lesson) {
+      return null;
+    }
+
+    const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
+    const step = await Step.create({
+      instructions: DEFAULT_MD,
+      codeModules: [code],
+    }).save();
+
+    console.log("lesson", lesson);
+
+    lesson.steps.push(step);
+    await lesson.save();
+
+    return step;
   }
 
   @Mutation(() => Step, { nullable: true })
@@ -42,7 +94,7 @@ export class StepResolver {
 
     await Step.update({ id: options.id }, { ...step, ...options });
 
-    return step
+    return step;
   }
 
   @Mutation(() => Boolean)

@@ -1,0 +1,5 @@
+mutation CreateStep($lessonId: Float!) {
+  createStep(options: { lessonId: $lessonId }) {
+    ...RegularStep
+  }
+}
