@@ -7,14 +7,7 @@ query Lesson($id: Int!) {
       username
     }
     steps {
-      id
-      createdAt
-      instructions
-      codeModules {
-        id
-        name
-        value
-      }
+      ...RegularStep
     }
   }
 }

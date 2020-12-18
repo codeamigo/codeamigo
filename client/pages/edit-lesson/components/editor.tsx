@@ -1,7 +1,7 @@
 import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco, Monaco } from "@monaco-editor/react";
 import React, { useEffect } from "react";
-import { CodeModule, Step, useStepQuery } from "../../../generated/graphql";
+import { CodeModule, LessonQuery, RegularStepFragment, Step, useStepQuery } from "../../../generated/graphql";
 import { CodeSandboxV1ResponseI, CodeSandboxV2ResponseI } from "../../api/types";
 
 const transformCode = (code: string, path: string) => {
@@ -51,7 +51,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
   };
 
   useEffect(() => {
-    const mods: { [key in string]: string } = data?.step?.codeModules?.reduce(
+    const mods = data?.step?.codeModules?.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) || {
@@ -81,7 +81,6 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
 
       setFiles({
         ...files,
-        'app.ts': ``,
         [dep1.dependency.name]: fileToAdd
       });
 
@@ -128,11 +127,11 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
     <div className="flex w-full">
       <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
         <h3>Initial Code</h3>
-        <div className="flex rounded-md border border-gray-200">
+        <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
           <div>
             {Object.keys(files).map((path) => (
               <button
-                className="text-xs"
+                className="text-xs block mb-1"
                 key={path}
                 onClick={() => setPath(path)}
                 type="button"
@@ -166,16 +165,7 @@ const Editor: React.FC<Props> = ({ setCode, step }) => {
 
 type Props = {
   setCode: (value: { id: number; name: string; value: string }) => void;
-  step: {
-    __typename?: "Step" | undefined;
-  } & Pick<Step, "id" | "createdAt" | "instructions"> & {
-      codeModules?:
-        | ({
-            __typename?: "CodeModule" | undefined;
-          } & Pick<CodeModule, "id" | "name" | "value">)[]
-        | null
-        | undefined;
-    };
+  step: RegularStepFragment
 };
 
 export default Editor;

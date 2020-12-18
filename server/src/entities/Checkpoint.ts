@@ -25,13 +25,9 @@ export class Checkpoint extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field()
-  @Column()
-  description!: string;
-
-  @Field()
-  @Column()
-  userCode!: string;
+  @Field(() => String)
+  @Column({ default: `` })
+  description: string;
 
   @Field()
   @Column()

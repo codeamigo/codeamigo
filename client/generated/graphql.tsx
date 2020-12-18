@@ -94,8 +94,7 @@ export type Checkpoint = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  description: Scalars['String'];
-  userCode: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   test: Scalars['String'];
 };
 
@@ -110,7 +109,7 @@ export type Mutation = {
   changePassword: UserResponse;
   updateStep?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
-  createCheckpoint: Checkpoint;
+  createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
   updateCodeModule?: Maybe<CodeModule>;
@@ -166,12 +165,12 @@ export type MutationDeleteStepArgs = {
 
 
 export type MutationCreateCheckpointArgs = {
-  options: CheckpointInput;
+  options: CreateCheckpointInput;
 };
 
 
 export type MutationUpdateCheckpointArgs = {
-  options: CheckpointInput;
+  options: UpdateCheckpointInput;
   id: Scalars['Float'];
 };
 
@@ -224,11 +223,13 @@ export type StepInput = {
   instructions: Scalars['String'];
 };
 
-export type CheckpointInput = {
+export type CreateCheckpointInput = {
+  checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
+};
+
+export type UpdateCheckpointInput = {
   description: Scalars['String'];
-  userCode: Scalars['String'];
-  test: Scalars['String'];
 };
 
 export type CodeModuleInput = {
@@ -236,9 +237,19 @@ export type CodeModuleInput = {
   value: Scalars['String'];
 };
 
+export type RegularCheckpointFragment = (
+  { __typename?: 'Checkpoint' }
+  & Pick<Checkpoint, 'test' | 'description'>
+);
+
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
+);
+
+export type RegularStepFragment = (
+  { __typename?: 'Step' }
+  & Pick<Step, 'id' | 'createdAt' | 'instructions'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -259,6 +270,20 @@ export type ChangePasswordMutation = (
       & Pick<User, 'id' | 'username'>
     )> }
   ) }
+);
+
+export type CreateCheckpointMutationVariables = Exact<{
+  checkpointId: Scalars['Float'];
+  stepId: Scalars['Float'];
+}>;
+
+
+export type CreateCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { createCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )> }
 );
 
 export type CreateLessonMutationVariables = Exact<{
@@ -388,11 +413,7 @@ export type LessonQuery = (
       & Pick<User, 'username'>
     ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
-      & Pick<Step, 'id' | 'createdAt' | 'instructions'>
-      & { codeModules?: Maybe<Array<(
-        { __typename?: 'CodeModule' }
-        & Pick<CodeModule, 'id' | 'name' | 'value'>
-      )>> }
+      & RegularStepFragment
     )>> }
   )> }
 );
@@ -438,7 +459,10 @@ export type StepQuery = (
     { __typename?: 'Step' }
     & { codeModules?: Maybe<Array<(
       { __typename?: 'CodeModule' }
-      & Pick<CodeModule, 'id' | 'name' | 'value'>
+      & Pick<CodeModule, 'name' | 'value'>
+    )>>, checkpoints?: Maybe<Array<(
+      { __typename?: 'Checkpoint' }
+      & RegularCheckpointFragment
     )>> }
   )> }
 );
@@ -450,14 +474,27 @@ export type StepsQuery = (
   { __typename?: 'Query' }
   & { steps: Array<(
     { __typename?: 'Step' }
-    & Pick<Step, 'instructions' | 'createdAt'>
+    & RegularStepFragment
   )> }
 );
 
+export const RegularCheckpointFragmentDoc = gql`
+    fragment RegularCheckpoint on Checkpoint {
+  test
+  description
+}
+    `;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
   message
+}
+    `;
+export const RegularStepFragmentDoc = gql`
+    fragment RegularStep on Step {
+  id
+  createdAt
+  instructions
 }
     `;
 export const ChangePasswordDocument = gql`
@@ -499,6 +536,39 @@ export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptio
 export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
 export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export const CreateCheckpointDocument = gql`
+    mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
+  createCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
+    ...RegularCheckpoint
+  }
+}
+    ${RegularCheckpointFragmentDoc}`;
+export type CreateCheckpointMutationFn = Apollo.MutationFunction<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
+
+/**
+ * __useCreateCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCreateCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCheckpointMutation, { data, loading, error }] = useCreateCheckpointMutation({
+ *   variables: {
+ *      checkpointId: // value for 'checkpointId'
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useCreateCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>) {
+        return Apollo.useMutation<CreateCheckpointMutation, CreateCheckpointMutationVariables>(CreateCheckpointDocument, baseOptions);
+      }
+export type CreateCheckpointMutationHookResult = ReturnType<typeof useCreateCheckpointMutation>;
+export type CreateCheckpointMutationResult = Apollo.MutationResult<CreateCheckpointMutation>;
+export type CreateCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
 export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!) {
   createLesson(options: {title: $title}) {
@@ -763,18 +833,11 @@ export const LessonDocument = gql`
       username
     }
     steps {
-      id
-      createdAt
-      instructions
-      codeModules {
-        id
-        name
-        value
-      }
+      ...RegularStep
     }
   }
 }
-    `;
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useLessonQuery__
@@ -879,13 +942,15 @@ export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {
     codeModules {
-      id
       name
       value
     }
+    checkpoints {
+      ...RegularCheckpoint
+    }
   }
 }
-    `;
+    ${RegularCheckpointFragmentDoc}`;
 
 /**
  * __useStepQuery__
@@ -915,11 +980,10 @@ export type StepQueryResult = Apollo.QueryResult<StepQuery, StepQueryVariables>;
 export const StepsDocument = gql`
     query Steps {
   steps {
-    instructions
-    createdAt
+    ...RegularStep
   }
 }
-    `;
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useStepsQuery__

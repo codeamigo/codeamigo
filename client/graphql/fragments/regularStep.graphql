@@ -1,0 +1,5 @@
+fragment RegularStep on Step {
+  id
+  createdAt
+  instructions
+}

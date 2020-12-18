@@ -10,6 +10,7 @@ import {
   LessonQuery,
   useUpdateCodeModuleMutation,
 } from "../../../generated/graphql";
+import Checkpoints from "./checkpoints";
 
 import Editor from "./editor";
 
@@ -121,6 +122,9 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
             </div>
             <div className="flex flex-col w-full">
               <Editor setCode={setCode} step={step} />
+            </div>
+            <div className="flex flex-col w-full">
+              <Checkpoints step={step} />
             </div>
           </>
         </Form>

@@ -1,0 +1,5 @@
+mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
+  createCheckpoint(options: { checkpointId: $checkpointId, stepId: $stepId }) {
+    ...RegularCheckpoint
+  }
+}

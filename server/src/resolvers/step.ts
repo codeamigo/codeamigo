@@ -29,7 +29,7 @@ export class StepResolver {
 
   @Query(() => Step, { nullable: true })
   step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
-    return Step.findOne(id, { relations: ["lesson", "codeModules"] });
+    return Step.findOne(id, { relations: ["lesson", "codeModules", "checkpoints"] });
   }
 
   @Mutation(() => Step, { nullable: true })

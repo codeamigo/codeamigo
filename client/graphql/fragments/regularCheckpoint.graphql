@@ -1,0 +1,4 @@
+fragment RegularCheckpoint on Checkpoint {
+  test
+  description
+}
