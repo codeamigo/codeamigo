@@ -243,6 +243,11 @@ export type RegularCheckpointFragment = (
   & Pick<Checkpoint, 'id' | 'test' | 'description'>
 );
 
+export type RegularCodeModuleFragment = (
+  { __typename?: 'CodeModule' }
+  & Pick<CodeModule, 'id' | 'name' | 'value'>
+);
+
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
@@ -470,7 +475,7 @@ export type StepQuery = (
     { __typename?: 'Step' }
     & { codeModules?: Maybe<Array<(
       { __typename?: 'CodeModule' }
-      & Pick<CodeModule, 'name' | 'value'>
+      & RegularCodeModuleFragment
     )>>, checkpoints?: Maybe<Array<(
       { __typename?: 'Checkpoint' }
       & RegularCheckpointFragment
@@ -494,6 +499,13 @@ export const RegularCheckpointFragmentDoc = gql`
   id
   test
   description
+}
+    `;
+export const RegularCodeModuleFragmentDoc = gql`
+    fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
 }
     `;
 export const RegularErrorFragmentDoc = gql`
@@ -984,15 +996,15 @@ export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {
     codeModules {
-      name
-      value
+      ...RegularCodeModule
     }
     checkpoints {
       ...RegularCheckpoint
     }
   }
 }
-    ${RegularCheckpointFragmentDoc}`;
+    ${RegularCodeModuleFragmentDoc}
+${RegularCheckpointFragmentDoc}`;
 
 /**
  * __useStepQuery__

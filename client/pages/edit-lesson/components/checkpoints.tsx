@@ -41,7 +41,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
       {checkpoints.length
         ? checkpoints.map((checkpoint, i) => {
             return (
-              <div>
+              <div key={checkpoint.id}>
                 <h3>Checkpoint {i + 1}</h3>
                 <div>Markdown editor</div>
 

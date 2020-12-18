@@ -17,16 +17,17 @@ import { CodeModule } from "../entities/CodeModule";
 const DEFAULT_TEST = `import { describe, it, run, expect } from 'jest-lite'
 
 describe('My Test', () => {
-  it('does something', () => {
+  it('runs', () => {
     expect(true).toBe(true)
   })
 })
 
 const runTests = async () => {
-    await run()
+    const results = await run()
+    console.log(results)
 }
 
-console.log(runTests())
+runTests()
 `;
 
 @InputType()

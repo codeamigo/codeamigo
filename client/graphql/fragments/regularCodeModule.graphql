@@ -1,0 +1,5 @@
+fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
+}

@@ -1,8 +1,7 @@
 query Step($id: Int!) {
   step(id: $id) {
     codeModules {
-      name
-      value
+      ...RegularCodeModule
     }
     checkpoints {
       ...RegularCheckpoint

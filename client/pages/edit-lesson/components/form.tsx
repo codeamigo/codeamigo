@@ -8,7 +8,6 @@ import {
   useUpdateLessonMutation,
   useUpdateStepMutation,
   LessonQuery,
-  useUpdateCodeModuleMutation,
 } from "../../../generated/graphql";
 import Checkpoints from "./checkpoints";
 
@@ -20,9 +19,6 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-  const [code, setCode] = useState<{ id: number; name: string; value: string }>(
-    {} as any
-  );
   const [step, setStep] = useState(sortedSteps[stepIdx]);
   const [markdown, setMarkdown] = useState(step?.instructions);
 
@@ -35,7 +31,6 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
 
   const [updateLesson] = useUpdateLessonMutation();
   const [updateStep] = useUpdateStepMutation();
-  const [updateCodeModule] = useUpdateCodeModuleMutation();
 
   return (
     <Formik
@@ -52,12 +47,6 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
             variables: {
               id: step.id,
               instructions: markdown || "",
-            },
-          });
-          console.log(code);
-          await updateCodeModule({
-            variables: {
-              ...code,
             },
           });
           refetch();
@@ -121,7 +110,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
               </div>
             </div>
             <div className="flex flex-col w-full">
-              <Editor setCode={setCode} step={step} />
+              <Editor step={step} />
             </div>
             <div className="flex flex-col w-full">
               <Checkpoints step={step} />
