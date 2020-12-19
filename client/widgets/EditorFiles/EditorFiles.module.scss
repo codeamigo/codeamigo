@@ -1,0 +1,6 @@
+.FILE:not(:first-child):hover {
+  color: black;
+  > span {
+    display: block;
+  }
+}

@@ -9,6 +9,7 @@ import {
 } from "type-graphql";
 
 import { CodeModule } from "../entities/CodeModule";
+import { Step } from "../entities/Step";
 
 @InputType()
 class CodeModuleInput {
@@ -30,6 +31,23 @@ export class CodeModuleResolver {
     @Arg("id", () => Int) id: number
   ): Promise<CodeModule | undefined> {
     return CodeModule.findOne(id);
+  }
+
+  @Mutation(() => CodeModule, { nullable: true })
+  async createCodeModule(
+    @Arg("stepId") stepId: number,
+    @Arg("options") options: CodeModuleInput
+  ): Promise<CodeModule | null> {
+    const step = await Step.findOne(stepId, { relations: ['codeModules'] })
+    const codeModule = await CodeModule.create({ ...options }).save();
+    if (!step) {
+      return null;
+    }
+
+    step.codeModules.push(codeModule);
+    await step.save();
+
+    return codeModule;
   }
 
   @Mutation(() => CodeModule, { nullable: true })

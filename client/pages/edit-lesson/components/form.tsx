@@ -11,7 +11,7 @@ import {
 } from "../../../generated/graphql";
 import Checkpoints from "./checkpoints";
 
-import Editor from "./editor";
+import Editor from "../../../widgets/Editor";
 
 const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
   const steps = lesson!.steps || [];

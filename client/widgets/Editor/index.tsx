@@ -4,12 +4,14 @@ import React, { useEffect } from "react";
 import {
   RegularStepFragment,
   useStepQuery,
+  useCreateCodeModuleMutation,
+  useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
-} from "../../../generated/graphql";
-import { CodeSandboxV2ResponseI } from "../../api/types";
-import { debounce } from 'debounce'
-
-type FilesType = { [key in string]: string };
+} from "../../generated/graphql";
+import { CodeSandboxV2ResponseI } from "../../pages/api/types";
+import { debounce } from "debounce";
+import { FilesType } from "./types";
+import EditorFiles from "../EditorFiles";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
@@ -40,8 +42,33 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data } = useStepQuery({ variables: { id: step.id } });
+  const { data, loading } = useStepQuery({ variables: { id: step.id } });
   const [updateCodeModule] = useUpdateCodeModuleMutation();
+  const [createCodeModule] = useCreateCodeModuleMutation();
+  const [deleteCodeModule] = useDeleteCodeModuleMutation();
+
+  const createFile = async (file: string) => {
+    createCodeModule({ variables: { stepId: step.id, name: file, value: `` } });
+
+    setFiles({
+      ...files,
+      [file]: ``
+    })
+  };
+
+  const removeFile = async (file: string) => {
+    const module = data?.step?.codeModules?.find(
+      (module) => module.name === file
+    );
+
+    if (!module) return
+    
+    // remove file from files state
+    const { [file]: tmp, ...rest } = files
+    setFiles(rest)
+
+    deleteCodeModule({ variables: { id: module.id } });
+  };
 
   const updateFile = debounce((path: string, code: string) => {
     setFiles({
@@ -55,7 +82,6 @@ const Editor: React.FC<Props> = ({ step }) => {
       (module) => module.name === path
     );
 
-    // create?
     if (!currentModule) return;
 
     updateCodeModule({
@@ -65,7 +91,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         value: code,
       },
     });
-  }, 1000);
+  }, 3000);
 
   useEffect(() => {
     if (!data?.step?.codeModules) return;
@@ -74,9 +100,9 @@ const Editor: React.FC<Props> = ({ step }) => {
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
-
+    
     setFiles(mods);
-  }, [data?.step?.codeModules]);
+  }, [data?.step?.codeModules?.length]);
 
   useEffect(() => {
     try {
@@ -147,21 +173,17 @@ const Editor: React.FC<Props> = ({ step }) => {
       <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
         <h3>Initial Code</h3>
         <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
-          <div>
-            {Object.keys(files).map((path) => (
-              <button
-                className="text-xs block mb-1"
-                key={path}
-                onClick={() => setCurrentPath(path)}
-                type="button"
-              >
-                {path}
-              </button>
-            ))}
-          </div>
+          <EditorFiles
+            createFile={createFile}
+            removeFile={removeFile}
+            currentPath={currentPath}
+            loading={loading}
+            files={files}
+            setCurrentPath={setCurrentPath}
+          />
           <ControlledEditor
             height="300px"
-            width="100%"
+            className="w-8/12"
             language={"typescript"}
             value={files[currentPath]}
             options={{

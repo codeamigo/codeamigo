@@ -2,7 +2,7 @@ import { Form, Formik } from "formik";
 import React from "react";
 import { useRouter } from "next/router";
 
-import InputField from "../components/form/InputField";
+import InputField from "../components/Form/InputField";
 import { useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils";
 import withApollo from "../utils/withApollo";

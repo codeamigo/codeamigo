@@ -114,6 +114,7 @@ export type Mutation = {
   createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
+  createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
   deleteCodeModule: Scalars['Boolean'];
 };
@@ -184,6 +185,12 @@ export type MutationUpdateCheckpointArgs = {
 
 export type MutationDeleteCheckpointArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationCreateCodeModuleArgs = {
+  options: CodeModuleInput;
+  stepId: Scalars['Float'];
 };
 
 
@@ -302,6 +309,21 @@ export type CreateCheckpointMutation = (
   )> }
 );
 
+export type CreateCodeModuleMutationVariables = Exact<{
+  stepId: Scalars['Float'];
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type CreateCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & { createCodeModule?: Maybe<(
+    { __typename?: 'CodeModule' }
+    & RegularCodeModuleFragment
+  )> }
+);
+
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
 }>;
@@ -340,6 +362,16 @@ export type DeleteCheckpointMutationVariables = Exact<{
 export type DeleteCheckpointMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteCheckpoint'>
+);
+
+export type DeleteCodeModuleMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCodeModule'>
 );
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -616,6 +648,40 @@ export function useCreateCheckpointMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateCheckpointMutationHookResult = ReturnType<typeof useCreateCheckpointMutation>;
 export type CreateCheckpointMutationResult = Apollo.MutationResult<CreateCheckpointMutation>;
 export type CreateCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
+export const CreateCodeModuleDocument = gql`
+    mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
+  createCodeModule(stepId: $stepId, options: {name: $name, value: $value}) {
+    ...RegularCodeModule
+  }
+}
+    ${RegularCodeModuleFragmentDoc}`;
+export type CreateCodeModuleMutationFn = Apollo.MutationFunction<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
+
+/**
+ * __useCreateCodeModuleMutation__
+ *
+ * To run a mutation, you first call `useCreateCodeModuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCodeModuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCodeModuleMutation, { data, loading, error }] = useCreateCodeModuleMutation({
+ *   variables: {
+ *      stepId: // value for 'stepId'
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useCreateCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>) {
+        return Apollo.useMutation<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>(CreateCodeModuleDocument, baseOptions);
+      }
+export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCodeModuleMutation>;
+export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
+export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!) {
   createLesson(options: {title: $title}) {
@@ -715,6 +781,36 @@ export function useDeleteCheckpointMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteCheckpointMutationHookResult = ReturnType<typeof useDeleteCheckpointMutation>;
 export type DeleteCheckpointMutationResult = Apollo.MutationResult<DeleteCheckpointMutation>;
 export type DeleteCheckpointMutationOptions = Apollo.BaseMutationOptions<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>;
+export const DeleteCodeModuleDocument = gql`
+    mutation DeleteCodeModule($id: Float!) {
+  deleteCodeModule(id: $id)
+}
+    `;
+export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
+
+/**
+ * __useDeleteCodeModuleMutation__
+ *
+ * To run a mutation, you first call `useDeleteCodeModuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCodeModuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCodeModuleMutation, { data, loading, error }] = useDeleteCodeModuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>) {
+        return Apollo.useMutation<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>(DeleteCodeModuleDocument, baseOptions);
+      }
+export type DeleteCodeModuleMutationHookResult = ReturnType<typeof useDeleteCodeModuleMutation>;
+export type DeleteCodeModuleMutationResult = Apollo.MutationResult<DeleteCodeModuleMutation>;
+export type DeleteCodeModuleMutationOptions = Apollo.BaseMutationOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)

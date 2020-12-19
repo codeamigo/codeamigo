@@ -1,0 +1,3 @@
+mutation DeleteCodeModule($id: Float!) {
+  deleteCodeModule(id: $id)
+}

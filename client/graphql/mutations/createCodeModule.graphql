@@ -1,0 +1,5 @@
+mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
+  createCodeModule(stepId: $stepId, options: { name: $name, value: $value }) {
+    ...RegularCodeModule
+  }
+}
