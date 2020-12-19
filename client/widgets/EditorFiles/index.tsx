@@ -7,7 +7,6 @@ import styles from "./EditorFiles.module.scss";
 const EditorFiles: React.FC<Props> = ({
   createFile,
   removeFile,
-  loading,
   currentPath,
   files,
   setCurrentPath,
@@ -40,7 +39,8 @@ const EditorFiles: React.FC<Props> = ({
     }
   }, [isAddingNewFile]);
 
-  console.log(loading)
+  const docs = Object.keys(files).filter((file) => !file.includes("spec"));
+  const tests = Object.keys(files).filter((file) => file.includes("spec"));
 
   return (
     <div className="border-r border-gray-200 w-4/12">
@@ -53,7 +53,7 @@ const EditorFiles: React.FC<Props> = ({
         />
       </div>
       <div>
-        {Object.keys(files).map((path) => (
+        {docs.map((path) => (
           <div
             key={path}
             className={`${
@@ -83,6 +83,24 @@ const EditorFiles: React.FC<Props> = ({
           </div>
         )}
       </div>
+      <div className="border-t border-b border-gray-200 p-1 mt-8 flex justify-between content-center">
+        <span className="text-sm font-semibold">Tests</span>
+      </div>
+      <div>
+        {tests.map((path) => (
+          <div
+            key={path}
+            className={`${
+              currentPath === path ? "bg-gray-100" : ""
+            } flex justify-between cursor-pointer w-full px-1 py-1 hover:bg-gray-100 ${
+              styles.FILE
+            }`}
+            onClick={() => setCurrentPath(path)}
+          >
+            <div className="text-xs">{path}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -90,7 +108,6 @@ const EditorFiles: React.FC<Props> = ({
 type Props = {
   createFile: (path: string) => void;
   removeFile: (path: string) => void;
-  loading: any;
   files: FilesType;
   currentPath: string;
   setCurrentPath: (path: string) => void;

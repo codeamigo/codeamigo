@@ -42,18 +42,29 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data, loading } = useStepQuery({ variables: { id: step.id } });
+  const { data, loading, refetch } = useStepQuery({
+    variables: { id: step.id },
+  });
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const createFile = async (file: string) => {
-    createCodeModule({ variables: { stepId: step.id, name: file, value: `` } });
+    if (files[file] !== undefined) {
+      alert("File name already taken.");
+      return;
+    }
+
+    await createCodeModule({
+      variables: { stepId: step.id, name: file, value: `` },
+    });
 
     setFiles({
       ...files,
-      [file]: ``
-    })
+      [file]: ``,
+    });
+
+    refetch();
   };
 
   const removeFile = async (file: string) => {
@@ -61,23 +72,16 @@ const Editor: React.FC<Props> = ({ step }) => {
       (module) => module.name === file
     );
 
-    if (!module) return
-    
+    if (!module) return;
+
     // remove file from files state
-    const { [file]: tmp, ...rest } = files
-    setFiles(rest)
+    const { [file]: tmp, ...rest } = files;
+    setFiles(rest);
 
     deleteCodeModule({ variables: { id: module.id } });
   };
 
   const updateFile = debounce((path: string, code: string) => {
-    setFiles({
-      ...files,
-      [path]: code,
-    });
-
-    setCurrentCode(code);
-
     const currentModule = data?.step?.codeModules?.find(
       (module) => module.name === path
     );
@@ -91,7 +95,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         value: code,
       },
     });
-  }, 3000);
+  }, 2500);
 
   useEffect(() => {
     if (!data?.step?.codeModules) return;
@@ -100,7 +104,7 @@ const Editor: React.FC<Props> = ({ step }) => {
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
-    
+
     setFiles(mods);
   }, [data?.step?.codeModules?.length]);
 
@@ -177,7 +181,6 @@ const Editor: React.FC<Props> = ({ step }) => {
             createFile={createFile}
             removeFile={removeFile}
             currentPath={currentPath}
-            loading={loading}
             files={files}
             setCurrentPath={setCurrentPath}
           />
@@ -190,7 +193,14 @@ const Editor: React.FC<Props> = ({ step }) => {
               minimap: { enabled: false },
             }}
             editorDidMount={editorDidMount}
-            onChange={(_, value) => updateFile(currentPath, value || "")}
+            onChange={(_, value) => {
+              setFiles({
+                ...files,
+                [currentPath]: value || "",
+              });
+              setCurrentCode(value || "");
+              updateFile(currentPath, value || "");
+            }}
           />
         </div>
       </div>
