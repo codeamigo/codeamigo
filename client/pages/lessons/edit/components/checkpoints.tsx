@@ -5,7 +5,7 @@ import {
   useDeleteCheckpointMutation,
   useCreateCheckpointMutation,
   useStepQuery,
-} from "../../../generated/graphql";
+} from "../../../../generated/graphql";
 
 const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   const { data, refetch } = useStepQuery({ variables: { id: step.id } });

@@ -1,6 +1,6 @@
 import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco } from "@monaco-editor/react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   RegularStepFragment,
   useStepQuery,
@@ -81,21 +81,24 @@ const Editor: React.FC<Props> = ({ step }) => {
     deleteCodeModule({ variables: { id: module.id } });
   };
 
-  const updateFile = debounce((path: string, code: string) => {
-    const currentModule = data?.step?.codeModules?.find(
-      (module) => module.name === path
-    );
+  const updateFile = useCallback(
+    debounce((path: string, code: string) => {
+      const currentModule = data?.step?.codeModules?.find(
+        (module) => module.name === path
+      );
 
-    if (!currentModule) return;
+      if (!currentModule) return;
 
-    updateCodeModule({
-      variables: {
-        id: currentModule.id,
-        name: path,
-        value: code,
-      },
-    });
-  }, 2500);
+      updateCodeModule({
+        variables: {
+          id: currentModule.id,
+          name: path,
+          value: code,
+        },
+      });
+    }, 2500),
+    []
+  );
 
   useEffect(() => {
     if (!data?.step?.codeModules) return;

@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-
-import { useLessonQuery } from "../../generated/graphql";
 import { NextPage } from "next";
 
-import StepForm from "./components/form";
-import Steps from "../../widgets/Lesson/Steps";
+import { useLessonQuery } from "../../../../generated/graphql";
+import Steps from "../../../../widgets/Lesson/Steps";
+import StepForm from "../components/form";
 
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
@@ -23,11 +22,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         currentStepIdx={currentStepIdx}
         setCurrentStepIdx={setCurrentStepIdx}
       />
-      <StepForm
-        currentStepIdx={currentStepIdx}
-        lesson={data.lesson}
-        refetch={refetch}
-      />
+      <StepForm currentStepIdx={currentStepIdx} lesson={data.lesson} />
     </div>
   );
 };

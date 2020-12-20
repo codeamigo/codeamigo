@@ -36,7 +36,7 @@ const Steps: React.FC<Props> = ({
   };
 
   return (
-    <div className="w-1/12 py-5 bg-white">
+    <div className="w-2/12 py-5 bg-white">
       <ol>
         {data.lesson?.steps &&
           data.lesson.steps.map((step, i) => {
