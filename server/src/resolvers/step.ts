@@ -99,6 +99,12 @@ export class StepResolver {
 
   @Mutation(() => Boolean)
   async deleteStep(@Arg("id") id: number): Promise<boolean> {
+    const step = await Step.findOne(id)
+
+    if (!step) {
+      return false
+    }
+    
     await Step.delete(id);
     return true;
   }

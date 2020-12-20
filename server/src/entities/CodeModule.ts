@@ -25,7 +25,7 @@ export class CodeModule extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field(() => String, { defaultValue: 'app.tsx' })
+  @Field(() => String, { defaultValue: "app.tsx" })
   @Column()
   name!: string;
 
@@ -33,7 +33,7 @@ export class CodeModule extends BaseEntity {
   @Column()
   value!: string;
 
-  @ManyToOne(() => Step, (step) => step.codeModules)
+  @ManyToOne(() => Step, (step) => step.codeModules, { onDelete: "CASCADE" })
   @Field(() => Step)
   step: Step;
 }

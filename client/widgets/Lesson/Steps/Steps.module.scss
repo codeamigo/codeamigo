@@ -1,0 +1,5 @@
+.STEP:not(:first-child):hover {
+  > span {
+    display: block;
+  }
+}

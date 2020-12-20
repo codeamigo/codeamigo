@@ -13,21 +13,21 @@ import Checkpoints from "./checkpoints";
 
 import Editor from "../../../widgets/Editor";
 
-const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
+const StepForm: React.FC<Props> = ({ currentStepIdx, lesson, refetch }) => {
   const steps = lesson!.steps || [];
   const sortedSteps = steps
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-  const [step, setStep] = useState(sortedSteps[stepIdx]);
+  const [step, setStep] = useState(sortedSteps[currentStepIdx]);
   const [markdown, setMarkdown] = useState(step?.instructions);
 
   const lessonId = lesson!.id;
 
   useEffect(() => {
-    setStep(sortedSteps[stepIdx]);
-    setMarkdown(sortedSteps[stepIdx]?.instructions);
-  }, [stepIdx]);
+    setStep(sortedSteps[currentStepIdx]);
+    setMarkdown(sortedSteps[currentStepIdx]?.instructions);
+  }, [currentStepIdx]);
 
   const [updateLesson] = useUpdateLessonMutation();
   const [updateStep] = useUpdateStepMutation();
@@ -124,7 +124,7 @@ const StepForm: React.FC<Props> = ({ stepIdx, lesson, refetch }) => {
 
 type Props = {
   lesson: LessonQuery["lesson"];
-  stepIdx: number;
+  currentStepIdx: number;
   refetch: any;
 };
 
