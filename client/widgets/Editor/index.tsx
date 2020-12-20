@@ -42,7 +42,7 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data } = useStepQuery({
+  const { data, refetch } = useStepQuery({
     variables: { id: step.id },
     fetchPolicy: 'no-cache'
   });
@@ -65,12 +65,18 @@ const Editor: React.FC<Props> = ({ step }) => {
       ...files,
       [file]: ``,
     });
+
+    setCurrentPath(file)
+
+    refetch()
   };
 
   const deleteFile = async (file: string) => {
     const module = data?.step?.codeModules?.find(
       (module) => module.name === file
     );
+
+    console.log(data?.step)
 
     if (!module) return;
 
@@ -109,6 +115,7 @@ const Editor: React.FC<Props> = ({ step }) => {
     ) as FilesType;
 
     setFiles(mods);
+    setCurrentPath(Object.keys(mods)[0])
   }, [data?.step?.id]);
 
   useEffect(() => {
