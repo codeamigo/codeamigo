@@ -16,7 +16,7 @@ import { isAuth } from "../middleware/isAuth";
 import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
 
-import { DEFAULT_MD } from './step'
+import { DEFAULT_MD } from "./step";
 
 @InputType()
 class LessonInput {
@@ -57,16 +57,31 @@ export class LessonResolver {
   }
 
   @Mutation(() => Lesson, { nullable: true })
-  async updateLesson(
+  async updateLessonTitle(
     @Arg("id") id: number,
-    @Arg("options") options: LessonInput
+    @Arg("title") title: string
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
       return null;
     }
 
-    await Lesson.update({ id }, { ...lesson, ...options });
+    await Lesson.update({ id }, { ...lesson, title });
+
+    return lesson;
+  }
+
+  @Mutation(() => Lesson, { nullable: true })
+  async updateLessonDescription(
+    @Arg("id") id: number,
+    @Arg("description") description: string
+  ): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne(id);
+    if (!lesson) {
+      return null;
+    }
+
+    await Lesson.update({ id }, { ...lesson, description });
 
     return lesson;
   }

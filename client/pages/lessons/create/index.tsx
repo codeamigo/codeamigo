@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import { useCreateLessonMutation } from "../../generated/graphql";
+import { useCreateLessonMutation } from "../../../generated/graphql";
 
 const CreateLesson = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ const CreateLesson = () => {
         variables: { title: "My Awesome Lesson" },
       });
       const id = response.data?.createLesson.id;
-      router.push(`/edit-lesson/${id}`)
+      router.push(`/lessons/edit/${id}`)
     }
 
     create();

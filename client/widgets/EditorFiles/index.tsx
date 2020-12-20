@@ -6,7 +6,7 @@ import styles from "./EditorFiles.module.scss";
 
 const EditorFiles: React.FC<Props> = ({
   createFile,
-  removeFile,
+  deleteFile,
   currentPath,
   files,
   setCurrentPath,
@@ -67,7 +67,7 @@ const EditorFiles: React.FC<Props> = ({
             <Icon
               name="minus-circled"
               className="text-red-600 text-sm hidden"
-              onClick={() => removeFile(path)}
+              onClick={() => deleteFile(path)}
             />
           </div>
         ))}
@@ -107,7 +107,7 @@ const EditorFiles: React.FC<Props> = ({
 
 type Props = {
   createFile: (path: string) => void;
-  removeFile: (path: string) => void;
+  deleteFile: (path: string) => void;
   files: FilesType;
   currentPath: string;
   setCurrentPath: (path: string) => void;

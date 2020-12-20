@@ -1,6 +1,6 @@
 import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco } from "@monaco-editor/react";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   RegularStepFragment,
   useStepQuery,
@@ -42,9 +42,11 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data, loading, refetch } = useStepQuery({
+  const { data } = useStepQuery({
     variables: { id: step.id },
+    fetchPolicy: 'no-cache'
   });
+
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
@@ -63,11 +65,9 @@ const Editor: React.FC<Props> = ({ step }) => {
       ...files,
       [file]: ``,
     });
-
-    refetch();
   };
 
-  const removeFile = async (file: string) => {
+  const deleteFile = async (file: string) => {
     const module = data?.step?.codeModules?.find(
       (module) => module.name === file
     );
@@ -81,21 +81,24 @@ const Editor: React.FC<Props> = ({ step }) => {
     deleteCodeModule({ variables: { id: module.id } });
   };
 
-  const updateFile = debounce((path: string, code: string) => {
-    const currentModule = data?.step?.codeModules?.find(
-      (module) => module.name === path
-    );
+  const updateFile = useCallback(
+    debounce(async (path: string, code: string) => {
+      const currentModule = data?.step?.codeModules?.find(
+        (module) => module.name === path
+      );
 
-    if (!currentModule) return;
+      if (!currentModule) return;
 
-    updateCodeModule({
-      variables: {
-        id: currentModule.id,
-        name: path,
-        value: code,
-      },
-    });
-  }, 2500);
+      await updateCodeModule({
+        variables: {
+          id: currentModule.id,
+          name: path,
+          value: code,
+        },
+      });
+    }, 1000),
+    [data?.step?.id]
+  );
 
   useEffect(() => {
     if (!data?.step?.codeModules) return;
@@ -106,7 +109,7 @@ const Editor: React.FC<Props> = ({ step }) => {
     ) as FilesType;
 
     setFiles(mods);
-  }, [data?.step?.codeModules?.length]);
+  }, [data?.step?.id]);
 
   useEffect(() => {
     try {
@@ -179,7 +182,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
           <EditorFiles
             createFile={createFile}
-            removeFile={removeFile}
+            deleteFile={deleteFile}
             currentPath={currentPath}
             files={files}
             setCurrentPath={setCurrentPath}

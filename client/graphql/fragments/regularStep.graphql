@@ -2,4 +2,10 @@ fragment RegularStep on Step {
   id
   createdAt
   instructions
+  codeModules {
+    ...RegularCodeModule
+  }
+  checkpoints {
+    ...RegularCheckpoint
+  }
 }
