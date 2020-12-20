@@ -37,6 +37,6 @@ export class Checkpoint extends BaseEntity {
   @Column()
   moduleId!: number;
 
-  @ManyToOne(() => Step, (step) => step.checkpoints)
+  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: 'CASCADE' })
   step: Step;
 }

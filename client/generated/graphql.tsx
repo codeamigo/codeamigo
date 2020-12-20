@@ -374,6 +374,16 @@ export type DeleteCodeModuleMutation = (
   & Pick<Mutation, 'deleteCodeModule'>
 );
 
+export type DeleteStepMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteStepMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteStep'>
+);
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -811,6 +821,36 @@ export function useDeleteCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteCodeModuleMutationHookResult = ReturnType<typeof useDeleteCodeModuleMutation>;
 export type DeleteCodeModuleMutationResult = Apollo.MutationResult<DeleteCodeModuleMutation>;
 export type DeleteCodeModuleMutationOptions = Apollo.BaseMutationOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
+export const DeleteStepDocument = gql`
+    mutation DeleteStep($id: Float!) {
+  deleteStep(id: $id)
+}
+    `;
+export type DeleteStepMutationFn = Apollo.MutationFunction<DeleteStepMutation, DeleteStepMutationVariables>;
+
+/**
+ * __useDeleteStepMutation__
+ *
+ * To run a mutation, you first call `useDeleteStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteStepMutation, { data, loading, error }] = useDeleteStepMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteStepMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStepMutation, DeleteStepMutationVariables>) {
+        return Apollo.useMutation<DeleteStepMutation, DeleteStepMutationVariables>(DeleteStepDocument, baseOptions);
+      }
+export type DeleteStepMutationHookResult = ReturnType<typeof useDeleteStepMutation>;
+export type DeleteStepMutationResult = Apollo.MutationResult<DeleteStepMutation>;
+export type DeleteStepMutationOptions = Apollo.BaseMutationOptions<DeleteStepMutation, DeleteStepMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)

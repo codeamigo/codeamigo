@@ -36,11 +36,15 @@ export class Step extends BaseEntity {
   @Field(() => Lesson)
   lesson: Lesson;
 
-  @OneToMany(() => CodeModule, (codeModule) => codeModule.step)
+  @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {
+    cascade: true,
+  })
   @Field(() => [CodeModule], { defaultValue: [] })
   codeModules!: CodeModule[];
 
-  @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.step)
+  @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.step, {
+    cascade: true,
+  })
   @Field(() => [Checkpoint], { defaultValue: [] })
   checkpoints!: Checkpoint[];
 }
