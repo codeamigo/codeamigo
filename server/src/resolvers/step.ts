@@ -76,8 +76,6 @@ export class StepResolver {
       codeModules: [code],
     }).save();
 
-    console.log("lesson", lesson);
-
     lesson.steps.push(step);
     await lesson.save();
 

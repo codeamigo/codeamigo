@@ -7,7 +7,6 @@ import {
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
-  StepQuery,
 } from "../../generated/graphql";
 import { CodeSandboxV2ResponseI } from "../../pages/api/types";
 import { debounce } from "debounce";
@@ -43,6 +42,11 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
+  const { data, refetch } = useStepQuery({
+    variables: { id: step.id },
+    fetchPolicy: 'no-cache'
+  });
+
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
@@ -63,8 +67,8 @@ const Editor: React.FC<Props> = ({ step }) => {
     });
   };
 
-  const removeFile = async (file: string) => {
-    const module = step.codeModules?.find(
+  const deleteFile = async (file: string) => {
+    const module = data?.step?.codeModules?.find(
       (module) => module.name === file
     );
 
@@ -78,34 +82,47 @@ const Editor: React.FC<Props> = ({ step }) => {
   };
 
   const updateFile = useCallback(
-    debounce((path: string, code: string) => {
-      const currentModule = step.codeModules?.find(
+    debounce(async (path: string, code: string) => {
+      const currentModule = data?.step?.codeModules?.find(
         (module) => module.name === path
       );
 
+      console.log(data)
+      console.log(currentModule)
+      console.log(code)
+      
       if (!currentModule) return;
 
-      updateCodeModule({
+      await updateCodeModule({
         variables: {
           id: currentModule.id,
           name: path,
           value: code,
         },
       });
-    }, 2500),
-    []
+
+      // refetch({ id: data?.step?.id })
+    }, 1000),
+    [data?.step]
   );
 
   useEffect(() => {
-    if (!step?.codeModules) return;
+    if (!data?.step?.codeModules) return;
 
-    const mods = step.codeModules.reduce(
+    console.log(data?.step?.codeModules)
+
+    const mods = data.step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
 
     setFiles(mods);
-  }, [step]);
+  }, [data?.step?.id]);
+
+  useEffect(() => {
+    console.log('refetch')
+    refetch({ id: step.id }).then(console.log)
+  }, [step.id]);
 
   useEffect(() => {
     try {
@@ -178,7 +195,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
           <EditorFiles
             createFile={createFile}
-            removeFile={removeFile}
+            deleteFile={deleteFile}
             currentPath={currentPath}
             files={files}
             setCurrentPath={setCurrentPath}
@@ -217,7 +234,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
-  step: NonNullable<StepQuery['step']>;
+  step: RegularStepFragment;
 };
 
 export default Editor;

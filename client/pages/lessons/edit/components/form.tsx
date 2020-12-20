@@ -20,8 +20,6 @@ const StepForm: React.FC<Props> = ({ currentStepIdx, lesson, refetch }) => {
     refetch()
   }, [currentStepIdx]);
 
-  console.log(step)
-
   return (
     <form className="w-10/12 w-full">
       <>

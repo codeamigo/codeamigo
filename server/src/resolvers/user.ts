@@ -87,9 +87,7 @@ export class UserResolver {
         username: options.username,
         password: hashedPw,
       }).save();
-      console.log('USER')
     } catch (e) {
-      console.log(e)
       if (e.detail && e.detail.includes("already exists")) {
         return {
           errors: [
