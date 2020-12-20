@@ -14,11 +14,15 @@ const Instructions: React.FC<Props> = ({ step }) => {
   const [updateStepM] = useUpdateStepMutation();
 
   const updateStep = useCallback(
-    debounce((value: string | undefined) => {
-      updateStepM({ variables: { id: step.id, instructions: value || "" } });
+    debounce((id: number, value: string | undefined) => {
+      updateStepM({ variables: { id, instructions: value || "" } });
     }, 1000),
     []
   );
+
+  useEffect(() => {
+    setMarkdown(step.instructions)
+  }, [step.instructions])
 
   return (
     <>
@@ -31,7 +35,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
             value={step.instructions}
             onChange={(_, value) => {
               setMarkdown(value);
-              updateStep(value);
+              updateStep(step.id, value);
             }}
             options={{
               wordWrap: "on",

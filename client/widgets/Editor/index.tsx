@@ -7,6 +7,7 @@ import {
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
+  StepQuery,
 } from "../../generated/graphql";
 import { CodeSandboxV2ResponseI } from "../../pages/api/types";
 import { debounce } from "debounce";
@@ -42,9 +43,6 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data, loading, refetch } = useStepQuery({
-    variables: { id: step.id },
-  });
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
@@ -63,12 +61,10 @@ const Editor: React.FC<Props> = ({ step }) => {
       ...files,
       [file]: ``,
     });
-
-    refetch();
   };
 
   const removeFile = async (file: string) => {
-    const module = data?.step?.codeModules?.find(
+    const module = step.codeModules?.find(
       (module) => module.name === file
     );
 
@@ -83,7 +79,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 
   const updateFile = useCallback(
     debounce((path: string, code: string) => {
-      const currentModule = data?.step?.codeModules?.find(
+      const currentModule = step.codeModules?.find(
         (module) => module.name === path
       );
 
@@ -101,15 +97,15 @@ const Editor: React.FC<Props> = ({ step }) => {
   );
 
   useEffect(() => {
-    if (!data?.step?.codeModules) return;
+    if (!step?.codeModules) return;
 
-    const mods = data.step.codeModules.reduce(
+    const mods = step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
 
     setFiles(mods);
-  }, [data?.step?.codeModules?.length]);
+  }, [step]);
 
   useEffect(() => {
     try {
@@ -221,7 +217,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
-  step: RegularStepFragment;
+  step: NonNullable<StepQuery['step']>;
 };
 
 export default Editor;

@@ -280,6 +280,13 @@ export type RegularErrorFragment = (
 export type RegularStepFragment = (
   { __typename?: 'Step' }
   & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+  & { codeModules?: Maybe<Array<(
+    { __typename?: 'CodeModule' }
+    & RegularCodeModuleFragment
+  )>>, checkpoints?: Maybe<Array<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )>> }
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -558,14 +565,7 @@ export type StepQuery = (
   { __typename?: 'Query' }
   & { step?: Maybe<(
     { __typename?: 'Step' }
-    & Pick<Step, 'instructions'>
-    & { codeModules?: Maybe<Array<(
-      { __typename?: 'CodeModule' }
-      & RegularCodeModuleFragment
-    )>>, checkpoints?: Maybe<Array<(
-      { __typename?: 'Checkpoint' }
-      & RegularCheckpointFragment
-    )>> }
+    & RegularStepFragment
   )> }
 );
 
@@ -580,11 +580,10 @@ export type StepsQuery = (
   )> }
 );
 
-export const RegularCheckpointFragmentDoc = gql`
-    fragment RegularCheckpoint on Checkpoint {
-  id
-  test
-  description
+export const RegularErrorFragmentDoc = gql`
+    fragment RegularError on FieldError {
+  field
+  message
 }
     `;
 export const RegularCodeModuleFragmentDoc = gql`
@@ -594,10 +593,11 @@ export const RegularCodeModuleFragmentDoc = gql`
   value
 }
     `;
-export const RegularErrorFragmentDoc = gql`
-    fragment RegularError on FieldError {
-  field
-  message
+export const RegularCheckpointFragmentDoc = gql`
+    fragment RegularCheckpoint on Checkpoint {
+  id
+  test
+  description
 }
     `;
 export const RegularStepFragmentDoc = gql`
@@ -605,8 +605,15 @@ export const RegularStepFragmentDoc = gql`
   id
   createdAt
   instructions
+  codeModules {
+    ...RegularCodeModule
+  }
+  checkpoints {
+    ...RegularCheckpoint
+  }
 }
-    `;
+    ${RegularCodeModuleFragmentDoc}
+${RegularCheckpointFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -1238,17 +1245,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {
-    instructions
-    codeModules {
-      ...RegularCodeModule
-    }
-    checkpoints {
-      ...RegularCheckpoint
-    }
+    ...RegularStep
   }
 }
-    ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}`;
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useStepQuery__

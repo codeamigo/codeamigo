@@ -22,7 +22,11 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         currentStepIdx={currentStepIdx}
         setCurrentStepIdx={setCurrentStepIdx}
       />
-      <StepForm currentStepIdx={currentStepIdx} lesson={data.lesson} />
+      <StepForm
+        refetch={refetch}
+        lesson={data.lesson}
+        currentStepIdx={currentStepIdx}
+      />
     </div>
   );
 };

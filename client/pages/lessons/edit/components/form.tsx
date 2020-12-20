@@ -7,7 +7,7 @@ import Editor from "../../../../widgets/Editor";
 import InfoForm from "../../../../widgets/Lesson/InfoForm";
 import Instructions from "../../../../widgets/Lesson/Instructions";
 
-const StepForm: React.FC<Props> = ({ currentStepIdx, lesson }) => {
+const StepForm: React.FC<Props> = ({ currentStepIdx, lesson, refetch }) => {
   const steps = lesson!.steps || [];
   const sortedSteps = steps
     .slice()
@@ -15,13 +15,12 @@ const StepForm: React.FC<Props> = ({ currentStepIdx, lesson }) => {
 
   const [step, setStep] = useState(sortedSteps[currentStepIdx]);
 
-  const { data } = useStepQuery({ variables: { id: step.id } });
-
   useEffect(() => {
     setStep(sortedSteps[currentStepIdx]);
+    refetch()
   }, [currentStepIdx]);
 
-  if (!data) return null
+  console.log(step)
 
   return (
     <form className="w-10/12 w-full">
@@ -44,6 +43,7 @@ const StepForm: React.FC<Props> = ({ currentStepIdx, lesson }) => {
 type Props = {
   lesson: LessonQuery["lesson"];
   currentStepIdx: number;
+  refetch: any
 };
 
 export default StepForm;
