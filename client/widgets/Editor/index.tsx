@@ -42,7 +42,7 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
 
-  const { data, refetch } = useStepQuery({
+  const { data } = useStepQuery({
     variables: { id: step.id },
     fetchPolicy: 'no-cache'
   });
@@ -87,10 +87,6 @@ const Editor: React.FC<Props> = ({ step }) => {
         (module) => module.name === path
       );
 
-      console.log(data)
-      console.log(currentModule)
-      console.log(code)
-      
       if (!currentModule) return;
 
       await updateCodeModule({
@@ -100,16 +96,12 @@ const Editor: React.FC<Props> = ({ step }) => {
           value: code,
         },
       });
-
-      // refetch({ id: data?.step?.id })
     }, 1000),
-    [data?.step]
+    [data?.step?.id]
   );
 
   useEffect(() => {
     if (!data?.step?.codeModules) return;
-
-    console.log(data?.step?.codeModules)
 
     const mods = data.step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
@@ -118,11 +110,6 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     setFiles(mods);
   }, [data?.step?.id]);
-
-  useEffect(() => {
-    console.log('refetch')
-    refetch({ id: step.id }).then(console.log)
-  }, [step.id]);
 
   useEffect(() => {
     try {
