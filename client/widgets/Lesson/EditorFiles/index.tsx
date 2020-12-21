@@ -9,6 +9,7 @@ const EditorFiles: React.FC<Props> = ({
   createFile,
   deleteFile,
   currentPath,
+  dependencies,
   files,
   setCurrentPath,
 }) => {
@@ -54,24 +55,26 @@ const EditorFiles: React.FC<Props> = ({
         />
       </div>
       <div>
-        {docs.sort((a, b) => a < b ? -1 : 1).map((path) => (
-          <div
-            key={path}
-            className={`${
-              currentPath === path ? "bg-gray-100" : ""
-            } flex justify-between cursor-pointer w-full px-1 py-1 hover:bg-gray-100 ${
-              styles.FILE
-            }`}
-            onClick={() => setCurrentPath(path)}
-          >
-            <div className="text-xs">{path}</div>
-            <Icon
-              name="minus-circled"
-              className="text-red-600 text-sm hidden"
-              onClick={() => deleteFile(path)}
-            />
-          </div>
-        ))}
+        {docs
+          .sort((a, b) => (a < b ? -1 : 1))
+          .map((path) => (
+            <div
+              key={path}
+              className={`${
+                currentPath === path ? "bg-gray-100" : ""
+              } flex justify-between cursor-pointer w-full px-1 py-1 hover:bg-gray-100 ${
+                styles.FILE
+              }`}
+              onClick={() => setCurrentPath(path)}
+            >
+              <div className="text-xs">{path}</div>
+              <Icon
+                name="minus-circled"
+                className="text-red-600 text-sm hidden"
+                onClick={() => deleteFile(path)}
+              />
+            </div>
+          ))}
         {isAddingNewFile && (
           <div className="px-1 py-1">
             <input
@@ -88,19 +91,33 @@ const EditorFiles: React.FC<Props> = ({
         <span className="text-sm font-semibold">Tests</span>
       </div>
       <div>
-        {tests.map((path) => (
-          <div
-            key={path}
-            className={`${
-              currentPath === path ? "bg-gray-100" : ""
-            } flex justify-between cursor-pointer w-full px-1 py-1 hover:bg-gray-100 ${
-              styles.FILE
-            }`}
-            onClick={() => setCurrentPath(path)}
-          >
-            <div className="text-xs">{path}</div>
-          </div>
-        ))}
+        {tests
+          .sort((a, b) => (a < b ? -1 : 1))
+          .map((path) => (
+            <div
+              key={path}
+              className={`${
+                currentPath === path ? "bg-gray-100" : ""
+              } flex justify-between cursor-pointer w-full px-1 py-1 hover:bg-gray-100 ${
+                styles.FILE
+              }`}
+              onClick={() => setCurrentPath(path)}
+            >
+              <div className="text-xs">{path}</div>
+            </div>
+          ))}
+      </div>
+
+      <div className="border-t border-b border-gray-200 p-1 mt-8 flex justify-between content-center">
+        <span className="text-sm font-semibold">Dependencies</span>
+      </div>
+      <div>
+        {dependencies &&
+          Object.keys(dependencies).map((path) => (
+            <div key={path} className={`flex justify-between w-full px-1 py-1`}>
+              <div className="text-xs">{path}</div>
+            </div>
+          ))}
       </div>
     </div>
   );
@@ -109,6 +126,7 @@ const EditorFiles: React.FC<Props> = ({
 type Props = {
   createFile: (path: string) => void;
   deleteFile: (path: string) => void;
+  dependencies?: FilesType;
   files: FilesType;
   currentPath: string;
   setCurrentPath: (path: string) => void;

@@ -132,8 +132,6 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
         const pkgJson = res.contents[`/node_modules/${pkg}/package.json`];
         const main = JSON.parse(pkgJson.content).main;
 
-        console.log(main);
-
         return {
           ...acc,
           [pkg]: res.contents[`/node_modules/${pkg}/${main}`].content,
@@ -195,6 +193,7 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
             deleteFile={deleteFile}
             currentPath={currentPath}
             files={files}
+            dependencies={dependencies}
             setCurrentPath={setCurrentPath}
           />
           <ControlledEditor
