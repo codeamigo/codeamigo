@@ -24,6 +24,8 @@ export type Query = {
   checkpoint?: Maybe<Checkpoint>;
   codeModules: Array<CodeModule>;
   codeModule?: Maybe<CodeModule>;
+  dependencies: Array<Dependency>;
+  dependency?: Maybe<Dependency>;
 };
 
 
@@ -46,6 +48,11 @@ export type QueryCodeModuleArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryDependencyArgs = {
+  id: Scalars['Int'];
+};
+
 export type Step = {
   __typename?: 'Step';
   id: Scalars['Float'];
@@ -55,6 +62,7 @@ export type Step = {
   lesson: Lesson;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
+  dependencies?: Maybe<Array<Dependency>>;
 };
 
 export type Lesson = {
@@ -99,6 +107,16 @@ export type Checkpoint = {
   moduleId: Scalars['Float'];
 };
 
+export type Dependency = {
+  __typename?: 'Dependency';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  package: Scalars['String'];
+  version?: Maybe<Scalars['String']>;
+  step: Step;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createStep?: Maybe<Step>;
@@ -118,6 +136,9 @@ export type Mutation = {
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
   deleteCodeModule: Scalars['Boolean'];
+  createDependency?: Maybe<Dependency>;
+  updateDependency?: Maybe<Dependency>;
+  deleteDependency: Scalars['Boolean'];
 };
 
 
@@ -211,6 +232,23 @@ export type MutationDeleteCodeModuleArgs = {
   id: Scalars['Float'];
 };
 
+
+export type MutationCreateDependencyArgs = {
+  options: DependencyInput;
+  stepId: Scalars['Float'];
+};
+
+
+export type MutationUpdateDependencyArgs = {
+  options: DependencyInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteDependencyArgs = {
+  id: Scalars['Float'];
+};
+
 export type CreateStepInput = {
   lessonId?: Maybe<Scalars['Float']>;
 };
@@ -262,6 +300,11 @@ export type CodeModuleInput = {
   value: Scalars['String'];
 };
 
+export type DependencyInput = {
+  package: Scalars['String'];
+  version: Scalars['String'];
+};
+
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
   & Pick<Checkpoint, 'id' | 'test' | 'description'>
@@ -270,6 +313,11 @@ export type RegularCheckpointFragment = (
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
   & Pick<CodeModule, 'id' | 'name' | 'value'>
+);
+
+export type RegularDependencyFragment = (
+  { __typename?: 'Dependency' }
+  & Pick<Dependency, 'id' | 'package' | 'version'>
 );
 
 export type RegularErrorFragment = (
@@ -286,6 +334,9 @@ export type RegularStepFragment = (
   )>>, checkpoints?: Maybe<Array<(
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
+  )>>, dependencies?: Maybe<Array<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
   )>> }
 );
 
@@ -600,6 +651,13 @@ export const RegularCheckpointFragmentDoc = gql`
   description
 }
     `;
+export const RegularDependencyFragmentDoc = gql`
+    fragment RegularDependency on Dependency {
+  id
+  package
+  version
+}
+    `;
 export const RegularStepFragmentDoc = gql`
     fragment RegularStep on Step {
   id
@@ -611,9 +669,13 @@ export const RegularStepFragmentDoc = gql`
   checkpoints {
     ...RegularCheckpoint
   }
+  dependencies {
+    ...RegularDependency
+  }
 }
     ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}`;
+${RegularCheckpointFragmentDoc}
+${RegularDependencyFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {

@@ -13,6 +13,7 @@ import { isAuth } from "../middleware/isAuth";
 import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
 import { Lesson } from "../entities/Lesson";
+import { Dependency } from "../entities/Dependency";
 
 export const DEFAULT_MD = `## Step \#
 
@@ -46,13 +47,15 @@ class CreateStepInput {
 export class StepResolver {
   @Query(() => [Step])
   steps(): Promise<Step[]> {
-    return Step.find({ relations: ["lesson", "checkpoints", "codeModules"] });
+    return Step.find({
+      relations: ["lesson", "checkpoints", "codeModules", "dependencies"],
+    });
   }
 
   @Query(() => Step, { nullable: true })
   step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
     return Step.findOne(id, {
-      relations: ["lesson", "codeModules", "checkpoints"],
+      relations: ["lesson", "checkpoints", "codeModules", "dependencies"],
     });
   }
 
@@ -71,10 +74,18 @@ export class StepResolver {
     }
 
     const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
+    const dependency = await Dependency.create({
+      package: "jest-lite",
+      version: "1.0.0-alpha.4",
+    }).save();
+
     const step = await Step.create({
       instructions: DEFAULT_MD,
       codeModules: [code],
+      dependencies: [dependency]
     }).save();
+
+    console.log(step)
 
     lesson.steps.push(step);
     await lesson.save();
@@ -97,12 +108,12 @@ export class StepResolver {
 
   @Mutation(() => Boolean)
   async deleteStep(@Arg("id") id: number): Promise<boolean> {
-    const step = await Step.findOne(id)
+    const step = await Step.findOne(id);
 
     if (!step) {
-      return false
+      return false;
     }
-    
+
     await Step.delete(id);
     return true;
   }

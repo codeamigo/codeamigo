@@ -43,8 +43,6 @@ const EditorFiles: React.FC<Props> = ({
   const docs = Object.keys(files).filter((file) => !file.includes("spec"));
   const tests = Object.keys(files).filter((file) => file.includes("spec"));
 
-  console.log(currentPath)
-
   return (
     <div className="border-r border-gray-200 w-4/12">
       <div className="border-b border-gray-200 p-1 flex justify-between content-center">

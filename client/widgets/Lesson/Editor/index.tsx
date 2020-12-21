@@ -122,60 +122,66 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
     }
   }, [currentCode, currentPath]);
 
+  async function getDeps() {
+    const newDependencies = step.dependencies?.reduce(
+      async (acc, { package: pkg, version }) => {
+        const res: CodeSandboxV2ResponseI = await fetch(
+          `${CS_PKG_URL}/${pkg}/${version}.json`
+        ).then((res) => res.json());
+
+        const pkgJson = res.contents[`/node_modules/${pkg}/package.json`];
+        const main = JSON.parse(pkgJson.content).main;
+
+        console.log(main);
+
+        return {
+          ...acc,
+          [pkg]: res.contents[`/node_modules/${pkg}/${main}`].content,
+        };
+      },
+      {}
+    );
+
+    setDependencies({
+      ...dependencies,
+      ...await newDependencies,
+    });
+
+    const monacoInstance = await monaco.init();
+
+    // validation settings
+    monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
+      {
+        noSemanticValidation: true,
+        noSyntaxValidation: false,
+      }
+    );
+
+    // compiler options
+    monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
+      target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
+      allowSyntheticDefaultImports: true,
+      allowNonTsExtensions: true,
+      typeRoots: ["node_modules/@types"],
+    });
+
+    // const fakeFiles = Object.keys(dep1.contents).reduce((acc, curr) => ({
+    //   ...acc,
+    //   [curr]: dep1.contents[curr].content
+    // }), {})
+
+    // for (const fileName in fakeFiles) {
+    //   const fakePath = `file:///node_modules/@types/${fileName}`;
+
+    //   monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
+    //     // @ts-ignore
+    //     fakeFiles[fileName],
+    //     fakePath
+    //   );
+    // }
+  }
+
   const editorDidMount = (_: any, editor: any) => {
-    async function getDeps() {
-      const pkg = "jest-lite";
-      const v = "1.0.0-alpha.4";
-      const dep1: CodeSandboxV2ResponseI = await fetch(
-        `${CS_PKG_URL}/${pkg}/${v}.json`
-      ).then((res) => res.json());
-
-      const pkgJson = dep1.contents[`/node_modules/${pkg}/package.json`];
-      const main = JSON.parse(pkgJson.content).main;
-
-      const dependency = dep1.contents[`/node_modules/${pkg}/${main}`].content;
-
-      setDependencies({
-        ...dependencies,
-        [dep1.dependency.name]: dependency,
-      });
-
-      const monacoInstance = await monaco.init();
-
-      // validation settings
-      monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
-        {
-          noSemanticValidation: true,
-          noSyntaxValidation: false,
-        }
-      );
-
-      // compiler options
-      monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions(
-        {
-          target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
-          allowSyntheticDefaultImports: true,
-          allowNonTsExtensions: true,
-          typeRoots: ["node_modules/@types"],
-        }
-      );
-
-      // const fakeFiles = Object.keys(dep1.contents).reduce((acc, curr) => ({
-      //   ...acc,
-      //   [curr]: dep1.contents[curr].content
-      // }), {})
-
-      // for (const fileName in fakeFiles) {
-      //   const fakePath = `file:///node_modules/@types/${fileName}`;
-
-      //   monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
-      //     // @ts-ignore
-      //     fakeFiles[fileName],
-      //     fakePath
-      //   );
-      // }
-    }
-
     getDeps();
   };
 

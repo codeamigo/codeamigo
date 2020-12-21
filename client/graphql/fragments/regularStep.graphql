@@ -8,4 +8,7 @@ fragment RegularStep on Step {
   checkpoints {
     ...RegularCheckpoint
   }
+  dependencies {
+    ...RegularDependency
+  }
 }
