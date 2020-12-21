@@ -3,7 +3,7 @@ import { NextPage } from "next";
 
 import { useLessonQuery } from "@generated/graphql";
 import Steps from "@widgets/Lesson/Steps";
-import StepForm from "@widgets/StepForm";
+import StepForm from "@widgets/Lesson/StepForm";
 
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);

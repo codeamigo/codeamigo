@@ -108,7 +108,8 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
     ) as FilesType;
 
     setFiles(mods);
-    setCurrentPath(Object.keys(mods)[0]);
+
+    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
   }, [step?.id, step?.codeModules]);
 
   useEffect(() => {
