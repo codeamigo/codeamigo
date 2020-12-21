@@ -1,10 +1,11 @@
 import debounce from "debounce";
 import React from "react";
+
 import {
   LessonQuery,
   useUpdateLessonDescriptionMutation,
   useUpdateLessonTitleMutation,
-} from "../../../generated/graphql";
+} from "@generated/graphql";
 
 const InfoForm: React.FC<Props> = ({ lesson }) => {
   const [updateLessonDescriptionM] = useUpdateLessonDescriptionMutation();

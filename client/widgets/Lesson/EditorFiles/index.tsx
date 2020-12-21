@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import Icon from "../../components/Icon";
+
+import Icon from "@components/Icon";
 import { FilesType } from "../Editor/types";
 
 import styles from "./EditorFiles.module.scss";

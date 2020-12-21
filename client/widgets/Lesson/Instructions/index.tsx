@@ -7,7 +7,7 @@ import gfm from "remark-gfm";
 import {
   RegularStepFragment,
   useUpdateStepMutation,
-} from "../../../generated/graphql";
+} from "@generated/graphql";
 
 const Instructions: React.FC<Props> = ({ step }) => {
   const [markdown, setMarkdown] = useState(step?.instructions);

@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
+
 import {
+  useCreateCheckpointMutation,
+  useDeleteCheckpointMutation,
   RegularCheckpointFragment,
   RegularStepFragment,
-  useDeleteCheckpointMutation,
-  useCreateCheckpointMutation,
-  useStepQuery,
-} from "../../../../generated/graphql";
+} from "@generated/graphql";
 
-const Checkpoints: React.FC<Props> = ({ step }: Props) => {
-  const { data, refetch } = useStepQuery({ variables: { id: step.id } });
+const Checkpoints: React.FC<Props> = ({ step, refetch }: Props) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [checkpoints, setCheckpoints] = useState(
@@ -16,11 +15,11 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   );
 
   useEffect(() => {
-    setCheckpoints(data?.step?.checkpoints || []);
-  }, [data?.step?.checkpoints]);
+    setCheckpoints(step?.checkpoints || []);
+  }, [step?.checkpoints]);
 
   const createCheckpoint = async () => {
-    const len = data?.step?.checkpoints?.length || 0;
+    const len = step?.checkpoints?.length || 0;
 
     await createCheckpointM({
       variables: { stepId: step.id, checkpointId: len + 1 },
@@ -36,7 +35,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   };
 
   return (
-    <div className='px-4 py-5'>
+    <div className="px-4 py-5">
       {checkpoints.length
         ? checkpoints.map((checkpoint, i) => {
             return (
@@ -73,6 +72,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
 
 type Props = {
   step: RegularStepFragment;
+  refetch: any;
 };
 
 export default Checkpoints;

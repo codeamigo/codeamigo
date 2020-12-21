@@ -1,56 +1,65 @@
 import React from "react";
-import Icon from "../../../components/Icon";
+import Icon from "@components/Icon";
 import {
-  LessonQuery,
+  RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
-} from "../../../generated/graphql";
+} from "@generated/graphql";
 
 import styles from "./Steps.module.scss";
 
 const Steps: React.FC<Props> = ({
-  data,
+  steps,
   refetch,
-  currentStepIdx,
-  setCurrentStepIdx,
+  lessonId,
+  currentStepId,
+  setCurrentStepId,
 }) => {
   const [createStepM] = useCreateStepMutation();
   const [deleteStepM] = useDeleteStepMutation();
 
   const createStep = async () => {
-    await createStepM({
-      variables: { lessonId: data.lesson!.id },
+    const step = await createStepM({
+      variables: { lessonId },
     });
 
     await refetch();
 
-    setCurrentStepIdx(data.lesson?.steps?.length || 0);
+    if (!step.data?.createStep?.id) return;
+
+    setCurrentStepId(step.data?.createStep?.id);
   };
 
   const deleteStep = async (id: number, idx: number) => {
+    const sortedSteps = steps
+      .slice()
+      .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
     await deleteStepM({ variables: { id } });
 
     await refetch();
 
-    setCurrentStepIdx(idx - 1 || 0);
+    setCurrentStepId(sortedSteps[idx - 1].id);
   };
 
   return (
     <div className="w-2/12 py-5 bg-white">
       <ol>
-        {data.lesson?.steps &&
-          data.lesson.steps.map((step, i) => {
+        {steps
+          .slice()
+          .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1))
+          .map((step, i) => {
             return (
               <li
                 className={`${
-                  currentStepIdx === i ? "text-blue-600" : ""
+                  currentStepId === step.id ? "text-blue-600" : ""
                 } list-none cursor-pointer w-full flex justify-between items-center ${
                   styles.STEP
                 }`}
                 key={step.id}
-                onClick={() => setCurrentStepIdx(i)}
+                onClick={() => setCurrentStepId(step.id)}
               >
-                <span>Step {i + 1}</span>
+                <span>Step {step.id}</span>
                 <Icon
                   name="minus-circled"
                   className="text-red-600 hidden"
@@ -72,10 +81,11 @@ const Steps: React.FC<Props> = ({
 };
 
 type Props = {
-  data: LessonQuery;
   refetch: any;
-  currentStepIdx: number;
-  setCurrentStepIdx: (n: number) => void;
+  lessonId: number;
+  currentStepId: number;
+  steps: RegularStepFragment[];
+  setCurrentStepId: (n: number) => void;
 };
 
 export default Steps;

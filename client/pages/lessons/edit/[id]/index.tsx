@@ -1,32 +1,34 @@
 import React, { useState } from "react";
 import { NextPage } from "next";
 
-import { useLessonQuery } from "../../../../generated/graphql";
-import Steps from "../../../../widgets/Lesson/Steps";
-import StepForm from "../components/form";
+import { useLessonQuery } from "@generated/graphql";
+import Steps from "@widgets/Lesson/Steps";
+import StepForm from "@widgets/StepForm";
 
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
-  const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [currentStepId, setCurrentStepId] = useState(0);
 
-  const { data, refetch } = useLessonQuery({ variables: { id } });
+  const { data, refetch } = useLessonQuery({
+    variables: { id },
+  });
 
   if (!data) return null;
   if (!data.lesson) return null;
+  if (!data.lesson.steps) return null;
+
+  const stepId = currentStepId || data.lesson.steps[0].id;
 
   return (
     <div className="flex px-8">
       <Steps
-        data={data}
         refetch={refetch}
-        currentStepIdx={currentStepIdx}
-        setCurrentStepIdx={setCurrentStepIdx}
+        steps={data.lesson.steps}
+        lessonId={data.lesson.id}
+        currentStepId={stepId}
+        setCurrentStepId={setCurrentStepId}
       />
-      <StepForm
-        refetch={refetch}
-        lesson={data.lesson}
-        currentStepIdx={currentStepIdx}
-      />
+      <StepForm lesson={data.lesson} currentStepId={stepId} />
     </div>
   );
 };

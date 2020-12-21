@@ -3,15 +3,16 @@ import { ControlledEditor, monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect } from "react";
 import {
   RegularStepFragment,
-  useStepQuery,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
-} from "../../generated/graphql";
-import { CodeSandboxV2ResponseI } from "../../pages/api/types";
+} from "@generated/graphql";
+import { CodeSandboxV2ResponseI } from "@api/types";
 import { debounce } from "debounce";
 import { FilesType } from "./types";
 import EditorFiles from "../EditorFiles";
+
+const CS_PKG_URL = "https://prod-packager-packages.codesandbox.io/v2/packages";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
@@ -35,17 +36,12 @@ const runCode = (files: FilesType, runPath: string) => {
   return module.exports;
 };
 
-const Editor: React.FC<Props> = ({ step }) => {
+const Editor: React.FC<Props> = ({ step, refetch }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState("");
   const [currentCode, setCurrentCode] = React.useState("");
   const [outputCode, setOutputCode] = React.useState("");
-
-  const { data, refetch } = useStepQuery({
-    variables: { id: step.id },
-    fetchPolicy: 'no-cache'
-  });
 
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -66,17 +62,13 @@ const Editor: React.FC<Props> = ({ step }) => {
       [file]: ``,
     });
 
-    setCurrentPath(file)
+    setCurrentPath(file);
 
-    refetch()
+    refetch();
   };
 
   const deleteFile = async (file: string) => {
-    const module = data?.step?.codeModules?.find(
-      (module) => module.name === file
-    );
-
-    console.log(data?.step)
+    const module = step?.codeModules?.find((module) => module.name === file);
 
     if (!module) return;
 
@@ -89,7 +81,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 
   const updateFile = useCallback(
     debounce(async (path: string, code: string) => {
-      const currentModule = data?.step?.codeModules?.find(
+      const currentModule = step?.codeModules?.find(
         (module) => module.name === path
       );
 
@@ -103,20 +95,21 @@ const Editor: React.FC<Props> = ({ step }) => {
         },
       });
     }, 1000),
-    [data?.step?.id]
+    [step?.id]
   );
 
   useEffect(() => {
-    if (!data?.step?.codeModules) return;
+    console.log("STEP MODS", step?.codeModules);
+    if (!step?.codeModules) return;
 
-    const mods = data.step.codeModules.reduce(
+    const mods = step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
 
     setFiles(mods);
-    setCurrentPath(Object.keys(mods)[0])
-  }, [data?.step?.id]);
+    setCurrentPath(Object.keys(mods)[0]);
+  }, [step?.id, step?.codeModules]);
 
   useEffect(() => {
     try {
@@ -130,13 +123,16 @@ const Editor: React.FC<Props> = ({ step }) => {
 
   const editorDidMount = (_: any, editor: any) => {
     async function getDeps() {
-      // TODO, make dynamic!
+      const pkg = "jest-lite";
+      const v = "1.0.0-alpha.4";
       const dep1: CodeSandboxV2ResponseI = await fetch(
-        "https://prod-packager-packages.codesandbox.io/v2/packages/jest-lite/1.0.0-alpha.4.json"
+        `${CS_PKG_URL}/${pkg}/${v}.json`
       ).then((res) => res.json());
 
-      const dependency =
-        dep1.contents["/node_modules/jest-lite/dist/core.js"].content;
+      const pkgJson = dep1.contents[`/node_modules/${pkg}/package.json`];
+      const main = JSON.parse(pkgJson.content).main;
+
+      const dependency = dep1.contents[`/node_modules/${pkg}/${main}`].content;
 
       setDependencies({
         ...dependencies,
@@ -229,6 +225,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 
 type Props = {
   step: RegularStepFragment;
+  refetch: any;
 };
 
 export default Editor;
