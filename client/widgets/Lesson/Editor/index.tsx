@@ -36,7 +36,7 @@ const runCode = (files: FilesType, runPath: string) => {
   return module.exports;
 };
 
-const Editor: React.FC<Props> = ({ step, refetch }) => {
+const Editor: React.FC<Props> = ({ step }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState("");
@@ -55,6 +55,7 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
 
     await createCodeModule({
       variables: { stepId: step.id, name: file, value: `` },
+      refetchQueries: ['Step']
     });
 
     setFiles({
@@ -63,8 +64,6 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
     });
 
     setCurrentPath(file);
-
-    refetch();
   };
 
   const deleteFile = async (file: string) => {
@@ -231,7 +230,6 @@ const Editor: React.FC<Props> = ({ step, refetch }) => {
 
 type Props = {
   step: RegularStepFragment;
-  refetch: any;
 };
 
 export default Editor;

@@ -4,13 +4,13 @@ import {
   RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
+  useLessonQuery,
 } from "@generated/graphql";
 
 import styles from "./Steps.module.scss";
 
 const Steps: React.FC<Props> = ({
   steps,
-  refetch,
   lessonId,
   currentStepId,
   setCurrentStepId,
@@ -21,9 +21,8 @@ const Steps: React.FC<Props> = ({
   const createStep = async () => {
     const step = await createStepM({
       variables: { lessonId },
+      refetchQueries: ["Lesson"],
     });
-
-    await refetch();
 
     if (!step.data?.createStep?.id) return;
 
@@ -35,9 +34,10 @@ const Steps: React.FC<Props> = ({
       .slice()
       .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-    await deleteStepM({ variables: { id } });
-
-    await refetch();
+    const res = await deleteStepM({
+      variables: { id },
+      refetchQueries: ["Lesson"],
+    });
 
     setCurrentStepId(sortedSteps[idx - 1].id);
   };
@@ -81,7 +81,6 @@ const Steps: React.FC<Props> = ({
 };
 
 type Props = {
-  refetch: any;
   lessonId: number;
   currentStepId: number;
   steps: RegularStepFragment[];

@@ -9,7 +9,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const [currentStepId, setCurrentStepId] = useState(0);
 
-  const { data, refetch } = useLessonQuery({
+  const { data } = useLessonQuery({
     variables: { id },
   });
 
@@ -22,7 +22,6 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   return (
     <div className="flex px-8">
       <Steps
-        refetch={refetch}
         steps={data.lesson.steps}
         lessonId={data.lesson.id}
         currentStepId={stepId}

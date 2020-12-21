@@ -8,9 +8,8 @@ import InfoForm from "@widgets/Lesson/InfoForm";
 import Instructions from "@widgets/Lesson/Instructions";
 
 const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
-  const { data, refetch } = useStepQuery({
+  const { data } = useStepQuery({
     variables: { id },
-    fetchPolicy: "no-cache",
   });
 
   if (!data?.step) return null;
@@ -23,10 +22,10 @@ const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
           <Instructions step={data.step} />
         </div>
         <div className="flex flex-col w-full">
-          <Editor step={data.step} refetch={refetch} />
+          <Editor step={data.step} />
         </div>
         <div className="flex flex-col w-full">
-          <Checkpoints step={data.step} refetch={refetch} />
+          <Checkpoints step={data.step} />
         </div>
       </>
     </form>

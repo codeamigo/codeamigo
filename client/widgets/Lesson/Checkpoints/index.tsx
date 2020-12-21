@@ -7,7 +7,7 @@ import {
   RegularStepFragment,
 } from "@generated/graphql";
 
-const Checkpoints: React.FC<Props> = ({ step, refetch }: Props) => {
+const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [checkpoints, setCheckpoints] = useState(
@@ -23,15 +23,12 @@ const Checkpoints: React.FC<Props> = ({ step, refetch }: Props) => {
 
     await createCheckpointM({
       variables: { stepId: step.id, checkpointId: len + 1 },
+      refetchQueries: ["Step"],
     });
-
-    refetch();
   };
 
   const deleteCheckpoint = async (id: number) => {
-    await deleteCheckpointM({ variables: { id } });
-
-    refetch();
+    await deleteCheckpointM({ variables: { id }, refetchQueries: ["Step"] });
   };
 
   return (
@@ -72,7 +69,6 @@ const Checkpoints: React.FC<Props> = ({ step, refetch }: Props) => {
 
 type Props = {
   step: RegularStepFragment;
-  refetch: any;
 };
 
 export default Checkpoints;
