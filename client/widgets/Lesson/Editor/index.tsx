@@ -13,21 +13,30 @@ import { FilesType } from "./types";
 import EditorFiles from "../EditorFiles";
 
 const CS_PKG_URL = "https://prod-packager-packages.codesandbox.io/v2/packages";
+const MODULE_ROOT = "/node_modules";
 
 const transformCode = (code: string, path: string) => {
   return babel.transform(code, {
-    presets: ["es2015", "typescript", "react"],
+    presets: ["es2015", "react"],
     filename: path,
   });
 };
 
-const findBestMatch = (files: FilesType, runPath: string) => {
+// ⛔️⛔️⛔️⛔️⛔️
+// This code is important and should be tested
+// thoroughly when changed. It runs through all
+// possible files to get the next required path.
+// ⛔️⛔️⛔️⛔️⛔️
+const findBestMatch = (
+  files: FilesType | CodeSandboxV2ResponseI["contents"],
+  runPath: string
+) => {
   switch (true) {
     case !!files[runPath]: {
-      return files[runPath];
+      return runPath;
     }
-    case !!files[`node_modules/${runPath}/index.js`]: {
-      return files[`node_modules/${runPath}/index.js`];
+    case !!files[`${MODULE_ROOT}/${runPath}/index.js`]: {
+      return `${MODULE_ROOT}/${runPath}/index.js`;
     }
     default:
       const fileKeys = Object.keys(files);
@@ -38,30 +47,35 @@ const findBestMatch = (files: FilesType, runPath: string) => {
 
       switch (true) {
         case opt1 !== undefined: {
-          return files[opt1!];
+          return opt1;
         }
         case opt2 !== undefined: {
-          return files[opt2!];
+          return opt2;
         }
       }
 
-      throw new Error(`No file found for ${runPath}`);
+      console.error(`No file found for ${runPath}`);
   }
 };
 
 const runCode = (files: FilesType, runPath: string) => {
-  const code = findBestMatch(files, runPath);
-  const babelOutput = transformCode(code, runPath);
+  try {
+    const path = findBestMatch(files, runPath);
+    const code = files[path!];
+    const babelOutput = transformCode(code, path!);
 
-  const require = (path: string) => {
-    return runCode(files, path);
-  };
+    const require = (path: string) => {
+      return runCode(files, path);
+    };
 
-  const exports = {};
-  const module = { exports };
-  eval(babelOutput.code);
+    const exports = {};
+    const module = { exports };
+    eval(babelOutput.code);
 
-  return module.exports;
+    return module.exports;
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const Editor: React.FC<Props> = ({ step }) => {
@@ -150,8 +164,9 @@ const Editor: React.FC<Props> = ({ step }) => {
 
   async function getDeps() {
     const fakeDeps = [
-      { package: "react", version: "16.0.0" },
-      { package: "react-dom", version: "16.0.0" },
+      { package: "react", version: "17.0.1" },
+      { package: "react-dom", version: "17.0.1" },
+      { package: "moment", version: "2.29.1" },
       { package: "jest-lite", version: "1.0.0-alpha.4" },
     ];
 
@@ -163,23 +178,22 @@ const Editor: React.FC<Props> = ({ step }) => {
           `${CS_PKG_URL}/${pkg}/${version}.json`
         ).then((res) => res.json());
 
-        const pkgJson = res.contents[`/node_modules/${pkg}/package.json`];
+        const pkgJson = res.contents[`${MODULE_ROOT}/${pkg}/package.json`];
         const main = JSON.parse(pkgJson.content).main;
-        const mainModule = `/node_modules/${pkg}/${main}`;
+        const mainModule = findBestMatch(res.contents, main);
 
         Object.keys(res.contents).map((value) => {
           if (value !== mainModule)
             dependencyDependencies = {
               ...dependencyDependencies,
-              [value.replace("/node", "node")]: res.contents[value].content,
+              [value]: res.contents[value].content,
             };
         });
 
         return {
           ...(await acc),
           ...dependencyDependencies,
-          [mainModule.replace("/node", "node")]: res.contents[mainModule]
-            .content,
+          [mainModule!]: res.contents[mainModule!].content,
         };
       },
       {}
@@ -244,24 +258,26 @@ const Editor: React.FC<Props> = ({ step }) => {
             dependencies={dependencies}
             setCurrentPath={setCurrentPath}
           />
-          <ControlledEditor
-            height="300px"
-            className="w-8/12"
-            language={"typescript"}
-            value={files[currentPath] || dependencies[currentPath]}
-            options={{
-              minimap: { enabled: false },
-            }}
-            editorDidMount={editorDidMount}
-            onChange={(_, value) => {
-              setFiles({
-                ...files,
-                [currentPath]: value || "",
-              });
-              setCurrentCode(value || "");
-              updateFile(currentPath, value || "");
-            }}
-          />
+          <div className="w-8/12">
+            <ControlledEditor
+              height="300px"
+              width="100%"
+              language={"typescript"}
+              value={files[currentPath] || dependencies[currentPath]}
+              options={{
+                minimap: { enabled: false },
+              }}
+              editorDidMount={editorDidMount}
+              onChange={(_, value) => {
+                setFiles({
+                  ...files,
+                  [currentPath]: value || "",
+                });
+                setCurrentCode(value || "");
+                updateFile(currentPath, value || "");
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
@@ -271,7 +287,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         >
           Run
         </button>
-        <div>{outputCode}</div>
+        <div id="root" />
       </div>
     </div>
   );
