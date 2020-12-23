@@ -21,16 +21,44 @@ const transformCode = (code: string, path: string) => {
   });
 };
 
+const findBestMatch = (files: FilesType, runPath: string) => {
+  switch (true) {
+    case !!files[runPath]: {
+      return files[runPath];
+    }
+    case !!files[`node_modules/${runPath}/index.js`]: {
+      return files[`node_modules/${runPath}/index.js`];
+    }
+    default:
+      const fileKeys = Object.keys(files);
+      const cleanRunPath = runPath.replace("./", "");
+
+      const opt1 = fileKeys.find((file) => file.includes(`${cleanRunPath}.js`));
+      const opt2 = fileKeys.find((file) => file.includes(cleanRunPath));
+
+      switch (true) {
+        case opt1 !== undefined: {
+          return files[opt1!];
+        }
+        case opt2 !== undefined: {
+          return files[opt2!];
+        }
+      }
+
+      throw new Error(`No file found for ${runPath}`);
+  }
+};
+
 const runCode = (files: FilesType, runPath: string) => {
-  const code = files[runPath];
+  const code = findBestMatch(files, runPath);
   const babelOutput = transformCode(code, runPath);
 
   const require = (path: string) => {
     return runCode(files, path);
   };
+
   const exports = {};
   const module = { exports };
-
   eval(babelOutput.code);
 
   return module.exports;
@@ -55,7 +83,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     await createCodeModule({
       variables: { stepId: step.id, name: file, value: `` },
-      refetchQueries: ['Step']
+      refetchQueries: ["Step"],
     });
 
     setFiles({
@@ -98,7 +126,6 @@ const Editor: React.FC<Props> = ({ step }) => {
   );
 
   useEffect(() => {
-    console.log("STEP MODS", step?.codeModules);
     if (!step?.codeModules) return;
 
     const mods = step.codeModules.reduce(
@@ -122,7 +149,15 @@ const Editor: React.FC<Props> = ({ step }) => {
   }, [currentCode, currentPath]);
 
   async function getDeps() {
-    const newDependencies = step.dependencies?.reduce(
+    const fakeDeps = [
+      { package: "react", version: "16.0.0" },
+      { package: "react-dom", version: "16.0.0" },
+      { package: "jest-lite", version: "1.0.0-alpha.4" },
+    ];
+
+    let dependencyDependencies: { [key in string]: string } = {};
+
+    const newDependencies = fakeDeps.reduce(
       async (acc, { package: pkg, version }) => {
         const res: CodeSandboxV2ResponseI = await fetch(
           `${CS_PKG_URL}/${pkg}/${version}.json`
@@ -130,10 +165,21 @@ const Editor: React.FC<Props> = ({ step }) => {
 
         const pkgJson = res.contents[`/node_modules/${pkg}/package.json`];
         const main = JSON.parse(pkgJson.content).main;
+        const mainModule = `/node_modules/${pkg}/${main}`;
+
+        Object.keys(res.contents).map((value) => {
+          if (value !== mainModule)
+            dependencyDependencies = {
+              ...dependencyDependencies,
+              [value.replace("/node", "node")]: res.contents[value].content,
+            };
+        });
 
         return {
-          ...acc,
-          [pkg]: res.contents[`/node_modules/${pkg}/${main}`].content,
+          ...(await acc),
+          ...dependencyDependencies,
+          [mainModule.replace("/node", "node")]: res.contents[mainModule]
+            .content,
         };
       },
       {}
@@ -141,7 +187,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     setDependencies({
       ...dependencies,
-      ...await newDependencies,
+      ...(await newDependencies),
     });
 
     const monacoInstance = await monaco.init();
@@ -162,10 +208,13 @@ const Editor: React.FC<Props> = ({ step }) => {
       typeRoots: ["node_modules/@types"],
     });
 
-    // const fakeFiles = Object.keys(dep1.contents).reduce((acc, curr) => ({
-    //   ...acc,
-    //   [curr]: dep1.contents[curr].content
-    // }), {})
+    // const fakeFiles = Object.keys(dependencyDependencies).reduce(
+    //   (acc, curr) => ({
+    //     ...acc,
+    //     [curr]: dependencyDependencies[curr],
+    //   }),
+    //   {}
+    // );
 
     // for (const fileName in fakeFiles) {
     //   const fakePath = `file:///node_modules/@types/${fileName}`;
@@ -199,7 +248,7 @@ const Editor: React.FC<Props> = ({ step }) => {
             height="300px"
             className="w-8/12"
             language={"typescript"}
-            value={files[currentPath]}
+            value={files[currentPath] || dependencies[currentPath]}
             options={{
               minimap: { enabled: false },
             }}

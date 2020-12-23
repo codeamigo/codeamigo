@@ -114,7 +114,11 @@ const EditorFiles: React.FC<Props> = ({
       <div>
         {dependencies &&
           Object.keys(dependencies).map((path) => (
-            <div key={path} className={`flex justify-between w-full px-1 py-1`}>
+            <div
+              key={path}
+              className={`flex justify-between w-full px-1 py-1`}
+              onClick={() => setCurrentPath(path)}
+            >
               <div className="text-xs">{path}</div>
             </div>
           ))}
