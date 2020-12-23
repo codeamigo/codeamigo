@@ -1,4 +1,3 @@
-import * as babel from "@babel/standalone";
 import { ControlledEditor, monaco } from "@monaco-editor/react";
 import React, { useCallback, useEffect } from "react";
 import {
@@ -12,22 +11,7 @@ import { debounce } from "debounce";
 import { FilesType } from "./types";
 import EditorFiles from "../EditorFiles";
 
-const CS_PKG_URL = "https://prod-packager-packages.codesandbox.io/v2/packages";
-const MODULE_ROOT = "/node_modules";
-
-const transformCode = (code: string, path: string) => {
-  return babel.transform(code, {
-    presets: ["es2015", "react"],
-    filename: path,
-  });
-};
-
-// ⛔️⛔️⛔️⛔️⛔️
-// This code is important and should be tested
-// thoroughly when changed. It runs through all
-// possible files to get the next required path.
-// ⛔️⛔️⛔️⛔️⛔️
-const findBestMatch = (
+export const findBestMatch = (
   files: FilesType | CodeSandboxV2ResponseI["contents"],
   runPath: string
 ) => {
@@ -57,33 +41,14 @@ const findBestMatch = (
       console.error(`No file found for ${runPath}`);
   }
 };
+export const MODULE_ROOT = "/node_modules";
 
-const runCode = (files: FilesType, runPath: string) => {
-  try {
-    const path = findBestMatch(files, runPath);
-    const code = files[path!];
-    const babelOutput = transformCode(code, path!);
-
-    const require = (path: string) => {
-      return runCode(files, path);
-    };
-
-    const exports = {};
-    const module = { exports };
-    eval(babelOutput.code);
-
-    return module.exports;
-  } catch (e) {
-    console.log(e);
-  }
-};
+const CS_PKG_URL = "https://prod-packager-packages.codesandbox.io/v2/packages";
 
 const Editor: React.FC<Props> = ({ step }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState("");
-  const [currentCode, setCurrentCode] = React.useState("");
-  const [outputCode, setOutputCode] = React.useState("");
 
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -152,15 +117,22 @@ const Editor: React.FC<Props> = ({ step }) => {
     if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
   }, [step?.id, step?.codeModules]);
 
-  useEffect(() => {
-    try {
-      const { code } = transformCode(currentCode, currentPath);
+  const postCode = () => {
+    // @ts-ignore
+    const iframe =
+      // @ts-ignore
+      document.getElementById("frame").contentWindow;
 
-      setOutputCode(code);
-    } catch (e) {
-      setOutputCode(e.message);
-    }
-  }, [currentCode, currentPath]);
+    // send files and path to iframe
+    iframe.postMessage(
+      {
+        files: { ...files, ...dependencies },
+        runPath: currentPath,
+        from: "editor",
+      } as PreviewData["data"],
+      "*"
+    );
+  };
 
   async function getDeps() {
     const fakeDeps = [
@@ -273,7 +245,6 @@ const Editor: React.FC<Props> = ({ step }) => {
                   ...files,
                   [currentPath]: value || "",
                 });
-                setCurrentCode(value || "");
                 updateFile(currentPath, value || "");
               }}
             />
@@ -281,13 +252,10 @@ const Editor: React.FC<Props> = ({ step }) => {
         </div>
       </div>
       <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-        <button
-          type="button"
-          onClick={() => runCode({ ...files, ...dependencies }, currentPath)}
-        >
+        <button type="button" onClick={() => postCode()}>
           Run
         </button>
-        <div id="root" />
+        <iframe id="frame" src="http://localhost:1234/"></iframe>
       </div>
     </div>
   );
