@@ -39,7 +39,7 @@
         const cleanRunPath = runPath.replace("./", "");
 
         const opt1 = fileKeys.find((file) => file.includes(`${cleanRunPath}.js`));
-        const opt2 = fileKeys.find((file) => file.includes(cleanRunPath));
+        const opt2 = fileKeys.find((file) => file.includes(cleanRunPath) && !file.includes('.json'));
 
         switch (true) {
           case opt1 !== undefined: {
@@ -53,7 +53,7 @@
         console.error(`No file found for ${runPath}`);
     }
   };
-  
+
   window.process = { env: { NODE_ENV: 'production' } }
 
   const exported = {}
@@ -63,7 +63,7 @@
       const path = findBestMatch(files, runPath);
       const code = files[path];
       const babelOutput = transformCode(code, path);
-      
+
       const require = (path) => {
         return runCode(files, path);
       };
@@ -77,7 +77,10 @@
       }
       return exported[runPath] || module.exports;
     } catch (e) {
-      console.log(e);
+      console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
+      console.log('Babel compliation error. Make sure that the findBestMatch is working as intended!')
+      console.log(`ERROR: ${e}`);
+      console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
     }
   };
 
@@ -87,4 +90,5 @@
     runCode(data.files, data.runPath);
   });
 </script>
+
 </html>
