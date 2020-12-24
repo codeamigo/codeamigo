@@ -8,7 +8,7 @@ import {
 } from "@generated/graphql";
 import { CodeSandboxV2ResponseI } from "@api/types";
 import { debounce } from "debounce";
-import { FilesType } from "./types";
+import { FilesType, PreviewType } from "./types";
 import EditorFiles from "../EditorFiles";
 
 export const findBestMatch = (
@@ -129,7 +129,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         files: { ...files, ...dependencies },
         runPath: currentPath,
         from: "editor",
-      } as PreviewData["data"],
+      } as PreviewType,
       "*"
     );
   };
