@@ -4,6 +4,7 @@ import Icon from "@components/Icon";
 import { FilesType } from "../Editor/types";
 
 import styles from "./EditorFiles.module.scss";
+import { RegularDependencyFragment } from "../../../generated/graphql";
 
 const EditorFiles: React.FC<Props> = ({
   createFile,
@@ -113,13 +114,12 @@ const EditorFiles: React.FC<Props> = ({
       </div>
       <div>
         {dependencies &&
-          Object.keys(dependencies).map((path) => (
+          dependencies.map((dependency) => (
             <div
-              key={path}
+              key={dependency.id}
               className={`flex justify-between w-full px-1 py-1`}
-              onClick={() => setCurrentPath(path)}
             >
-              <div className="text-xs">{path}</div>
+              <div className="text-xs">{dependency.package}</div>
             </div>
           ))}
       </div>
@@ -130,7 +130,7 @@ const EditorFiles: React.FC<Props> = ({
 type Props = {
   createFile: (path: string) => void;
   deleteFile: (path: string) => void;
-  dependencies?: FilesType;
+  dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
   currentPath: string;
   setCurrentPath: (path: string) => void;

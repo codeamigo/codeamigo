@@ -227,7 +227,7 @@ const Editor: React.FC<Props> = ({ step }) => {
             deleteFile={deleteFile}
             currentPath={currentPath}
             files={files}
-            dependencies={dependencies}
+            dependencies={step.dependencies}
             setCurrentPath={setCurrentPath}
           />
           <div className="w-8/12">
