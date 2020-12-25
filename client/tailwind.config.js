@@ -7,6 +7,8 @@ module.exports = {
   variants: {
     extend: {
       opacity: ['disabled'],
+      borderWidth: ['first'],
+      margin: ['first']
     },
   },
   plugins: [
