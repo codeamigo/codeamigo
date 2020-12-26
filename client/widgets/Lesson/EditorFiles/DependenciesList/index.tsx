@@ -43,7 +43,7 @@ const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
     setTimeout(() => {
       setIsAdding(false);
       setSearchResults([]);
-    }, 100);
+    }, 500);
   };
 
   const createDependency = async (result: AlgoliaSearchResultType) => {

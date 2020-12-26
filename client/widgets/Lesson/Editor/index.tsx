@@ -104,37 +104,7 @@ const Editor: React.FC<Props> = ({ step }) => {
     [step?.id]
   );
 
-  useEffect(() => {
-    if (!step?.codeModules) return;
-
-    const mods = step.codeModules.reduce(
-      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-      {}
-    ) as FilesType;
-
-    setFiles(mods);
-
-    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
-  }, [step?.id, step?.codeModules]);
-
-  const postCode = () => {
-    // @ts-ignore
-    const iframe =
-      // @ts-ignore
-      document.getElementById("frame").contentWindow;
-
-    // send files and path to iframe
-    iframe.postMessage(
-      {
-        files: { ...files, ...dependencies },
-        runPath: currentPath,
-        from: "editor",
-      } as PreviewType,
-      "*"
-    );
-  };
-
-  async function getDeps() {
+  const updateDependencies = async () => {
     let dependencyDependencies: { [key in string]: string } = {};
 
     const newDependencies = step.dependencies?.reduce(
@@ -165,9 +135,46 @@ const Editor: React.FC<Props> = ({ step }) => {
     );
 
     setDependencies({
-      ...dependencies,
       ...(await newDependencies),
     });
+  };
+
+  useEffect(() => {
+    if (!step.codeModules) return;
+
+    const mods = step.codeModules.reduce(
+      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+      {}
+    ) as FilesType;
+
+    setFiles(mods);
+
+    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
+  }, [step.id, step.codeModules]);
+
+  useEffect(() => {
+    updateDependencies();
+  }, [step.dependencies]);
+
+  const postCode = () => {
+    // @ts-ignore
+    const iframe =
+      // @ts-ignore
+      document.getElementById("frame").contentWindow;
+
+    // send files and path to iframe
+    iframe.postMessage(
+      {
+        files: { ...files, ...dependencies },
+        runPath: currentPath,
+        from: "editor",
+      } as PreviewType,
+      "*"
+    );
+  };
+
+  async function getDeps() {
+    await updateDependencies();
 
     const monacoInstance = await monaco.init();
 
