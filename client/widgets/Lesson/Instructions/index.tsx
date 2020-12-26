@@ -22,7 +22,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
 
   useEffect(() => {
     setMarkdown(step.instructions)
-  }, [step.instructions])
+  }, [step.id])
 
   return (
     <>
@@ -32,7 +32,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
           <ControlledEditor
             height="300px"
             width="100%"
-            value={step.instructions}
+            value={markdown}
             onChange={(_, value) => {
               setMarkdown(value);
               updateStep(step.id, value);
