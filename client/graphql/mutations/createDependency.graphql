@@ -1,0 +1,12 @@
+mutation CreateDependency(
+  $stepId: Float!
+  $package: String!
+  $version: String!
+) {
+  createDependency(
+    stepId: $stepId
+    options: { package: $package, version: $version }
+  ) {
+    ...RegularDependency
+  }
+}

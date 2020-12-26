@@ -50,8 +50,8 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState("");
 
-  const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [createCodeModule] = useCreateCodeModuleMutation();
+  const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const createFile = async (file: string) => {
@@ -135,16 +135,9 @@ const Editor: React.FC<Props> = ({ step }) => {
   };
 
   async function getDeps() {
-    const fakeDeps = [
-      { package: "react", version: "17.0.1" },
-      { package: "react-dom", version: "17.0.1" },
-      { package: "moment", version: "2.29.1" },
-      { package: "jest-lite", version: "1.0.0-alpha.4" },
-    ];
-
     let dependencyDependencies: { [key in string]: string } = {};
 
-    const newDependencies = fakeDeps.reduce(
+    const newDependencies = step.dependencies?.reduce(
       async (acc, { package: pkg, version }) => {
         const res: CodeSandboxV2ResponseI = await fetch(
           `${CS_PKG_URL}/${pkg}/${version}.json`
@@ -223,11 +216,12 @@ const Editor: React.FC<Props> = ({ step }) => {
         <h3>Initial Code</h3>
         <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
           <EditorFiles
+            files={files}
+            currentPath={currentPath}
+            dependencies={step.dependencies}
+            stepId={step.id}
             createFile={createFile}
             deleteFile={deleteFile}
-            currentPath={currentPath}
-            files={files}
-            dependencies={step.dependencies}
             setCurrentPath={setCurrentPath}
           />
           <div className="w-8/12">

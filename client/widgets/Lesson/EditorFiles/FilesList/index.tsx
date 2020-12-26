@@ -6,10 +6,10 @@ import styles from "./FilesList.module.scss";
 
 const FilesList: React.FC<Props> = ({
   name,
-  onCreate,
-  onDelete,
   currentPath,
   files,
+  onCreate,
+  onDelete,
   setCurrentPath,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);

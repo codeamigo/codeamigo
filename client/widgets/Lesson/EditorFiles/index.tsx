@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { FilesType } from "../Editor/types";
 
-import styles from "./EditorFiles.module.scss";
 import FilesList from "./FilesList";
 import { RegularDependencyFragment } from "@generated/graphql";
+import DependenciesList from "./DependenciesList";
+
+export type AlgoliaSearchResultType = { name: string; version: string };
 
 const EditorFiles: React.FC<Props> = ({
-  createFile,
-  deleteFile,
   currentPath,
   dependencies,
   files,
+  stepId,
+  createFile,
+  deleteFile,
   setCurrentPath,
 }) => {
   const docs = Object.keys(files).filter((file) => !file.includes("spec"));
@@ -34,12 +37,7 @@ const EditorFiles: React.FC<Props> = ({
         currentPath={currentPath}
         setCurrentPath={setCurrentPath}
       />
-      <FilesList
-        name={"Dependencies"}
-        files={deps}
-        onDelete={deleteFile}
-        onCreate={createFile}
-      />
+      <DependenciesList name={"Dependencies"} files={deps} stepId={stepId} />
     </div>
   );
 };
@@ -50,6 +48,7 @@ type Props = {
   dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
   currentPath: string;
+  stepId: number;
   setCurrentPath: (path: string) => void;
 };
 
