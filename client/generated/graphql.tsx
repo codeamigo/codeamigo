@@ -24,6 +24,8 @@ export type Query = {
   checkpoint?: Maybe<Checkpoint>;
   codeModules: Array<CodeModule>;
   codeModule?: Maybe<CodeModule>;
+  dependencies: Array<Dependency>;
+  dependency?: Maybe<Dependency>;
 };
 
 
@@ -46,6 +48,11 @@ export type QueryCodeModuleArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryDependencyArgs = {
+  id: Scalars['Int'];
+};
+
 export type Step = {
   __typename?: 'Step';
   id: Scalars['Float'];
@@ -55,6 +62,7 @@ export type Step = {
   lesson: Lesson;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
+  dependencies?: Maybe<Array<Dependency>>;
 };
 
 export type Lesson = {
@@ -99,6 +107,16 @@ export type Checkpoint = {
   moduleId: Scalars['Float'];
 };
 
+export type Dependency = {
+  __typename?: 'Dependency';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  package: Scalars['String'];
+  version?: Maybe<Scalars['String']>;
+  step: Step;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createStep?: Maybe<Step>;
@@ -118,6 +136,9 @@ export type Mutation = {
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
   deleteCodeModule: Scalars['Boolean'];
+  createDependency?: Maybe<Dependency>;
+  updateDependency?: Maybe<Dependency>;
+  deleteDependency: Scalars['Boolean'];
 };
 
 
@@ -211,6 +232,23 @@ export type MutationDeleteCodeModuleArgs = {
   id: Scalars['Float'];
 };
 
+
+export type MutationCreateDependencyArgs = {
+  options: DependencyInput;
+  stepId: Scalars['Float'];
+};
+
+
+export type MutationUpdateDependencyArgs = {
+  options: DependencyInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteDependencyArgs = {
+  id: Scalars['Float'];
+};
+
 export type CreateStepInput = {
   lessonId?: Maybe<Scalars['Float']>;
 };
@@ -262,6 +300,11 @@ export type CodeModuleInput = {
   value: Scalars['String'];
 };
 
+export type DependencyInput = {
+  package: Scalars['String'];
+  version: Scalars['String'];
+};
+
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
   & Pick<Checkpoint, 'id' | 'test' | 'description'>
@@ -270,6 +313,11 @@ export type RegularCheckpointFragment = (
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
   & Pick<CodeModule, 'id' | 'name' | 'value'>
+);
+
+export type RegularDependencyFragment = (
+  { __typename?: 'Dependency' }
+  & Pick<Dependency, 'id' | 'package' | 'version'>
 );
 
 export type RegularErrorFragment = (
@@ -286,6 +334,9 @@ export type RegularStepFragment = (
   )>>, checkpoints?: Maybe<Array<(
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
+  )>>, dependencies?: Maybe<Array<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
   )>> }
 );
 
@@ -338,6 +389,21 @@ export type CreateCodeModuleMutation = (
   )> }
 );
 
+export type CreateDependencyMutationVariables = Exact<{
+  stepId: Scalars['Float'];
+  package: Scalars['String'];
+  version: Scalars['String'];
+}>;
+
+
+export type CreateDependencyMutation = (
+  { __typename?: 'Mutation' }
+  & { createDependency?: Maybe<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
+  )> }
+);
+
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
 }>;
@@ -386,6 +452,16 @@ export type DeleteCodeModuleMutationVariables = Exact<{
 export type DeleteCodeModuleMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteCodeModule'>
+);
+
+export type DeleteDependencyMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteDependencyMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteDependency'>
 );
 
 export type DeleteStepMutationVariables = Exact<{
@@ -600,6 +676,13 @@ export const RegularCheckpointFragmentDoc = gql`
   description
 }
     `;
+export const RegularDependencyFragmentDoc = gql`
+    fragment RegularDependency on Dependency {
+  id
+  package
+  version
+}
+    `;
 export const RegularStepFragmentDoc = gql`
     fragment RegularStep on Step {
   id
@@ -611,9 +694,13 @@ export const RegularStepFragmentDoc = gql`
   checkpoints {
     ...RegularCheckpoint
   }
+  dependencies {
+    ...RegularDependency
+  }
 }
     ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}`;
+${RegularCheckpointFragmentDoc}
+${RegularDependencyFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -720,6 +807,43 @@ export function useCreateCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCodeModuleMutation>;
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
 export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
+export const CreateDependencyDocument = gql`
+    mutation CreateDependency($stepId: Float!, $package: String!, $version: String!) {
+  createDependency(
+    stepId: $stepId
+    options: {package: $package, version: $version}
+  ) {
+    ...RegularDependency
+  }
+}
+    ${RegularDependencyFragmentDoc}`;
+export type CreateDependencyMutationFn = Apollo.MutationFunction<CreateDependencyMutation, CreateDependencyMutationVariables>;
+
+/**
+ * __useCreateDependencyMutation__
+ *
+ * To run a mutation, you first call `useCreateDependencyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDependencyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDependencyMutation, { data, loading, error }] = useCreateDependencyMutation({
+ *   variables: {
+ *      stepId: // value for 'stepId'
+ *      package: // value for 'package'
+ *      version: // value for 'version'
+ *   },
+ * });
+ */
+export function useCreateDependencyMutation(baseOptions?: Apollo.MutationHookOptions<CreateDependencyMutation, CreateDependencyMutationVariables>) {
+        return Apollo.useMutation<CreateDependencyMutation, CreateDependencyMutationVariables>(CreateDependencyDocument, baseOptions);
+      }
+export type CreateDependencyMutationHookResult = ReturnType<typeof useCreateDependencyMutation>;
+export type CreateDependencyMutationResult = Apollo.MutationResult<CreateDependencyMutation>;
+export type CreateDependencyMutationOptions = Apollo.BaseMutationOptions<CreateDependencyMutation, CreateDependencyMutationVariables>;
 export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!) {
   createLesson(options: {title: $title}) {
@@ -849,6 +973,36 @@ export function useDeleteCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteCodeModuleMutationHookResult = ReturnType<typeof useDeleteCodeModuleMutation>;
 export type DeleteCodeModuleMutationResult = Apollo.MutationResult<DeleteCodeModuleMutation>;
 export type DeleteCodeModuleMutationOptions = Apollo.BaseMutationOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
+export const DeleteDependencyDocument = gql`
+    mutation DeleteDependency($id: Float!) {
+  deleteDependency(id: $id)
+}
+    `;
+export type DeleteDependencyMutationFn = Apollo.MutationFunction<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
+
+/**
+ * __useDeleteDependencyMutation__
+ *
+ * To run a mutation, you first call `useDeleteDependencyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteDependencyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteDependencyMutation, { data, loading, error }] = useDeleteDependencyMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteDependencyMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>) {
+        return Apollo.useMutation<DeleteDependencyMutation, DeleteDependencyMutationVariables>(DeleteDependencyDocument, baseOptions);
+      }
+export type DeleteDependencyMutationHookResult = ReturnType<typeof useDeleteDependencyMutation>;
+export type DeleteDependencyMutationResult = Apollo.MutationResult<DeleteDependencyMutation>;
+export type DeleteDependencyMutationOptions = Apollo.BaseMutationOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
 export const DeleteStepDocument = gql`
     mutation DeleteStep($id: Float!) {
   deleteStep(id: $id)

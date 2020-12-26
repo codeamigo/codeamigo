@@ -20,6 +20,8 @@ import { StepResolver } from "./resolvers/step";
 import { CheckpointResolver } from "./resolvers/checkpoint";
 import { CodeModule } from "./entities/CodeModule";
 import { CodeModuleResolver } from "./resolvers/codeModule";
+import { Dependency } from "./entities/Dependency";
+import { DependencyResolver } from "./resolvers/dependency";
 
 const main = async () => {
   await createConnection({
@@ -29,7 +31,7 @@ const main = async () => {
     password: "postgres",
     logging: true,
     synchronize: true,
-    entities: [Checkpoint, CodeModule, Lesson, Step, User],
+    entities: [Checkpoint, CodeModule, Dependency, Lesson, Step, User],
   });
 
   const app = express();
@@ -68,6 +70,7 @@ const main = async () => {
       resolvers: [
         CheckpointResolver,
         CodeModuleResolver,
+        DependencyResolver,
         LessonResolver,
         StepResolver,
         UserResolver,

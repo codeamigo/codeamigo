@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Checkpoint } from "./Checkpoint";
 import { CodeModule } from "./CodeModule";
+import { Dependency } from "./Dependency";
 import { Lesson } from "./Lesson";
 
 @ObjectType()
@@ -36,15 +37,24 @@ export class Step extends BaseEntity {
   @Field(() => Lesson)
   lesson: Lesson;
 
+  // code modules
   @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {
     cascade: true,
   })
   @Field(() => [CodeModule], { defaultValue: [] })
   codeModules!: CodeModule[];
 
+  // checkpoints
   @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.step, {
     cascade: true,
   })
   @Field(() => [Checkpoint], { defaultValue: [] })
   checkpoints!: Checkpoint[];
+
+  // dependencies
+  @OneToMany(() => Dependency, (dependency) => dependency.step, {
+    cascade: true,
+  })
+  @Field(() => [Dependency], { defaultValue: [] })
+  dependencies!: Dependency[];
 }

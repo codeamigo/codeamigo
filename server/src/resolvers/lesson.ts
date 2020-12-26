@@ -17,6 +17,7 @@ import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
 
 import { DEFAULT_MD } from "./step";
+import { Dependency } from "../entities/Dependency";
 
 @InputType()
 class LessonInput {
@@ -46,9 +47,14 @@ export class LessonResolver {
   ): Promise<Lesson> {
     const owner = await User.findOne({ id: req.session.userId });
     const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
+    const dependency = await Dependency.create({
+      package: "jest-lite",
+      version: "1.0.0-alpha.4",
+    }).save();
     const step = await Step.create({
       instructions: DEFAULT_MD,
       codeModules: [code],
+      dependencies: [dependency]
     }).save();
 
     const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();
