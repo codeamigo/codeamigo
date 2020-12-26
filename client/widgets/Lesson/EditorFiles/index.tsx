@@ -19,7 +19,6 @@ const EditorFiles: React.FC<Props> = ({
 }) => {
   const docs = Object.keys(files).filter((file) => !file.includes("spec"));
   const tests = Object.keys(files).filter((file) => file.includes("spec"));
-  const deps = dependencies?.map((dep) => `${dep.package} v${dep.version}`);
 
   return (
     <div className="border-r border-gray-200 w-4/12">
@@ -37,7 +36,7 @@ const EditorFiles: React.FC<Props> = ({
         currentPath={currentPath}
         setCurrentPath={setCurrentPath}
       />
-      <DependenciesList name={"Dependencies"} files={deps} stepId={stepId} />
+      <DependenciesList name={"Dependencies"} dependencies={dependencies} stepId={stepId} />
     </div>
   );
 };

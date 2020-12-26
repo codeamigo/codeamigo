@@ -5,11 +5,12 @@ import Icon from "@components/Icon";
 import styles from "./DependenciesList.module.scss";
 import { AlgoliaSearchResultType } from "..";
 import {
+  RegularDependencyFragment,
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
 } from "../../../../generated/graphql";
 
-const DependenciesList: React.FC<Props> = ({ name, files, stepId }) => {
+const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [searchResults, setSearchResults] = useState<
@@ -42,11 +43,11 @@ const DependenciesList: React.FC<Props> = ({ name, files, stepId }) => {
     setTimeout(() => {
       setIsAdding(false);
       setSearchResults([]);
-    }, 100)
+    }, 100);
   };
 
   const createDependency = async (result: AlgoliaSearchResultType) => {
-    console.log(result)
+    console.log(result);
     await createDependencyM({
       variables: {
         stepId,
@@ -79,19 +80,27 @@ const DependenciesList: React.FC<Props> = ({ name, files, stepId }) => {
         />
       </div>
       <div>
-        {files &&
-          files
-            .sort((a, b) => (a < b ? -1 : 1))
-            .map((path) => (
+        {dependencies &&
+          dependencies
+            .slice()
+            .sort((a, b) => a.package.localeCompare(b.package))
+            .map((dep) => (
               <div
-                key={path}
+                key={dep.id}
                 className={`flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${styles.FILE}`}
               >
-                <div className="text-xs">{path}</div>
+                <div className="text-xs">
+                  {dep.package} {dep.version}
+                </div>
                 <Icon
                   name="minus-circled"
                   className="text-red-600 text-sm hidden cursor-pointer"
-                  // onClick={() => deleteDependency(path)}
+                  onClick={() =>
+                    deleteDependency({
+                      variables: { id: dep.id },
+                      refetchQueries: ["Step"],
+                    })
+                  }
                 />
               </div>
             ))}
@@ -138,7 +147,7 @@ const DependenciesList: React.FC<Props> = ({ name, files, stepId }) => {
 
 type Props = {
   name: string;
-  files?: Array<string>;
+  dependencies?: RegularDependencyFragment[] | null;
   stepId: number;
 };
 
