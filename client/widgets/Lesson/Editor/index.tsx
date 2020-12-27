@@ -166,7 +166,7 @@ const Editor: React.FC<Props> = ({ step }) => {
     monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
       {
         noSemanticValidation: true,
-        noSyntaxValidation: false,
+        noSyntaxValidation: true,
       }
     );
 
