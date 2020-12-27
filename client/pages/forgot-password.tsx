@@ -1,31 +1,31 @@
-import { Form, Formik } from "formik";
-import React from "react";
+import { Form, Formik } from 'formik';
+import React from 'react';
 
-import InputField from "../components/Form/InputField";
-import { useForgotPasswordMutation } from "../generated/graphql";
-import withApollo from "../utils/withApollo";
+import InputField from '../components/Form/InputField';
+import { useForgotPasswordMutation } from '../generated/graphql';
+import withApollo from '../utils/withApollo';
 
 const ForgotPassword: React.FC<Props> = () => {
   const [forgotPassword, { data }] = useForgotPasswordMutation();
 
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ email: '', password: '' }}
       onSubmit={async (values, { setErrors, setStatus }) => {
         const { data } = await forgotPassword({ variables: values });
         if (!data?.forgotPassword) {
           return setErrors({
-            email: "Could not reset password. Try a different email.",
+            email: 'Could not reset password. Try a different email.',
           });
         }
 
-        setStatus("success");
+        setStatus('success');
       }}
     >
       {({ isSubmitting, status }) => (
         <Form>
           <div className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
-            {status === "success" ? (
+            {status === 'success' ? (
               <h1 className="text-2xl text-green-600 font-semibold justify-center flex mb-4">
                 Password reset link sent!
               </h1>

@@ -1,11 +1,11 @@
-import { Form, Formik } from "formik";
-import React from "react";
-import { useRouter } from "next/router";
+import { Form, Formik } from 'formik';
+import React from 'react';
+import { useRouter } from 'next/router';
 
-import InputField from "../components/Form/InputField";
-import { useRegisterMutation } from "../generated/graphql";
-import { toErrorMap } from "../utils";
-import withApollo from "../utils/withApollo";
+import InputField from '../components/Form/InputField';
+import { useRegisterMutation } from '../generated/graphql';
+import { toErrorMap } from '../utils';
+import withApollo from '../utils/withApollo';
 
 const Register: React.FC<Props> = () => {
   const router = useRouter();
@@ -13,7 +13,7 @@ const Register: React.FC<Props> = () => {
 
   return (
     <Formik
-      initialValues={{ email: "", username: "", password: "" }}
+      initialValues={{ email: '', username: '', password: '' }}
       onSubmit={async (values, { setErrors }) => {
         const { data } = await register({ variables: values });
         if (data?.register.errors) {
@@ -21,7 +21,7 @@ const Register: React.FC<Props> = () => {
         }
 
         if (data?.register.user) {
-          router.push("/");
+          router.push('/');
         }
       }}
     >
@@ -34,8 +34,18 @@ const Register: React.FC<Props> = () => {
             <div className="shadow overflow-hidden sm:rounded-md">
               <div className="px-4 py-5 bg-white sm:p-6">
                 <div className="grid gap-6">
-                  <InputField label="Username" name="username" type="text" required />
-                  <InputField label="Email" name="email" type="email" required />
+                  <InputField
+                    label="Username"
+                    name="username"
+                    type="text"
+                    required
+                  />
+                  <InputField
+                    label="Email"
+                    name="email"
+                    type="email"
+                    required
+                  />
                   <InputField
                     label="Password"
                     name="password"

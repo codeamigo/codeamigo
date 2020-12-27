@@ -1,18 +1,18 @@
-import { ControlledEditor, monaco } from "@monaco-editor/react";
-import React, { useCallback, useEffect } from "react";
+import { ControlledEditor, monaco } from '@monaco-editor/react';
+import React, { useCallback, useEffect } from 'react';
 import {
   RegularStepFragment,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
-} from "@generated/graphql";
-import { CodeSandboxV2ResponseI } from "@api/types";
-import { debounce } from "debounce";
-import { FilesType, PreviewType } from "./types";
-import EditorFiles from "../EditorFiles";
+} from '@generated/graphql';
+import { CodeSandboxV2ResponseI } from '@api/types';
+import { debounce } from 'debounce';
+import { FilesType, PreviewType } from './types';
+import EditorFiles from '../EditorFiles';
 
 export const findBestMatch = (
-  files: FilesType | CodeSandboxV2ResponseI["contents"],
+  files: FilesType | CodeSandboxV2ResponseI['contents'],
   runPath: string
 ) => {
   switch (true) {
@@ -24,7 +24,7 @@ export const findBestMatch = (
     }
     default:
       const fileKeys = Object.keys(files);
-      const cleanRunPath = runPath.replace("./", "");
+      const cleanRunPath = runPath.replace('./', '');
 
       const opt1 = fileKeys.find((file) => file.includes(`${cleanRunPath}.js`));
       const opt2 = fileKeys.find((file) => file.includes(cleanRunPath));
@@ -41,14 +41,14 @@ export const findBestMatch = (
       console.error(`No file found for ${runPath}`);
   }
 };
-export const MODULE_ROOT = "/node_modules";
+export const MODULE_ROOT = '/node_modules';
 
-const CS_PKG_URL = "https://prod-packager-packages.codesandbox.io/v2/packages";
+const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ step }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
-  const [currentPath, setCurrentPath] = React.useState("");
+  const [currentPath, setCurrentPath] = React.useState('');
 
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
@@ -56,13 +56,13 @@ const Editor: React.FC<Props> = ({ step }) => {
 
   const createFile = async (file: string) => {
     if (files[file] !== undefined) {
-      alert("File name already taken.");
+      alert('File name already taken.');
       return;
     }
 
     await createCodeModule({
       variables: { stepId: step.id, name: file, value: `` },
-      refetchQueries: ["Step"],
+      refetchQueries: ['Step'],
     });
 
     setFiles({
@@ -160,16 +160,16 @@ const Editor: React.FC<Props> = ({ step }) => {
     // @ts-ignore
     const iframe =
       // @ts-ignore
-      document.getElementById("frame").contentWindow;
+      document.getElementById('frame').contentWindow;
 
     // send files and path to iframe
     iframe.postMessage(
       {
         files: { ...files, ...dependencies },
         runPath: currentPath,
-        from: "editor",
+        from: 'editor',
       } as PreviewType,
-      "*"
+      '*'
     );
   };
 
@@ -191,7 +191,7 @@ const Editor: React.FC<Props> = ({ step }) => {
       target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
       allowSyntheticDefaultImports: true,
       allowNonTsExtensions: true,
-      typeRoots: ["node_modules/@types"],
+      typeRoots: ['node_modules/@types'],
     });
 
     // const fakeFiles = Object.keys(dependencyDependencies).reduce(
@@ -240,10 +240,10 @@ const Editor: React.FC<Props> = ({ step }) => {
         <div className="w-9/12 h-80 lg:h-full">
           <ControlledEditor
             width="100%"
-            language={"typescript"}
+            language={'typescript'}
             value={files[currentPath] || dependencies[currentPath]}
             options={{
-              wordWrap: "on",
+              wordWrap: 'on',
               minimap: { enabled: false },
               automaticLayout: true,
               scrollBeyondLastLine: false,
@@ -252,9 +252,9 @@ const Editor: React.FC<Props> = ({ step }) => {
             onChange={(_, value) => {
               setFiles({
                 ...files,
-                [currentPath]: value || "",
+                [currentPath]: value || '',
               });
-              updateFile(currentPath, value || "");
+              updateFile(currentPath, value || '');
             }}
           />
         </div>

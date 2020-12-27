@@ -8,10 +8,8 @@ module.exports = {
     extend: {
       opacity: ['disabled'],
       borderWidth: ['first'],
-      margin: ['first']
+      margin: ['first'],
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-  ],
-}
+  plugins: [require('@tailwindcss/forms')],
+};

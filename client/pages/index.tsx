@@ -1,7 +1,7 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useLessonsQuery } from "../generated/graphql";
-import withApollo from "../utils/withApollo";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useLessonsQuery } from '../generated/graphql';
+import withApollo from '../utils/withApollo';
 
 const Home = () => {
   const { loading, error, data } = useLessonsQuery();
