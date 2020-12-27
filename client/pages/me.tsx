@@ -4,7 +4,7 @@ import { useMeQuery } from '../generated/graphql';
 import withApollo from '../utils/withApollo';
 
 const Me = () => {
-  const { loading, error, data } = useMeQuery();
+  const { data, error, loading } = useMeQuery();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;

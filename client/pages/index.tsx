@@ -5,7 +5,7 @@ import { useLessonsQuery } from '../generated/graphql';
 import withApollo from '../utils/withApollo';
 
 const Home = () => {
-  const { loading, error, data } = useLessonsQuery();
+  const { data, error, loading } = useLessonsQuery();
   const router = useRouter();
 
   if (loading) return <>Loading...</>;

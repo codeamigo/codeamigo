@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './FilesList.module.scss';
 
 const FilesList: React.FC<Props> = ({
-  name,
   currentPath,
   files,
+  name,
   onCreate,
   onDelete,
   setCurrentPath,

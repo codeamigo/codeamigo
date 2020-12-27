@@ -30,7 +30,7 @@ const ChangePassword: NextPage<{ token: string }> = (props) => {
         }
       }}
     >
-      {({ isSubmitting, errors }) => (
+      {({ errors, isSubmitting }) => (
         <Form>
           <div className="max-w-2xl mx-auto py-6 sm:px-6 lg:px-8">
             <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">

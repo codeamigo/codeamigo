@@ -8,13 +8,13 @@ import FilesList from './FilesList';
 export type AlgoliaSearchResultType = { name: string; version: string };
 
 const EditorFiles: React.FC<Props> = ({
+  createFile,
   currentPath,
+  deleteFile,
   dependencies,
   files,
-  stepId,
-  createFile,
-  deleteFile,
   setCurrentPath,
+  stepId,
 }) => {
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));

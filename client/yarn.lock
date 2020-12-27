@@ -3373,12 +3373,24 @@ eslint-plugin-simple-import-sort@^7.0.0:
   resolved "https://registry.yarnpkg.com/eslint-plugin-simple-import-sort/-/eslint-plugin-simple-import-sort-7.0.0.tgz#a1dad262f46d2184a90095a60c66fef74727f0f8"
   integrity sha512-U3vEDB5zhYPNfxT5TYR7u01dboFZp+HNpnGhkDB2g/2E4wZ/g1Q9Ton8UwCLfRV9yAKyYqDh62oHOamvkFxsvw==
 
+eslint-plugin-sort-destructure-keys@^1.3.5:
+  version "1.3.5"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-sort-destructure-keys/-/eslint-plugin-sort-destructure-keys-1.3.5.tgz#c6f45c3e58d4435564025a6ca5f4a838010800fd"
+  integrity sha512-JmVpidhDsLwZsmRDV7Tf/vZgOAOEQGkLtwToSvX5mD8fuWYS/xkgMRBsalW1fGlc8CgJJwnzropt4oMQ7YCHLg==
+  dependencies:
+    natural-compare-lite "^1.4.0"
+
 eslint-plugin-sort-keys-fix@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-sort-keys-fix/-/eslint-plugin-sort-keys-fix-1.1.1.tgz#2ed201b53fd4a89552c6e2abd38933f330a4b62e"
   integrity sha512-x02SLBg+8OEaoT9vvMbsgeInw17wjHLsa9cOieIVQY+xMNRiXBbyMWw+NiBoxYyJIR4QKDOPDofCjQdoSvltQg==
   dependencies:
     requireindex "~1.2.0"
+
+eslint-plugin-wyze@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-wyze/-/eslint-plugin-wyze-3.4.0.tgz#9c7219b5c6a09b6061ed820c518564ec04b085fc"
+  integrity sha1-nHIZtcagm2Bh7YIMUYVk7ASwhfw=
 
 eslint-scope@^4.0.3:
   version "4.0.3"
@@ -5670,6 +5682,11 @@ native-url@0.3.4:
   integrity sha512-6iM8R99ze45ivyH8vybJ7X0yekIcPf5GgLV5K0ENCbmRcaRIDoj37BC8iLEmaaBfqqb8enuZ5p0uhY+lVAbAcA==
   dependencies:
     querystring "^0.2.0"
+
+natural-compare-lite@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/natural-compare-lite/-/natural-compare-lite-1.4.0.tgz#17b09581988979fddafe0201e931ba933c96cbb4"
+  integrity sha1-F7CVgZiJef3a/gIB6TG6kzyWy7Q=
 
 natural-compare@^1.4.0:
   version "1.4.0"

@@ -10,10 +10,10 @@ import React from 'react';
 import styles from './Steps.module.scss';
 
 const Steps: React.FC<Props> = ({
-  steps,
-  lessonId,
   currentStepId,
+  lessonId,
   setCurrentStepId,
+  steps,
   toggleShowSteps,
 }) => {
   const [createStepM] = useCreateStepMutation();

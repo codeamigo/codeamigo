@@ -9,7 +9,7 @@ import {
 import { AlgoliaSearchResultType } from '..';
 import styles from './DependenciesList.module.scss';
 
-const DependenciesList: React.FC<Props> = ({ name, stepId, dependencies }) => {
+const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [searchResults, setSearchResults] = useState<
