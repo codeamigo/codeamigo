@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+
 import { Step } from "./Step";
 
 @ObjectType()
@@ -37,6 +38,6 @@ export class Checkpoint extends BaseEntity {
   @Column()
   moduleId!: number;
 
-  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: "CASCADE" })
   step: Step;
 }

@@ -8,11 +8,11 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
 
 import { Checkpoint } from "../entities/Checkpoint";
-import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
+import { Step } from "../entities/Step";
+import { isAuth } from "../middleware/isAuth";
 
 const DEFAULT_TEST = `import { describe, it, run, expect } from 'jest-lite'
 
@@ -81,7 +81,7 @@ export class CheckpointResolver {
     step.codeModules.push(newModule);
     await step.save();
 
-    return Checkpoint.create({ test, step, moduleId: newModule.id }).save();
+    return Checkpoint.create({ moduleId: newModule.id, step, test }).save();
   }
 
   @Mutation(() => Checkpoint, { nullable: true })

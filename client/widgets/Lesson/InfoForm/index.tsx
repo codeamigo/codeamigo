@@ -1,10 +1,9 @@
+import Icon from '@components/Icon';
+import { LessonQuery, useUpdateLessonTitleMutation } from '@generated/graphql';
 import debounce from 'debounce';
 import React from 'react';
 
-import { LessonQuery, useUpdateLessonTitleMutation } from '@generated/graphql';
-import Icon from '@components/Icon';
-
-const InfoForm: React.FC<Props> =  ({ lesson, toggleShowSteps }) => {
+const InfoForm: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
   const [updateLessonTitleM] = useUpdateLessonTitleMutation();
 
   const updateLessonTitle = debounce(

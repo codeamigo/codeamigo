@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
-import { useCreateLessonMutation } from "../../../generated/graphql";
+import { useCreateLessonMutation } from '../../../generated/graphql';
 
 const CreateLesson = () => {
   const router = useRouter();
@@ -10,10 +10,10 @@ const CreateLesson = () => {
   useEffect(() => {
     async function create() {
       const response = await createLesson({
-        variables: { title: "My Awesome Lesson" },
+        variables: { title: 'My Awesome Lesson' },
       });
       const id = response.data?.createLesson.id;
-      router.push(`/lessons/edit/${id}`)
+      router.push(`/lessons/edit/${id}`);
     }
 
     create();

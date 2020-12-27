@@ -1,45 +1,45 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
-import express from "express";
+
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import Redis from "ioredis";
-import session from "express-session";
 import connectRedis from "connect-redis";
 import cors from "cors";
+import express from "express";
+import session from "express-session";
+import Redis from "ioredis";
+import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
 
 import { __prod__ } from "./constants";
 import { Checkpoint } from "./entities/Checkpoint";
-import { Lesson } from "./entities/Lesson";
-import { User } from "./entities/User";
-import { Step } from "./entities/Step";
-
-import { LessonResolver } from "./resolvers/lesson";
-import { UserResolver } from "./resolvers/user";
-import { StepResolver } from "./resolvers/step";
-import { CheckpointResolver } from "./resolvers/checkpoint";
 import { CodeModule } from "./entities/CodeModule";
-import { CodeModuleResolver } from "./resolvers/codeModule";
 import { Dependency } from "./entities/Dependency";
+import { Lesson } from "./entities/Lesson";
+import { Step } from "./entities/Step";
+import { User } from "./entities/User";
+import { CheckpointResolver } from "./resolvers/checkpoint";
+import { CodeModuleResolver } from "./resolvers/codeModule";
 import { DependencyResolver } from "./resolvers/dependency";
+import { LessonResolver } from "./resolvers/lesson";
+import { StepResolver } from "./resolvers/step";
+import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
   await createConnection({
-    type: "postgres",
     database: "codeamigo",
-    username: "postgres",
-    password: "postgres",
-    logging: true,
-    synchronize: true,
     entities: [Checkpoint, CodeModule, Dependency, Lesson, Step, User],
+    logging: true,
+    password: "postgres",
+    synchronize: true,
+    type: "postgres",
+    username: "postgres",
   });
 
   const app = express();
 
   app.use(
     cors({
-      origin: "http://localhost:3000",
       credentials: true,
+      origin: "http://localhost:3000",
     })
   );
 
@@ -48,24 +48,26 @@ const main = async () => {
 
   app.use(
     session({
+      cookie: {
+        httpOnly: true,
+        // 10 years
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        sameSite: "lax",
+        secure: __prod__,
+      },
       name: "amigoid",
+      resave: false,
+      saveUninitialized: false,
+      secret: "secreto",
       store: new RedisStore({
         client: redis,
         disableTouch: true,
       }),
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
-        httpOnly: true,
-        sameSite: "lax",
-        secure: __prod__,
-      },
-      saveUninitialized: false,
-      secret: "secreto",
-      resave: false,
     })
   );
 
   const apolloServer = new ApolloServer({
+    context: ({ req, res }) => ({ redis, req, res }),
     schema: await buildSchema({
       resolvers: [
         CheckpointResolver,
@@ -77,7 +79,6 @@ const main = async () => {
       ],
       validate: false,
     }),
-    context: ({ req, res }) => ({ req, res, redis }),
   });
 
   apolloServer.applyMiddleware({ app, cors: false });

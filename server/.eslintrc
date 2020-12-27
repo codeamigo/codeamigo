@@ -2,13 +2,12 @@
   "parser": "@typescript-eslint/parser",
   "extends": ["plugin:prettier/recommended"],
 
-  "plugins": ["prettier", "react", "simple-import-sort", "sort-keys-fix"],
+  "plugins": ["prettier", "simple-import-sort", "sort-keys-fix"],
 
   "rules": {
     "prettier/prettier": "error",
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
-    "sort-keys-fix/sort-keys-fix": "error",
-    "react/sort-prop-types": "error"
+    "sort-keys-fix/sort-keys-fix": "error"
   }
 }

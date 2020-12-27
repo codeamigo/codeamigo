@@ -1,13 +1,13 @@
-import React from "react";
-import Icon from "@components/Icon";
+import Icon from '@components/Icon';
 import {
   RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
   useLessonQuery,
-} from "@generated/graphql";
+} from '@generated/graphql';
+import React from 'react';
 
-import styles from "./Steps.module.scss";
+import styles from './Steps.module.scss';
 
 const Steps: React.FC<Props> = ({
   steps,
@@ -21,8 +21,8 @@ const Steps: React.FC<Props> = ({
 
   const createStep = async () => {
     const step = await createStepM({
+      refetchQueries: ['Lesson'],
       variables: { lessonId },
-      refetchQueries: ["Lesson"],
     });
 
     if (!step.data?.createStep?.id) return;
@@ -36,8 +36,8 @@ const Steps: React.FC<Props> = ({
       .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
     const res = await deleteStepM({
+      refetchQueries: ['Lesson'],
       variables: { id },
-      refetchQueries: ["Lesson"],
     });
 
     setCurrentStepId(sortedSteps[idx - 1].id);
@@ -58,7 +58,7 @@ const Steps: React.FC<Props> = ({
             return (
               <li
                 className={`${
-                  currentStepId === step.id ? "text-blue-600" : ""
+                  currentStepId === step.id ? 'text-blue-600' : ''
                 } list-none cursor-pointer w-full flex justify-between items-center ${
                   styles.STEP
                 }`}

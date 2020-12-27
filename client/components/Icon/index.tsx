@@ -1,5 +1,6 @@
-import React from "react";
-import { IconType } from "./types";
+import React from 'react';
+
+import { IconType } from './types';
 
 const Icon: React.FC<Props> = ({ name, className, ...rest }) => {
   return (

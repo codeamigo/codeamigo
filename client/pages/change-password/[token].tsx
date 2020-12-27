@@ -1,12 +1,12 @@
-import { Form, Formik } from "formik";
-import React from "react";
-import { useRouter } from "next/router";
+import { Context } from '@apollo/client';
+import { Form, Formik } from 'formik';
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import React from 'react';
 
-import InputField from "../../components/Form/InputField";
-import { useChangePasswordMutation } from "../../generated/graphql";
-import { toErrorMap } from "../../utils";
-import { NextPage } from "next";
-import { Context } from "@apollo/client";
+import InputField from '../../components/Form/InputField';
+import { useChangePasswordMutation } from '../../generated/graphql';
+import { toErrorMap } from '../../utils';
 
 const ChangePassword: NextPage<{ token: string }> = (props) => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const ChangePassword: NextPage<{ token: string }> = (props) => {
 
   return (
     <Formik
-      initialValues={{ newPassword: "", token: props.token }}
+      initialValues={{ newPassword: '', token: props.token }}
       onSubmit={async (values, { setErrors }) => {
         const { data } = await changePassword({
           variables: {
@@ -26,7 +26,7 @@ const ChangePassword: NextPage<{ token: string }> = (props) => {
         }
 
         if (data?.changePassword.user) {
-          router.push("/");
+          router.push('/');
         }
       }}
     >

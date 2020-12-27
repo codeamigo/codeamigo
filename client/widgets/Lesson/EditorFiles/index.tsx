@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { RegularDependencyFragment } from '@generated/graphql';
+import React, { useState } from 'react';
 
-import { FilesType } from "../Editor/types";
-
-import FilesList from "./FilesList";
-import { RegularDependencyFragment } from "@generated/graphql";
-import DependenciesList from "./DependenciesList";
+import { FilesType } from '../Editor/types';
+import DependenciesList from './DependenciesList';
+import FilesList from './FilesList';
 
 export type AlgoliaSearchResultType = { name: string; version: string };
 
@@ -17,13 +16,13 @@ const EditorFiles: React.FC<Props> = ({
   deleteFile,
   setCurrentPath,
 }) => {
-  const docs = Object.keys(files).filter((file) => !file.includes("spec"));
-  const tests = Object.keys(files).filter((file) => file.includes("spec"));
+  const docs = Object.keys(files).filter((file) => !file.includes('spec'));
+  const tests = Object.keys(files).filter((file) => file.includes('spec'));
 
   return (
     <>
       <FilesList
-        name={"Files"}
+        name={'Files'}
         files={docs}
         onDelete={deleteFile}
         onCreate={createFile}
@@ -31,12 +30,16 @@ const EditorFiles: React.FC<Props> = ({
         setCurrentPath={setCurrentPath}
       />
       <FilesList
-        name={"Tests"}
+        name={'Tests'}
         files={tests}
         currentPath={currentPath}
         setCurrentPath={setCurrentPath}
       />
-      <DependenciesList name={"Dependencies"} dependencies={dependencies} stepId={stepId} />
+      <DependenciesList
+        name={'Dependencies'}
+        dependencies={dependencies}
+        stepId={stepId}
+      />
     </>
   );
 };

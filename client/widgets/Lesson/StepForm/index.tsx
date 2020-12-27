@@ -1,11 +1,9 @@
-import React from "react";
-
-import { LessonQuery, useStepQuery } from "@generated/graphql";
-
-import Editor from "@widgets/Lesson/Editor";
-import Checkpoints from "@widgets/Lesson/Checkpoints";
-import InfoForm from "@widgets/Lesson/InfoForm";
-import Instructions from "@widgets/Lesson/Instructions";
+import { LessonQuery, useStepQuery } from '@generated/graphql';
+import Checkpoints from '@widgets/Lesson/Checkpoints';
+import Editor from '@widgets/Lesson/Editor';
+import InfoForm from '@widgets/Lesson/InfoForm';
+import Instructions from '@widgets/Lesson/Instructions';
+import React from 'react';
 
 const StepForm: React.FC<Props> = ({
   currentStepId: id,
@@ -37,7 +35,7 @@ const StepForm: React.FC<Props> = ({
 };
 
 type Props = {
-  lesson: LessonQuery["lesson"];
+  lesson: LessonQuery['lesson'];
   currentStepId: number;
   toggleShowSteps: () => void;
 };

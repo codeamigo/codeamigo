@@ -1,15 +1,16 @@
 module.exports = {
+  darkMode: false,
+  plugins: [require('@tailwindcss/forms')],
   purge: ['./pages/**/*.js', './components/**/*.js'],
-  darkMode: false, // or 'media' or 'class'
+  // or 'media' or 'class'
   theme: {
     extend: {},
   },
   variants: {
     extend: {
-      opacity: ['disabled'],
       borderWidth: ['first'],
       margin: ['first'],
+      opacity: ['disabled'],
     },
   },
-  plugins: [require('@tailwindcss/forms')],
 };

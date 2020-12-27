@@ -38,7 +38,7 @@ export class DependencyResolver {
     @Arg("stepId") stepId: number,
     @Arg("options") options: DependencyInput
   ): Promise<Dependency | null> {
-    const step = await Step.findOne(stepId, { relations: ['dependencies'] })
+    const step = await Step.findOne(stepId, { relations: ["dependencies"] });
     const dependency = await Dependency.create({ ...options }).save();
     if (!step) {
       return null;

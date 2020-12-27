@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import Icon from '@components/Icon';
+import React, { useEffect, useRef, useState } from 'react';
 
-import Icon from "@components/Icon";
-
-import styles from "./FilesList.module.scss";
+import styles from './FilesList.module.scss';
 
 const FilesList: React.FC<Props> = ({
   name,
@@ -26,7 +25,7 @@ const FilesList: React.FC<Props> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && onCreate) {
+    if (event.key === 'Enter' && onCreate) {
       onCreate(event.currentTarget.value);
       setIsAdding(false);
     }
@@ -60,10 +59,10 @@ const FilesList: React.FC<Props> = ({
               <div
                 key={path}
                 className={`${
-                  currentPath === path ? "bg-gray-100" : ""
+                  currentPath === path ? 'bg-gray-100' : ''
                 } flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
                   styles.FILE
-                } ${setCurrentPath ? "cursor-pointer" : ""}`}
+                } ${setCurrentPath ? 'cursor-pointer' : ''}`}
                 onClick={() => setCurrentPath && setCurrentPath(path)}
               >
                 <div className="text-xs">{path}</div>

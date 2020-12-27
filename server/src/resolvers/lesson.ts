@@ -1,4 +1,3 @@
-import { Lesson } from "../entities/Lesson";
 import {
   Arg,
   Ctx,
@@ -10,14 +9,15 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { MyContext } from "../types";
+
+import { CodeModule } from "../entities/CodeModule";
+import { Dependency } from "../entities/Dependency";
+import { Lesson } from "../entities/Lesson";
+import { Step } from "../entities/Step";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
-import { Step } from "../entities/Step";
-import { CodeModule } from "../entities/CodeModule";
-
+import { MyContext } from "../types";
 import { DEFAULT_MD } from "./step";
-import { Dependency } from "../entities/Dependency";
 
 @InputType()
 class LessonInput {
@@ -52,9 +52,9 @@ export class LessonResolver {
       version: "1.0.0-alpha.4",
     }).save();
     const step = await Step.create({
-      instructions: DEFAULT_MD,
       codeModules: [code],
-      dependencies: [dependency]
+      dependencies: [dependency],
+      instructions: DEFAULT_MD,
     }).save();
 
     const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();

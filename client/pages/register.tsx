@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
-import React from 'react';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 import InputField from '../components/Form/InputField';
 import { useRegisterMutation } from '../generated/graphql';
@@ -13,7 +13,7 @@ const Register: React.FC<Props> = () => {
 
   return (
     <Formik
-      initialValues={{ email: '', username: '', password: '' }}
+      initialValues={{ email: '', password: '', username: '' }}
       onSubmit={async (values, { setErrors }) => {
         const { data } = await register({ variables: values });
         if (data?.register.errors) {

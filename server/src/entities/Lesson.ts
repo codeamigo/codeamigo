@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+
 import { Step } from "./Step";
 import { User } from "./User";
 
@@ -36,8 +37,8 @@ export class Lesson extends BaseEntity {
   description: string;
 
   @Field()
-  @Column({ type: 'int', default: 0 })
-  likes!: number
+  @Column({ default: 0, type: "int" })
+  likes!: number;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.lessons)

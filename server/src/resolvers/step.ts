@@ -8,12 +8,12 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { isAuth } from "../middleware/isAuth";
 
-import { Step } from "../entities/Step";
 import { CodeModule } from "../entities/CodeModule";
-import { Lesson } from "../entities/Lesson";
 import { Dependency } from "../entities/Dependency";
+import { Lesson } from "../entities/Lesson";
+import { Step } from "../entities/Step";
+import { isAuth } from "../middleware/isAuth";
 
 export const DEFAULT_MD = `## Step \#
 
@@ -80,12 +80,12 @@ export class StepResolver {
     }).save();
 
     const step = await Step.create({
-      instructions: DEFAULT_MD,
       codeModules: [code],
-      dependencies: [dependency]
+      dependencies: [dependency],
+      instructions: DEFAULT_MD,
     }).save();
 
-    console.log(step)
+    console.log(step);
 
     lesson.steps.push(step);
     await lesson.save();

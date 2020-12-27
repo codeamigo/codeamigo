@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { useMeQuery } from '../generated/graphql';
 import withApollo from '../utils/withApollo';
 

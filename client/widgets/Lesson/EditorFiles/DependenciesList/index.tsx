@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import Icon from '@components/Icon';
+import React, { useEffect, useRef, useState } from 'react';
 
-import Icon from "@components/Icon";
-
-import styles from "./DependenciesList.module.scss";
-import { AlgoliaSearchResultType } from "..";
 import {
   RegularDependencyFragment,
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
-} from "../../../../generated/graphql";
+} from '../../../../generated/graphql';
+import { AlgoliaSearchResultType } from '..';
+import styles from './DependenciesList.module.scss';
 
-const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
+const DependenciesList: React.FC<Props> = ({ name, stepId, dependencies }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [searchResults, setSearchResults] = useState<
@@ -26,14 +25,14 @@ const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
     const response: {
       hits: Array<AlgoliaSearchResultType>;
     } = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify({
-        query,
         hitsPerPage: 4,
+        query,
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
     }).then((res) => res.json());
 
     setSearchResults(response.hits);
@@ -49,12 +48,12 @@ const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
   const createDependency = async (result: AlgoliaSearchResultType) => {
     console.log(result);
     await createDependencyM({
+      refetchQueries: ['Step'],
       variables: {
-        stepId,
         package: result.name,
+        stepId,
         version: result.version,
       },
-      refetchQueries: ["Step"],
     });
 
     setIsAdding(false);
@@ -88,7 +87,7 @@ const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
               <div
                 key={dep.id}
                 className={`flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
-                  dep.package !== "jest-lite" ? styles.FILE : ""
+                  dep.package !== 'jest-lite' ? styles.FILE : ''
                 }`}
               >
                 <div className="text-xs">
@@ -99,8 +98,8 @@ const DependenciesList: React.FC<Props> = ({ name, dependencies, stepId }) => {
                   className="text-red-600 text-sm hidden cursor-pointer"
                   onClick={() =>
                     deleteDependency({
+                      refetchQueries: ['Step'],
                       variables: { id: dep.id },
-                      refetchQueries: ["Step"],
                     })
                   }
                 />

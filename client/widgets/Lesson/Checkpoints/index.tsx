@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
-
 import {
-  useCreateCheckpointMutation,
-  useDeleteCheckpointMutation,
   RegularCheckpointFragment,
   RegularStepFragment,
-} from "@generated/graphql";
+  useCreateCheckpointMutation,
+  useDeleteCheckpointMutation,
+} from '@generated/graphql';
+import React, { useEffect, useState } from 'react';
 
 const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
@@ -22,13 +21,13 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
     const len = step?.checkpoints?.length || 0;
 
     await createCheckpointM({
-      variables: { stepId: step.id, checkpointId: len + 1 },
-      refetchQueries: ["Step"],
+      refetchQueries: ['Step'],
+      variables: { checkpointId: len + 1, stepId: step.id },
     });
   };
 
   const deleteCheckpoint = async (id: number) => {
-    await deleteCheckpointM({ variables: { id }, refetchQueries: ["Step"] });
+    await deleteCheckpointM({ refetchQueries: ['Step'], variables: { id } });
   };
 
   return (

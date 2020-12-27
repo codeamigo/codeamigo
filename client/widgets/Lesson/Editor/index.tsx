@@ -1,15 +1,16 @@
-import { ControlledEditor, monaco } from '@monaco-editor/react';
-import React, { useCallback, useEffect } from 'react';
+import { CodeSandboxV2ResponseI } from '@api/types';
 import {
   RegularStepFragment,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
 } from '@generated/graphql';
-import { CodeSandboxV2ResponseI } from '@api/types';
+import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
-import { FilesType, PreviewType } from './types';
+import React, { useCallback, useEffect } from 'react';
+
 import EditorFiles from '../EditorFiles';
+import { FilesType, PreviewType } from './types';
 
 export const findBestMatch = (
   files: FilesType | CodeSandboxV2ResponseI['contents'],
@@ -61,8 +62,8 @@ const Editor: React.FC<Props> = ({ step }) => {
     }
 
     await createCodeModule({
-      variables: { stepId: step.id, name: file, value: `` },
       refetchQueries: ['Step'],
+      variables: { name: file, stepId: step.id, value: `` },
     });
 
     setFiles({
@@ -166,8 +167,8 @@ const Editor: React.FC<Props> = ({ step }) => {
     iframe.postMessage(
       {
         files: { ...files, ...dependencies },
-        runPath: currentPath,
         from: 'editor',
+        runPath: currentPath,
       } as PreviewType,
       '*'
     );
@@ -188,9 +189,9 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     // compiler options
     monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-      target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
-      allowSyntheticDefaultImports: true,
       allowNonTsExtensions: true,
+      allowSyntheticDefaultImports: true,
+      target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
       typeRoots: ['node_modules/@types'],
     });
 
@@ -243,10 +244,10 @@ const Editor: React.FC<Props> = ({ step }) => {
             language={'typescript'}
             value={files[currentPath] || dependencies[currentPath]}
             options={{
-              wordWrap: 'on',
-              minimap: { enabled: false },
               automaticLayout: true,
+              minimap: { enabled: false },
               scrollBeyondLastLine: false,
+              wordWrap: 'on',
             }}
             editorDidMount={editorDidMount}
             onChange={(_, value) => {

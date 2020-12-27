@@ -1,20 +1,20 @@
-import { ControlledEditor } from "@monaco-editor/react";
-import { debounce } from "debounce";
-import React, { useCallback, useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
-import gfm from "remark-gfm";
+import { RegularStepFragment, useUpdateStepMutation } from '@generated/graphql';
+import { ControlledEditor } from '@monaco-editor/react';
+import { debounce } from 'debounce';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
-import { RegularStepFragment, useUpdateStepMutation } from "@generated/graphql";
-import Checkpoints from "../Checkpoints";
+import Checkpoints from '../Checkpoints';
 
 const Instructions: React.FC<Props> = ({ step }) => {
   const [markdown, setMarkdown] = useState(step?.instructions);
-  const [view, toggleView] = useState<"editor" | "preview">("editor");
+  const [view, toggleView] = useState<'editor' | 'preview'>('editor');
   const [updateStepM] = useUpdateStepMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
-      updateStepM({ variables: { id, instructions: value || "" } });
+      updateStepM({ variables: { id, instructions: value || '' } });
     }, 1000),
     []
   );
@@ -28,25 +28,25 @@ const Instructions: React.FC<Props> = ({ step }) => {
       <div className="w-full lg:h-full flex flex-col">
         <h3>
           <span
-            onClick={() => toggleView("editor")}
+            onClick={() => toggleView('editor')}
             className={`cursor-pointer ${
-              view === "editor" ? "text-blue-600" : "text-black"
+              view === 'editor' ? 'text-blue-600' : 'text-black'
             }`}
           >
             Edit Instructions
           </span>
           |
           <span
-            onClick={() => toggleView("preview")}
+            onClick={() => toggleView('preview')}
             className={`cursor-pointer ${
-              view === "preview" ? "text-blue-600" : "text-black"
+              view === 'preview' ? 'text-blue-600' : 'text-black'
             }`}
           >
             Preview
           </span>
         </h3>
         <div className="h-80 lg:h-full lg:flex lg:flex-col rounded-md border border-gray-200">
-          {view === "editor" ? (
+          {view === 'editor' ? (
             <ControlledEditor
               value={markdown}
               onChange={(_, value) => {
@@ -54,17 +54,17 @@ const Instructions: React.FC<Props> = ({ step }) => {
                 updateStep(step.id, value);
               }}
               options={{
-                wordWrap: "on",
+                automaticLayout: true,
                 minimap: { enabled: false },
                 quickSuggestions: false,
-                automaticLayout: true,
                 scrollBeyondLastLine: false,
+                wordWrap: 'on',
               }}
             />
           ) : (
             <ReactMarkdown
               className="markdown-body px-6 py-4"
-              children={markdown || ""}
+              children={markdown || ''}
               plugins={[gfm]}
             />
           )}

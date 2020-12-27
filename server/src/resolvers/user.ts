@@ -1,3 +1,4 @@
+import argon2 from "argon2";
 import {
   Arg,
   Ctx,
@@ -8,12 +9,11 @@ import {
   Query,
   Resolver,
 } from "type-graphql";
-import { User } from "../entities/User";
-import argon2 from "argon2";
 import { v4 } from "uuid";
 
-import { MyContext } from "../types";
 import { FORGOT_PASSWORD_PREFIX } from "../constants";
+import { User } from "../entities/User";
+import { MyContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 
 @InputType()
@@ -58,8 +58,8 @@ export class UserResolver {
     if (!req.session.userId) {
       return null;
     }
-    
-    return await User.findOne(req.session.userId, { relations: ['lessons'] });
+
+    return await User.findOne(req.session.userId, { relations: ["lessons"] });
   }
 
   @Mutation(() => UserResponse)
@@ -84,8 +84,8 @@ export class UserResolver {
     try {
       user = await User.create({
         email: options.email,
-        username: options.username,
         password: hashedPw,
+        username: options.username,
       }).save();
     } catch (e) {
       if (e.detail && e.detail.includes("already exists")) {

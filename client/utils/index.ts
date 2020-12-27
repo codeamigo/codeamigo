@@ -1,4 +1,4 @@
-import { FieldError } from "../generated/graphql";
+import { FieldError } from '../generated/graphql';
 
 export const toErrorMap = (errors: FieldError[]) => {
   const errorMap: Record<string, string> = {};
@@ -10,10 +10,10 @@ export const toErrorMap = (errors: FieldError[]) => {
 
 export const monacoFileLanguage = (ext: string) => {
   switch (ext) {
-    case "tsx":
-      return "javascript";
-    case "ts":
-      return "typescript";
+    case 'tsx':
+      return 'javascript';
+    case 'ts':
+      return 'typescript';
     default:
       return ext;
   }

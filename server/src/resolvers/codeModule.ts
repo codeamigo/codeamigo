@@ -38,7 +38,7 @@ export class CodeModuleResolver {
     @Arg("stepId") stepId: number,
     @Arg("options") options: CodeModuleInput
   ): Promise<CodeModule | null> {
-    const step = await Step.findOne(stepId, { relations: ['codeModules'] })
+    const step = await Step.findOne(stepId, { relations: ["codeModules"] });
     const codeModule = await CodeModule.create({ ...options }).save();
     if (!step) {
       return null;
