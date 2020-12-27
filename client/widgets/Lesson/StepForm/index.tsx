@@ -1,14 +1,9 @@
 import { LessonQuery, useStepQuery } from '@generated/graphql';
 import Editor from '@widgets/Lesson/Editor';
-import InfoForm from '@widgets/Lesson/InfoForm';
 import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
 
-const StepForm: React.FC<Props> = ({
-  currentStepId: id,
-  lesson,
-  toggleShowSteps,
-}) => {
+const StepForm: React.FC<Props> = ({ currentStepId: id }) => {
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
@@ -18,7 +13,6 @@ const StepForm: React.FC<Props> = ({
 
   return (
     <>
-      <InfoForm lesson={lesson} toggleShowSteps={toggleShowSteps} />
       <div className="flex flex-col lg:flex-row lg:h-full">
         <div className="flex w-full lg:w-1/4 lg:h-full">
           <Instructions step={data.step} />

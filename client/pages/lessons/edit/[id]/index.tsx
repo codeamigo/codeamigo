@@ -3,6 +3,7 @@ import StepForm from '@widgets/Lesson/StepForm';
 import Steps from '@widgets/Lesson/Steps';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
+import InfoForm from '@widgets/Lesson/InfoForm';
 
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
@@ -26,7 +27,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   return (
     <div className="flex">
       {showSteps && (
-        <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-90 py-3 px-4 pl-10 z-10 md:w-2/12">
+        <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-90 py-2 px-4 pl-10 z-10 md:w-2/12">
           <Steps
             currentStepId={stepId}
             lessonId={data.lesson.id}
@@ -37,6 +38,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         </div>
       )}
       <div className="w-full h-screen">
+        <InfoForm lesson={data.lesson} toggleShowSteps={toggleShowSteps} />
         <StepForm
           currentStepId={stepId}
           lesson={data.lesson}
