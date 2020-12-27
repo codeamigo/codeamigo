@@ -14,6 +14,7 @@ const Steps: React.FC<Props> = ({
   lessonId,
   currentStepId,
   setCurrentStepId,
+  toggleShowSteps,
 }) => {
   const [createStepM] = useCreateStepMutation();
   const [deleteStepM] = useDeleteStepMutation();
@@ -43,7 +44,12 @@ const Steps: React.FC<Props> = ({
   };
 
   return (
-    <div className="w-2/12 py-5 bg-white">
+    <>
+      <Icon
+        name="list"
+        className="absolute left-4 text-xl text-black cursor-pointer"
+        onClick={toggleShowSteps}
+      />
       <ol>
         {steps
           .slice()
@@ -76,7 +82,7 @@ const Steps: React.FC<Props> = ({
       >
         Add Step
       </button>
-    </div>
+    </>
   );
 };
 
@@ -85,6 +91,7 @@ type Props = {
   currentStepId: number;
   steps: RegularStepFragment[];
   setCurrentStepId: (n: number) => void;
+  toggleShowSteps: () => void;
 };
 
 export default Steps;

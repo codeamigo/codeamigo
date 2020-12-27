@@ -7,7 +7,11 @@ import Checkpoints from "@widgets/Lesson/Checkpoints";
 import InfoForm from "@widgets/Lesson/InfoForm";
 import Instructions from "@widgets/Lesson/Instructions";
 
-const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
+const StepForm: React.FC<Props> = ({
+  currentStepId: id,
+  lesson,
+  toggleShowSteps,
+}) => {
   const { data } = useStepQuery({
     variables: { id },
   });
@@ -15,8 +19,8 @@ const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
   if (!data?.step) return null;
 
   return (
-    <form className="w-full h-screen">
-      <InfoForm lesson={lesson} />
+    <>
+      <InfoForm lesson={lesson} toggleShowSteps={toggleShowSteps} />
       <div className="flex flex-col lg:flex-row lg:h-full">
         <div className="flex w-full lg:w-1/4 lg:h-full">
           <Instructions step={data.step} />
@@ -28,13 +32,14 @@ const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
           <iframe id="frame" src="http://localhost:1234/"></iframe>
         </div>
       </div>
-    </form>
+    </>
   );
 };
 
 type Props = {
   lesson: LessonQuery["lesson"];
   currentStepId: number;
+  toggleShowSteps: () => void;
 };
 
 export default StepForm;
