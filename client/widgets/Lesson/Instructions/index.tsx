@@ -40,6 +40,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
             options={{
               wordWrap: "on",
               minimap: { enabled: false },
+              quickSuggestions: false
             }}
           />
         </div>
