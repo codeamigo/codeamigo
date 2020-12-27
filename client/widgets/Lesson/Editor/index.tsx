@@ -160,6 +160,9 @@ const Editor: React.FC<Props> = ({ step }) => {
   async function getDeps() {
     await updateDependencies();
 
+    const jsxFactory = 'React.createElement';
+    const reactNamespace = 'React';
+    const hasNativeTypescript = false;
     const monacoInstance = await monaco.init();
 
     // validation settings
@@ -171,10 +174,36 @@ const Editor: React.FC<Props> = ({ step }) => {
     );
 
     // compiler options
+    // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-      allowNonTsExtensions: true,
-      allowSyntheticDefaultImports: true,
-      target: monacoInstance.languages.typescript.ScriptTarget.ESNext,
+      allowJs: true,
+      allowNonTsExtensions: !hasNativeTypescript,
+      experimentalDecorators: true,
+      jsx: monacoInstance.languages.typescript.JsxEmit.React,
+      jsxFactory,
+      module: hasNativeTypescript
+        ? monacoInstance.languages.typescript.ModuleKind.ES2015
+        : monacoInstance.languages.typescript.ModuleKind.System,
+      moduleResolution:
+        monacoInstance.languages.typescript.ModuleResolutionKind.NodeJs,
+      // forceConsistentCasingInFileNames:
+      //   hasNativeTypescript && existingConfig.forceConsistentCasingInFileNames,
+      // noImplicitReturns:
+      //   hasNativeTypescript && existingConfig.noImplicitReturns,
+      // noImplicitThis: hasNativeTypescript && existingConfig.noImplicitThis,
+      // noImplicitAny: hasNativeTypescript && existingConfig.noImplicitAny,
+      // strictNullChecks: hasNativeTypescript && existingConfig.strictNullChecks,
+      // suppressImplicitAnyIndexErrors:
+      //   hasNativeTypescript && existingConfig.suppressImplicitAnyIndexErrors,
+      // noUnusedLocals: hasNativeTypescript && existingConfig.noUnusedLocals,
+      newLine: monacoInstance.languages.typescript.NewLineKind.LineFeed,
+
+      noEmit: true,
+
+      reactNamespace,
+
+      target: monacoInstance.languages.typescript.ScriptTarget.ES2016,
+
       typeRoots: ['node_modules/@types'],
     });
 

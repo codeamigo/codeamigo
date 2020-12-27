@@ -1,9 +1,9 @@
 import { useLessonQuery } from '@generated/graphql';
+import InfoForm from '@widgets/Lesson/InfoForm';
 import StepForm from '@widgets/Lesson/StepForm';
 import Steps from '@widgets/Lesson/Steps';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
-import InfoForm from '@widgets/Lesson/InfoForm';
 
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
