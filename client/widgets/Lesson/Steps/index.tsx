@@ -35,7 +35,7 @@ const Steps: React.FC<Props> = ({
       .slice()
       .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
-    const res = await deleteStepM({
+    await deleteStepM({
       refetchQueries: ['Lesson'],
       variables: { id },
     });

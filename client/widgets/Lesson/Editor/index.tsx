@@ -140,23 +140,6 @@ const Editor: React.FC<Props> = ({ step }) => {
     });
   };
 
-  useEffect(() => {
-    if (!step.codeModules) return;
-
-    const mods = step.codeModules.reduce(
-      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-      {}
-    ) as FilesType;
-
-    setFiles(mods);
-
-    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
-  }, [step.id, step.codeModules]);
-
-  useEffect(() => {
-    updateDependencies();
-  }, [step.dependencies]);
-
   const postCode = () => {
     // @ts-ignore
     const iframe =
@@ -217,6 +200,23 @@ const Editor: React.FC<Props> = ({ step }) => {
   const editorDidMount = (_: any, editor: any) => {
     getDeps();
   };
+
+  useEffect(() => {
+    if (!step.codeModules) return;
+
+    const mods = step.codeModules.reduce(
+      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+      {}
+    ) as FilesType;
+
+    setFiles(mods);
+
+    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
+  }, [step.id, step.codeModules]);
+
+  useEffect(() => {
+    updateDependencies();
+  }, [step.dependencies]);
 
   return (
     <div className="w-full lg:h-full flex flex-col">

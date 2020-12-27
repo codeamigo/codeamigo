@@ -85,8 +85,6 @@ export class StepResolver {
       instructions: DEFAULT_MD,
     }).save();
 
-    console.log(step);
-
     lesson.steps.push(step);
     await lesson.save();
 

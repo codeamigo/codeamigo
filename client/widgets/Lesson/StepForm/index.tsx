@@ -1,5 +1,4 @@
 import { LessonQuery, useStepQuery } from '@generated/graphql';
-import Checkpoints from '@widgets/Lesson/Checkpoints';
 import Editor from '@widgets/Lesson/Editor';
 import InfoForm from '@widgets/Lesson/InfoForm';
 import Instructions from '@widgets/Lesson/Instructions';
@@ -11,6 +10,7 @@ const StepForm: React.FC<Props> = ({
   toggleShowSteps,
 }) => {
   const { data } = useStepQuery({
+    fetchPolicy: 'cache-and-network',
     variables: { id },
   });
 
