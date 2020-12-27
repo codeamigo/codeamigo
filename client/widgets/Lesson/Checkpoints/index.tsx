@@ -35,13 +35,13 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
       {checkpoints.length
         ? checkpoints.map((checkpoint, i) => {
             return (
-              <div key={checkpoint.id} className="mb-6">
+              <div className="mb-6" key={checkpoint.id}>
                 <h3>
                   <span>Checkpoint {i + 1} </span>
                   {i === checkpoints.length - 1 ? (
                     <button
-                      onClick={() => deleteCheckpoint(checkpoint.id)}
                       className="inline-flex justify-center py-1 px-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                      onClick={() => deleteCheckpoint(checkpoint.id)}
                       type="button"
                     >
                       Delete

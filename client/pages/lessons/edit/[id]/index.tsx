@@ -28,18 +28,18 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
       {showSteps && (
         <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-90 py-3 px-4 pl-10 z-10 md:w-2/12">
           <Steps
-            steps={data.lesson.steps}
-            lessonId={data.lesson.id}
             currentStepId={stepId}
+            lessonId={data.lesson.id}
             setCurrentStepId={setCurrentStepId}
+            steps={data.lesson.steps}
             toggleShowSteps={toggleShowSteps}
           />
         </div>
       )}
       <div className="w-full h-screen">
         <StepForm
-          lesson={data.lesson}
           currentStepId={stepId}
+          lesson={data.lesson}
           toggleShowSteps={toggleShowSteps}
         />
       </div>

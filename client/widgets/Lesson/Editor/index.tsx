@@ -222,34 +222,26 @@ const Editor: React.FC<Props> = ({ step }) => {
     <div className="w-full lg:h-full flex flex-col">
       <h3 className="flex justify-between">
         <span>Initial Code</span>
-        <button type="button" onClick={() => postCode()}>
+        <button onClick={() => postCode()} type="button">
           Run
         </button>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
         <div className="w-3/12 border-r border-gray-200">
           <EditorFiles
-            files={files}
-            currentPath={currentPath}
-            dependencies={step.dependencies}
-            stepId={step.id}
             createFile={createFile}
+            currentPath={currentPath}
             deleteFile={deleteFile}
+            dependencies={step.dependencies}
+            files={files}
             setCurrentPath={setCurrentPath}
+            stepId={step.id}
           />
         </div>
         <div className="w-9/12 h-80 lg:h-full">
           <ControlledEditor
-            width="100%"
-            language={'typescript'}
-            value={files[currentPath] || dependencies[currentPath]}
-            options={{
-              automaticLayout: true,
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              wordWrap: 'on',
-            }}
             editorDidMount={editorDidMount}
+            language={'typescript'}
             onChange={(_, value) => {
               setFiles({
                 ...files,
@@ -257,6 +249,14 @@ const Editor: React.FC<Props> = ({ step }) => {
               });
               updateFile(currentPath, value || '');
             }}
+            options={{
+              automaticLayout: true,
+              minimap: { enabled: false },
+              scrollBeyondLastLine: false,
+              wordWrap: 'on',
+            }}
+            value={files[currentPath] || dependencies[currentPath]}
+            width="100%"
           />
         </div>
       </div>

@@ -45,8 +45,8 @@ const FilesList: React.FC<Props> = ({
         <span className="text-sm font-semibold">{name}</span>
         {onCreate && (
           <Icon
-            name="plus-circled"
             className="text-sm text-gray-500 hover:text-black cursor-pointer"
+            name="plus-circled"
             onClick={() => setIsAdding(true)}
           />
         )}
@@ -57,19 +57,19 @@ const FilesList: React.FC<Props> = ({
             .sort((a, b) => (a < b ? -1 : 1))
             .map((path) => (
               <div
-                key={path}
                 className={`${
                   currentPath === path ? 'bg-gray-100' : ''
                 } flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
                   styles.FILE
                 } ${setCurrentPath ? 'cursor-pointer' : ''}`}
+                key={path}
                 onClick={() => setCurrentPath && setCurrentPath(path)}
               >
                 <div className="text-xs">{path}</div>
                 {onDelete && (
                   <Icon
-                    name="minus-circled"
                     className="text-red-600 text-sm hidden"
+                    name="minus-circled"
                     onClick={() => onDelete(path)}
                   />
                 )}
@@ -78,11 +78,11 @@ const FilesList: React.FC<Props> = ({
         {isAdding && (
           <div className="px-1 py-1">
             <input
-              type="text"
               className="w-full text-xs px-2 py-1"
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               ref={inputRef}
+              type="text"
             />
           </div>
         )}

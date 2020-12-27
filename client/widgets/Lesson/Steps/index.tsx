@@ -46,8 +46,8 @@ const Steps: React.FC<Props> = ({
   return (
     <>
       <Icon
-        name="list"
         className="absolute left-4 text-xl text-black cursor-pointer"
+        name="list"
         onClick={toggleShowSteps}
       />
       <ol>
@@ -67,8 +67,8 @@ const Steps: React.FC<Props> = ({
               >
                 <span>Step {step.id}</span>
                 <Icon
-                  name="minus-circled"
                   className="text-red-600 hidden"
+                  name="minus-circled"
                   onClick={() => deleteStep(step.id, i)}
                 />
               </li>
@@ -77,8 +77,8 @@ const Steps: React.FC<Props> = ({
       </ol>
       <button
         className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
-        type="button"
         onClick={createStep}
+        type="button"
       >
         Add Step
       </button>

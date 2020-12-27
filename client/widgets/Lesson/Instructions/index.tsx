@@ -28,19 +28,19 @@ const Instructions: React.FC<Props> = ({ step }) => {
       <div className="w-full lg:h-full flex flex-col">
         <h3>
           <span
-            onClick={() => toggleView('editor')}
             className={`cursor-pointer ${
               view === 'editor' ? 'text-blue-600' : 'text-black'
             }`}
+            onClick={() => toggleView('editor')}
           >
             Edit Instructions
           </span>
           |
           <span
-            onClick={() => toggleView('preview')}
             className={`cursor-pointer ${
               view === 'preview' ? 'text-blue-600' : 'text-black'
             }`}
+            onClick={() => toggleView('preview')}
           >
             Preview
           </span>
@@ -48,7 +48,6 @@ const Instructions: React.FC<Props> = ({ step }) => {
         <div className="h-80 lg:h-full lg:flex lg:flex-col rounded-md border border-gray-200">
           {view === 'editor' ? (
             <ControlledEditor
-              value={markdown}
               onChange={(_, value) => {
                 setMarkdown(value);
                 updateStep(step.id, value);
@@ -60,11 +59,12 @@ const Instructions: React.FC<Props> = ({ step }) => {
                 scrollBeyondLastLine: false,
                 wordWrap: 'on',
               }}
+              value={markdown}
             />
           ) : (
             <ReactMarkdown
-              className="markdown-body px-6 py-4"
               children={markdown || ''}
+              className="markdown-body px-6 py-4"
               plugins={[gfm]}
             />
           )}

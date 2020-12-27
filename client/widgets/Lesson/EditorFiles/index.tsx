@@ -22,22 +22,22 @@ const EditorFiles: React.FC<Props> = ({
   return (
     <>
       <FilesList
-        name={'Files'}
-        files={docs}
-        onDelete={deleteFile}
-        onCreate={createFile}
         currentPath={currentPath}
+        files={docs}
+        name={'Files'}
+        onCreate={createFile}
+        onDelete={deleteFile}
         setCurrentPath={setCurrentPath}
       />
       <FilesList
-        name={'Tests'}
-        files={tests}
         currentPath={currentPath}
+        files={tests}
+        name={'Tests'}
         setCurrentPath={setCurrentPath}
       />
       <DependenciesList
-        name={'Dependencies'}
         dependencies={dependencies}
+        name={'Dependencies'}
         stepId={stepId}
       />
     </>

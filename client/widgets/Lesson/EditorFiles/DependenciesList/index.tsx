@@ -73,8 +73,8 @@ const DependenciesList: React.FC<Props> = ({ name, stepId, dependencies }) => {
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
         <span className="text-sm font-semibold">{name}</span>
         <Icon
-          name="plus-circled"
           className="text-sm text-gray-500 hover:text-black cursor-pointer"
+          name="plus-circled"
           onClick={() => setIsAdding(true)}
         />
       </div>
@@ -85,17 +85,17 @@ const DependenciesList: React.FC<Props> = ({ name, stepId, dependencies }) => {
             .sort((a, b) => a.package.localeCompare(b.package))
             .map((dep) => (
               <div
-                key={dep.id}
                 className={`flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
                   dep.package !== 'jest-lite' ? styles.FILE : ''
                 }`}
+                key={dep.id}
               >
                 <div className="text-xs">
                   {dep.package} {dep.version}
                 </div>
                 <Icon
-                  name="minus-circled"
                   className="text-red-600 text-sm hidden cursor-pointer"
+                  name="minus-circled"
                   onClick={() =>
                     deleteDependency({
                       refetchQueries: ['Step'],
@@ -109,29 +109,29 @@ const DependenciesList: React.FC<Props> = ({ name, stepId, dependencies }) => {
           {isAdding && (
             <div className="px-1 py-1">
               <input
-                type="text"
                 className="w-full text-xs px-2 py-1"
                 onBlur={handleBlur}
                 onChange={(e) => searchDeps(e.currentTarget.value)}
                 ref={inputRef}
+                type="text"
               />
             </div>
           )}
           {searchResults && searchResults.length > 0 && (
             <div className="origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               <div
+                aria-labelledby="options-menu"
+                aria-orientation="vertical"
                 className="py-1"
                 role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="options-menu"
               >
                 {searchResults.map((result) => {
                   return (
                     <div
                       className="px-2 py-2 text-xs hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
-                      role="menuitem"
-                      onClick={() => createDependency(result)}
                       key={result.name}
+                      onClick={() => createDependency(result)}
+                      role="menuitem"
                     >
                       {result.name} {result.version}
                     </div>

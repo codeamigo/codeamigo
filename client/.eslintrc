@@ -9,6 +9,6 @@
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "sort-keys-fix/sort-keys-fix": "error",
-    "react/sort-prop-types": "error"
+    "react/jsx-sort-props": "error"
   }
 }
