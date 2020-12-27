@@ -26,7 +26,25 @@ const Instructions: React.FC<Props> = ({ step }) => {
   return (
     <>
       <div className="w-full lg:h-full flex flex-col">
-        <h3>Instructions</h3>
+        <h3>
+          <span
+            onClick={() => toggleView("editor")}
+            className={`cursor-pointer ${
+              view === "editor" ? "text-blue-600" : "text-black"
+            }`}
+          >
+            Edit Instructions
+          </span>
+          |
+          <span
+            onClick={() => toggleView("preview")}
+            className={`cursor-pointer ${
+              view === "preview" ? "text-blue-600" : "text-black"
+            }`}
+          >
+            Preview
+          </span>
+        </h3>
         <div className="h-80 lg:h-full lg:flex lg:flex-col rounded-md border border-gray-200">
           {view === "editor" ? (
             <ControlledEditor
@@ -40,7 +58,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
                 minimap: { enabled: false },
                 quickSuggestions: false,
                 automaticLayout: true,
-                scrollBeyondLastLine: false
+                scrollBeyondLastLine: false,
               }}
             />
           ) : (

@@ -27,7 +27,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   return (
     <div className="flex">
       {showSteps && (
-        <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-50 py-3 px-4 pl-10 z-10 md:w-2/12">
+        <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-90 py-3 px-4 pl-10 z-10 md:w-2/12">
           <Steps
             steps={data.lesson.steps}
             lessonId={data.lesson.id}
