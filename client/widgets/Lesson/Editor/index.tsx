@@ -218,10 +218,15 @@ const Editor: React.FC<Props> = ({ step }) => {
   };
 
   return (
-    <div className="flex w-full">
-      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-        <h3>Initial Code</h3>
-        <div className="flex rounded-md border border-gray-200 whitespace-nowrap">
+    <div className="w-full lg:h-full flex flex-col">
+      <h3 className="flex justify-between">
+        <span>Initial Code</span>
+        <button type="button" onClick={() => postCode()}>
+          Run
+        </button>
+      </h3>
+      <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
+        <div className="w-3/12 border-r border-gray-200">
           <EditorFiles
             files={files}
             currentPath={currentPath}
@@ -231,32 +236,28 @@ const Editor: React.FC<Props> = ({ step }) => {
             deleteFile={deleteFile}
             setCurrentPath={setCurrentPath}
           />
-          <div className="w-8/12">
-            <ControlledEditor
-              height="300px"
-              width="100%"
-              language={"typescript"}
-              value={files[currentPath] || dependencies[currentPath]}
-              options={{
-                minimap: { enabled: false },
-              }}
-              editorDidMount={editorDidMount}
-              onChange={(_, value) => {
-                setFiles({
-                  ...files,
-                  [currentPath]: value || "",
-                });
-                updateFile(currentPath, value || "");
-              }}
-            />
-          </div>
         </div>
-      </div>
-      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-        <button type="button" onClick={() => postCode()}>
-          Run
-        </button>
-        <iframe id="frame" src="http://localhost:1234/"></iframe>
+        <div className="w-9/12 h-80 lg:h-full">
+          <ControlledEditor
+            width="100%"
+            language={"typescript"}
+            value={files[currentPath] || dependencies[currentPath]}
+            options={{
+              wordWrap: "on",
+              minimap: { enabled: false },
+              automaticLayout: true,
+              scrollBeyondLastLine: false,
+            }}
+            editorDidMount={editorDidMount}
+            onChange={(_, value) => {
+              setFiles({
+                ...files,
+                [currentPath]: value || "",
+              });
+              updateFile(currentPath, value || "");
+            }}
+          />
+        </div>
       </div>
     </div>
   );

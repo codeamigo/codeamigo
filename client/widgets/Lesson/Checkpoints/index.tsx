@@ -32,7 +32,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   };
 
   return (
-    <div className="px-4 py-5">
+    <>
       {checkpoints.length
         ? checkpoints.map((checkpoint, i) => {
             return (
@@ -63,7 +63,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
           Add Checkpoint
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

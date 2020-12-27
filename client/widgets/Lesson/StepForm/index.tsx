@@ -15,19 +15,19 @@ const StepForm: React.FC<Props> = ({ currentStepId: id, lesson }) => {
   if (!data?.step) return null;
 
   return (
-    <form className="w-10/12 w-full">
-      <>
-        <InfoForm lesson={lesson} />
-        <div className="flex w-full">
+    <form className="w-full h-screen">
+      <InfoForm lesson={lesson} />
+      <div className="flex flex-col lg:flex-row lg:h-full">
+        <div className="flex w-full lg:w-1/4 lg:h-full">
           <Instructions step={data.step} />
         </div>
-        <div className="flex flex-col w-full">
+        <div className="flex w-full lg:w-2/4">
           <Editor step={data.step} />
         </div>
-        <div className="flex flex-col w-full">
-          <Checkpoints step={data.step} />
+        <div className="flex w-full lg:w-1/4">
+          <iframe id="frame" src="http://localhost:1234/"></iframe>
         </div>
-      </>
+      </div>
     </form>
   );
 };

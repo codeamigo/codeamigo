@@ -21,7 +21,7 @@ const EditorFiles: React.FC<Props> = ({
   const tests = Object.keys(files).filter((file) => file.includes("spec"));
 
   return (
-    <div className="border-r border-gray-200 w-4/12">
+    <>
       <FilesList
         name={"Files"}
         files={docs}
@@ -37,7 +37,7 @@ const EditorFiles: React.FC<Props> = ({
         setCurrentPath={setCurrentPath}
       />
       <DependenciesList name={"Dependencies"} dependencies={dependencies} stepId={stepId} />
-    </div>
+    </>
   );
 };
 

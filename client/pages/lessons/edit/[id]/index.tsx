@@ -20,13 +20,13 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   const stepId = currentStepId || data.lesson.steps[0].id;
 
   return (
-    <div className="flex px-8">
-      <Steps
+    <div className="flex">
+      {/* <Steps
         steps={data.lesson.steps}
         lessonId={data.lesson.id}
         currentStepId={stepId}
         setCurrentStepId={setCurrentStepId}
-      />
+      /> */}
       <StepForm lesson={data.lesson} currentStepId={stepId} />
     </div>
   );
