@@ -1,3 +1,5 @@
+// http://www.entypo.com/
+
 export type IconType =
   | "address"
   | "adjust"

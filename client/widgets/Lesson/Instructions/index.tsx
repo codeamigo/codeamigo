@@ -4,13 +4,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import gfm from "remark-gfm";
 
-import {
-  RegularStepFragment,
-  useUpdateStepMutation,
-} from "@generated/graphql";
+import { RegularStepFragment, useUpdateStepMutation } from "@generated/graphql";
+import Checkpoints from "../Checkpoints";
 
 const Instructions: React.FC<Props> = ({ step }) => {
   const [markdown, setMarkdown] = useState(step?.instructions);
+  const [view, toggleView] = useState<"editor" | "preview">("editor");
   const [updateStepM] = useUpdateStepMutation();
 
   const updateStep = useCallback(
@@ -21,35 +20,58 @@ const Instructions: React.FC<Props> = ({ step }) => {
   );
 
   useEffect(() => {
-    setMarkdown(step.instructions)
-  }, [step.id])
+    setMarkdown(step.instructions);
+  }, [step.id]);
 
   return (
     <>
-      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-        <h3>Instructions</h3>
-        <div className="rounded-md border border-gray-200">
-          <ControlledEditor
-            height="300px"
-            width="100%"
-            value={markdown}
-            onChange={(_, value) => {
-              setMarkdown(value);
-              updateStep(step.id, value);
-            }}
-            options={{
-              wordWrap: "on",
-              minimap: { enabled: false },
-            }}
-          />
+      <div className="w-full lg:h-full flex flex-col">
+        <h3>
+          <span
+            onClick={() => toggleView("editor")}
+            className={`cursor-pointer ${
+              view === "editor" ? "text-blue-600" : "text-black"
+            }`}
+          >
+            Edit Instructions
+          </span>
+          |
+          <span
+            onClick={() => toggleView("preview")}
+            className={`cursor-pointer ${
+              view === "preview" ? "text-blue-600" : "text-black"
+            }`}
+          >
+            Preview
+          </span>
+        </h3>
+        <div className="h-80 lg:h-full lg:flex lg:flex-col rounded-md border border-gray-200">
+          {view === "editor" ? (
+            <ControlledEditor
+              value={markdown}
+              onChange={(_, value) => {
+                setMarkdown(value);
+                updateStep(step.id, value);
+              }}
+              options={{
+                wordWrap: "on",
+                minimap: { enabled: false },
+                quickSuggestions: false,
+                automaticLayout: true,
+                scrollBeyondLastLine: false,
+              }}
+            />
+          ) : (
+            <ReactMarkdown
+              className="markdown-body px-6 py-4"
+              children={markdown || ""}
+              plugins={[gfm]}
+            />
+          )}
         </div>
-      </div>
-      <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-        <ReactMarkdown
-          className="markdown-body px-6 py-4"
-          children={markdown || ""}
-          plugins={[gfm]}
-        />
+        <div>
+          <Checkpoints step={step} />
+        </div>
       </div>
     </>
   );

@@ -1,14 +1,10 @@
 import debounce from "debounce";
 import React from "react";
 
-import {
-  LessonQuery,
-  useUpdateLessonDescriptionMutation,
-  useUpdateLessonTitleMutation,
-} from "@generated/graphql";
+import { LessonQuery, useUpdateLessonTitleMutation } from "@generated/graphql";
+import Icon from "../../../components/Icon";
 
-const InfoForm: React.FC<Props> = ({ lesson }) => {
-  const [updateLessonDescriptionM] = useUpdateLessonDescriptionMutation();
+const InfoForm: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
   const [updateLessonTitleM] = useUpdateLessonTitleMutation();
 
   const updateLessonTitle = debounce(
@@ -20,41 +16,30 @@ const InfoForm: React.FC<Props> = ({ lesson }) => {
     1000
   );
 
-  const updateLessonDescription = debounce(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      updateLessonDescriptionM({
-        variables: { id: lesson!.id, description: e.target.value },
-      });
-    },
-    1000
-  );
-
   return (
-    <div className="px-4 py-5 bg-white sm:p-6 w-1/2">
-      <div className="grid gap-2">
-        <input
-          type="text"
-          name="title"
-          placeholder="Lesson title"
-          className="border-0 focus:ring-0 p-0 text-2xl"
-          defaultValue={lesson?.title}
-          onChange={updateLessonTitle}
-        />
-        <input
-          name="description"
-          type="text"
-          placeholder="Add a description"
-          className="border-0 focus:ring-0 p-0 text-lg"
-          defaultValue={lesson?.description || ''}
-          onChange={updateLessonDescription}
-        />
-      </div>
+    <div className="w-full py-2 px-4 flex items-center bg-gray-800">
+      <Icon
+        name="list"
+        className="text-white cursor-pointer text-xl"
+        onClick={toggleShowSteps}
+      />
+      <input
+        type="text"
+        name="title"
+        placeholder="Lesson title"
+        className="w-full text-center border-0 focus:ring-0 p-0 text-xl bg-gray-800 text-white"
+        defaultValue={lesson?.title}
+        onChange={updateLessonTitle}
+        maxLength={40}
+      />
+      <div className="bg-green-300 ring-1 ring-green-300 ring-opacity-50 h-2 w-2 rounded-full"></div>
     </div>
   );
 };
 
 type Props = {
   lesson: LessonQuery["lesson"];
+  toggleShowSteps: () => void;
 };
 
 export default InfoForm;
