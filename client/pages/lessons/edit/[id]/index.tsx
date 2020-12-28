@@ -37,7 +37,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
           />
         </div>
       )}
-      <div className="w-full h-screen">
+      <div className="w-full overflow-hidden lg:h-screen">
         <InfoForm lesson={data.lesson} toggleShowSteps={toggleShowSteps} />
         <StepForm
           currentStepId={stepId}

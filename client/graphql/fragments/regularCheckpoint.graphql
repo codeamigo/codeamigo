@@ -2,4 +2,5 @@ fragment RegularCheckpoint on Checkpoint {
   id
   test
   description
+  createdAt
 }

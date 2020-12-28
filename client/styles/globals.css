@@ -11,3 +11,7 @@
     @apply list-disc;
   }
 }
+
+.lg\:h-full-minus{
+  height: calc(100% - 44px) !important;
+}

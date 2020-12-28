@@ -1,0 +1,11 @@
+mutation UpdateCheckpoint(
+  $id: Float!
+  $description: String!
+) {
+  updateCheckpoint(
+    id: $id
+    options: { description: $description }
+  ) {
+    id
+  }
+}
