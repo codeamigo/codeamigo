@@ -69,7 +69,15 @@ const Steps: React.FC<Props> = ({
                 <Icon
                   className="text-red-600 hidden"
                   name="minus-circled"
-                  onClick={() => deleteStep(step.id, i)}
+                  onClick={() => {
+                    const yes = window.confirm(
+                      'Are you sure you want to delete this step?'
+                    );
+
+                    if (yes) {
+                      deleteStep(step.id, i);
+                    }
+                  }}
                 />
               </li>
             );

@@ -96,12 +96,18 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
                 <Icon
                   className="text-red-600 text-sm hidden cursor-pointer"
                   name="minus-circled"
-                  onClick={() =>
-                    deleteDependency({
-                      refetchQueries: ['Step'],
-                      variables: { id: dep.id },
-                    })
-                  }
+                  onClick={() => {
+                    const yes = window.confirm(
+                      'Are you sure you want to delete this dependency?'
+                    );
+
+                    if (yes) {
+                      deleteDependency({
+                        refetchQueries: ['Step'],
+                        variables: { id: dep.id },
+                      });
+                    }
+                  }}
                 />
               </div>
             ))}

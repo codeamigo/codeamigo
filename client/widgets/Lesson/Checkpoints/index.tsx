@@ -122,7 +122,12 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
                         className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
                         onClick={(e) => {
                           e.stopPropagation();
-                          deleteCheckpoint(checkpoint.id);
+                          const yes = window.confirm(
+                            'Are you sure you want to delete this checkpoint?'
+                          );
+                          if (yes) {
+                            deleteCheckpoint(checkpoint.id);
+                          }
                         }}
                         type="button"
                       >
