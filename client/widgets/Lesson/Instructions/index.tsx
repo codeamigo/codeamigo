@@ -45,7 +45,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
             Preview
           </span>
         </h3>
-        <div className="h-80 lg:h-full lg:flex lg:flex-col rounded-md border border-gray-200">
+        <div className="h-80 lg:h-3/5 lg:flex lg:flex-col rounded-md border border-gray-200">
           {view === 'editor' ? (
             <ControlledEditor
               onChange={(_, value) => {
@@ -69,7 +69,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
             />
           )}
         </div>
-        <div>
+        <div className="flex flex-col p-2 overflow-scroll">
           <Checkpoints step={step} />
         </div>
       </div>
