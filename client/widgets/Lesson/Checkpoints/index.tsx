@@ -80,7 +80,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
       {sortedCheckpoints.length
         ? sortedCheckpoints.map((checkpoint, i) => {
             return (
-              <div className="mb-6" key={checkpoint.id}>
+              <div key={checkpoint.id}>
                 <h3
                   className="w-full flex justify-between items-center bg-gray-100 p-2 text-xs cursor-pointer"
                   onClick={() => {
@@ -137,7 +137,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
                   </div>
                 </h3>
                 {isCurrentCheckpoint(checkpoint.id) && (
-                  <div className="h-24">
+                  <div className="h-24 min-h-24 overflow-scroll">
                     {view === 'editor' ? (
                       <ControlledEditor
                         onChange={(_, value) => {
