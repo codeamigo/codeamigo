@@ -48,7 +48,7 @@ export class LessonResolver {
     const owner = await User.findOne({ id: req.session.userId });
     const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
     const dependency = await Dependency.create({
-      package: "jest-lite",
+      package: "codeamigo-jest-lite",
       version: "1.0.0-alpha.4",
     }).save();
     const step = await Step.create({

@@ -256,7 +256,7 @@ const Editor: React.FC<Props> = ({ step }) => {
         </button>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
-        <div className="w-3/12 border-r border-gray-200">
+        <div className="w-5/12 border-r border-gray-200">
           <EditorFiles
             createFile={createFile}
             currentPath={currentPath}
@@ -267,7 +267,7 @@ const Editor: React.FC<Props> = ({ step }) => {
             stepId={step.id}
           />
         </div>
-        <div className="w-9/12 h-80 lg:h-full">
+        <div className="w-7/12 h-80 lg:h-full">
           <ControlledEditor
             editorDidMount={editorDidMount}
             language={'typescript'}

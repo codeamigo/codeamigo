@@ -86,7 +86,7 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
             .map((dep) => (
               <div
                 className={`flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
-                  dep.package !== 'jest-lite' ? styles.FILE : ''
+                  dep.package !== 'codeamigo-jest-lite' ? styles.FILE : ''
                 }`}
                 key={dep.id}
               >
