@@ -70,7 +70,15 @@ const FilesList: React.FC<Props> = ({
                   <Icon
                     className="text-red-600 text-sm hidden"
                     name="minus-circled"
-                    onClick={() => onDelete(path)}
+                    onClick={() => {
+                      const yes = window.confirm(
+                        'Are you sure you want to delete this file?'
+                      );
+
+                      if (yes) {
+                        onDelete(path);
+                      }
+                    }}
                   />
                 )}
               </div>
