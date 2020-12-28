@@ -14,7 +14,10 @@ import { CodeModule } from "../entities/CodeModule";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
 
-const DEFAULT_TEST = `import { describe, it, run, expect } from 'jest-lite'
+const DEFAULT_TEST = `import { core, enzyme } from 'codeamigo-jest-lite'
+
+const { describe, it, run, expect } = core
+const { mount } = enzyme
 
 describe('My Test', () => {
   it('runs', () => {

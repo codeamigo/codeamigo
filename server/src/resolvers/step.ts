@@ -75,8 +75,8 @@ export class StepResolver {
 
     const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
     const dependency = await Dependency.create({
-      package: "jest-lite",
-      version: "1.0.0-alpha.4",
+      package: "codeamigo-jest-lite",
+      version: "1.0.0-alpha.7",
     }).save();
 
     const step = await Step.create({
