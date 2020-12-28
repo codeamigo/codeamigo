@@ -83,7 +83,13 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
               <div className="mb-6" key={checkpoint.id}>
                 <h3
                   className="w-full flex justify-between items-center bg-gray-100 p-2 text-xs cursor-pointer"
-                  onClick={() => setActiveCheckpoint(checkpoint)}
+                  onClick={() => {
+                    if (isCurrentCheckpoint(checkpoint.id)) {
+                      setActiveCheckpoint(undefined);
+                    } else {
+                      setActiveCheckpoint(checkpoint);
+                    }
+                  }}
                 >
                   <span className="flex items-center">
                     <Icon
