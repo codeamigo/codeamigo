@@ -49,7 +49,7 @@ export class LessonResolver {
     const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
     const dependency = await Dependency.create({
       package: "codeamigo-jest-lite",
-      version: "1.0.0-alpha.4",
+      version: "1.0.0-alpha.7",
     }).save();
     const step = await Step.create({
       codeModules: [code],
