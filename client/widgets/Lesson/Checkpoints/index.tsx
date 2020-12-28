@@ -3,19 +3,44 @@ import {
   RegularStepFragment,
   useCreateCheckpointMutation,
   useDeleteCheckpointMutation,
+  useUpdateCheckpointMutation,
 } from '@generated/graphql';
-import React, { useEffect, useState } from 'react';
+import { ControlledEditor } from '@monaco-editor/react';
+import debounce from 'debounce';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+
+import Icon from '../../../components/Icon';
 
 const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
+  const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [checkpoints, setCheckpoints] = useState(
     [] as Array<RegularCheckpointFragment>
   );
+  const [view, toggleView] = useState<'editor' | 'preview'>('editor');
+
+  if (!step.checkpoints) return null;
+
+  const sortedCheckpoints = step.checkpoints
+    .slice()
+    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
+  const [activeCheckpoint, setActiveCheckpoint] = useState<
+    RegularCheckpointFragment | undefined
+  >(sortedCheckpoints[0]);
+  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   useEffect(() => {
     setCheckpoints(step?.checkpoints || []);
   }, [step?.checkpoints]);
+
+  useEffect(() => {
+    console.log(activeCheckpoint?.description);
+    setMarkdown(activeCheckpoint?.description);
+  }, [activeCheckpoint?.id]);
 
   const createCheckpoint = async () => {
     const len = step?.checkpoints?.length || 0;
@@ -26,29 +51,88 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
     });
   };
 
+  const updateCheckpoint = useCallback(
+    debounce((value: string | undefined) => {
+      if (!activeCheckpoint) return;
+
+      updateCheckpointM({
+        refetchQueries: ['Step'],
+        variables: { description: value || '', id: activeCheckpoint.id },
+      });
+    }, 1000),
+    [activeCheckpoint]
+  );
+
   const deleteCheckpoint = async (id: number) => {
+    const len = step?.checkpoints?.length || 0;
+
+    if (activeCheckpoint?.id === id) {
+      setActiveCheckpoint(checkpoints[len - 1 - 1]);
+    }
+
     await deleteCheckpointM({ refetchQueries: ['Step'], variables: { id } });
   };
 
   return (
     <>
-      {checkpoints.length
-        ? checkpoints.map((checkpoint, i) => {
+      {sortedCheckpoints.length
+        ? sortedCheckpoints.map((checkpoint, i) => {
             return (
               <div className="mb-6" key={checkpoint.id}>
-                <h3>
-                  <span>Checkpoint {i + 1} </span>
+                <h3
+                  className="w-full flex justify-between items-center bg-gray-100 p-2 text-xs cursor-pointer"
+                  onClick={() => setActiveCheckpoint(checkpoint)}
+                >
+                  <span className="flex items-center">
+                    <Icon
+                      className="text-gray-600 mr-2"
+                      name={
+                        activeCheckpoint?.id === checkpoint.id
+                          ? 'down-dir'
+                          : 'right-dir'
+                      }
+                    />
+                    <span>Checkpoint {i + 1} </span>
+                  </span>
                   {i === checkpoints.length - 1 ? (
                     <button
-                      className="inline-flex justify-center py-1 px-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
-                      onClick={() => deleteCheckpoint(checkpoint.id)}
+                      className="inline-flex justify-center py-0.5 px-1 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteCheckpoint(checkpoint.id);
+                      }}
                       type="button"
                     >
                       Delete
                     </button>
                   ) : null}
                 </h3>
-                <div>Markdown editor</div>
+                {activeCheckpoint?.id === checkpoint.id && (
+                  <div className="h-24">
+                    {view === 'editor' ? (
+                      <ControlledEditor
+                        onChange={(_, value) => {
+                          setMarkdown(value || '');
+                          updateCheckpoint(value);
+                        }}
+                        options={{
+                          automaticLayout: true,
+                          minimap: { enabled: false },
+                          quickSuggestions: false,
+                          scrollBeyondLastLine: false,
+                          wordWrap: 'on',
+                        }}
+                        value={markdown}
+                      />
+                    ) : (
+                      <ReactMarkdown
+                        children={markdown || ''}
+                        className="markdown-body px-6 py-4"
+                        plugins={[gfm]}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             );
           })

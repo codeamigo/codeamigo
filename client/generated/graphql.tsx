@@ -1,13 +1,9 @@
-import * as Apollo from '@apollo/client';
 import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> &
-  { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -19,37 +15,62 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  steps: Array<Step>;
-  step?: Maybe<Step>;
-  lessons: Array<Lesson>;
-  lesson?: Maybe<Lesson>;
-  me?: Maybe<User>;
   checkpoints: Array<Checkpoint>;
   checkpoint?: Maybe<Checkpoint>;
   codeModules: Array<CodeModule>;
   codeModule?: Maybe<CodeModule>;
   dependencies: Array<Dependency>;
   dependency?: Maybe<Dependency>;
+  steps: Array<Step>;
+  step?: Maybe<Step>;
+  lessons: Array<Lesson>;
+  lesson?: Maybe<Lesson>;
+  me?: Maybe<User>;
 };
 
-export type QueryStepArgs = {
-  id: Scalars['Int'];
-};
-
-export type QueryLessonArgs = {
-  id: Scalars['Int'];
-};
 
 export type QueryCheckpointArgs = {
   id: Scalars['Int'];
 };
 
+
 export type QueryCodeModuleArgs = {
   id: Scalars['Int'];
 };
 
+
 export type QueryDependencyArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryStepArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryLessonArgs = {
+  id: Scalars['Int'];
+};
+
+export type Checkpoint = {
+  __typename?: 'Checkpoint';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  description: Scalars['String'];
+  test: Scalars['String'];
+  moduleId: Scalars['Float'];
+};
+
+export type CodeModule = {
+  __typename?: 'CodeModule';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  step: Step;
 };
 
 export type Step = {
@@ -86,26 +107,6 @@ export type User = {
   lessons: Array<Lesson>;
 };
 
-export type CodeModule = {
-  __typename?: 'CodeModule';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
-  step: Step;
-};
-
-export type Checkpoint = {
-  __typename?: 'Checkpoint';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  description: Scalars['String'];
-  test: Scalars['String'];
-  moduleId: Scalars['Float'];
-};
-
 export type Dependency = {
   __typename?: 'Dependency';
   id: Scalars['Float'];
@@ -118,6 +119,15 @@ export type Dependency = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createCheckpoint?: Maybe<Checkpoint>;
+  updateCheckpoint?: Maybe<Checkpoint>;
+  deleteCheckpoint: Scalars['Boolean'];
+  createCodeModule?: Maybe<CodeModule>;
+  updateCodeModule?: Maybe<CodeModule>;
+  deleteCodeModule: Scalars['Boolean'];
+  createDependency?: Maybe<Dependency>;
+  updateDependency?: Maybe<Dependency>;
+  deleteDependency: Scalars['Boolean'];
   createStep?: Maybe<Step>;
   updateStep?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
@@ -129,103 +139,133 @@ export type Mutation = {
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
-  createCheckpoint?: Maybe<Checkpoint>;
-  updateCheckpoint?: Maybe<Checkpoint>;
-  deleteCheckpoint: Scalars['Boolean'];
-  createCodeModule?: Maybe<CodeModule>;
-  updateCodeModule?: Maybe<CodeModule>;
-  deleteCodeModule: Scalars['Boolean'];
-  createDependency?: Maybe<Dependency>;
-  updateDependency?: Maybe<Dependency>;
-  deleteDependency: Scalars['Boolean'];
 };
 
-export type MutationCreateStepArgs = {
-  options: CreateStepInput;
-};
-
-export type MutationUpdateStepArgs = {
-  options: StepInput;
-};
-
-export type MutationDeleteStepArgs = {
-  id: Scalars['Float'];
-};
-
-export type MutationCreateLessonArgs = {
-  options: LessonInput;
-};
-
-export type MutationUpdateLessonTitleArgs = {
-  title: Scalars['String'];
-  id: Scalars['Float'];
-};
-
-export type MutationUpdateLessonDescriptionArgs = {
-  description: Scalars['String'];
-  id: Scalars['Float'];
-};
-
-export type MutationDeleteLessonArgs = {
-  id: Scalars['Float'];
-};
-
-export type MutationRegisterArgs = {
-  options: RegisterInput;
-};
-
-export type MutationLoginArgs = {
-  options: LoginInput;
-};
-
-export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
-};
-
-export type MutationChangePasswordArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
-};
 
 export type MutationCreateCheckpointArgs = {
   options: CreateCheckpointInput;
 };
+
 
 export type MutationUpdateCheckpointArgs = {
   options: UpdateCheckpointInput;
   id: Scalars['Float'];
 };
 
+
 export type MutationDeleteCheckpointArgs = {
   id: Scalars['Float'];
 };
+
 
 export type MutationCreateCodeModuleArgs = {
   options: CodeModuleInput;
   stepId: Scalars['Float'];
 };
 
+
 export type MutationUpdateCodeModuleArgs = {
   options: CodeModuleInput;
   id: Scalars['Float'];
 };
 
+
 export type MutationDeleteCodeModuleArgs = {
   id: Scalars['Float'];
 };
+
 
 export type MutationCreateDependencyArgs = {
   options: DependencyInput;
   stepId: Scalars['Float'];
 };
 
+
 export type MutationUpdateDependencyArgs = {
   options: DependencyInput;
   id: Scalars['Float'];
 };
 
+
 export type MutationDeleteDependencyArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationCreateStepArgs = {
+  options: CreateStepInput;
+};
+
+
+export type MutationUpdateStepArgs = {
+  options: StepInput;
+};
+
+
+export type MutationDeleteStepArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationCreateLessonArgs = {
+  options: LessonInput;
+};
+
+
+export type MutationUpdateLessonTitleArgs = {
+  title: Scalars['String'];
+  id: Scalars['Float'];
+};
+
+
+export type MutationUpdateLessonDescriptionArgs = {
+  description: Scalars['String'];
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteLessonArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationRegisterArgs = {
+  options: RegisterInput;
+};
+
+
+export type MutationLoginArgs = {
+  options: LoginInput;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type CreateCheckpointInput = {
+  checkpointId: Scalars['Float'];
+  stepId: Scalars['Float'];
+};
+
+export type UpdateCheckpointInput = {
+  description: Scalars['String'];
+};
+
+export type CodeModuleInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type DependencyInput = {
+  package: Scalars['String'];
+  version: Scalars['String'];
 };
 
 export type CreateStepInput = {
@@ -265,82 +305,74 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
-export type CreateCheckpointInput = {
-  checkpointId: Scalars['Float'];
-  stepId: Scalars['Float'];
-};
+export type RegularCheckpointFragment = (
+  { __typename?: 'Checkpoint' }
+  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt'>
+);
 
-export type UpdateCheckpointInput = {
-  description: Scalars['String'];
-};
+export type RegularCodeModuleFragment = (
+  { __typename?: 'CodeModule' }
+  & Pick<CodeModule, 'id' | 'name' | 'value'>
+);
 
-export type CodeModuleInput = {
-  name: Scalars['String'];
-  value: Scalars['String'];
-};
+export type RegularDependencyFragment = (
+  { __typename?: 'Dependency' }
+  & Pick<Dependency, 'id' | 'package' | 'version'>
+);
 
-export type DependencyInput = {
-  package: Scalars['String'];
-  version: Scalars['String'];
-};
+export type RegularErrorFragment = (
+  { __typename?: 'FieldError' }
+  & Pick<FieldError, 'field' | 'message'>
+);
 
-export type RegularCheckpointFragment = { __typename?: 'Checkpoint' } & Pick<
-  Checkpoint,
-  'id' | 'test' | 'description'
->;
-
-export type RegularCodeModuleFragment = { __typename?: 'CodeModule' } & Pick<
-  CodeModule,
-  'id' | 'name' | 'value'
->;
-
-export type RegularDependencyFragment = { __typename?: 'Dependency' } & Pick<
-  Dependency,
-  'id' | 'package' | 'version'
->;
-
-export type RegularErrorFragment = { __typename?: 'FieldError' } & Pick<
-  FieldError,
-  'field' | 'message'
->;
-
-export type RegularStepFragment = { __typename?: 'Step' } & Pick<
-  Step,
-  'id' | 'createdAt' | 'instructions'
-> & {
-    codeModules?: Maybe<
-      Array<{ __typename?: 'CodeModule' } & RegularCodeModuleFragment>
-    >;
-    checkpoints?: Maybe<
-      Array<{ __typename?: 'Checkpoint' } & RegularCheckpointFragment>
-    >;
-    dependencies?: Maybe<
-      Array<{ __typename?: 'Dependency' } & RegularDependencyFragment>
-    >;
-  };
+export type RegularStepFragment = (
+  { __typename?: 'Step' }
+  & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+  & { codeModules?: Maybe<Array<(
+    { __typename?: 'CodeModule' }
+    & RegularCodeModuleFragment
+  )>>, checkpoints?: Maybe<Array<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )>>, dependencies?: Maybe<Array<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
+  )>> }
+);
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
   newPassword: Scalars['String'];
 }>;
 
-export type ChangePasswordMutation = { __typename?: 'Mutation' } & {
-  changePassword: { __typename?: 'UserResponse' } & {
-    errors?: Maybe<Array<{ __typename?: 'FieldError' } & RegularErrorFragment>>;
-    user?: Maybe<{ __typename?: 'User' } & Pick<User, 'id' | 'username'>>;
-  };
-};
+
+export type ChangePasswordMutation = (
+  { __typename?: 'Mutation' }
+  & { changePassword: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & RegularErrorFragment
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    )> }
+  ) }
+);
 
 export type CreateCheckpointMutationVariables = Exact<{
   checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
 }>;
 
-export type CreateCheckpointMutation = { __typename?: 'Mutation' } & {
-  createCheckpoint?: Maybe<
-    { __typename?: 'Checkpoint' } & RegularCheckpointFragment
-  >;
-};
+
+export type CreateCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { createCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )> }
+);
 
 export type CreateCodeModuleMutationVariables = Exact<{
   stepId: Scalars['Float'];
@@ -348,11 +380,14 @@ export type CreateCodeModuleMutationVariables = Exact<{
   value: Scalars['String'];
 }>;
 
-export type CreateCodeModuleMutation = { __typename?: 'Mutation' } & {
-  createCodeModule?: Maybe<
-    { __typename?: 'CodeModule' } & RegularCodeModuleFragment
-  >;
-};
+
+export type CreateCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & { createCodeModule?: Maybe<(
+    { __typename?: 'CodeModule' }
+    & RegularCodeModuleFragment
+  )> }
+);
 
 export type CreateDependencyMutationVariables = Exact<{
   stepId: Scalars['Float'];
@@ -360,92 +395,114 @@ export type CreateDependencyMutationVariables = Exact<{
   version: Scalars['String'];
 }>;
 
-export type CreateDependencyMutation = { __typename?: 'Mutation' } & {
-  createDependency?: Maybe<
-    { __typename?: 'Dependency' } & RegularDependencyFragment
-  >;
-};
+
+export type CreateDependencyMutation = (
+  { __typename?: 'Mutation' }
+  & { createDependency?: Maybe<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
+  )> }
+);
 
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
 }>;
 
-export type CreateLessonMutation = { __typename?: 'Mutation' } & {
-  createLesson: { __typename?: 'Lesson' } & Pick<Lesson, 'id' | 'title'> & {
-      owner: { __typename?: 'User' } & Pick<User, 'id' | 'username'>;
-    };
-};
+
+export type CreateLessonMutation = (
+  { __typename?: 'Mutation' }
+  & { createLesson: (
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id' | 'title'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    ) }
+  ) }
+);
 
 export type CreateStepMutationVariables = Exact<{
   lessonId: Scalars['Float'];
 }>;
 
-export type CreateStepMutation = { __typename?: 'Mutation' } & {
-  createStep?: Maybe<{ __typename?: 'Step' } & RegularStepFragment>;
-};
+
+export type CreateStepMutation = (
+  { __typename?: 'Mutation' }
+  & { createStep?: Maybe<(
+    { __typename?: 'Step' }
+    & RegularStepFragment
+  )> }
+);
 
 export type DeleteCheckpointMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
-export type DeleteCheckpointMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteCheckpoint'
->;
+
+export type DeleteCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCheckpoint'>
+);
 
 export type DeleteCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
-export type DeleteCodeModuleMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteCodeModule'
->;
+
+export type DeleteCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteCodeModule'>
+);
 
 export type DeleteDependencyMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
-export type DeleteDependencyMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteDependency'
->;
+
+export type DeleteDependencyMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteDependency'>
+);
 
 export type DeleteStepMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
 
-export type DeleteStepMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'deleteStep'
->;
+
+export type DeleteStepMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteStep'>
+);
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
 
-export type ForgotPasswordMutation = { __typename?: 'Mutation' } & Pick<
-  Mutation,
-  'forgotPassword'
->;
+
+export type ForgotPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'forgotPassword'>
+);
 
 export type LoginMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
 }>;
 
-export type LoginMutation = { __typename?: 'Mutation' } & {
-  login: { __typename?: 'UserResponse' } & {
-    errors?: Maybe<
-      Array<
-        { __typename?: 'FieldError' } & Pick<FieldError, 'message' | 'field'>
-      >
-    >;
-    user?: Maybe<
-      { __typename?: 'User' } & Pick<User, 'id' | 'username' | 'createdAt'>
-    >;
-  };
-};
+
+export type LoginMutation = (
+  { __typename?: 'Mutation' }
+  & { login: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message' | 'field'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'createdAt'>
+    )> }
+  ) }
+);
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
@@ -453,18 +510,34 @@ export type RegisterMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-export type RegisterMutation = { __typename?: 'Mutation' } & {
-  register: { __typename?: 'UserResponse' } & {
-    errors?: Maybe<
-      Array<
-        { __typename?: 'FieldError' } & Pick<FieldError, 'field' | 'message'>
-      >
-    >;
-    user?: Maybe<
-      { __typename?: 'User' } & Pick<User, 'id' | 'email' | 'username'>
-    >;
-  };
-};
+
+export type RegisterMutation = (
+  { __typename?: 'Mutation' }
+  & { register: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'email' | 'username'>
+    )> }
+  ) }
+);
+
+export type UpdateCheckpointMutationVariables = Exact<{
+  id: Scalars['Float'];
+  description: Scalars['String'];
+}>;
+
+
+export type UpdateCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & Pick<Checkpoint, 'id'>
+  )> }
+);
 
 export type UpdateCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
@@ -472,155 +545,191 @@ export type UpdateCodeModuleMutationVariables = Exact<{
   value: Scalars['String'];
 }>;
 
-export type UpdateCodeModuleMutation = { __typename?: 'Mutation' } & {
-  updateCodeModule?: Maybe<
-    { __typename?: 'CodeModule' } & Pick<CodeModule, 'id'>
-  >;
-};
+
+export type UpdateCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCodeModule?: Maybe<(
+    { __typename?: 'CodeModule' }
+    & Pick<CodeModule, 'id'>
+  )> }
+);
 
 export type UpdateLessonTitleMutationVariables = Exact<{
   id: Scalars['Float'];
   title: Scalars['String'];
 }>;
 
-export type UpdateLessonTitleMutation = { __typename?: 'Mutation' } & {
-  updateLessonTitle?: Maybe<{ __typename?: 'Lesson' } & Pick<Lesson, 'id'>>;
-};
+
+export type UpdateLessonTitleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonTitle?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id'>
+  )> }
+);
 
 export type UpdateLessonDescriptionMutationVariables = Exact<{
   id: Scalars['Float'];
   description: Scalars['String'];
 }>;
 
-export type UpdateLessonDescriptionMutation = { __typename?: 'Mutation' } & {
-  updateLessonDescription?: Maybe<
-    { __typename?: 'Lesson' } & Pick<Lesson, 'id'>
-  >;
-};
+
+export type UpdateLessonDescriptionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonDescription?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id'>
+  )> }
+);
 
 export type UpdateStepMutationVariables = Exact<{
   id: Scalars['Float'];
   instructions: Scalars['String'];
 }>;
 
-export type UpdateStepMutation = { __typename?: 'Mutation' } & {
-  updateStep?: Maybe<
-    { __typename?: 'Step' } & Pick<Step, 'id' | 'createdAt' | 'instructions'>
-  >;
-};
+
+export type UpdateStepMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStep?: Maybe<(
+    { __typename?: 'Step' }
+    & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+  )> }
+);
 
 export type LessonQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-export type LessonQuery = { __typename?: 'Query' } & {
-  lesson?: Maybe<
-    { __typename?: 'Lesson' } & Pick<Lesson, 'id' | 'title' | 'description'> & {
-        owner: { __typename?: 'User' } & Pick<User, 'username'>;
-        steps?: Maybe<Array<{ __typename?: 'Step' } & RegularStepFragment>>;
-      }
-  >;
-};
 
-export type LessonsQueryVariables = Exact<{ [key: string]: never }>;
+export type LessonQuery = (
+  { __typename?: 'Query' }
+  & { lesson?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id' | 'title' | 'description'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ), steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & RegularStepFragment
+    )>> }
+  )> }
+);
 
-export type LessonsQuery = { __typename?: 'Query' } & {
-  lessons: Array<
-    { __typename?: 'Lesson' } & Pick<
-      Lesson,
-      'createdAt' | 'id' | 'title' | 'updatedAt'
-    > & { owner: { __typename?: 'User' } & Pick<User, 'username'> }
-  >;
-};
+export type LessonsQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type MeQuery = { __typename?: 'Query' } & {
-  me?: Maybe<
-    { __typename?: 'User' } & Pick<User, 'id' | 'username'> & {
-        lessons: Array<{ __typename?: 'Lesson' } & Pick<Lesson, 'id'>>;
-      }
-  >;
-};
+export type LessonsQuery = (
+  { __typename?: 'Query' }
+  & { lessons: Array<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'createdAt' | 'id' | 'title' | 'updatedAt'>
+    & { owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'username'>
+    ) }
+  )> }
+);
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = (
+  { __typename?: 'Query' }
+  & { me?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+    & { lessons: Array<(
+      { __typename?: 'Lesson' }
+      & Pick<Lesson, 'id'>
+    )> }
+  )> }
+);
 
 export type StepQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-export type StepQuery = { __typename?: 'Query' } & {
-  step?: Maybe<{ __typename?: 'Step' } & RegularStepFragment>;
-};
 
-export type StepsQueryVariables = Exact<{ [key: string]: never }>;
+export type StepQuery = (
+  { __typename?: 'Query' }
+  & { step?: Maybe<(
+    { __typename?: 'Step' }
+    & RegularStepFragment
+  )> }
+);
 
-export type StepsQuery = { __typename?: 'Query' } & {
-  steps: Array<{ __typename?: 'Step' } & RegularStepFragment>;
-};
+export type StepsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StepsQuery = (
+  { __typename?: 'Query' }
+  & { steps: Array<(
+    { __typename?: 'Step' }
+    & RegularStepFragment
+  )> }
+);
 
 export const RegularErrorFragmentDoc = gql`
-  fragment RegularError on FieldError {
-    field
-    message
-  }
-`;
+    fragment RegularError on FieldError {
+  field
+  message
+}
+    `;
 export const RegularCodeModuleFragmentDoc = gql`
-  fragment RegularCodeModule on CodeModule {
-    id
-    name
-    value
-  }
-`;
+    fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
+}
+    `;
 export const RegularCheckpointFragmentDoc = gql`
-  fragment RegularCheckpoint on Checkpoint {
-    id
-    test
-    description
-  }
-`;
+    fragment RegularCheckpoint on Checkpoint {
+  id
+  test
+  description
+  createdAt
+}
+    `;
 export const RegularDependencyFragmentDoc = gql`
-  fragment RegularDependency on Dependency {
-    id
-    package
-    version
-  }
-`;
+    fragment RegularDependency on Dependency {
+  id
+  package
+  version
+}
+    `;
 export const RegularStepFragmentDoc = gql`
-  fragment RegularStep on Step {
-    id
-    createdAt
-    instructions
-    codeModules {
-      ...RegularCodeModule
-    }
-    checkpoints {
-      ...RegularCheckpoint
-    }
-    dependencies {
-      ...RegularDependency
-    }
+    fragment RegularStep on Step {
+  id
+  createdAt
+  instructions
+  codeModules {
+    ...RegularCodeModule
   }
-  ${RegularCodeModuleFragmentDoc}
-  ${RegularCheckpointFragmentDoc}
-  ${RegularDependencyFragmentDoc}
-`;
+  checkpoints {
+    ...RegularCheckpoint
+  }
+  dependencies {
+    ...RegularDependency
+  }
+}
+    ${RegularCodeModuleFragmentDoc}
+${RegularCheckpointFragmentDoc}
+${RegularDependencyFragmentDoc}`;
 export const ChangePasswordDocument = gql`
-  mutation ChangePassword($token: String!, $newPassword: String!) {
-    changePassword(token: $token, newPassword: $newPassword) {
-      errors {
-        ...RegularError
-      }
-      user {
-        id
-        username
-      }
+    mutation ChangePassword($token: String!, $newPassword: String!) {
+  changePassword(token: $token, newPassword: $newPassword) {
+    errors {
+      ...RegularError
+    }
+    user {
+      id
+      username
     }
   }
-  ${RegularErrorFragmentDoc}
-`;
-export type ChangePasswordMutationFn = Apollo.MutationFunction<
-  ChangePasswordMutation,
-  ChangePasswordMutationVariables
->;
+}
+    ${RegularErrorFragmentDoc}`;
+export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
 
 /**
  * __useChangePasswordMutation__
@@ -640,39 +749,20 @@ export type ChangePasswordMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useChangePasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ChangePasswordMutation,
-    ChangePasswordMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    ChangePasswordMutation,
-    ChangePasswordMutationVariables
-  >(ChangePasswordDocument, baseOptions);
-}
-export type ChangePasswordMutationHookResult = ReturnType<
-  typeof useChangePasswordMutation
->;
+export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
+        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
+      }
+export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
 export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
-export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<
-  ChangePasswordMutation,
-  ChangePasswordMutationVariables
->;
+export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
 export const CreateCheckpointDocument = gql`
-  mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
-    createCheckpoint(
-      options: { checkpointId: $checkpointId, stepId: $stepId }
-    ) {
-      ...RegularCheckpoint
-    }
+    mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
+  createCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
+    ...RegularCheckpoint
   }
-  ${RegularCheckpointFragmentDoc}
-`;
-export type CreateCheckpointMutationFn = Apollo.MutationFunction<
-  CreateCheckpointMutation,
-  CreateCheckpointMutationVariables
->;
+}
+    ${RegularCheckpointFragmentDoc}`;
+export type CreateCheckpointMutationFn = Apollo.MutationFunction<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
 
 /**
  * __useCreateCheckpointMutation__
@@ -692,37 +782,20 @@ export type CreateCheckpointMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateCheckpointMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCheckpointMutation,
-    CreateCheckpointMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    CreateCheckpointMutation,
-    CreateCheckpointMutationVariables
-  >(CreateCheckpointDocument, baseOptions);
-}
-export type CreateCheckpointMutationHookResult = ReturnType<
-  typeof useCreateCheckpointMutation
->;
+export function useCreateCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>) {
+        return Apollo.useMutation<CreateCheckpointMutation, CreateCheckpointMutationVariables>(CreateCheckpointDocument, baseOptions);
+      }
+export type CreateCheckpointMutationHookResult = ReturnType<typeof useCreateCheckpointMutation>;
 export type CreateCheckpointMutationResult = Apollo.MutationResult<CreateCheckpointMutation>;
-export type CreateCheckpointMutationOptions = Apollo.BaseMutationOptions<
-  CreateCheckpointMutation,
-  CreateCheckpointMutationVariables
->;
+export type CreateCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
 export const CreateCodeModuleDocument = gql`
-  mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
-    createCodeModule(stepId: $stepId, options: { name: $name, value: $value }) {
-      ...RegularCodeModule
-    }
+    mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
+  createCodeModule(stepId: $stepId, options: {name: $name, value: $value}) {
+    ...RegularCodeModule
   }
-  ${RegularCodeModuleFragmentDoc}
-`;
-export type CreateCodeModuleMutationFn = Apollo.MutationFunction<
-  CreateCodeModuleMutation,
-  CreateCodeModuleMutationVariables
->;
+}
+    ${RegularCodeModuleFragmentDoc}`;
+export type CreateCodeModuleMutationFn = Apollo.MutationFunction<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 
 /**
  * __useCreateCodeModuleMutation__
@@ -743,44 +816,23 @@ export type CreateCodeModuleMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateCodeModuleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCodeModuleMutation,
-    CreateCodeModuleMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    CreateCodeModuleMutation,
-    CreateCodeModuleMutationVariables
-  >(CreateCodeModuleDocument, baseOptions);
-}
-export type CreateCodeModuleMutationHookResult = ReturnType<
-  typeof useCreateCodeModuleMutation
->;
+export function useCreateCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>) {
+        return Apollo.useMutation<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>(CreateCodeModuleDocument, baseOptions);
+      }
+export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCodeModuleMutation>;
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
-export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<
-  CreateCodeModuleMutation,
-  CreateCodeModuleMutationVariables
->;
+export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 export const CreateDependencyDocument = gql`
-  mutation CreateDependency(
-    $stepId: Float!
-    $package: String!
-    $version: String!
+    mutation CreateDependency($stepId: Float!, $package: String!, $version: String!) {
+  createDependency(
+    stepId: $stepId
+    options: {package: $package, version: $version}
   ) {
-    createDependency(
-      stepId: $stepId
-      options: { package: $package, version: $version }
-    ) {
-      ...RegularDependency
-    }
+    ...RegularDependency
   }
-  ${RegularDependencyFragmentDoc}
-`;
-export type CreateDependencyMutationFn = Apollo.MutationFunction<
-  CreateDependencyMutation,
-  CreateDependencyMutationVariables
->;
+}
+    ${RegularDependencyFragmentDoc}`;
+export type CreateDependencyMutationFn = Apollo.MutationFunction<CreateDependencyMutation, CreateDependencyMutationVariables>;
 
 /**
  * __useCreateDependencyMutation__
@@ -801,41 +853,25 @@ export type CreateDependencyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateDependencyMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateDependencyMutation,
-    CreateDependencyMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    CreateDependencyMutation,
-    CreateDependencyMutationVariables
-  >(CreateDependencyDocument, baseOptions);
-}
-export type CreateDependencyMutationHookResult = ReturnType<
-  typeof useCreateDependencyMutation
->;
-export type CreateDependencyMutationResult = Apollo.MutationResult<CreateDependencyMutation>;
-export type CreateDependencyMutationOptions = Apollo.BaseMutationOptions<
-  CreateDependencyMutation,
-  CreateDependencyMutationVariables
->;
-export const CreateLessonDocument = gql`
-  mutation CreateLesson($title: String!) {
-    createLesson(options: { title: $title }) {
-      id
-      title
-      owner {
-        id
-        username
+export function useCreateDependencyMutation(baseOptions?: Apollo.MutationHookOptions<CreateDependencyMutation, CreateDependencyMutationVariables>) {
+        return Apollo.useMutation<CreateDependencyMutation, CreateDependencyMutationVariables>(CreateDependencyDocument, baseOptions);
       }
+export type CreateDependencyMutationHookResult = ReturnType<typeof useCreateDependencyMutation>;
+export type CreateDependencyMutationResult = Apollo.MutationResult<CreateDependencyMutation>;
+export type CreateDependencyMutationOptions = Apollo.BaseMutationOptions<CreateDependencyMutation, CreateDependencyMutationVariables>;
+export const CreateLessonDocument = gql`
+    mutation CreateLesson($title: String!) {
+  createLesson(options: {title: $title}) {
+    id
+    title
+    owner {
+      id
+      username
     }
   }
-`;
-export type CreateLessonMutationFn = Apollo.MutationFunction<
-  CreateLessonMutation,
-  CreateLessonMutationVariables
->;
+}
+    `;
+export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutation, CreateLessonMutationVariables>;
 
 /**
  * __useCreateLessonMutation__
@@ -854,37 +890,20 @@ export type CreateLessonMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateLessonMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateLessonMutation,
-    CreateLessonMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    CreateLessonMutation,
-    CreateLessonMutationVariables
-  >(CreateLessonDocument, baseOptions);
-}
-export type CreateLessonMutationHookResult = ReturnType<
-  typeof useCreateLessonMutation
->;
+export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions<CreateLessonMutation, CreateLessonMutationVariables>) {
+        return Apollo.useMutation<CreateLessonMutation, CreateLessonMutationVariables>(CreateLessonDocument, baseOptions);
+      }
+export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
-export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<
-  CreateLessonMutation,
-  CreateLessonMutationVariables
->;
+export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
 export const CreateStepDocument = gql`
-  mutation CreateStep($lessonId: Float!) {
-    createStep(options: { lessonId: $lessonId }) {
-      ...RegularStep
-    }
+    mutation CreateStep($lessonId: Float!) {
+  createStep(options: {lessonId: $lessonId}) {
+    ...RegularStep
   }
-  ${RegularStepFragmentDoc}
-`;
-export type CreateStepMutationFn = Apollo.MutationFunction<
-  CreateStepMutation,
-  CreateStepMutationVariables
->;
+}
+    ${RegularStepFragmentDoc}`;
+export type CreateStepMutationFn = Apollo.MutationFunction<CreateStepMutation, CreateStepMutationVariables>;
 
 /**
  * __useCreateStepMutation__
@@ -903,34 +922,18 @@ export type CreateStepMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useCreateStepMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateStepMutation,
-    CreateStepMutationVariables
-  >
-) {
-  return Apollo.useMutation<CreateStepMutation, CreateStepMutationVariables>(
-    CreateStepDocument,
-    baseOptions
-  );
-}
-export type CreateStepMutationHookResult = ReturnType<
-  typeof useCreateStepMutation
->;
+export function useCreateStepMutation(baseOptions?: Apollo.MutationHookOptions<CreateStepMutation, CreateStepMutationVariables>) {
+        return Apollo.useMutation<CreateStepMutation, CreateStepMutationVariables>(CreateStepDocument, baseOptions);
+      }
+export type CreateStepMutationHookResult = ReturnType<typeof useCreateStepMutation>;
 export type CreateStepMutationResult = Apollo.MutationResult<CreateStepMutation>;
-export type CreateStepMutationOptions = Apollo.BaseMutationOptions<
-  CreateStepMutation,
-  CreateStepMutationVariables
->;
+export type CreateStepMutationOptions = Apollo.BaseMutationOptions<CreateStepMutation, CreateStepMutationVariables>;
 export const DeleteCheckpointDocument = gql`
-  mutation DeleteCheckpoint($id: Float!) {
-    deleteCheckpoint(id: $id)
-  }
-`;
-export type DeleteCheckpointMutationFn = Apollo.MutationFunction<
-  DeleteCheckpointMutation,
-  DeleteCheckpointMutationVariables
->;
+    mutation DeleteCheckpoint($id: Float!) {
+  deleteCheckpoint(id: $id)
+}
+    `;
+export type DeleteCheckpointMutationFn = Apollo.MutationFunction<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>;
 
 /**
  * __useDeleteCheckpointMutation__
@@ -949,34 +952,18 @@ export type DeleteCheckpointMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteCheckpointMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteCheckpointMutation,
-    DeleteCheckpointMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    DeleteCheckpointMutation,
-    DeleteCheckpointMutationVariables
-  >(DeleteCheckpointDocument, baseOptions);
-}
-export type DeleteCheckpointMutationHookResult = ReturnType<
-  typeof useDeleteCheckpointMutation
->;
+export function useDeleteCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>) {
+        return Apollo.useMutation<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>(DeleteCheckpointDocument, baseOptions);
+      }
+export type DeleteCheckpointMutationHookResult = ReturnType<typeof useDeleteCheckpointMutation>;
 export type DeleteCheckpointMutationResult = Apollo.MutationResult<DeleteCheckpointMutation>;
-export type DeleteCheckpointMutationOptions = Apollo.BaseMutationOptions<
-  DeleteCheckpointMutation,
-  DeleteCheckpointMutationVariables
->;
+export type DeleteCheckpointMutationOptions = Apollo.BaseMutationOptions<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>;
 export const DeleteCodeModuleDocument = gql`
-  mutation DeleteCodeModule($id: Float!) {
-    deleteCodeModule(id: $id)
-  }
-`;
-export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<
-  DeleteCodeModuleMutation,
-  DeleteCodeModuleMutationVariables
->;
+    mutation DeleteCodeModule($id: Float!) {
+  deleteCodeModule(id: $id)
+}
+    `;
+export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
 
 /**
  * __useDeleteCodeModuleMutation__
@@ -995,34 +982,18 @@ export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteCodeModuleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteCodeModuleMutation,
-    DeleteCodeModuleMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    DeleteCodeModuleMutation,
-    DeleteCodeModuleMutationVariables
-  >(DeleteCodeModuleDocument, baseOptions);
-}
-export type DeleteCodeModuleMutationHookResult = ReturnType<
-  typeof useDeleteCodeModuleMutation
->;
+export function useDeleteCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>) {
+        return Apollo.useMutation<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>(DeleteCodeModuleDocument, baseOptions);
+      }
+export type DeleteCodeModuleMutationHookResult = ReturnType<typeof useDeleteCodeModuleMutation>;
 export type DeleteCodeModuleMutationResult = Apollo.MutationResult<DeleteCodeModuleMutation>;
-export type DeleteCodeModuleMutationOptions = Apollo.BaseMutationOptions<
-  DeleteCodeModuleMutation,
-  DeleteCodeModuleMutationVariables
->;
+export type DeleteCodeModuleMutationOptions = Apollo.BaseMutationOptions<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
 export const DeleteDependencyDocument = gql`
-  mutation DeleteDependency($id: Float!) {
-    deleteDependency(id: $id)
-  }
-`;
-export type DeleteDependencyMutationFn = Apollo.MutationFunction<
-  DeleteDependencyMutation,
-  DeleteDependencyMutationVariables
->;
+    mutation DeleteDependency($id: Float!) {
+  deleteDependency(id: $id)
+}
+    `;
+export type DeleteDependencyMutationFn = Apollo.MutationFunction<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
 
 /**
  * __useDeleteDependencyMutation__
@@ -1041,34 +1012,18 @@ export type DeleteDependencyMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteDependencyMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteDependencyMutation,
-    DeleteDependencyMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    DeleteDependencyMutation,
-    DeleteDependencyMutationVariables
-  >(DeleteDependencyDocument, baseOptions);
-}
-export type DeleteDependencyMutationHookResult = ReturnType<
-  typeof useDeleteDependencyMutation
->;
+export function useDeleteDependencyMutation(baseOptions?: Apollo.MutationHookOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>) {
+        return Apollo.useMutation<DeleteDependencyMutation, DeleteDependencyMutationVariables>(DeleteDependencyDocument, baseOptions);
+      }
+export type DeleteDependencyMutationHookResult = ReturnType<typeof useDeleteDependencyMutation>;
 export type DeleteDependencyMutationResult = Apollo.MutationResult<DeleteDependencyMutation>;
-export type DeleteDependencyMutationOptions = Apollo.BaseMutationOptions<
-  DeleteDependencyMutation,
-  DeleteDependencyMutationVariables
->;
+export type DeleteDependencyMutationOptions = Apollo.BaseMutationOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
 export const DeleteStepDocument = gql`
-  mutation DeleteStep($id: Float!) {
-    deleteStep(id: $id)
-  }
-`;
-export type DeleteStepMutationFn = Apollo.MutationFunction<
-  DeleteStepMutation,
-  DeleteStepMutationVariables
->;
+    mutation DeleteStep($id: Float!) {
+  deleteStep(id: $id)
+}
+    `;
+export type DeleteStepMutationFn = Apollo.MutationFunction<DeleteStepMutation, DeleteStepMutationVariables>;
 
 /**
  * __useDeleteStepMutation__
@@ -1087,34 +1042,18 @@ export type DeleteStepMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useDeleteStepMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteStepMutation,
-    DeleteStepMutationVariables
-  >
-) {
-  return Apollo.useMutation<DeleteStepMutation, DeleteStepMutationVariables>(
-    DeleteStepDocument,
-    baseOptions
-  );
-}
-export type DeleteStepMutationHookResult = ReturnType<
-  typeof useDeleteStepMutation
->;
+export function useDeleteStepMutation(baseOptions?: Apollo.MutationHookOptions<DeleteStepMutation, DeleteStepMutationVariables>) {
+        return Apollo.useMutation<DeleteStepMutation, DeleteStepMutationVariables>(DeleteStepDocument, baseOptions);
+      }
+export type DeleteStepMutationHookResult = ReturnType<typeof useDeleteStepMutation>;
 export type DeleteStepMutationResult = Apollo.MutationResult<DeleteStepMutation>;
-export type DeleteStepMutationOptions = Apollo.BaseMutationOptions<
-  DeleteStepMutation,
-  DeleteStepMutationVariables
->;
+export type DeleteStepMutationOptions = Apollo.BaseMutationOptions<DeleteStepMutation, DeleteStepMutationVariables>;
 export const ForgotPasswordDocument = gql`
-  mutation ForgotPassword($email: String!) {
-    forgotPassword(email: $email)
-  }
-`;
-export type ForgotPasswordMutationFn = Apollo.MutationFunction<
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables
->;
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
+export type ForgotPasswordMutationFn = Apollo.MutationFunction<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 
 /**
  * __useForgotPasswordMutation__
@@ -1133,44 +1072,28 @@ export type ForgotPasswordMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useForgotPasswordMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    ForgotPasswordMutation,
-    ForgotPasswordMutationVariables
-  >(ForgotPasswordDocument, baseOptions);
-}
-export type ForgotPasswordMutationHookResult = ReturnType<
-  typeof useForgotPasswordMutation
->;
+export function useForgotPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>) {
+        return Apollo.useMutation<ForgotPasswordMutation, ForgotPasswordMutationVariables>(ForgotPasswordDocument, baseOptions);
+      }
+export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswordMutation>;
 export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
-export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<
-  ForgotPasswordMutation,
-  ForgotPasswordMutationVariables
->;
+export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const LoginDocument = gql`
-  mutation Login($usernameOrEmail: String!, $password: String!) {
-    login(options: { usernameOrEmail: $usernameOrEmail, password: $password }) {
-      errors {
-        message
-        field
-      }
-      user {
-        id
-        username
-        createdAt
-      }
+    mutation Login($usernameOrEmail: String!, $password: String!) {
+  login(options: {usernameOrEmail: $usernameOrEmail, password: $password}) {
+    errors {
+      message
+      field
+    }
+    user {
+      id
+      username
+      createdAt
     }
   }
-`;
-export type LoginMutationFn = Apollo.MutationFunction<
-  LoginMutation,
-  LoginMutationVariables
->;
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
  * __useLoginMutation__
@@ -1190,44 +1113,28 @@ export type LoginMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useLoginMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    LoginMutation,
-    LoginMutationVariables
-  >
-) {
-  return Apollo.useMutation<LoginMutation, LoginMutationVariables>(
-    LoginDocument,
-    baseOptions
-  );
-}
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, baseOptions);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
-export type LoginMutationOptions = Apollo.BaseMutationOptions<
-  LoginMutation,
-  LoginMutationVariables
->;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
 export const RegisterDocument = gql`
-  mutation Register($email: String!, $username: String!, $password: String!) {
-    register(
-      options: { email: $email, username: $username, password: $password }
-    ) {
-      errors {
-        field
-        message
-      }
-      user {
-        id
-        email
-        username
-      }
+    mutation Register($email: String!, $username: String!, $password: String!) {
+  register(options: {email: $email, username: $username, password: $password}) {
+    errors {
+      field
+      message
+    }
+    user {
+      id
+      email
+      username
     }
   }
-`;
-export type RegisterMutationFn = Apollo.MutationFunction<
-  RegisterMutation,
-  RegisterMutationVariables
->;
+}
+    `;
+export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
  * __useRegisterMutation__
@@ -1248,34 +1155,53 @@ export type RegisterMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useRegisterMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    RegisterMutation,
-    RegisterMutationVariables
-  >
-) {
-  return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
-    RegisterDocument,
-    baseOptions
-  );
-}
+export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<RegisterMutation, RegisterMutationVariables>) {
+        return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument, baseOptions);
+      }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
-export type RegisterMutationOptions = Apollo.BaseMutationOptions<
-  RegisterMutation,
-  RegisterMutationVariables
->;
-export const UpdateCodeModuleDocument = gql`
-  mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
-    updateCodeModule(id: $id, options: { name: $name, value: $value }) {
-      id
-    }
+export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateCheckpointDocument = gql`
+    mutation UpdateCheckpoint($id: Float!, $description: String!) {
+  updateCheckpoint(id: $id, options: {description: $description}) {
+    id
   }
-`;
-export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<
-  UpdateCodeModuleMutation,
-  UpdateCodeModuleMutationVariables
->;
+}
+    `;
+export type UpdateCheckpointMutationFn = Apollo.MutationFunction<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>;
+
+/**
+ * __useUpdateCheckpointMutation__
+ *
+ * To run a mutation, you first call `useUpdateCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCheckpointMutation, { data, loading, error }] = useUpdateCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useUpdateCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>) {
+        return Apollo.useMutation<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>(UpdateCheckpointDocument, baseOptions);
+      }
+export type UpdateCheckpointMutationHookResult = ReturnType<typeof useUpdateCheckpointMutation>;
+export type UpdateCheckpointMutationResult = Apollo.MutationResult<UpdateCheckpointMutation>;
+export type UpdateCheckpointMutationOptions = Apollo.BaseMutationOptions<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>;
+export const UpdateCodeModuleDocument = gql`
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
+  updateCodeModule(id: $id, options: {name: $name, value: $value}) {
+    id
+  }
+}
+    `;
+export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 
 /**
  * __useUpdateCodeModuleMutation__
@@ -1296,36 +1222,20 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateCodeModuleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateCodeModuleMutation,
-    UpdateCodeModuleMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    UpdateCodeModuleMutation,
-    UpdateCodeModuleMutationVariables
-  >(UpdateCodeModuleDocument, baseOptions);
-}
-export type UpdateCodeModuleMutationHookResult = ReturnType<
-  typeof useUpdateCodeModuleMutation
->;
+export function useUpdateCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>) {
+        return Apollo.useMutation<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>(UpdateCodeModuleDocument, baseOptions);
+      }
+export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
-export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<
-  UpdateCodeModuleMutation,
-  UpdateCodeModuleMutationVariables
->;
+export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 export const UpdateLessonTitleDocument = gql`
-  mutation UpdateLessonTitle($id: Float!, $title: String!) {
-    updateLessonTitle(id: $id, title: $title) {
-      id
-    }
+    mutation UpdateLessonTitle($id: Float!, $title: String!) {
+  updateLessonTitle(id: $id, title: $title) {
+    id
   }
-`;
-export type UpdateLessonTitleMutationFn = Apollo.MutationFunction<
-  UpdateLessonTitleMutation,
-  UpdateLessonTitleMutationVariables
->;
+}
+    `;
+export type UpdateLessonTitleMutationFn = Apollo.MutationFunction<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>;
 
 /**
  * __useUpdateLessonTitleMutation__
@@ -1345,36 +1255,20 @@ export type UpdateLessonTitleMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateLessonTitleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateLessonTitleMutation,
-    UpdateLessonTitleMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    UpdateLessonTitleMutation,
-    UpdateLessonTitleMutationVariables
-  >(UpdateLessonTitleDocument, baseOptions);
-}
-export type UpdateLessonTitleMutationHookResult = ReturnType<
-  typeof useUpdateLessonTitleMutation
->;
+export function useUpdateLessonTitleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>(UpdateLessonTitleDocument, baseOptions);
+      }
+export type UpdateLessonTitleMutationHookResult = ReturnType<typeof useUpdateLessonTitleMutation>;
 export type UpdateLessonTitleMutationResult = Apollo.MutationResult<UpdateLessonTitleMutation>;
-export type UpdateLessonTitleMutationOptions = Apollo.BaseMutationOptions<
-  UpdateLessonTitleMutation,
-  UpdateLessonTitleMutationVariables
->;
+export type UpdateLessonTitleMutationOptions = Apollo.BaseMutationOptions<UpdateLessonTitleMutation, UpdateLessonTitleMutationVariables>;
 export const UpdateLessonDescriptionDocument = gql`
-  mutation UpdateLessonDescription($id: Float!, $description: String!) {
-    updateLessonDescription(id: $id, description: $description) {
-      id
-    }
+    mutation UpdateLessonDescription($id: Float!, $description: String!) {
+  updateLessonDescription(id: $id, description: $description) {
+    id
   }
-`;
-export type UpdateLessonDescriptionMutationFn = Apollo.MutationFunction<
-  UpdateLessonDescriptionMutation,
-  UpdateLessonDescriptionMutationVariables
->;
+}
+    `;
+export type UpdateLessonDescriptionMutationFn = Apollo.MutationFunction<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
 
 /**
  * __useUpdateLessonDescriptionMutation__
@@ -1394,38 +1288,22 @@ export type UpdateLessonDescriptionMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateLessonDescriptionMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateLessonDescriptionMutation,
-    UpdateLessonDescriptionMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    UpdateLessonDescriptionMutation,
-    UpdateLessonDescriptionMutationVariables
-  >(UpdateLessonDescriptionDocument, baseOptions);
-}
-export type UpdateLessonDescriptionMutationHookResult = ReturnType<
-  typeof useUpdateLessonDescriptionMutation
->;
+export function useUpdateLessonDescriptionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>(UpdateLessonDescriptionDocument, baseOptions);
+      }
+export type UpdateLessonDescriptionMutationHookResult = ReturnType<typeof useUpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationResult = Apollo.MutationResult<UpdateLessonDescriptionMutation>;
-export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<
-  UpdateLessonDescriptionMutation,
-  UpdateLessonDescriptionMutationVariables
->;
+export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
 export const UpdateStepDocument = gql`
-  mutation UpdateStep($id: Float!, $instructions: String!) {
-    updateStep(options: { id: $id, instructions: $instructions }) {
-      id
-      createdAt
-      instructions
-    }
+    mutation UpdateStep($id: Float!, $instructions: String!) {
+  updateStep(options: {id: $id, instructions: $instructions}) {
+    id
+    createdAt
+    instructions
   }
-`;
-export type UpdateStepMutationFn = Apollo.MutationFunction<
-  UpdateStepMutation,
-  UpdateStepMutationVariables
->;
+}
+    `;
+export type UpdateStepMutationFn = Apollo.MutationFunction<UpdateStepMutation, UpdateStepMutationVariables>;
 
 /**
  * __useUpdateStepMutation__
@@ -1445,41 +1323,27 @@ export type UpdateStepMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useUpdateStepMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateStepMutation,
-    UpdateStepMutationVariables
-  >
-) {
-  return Apollo.useMutation<UpdateStepMutation, UpdateStepMutationVariables>(
-    UpdateStepDocument,
-    baseOptions
-  );
-}
-export type UpdateStepMutationHookResult = ReturnType<
-  typeof useUpdateStepMutation
->;
+export function useUpdateStepMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStepMutation, UpdateStepMutationVariables>) {
+        return Apollo.useMutation<UpdateStepMutation, UpdateStepMutationVariables>(UpdateStepDocument, baseOptions);
+      }
+export type UpdateStepMutationHookResult = ReturnType<typeof useUpdateStepMutation>;
 export type UpdateStepMutationResult = Apollo.MutationResult<UpdateStepMutation>;
-export type UpdateStepMutationOptions = Apollo.BaseMutationOptions<
-  UpdateStepMutation,
-  UpdateStepMutationVariables
->;
+export type UpdateStepMutationOptions = Apollo.BaseMutationOptions<UpdateStepMutation, UpdateStepMutationVariables>;
 export const LessonDocument = gql`
-  query Lesson($id: Int!) {
-    lesson(id: $id) {
-      id
-      title
-      description
-      owner {
-        username
-      }
-      steps {
-        ...RegularStep
-      }
+    query Lesson($id: Int!) {
+  lesson(id: $id) {
+    id
+    title
+    description
+    owner {
+      username
+    }
+    steps {
+      ...RegularStep
     }
   }
-  ${RegularStepFragmentDoc}
-`;
+}
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useLessonQuery__
@@ -1497,41 +1361,28 @@ export const LessonDocument = gql`
  *   },
  * });
  */
-export function useLessonQuery(
-  baseOptions: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>
-) {
-  return Apollo.useQuery<LessonQuery, LessonQueryVariables>(
-    LessonDocument,
-    baseOptions
-  );
-}
-export function useLessonLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<LessonQuery, LessonQueryVariables>
-) {
-  return Apollo.useLazyQuery<LessonQuery, LessonQueryVariables>(
-    LessonDocument,
-    baseOptions
-  );
-}
+export function useLessonQuery(baseOptions: Apollo.QueryHookOptions<LessonQuery, LessonQueryVariables>) {
+        return Apollo.useQuery<LessonQuery, LessonQueryVariables>(LessonDocument, baseOptions);
+      }
+export function useLessonLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonQuery, LessonQueryVariables>) {
+          return Apollo.useLazyQuery<LessonQuery, LessonQueryVariables>(LessonDocument, baseOptions);
+        }
 export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
-export type LessonQueryResult = Apollo.QueryResult<
-  LessonQuery,
-  LessonQueryVariables
->;
+export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-  query Lessons {
-    lessons {
-      createdAt
-      id
-      title
-      updatedAt
-      owner {
-        username
-      }
+    query Lessons {
+  lessons {
+    createdAt
+    id
+    title
+    updatedAt
+    owner {
+      username
     }
   }
-`;
+}
+    `;
 
 /**
  * __useLessonsQuery__
@@ -1548,39 +1399,26 @@ export const LessonsDocument = gql`
  *   },
  * });
  */
-export function useLessonsQuery(
-  baseOptions?: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>
-) {
-  return Apollo.useQuery<LessonsQuery, LessonsQueryVariables>(
-    LessonsDocument,
-    baseOptions
-  );
-}
-export function useLessonsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<LessonsQuery, LessonsQueryVariables>
-) {
-  return Apollo.useLazyQuery<LessonsQuery, LessonsQueryVariables>(
-    LessonsDocument,
-    baseOptions
-  );
-}
+export function useLessonsQuery(baseOptions?: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+        return Apollo.useQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, baseOptions);
+      }
+export function useLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+          return Apollo.useLazyQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, baseOptions);
+        }
 export type LessonsQueryHookResult = ReturnType<typeof useLessonsQuery>;
 export type LessonsLazyQueryHookResult = ReturnType<typeof useLessonsLazyQuery>;
-export type LessonsQueryResult = Apollo.QueryResult<
-  LessonsQuery,
-  LessonsQueryVariables
->;
+export type LessonsQueryResult = Apollo.QueryResult<LessonsQuery, LessonsQueryVariables>;
 export const MeDocument = gql`
-  query Me {
-    me {
+    query Me {
+  me {
+    id
+    username
+    lessons {
       id
-      username
-      lessons {
-        id
-      }
     }
   }
-`;
+}
+    `;
 
 /**
  * __useMeQuery__
@@ -1597,30 +1435,22 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(
-  baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
-}
-export function useMeLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
-) {
-  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(
-    MeDocument,
-    baseOptions
-  );
-}
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, baseOptions);
+        }
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const StepDocument = gql`
-  query Step($id: Int!) {
-    step(id: $id) {
-      ...RegularStep
-    }
+    query Step($id: Int!) {
+  step(id: $id) {
+    ...RegularStep
   }
-  ${RegularStepFragmentDoc}
-`;
+}
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useStepQuery__
@@ -1638,33 +1468,22 @@ export const StepDocument = gql`
  *   },
  * });
  */
-export function useStepQuery(
-  baseOptions: Apollo.QueryHookOptions<StepQuery, StepQueryVariables>
-) {
-  return Apollo.useQuery<StepQuery, StepQueryVariables>(
-    StepDocument,
-    baseOptions
-  );
-}
-export function useStepLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<StepQuery, StepQueryVariables>
-) {
-  return Apollo.useLazyQuery<StepQuery, StepQueryVariables>(
-    StepDocument,
-    baseOptions
-  );
-}
+export function useStepQuery(baseOptions: Apollo.QueryHookOptions<StepQuery, StepQueryVariables>) {
+        return Apollo.useQuery<StepQuery, StepQueryVariables>(StepDocument, baseOptions);
+      }
+export function useStepLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StepQuery, StepQueryVariables>) {
+          return Apollo.useLazyQuery<StepQuery, StepQueryVariables>(StepDocument, baseOptions);
+        }
 export type StepQueryHookResult = ReturnType<typeof useStepQuery>;
 export type StepLazyQueryHookResult = ReturnType<typeof useStepLazyQuery>;
 export type StepQueryResult = Apollo.QueryResult<StepQuery, StepQueryVariables>;
 export const StepsDocument = gql`
-  query Steps {
-    steps {
-      ...RegularStep
-    }
+    query Steps {
+  steps {
+    ...RegularStep
   }
-  ${RegularStepFragmentDoc}
-`;
+}
+    ${RegularStepFragmentDoc}`;
 
 /**
  * __useStepsQuery__
@@ -1681,25 +1500,12 @@ export const StepsDocument = gql`
  *   },
  * });
  */
-export function useStepsQuery(
-  baseOptions?: Apollo.QueryHookOptions<StepsQuery, StepsQueryVariables>
-) {
-  return Apollo.useQuery<StepsQuery, StepsQueryVariables>(
-    StepsDocument,
-    baseOptions
-  );
-}
-export function useStepsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<StepsQuery, StepsQueryVariables>
-) {
-  return Apollo.useLazyQuery<StepsQuery, StepsQueryVariables>(
-    StepsDocument,
-    baseOptions
-  );
-}
+export function useStepsQuery(baseOptions?: Apollo.QueryHookOptions<StepsQuery, StepsQueryVariables>) {
+        return Apollo.useQuery<StepsQuery, StepsQueryVariables>(StepsDocument, baseOptions);
+      }
+export function useStepsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StepsQuery, StepsQueryVariables>) {
+          return Apollo.useLazyQuery<StepsQuery, StepsQueryVariables>(StepsDocument, baseOptions);
+        }
 export type StepsQueryHookResult = ReturnType<typeof useStepsQuery>;
 export type StepsLazyQueryHookResult = ReturnType<typeof useStepsLazyQuery>;
-export type StepsQueryResult = Apollo.QueryResult<
-  StepsQuery,
-  StepsQueryVariables
->;
+export type StepsQueryResult = Apollo.QueryResult<StepsQuery, StepsQueryVariables>;
