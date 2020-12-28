@@ -38,8 +38,8 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
   }, [step?.checkpoints]);
 
   useEffect(() => {
-    console.log(activeCheckpoint?.description);
     setMarkdown(activeCheckpoint?.description);
+    toggleView('editor');
   }, [activeCheckpoint?.id]);
 
   const createCheckpoint = async () => {
@@ -73,6 +73,8 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
     await deleteCheckpointM({ refetchQueries: ['Step'], variables: { id } });
   };
 
+  const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
+
   return (
     <>
       {sortedCheckpoints.length
@@ -87,27 +89,43 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
                     <Icon
                       className="text-gray-600 mr-2"
                       name={
-                        activeCheckpoint?.id === checkpoint.id
+                        isCurrentCheckpoint(checkpoint.id)
                           ? 'down-dir'
                           : 'right-dir'
                       }
                     />
                     <span>Checkpoint {i + 1} </span>
                   </span>
-                  {i === checkpoints.length - 1 ? (
-                    <button
-                      className="inline-flex justify-center py-0.5 px-1 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                  <div className="flex">
+                    <Icon
+                      className="text-gray-700 text-lg leading-none"
+                      name={
+                        view === 'editor' && isCurrentCheckpoint(checkpoint.id)
+                          ? 'eye'
+                          : 'doc-text-inv'
+                      }
                       onClick={(e) => {
                         e.stopPropagation();
-                        deleteCheckpoint(checkpoint.id);
+                        if (isCurrentCheckpoint(checkpoint.id)) {
+                          toggleView(view === 'editor' ? 'preview' : 'editor');
+                        }
                       }}
-                      type="button"
-                    >
-                      Delete
-                    </button>
-                  ) : null}
+                    />
+                    {i === checkpoints.length - 1 ? (
+                      <button
+                        className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteCheckpoint(checkpoint.id);
+                        }}
+                        type="button"
+                      >
+                        Delete
+                      </button>
+                    ) : null}
+                  </div>
                 </h3>
-                {activeCheckpoint?.id === checkpoint.id && (
+                {isCurrentCheckpoint(checkpoint.id) && (
                   <div className="h-24">
                     {view === 'editor' ? (
                       <ControlledEditor
