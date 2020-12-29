@@ -30,14 +30,6 @@ export class Session extends BaseEntity {
 
   @Field()
   @Column()
-  title!: string;
-
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  description: string;
-
-  @Field()
-  @Column()
   currentStep: number;
 
   @Field()
@@ -48,7 +40,9 @@ export class Session extends BaseEntity {
   @ManyToOne(() => User, (user) => user.classes)
   student: User;
 
-  @OneToMany(() => Step, (step) => step.session)
+  @OneToMany(() => Step, (step) => step.session, {
+    cascade: true,
+  })
   @Field(() => [Step], { defaultValue: [] })
   steps!: Step[];
 }

@@ -10,6 +10,9 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
+import { Checkpoint } from "../entities/Checkpoint";
+import { CodeModule } from "../entities/CodeModule";
+import { Dependency } from "../entities/Dependency";
 import { Lesson } from "../entities/Lesson";
 import { Session } from "../entities/Session";
 import { Step } from "../entities/Step";
@@ -58,18 +61,68 @@ export class SessionResolver {
     }
 
     await lesson.students.push(student);
+    await lesson.save();
 
-    const currentStep = lesson.steps.sort((a, b) =>
-      b.createdAt < a.createdAt ? 1 : -1
-    )[0].id;
+    try {
+      const currentStep = lesson.steps.sort((a, b) =>
+        b.createdAt < a.createdAt ? 1 : -1
+      )[0].id;
 
-    const session = Session.create({
-      currentStep,
-      lessonId,
-      student,
-    }).save();
+      const steps = await Promise.all(
+        lesson.steps.map(async ({ id }) => {
+          const step = await Step.findOne(id, {
+            relations: ["codeModules", "checkpoints", "dependencies"],
+          });
 
-    return session;
+          const codeModules = await Promise.all(
+            step!.codeModules.map(async (codeModule) => {
+              const { id, createdAt, updatedAt, ...rest } = codeModule;
+
+              return await CodeModule.create({
+                ...rest,
+              }).save();
+            })
+          );
+
+          const checkpoints = await Promise.all(
+            step!.checkpoints.map(async (checkpoint) => {
+              const { id, createdAt, updatedAt, ...rest } = checkpoint;
+
+              return await Checkpoint.create({ ...rest }).save();
+            })
+          );
+
+          const dependencies = await Promise.all(
+            step!.dependencies.map(async (dependency) => {
+              const { id, createdAt, updatedAt, ...rest } = dependency;
+
+              return await Dependency.create({ ...rest }).save();
+            })
+          );
+
+          return await Step.create({
+            checkpoints,
+            codeModules,
+            dependencies,
+            instructions: step?.instructions || "",
+          }).save();
+        })
+      );
+
+      console.log(steps);
+
+      const session = await Session.create({
+        currentStep,
+        lessonId,
+        steps,
+        student,
+      }).save();
+
+      return session;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
   }
 
   @Mutation(() => Boolean)

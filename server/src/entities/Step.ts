@@ -35,13 +35,13 @@ export class Step extends BaseEntity {
   @Column()
   instructions!: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.steps)
+  @ManyToOne(() => Lesson, (lesson) => lesson.steps, { onDelete: "CASCADE" })
   @Field(() => Lesson)
   lesson: Lesson;
 
-  @ManyToOne(() => Session, (session) => session.steps)
+  @ManyToOne(() => Session, (session) => session.steps, { onDelete: "CASCADE" })
   @Field(() => Session)
-  class: Session;
+  session: Session;
 
   // code modules
   @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {

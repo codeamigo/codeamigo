@@ -51,7 +51,9 @@ export class Lesson extends BaseEntity {
   @ManyToOne(() => User, (user) => user.lessons)
   owner: User;
 
-  @OneToMany(() => Step, (step) => step.lesson)
+  @OneToMany(() => Step, (step) => step.lesson, {
+    cascade: true,
+  })
   @Field(() => [Step], { defaultValue: [] })
   steps!: Step[];
 }
