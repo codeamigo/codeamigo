@@ -18,7 +18,7 @@ const Home = () => {
             <div
               className="p-3 rounded-lg border-gray-200 border-2 cursor-pointer"
               key={lesson.id}
-              onClick={() => router.push(`/lessons/${lesson.id}`)}
+              onClick={() => router.push(`/lessons/start/${lesson.id}`)}
             >
               <h2 className="text-xl">{lesson.title}</h2>
               <h3 className="text-xs">By: {lesson.owner.username}</h3>

@@ -88,6 +88,7 @@ export class UserResolver {
         username: options.username,
       }).save();
     } catch (e) {
+      console.log(e);
       if (e.detail && e.detail.includes("already exists")) {
         return {
           errors: [

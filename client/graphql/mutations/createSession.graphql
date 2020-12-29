@@ -1,0 +1,5 @@
+mutation CreateSession($lessonId: Float!) {
+  createSession(options: { lessonId: $lessonId }) {
+    id
+  }
+}
