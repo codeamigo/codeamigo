@@ -100,11 +100,11 @@ const FilesList: React.FC<Props> = ({
 };
 
 type Props = {
+  currentPath?: string;
+  files?: Array<string>;
   name: string;
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
-  files?: Array<string>;
-  currentPath?: string;
   setCurrentPath?: (path: string) => void;
 };
 

@@ -240,7 +240,8 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     setFiles(mods);
 
-    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
+    if (!currentPath)
+      setCurrentPath(Object.keys(mods).filter((n) => !n.includes('spec'))[0]);
   }, [step.id, step.codeModules]);
 
   useEffect(() => {
@@ -294,6 +295,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
+  isEditting?: boolean;
   step: RegularStepFragment;
 };
 

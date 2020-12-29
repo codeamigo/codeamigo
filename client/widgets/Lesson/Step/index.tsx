@@ -19,7 +19,7 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
           <Instructions step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">
-          <Editor step={data.step} />
+          <Editor step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
           <iframe id="frame" src="http://localhost:1234/"></iframe>
@@ -30,9 +30,9 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
 };
 
 type Props = {
+  currentStepId: number;
   isEditting?: boolean;
   lesson: LessonQuery['lesson'];
-  currentStepId: number;
   toggleShowSteps: () => void;
 };
 

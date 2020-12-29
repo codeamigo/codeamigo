@@ -1,11 +1,11 @@
 import Icon from '@components/Icon';
-import React, { useEffect, useRef, useState } from 'react';
-
 import {
   RegularDependencyFragment,
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
-} from '../../../../generated/graphql';
+} from '@generated/graphql';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { AlgoliaSearchResultType } from '..';
 import styles from './DependenciesList.module.scss';
 
@@ -153,8 +153,8 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
 };
 
 type Props = {
-  name: string;
   dependencies?: RegularDependencyFragment[] | null;
+  name: string;
   stepId: number;
 };
 

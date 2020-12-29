@@ -13,8 +13,8 @@ const Icon: React.FC<Props> = ({ className, name, ...rest }) => {
 };
 
 type Props = {
-  name: IconType;
   className: string;
+  name: IconType;
 } & React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLSpanElement>,
   HTMLSpanElement

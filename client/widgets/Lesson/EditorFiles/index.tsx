@@ -46,12 +46,12 @@ const EditorFiles: React.FC<Props> = ({
 
 type Props = {
   createFile: (path: string) => void;
+  currentPath: string;
   deleteFile: (path: string) => void;
   dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
-  currentPath: string;
-  stepId: number;
   setCurrentPath: (path: string) => void;
+  stepId: number;
 };
 
 export default EditorFiles;
