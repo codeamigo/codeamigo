@@ -30,9 +30,13 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
 
+  const nextCheckpoint = isEditting
+    ? sortedCheckpoints[0]
+    : sortedCheckpoints.find((checkpoint) => !checkpoint.isCompleted);
+
   const [activeCheckpoint, setActiveCheckpoint] = useState<
     RegularCheckpointFragment | undefined
-  >(sortedCheckpoints[0]);
+  >(nextCheckpoint || sortedCheckpoints[0]);
   const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   useEffect(() => {
@@ -104,6 +108,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
                     />
                     <span>Checkpoint {i + 1} </span>
                   </span>
+                  {!isEditting && checkpoint.isCompleted && <span>✅</span>}
                   {isEditting && (
                     <div className="flex">
                       <Icon

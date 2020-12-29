@@ -55,6 +55,14 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
+  const sortedCheckpoints = (step.checkpoints || [])
+    .slice()
+    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
+  const nextCheckpoint = sortedCheckpoints.find(
+    (checkpoint) => !checkpoint.isCompleted
+  );
+
   const createFile = async (file: string) => {
     if (files[file] !== undefined) {
       alert('File name already taken.');
@@ -140,7 +148,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     });
   };
 
-  const postCode = () => {
+  const postCode = (path?: string, isTest?: boolean) => {
     // @ts-ignore
     const iframe =
       // @ts-ignore
@@ -151,7 +159,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       {
         files: { ...files, ...dependencies },
         from: 'editor',
-        runPath: currentPath,
+        isTest,
+        runPath: path || currentPath,
       } as PreviewType,
       '*'
     );
@@ -252,9 +261,24 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     <div className="w-full lg:h-full flex flex-col">
       <h3 className="flex justify-between">
         <span>Initial Code</span>
-        <button onClick={() => postCode()} type="button">
-          Run
-        </button>
+        <div className="flex">
+          <button
+            className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none disabled:opacity-50"
+            onClick={() => postCode()}
+            type="button"
+          >
+            Run
+          </button>
+          {!rest.isEditting && (
+            <button
+              className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+              onClick={() => postCode(nextCheckpoint?.test, true)}
+              type="button"
+            >
+              Test
+            </button>
+          )}
+        </div>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
         <div className="w-4/12 border-r border-gray-200">

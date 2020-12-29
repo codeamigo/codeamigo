@@ -16,12 +16,10 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
   useEffect(() => {
     async function create() {
       if (!loading && !data?.session?.id) {
-        const s = await createSession({
+        await createSession({
           refetchQueries: ['Session'],
           variables: { lessonId: id },
         });
-        console.log('created session', s);
-        console.log('routing');
         router.push(`/lessons/${id}`);
       } else {
         router.push(`/lessons/${id}`);

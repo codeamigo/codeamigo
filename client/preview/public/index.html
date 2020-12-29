@@ -14,6 +14,15 @@
 <script async defer type="text/babel">
   const MODULE_ROOT = "/node_modules";
 
+  // hijack console log
+  (function () {
+    var oldLog = console.log;
+    console.log = function (message) {
+      alert(JSON.stringify(message))
+      oldLog.apply(console, arguments);
+    };
+  })();
+
   const transformCode = (code, path) => {
     return Babel.transform(code, {
       presets: ["es2015", "typescript", "react"],

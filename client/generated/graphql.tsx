@@ -345,7 +345,7 @@ export type LoginInput = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt'>
+  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt' | 'isCompleted'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -757,6 +757,7 @@ export const RegularCheckpointFragmentDoc = gql`
   test
   description
   createdAt
+  isCompleted
 }
     `;
 export const RegularDependencyFragmentDoc = gql`
