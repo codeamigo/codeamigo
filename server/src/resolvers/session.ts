@@ -34,8 +34,19 @@ export class SessionResolver {
   }
 
   @Query(() => Session, { nullable: true })
-  session(@Arg("id", () => Int) id: number): Promise<Session | undefined> {
-    return Session.findOne(id, { relations: ["steps"] });
+  @UseMiddleware(isAuth)
+  async session(
+    @Arg("lessonId", () => Int) lessonId: number,
+    @Ctx() { req }: MyContext
+  ): Promise<Session | undefined> {
+    const student = await User.findOne({ id: req.session.userId });
+
+    const session = await Session.findOne({
+      relations: ["steps"],
+      where: { lessonId, student },
+    });
+
+    return session;
   }
 
   @Mutation(() => Session, { nullable: true })
@@ -64,10 +75,6 @@ export class SessionResolver {
     await lesson.save();
 
     try {
-      const currentStep = lesson.steps.sort((a, b) =>
-        b.createdAt < a.createdAt ? 1 : -1
-      )[0].id;
-
       const steps = await Promise.all(
         lesson.steps.map(async ({ id }) => {
           const step = await Step.findOne(id, {
@@ -109,7 +116,9 @@ export class SessionResolver {
         })
       );
 
-      console.log(steps);
+      const currentStep = steps.sort((a, b) =>
+        b.createdAt < a.createdAt ? 1 : -1
+      )[0].id;
 
       const session = await Session.create({
         currentStep,

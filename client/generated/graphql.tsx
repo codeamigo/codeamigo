@@ -57,7 +57,7 @@ export type QueryLessonArgs = {
 
 
 export type QuerySessionArgs = {
-  id: Scalars['Int'];
+  lessonId: Scalars['Int'];
 };
 
 export type Checkpoint = {
@@ -88,7 +88,7 @@ export type Step = {
   updatedAt: Scalars['String'];
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
-  class: Session;
+  session: Session;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
   dependencies?: Maybe<Array<Dependency>>;
@@ -102,7 +102,7 @@ export type Lesson = {
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
-  students: Array<User>;
+  students?: Maybe<Array<User>>;
   owner: User;
   steps?: Maybe<Array<Step>>;
 };
@@ -123,8 +123,6 @@ export type Session = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
   currentStep: Scalars['Float'];
   lessonId: Scalars['Float'];
   student: User;
@@ -683,6 +681,23 @@ export type MeQuery = (
       { __typename?: 'Lesson' }
       & Pick<Lesson, 'id'>
     )> }
+  )> }
+);
+
+export type SessionQueryVariables = Exact<{
+  lessonId: Scalars['Int'];
+}>;
+
+
+export type SessionQuery = (
+  { __typename?: 'Query' }
+  & { session?: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'currentStep'>
+    & { steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & RegularStepFragment
+    )>> }
   )> }
 );
 
@@ -1484,6 +1499,43 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SessionDocument = gql`
+    query Session($lessonId: Int!) {
+  session(lessonId: $lessonId) {
+    id
+    currentStep
+    steps {
+      ...RegularStep
+    }
+  }
+}
+    ${RegularStepFragmentDoc}`;
+
+/**
+ * __useSessionQuery__
+ *
+ * To run a query within a React component, call `useSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSessionQuery({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useSessionQuery(baseOptions: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>) {
+        return Apollo.useQuery<SessionQuery, SessionQueryVariables>(SessionDocument, baseOptions);
+      }
+export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>) {
+          return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(SessionDocument, baseOptions);
+        }
+export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
+export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
+export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
 export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {

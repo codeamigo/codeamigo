@@ -1,4 +1,4 @@
-import { useLessonQuery } from '@generated/graphql';
+import { useLessonQuery, useSessionQuery } from '@generated/graphql';
 import Info from '@widgets/Lesson/Info';
 import Step from '@widgets/Lesson/Step';
 import Steps from '@widgets/Lesson/Steps';
@@ -13,6 +13,9 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   const { data } = useLessonQuery({
     variables: { id },
   });
+  const { data: sessionData } = useSessionQuery({
+    variables: { lessonId: id },
+  });
 
   const toggleShowSteps = () => {
     setShowSteps(!showSteps);
@@ -22,7 +25,12 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
-  const stepId = currentStepId || data.lesson.steps[0].id;
+  if (!sessionData) return null;
+  if (!sessionData.session) return null;
+  if (!sessionData.session.steps) return null;
+
+  const stepId = sessionData.session.currentStep;
+  console.log('sessionData', stepId);
 
   return (
     <div className="flex">
@@ -32,7 +40,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
             currentStepId={stepId}
             lessonId={data.lesson.id}
             setCurrentStepId={setCurrentStepId}
-            steps={data.lesson.steps}
+            steps={sessionData.session.steps}
             toggleShowSteps={toggleShowSteps}
           />
         </div>

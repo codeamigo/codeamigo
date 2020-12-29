@@ -1,0 +1,9 @@
+query Session($lessonId: Int!) {
+  session(lessonId: $lessonId) {
+    id
+    currentStep
+    steps {
+      ...RegularStep
+    }
+  }
+}

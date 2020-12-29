@@ -4,6 +4,8 @@ import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
 
 const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
+  console.log(id);
+
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
