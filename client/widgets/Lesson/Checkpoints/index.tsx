@@ -13,14 +13,16 @@ import gfm from 'remark-gfm';
 
 import Icon from '../../../components/Icon';
 
-const Checkpoints: React.FC<Props> = ({ step }: Props) => {
+const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [checkpoints, setCheckpoints] = useState(
     [] as Array<RegularCheckpointFragment>
   );
-  const [view, toggleView] = useState<'editor' | 'preview'>('editor');
+  const [view, toggleView] = useState<'editor' | 'preview'>(
+    isEditting ? 'editor' : 'preview'
+  );
 
   if (!step.checkpoints) return null;
 
@@ -39,7 +41,7 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
 
   useEffect(() => {
     setMarkdown(activeCheckpoint?.description);
-    toggleView('editor');
+    if (isEditting) toggleView('editor');
   }, [activeCheckpoint?.id]);
 
   const createCheckpoint = async () => {
@@ -102,42 +104,51 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
                     />
                     <span>Checkpoint {i + 1} </span>
                   </span>
-                  <div className="flex">
-                    <Icon
-                      className="text-gray-700 text-lg leading-none"
-                      name={
-                        view === 'editor' && isCurrentCheckpoint(checkpoint.id)
-                          ? 'eye'
-                          : 'doc-text-inv'
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (isCurrentCheckpoint(checkpoint.id)) {
-                          toggleView(view === 'editor' ? 'preview' : 'editor');
+                  {isEditting && (
+                    <div className="flex">
+                      <Icon
+                        className="text-gray-700 text-lg leading-none"
+                        name={
+                          view === 'editor' &&
+                          isCurrentCheckpoint(checkpoint.id)
+                            ? 'eye'
+                            : 'doc-text-inv'
                         }
-                      }}
-                    />
-                    {i === checkpoints.length - 1 ? (
-                      <button
-                        className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
                         onClick={(e) => {
                           e.stopPropagation();
-                          const yes = window.confirm(
-                            'Are you sure you want to delete this checkpoint?'
-                          );
-                          if (yes) {
-                            deleteCheckpoint(checkpoint.id);
+                          if (isCurrentCheckpoint(checkpoint.id)) {
+                            toggleView(
+                              view === 'editor' ? 'preview' : 'editor'
+                            );
                           }
                         }}
-                        type="button"
-                      >
-                        Delete
-                      </button>
-                    ) : null}
-                  </div>
+                      />
+                      {i === checkpoints.length - 1 ? (
+                        <button
+                          className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const yes = window.confirm(
+                              'Are you sure you want to delete this checkpoint?'
+                            );
+                            if (yes) {
+                              deleteCheckpoint(checkpoint.id);
+                            }
+                          }}
+                          type="button"
+                        >
+                          Delete
+                        </button>
+                      ) : null}
+                    </div>
+                  )}
                 </h3>
                 {isCurrentCheckpoint(checkpoint.id) && (
-                  <div className="h-24 min-h-24 overflow-scroll">
+                  <div
+                    className={`${
+                      isEditting ? 'h-24' : ''
+                    } min-h-24 overflow-scroll`}
+                  >
                     {view === 'editor' ? (
                       <ControlledEditor
                         onChange={(_, value) => {
@@ -166,20 +177,23 @@ const Checkpoints: React.FC<Props> = ({ step }: Props) => {
             );
           })
         : null}
-      <div className="mt-4">
-        <button
-          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-          onClick={createCheckpoint}
-          type="button"
-        >
-          Add Checkpoint
-        </button>
-      </div>
+      {isEditting && (
+        <div className="mt-4">
+          <button
+            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            onClick={createCheckpoint}
+            type="button"
+          >
+            Add Checkpoint
+          </button>
+        </div>
+      )}
     </>
   );
 };
 
 type Props = {
+  isEditting?: boolean;
   step: RegularStepFragment;
 };
 

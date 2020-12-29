@@ -6,6 +6,7 @@ const Icon: React.FC<Props> = ({ className, name, ...rest }) => {
   return (
     <span
       className={`ICON icon-${name} flex items-center justify-center ${className}`}
+      role="button"
       {...rest}
     ></span>
   );

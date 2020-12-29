@@ -3,7 +3,7 @@ import { LessonQuery, useUpdateLessonTitleMutation } from '@generated/graphql';
 import debounce from 'debounce';
 import React from 'react';
 
-const InfoForm: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
+const Form: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
   const [updateLessonTitleM] = useUpdateLessonTitleMutation();
 
   const updateLessonTitle = debounce(
@@ -41,4 +41,4 @@ type Props = {
   toggleShowSteps: () => void;
 };
 
-export default InfoForm;
+export default Form;

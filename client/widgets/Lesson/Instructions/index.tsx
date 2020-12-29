@@ -7,9 +7,12 @@ import gfm from 'remark-gfm';
 
 import Checkpoints from '../Checkpoints';
 
-const Instructions: React.FC<Props> = ({ step }) => {
+const Instructions: React.FC<Props> = (props) => {
+  const { isEditting, step } = props;
   const [markdown, setMarkdown] = useState(step?.instructions);
-  const [view, toggleView] = useState<'editor' | 'preview'>('editor');
+  const [view, toggleView] = useState<'editor' | 'preview'>(
+    isEditting ? 'editor' : 'preview'
+  );
   const [updateStepM] = useUpdateStepMutation();
 
   const updateStep = useCallback(
@@ -27,25 +30,31 @@ const Instructions: React.FC<Props> = ({ step }) => {
     <>
       <div className="w-full lg:h-full flex flex-col">
         <h3>
-          <span
-            className={`cursor-pointer ${
-              view === 'editor' ? 'text-blue-600' : 'text-black'
-            }`}
-            onClick={() => toggleView('editor')}
-          >
-            Edit Instructions
-          </span>
-          |
-          <span
-            className={`cursor-pointer ${
-              view === 'preview' ? 'text-blue-600' : 'text-black'
-            }`}
-            onClick={() => toggleView('preview')}
-          >
-            Preview
-          </span>
+          {isEditting ? (
+            <>
+              <span
+                className={`cursor-pointer ${
+                  view === 'editor' ? 'text-blue-600' : 'text-black'
+                }`}
+                onClick={() => toggleView('editor')}
+              >
+                Edit Instructions
+              </span>
+              |
+              <span
+                className={`cursor-pointer ${
+                  view === 'preview' ? 'text-blue-600' : 'text-black'
+                }`}
+                onClick={() => toggleView('preview')}
+              >
+                Preview
+              </span>
+            </>
+          ) : (
+            <span>Instructions</span>
+          )}
         </h3>
-        <div className="h-80 lg:min-h-3/5 lg:flex lg:flex-col rounded-md border border-gray-200">
+        <div className="h-80 lg:min-h-3/5 lg:flex lg:flex-col rounded-md border border-gray-200 overflow-scroll">
           {view === 'editor' ? (
             <ControlledEditor
               onChange={(_, value) => {
@@ -70,7 +79,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
           )}
         </div>
         <div className="flex flex-col">
-          <Checkpoints step={step} />
+          <Checkpoints {...props} />
         </div>
       </div>
     </>
@@ -78,6 +87,7 @@ const Instructions: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
+  isEditting?: boolean;
   step: RegularStepFragment;
 };
 

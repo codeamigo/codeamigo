@@ -60,7 +60,7 @@ const FilesList: React.FC<Props> = ({
                 className={`${
                   currentPath === path ? 'bg-gray-100' : ''
                 } flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
-                  styles.FILE
+                  path === 'app.tsx' ? '' : styles.FILE
                 } ${setCurrentPath ? 'cursor-pointer' : ''}`}
                 key={path}
                 onClick={() => setCurrentPath && setCurrentPath(path)}

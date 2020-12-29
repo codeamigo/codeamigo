@@ -5,7 +5,7 @@ import Steps from '@widgets/Lesson/Steps';
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 
-const EditLesson: NextPage<{ id: string }> = (props) => {
+const Lesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
@@ -38,14 +38,9 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         </div>
       )}
       <div className="w-full overflow-hidden lg:h-screen">
-        <Info
-          isEditting
-          lesson={data.lesson}
-          toggleShowSteps={toggleShowSteps}
-        />
+        <Info lesson={data.lesson} toggleShowSteps={toggleShowSteps} />
         <Step
           currentStepId={stepId}
-          isEditting
           lesson={data.lesson}
           toggleShowSteps={toggleShowSteps}
         />
@@ -54,8 +49,8 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   );
 };
 
-EditLesson.getInitialProps = ({ query }) => ({
+Lesson.getInitialProps = ({ query }) => ({
   id: query.id as string,
 });
 
-export default EditLesson;
+export default Lesson;
