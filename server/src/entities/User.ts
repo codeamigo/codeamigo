@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 
 import { Lesson } from "./Lesson";
+import { Session } from "./Session";
 
 @ObjectType()
 @Entity()
@@ -40,4 +41,8 @@ export class User extends BaseEntity {
   @Field(() => [Lesson])
   @OneToMany(() => Lesson, (lesson) => lesson.owner)
   lessons: Lesson[];
+
+  @Field(() => [Session])
+  @OneToMany(() => Session, (session) => session.student)
+  classes: Session[];
 }

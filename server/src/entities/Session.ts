@@ -4,8 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -17,7 +15,7 @@ import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Lesson extends BaseEntity {
+export class Session extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -39,19 +37,18 @@ export class Lesson extends BaseEntity {
   description: string;
 
   @Field()
-  @Column({ default: 0, type: "int" })
-  likes!: number;
+  @Column()
+  currentStep: number;
 
-  @ManyToMany(() => User)
-  @Field(() => [User], { defaultValue: [] })
-  @JoinTable()
-  students: User[];
+  @Field()
+  @Column()
+  lessonId!: number;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.lessons)
-  owner: User;
+  @ManyToOne(() => User, (user) => user.classes)
+  student: User;
 
-  @OneToMany(() => Step, (step) => step.lesson)
+  @OneToMany(() => Step, (step) => step.session)
   @Field(() => [Step], { defaultValue: [] })
   steps!: Step[];
 }

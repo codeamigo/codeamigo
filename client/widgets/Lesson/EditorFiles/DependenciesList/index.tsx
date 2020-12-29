@@ -9,7 +9,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AlgoliaSearchResultType } from '..';
 import styles from './DependenciesList.module.scss';
 
-const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
+const DependenciesList: React.FC<Props> = ({
+  dependencies,
+  isEditting,
+  name,
+  stepId,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [searchResults, setSearchResults] = useState<
@@ -38,7 +43,7 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
     setSearchResults(response.hits);
   };
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = () => {
     setTimeout(() => {
       setIsAdding(false);
       setSearchResults([]);
@@ -46,7 +51,6 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
   };
 
   const createDependency = async (result: AlgoliaSearchResultType) => {
-    console.log(result);
     await createDependencyM({
       refetchQueries: ['Step'],
       variables: {
@@ -72,11 +76,13 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
         <span className="text-sm font-semibold">{name}</span>
-        <Icon
-          className="text-sm text-gray-500 hover:text-black cursor-pointer"
-          name="plus-circled"
-          onClick={() => setIsAdding(true)}
-        />
+        {isEditting && (
+          <Icon
+            className="text-sm text-gray-500 hover:text-black cursor-pointer"
+            name="plus-circled"
+            onClick={() => setIsAdding(true)}
+          />
+        )}
       </div>
       <div>
         {dependencies &&
@@ -93,22 +99,24 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
                 <div className="text-xs">
                   {dep.package} {dep.version}
                 </div>
-                <Icon
-                  className="text-red-600 text-sm hidden cursor-pointer"
-                  name="minus-circled"
-                  onClick={() => {
-                    const yes = window.confirm(
-                      'Are you sure you want to delete this dependency?'
-                    );
+                {isEditting && (
+                  <Icon
+                    className="text-red-600 text-sm hidden cursor-pointer"
+                    name="minus-circled"
+                    onClick={() => {
+                      const yes = window.confirm(
+                        'Are you sure you want to delete this dependency?'
+                      );
 
-                    if (yes) {
-                      deleteDependency({
-                        refetchQueries: ['Step'],
-                        variables: { id: dep.id },
-                      });
-                    }
-                  }}
-                />
+                      if (yes) {
+                        deleteDependency({
+                          refetchQueries: ['Step'],
+                          variables: { id: dep.id },
+                        });
+                      }
+                    }}
+                  />
+                )}
               </div>
             ))}
         <div className="relative">
@@ -154,6 +162,7 @@ const DependenciesList: React.FC<Props> = ({ dependencies, name, stepId }) => {
 
 type Props = {
   dependencies?: RegularDependencyFragment[] | null;
+  isEditting?: boolean;
   name: string;
   stepId: number;
 };

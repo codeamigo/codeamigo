@@ -46,7 +46,7 @@ export const MODULE_ROOT = '/node_modules';
 
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
-const Editor: React.FC<Props> = ({ step }) => {
+const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState('');
@@ -266,6 +266,7 @@ const Editor: React.FC<Props> = ({ step }) => {
             files={files}
             setCurrentPath={setCurrentPath}
             stepId={step.id}
+            {...rest}
           />
         </div>
         <div className="w-8/12 h-80 lg:h-full">

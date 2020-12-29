@@ -25,6 +25,8 @@ export type Query = {
   step?: Maybe<Step>;
   lessons: Array<Lesson>;
   lesson?: Maybe<Lesson>;
+  sessions: Array<Session>;
+  session?: Maybe<Session>;
   me?: Maybe<User>;
 };
 
@@ -53,12 +55,18 @@ export type QueryLessonArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QuerySessionArgs = {
+  id: Scalars['Int'];
+};
+
 export type Checkpoint = {
   __typename?: 'Checkpoint';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   description: Scalars['String'];
+  isCompleted: Scalars['Boolean'];
   test: Scalars['String'];
   moduleId: Scalars['Float'];
 };
@@ -80,6 +88,7 @@ export type Step = {
   updatedAt: Scalars['String'];
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
+  class: Session;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
   dependencies?: Maybe<Array<Dependency>>;
@@ -93,6 +102,7 @@ export type Lesson = {
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
+  students: Array<User>;
   owner: User;
   steps?: Maybe<Array<Step>>;
 };
@@ -105,6 +115,20 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   lessons: Array<Lesson>;
+  classes: Array<Session>;
+};
+
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  title: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  currentStep: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  student: User;
+  steps?: Maybe<Array<Step>>;
 };
 
 export type Dependency = {
@@ -135,6 +159,8 @@ export type Mutation = {
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
+  createSession?: Maybe<Session>;
+  deleteSession: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
@@ -229,6 +255,16 @@ export type MutationDeleteLessonArgs = {
 };
 
 
+export type MutationCreateSessionArgs = {
+  options: SessionInput;
+};
+
+
+export type MutationDeleteSessionArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type MutationRegisterArgs = {
   options: RegisterInput;
 };
@@ -280,6 +316,10 @@ export type StepInput = {
 export type LessonInput = {
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
+};
+
+export type SessionInput = {
+  lessonId: Scalars['Float'];
 };
 
 export type UserResponse = {

@@ -9,12 +9,10 @@ export type AlgoliaSearchResultType = { name: string; version: string };
 
 const EditorFiles: React.FC<Props> = ({
   createFile,
-  currentPath,
   deleteFile,
-  dependencies,
   files,
   setCurrentPath,
-  stepId,
+  ...rest
 }) => {
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));
@@ -22,24 +20,22 @@ const EditorFiles: React.FC<Props> = ({
   return (
     <>
       <FilesList
-        currentPath={currentPath}
         files={docs}
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
         setCurrentPath={setCurrentPath}
+        {...rest}
       />
-      <FilesList
-        currentPath={currentPath}
-        files={tests}
-        name={'Tests'}
-        setCurrentPath={setCurrentPath}
-      />
-      <DependenciesList
-        dependencies={dependencies}
-        name={'Dependencies'}
-        stepId={stepId}
-      />
+      {rest.isEditting && (
+        <FilesList
+          files={tests}
+          name={'Tests'}
+          setCurrentPath={setCurrentPath}
+          {...rest}
+        />
+      )}
+      <DependenciesList name={'Dependencies'} {...rest} />
     </>
   );
 };
@@ -50,6 +46,7 @@ type Props = {
   deleteFile: (path: string) => void;
   dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
+  isEditting?: boolean;
   setCurrentPath: (path: string) => void;
   stepId: number;
 };

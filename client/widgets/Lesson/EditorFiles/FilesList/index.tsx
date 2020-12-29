@@ -6,6 +6,7 @@ import styles from './FilesList.module.scss';
 const FilesList: React.FC<Props> = ({
   currentPath,
   files,
+  isEditting,
   name,
   onCreate,
   onDelete,
@@ -43,7 +44,7 @@ const FilesList: React.FC<Props> = ({
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
         <span className="text-sm font-semibold">{name}</span>
-        {onCreate && (
+        {onCreate && isEditting && (
           <Icon
             className="text-sm text-gray-500 hover:text-black cursor-pointer"
             name="plus-circled"
@@ -66,7 +67,7 @@ const FilesList: React.FC<Props> = ({
                 onClick={() => setCurrentPath && setCurrentPath(path)}
               >
                 <div className="text-xs">{path}</div>
-                {onDelete && (
+                {onDelete && isEditting && (
                   <Icon
                     className="text-red-600 text-sm hidden"
                     name="minus-circled"
@@ -102,6 +103,7 @@ const FilesList: React.FC<Props> = ({
 type Props = {
   currentPath?: string;
   files?: Array<string>;
+  isEditting?: boolean;
   name: string;
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;

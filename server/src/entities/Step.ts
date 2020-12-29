@@ -14,6 +14,7 @@ import { Checkpoint } from "./Checkpoint";
 import { CodeModule } from "./CodeModule";
 import { Dependency } from "./Dependency";
 import { Lesson } from "./Lesson";
+import { Session } from "./Session";
 
 @ObjectType()
 @Entity()
@@ -37,6 +38,10 @@ export class Step extends BaseEntity {
   @ManyToOne(() => Lesson, (lesson) => lesson.steps)
   @Field(() => Lesson)
   lesson: Lesson;
+
+  @ManyToOne(() => Session, (session) => session.steps)
+  @Field(() => Session)
+  class: Session;
 
   // code modules
   @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {

@@ -30,6 +30,10 @@ export class Checkpoint extends BaseEntity {
   @Column({ default: `` })
   description: string;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isCompleted!: boolean;
+
   @Field()
   @Column()
   test!: string;
