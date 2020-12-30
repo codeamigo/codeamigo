@@ -18,6 +18,7 @@
       "@api/*": ["./api/*"],
       "@components/*": ["./components/*"],
       "@generated/*": ["./generated/*"],
+      "@pages/*": ["./pages/*"],
       "@widgets/*": ["./widgets/*"]
     }
   },

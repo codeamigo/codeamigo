@@ -24,7 +24,7 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
           <Editor step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
-          <iframe id="frame" src="http://localhost:1234/"></iframe>
+          <iframe id="frame" src="/preview.html"></iframe>
         </div>
       </div>
     </>
