@@ -1,6 +1,7 @@
 import { CodeSandboxV2ResponseI } from '@api/types';
 import {
   RegularStepFragment,
+  useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
@@ -54,6 +55,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
+
+  const [completeCheckpoint] = useCompleteCheckpointMutation();
 
   const sortedCheckpoints = (step.checkpoints || [])
     .slice()
@@ -256,6 +259,24 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   useEffect(() => {
     updateDependencies();
   }, [step.dependencies]);
+
+  useEffect(() => {
+    window.addEventListener('message', (message) => {
+      if (message.data.from === 'preview') {
+        try {
+          const result = JSON.parse(message.data.result);
+          if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
+            completeCheckpoint({
+              refetchQueries: ['Step'],
+              variables: { id: nextCheckpoint.id },
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  }, []);
 
   return (
     <div className="w-full lg:h-full flex flex-col">

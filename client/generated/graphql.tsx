@@ -143,6 +143,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
+  completeCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
@@ -173,6 +174,11 @@ export type MutationCreateCheckpointArgs = {
 
 export type MutationUpdateCheckpointArgs = {
   options: UpdateCheckpointInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationCompleteCheckpointArgs = {
   id: Scalars['Float'];
 };
 
@@ -585,6 +591,19 @@ export type UpdateCheckpointMutationVariables = Exact<{
 export type UpdateCheckpointMutation = (
   { __typename?: 'Mutation' }
   & { updateCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & Pick<Checkpoint, 'id'>
+  )> }
+);
+
+export type CompleteCheckpointMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type CompleteCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { completeCheckpoint?: Maybe<(
     { __typename?: 'Checkpoint' }
     & Pick<Checkpoint, 'id'>
   )> }
@@ -1295,6 +1314,38 @@ export function useUpdateCheckpointMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateCheckpointMutationHookResult = ReturnType<typeof useUpdateCheckpointMutation>;
 export type UpdateCheckpointMutationResult = Apollo.MutationResult<UpdateCheckpointMutation>;
 export type UpdateCheckpointMutationOptions = Apollo.BaseMutationOptions<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>;
+export const CompleteCheckpointDocument = gql`
+    mutation CompleteCheckpoint($id: Float!) {
+  completeCheckpoint(id: $id) {
+    id
+  }
+}
+    `;
+export type CompleteCheckpointMutationFn = Apollo.MutationFunction<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
+
+/**
+ * __useCompleteCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCompleteCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeCheckpointMutation, { data, loading, error }] = useCompleteCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCompleteCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>) {
+        return Apollo.useMutation<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>(CompleteCheckpointDocument, baseOptions);
+      }
+export type CompleteCheckpointMutationHookResult = ReturnType<typeof useCompleteCheckpointMutation>;
+export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
+export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
     mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
   updateCodeModule(id: $id, options: {name: $name, value: $value}) {

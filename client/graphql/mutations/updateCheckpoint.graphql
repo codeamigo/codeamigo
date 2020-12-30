@@ -9,3 +9,13 @@ mutation UpdateCheckpoint(
     id
   }
 }
+
+mutation CompleteCheckpoint(
+  $id: Float!
+) {
+  completeCheckpoint(
+    id: $id
+  ) {
+    id
+  }
+}
