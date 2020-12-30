@@ -14,19 +14,21 @@ import { Checkpoint } from "./entities/Checkpoint";
 import { CodeModule } from "./entities/CodeModule";
 import { Dependency } from "./entities/Dependency";
 import { Lesson } from "./entities/Lesson";
+import { Session } from "./entities/Session";
 import { Step } from "./entities/Step";
 import { User } from "./entities/User";
 import { CheckpointResolver } from "./resolvers/checkpoint";
 import { CodeModuleResolver } from "./resolvers/codeModule";
 import { DependencyResolver } from "./resolvers/dependency";
 import { LessonResolver } from "./resolvers/lesson";
+import { SessionResolver } from "./resolvers/session";
 import { StepResolver } from "./resolvers/step";
 import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
   await createConnection({
     database: "codeamigo",
-    entities: [Checkpoint, CodeModule, Dependency, Lesson, Step, User],
+    entities: [Checkpoint, CodeModule, Dependency, Lesson, Session, Step, User],
     logging: true,
     password: "postgres",
     synchronize: true,
@@ -74,6 +76,7 @@ const main = async () => {
         CodeModuleResolver,
         DependencyResolver,
         LessonResolver,
+        SessionResolver,
         StepResolver,
         UserResolver,
       ],

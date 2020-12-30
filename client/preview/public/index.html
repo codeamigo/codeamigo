@@ -14,6 +14,28 @@
 <script async defer type="text/babel">
   const MODULE_ROOT = "/node_modules";
 
+  // hijack console log
+  (function () {
+    let oldlog = console.log;
+    let oldinfo = console.info;
+    let oldwarn = console.warn;
+    console.log = function (message) {
+      let msg = typeof message === 'string' ? messsage : JSON.stringify(message)
+      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      oldlog.apply(console, arguments);
+    };
+    console.info = function (message) {
+      let msg = typeof message === 'string' ? messsage : JSON.stringify(message)
+      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      oldinfo.apply(console, arguments);
+    };
+    console.warn = function (message) {
+      let msg = typeof message === 'string' ? messsage : JSON.stringify(message)
+      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      oldwarn.apply(console, arguments);
+    };
+  })();
+
   const transformCode = (code, path) => {
     return Babel.transform(code, {
       presets: ["es2015", "typescript", "react"],

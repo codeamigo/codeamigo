@@ -88,6 +88,7 @@ export class CheckpointResolver {
   }
 
   @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateCheckpoint(
     @Arg("id") id: number,
     @Arg("options") options: UpdateCheckpointInput
@@ -98,6 +99,20 @@ export class CheckpointResolver {
     }
 
     await Checkpoint.update({ id }, { ...options });
+
+    return checkpoint;
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async completeCheckpoint(@Arg("id") id: number): Promise<Checkpoint | null> {
+    const checkpoint = await Checkpoint.findOne(id);
+    if (!checkpoint) {
+      return null;
+    }
+
+    checkpoint.isCompleted = true;
+    checkpoint.save();
 
     return checkpoint;
   }

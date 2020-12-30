@@ -1,6 +1,7 @@
 import { CodeSandboxV2ResponseI } from '@api/types';
 import {
   RegularStepFragment,
+  useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
@@ -46,7 +47,7 @@ export const MODULE_ROOT = '/node_modules';
 
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
-const Editor: React.FC<Props> = ({ step }) => {
+const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [files, setFiles] = React.useState({} as FilesType);
   const [dependencies, setDependencies] = React.useState({} as FilesType);
   const [currentPath, setCurrentPath] = React.useState('');
@@ -54,6 +55,16 @@ const Editor: React.FC<Props> = ({ step }) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
+
+  const [completeCheckpoint] = useCompleteCheckpointMutation();
+
+  const sortedCheckpoints = (step.checkpoints || [])
+    .slice()
+    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
+  const nextCheckpoint = sortedCheckpoints.find(
+    (checkpoint) => !checkpoint.isCompleted
+  );
 
   const createFile = async (file: string) => {
     if (files[file] !== undefined) {
@@ -140,7 +151,7 @@ const Editor: React.FC<Props> = ({ step }) => {
     });
   };
 
-  const postCode = () => {
+  const postCode = (path?: string, isTest?: boolean) => {
     // @ts-ignore
     const iframe =
       // @ts-ignore
@@ -151,7 +162,8 @@ const Editor: React.FC<Props> = ({ step }) => {
       {
         files: { ...files, ...dependencies },
         from: 'editor',
-        runPath: currentPath,
+        isTest,
+        runPath: path || currentPath,
       } as PreviewType,
       '*'
     );
@@ -240,20 +252,54 @@ const Editor: React.FC<Props> = ({ step }) => {
 
     setFiles(mods);
 
-    if (!currentPath) setCurrentPath(Object.keys(mods)[0]);
+    if (!currentPath)
+      setCurrentPath(Object.keys(mods).filter((n) => !n.includes('spec'))[0]);
   }, [step.id, step.codeModules]);
 
   useEffect(() => {
     updateDependencies();
   }, [step.dependencies]);
 
+  useEffect(() => {
+    window.addEventListener('message', (message) => {
+      if (message.data.from === 'preview') {
+        try {
+          const result = JSON.parse(message.data.result);
+          if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
+            completeCheckpoint({
+              refetchQueries: ['Step'],
+              variables: { id: nextCheckpoint.id },
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  }, []);
+
   return (
     <div className="w-full lg:h-full flex flex-col">
       <h3 className="flex justify-between">
         <span>Initial Code</span>
-        <button onClick={() => postCode()} type="button">
-          Run
-        </button>
+        <div className="flex">
+          <button
+            className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none disabled:opacity-50"
+            onClick={() => postCode()}
+            type="button"
+          >
+            Run
+          </button>
+          {!rest.isEditting && (
+            <button
+              className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+              onClick={() => postCode(nextCheckpoint?.test, true)}
+              type="button"
+            >
+              Test
+            </button>
+          )}
+        </div>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
         <div className="w-4/12 border-r border-gray-200">
@@ -265,6 +311,7 @@ const Editor: React.FC<Props> = ({ step }) => {
             files={files}
             setCurrentPath={setCurrentPath}
             stepId={step.id}
+            {...rest}
           />
         </div>
         <div className="w-8/12 h-80 lg:h-full">
@@ -294,6 +341,7 @@ const Editor: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
+  isEditting?: boolean;
   step: RegularStepFragment;
 };
 

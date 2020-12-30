@@ -27,8 +27,8 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
 };
 
 type Props = {
-  name: string;
   label: string;
+  name: string;
 };
 
 export default InputField;

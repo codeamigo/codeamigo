@@ -14,6 +14,7 @@ import { Checkpoint } from "./Checkpoint";
 import { CodeModule } from "./CodeModule";
 import { Dependency } from "./Dependency";
 import { Lesson } from "./Lesson";
+import { Session } from "./Session";
 
 @ObjectType()
 @Entity()
@@ -34,9 +35,13 @@ export class Step extends BaseEntity {
   @Column()
   instructions!: string;
 
-  @ManyToOne(() => Lesson, (lesson) => lesson.steps)
+  @ManyToOne(() => Lesson, (lesson) => lesson.steps, { onDelete: "CASCADE" })
   @Field(() => Lesson)
   lesson: Lesson;
+
+  @ManyToOne(() => Session, (session) => session.steps, { onDelete: "CASCADE" })
+  @Field(() => Session)
+  session: Session;
 
   // code modules
   @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {

@@ -95,10 +95,10 @@ const Steps: React.FC<Props> = ({
 };
 
 type Props = {
-  lessonId: number;
   currentStepId: number;
-  steps: RegularStepFragment[];
+  lessonId: number;
   setCurrentStepId: (n: number) => void;
+  steps: RegularStepFragment[];
   toggleShowSteps: () => void;
 };
 

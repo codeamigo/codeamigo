@@ -25,6 +25,8 @@ export type Query = {
   step?: Maybe<Step>;
   lessons: Array<Lesson>;
   lesson?: Maybe<Lesson>;
+  sessions: Array<Session>;
+  session?: Maybe<Session>;
   me?: Maybe<User>;
 };
 
@@ -53,12 +55,18 @@ export type QueryLessonArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QuerySessionArgs = {
+  lessonId: Scalars['Int'];
+};
+
 export type Checkpoint = {
   __typename?: 'Checkpoint';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   description: Scalars['String'];
+  isCompleted: Scalars['Boolean'];
   test: Scalars['String'];
   moduleId: Scalars['Float'];
 };
@@ -80,6 +88,7 @@ export type Step = {
   updatedAt: Scalars['String'];
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
+  session: Session;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
   dependencies?: Maybe<Array<Dependency>>;
@@ -93,6 +102,7 @@ export type Lesson = {
   title: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
+  students?: Maybe<Array<User>>;
   owner: User;
   steps?: Maybe<Array<Step>>;
 };
@@ -105,6 +115,18 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   lessons: Array<Lesson>;
+  classes: Array<Session>;
+};
+
+export type Session = {
+  __typename?: 'Session';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  currentStep: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  student: User;
+  steps?: Maybe<Array<Step>>;
 };
 
 export type Dependency = {
@@ -121,6 +143,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
+  completeCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
@@ -135,6 +158,8 @@ export type Mutation = {
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
+  createSession?: Maybe<Session>;
+  deleteSession: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
   forgotPassword: Scalars['Boolean'];
@@ -149,6 +174,11 @@ export type MutationCreateCheckpointArgs = {
 
 export type MutationUpdateCheckpointArgs = {
   options: UpdateCheckpointInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationCompleteCheckpointArgs = {
   id: Scalars['Float'];
 };
 
@@ -229,6 +259,16 @@ export type MutationDeleteLessonArgs = {
 };
 
 
+export type MutationCreateSessionArgs = {
+  options: SessionInput;
+};
+
+
+export type MutationDeleteSessionArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type MutationRegisterArgs = {
   options: RegisterInput;
 };
@@ -282,6 +322,10 @@ export type LessonInput = {
   description?: Maybe<Scalars['String']>;
 };
 
+export type SessionInput = {
+  lessonId: Scalars['Float'];
+};
+
 export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -307,7 +351,7 @@ export type LoginInput = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt'>
+  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt' | 'isCompleted'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -419,6 +463,19 @@ export type CreateLessonMutation = (
       & Pick<User, 'id' | 'username'>
     ) }
   ) }
+);
+
+export type CreateSessionMutationVariables = Exact<{
+  lessonId: Scalars['Float'];
+}>;
+
+
+export type CreateSessionMutation = (
+  { __typename?: 'Mutation' }
+  & { createSession?: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id'>
+  )> }
 );
 
 export type CreateStepMutationVariables = Exact<{
@@ -539,6 +596,19 @@ export type UpdateCheckpointMutation = (
   )> }
 );
 
+export type CompleteCheckpointMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type CompleteCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { completeCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & Pick<Checkpoint, 'id'>
+  )> }
+);
+
 export type UpdateCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
@@ -646,6 +716,23 @@ export type MeQuery = (
   )> }
 );
 
+export type SessionQueryVariables = Exact<{
+  lessonId: Scalars['Int'];
+}>;
+
+
+export type SessionQuery = (
+  { __typename?: 'Query' }
+  & { session?: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'currentStep'>
+    & { steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & RegularStepFragment
+    )>> }
+  )> }
+);
+
 export type StepQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -689,6 +776,7 @@ export const RegularCheckpointFragmentDoc = gql`
   test
   description
   createdAt
+  isCompleted
 }
     `;
 export const RegularDependencyFragmentDoc = gql`
@@ -896,6 +984,38 @@ export function useCreateLessonMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMutation>;
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
+export const CreateSessionDocument = gql`
+    mutation CreateSession($lessonId: Float!) {
+  createSession(options: {lessonId: $lessonId}) {
+    id
+  }
+}
+    `;
+export type CreateSessionMutationFn = Apollo.MutationFunction<CreateSessionMutation, CreateSessionMutationVariables>;
+
+/**
+ * __useCreateSessionMutation__
+ *
+ * To run a mutation, you first call `useCreateSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createSessionMutation, { data, loading, error }] = useCreateSessionMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useCreateSessionMutation(baseOptions?: Apollo.MutationHookOptions<CreateSessionMutation, CreateSessionMutationVariables>) {
+        return Apollo.useMutation<CreateSessionMutation, CreateSessionMutationVariables>(CreateSessionDocument, baseOptions);
+      }
+export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
+export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
+export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CreateStepDocument = gql`
     mutation CreateStep($lessonId: Float!) {
   createStep(options: {lessonId: $lessonId}) {
@@ -1194,6 +1314,38 @@ export function useUpdateCheckpointMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateCheckpointMutationHookResult = ReturnType<typeof useUpdateCheckpointMutation>;
 export type UpdateCheckpointMutationResult = Apollo.MutationResult<UpdateCheckpointMutation>;
 export type UpdateCheckpointMutationOptions = Apollo.BaseMutationOptions<UpdateCheckpointMutation, UpdateCheckpointMutationVariables>;
+export const CompleteCheckpointDocument = gql`
+    mutation CompleteCheckpoint($id: Float!) {
+  completeCheckpoint(id: $id) {
+    id
+  }
+}
+    `;
+export type CompleteCheckpointMutationFn = Apollo.MutationFunction<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
+
+/**
+ * __useCompleteCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCompleteCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeCheckpointMutation, { data, loading, error }] = useCompleteCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCompleteCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>) {
+        return Apollo.useMutation<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>(CompleteCheckpointDocument, baseOptions);
+      }
+export type CompleteCheckpointMutationHookResult = ReturnType<typeof useCompleteCheckpointMutation>;
+export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
+export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
     mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
   updateCodeModule(id: $id, options: {name: $name, value: $value}) {
@@ -1444,6 +1596,43 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const SessionDocument = gql`
+    query Session($lessonId: Int!) {
+  session(lessonId: $lessonId) {
+    id
+    currentStep
+    steps {
+      ...RegularStep
+    }
+  }
+}
+    ${RegularStepFragmentDoc}`;
+
+/**
+ * __useSessionQuery__
+ *
+ * To run a query within a React component, call `useSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSessionQuery({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useSessionQuery(baseOptions: Apollo.QueryHookOptions<SessionQuery, SessionQueryVariables>) {
+        return Apollo.useQuery<SessionQuery, SessionQueryVariables>(SessionDocument, baseOptions);
+      }
+export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionQuery, SessionQueryVariables>) {
+          return Apollo.useLazyQuery<SessionQuery, SessionQueryVariables>(SessionDocument, baseOptions);
+        }
+export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
+export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
+export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
 export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {
