@@ -52,12 +52,11 @@ Visit http://localhost:3000
 5. dokku tags:deploy api latest
 ```
 
-http://dokku.viewdocs.io/dokku~v0.21.4/deployment/methods/images/#image-workflows
-
 ### Deploying Frontend
 
 ```
-1. vercel --prod
+1. cd client
+2. vercel --prod
 ```
 
 ### Model
