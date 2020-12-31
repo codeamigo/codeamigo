@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv-safe/config";
 
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
@@ -26,31 +27,31 @@ import { StepResolver } from "./resolvers/step";
 import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
-  await createConnection({
-    database: "codeamigo",
+  const conn = await createConnection({
     entities: [Checkpoint, CodeModule, Dependency, Lesson, Session, Step, User],
     logging: true,
-    password: "postgres",
-    synchronize: true,
+    synchronize: __prod__,
     type: "postgres",
-    username: "postgres",
+    url: process.env.DATABASE_URL,
   });
+  await conn.runMigrations();
 
   const app = express();
-
+  app.set("proxy", 1);
   app.use(
     cors({
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
     })
   );
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
 
   app.use(
     session({
       cookie: {
+        domain: __prod__ ? ".codeamigo.dev" : undefined,
         httpOnly: true,
         // 10 years
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
@@ -60,7 +61,7 @@ const main = async () => {
       name: "amigoid",
       resave: false,
       saveUninitialized: false,
-      secret: "secreto",
+      secret: process.env.SESSION_SECRET,
       store: new RedisStore({
         client: redis,
         disableTouch: true,
@@ -86,8 +87,8 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(4000, () => {
-    console.log("server started on localhost:4000");
+  app.listen(parseInt(process.env.PORT), () => {
+    console.log(`Server started on localhost:${process.env.PORT}`);
   });
 };
 

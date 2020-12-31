@@ -169,7 +169,7 @@ export class UserResolver {
     );
 
     // TODO, ENV
-    const action = `<a href="http://localhost:3000/change-password/${token}">Reset password</a>`;
+    const action = `<a href="${process.env.CORS_ORIGIN}/change-password/${token}">Reset password</a>`;
 
     await sendEmail(email, action);
 
