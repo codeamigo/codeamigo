@@ -44,11 +44,21 @@ Visit http://localhost:3000
 
 ### Deploying Backend
 
+```
 1. push to codeamigo master
-2. get image from docker hub
-3. deploy image to dokku
+2. ssh into digital ocean droplet
+3. docker pull plondon/codeamigo:latest
+4. docker tag plondon/codeamigo:latest dokku/api:latest
+5. dokku tags:deploy api latest
+```
 
 http://dokku.viewdocs.io/dokku~v0.21.4/deployment/methods/images/#image-workflows
+
+### Deploying Frontend
+
+```
+1. vercel --prod
+```
 
 ### Model
 
