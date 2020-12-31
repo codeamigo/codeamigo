@@ -37,7 +37,7 @@ const main = async () => {
   await conn.runMigrations();
 
   const app = express();
-  app.set("proxy", 1);
+  app.set("trust proxy", 1);
   app.use(
     cors({
       credentials: true,
