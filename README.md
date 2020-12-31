@@ -45,11 +45,12 @@ Visit http://localhost:3000
 ### Deploying Backend
 
 ```
-1. push to codeamigo master
-2. ssh into digital ocean droplet
-3. docker pull plondon/codeamigo:latest
-4. docker tag plondon/codeamigo:latest dokku/api:latest
-5. dokku tags:deploy api latest
+1. ssh root@104.236.11.118
+2. push to codeamigo master
+3. ssh into digital ocean droplet
+4. docker pull plondon/codeamigo:latest
+5. docker tag plondon/codeamigo:latest dokku/api:latest
+6. dokku tags:deploy api latest
 ```
 
 ### Deploying Frontend
