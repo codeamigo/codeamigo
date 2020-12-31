@@ -4,7 +4,7 @@ import { withApollo as createWithApollo } from 'next-apollo';
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
   credentials: 'include',
-  uri: 'http://localhost:4000/graphql',
+  uri: `${process.env.NEXT_PUBLIC_API_URL}`,
 });
 
 export default createWithApollo(client);

@@ -42,6 +42,14 @@ Visit http://localhost:3000
 6. tailwindcss
 ```
 
+### Deploying Backend
+
+1. push to codeamigo master
+2. get image from docker hub
+3. deploy image to dokku
+
+http://dokku.viewdocs.io/dokku~v0.21.4/deployment/methods/images/#image-workflows
+
 ### Model
 
 https://youtu.be/I6ypD7qv3Z8?t=14231
