@@ -1,15 +1,16 @@
+import InputField from '@components/Form/InputField';
+import { useLoginMutation } from '@generated/graphql';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import InputField from '../components/Form/InputField';
-import { useLoginMutation } from '../generated/graphql';
-import { toErrorMap } from '../utils';
-import withApollo from '../utils/withApollo';
+import { useGlobalState } from '../../state';
+import { toErrorMap } from '../../utils';
 
-const Login: React.FC<Props> = () => {
+const Login: React.FC = () => {
   const router = useRouter();
   const [login, { data }] = useLoginMutation();
+  const [_, setModal] = useGlobalState('modal');
 
   return (
     <Formik
@@ -21,6 +22,7 @@ const Login: React.FC<Props> = () => {
         }
 
         if (data?.login.user) {
+          setModal(null);
           router.push('/');
         }
       }}
@@ -63,6 +65,4 @@ const Login: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
-
-export default withApollo({ ssr: false })(Login);
+export default Login;

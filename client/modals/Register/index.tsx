@@ -1,15 +1,16 @@
+import InputField from '@components/Form/InputField';
+import { useRegisterMutation } from '@generated/graphql';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import InputField from '../components/Form/InputField';
-import { useRegisterMutation } from '../generated/graphql';
-import { toErrorMap } from '../utils';
-import withApollo from '../utils/withApollo';
+import { useGlobalState } from '../../state';
+import { toErrorMap } from '../../utils';
 
-const Register: React.FC<Props> = () => {
+const Register: React.FC = () => {
   const router = useRouter();
   const [register, { data }] = useRegisterMutation();
+  const [_, setModal] = useGlobalState('modal');
 
   return (
     <Formik
@@ -21,6 +22,7 @@ const Register: React.FC<Props> = () => {
         }
 
         if (data?.register.user) {
+          setModal(null);
           router.push('/');
         }
       }}
@@ -71,6 +73,4 @@ const Register: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
-
-export default withApollo({ ssr: false })(Register);
+export default Register;

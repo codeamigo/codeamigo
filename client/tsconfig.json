@@ -19,6 +19,8 @@
       "@components/*": ["./components/*"],
       "@generated/*": ["./generated/*"],
       "@pages/*": ["./pages/*"],
+      "@modals/*": ["./modals/*"],
+      "@utils/*": ["./utils/*"],
       "@widgets/*": ["./widgets/*"]
     }
   },

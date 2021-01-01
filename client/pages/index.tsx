@@ -1,14 +1,26 @@
 import { useRouter } from 'next/router';
 
-import { useLessonsQuery } from '../generated/graphql';
+import { useLessonsQuery, useMeQuery } from '../generated/graphql';
+import { useGlobalState } from '../state';
 import withApollo from '../utils/withApollo';
 
 const Home = () => {
+  const [modals, setModal] = useGlobalState('modal');
+  const { data: meData, error: meError, loading: meLoading } = useMeQuery();
   const { data, error, loading } = useLessonsQuery();
   const router = useRouter();
 
-  if (loading) return <>Loading...</>;
-  if (error) return <>Error</>;
+  if (loading || meLoading) return <>Loading...</>;
+  if (error || meError) return <>Error</>;
+
+  const handleClick = (id: number) => {
+    console.log(meData);
+    // if (meData?.me?.id) {
+    router.push(`/lessons/start/${id}`);
+    // } else {
+    //   setModal('login');
+    // }
+  };
 
   return (
     <div className="container mx-auto p-10">
@@ -18,7 +30,7 @@ const Home = () => {
             <div
               className="p-3 rounded-lg border-gray-200 border-2 cursor-pointer"
               key={lesson.id}
-              onClick={() => router.push(`/lessons/start/${lesson.id}`)}
+              onClick={() => handleClick(lesson.id)}
             >
               <h2 className="text-xl">{lesson.title}</h2>
               <h3 className="text-xs">By: {lesson.owner.username}</h3>
