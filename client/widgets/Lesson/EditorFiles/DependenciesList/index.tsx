@@ -138,7 +138,7 @@ const DependenciesList: React.FC<Props> = ({
             ))}
         <div className="relative">
           {isAdding && (
-            <div className="px-1 py-1">
+            <div className="p-1">
               <input
                 className="w-full text-xs px-2 py-1"
                 onBlur={handleBlur}
@@ -156,16 +156,20 @@ const DependenciesList: React.FC<Props> = ({
               onChange={createDependency}
               value=""
             >
-              <div className="relative">
+              <div className="relative p-1">
                 <Transition
-                  className="absolute mt-1 w-full"
+                  className="w-full rounded-md shadow-md"
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                   show={searchResults.length > 0}
                 >
-                  {/* @ts-ignore */}
-                  <Listbox.Options ref={optionsRef} static={isAdding}>
+                  <Listbox.Options
+                    className="outline-none"
+                    /* @ts-ignore */
+                    ref={optionsRef}
+                    static={isAdding}
+                  >
                     {searchResults.map((result, i) => (
                       // @ts-ignore
                       <Listbox.Option key={i} value={result}>
@@ -176,7 +180,7 @@ const DependenciesList: React.FC<Props> = ({
                                 active
                                   ? 'text-white bg-blue-600'
                                   : 'text-gray-900'
-                              } cursor-default select-none relative py-1 px-2`}
+                              } cursor-pointer select-none relative py-1 px-2 outline-none`}
                             >
                               <span
                                 className={`${
