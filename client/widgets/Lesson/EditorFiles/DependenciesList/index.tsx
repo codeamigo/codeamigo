@@ -57,14 +57,35 @@ const DependenciesList: React.FC<Props> = ({
       return;
     }
 
-    // setIsAdding(false);
-    // setSearchResults([]);
+    setIsAdding(false);
+    setSearchResults([]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
-      if (optionsRef.current) optionsRef.current.focus();
+      e.preventDefault();
+      if (optionsRef.current) {
+        if (optionsRef.current.firstChild) {
+          // @ts-ignore
+          optionsRef.current.firstChild.focus();
+        } else {
+          optionsRef.current.focus();
+        }
+      }
     }
+
+    // Does not work
+    // if (e.key === 'ArrowUp') {
+    //   if (!inputRef.current) return;
+    //   if (!optionsRef.current) return;
+    //   if (!optionsRef.current.firstChild) return;
+    //   // @ts-ignore
+    //   if (e.target.id === optionsRef.current?.firstChild.id) {
+    //     // @ts-ignore
+    //     optionsRef.current.lastChild.focus();
+    //     console.log(optionsRef.current.lastChild);
+    //   }
+    // }
   };
 
   const createDependency = async (result: AlgoliaSearchResultType) => {
@@ -154,11 +175,12 @@ const DependenciesList: React.FC<Props> = ({
               onBlur={handleBlur}
               /* @ts-ignore */
               onChange={createDependency}
+              onKeyDown={handleKeyDown}
               value=""
             >
               <div className="relative p-1">
                 <Transition
-                  className="w-full rounded-md shadow-md"
+                  className="w-full rounded-md shadow-md bg-white"
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
@@ -171,8 +193,12 @@ const DependenciesList: React.FC<Props> = ({
                     static={isAdding}
                   >
                     {searchResults.map((result, i) => (
-                      // @ts-ignore
-                      <Listbox.Option key={i} value={result}>
+                      <Listbox.Option
+                        className="outline-none"
+                        key={i}
+                        // @ts-ignore
+                        value={result}
+                      >
                         {({ active }) => {
                           return (
                             <div
@@ -180,7 +206,7 @@ const DependenciesList: React.FC<Props> = ({
                                 active
                                   ? 'text-white bg-blue-600'
                                   : 'text-gray-900'
-                              } cursor-pointer select-none relative py-1 px-2 outline-none`}
+                              } cursor-pointer select-none relative py-1 px-2`}
                             >
                               <span
                                 className={`${
