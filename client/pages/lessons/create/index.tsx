@@ -13,7 +13,7 @@ const CreateLesson = () => {
         variables: { title: 'My Awesome Lesson' },
       });
       const id = response.data?.createLesson.id;
-      router.push(`/lessons/edit/${id}`);
+      router.replace(`/lessons/edit/${id}`);
     }
 
     create();

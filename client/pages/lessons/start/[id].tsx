@@ -20,9 +20,9 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
           refetchQueries: ['Session'],
           variables: { lessonId: id },
         });
-        router.push(`/lessons/${id}`);
+        router.replace(`/lessons/${id}`);
       } else {
-        router.push(`/lessons/${id}`);
+        router.replace(`/lessons/${id}`);
       }
     }
 
