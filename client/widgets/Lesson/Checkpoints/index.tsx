@@ -14,6 +14,18 @@ import gfm from 'remark-gfm';
 import Icon from '../../../components/Icon';
 
 const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
+  const sortedCheckpoints = (step.checkpoints || [])
+    .slice()
+    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+  const nextCheckpoint = isEditting
+    ? sortedCheckpoints[0]
+    : sortedCheckpoints.find((checkpoint) => !checkpoint.isCompleted);
+
+  const [activeCheckpoint, setActiveCheckpoint] = useState<
+    RegularCheckpointFragment | undefined
+  >(nextCheckpoint || sortedCheckpoints[0]);
+  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
+
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
@@ -24,21 +36,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
     isEditting ? 'editor' : 'preview'
   );
 
-  if (!step.checkpoints) return null;
-
-  const sortedCheckpoints = step.checkpoints
-    .slice()
-    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-
-  const nextCheckpoint = isEditting
-    ? sortedCheckpoints[0]
-    : sortedCheckpoints.find((checkpoint) => !checkpoint.isCompleted);
-
-  const [activeCheckpoint, setActiveCheckpoint] = useState<
-    RegularCheckpointFragment | undefined
-  >(nextCheckpoint || sortedCheckpoints[0]);
-  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
-
   useEffect(() => {
     setCheckpoints(step?.checkpoints || []);
   }, [step?.checkpoints]);
@@ -47,15 +44,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
     setMarkdown(activeCheckpoint?.description);
     if (isEditting) toggleView('editor');
   }, [activeCheckpoint?.id]);
-
-  const createCheckpoint = async () => {
-    const len = step?.checkpoints?.length || 0;
-
-    await createCheckpointM({
-      refetchQueries: ['Step'],
-      variables: { checkpointId: len + 1, stepId: step.id },
-    });
-  };
 
   const updateCheckpoint = useCallback(
     debounce((value: string | undefined) => {
@@ -68,6 +56,17 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
     }, 1000),
     [activeCheckpoint]
   );
+
+  if (!step.checkpoints) return null;
+
+  const createCheckpoint = async () => {
+    const len = step?.checkpoints?.length || 0;
+
+    await createCheckpointM({
+      refetchQueries: ['Step'],
+      variables: { checkpointId: len + 1, stepId: step.id },
+    });
+  };
 
   const deleteCheckpoint = async (id: number) => {
     const len = step?.checkpoints?.length || 0;
