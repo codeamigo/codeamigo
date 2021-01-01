@@ -57,8 +57,8 @@ const DependenciesList: React.FC<Props> = ({
       return;
     }
 
-    setIsAdding(false);
-    setSearchResults([]);
+    // setIsAdding(false);
+    // setSearchResults([]);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -150,67 +150,50 @@ const DependenciesList: React.FC<Props> = ({
             </div>
           )}
           {searchResults && searchResults.length > 0 && (
-            <div className="origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-              {/* @ts-ignore */}
-              <Listbox onBlur={handleBlur} onChange={createDependency} value="">
-                <div className="relative">
-                  <Transition
-                    className="absolute mt-1 w-full rounded-md bg-white shadow-lg"
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                    show={searchResults.length > 0}
-                  >
-                    {/* @ts-ignore */}
-                    <Listbox.Options ref={optionsRef} static={isAdding}>
-                      {searchResults.map((result, i) => (
-                        // @ts-ignore
-                        <Listbox.Option key={result.name + i} value={result}>
-                          {({ active }) => {
-                            return (
-                              <div
+            <Listbox
+              onBlur={handleBlur}
+              /* @ts-ignore */
+              onChange={createDependency}
+              value=""
+            >
+              <div className="relative">
+                <Transition
+                  className="absolute mt-1 w-full"
+                  leave="transition ease-in duration-100"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                  show={searchResults.length > 0}
+                >
+                  {/* @ts-ignore */}
+                  <Listbox.Options ref={optionsRef} static={isAdding}>
+                    {searchResults.map((result, i) => (
+                      // @ts-ignore
+                      <Listbox.Option key={i} value={result}>
+                        {({ active }) => {
+                          return (
+                            <div
+                              className={`${
+                                active
+                                  ? 'text-white bg-blue-600'
+                                  : 'text-gray-900'
+                              } cursor-default select-none relative py-1 px-2`}
+                            >
+                              <span
                                 className={`${
-                                  active
-                                    ? 'text-white bg-blue-600'
-                                    : 'text-gray-900'
-                                } cursor-default select-none relative py-2 pl-8 pr-4`}
+                                  active ? 'text-white' : 'text-blue-600'
+                                } text-xs flex items-center`}
                               >
-                                <span
-                                  className={`${
-                                    active ? 'text-white' : 'text-blue-600'
-                                  } absolute inset-y-0 left-0 flex items-center pl-1.5`}
-                                >
-                                  {result.name} {result.version}
-                                </span>
-                              </div>
-                            );
-                          }}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-              {/* <div
-                aria-labelledby="options-menu"
-                aria-orientation="vertical"
-                className="py-1"
-                role="menu"
-              >
-                {searchResults.map((result) => {
-                  return (
-                    <div
-                      className="px-2 py-2 text-xs hover:bg-gray-100 hover:text-gray-900 cursor-pointer"
-                      key={result.name}
-                      onClick={() => createDependency(result)}
-                      role="menuitem"
-                    >
-                      {result.name} {result.version}
-                    </div>
-                  );
-                })}
-              </div> */}
-            </div>
+                                {result.name} {result.version}
+                              </span>
+                            </div>
+                          );
+                        }}
+                      </Listbox.Option>
+                    ))}
+                  </Listbox.Options>
+                </Transition>
+              </div>
+            </Listbox>
           )}
         </div>
       </div>
