@@ -52,7 +52,6 @@ const DependenciesList: React.FC<Props> = ({
         // @ts-ignore
         e.relatedTarget.parentElement === optionsRef.current)
     ) {
-      console.log(e);
       // do nothing
       return;
     }
