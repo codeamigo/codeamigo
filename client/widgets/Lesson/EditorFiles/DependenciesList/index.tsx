@@ -4,6 +4,7 @@ import {
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
 } from '@generated/graphql';
+import { Listbox, Transition } from '@headlessui/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { AlgoliaSearchResultType } from '..';
@@ -16,6 +17,7 @@ const DependenciesList: React.FC<Props> = ({
   stepId,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const optionsRef = useRef<HTMLUListElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [searchResults, setSearchResults] = useState<
     Array<AlgoliaSearchResultType>
@@ -24,7 +26,7 @@ const DependenciesList: React.FC<Props> = ({
   const [createDependencyM] = useCreateDependencyMutation();
   const [deleteDependency] = useDeleteDependencyMutation();
 
-  const searchDeps = async (query: string) => {
+  const searchDeps = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = `https://ofcncog2cu-dsn.algolia.net/1/indexes/npm-search/query?x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser&x-algolia-application-id=OFCNCOG2CU&x-algolia-api-key=00383ecd8441ead30b1b0ff981c426f5`;
 
     const response: {
@@ -32,7 +34,7 @@ const DependenciesList: React.FC<Props> = ({
     } = await fetch(url, {
       body: JSON.stringify({
         hitsPerPage: 4,
-        query,
+        query: e.currentTarget.value,
       }),
       headers: {
         'Content-Type': 'application/json',
@@ -43,11 +45,26 @@ const DependenciesList: React.FC<Props> = ({
     setSearchResults(response.hits);
   };
 
-  const handleBlur = () => {
-    setTimeout(() => {
-      setIsAdding(false);
-      setSearchResults([]);
-    }, 500);
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (
+      e.relatedTarget &&
+      (optionsRef.current === e.relatedTarget ||
+        // @ts-ignore
+        e.relatedTarget.parentElement === optionsRef.current)
+    ) {
+      console.log(e);
+      // do nothing
+      return;
+    }
+
+    setIsAdding(false);
+    setSearchResults([]);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      if (optionsRef.current) optionsRef.current.focus();
+    }
   };
 
   const createDependency = async (result: AlgoliaSearchResultType) => {
@@ -125,7 +142,8 @@ const DependenciesList: React.FC<Props> = ({
               <input
                 className="w-full text-xs px-2 py-1"
                 onBlur={handleBlur}
-                onChange={(e) => searchDeps(e.currentTarget.value)}
+                onChange={searchDeps}
+                onKeyDown={handleKeyDown}
                 ref={inputRef}
                 type="text"
               />
@@ -133,7 +151,47 @@ const DependenciesList: React.FC<Props> = ({
           )}
           {searchResults && searchResults.length > 0 && (
             <div className="origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
-              <div
+              {/* @ts-ignore */}
+              <Listbox onBlur={handleBlur} onChange={createDependency} value="">
+                <div className="relative">
+                  <Transition
+                    className="absolute mt-1 w-full rounded-md bg-white shadow-lg"
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                    show={searchResults.length > 0}
+                  >
+                    {/* @ts-ignore */}
+                    <Listbox.Options ref={optionsRef} static={isAdding}>
+                      {searchResults.map((result, i) => (
+                        // @ts-ignore
+                        <Listbox.Option key={result.name + i} value={result}>
+                          {({ active }) => {
+                            return (
+                              <div
+                                className={`${
+                                  active
+                                    ? 'text-white bg-blue-600'
+                                    : 'text-gray-900'
+                                } cursor-default select-none relative py-2 pl-8 pr-4`}
+                              >
+                                <span
+                                  className={`${
+                                    active ? 'text-white' : 'text-blue-600'
+                                  } absolute inset-y-0 left-0 flex items-center pl-1.5`}
+                                >
+                                  {result.name} {result.version}
+                                </span>
+                              </div>
+                            );
+                          }}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+              {/* <div
                 aria-labelledby="options-menu"
                 aria-orientation="vertical"
                 className="py-1"
@@ -151,7 +209,7 @@ const DependenciesList: React.FC<Props> = ({
                     </div>
                   );
                 })}
-              </div>
+              </div> */}
             </div>
           )}
         </div>
