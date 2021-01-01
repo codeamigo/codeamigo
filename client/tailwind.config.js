@@ -1,7 +1,12 @@
 module.exports = {
+  // or 'media' or 'class'
   darkMode: false,
   plugins: [require('@tailwindcss/forms')],
-  // or 'media' or 'class'
+  purge: [
+    './components/**/*.{js,ts,jsx,tsx}',
+    './pages/**/*.{js,ts,jsx,tsx}',
+    './widgets/**/*.{js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       minHeight: {

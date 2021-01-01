@@ -46,11 +46,9 @@ Visit http://localhost:3000
 
 ```
 1. ssh root@104.236.11.118
-2. push to codeamigo master
-3. ssh into digital ocean droplet
-4. docker pull plondon/codeamigo:latest
-5. docker tag plondon/codeamigo:latest dokku/api:latest
-6. dokku tags:deploy api latest
+2. docker pull plondon/codeamigo:latest
+3. docker tag plondon/codeamigo:latest dokku/api:latest
+4. dokku tags:deploy api latest
 ```
 
 ### Deploying Frontend
