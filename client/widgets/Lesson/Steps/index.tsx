@@ -3,18 +3,19 @@ import {
   RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
-  useLessonQuery,
 } from '@generated/graphql';
+import { Transition } from '@headlessui/react';
 import React from 'react';
 
 import styles from './Steps.module.scss';
 
 const Steps: React.FC<Props> = ({
   currentStepId,
+  isEditting,
   lessonId,
   setCurrentStepId,
+  showSteps,
   steps,
-  toggleShowSteps,
 }) => {
   const [createStepM] = useCreateStepMutation();
   const [deleteStepM] = useDeleteStepMutation();
@@ -44,12 +45,16 @@ const Steps: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <Icon
-        className="absolute left-4 text-xl text-black cursor-pointer"
-        name="list"
-        onClick={toggleShowSteps}
-      />
+    <Transition
+      className="w-full absolute top-11 left-0 h-full bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
+      enter="transition ease-in-out duration-200 transform"
+      enterFrom="-translate-x-full"
+      enterTo="translate-x-0"
+      leave="transition ease-in-out duration-300 transform"
+      leaveFrom="translate-x-0"
+      leaveTo="-translate-x-full"
+      show={showSteps}
+    >
       <ol>
         {steps
           .slice()
@@ -66,40 +71,45 @@ const Steps: React.FC<Props> = ({
                 onClick={() => setCurrentStepId(step.id)}
               >
                 <span>Step {step.id}</span>
-                <Icon
-                  className="text-red-600 hidden"
-                  name="minus-circled"
-                  onClick={() => {
-                    const yes = window.confirm(
-                      'Are you sure you want to delete this step?'
-                    );
+                {isEditting && (
+                  <Icon
+                    className="text-red-600 hidden"
+                    name="minus-circled"
+                    onClick={() => {
+                      const yes = window.confirm(
+                        'Are you sure you want to delete this step?'
+                      );
 
-                    if (yes) {
-                      deleteStep(step.id, i);
-                    }
-                  }}
-                />
+                      if (yes) {
+                        deleteStep(step.id, i);
+                      }
+                    }}
+                  />
+                )}
               </li>
             );
           })}
       </ol>
-      <button
-        className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
-        onClick={createStep}
-        type="button"
-      >
-        Add Step
-      </button>
-    </>
+      {isEditting && (
+        <button
+          className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
+          onClick={createStep}
+          type="button"
+        >
+          Add Step
+        </button>
+      )}
+    </Transition>
   );
 };
 
 type Props = {
   currentStepId: number;
+  isEditting?: boolean;
   lessonId: number;
   setCurrentStepId: (n: number) => void;
+  showSteps: boolean;
   steps: RegularStepFragment[];
-  toggleShowSteps: () => void;
 };
 
 export default Steps;

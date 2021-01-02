@@ -26,17 +26,14 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
 
   return (
     <div className="flex">
-      {showSteps && (
-        <div className="w-full absolute top-0 left-0 h-full bg-white bg-opacity-90 py-2 px-4 pl-10 z-10 md:w-2/12">
-          <Steps
-            currentStepId={stepId}
-            lessonId={data.lesson.id}
-            setCurrentStepId={setCurrentStepId}
-            steps={data.lesson.steps}
-            toggleShowSteps={toggleShowSteps}
-          />
-        </div>
-      )}
+      <Steps
+        currentStepId={stepId}
+        isEditting
+        lessonId={data.lesson.id}
+        setCurrentStepId={setCurrentStepId}
+        showSteps={showSteps}
+        steps={data.lesson.steps}
+      />
       <div className="w-full overflow-hidden lg:h-screen">
         <Info
           isEditting
