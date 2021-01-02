@@ -17,6 +17,7 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
     async function create() {
       if (!loading && !data?.session?.id) {
         await createSession({
+          awaitRefetchQueries: true,
           refetchQueries: ['Session'],
           variables: { lessonId: id },
         });

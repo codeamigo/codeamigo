@@ -81,6 +81,8 @@ export class SessionResolver {
             relations: ["codeModules", "checkpoints", "dependencies"],
           });
 
+          const { createdAt } = step!;
+
           const codeModules = await Promise.all(
             step!.codeModules.map(async (codeModule) => {
               const { id, createdAt, updatedAt, ...rest } = codeModule;
@@ -110,11 +112,14 @@ export class SessionResolver {
           return await Step.create({
             checkpoints,
             codeModules,
+            createdAt,
             dependencies,
             instructions: step?.instructions || "",
           }).save();
         })
       );
+
+      console.log(steps);
 
       const currentStep = steps.sort((a, b) =>
         b.createdAt < a.createdAt ? 1 : -1
