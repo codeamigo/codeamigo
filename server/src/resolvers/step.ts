@@ -41,7 +41,7 @@ class StepInput {
 class CreateStepInput {
   @Field()
   name: string;
-  @Field({ nullable: true })
+  @Field()
   lessonId: number;
 }
 

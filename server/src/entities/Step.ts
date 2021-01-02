@@ -31,8 +31,8 @@ export class Step extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field(() => String, { defaultValue: ``, nullable: true })
-  @Column()
+  @Field(() => String)
+  @Column({ nullable: true })
   name: string;
 
   @Field(() => String, { defaultValue: `` })

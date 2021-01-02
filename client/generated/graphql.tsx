@@ -312,7 +312,7 @@ export type DependencyInput = {
 
 export type CreateStepInput = {
   name: Scalars['String'];
-  lessonId?: Maybe<Scalars['Float']>;
+  lessonId: Scalars['Float'];
 };
 
 export type StepInput = {
