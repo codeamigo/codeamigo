@@ -10,7 +10,7 @@ import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 
-import { __prod__ } from "./constants";
+import { __prod__, SESSION_COOKIE } from "./constants";
 import { Checkpoint } from "./entities/Checkpoint";
 import { CodeModule } from "./entities/CodeModule";
 import { Dependency } from "./entities/Dependency";
@@ -58,7 +58,7 @@ const main = async () => {
         sameSite: "lax",
         secure: __prod__,
       },
-      name: "amigoid",
+      name: SESSION_COOKIE,
       resave: false,
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,

@@ -11,7 +11,7 @@ import {
 } from "type-graphql";
 import { v4 } from "uuid";
 
-import { FORGOT_PASSWORD_PREFIX } from "../constants";
+import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
 import { User } from "../entities/User";
 import { MyContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
@@ -146,6 +146,22 @@ export class UserResolver {
     return {
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { req, res }: MyContext): Promise<Boolean> {
+    return new Promise((resolve) => {
+      req.session.destroy((err) => {
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+
+        res.clearCookie(SESSION_COOKIE);
+        resolve(true);
+      });
+    });
   }
 
   @Mutation(() => Boolean)

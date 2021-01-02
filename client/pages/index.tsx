@@ -6,20 +6,19 @@ import withApollo from '../utils/withApollo';
 
 const Home = () => {
   const [modals, setModal] = useGlobalState('modal');
-  const { data: meData, error: meError, loading: meLoading } = useMeQuery();
+  const [user] = useGlobalState('user');
   const { data, error, loading } = useLessonsQuery();
   const router = useRouter();
 
-  if (loading || meLoading) return <>Loading...</>;
-  if (error || meError) return <>Error</>;
-
   const handleClick = (id: number) => {
-    console.log(meData);
-    // if (meData?.me?.id) {
-    router.push(`/lessons/start/${id}`);
-    // } else {
-    //   setModal('login');
-    // }
+    if (user.data?.me) {
+      router.push(`/lessons/start/${id}`);
+    } else {
+      setModal({
+        callback: () => router.push(`/lessons/start/${id}`),
+        name: 'login',
+      });
+    }
   };
 
   return (

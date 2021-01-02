@@ -10,20 +10,23 @@ import { toErrorMap } from '../../utils';
 const Login: React.FC = () => {
   const router = useRouter();
   const [login, { data }] = useLoginMutation();
-  const [_, setModal] = useGlobalState('modal');
+  const [modal, setModal] = useGlobalState('modal');
 
   return (
     <Formik
       initialValues={{ password: '', usernameOrEmail: '' }}
       onSubmit={async (values, { setErrors }) => {
-        const { data } = await login({ variables: values });
+        const { data } = await login({
+          refetchQueries: ['Me'],
+          variables: values,
+        });
         if (data?.login.errors) {
           setErrors(toErrorMap(data.login.errors));
         }
 
         if (data?.login.user) {
-          setModal(null);
-          router.push('/');
+          modal.callback();
+          setModal({ callback: () => null, name: null });
         }
       }}
     >

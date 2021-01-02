@@ -8,7 +8,9 @@ import Register from './Register';
 const Modals: React.FC<Props> = () => {
   const [modal, setModal] = useGlobalState('modal');
 
-  return modal ? (
+  const isOpen = !!modal.name;
+
+  return isOpen ? (
     <div className="fixed z-10 inset-0 overflow-y-auto">
       <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay, show/hide based on modal state.
@@ -26,7 +28,7 @@ const Modals: React.FC<Props> = () => {
           leave="transition-opacity duration-150"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
-          show={!!modal}
+          show={isOpen}
         >
           <div aria-hidden="true" className="fixed inset-0 transition-opacity">
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -54,8 +56,8 @@ const Modals: React.FC<Props> = () => {
           className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
           role="dialog"
         >
-          {modal === 'login' && <Login />}
-          {modal === 'register' && <Register />}
+          {modal.name === 'login' && <Login />}
+          {modal.name === 'register' && <Register />}
         </div>
       </div>
     </div>

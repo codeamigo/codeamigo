@@ -9,14 +9,17 @@ import React from 'react';
 
 import Layout from '../layouts';
 import Modals from '../modals';
+import AuthProvider from '../providers/AuthProvider';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <ApolloProvider client={client}>
-      <Layout pathname={router.pathname}>
-        <Component {...pageProps} />
-      </Layout>
-      <Modals />
+      <AuthProvider>
+        <Layout pathname={router.pathname}>
+          <Component {...pageProps} />
+        </Layout>
+        <Modals />
+      </AuthProvider>
     </ApolloProvider>
   );
 }
