@@ -1,6 +1,7 @@
 fragment RegularStep on Step {
   id
   createdAt
+  name
   instructions
   codeModules {
     ...RegularCodeModule

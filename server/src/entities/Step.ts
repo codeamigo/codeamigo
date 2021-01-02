@@ -33,6 +33,10 @@ export class Step extends BaseEntity {
 
   @Field(() => String, { defaultValue: `` })
   @Column()
+  name!: string;
+
+  @Field(() => String, { defaultValue: `` })
+  @Column()
   instructions!: string;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, { onDelete: "CASCADE" })

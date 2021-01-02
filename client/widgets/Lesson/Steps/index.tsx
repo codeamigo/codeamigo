@@ -5,7 +5,7 @@ import {
   useDeleteStepMutation,
 } from '@generated/graphql';
 import { Transition } from '@headlessui/react';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './Steps.module.scss';
 
@@ -17,18 +17,29 @@ const Steps: React.FC<Props> = ({
   showSteps,
   steps,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
   const [createStepM] = useCreateStepMutation();
   const [deleteStepM] = useDeleteStepMutation();
+  const [isAdding, setIsAdding] = useState(false);
 
-  const createStep = async () => {
+  useEffect(() => {
+    if (isAdding) {
+      setTimeout(() => {
+        inputRef.current!.focus();
+      }, 0);
+    }
+  }, [isAdding]);
+
+  const createStep = async (name: string) => {
     const step = await createStepM({
       refetchQueries: ['Lesson'],
-      variables: { lessonId },
+      variables: { lessonId, name },
     });
 
     if (!step.data?.createStep?.id) return;
 
     setCurrentStepId(step.data?.createStep?.id);
+    setIsAdding(false);
   };
 
   const deleteStep = async (id: number, idx: number) => {
@@ -42,6 +53,23 @@ const Steps: React.FC<Props> = ({
     });
 
     setCurrentStepId(sortedSteps[idx - 1].id);
+  };
+
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value;
+
+    if (value) {
+      createStep(value);
+    }
+
+    setIsAdding(false);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      createStep(event.currentTarget.value);
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -70,7 +98,7 @@ const Steps: React.FC<Props> = ({
                 key={step.id}
                 onClick={() => setCurrentStepId(step.id)}
               >
-                <span>Step {step.id}</span>
+                <span>{step.name}</span>
                 {isEditting && (
                   <Icon
                     className="text-red-600 hidden"
@@ -90,10 +118,19 @@ const Steps: React.FC<Props> = ({
             );
           })}
       </ol>
+      {isAdding && (
+        <input
+          className="w-full text-sm px-2 py-1"
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          ref={inputRef}
+          type="text"
+        />
+      )}
       {isEditting && (
         <button
           className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
-          onClick={createStep}
+          onClick={() => setIsAdding(true)}
           type="button"
         >
           Add Step

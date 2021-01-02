@@ -1,5 +1,5 @@
-mutation CreateStep($lessonId: Float!) {
-  createStep(options: { lessonId: $lessonId }) {
+mutation CreateStep($lessonId: Float!, $name: String!) {
+  createStep(options: { lessonId: $lessonId, name: $name }) {
     ...RegularStep
   }
 }

@@ -26,6 +26,14 @@ const DependenciesList: React.FC<Props> = ({
   const [createDependencyM] = useCreateDependencyMutation();
   const [deleteDependency] = useDeleteDependencyMutation();
 
+  useEffect(() => {
+    if (isAdding) {
+      setTimeout(() => {
+        inputRef.current!.focus();
+      }, 0);
+    }
+  }, [isAdding]);
+
   const searchDeps = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = `https://ofcncog2cu-dsn.algolia.net/1/indexes/npm-search/query?x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser&x-algolia-application-id=OFCNCOG2CU&x-algolia-api-key=00383ecd8441ead30b1b0ff981c426f5`;
 
@@ -100,14 +108,6 @@ const DependenciesList: React.FC<Props> = ({
     setIsAdding(false);
     setSearchResults([]);
   };
-
-  useEffect(() => {
-    if (isAdding) {
-      setTimeout(() => {
-        inputRef.current!.focus();
-      }, 0);
-    }
-  }, [isAdding]);
 
   return (
     <>

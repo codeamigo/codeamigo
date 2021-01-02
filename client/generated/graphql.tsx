@@ -86,6 +86,7 @@ export type Step = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
   session: Session;
@@ -310,6 +311,7 @@ export type DependencyInput = {
 };
 
 export type CreateStepInput = {
+  name: Scalars['String'];
   lessonId?: Maybe<Scalars['Float']>;
 };
 
@@ -381,7 +383,7 @@ export type RegularMeFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'instructions'>
+  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions'>
   & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
@@ -490,6 +492,7 @@ export type CreateSessionMutation = (
 
 export type CreateStepMutationVariables = Exact<{
   lessonId: Scalars['Float'];
+  name: Scalars['String'];
 }>;
 
 
@@ -817,6 +820,7 @@ export const RegularStepFragmentDoc = gql`
     fragment RegularStep on Step {
   id
   createdAt
+  name
   instructions
   codeModules {
     ...RegularCodeModule
@@ -1044,8 +1048,8 @@ export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSession
 export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
 export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CreateStepDocument = gql`
-    mutation CreateStep($lessonId: Float!) {
-  createStep(options: {lessonId: $lessonId}) {
+    mutation CreateStep($lessonId: Float!, $name: String!) {
+  createStep(options: {lessonId: $lessonId, name: $name}) {
     ...RegularStep
   }
 }
@@ -1066,6 +1070,7 @@ export type CreateStepMutationFn = Apollo.MutationFunction<CreateStepMutation, C
  * const [createStepMutation, { data, loading, error }] = useCreateStepMutation({
  *   variables: {
  *      lessonId: // value for 'lessonId'
+ *      name: // value for 'name'
  *   },
  * });
  */

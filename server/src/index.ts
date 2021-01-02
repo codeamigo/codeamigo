@@ -30,10 +30,11 @@ const main = async () => {
   const conn = await createConnection({
     entities: [Checkpoint, CodeModule, Dependency, Lesson, Session, Step, User],
     logging: true,
-    synchronize: __prod__,
+    synchronize: !__prod__,
     type: "postgres",
     url: process.env.DATABASE_URL,
   });
+
   await conn.runMigrations();
 
   const app = express();

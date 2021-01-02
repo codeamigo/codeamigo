@@ -39,6 +39,8 @@ class StepInput {
 
 @InputType()
 class CreateStepInput {
+  @Field()
+  name: string;
   @Field({ nullable: true })
   lessonId: number;
 }
@@ -83,6 +85,7 @@ export class StepResolver {
       codeModules: [code],
       dependencies: [dependency],
       instructions: DEFAULT_MD,
+      name: options.name,
     }).save();
 
     lesson.steps.push(step);

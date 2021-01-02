@@ -15,6 +15,14 @@ const FilesList: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
 
+  useEffect(() => {
+    if (isAdding) {
+      setTimeout(() => {
+        inputRef.current!.focus();
+      }, 0);
+    }
+  }, [isAdding]);
+
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
 
@@ -31,14 +39,6 @@ const FilesList: React.FC<Props> = ({
       setIsAdding(false);
     }
   };
-
-  useEffect(() => {
-    if (isAdding) {
-      setTimeout(() => {
-        inputRef.current!.focus();
-      }, 0);
-    }
-  }, [isAdding]);
 
   return (
     <>
