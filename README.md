@@ -51,6 +51,11 @@ Visit http://localhost:3000
 4. dokku tags:deploy api latest
 ```
 
+### Migrations
+```
+1. https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb1b3
+```
+
 ### Deploying Frontend
 
 ```
