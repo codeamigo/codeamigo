@@ -86,7 +86,7 @@ export type Step = {
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
   session: Session;
