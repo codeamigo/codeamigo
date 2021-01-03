@@ -35,6 +35,9 @@ const main = async () => {
     url: process.env.DATABASE_URL,
   });
 
+  console.log("show migrations");
+  await conn.showMigrations();
+  console.log("run migrations");
   await conn.runMigrations();
 
   const app = express();

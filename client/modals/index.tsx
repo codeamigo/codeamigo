@@ -1,5 +1,5 @@
 import { Transition } from '@headlessui/react';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { useGlobalState } from '../state';
 import Login from './Login';
@@ -7,6 +7,17 @@ import Register from './Register';
 
 const Modals: React.FC<Props> = () => {
   const [modal, setModal] = useGlobalState('modal');
+
+  const handleEscape = useCallback((event) => {
+    if (event.keyCode === 27) setModal({ callback: () => null, name: null });
+  }, []);
+
+  useEffect(() => {
+    if (modal.name) document.addEventListener('keydown', handleEscape, false);
+    return () => {
+      document.removeEventListener('keydown', handleEscape, false);
+    };
+  }, [modal.name]);
 
   const isOpen = !!modal.name;
 
@@ -30,7 +41,11 @@ const Modals: React.FC<Props> = () => {
           leaveTo="opacity-0"
           show={isOpen}
         >
-          <div aria-hidden="true" className="fixed inset-0 transition-opacity">
+          <div
+            aria-hidden="true"
+            className="fixed inset-0 transition-opacity"
+            onClick={() => setModal({ callback: () => null, name: null })}
+          >
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
           </div>
         </Transition>
@@ -53,7 +68,7 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
           role="dialog"
         >
           {modal.name === 'login' && <Login />}
