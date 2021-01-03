@@ -1,4 +1,7 @@
-import { RegularStepFragment, useUpdateStepMutation } from '@generated/graphql';
+import {
+  RegularStepFragment,
+  useUpdateStepInstructionsMutation,
+} from '@generated/graphql';
 import { ControlledEditor } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -13,11 +16,13 @@ const Instructions: React.FC<Props> = (props) => {
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
   );
-  const [updateStepM] = useUpdateStepMutation();
+  const [updateStepM] = useUpdateStepInstructionsMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
-      updateStepM({ variables: { id, instructions: value || '' } });
+      updateStepM({
+        variables: { id, instructions: value || '' },
+      });
     }, 1000),
     []
   );

@@ -3,6 +3,7 @@ import {
   RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
+  useUpdateStepNameMutation,
 } from '@generated/graphql';
 import { Transition } from '@headlessui/react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -18,9 +19,12 @@ const Steps: React.FC<Props> = ({
   steps,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const updateRef = useRef<HTMLInputElement>(null);
   const [createStepM] = useCreateStepMutation();
+  const [updateStepM] = useUpdateStepNameMutation();
   const [deleteStepM] = useDeleteStepMutation();
   const [isAdding, setIsAdding] = useState(false);
+  const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
 
   useEffect(() => {
     if (isAdding) {
@@ -40,6 +44,15 @@ const Steps: React.FC<Props> = ({
 
     setCurrentStepId(step.data?.createStep?.id);
     setIsAdding(false);
+  };
+
+  const updateStep = async (id: number, name: string) => {
+    updateStepM({
+      refetchQueries: ['Lesson'],
+      variables: { id, name },
+    });
+
+    setIsUpdating(false);
   };
 
   const deleteStep = async (id: number, idx: number) => {
@@ -72,6 +85,26 @@ const Steps: React.FC<Props> = ({
     }
   };
 
+  const handleUpdateBlur = (
+    event: React.FocusEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    const value = event.currentTarget.value;
+
+    if (value) {
+      updateStep(id, value);
+    }
+  };
+
+  const handleUpdateKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    id: number
+  ) => {
+    if (event.key === 'Enter') {
+      updateStep(id, event.currentTarget.value);
+    }
+  };
+
   return (
     <Transition
       className="w-full absolute top-11 left-0 h-full bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
@@ -98,7 +131,47 @@ const Steps: React.FC<Props> = ({
                 key={step.id}
                 onClick={() => setCurrentStepId(step.id)}
               >
-                <span>{step.name || ''}</span>
+                <div className="flex">
+                  {isUpdating === step.id ? (
+                    <input
+                      className="w-full text-sm text-gray-900 px-2 py-1"
+                      defaultValue={step.name || ''}
+                      onBlur={(e) => handleUpdateBlur(e, step.id)}
+                      onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
+                      ref={updateRef}
+                      type="text"
+                    />
+                  ) : (
+                    <span>{step.name || ''}</span>
+                  )}
+                  {isEditting && isUpdating !== step.id && (
+                    <Icon
+                      className="text-gray-500 ml-2 hover:text-blue-600 transition-colors duration-150"
+                      name="pencil"
+                      onClick={() => {
+                        setIsUpdating(step.id);
+                        setTimeout(() => {
+                          updateRef.current?.focus();
+                        }, 0);
+                      }}
+                    />
+                  )}
+                  {isEditting && isUpdating === step.id && (
+                    <>
+                      <Icon
+                        className="text-gray-500 ml-2 hover:text-green-600 transition-colors duration-150"
+                        name="check"
+                        // handled by blur
+                        onClick={() => null}
+                      />
+                      <Icon
+                        className="text-gray-500 ml-2 hover:text-blue-600 transition-colors duration-150"
+                        name="cancel-circled"
+                        onClick={() => setIsUpdating(false)}
+                      />
+                    </>
+                  )}
+                </div>
                 {isEditting && (
                   <Icon
                     className="text-red-600 hidden"

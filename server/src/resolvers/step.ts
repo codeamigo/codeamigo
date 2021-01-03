@@ -30,11 +30,19 @@ Remember to be short and sweet. 😘
 `;
 
 @InputType()
-class StepInput {
-  @Field({ nullable: true })
+class StepInstructionsInput {
+  @Field()
   id: number;
   @Field()
   instructions: string;
+}
+
+@InputType()
+class StepNameInput {
+  @Field()
+  id: number;
+  @Field()
+  name: string;
 }
 
 @InputType()
@@ -85,7 +93,7 @@ export class StepResolver {
       codeModules: [code],
       dependencies: [dependency],
       instructions: DEFAULT_MD,
-      // name: options.name,
+      name: options.name,
     }).save();
 
     lesson.steps.push(step);
@@ -96,13 +104,33 @@ export class StepResolver {
 
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
-  async updateStep(@Arg("options") options: StepInput): Promise<Step | null> {
+  async updateStepInstructions(
+    @Arg("options") options: StepInstructionsInput
+  ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
       return null;
     }
 
-    await Step.update({ id: options.id }, { ...step, ...options });
+    await Step.update(
+      { id: options.id },
+      { ...step, instructions: options.instructions }
+    );
+
+    return step;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateStepName(
+    @Arg("options") options: StepNameInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    if (!step) {
+      return null;
+    }
+
+    await Step.update({ id: options.id }, { ...step, name: options.name });
 
     return step;
   }
