@@ -74,14 +74,13 @@ const Steps: React.FC<Props> = ({
     if (value) {
       createStep(value);
     }
-
-    setIsAdding(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      createStep(event.currentTarget.value);
-      setIsAdding(false);
+    const value = event.currentTarget.value;
+
+    if (event.key === 'Enter' && value) {
+      createStep(value);
     }
   };
 
@@ -100,8 +99,10 @@ const Steps: React.FC<Props> = ({
     event: React.KeyboardEvent<HTMLInputElement>,
     id: number
   ) => {
-    if (event.key === 'Enter') {
-      updateStep(id, event.currentTarget.value);
+    const value = event.currentTarget.value;
+
+    if (event.key === 'Enter' && value) {
+      updateStep(id, value);
     }
   };
 
@@ -123,18 +124,26 @@ const Steps: React.FC<Props> = ({
           .map((step, i) => {
             return (
               <li
-                className={`${
+                className={`${isEditting ? 'cursor-text' : 'cursor-pointer'} ${
                   currentStepId === step.id ? 'text-blue-600' : ''
-                } list-none cursor-pointer w-full flex justify-between items-center ${
+                } list-none w-full flex justify-between items-center ${
                   styles.STEP
                 }`}
                 key={step.id}
-                onClick={() => setCurrentStepId(step.id)}
+                onClick={() => {
+                  setCurrentStepId(step.id);
+
+                  if (!isEditting) return;
+                  setIsUpdating(step.id);
+                  setTimeout(() => {
+                    updateRef.current?.focus();
+                  }, 0);
+                }}
               >
-                <div className="flex">
+                <div className="flex w-full">
                   {isUpdating === step.id ? (
                     <input
-                      className="w-full text-sm text-gray-900 px-2 py-1"
+                      className="w-full text-md text-gray-900 px-0 py-0 border-none border-b-2 border-blue-50 bg-transparent focus:ring-0"
                       defaultValue={step.name || ''}
                       onBlur={(e) => handleUpdateBlur(e, step.id)}
                       onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
@@ -142,41 +151,31 @@ const Steps: React.FC<Props> = ({
                       type="text"
                     />
                   ) : (
-                    <span>{step.name || ''}</span>
-                  )}
-                  {isEditting && isUpdating !== step.id && (
-                    <Icon
-                      className="text-gray-500 ml-2 hover:text-blue-600 transition-colors duration-150"
-                      name="pencil"
-                      onClick={() => {
-                        setIsUpdating(step.id);
-                        setTimeout(() => {
-                          updateRef.current?.focus();
-                        }, 0);
-                      }}
-                    />
-                  )}
-                  {isEditting && isUpdating === step.id && (
-                    <>
-                      <Icon
-                        className="text-gray-500 ml-2 hover:text-green-600 transition-colors duration-150"
-                        name="check"
-                        // handled by blur
-                        onClick={() => null}
-                      />
-                      <Icon
-                        className="text-gray-500 ml-2 hover:text-blue-600 transition-colors duration-150"
-                        name="cancel-circled"
-                        onClick={() => setIsUpdating(false)}
-                      />
-                    </>
+                    <span
+                      className={`${
+                        isEditting
+                          ? 'cursor-text'
+                          : 'cursor-pointer hover:text-blue-600 transition-colors duration-150'
+                      }`}
+                      role="button"
+                    >
+                      {step.name || ''}
+                    </span>
                   )}
                 </div>
-                {isEditting && (
+                {isEditting && isUpdating === step.id && (
+                  <Icon
+                    className="text-gray-500 mr-2 hover:text-green-600 transition-colors duration-150"
+                    name="check"
+                    // handled by blur
+                    onClick={() => null}
+                  />
+                )}
+                {isEditting && !isUpdating && (
                   <Icon
                     className="text-red-600 hidden"
                     name="minus-circled"
-                    onClick={() => {
+                    onClick={(e) => {
                       const yes = window.confirm(
                         'Are you sure you want to delete this step?'
                       );

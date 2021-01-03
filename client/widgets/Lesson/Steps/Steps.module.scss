@@ -1,5 +1,7 @@
 .STEP:not(:first-child):hover {
+  color: black;
   > span {
     display: block;
+    line-height: 1;
   }
 }

@@ -67,7 +67,9 @@ const TopNav: React.FC<Props> = () => {
             <div className="hidden sm:block">
               <div className="flex space-x-4">
                 <button
-                  className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium"
+                  className={`${
+                    router.pathname === '/' ? 'bg-gray-900 font-medium' : ''
+                  } text-white block px-3 py-2 rounded-md text-base`}
                   onClick={() => router.push('/')}
                 >
                   Dashboard
@@ -166,7 +168,9 @@ const TopNav: React.FC<Props> = () => {
           <div className="px-2 pt-2 pb-3 space-y-1">
             {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
             <button
-              className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+              className={`${
+                router.pathname === '/' ? 'bg-gray-900' : ''
+              } text-white block px-3 py-2 rounded-md text-base font-medium`}
               onClick={() => router.push('/')}
             >
               Dashboard
