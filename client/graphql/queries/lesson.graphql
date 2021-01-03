@@ -4,6 +4,7 @@ query Lesson($id: Int!) {
     title
     description
     owner {
+      id
       username
     }
     steps {

@@ -724,7 +724,7 @@ export type LessonQuery = (
     & Pick<Lesson, 'id' | 'title' | 'description'>
     & { owner: (
       { __typename?: 'User' }
-      & Pick<User, 'username'>
+      & Pick<User, 'id' | 'username'>
     ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
@@ -1605,6 +1605,7 @@ export const LessonDocument = gql`
     title
     description
     owner {
+      id
       username
     }
     steps {

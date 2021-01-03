@@ -4,8 +4,6 @@ import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
 
 const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
-  console.log(id);
-
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
@@ -17,7 +15,6 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
     <>
       <div className="flex flex-col lg:flex-row lg:h-full-minus">
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
-          {rest.isEditting}
           <Instructions step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">

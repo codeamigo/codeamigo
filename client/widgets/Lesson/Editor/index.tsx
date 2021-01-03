@@ -295,12 +295,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       <h3 className="flex justify-between">
         <span>Initial Code</span>
         <div className="flex">
-          <button
-            className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none disabled:opacity-50"
-            type="button"
-          >
-            Run
-          </button>
           {!rest.isEditting && (
             <button
               className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
