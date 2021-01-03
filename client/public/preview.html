@@ -8,9 +8,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 
-<body>
-  <div id="root"></div>
-</body>
+<body></body>
 <script async defer type="text/babel">
   const MODULE_ROOT = "/node_modules";
 
@@ -100,7 +98,7 @@
       return exported[runPath] || module.exports;
     } catch (e) {
       console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
-      console.log('Babel compliation error. Make sure that the findBestMatch is working as intended!')
+      console.log('Babel compliation error. Make sure that `findBestMatch` is working as intended!')
       console.log(`ERROR: ${e}`);
       console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
     }
@@ -108,6 +106,10 @@
 
   window.addEventListener("message", ({ data }) => {
     if (data.from !== "editor") return;
+
+    if (data.files['index.html']) {
+      document.querySelector('body').innerHTML = data.files['index.html']
+    }
 
     runCode(data.files, data.runPath);
   });

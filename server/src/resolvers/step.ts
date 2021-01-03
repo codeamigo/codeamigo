@@ -83,14 +83,21 @@ export class StepResolver {
       return null;
     }
 
-    const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
+    const appMod = await CodeModule.create({
+      name: "app.tsx",
+      value: "",
+    }).save();
+    const htmlMod = await CodeModule.create({
+      name: "index.html",
+      value: "<div id='root'></div>",
+    }).save();
     const dependency = await Dependency.create({
       package: "codeamigo-jest-lite",
       version: "1.0.0-alpha.7",
     }).save();
 
     const step = await Step.create({
-      codeModules: [code],
+      codeModules: [appMod, htmlMod],
       dependencies: [dependency],
       instructions: DEFAULT_MD,
       name: options.name,

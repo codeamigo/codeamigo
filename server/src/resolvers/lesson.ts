@@ -17,7 +17,8 @@ import { Step } from "../entities/Step";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
-import { DEFAULT_MD } from "./step";
+import { CheckpointResolver } from "./checkpoint";
+import { DEFAULT_MD, StepResolver } from "./step";
 
 @InputType()
 class LessonInput {
@@ -46,19 +47,10 @@ export class LessonResolver {
     @Ctx() { req }: MyContext
   ): Promise<Lesson> {
     const owner = await User.findOne({ id: req.session.userId });
-    const code = await CodeModule.create({ name: "app.tsx", value: "" }).save();
-    const dependency = await Dependency.create({
-      package: "codeamigo-jest-lite",
-      version: "1.0.0-alpha.7",
-    }).save();
-    const step = await Step.create({
-      codeModules: [code],
-      dependencies: [dependency],
-      instructions: DEFAULT_MD,
-      name: "Step 1",
-    }).save();
+    const stepResolver = new StepResolver();
 
-    const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();
+    const lesson = await Lesson.create({ ...options, owner }).save();
+    await stepResolver.createStep({ lessonId: lesson.id, name: "Step 1" });
 
     return lesson;
   }

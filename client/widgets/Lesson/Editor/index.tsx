@@ -157,6 +157,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       // @ts-ignore
       document.getElementById('frame').contentWindow;
 
+    console.log('here');
+
     // send files and path to iframe
     iframe.postMessage(
       {
