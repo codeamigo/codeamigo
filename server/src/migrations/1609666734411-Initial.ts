@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Initial1609340650011 implements MigrationInterface {
-  name = "Initial1609340650011";
+export class Initial1609666734411 implements MigrationInterface {
+  name = "Initial1609666734411";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -20,7 +20,7 @@ export class Initial1609340650011 implements MigrationInterface {
       `CREATE TABLE "lesson" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "title" character varying NOT NULL, "description" character varying, "likes" integer NOT NULL DEFAULT '0', "ownerId" integer, CONSTRAINT "PK_0ef25918f0237e68696dee455bd" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "step" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "instructions" character varying NOT NULL, "lessonId" integer, "sessionId" integer, CONSTRAINT "PK_70d386ace569c3d265e05db0cc7" PRIMARY KEY ("id"))`
+      `CREATE TABLE "step" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "name" character varying, "instructions" character varying NOT NULL, "lessonId" integer, "sessionId" integer, CONSTRAINT "PK_70d386ace569c3d265e05db0cc7" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "checkpoint" ("id" SERIAL NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "description" character varying NOT NULL DEFAULT '', "isCompleted" boolean NOT NULL DEFAULT false, "test" character varying NOT NULL, "moduleId" integer NOT NULL, "stepId" integer, CONSTRAINT "PK_fea86db187949398f8b614f730a" PRIMARY KEY ("id"))`

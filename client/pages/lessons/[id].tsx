@@ -3,17 +3,29 @@ import Info from '@widgets/Lesson/Info';
 import Step from '@widgets/Lesson/Step';
 import Steps from '@widgets/Lesson/Steps';
 import { NextPage } from 'next';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
+import { useGlobalState } from '../../state';
 
 const Lesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
+  const router = useRouter();
+  const [user] = useGlobalState('user');
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
+
+  useEffect(() => {
+    if (user.loading) return;
+
+    if (!user.data?.me) router.push('/');
+  }, [user]);
 
   const { data } = useLessonQuery({
     variables: { id },
   });
   const { data: sessionData } = useSessionQuery({
+    fetchPolicy: 'cache-and-network',
     variables: { lessonId: id },
   });
 
@@ -25,7 +37,10 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
-  if (!sessionData) return null;
+  if (!sessionData) {
+    router.push(`/lessons/start/${id}`);
+    return null;
+  }
   if (!sessionData.session) return null;
   if (!sessionData.session.steps) return null;
 
