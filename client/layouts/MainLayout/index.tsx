@@ -1,13 +1,14 @@
 import React from 'react';
 
+import Container from './Container';
 import TopNav from './TopNav';
 
 const MainLayout: React.FC<Props> = ({ children }) => {
   return (
-    <div>
+    <>
       <TopNav />
-      {children}
-    </div>
+      <Container>{children}</Container>
+    </>
   );
 };
 
