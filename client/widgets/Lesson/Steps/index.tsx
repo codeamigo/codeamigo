@@ -98,7 +98,7 @@ const Steps: React.FC<Props> = ({
                 key={step.id}
                 onClick={() => setCurrentStepId(step.id)}
               >
-                <span>{step.name}</span>
+                <span>{step.name || ''}</span>
                 {isEditting && (
                   <Icon
                     className="text-red-600 hidden"

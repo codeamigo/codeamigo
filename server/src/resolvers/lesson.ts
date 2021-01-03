@@ -55,7 +55,7 @@ export class LessonResolver {
       codeModules: [code],
       dependencies: [dependency],
       instructions: DEFAULT_MD,
-      name: "Step 1",
+      // name: "Step 1",
     }).save();
 
     const lesson = Lesson.create({ ...options, owner, steps: [step] }).save();

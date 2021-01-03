@@ -53,7 +53,9 @@ Visit http://localhost:3000
 
 ### Migrations
 ```
-1. https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb1b3
+1. npx typeorm migration:run
+
+See https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb1b3
 ```
 
 ### Deploying Frontend

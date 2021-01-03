@@ -85,7 +85,7 @@ export class StepResolver {
       codeModules: [code],
       dependencies: [dependency],
       instructions: DEFAULT_MD,
-      name: options.name,
+      // name: options.name,
     }).save();
 
     lesson.steps.push(step);
