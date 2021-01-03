@@ -151,25 +151,35 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     });
   };
 
-  const postCode = (path?: string, isTest?: boolean) => {
-    // @ts-ignore
-    const iframe =
-      // @ts-ignore
-      document.getElementById('frame').contentWindow;
+  const postCode = useCallback(
+    debounce(
+      (
+        files: FilesType,
+        dependencies: FilesType,
+        runPath: string,
+        value: string,
+        isTest?: boolean
+      ) => {
+        // @ts-ignore
+        const iframe =
+          // @ts-ignore
+          document.getElementById('frame').contentWindow;
 
-    console.log('here');
-
-    // send files and path to iframe
-    iframe.postMessage(
-      {
-        files: { ...files, ...dependencies },
-        from: 'editor',
-        isTest,
-        runPath: path || currentPath,
-      } as PreviewType,
-      '*'
-    );
-  };
+        // send files and path to iframe
+        iframe.postMessage(
+          {
+            files: { ...files, ...dependencies, [runPath]: value },
+            from: 'editor',
+            isTest,
+            runPath,
+          } as PreviewType,
+          '*'
+        );
+      },
+      1500
+    ),
+    []
+  );
 
   async function getDeps() {
     await updateDependencies();
@@ -287,7 +297,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         <div className="flex">
           <button
             className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none disabled:opacity-50"
-            onClick={() => postCode()}
             type="button"
           >
             Run
@@ -295,7 +304,15 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           {!rest.isEditting && (
             <button
               className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
-              onClick={() => postCode(nextCheckpoint?.test, true)}
+              onClick={() =>
+                postCode(
+                  files,
+                  dependencies,
+                  nextCheckpoint!.test,
+                  files[nextCheckpoint!.test],
+                  true
+                )
+              }
               type="button"
             >
               Test
@@ -325,6 +342,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
                 ...files,
                 [currentPath]: value || '',
               });
+              postCode(files, dependencies, currentPath, value || '');
               updateFile(currentPath, value || '');
             }}
             options={{
