@@ -167,7 +167,7 @@ const TopNav: React.FC<Props> = () => {
             {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
             <button
               className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
-              onClick={() => router.push('/me')}
+              onClick={() => router.push('/')}
             >
               Dashboard
             </button>

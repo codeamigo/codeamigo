@@ -33,7 +33,7 @@ export class Step extends BaseEntity {
 
   @Field(() => String)
   @Column({ nullable: true })
-  name: string;
+  name?: string;
 
   @Field(() => String, { defaultValue: `` })
   @Column()
