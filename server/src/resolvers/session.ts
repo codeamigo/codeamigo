@@ -115,7 +115,7 @@ export class SessionResolver {
             createdAt,
             dependencies,
             instructions: step?.instructions || "",
-            // name: step?.name || "",
+            name: step?.name || "",
           }).save();
         })
       );
