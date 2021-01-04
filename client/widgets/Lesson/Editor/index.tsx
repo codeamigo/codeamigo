@@ -271,6 +271,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     window.addEventListener('message', (message) => {
       if (message.data.from === 'preview') {
         try {
+          // don't complete checkpoint if editting
+          if (rest.isEditting) return;
+
           const result = JSON.parse(message.data.result);
           if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
             completeCheckpoint({
@@ -290,23 +293,21 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       <h3 className="flex justify-between">
         <span>Initial Code</span>
         <div className="flex">
-          {!rest.isEditting && (
-            <button
-              className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
-              onClick={() =>
-                postCode(
-                  files,
-                  dependencies,
-                  nextCheckpoint!.test,
-                  files[nextCheckpoint!.test],
-                  true
-                )
-              }
-              type="button"
-            >
-              Test
-            </button>
-          )}
+          <button
+            className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+            onClick={() =>
+              postCode(
+                files,
+                dependencies,
+                nextCheckpoint!.test,
+                files[nextCheckpoint!.test],
+                true
+              )
+            }
+            type="button"
+          >
+            Test
+          </button>
         </div>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">

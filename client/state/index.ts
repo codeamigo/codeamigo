@@ -15,6 +15,6 @@ export const { useGlobalState } = createGlobalState({
   } as ModalStateType,
   user: {
     data: undefined as MeQuery | undefined,
-    loading: false as boolean,
+    loading: true as boolean,
   },
 });

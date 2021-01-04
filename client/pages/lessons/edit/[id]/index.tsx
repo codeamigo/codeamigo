@@ -29,8 +29,10 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson.steps) return null;
 
   if (data.lesson.owner.id !== user.data?.me?.id) {
-    router.push('/');
-    return null;
+    if (typeof window !== 'undefined') {
+      router.push('/');
+      return null;
+    }
   }
 
   const stepId = currentStepId || data.lesson.steps[0].id;

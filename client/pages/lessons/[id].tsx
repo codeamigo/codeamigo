@@ -24,7 +24,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   const { data } = useLessonQuery({
     variables: { id },
   });
-  const { data: sessionData } = useSessionQuery({
+  const { data: sessionData, loading } = useSessionQuery({
     fetchPolicy: 'cache-and-network',
     variables: { lessonId: id },
   });
@@ -37,8 +37,12 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
+  if (loading) return null;
+
   if (!sessionData) {
-    router.push(`/lessons/start/${id}`);
+    if (typeof window !== 'undefined') {
+      router.push(`/lessons/start/${id}`);
+    }
     return null;
   }
   if (!sessionData.session) return null;
