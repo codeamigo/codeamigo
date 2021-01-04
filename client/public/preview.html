@@ -91,10 +91,11 @@
       const exports = {};
       const module = { exports };
       eval(babelOutput.code);
-
-      if (!exported[runPath]) {
+      
+      if (!exported[runPath] && path.includes(MODULE_ROOT)) {
         exported[runPath] = module.exports
       }
+      
       return exported[runPath] || module.exports;
     } catch (e) {
       console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
