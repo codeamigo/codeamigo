@@ -67,11 +67,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   );
 
   const createFile = async (file: string) => {
-    if (files[file] !== undefined) {
-      alert('File name already taken.');
-      return;
-    }
-
     await createCodeModule({
       refetchQueries: ['Step'],
       variables: { name: file, stepId: step.id, value: `` },

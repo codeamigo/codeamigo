@@ -2,6 +2,7 @@ import Icon from '@components/Icon';
 import React, { useEffect, useRef, useState } from 'react';
 
 import styles from './FilesList.module.scss';
+import { isValidName } from './validation';
 
 const FilesList: React.FC<Props> = ({
   currentPath,
@@ -14,6 +15,7 @@ const FilesList: React.FC<Props> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (isAdding) {
@@ -25,6 +27,12 @@ const FilesList: React.FC<Props> = ({
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
+    const isValid = isValidName(value, files);
+
+    if (!isValid.valid) {
+      setError(isValid.reason);
+      return;
+    }
 
     if (value && onCreate) {
       onCreate(value);
@@ -35,7 +43,16 @@ const FilesList: React.FC<Props> = ({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && onCreate) {
-      onCreate(event.currentTarget.value);
+      const value = event.currentTarget.value;
+
+      const isValid = isValidName(value, files);
+
+      if (!isValid.valid) {
+        setError(isValid.reason);
+        return;
+      }
+
+      onCreate(value);
       setIsAdding(false);
     }
   };
@@ -85,14 +102,20 @@ const FilesList: React.FC<Props> = ({
               </div>
             ))}
         {isAdding && (
-          <div className="px-1 py-1">
+          <div className="px-1 pb-2 relative">
             <input
               className="w-full text-xs px-2 py-1"
               onBlur={handleBlur}
+              onChange={() => setError('')}
               onKeyDown={handleKeyDown}
               ref={inputRef}
               type="text"
             />
+            {error && (
+              <div className="text-red-600 text-xs absolute -bottom-2.5">
+                {error}
+              </div>
+            )}
           </div>
         )}
       </div>
