@@ -8,10 +8,13 @@ import {
 } from '@generated/graphql';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import EditorFiles from '../EditorFiles';
 import { FilesType, PreviewType } from './types';
+import { getExtension } from './utils';
+
+const FILE = 'file:///';
 
 export const findBestMatch = (
   files: FilesType | CodeSandboxV2ResponseI['contents'],
@@ -48,15 +51,66 @@ export const MODULE_ROOT = '/node_modules';
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ step, ...rest }) => {
-  const [files, setFiles] = React.useState({} as FilesType);
-  const [dependencies, setDependencies] = React.useState({} as FilesType);
-  const [currentPath, setCurrentPath] = React.useState('');
+  const editorRef = useRef<any>();
+  const monacoRef = useRef<any>();
+
+  const [files, setFiles] = useState({} as FilesType);
+  const [dependencies, setDependencies] = useState({} as FilesType);
+  const [currentPath, setCurrentPath] = useState('');
+  const [editorIsReady, setIsEditorReady] = useState(false);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
+
+  useEffect(() => {
+    if (!step.codeModules) return;
+
+    const mods = step.codeModules.reduce(
+      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+      {}
+    ) as FilesType;
+
+    setFiles(mods);
+  }, [step.id, step.codeModules]);
+
+  useEffect(() => {
+    console.log('useeffect', currentPath);
+    if (editorIsReady) {
+      editorRef.current.setModel(
+        monacoRef.current.editor.getModel(`${FILE}${currentPath}`)
+      );
+
+      editorRef.current.focus();
+    }
+  }, [currentPath]);
+
+  useEffect(() => {
+    updateDependencies();
+  }, [step.dependencies]);
+
+  useEffect(() => {
+    window.addEventListener('message', (message) => {
+      if (message.data.from === 'preview') {
+        try {
+          // don't complete checkpoint if editting
+          if (rest.isEditting) return;
+
+          const result = JSON.parse(message.data.result);
+          if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
+            completeCheckpoint({
+              refetchQueries: ['Step'],
+              variables: { id: nextCheckpoint.id },
+            });
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    });
+  }, []);
 
   const sortedCheckpoints = (step.checkpoints || [])
     .slice()
@@ -67,15 +121,23 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   );
 
   const createFile = async (file: string) => {
+    const value = ``;
+
     await createCodeModule({
       refetchQueries: ['Step'],
-      variables: { name: file, stepId: step.id, value: `` },
+      variables: { name: file, stepId: step.id, value },
     });
 
     setFiles({
       ...files,
-      [file]: ``,
+      [file]: value,
     });
+
+    monacoRef.current.editor.createModel(
+      value,
+      getExtension(file),
+      `${FILE}${file}`
+    );
 
     setCurrentPath(file);
   };
@@ -85,11 +147,17 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
     if (!module) return;
 
+    monacoRef.current.editor.getModel(`${FILE}${file}`).dispose();
+
     // remove file from files state
     const { [file]: tmp, ...rest } = files;
     setFiles(rest);
 
-    deleteCodeModule({ variables: { id: module.id } });
+    // delete module
+    await deleteCodeModule({ variables: { id: module.id } });
+
+    // go back to main
+    goToMain(rest);
   };
 
   const updateFile = useCallback(
@@ -180,63 +248,76 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     await updateDependencies();
   }
 
-  const editorDidMount = async (_: any, editor: any) => {
-    await getDeps();
-
+  const setupCompilerOptions = () => {
     const jsxFactory = 'React.createElement';
     const reactNamespace = 'React';
     const hasNativeTypescript = false;
-    const monacoInstance = await monaco.init();
 
-    editor.addCommand(
-      monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KEY_S,
-      () => {
-        editor.getAction('editor.action.formatDocument').run();
+    // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
+    monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
+      {
+        allowJs: true,
+        allowNonTsExtensions: !hasNativeTypescript,
+        experimentalDecorators: true,
+        jsx: monacoRef.current.languages.typescript.JsxEmit.React,
+        jsxFactory,
+        module: hasNativeTypescript
+          ? monacoRef.current.languages.typescript.ModuleKind.ES2015
+          : monacoRef.current.languages.typescript.ModuleKind.System,
+        moduleResolution:
+          monacoRef.current.languages.typescript.ModuleResolutionKind.NodeJs,
+        // forceConsistentCasingInFileNames:
+        //   hasNativeTypescript && existingConfig.forceConsistentCasingInFileNames,
+        // noImplicitReturns:
+        //   hasNativeTypescript && existingConfig.noImplicitReturns,
+        // noImplicitThis: hasNativeTypescript && existingConfig.noImplicitThis,
+        // noImplicitAny: hasNativeTypescript && existingConfig.noImplicitAny,
+        // strictNullChecks: hasNativeTypescript && existingConfig.strictNullChecks,
+        // suppressImplicitAnyIndexErrors:
+        //   hasNativeTypescript && existingConfig.suppressImplicitAnyIndexErrors,
+        // noUnusedLocals: hasNativeTypescript && existingConfig.noUnusedLocals,
+        newLine: monacoRef.current.languages.typescript.NewLineKind.LineFeed,
+
+        noEmit: true,
+
+        reactNamespace,
+
+        target: monacoRef.current.languages.typescript.ScriptTarget.ES2016,
+
+        typeRoots: ['node_modules/@types'],
       }
     );
+  };
 
-    // validation settings
-    monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
+  const setupDiagnosticsOptions = () => {
+    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
       {
         noSemanticValidation: true,
         noSyntaxValidation: true,
       }
     );
+  };
 
-    // compiler options
-    // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
-    monacoInstance.languages.typescript.typescriptDefaults.setCompilerOptions({
-      allowJs: true,
-      allowNonTsExtensions: !hasNativeTypescript,
-      experimentalDecorators: true,
-      jsx: monacoInstance.languages.typescript.JsxEmit.React,
-      jsxFactory,
-      module: hasNativeTypescript
-        ? monacoInstance.languages.typescript.ModuleKind.ES2015
-        : monacoInstance.languages.typescript.ModuleKind.System,
-      moduleResolution:
-        monacoInstance.languages.typescript.ModuleResolutionKind.NodeJs,
-      // forceConsistentCasingInFileNames:
-      //   hasNativeTypescript && existingConfig.forceConsistentCasingInFileNames,
-      // noImplicitReturns:
-      //   hasNativeTypescript && existingConfig.noImplicitReturns,
-      // noImplicitThis: hasNativeTypescript && existingConfig.noImplicitThis,
-      // noImplicitAny: hasNativeTypescript && existingConfig.noImplicitAny,
-      // strictNullChecks: hasNativeTypescript && existingConfig.strictNullChecks,
-      // suppressImplicitAnyIndexErrors:
-      //   hasNativeTypescript && existingConfig.suppressImplicitAnyIndexErrors,
-      // noUnusedLocals: hasNativeTypescript && existingConfig.noUnusedLocals,
-      newLine: monacoInstance.languages.typescript.NewLineKind.LineFeed,
+  const setupCommands = () => {
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.KEY_S,
+      () => {
+        editorRef.current.getAction('editor.action.formatDocument').run();
+      }
+    );
+  };
 
-      noEmit: true,
-
-      reactNamespace,
-
-      target: monacoInstance.languages.typescript.ScriptTarget.ES2016,
-
-      typeRoots: ['node_modules/@types'],
+  const setupModels = () => {
+    Object.keys(files).map((file) => {
+      monacoRef.current.editor.createModel(
+        files[file],
+        getExtension(file),
+        `${FILE}${file}`
+      );
     });
+  };
 
+  const setupTypes = () => {
     // const fakeFiles = Object.keys(dependencyDependencies).reduce(
     //   (acc, curr) => ({
     //     ...acc,
@@ -244,10 +325,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     //   }),
     //   {}
     // );
-
     // for (const fileName in fakeFiles) {
     //   const fakePath = `file:///node_modules/@types/${fileName}`;
-
     //   monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
     //     // @ts-ignore
     //     fakeFiles[fileName],
@@ -256,48 +335,36 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     // }
   };
 
-  useEffect(() => {
-    if (!step.codeModules) return;
+  const setupEditor = () => {
+    setupCommands();
+    setupCompilerOptions();
+    setupDiagnosticsOptions();
+    setupModels();
+    setupTypes();
 
-    const mods = step.codeModules.reduce(
-      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-      {}
-    ) as FilesType;
+    setIsEditorReady(true);
+    goToMain(files);
+  };
 
-    setFiles(mods);
+  const editorDidMount = async (_: any, editor: any) => {
+    await getDeps();
 
-    const main = Object.keys(mods).find((file) => file === 'app.tsx');
+    const monacoInstance = await monaco.init();
 
-    if (!currentPath)
-      setCurrentPath(
-        main || Object.keys(mods).filter((n) => !n.includes('spec'))[0]
-      );
-  }, [step.id, step.codeModules]);
+    editorRef.current = editor;
+    monacoRef.current = monacoInstance;
 
-  useEffect(() => {
-    updateDependencies();
-  }, [step.dependencies]);
+    setupEditor();
+  };
 
-  useEffect(() => {
-    window.addEventListener('message', (message) => {
-      if (message.data.from === 'preview') {
-        try {
-          // don't complete checkpoint if editting
-          if (rest.isEditting) return;
+  const goToMain = (files: FilesType) => {
+    const main = Object.keys(files).find((file) => file === 'app.tsx');
 
-          const result = JSON.parse(message.data.result);
-          if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
-            completeCheckpoint({
-              refetchQueries: ['Step'],
-              variables: { id: nextCheckpoint.id },
-            });
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    });
-  }, []);
+    console.log(main);
+    setCurrentPath(
+      main || Object.keys(files).filter((n) => !n.includes('spec'))[0]
+    );
+  };
 
   return (
     <div className="w-full lg:h-full flex flex-col">
@@ -352,7 +419,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
               scrollBeyondLastLine: false,
               wordWrap: 'on',
             }}
-            value={files[currentPath] || dependencies[currentPath]}
             width="100%"
           />
         </div>
