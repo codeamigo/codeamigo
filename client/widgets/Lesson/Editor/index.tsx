@@ -178,11 +178,22 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
   async function getDeps() {
     await updateDependencies();
+  }
+
+  const editorDidMount = async (_: any, editor: any) => {
+    await getDeps();
 
     const jsxFactory = 'React.createElement';
     const reactNamespace = 'React';
     const hasNativeTypescript = false;
     const monacoInstance = await monaco.init();
+
+    editor.addCommand(
+      monacoInstance.KeyMod.CtrlCmd | monacoInstance.KeyCode.KEY_S,
+      () => {
+        editor.getAction('editor.action.formatDocument').run();
+      }
+    );
 
     // validation settings
     monacoInstance.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
@@ -243,10 +254,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     //     fakePath
     //   );
     // }
-  }
-
-  const editorDidMount = (_: any, editor: any) => {
-    getDeps();
   };
 
   useEffect(() => {
@@ -259,8 +266,12 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
     setFiles(mods);
 
+    const main = Object.keys(mods).find((file) => file === 'app.tsx');
+
     if (!currentPath)
-      setCurrentPath(Object.keys(mods).filter((n) => !n.includes('spec'))[0]);
+      setCurrentPath(
+        main || Object.keys(mods).filter((n) => !n.includes('spec'))[0]
+      );
   }, [step.id, step.codeModules]);
 
   useEffect(() => {

@@ -10,15 +10,11 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { CodeModule } from "../entities/CodeModule";
-import { Dependency } from "../entities/Dependency";
 import { Lesson } from "../entities/Lesson";
-import { Step } from "../entities/Step";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
-import { CheckpointResolver } from "./checkpoint";
-import { DEFAULT_MD, StepResolver } from "./step";
+import { StepResolver } from "./step";
 
 @InputType()
 class LessonInput {
