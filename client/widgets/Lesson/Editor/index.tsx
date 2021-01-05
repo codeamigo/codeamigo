@@ -358,12 +358,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   };
 
   const goToMain = (files: FilesType) => {
-    const main = Object.keys(files).find((file) => file === 'app.tsx');
+    const main =
+      Object.keys(files).find((file) => file === 'app.tsx') ||
+      Object.keys(files).filter((n) => !n.includes('spec'))[0];
 
-    console.log(main);
-    setCurrentPath(
-      main || Object.keys(files).filter((n) => !n.includes('spec'))[0]
-    );
+    setCurrentPath(main);
+
+    postCode(files, dependencies, main, files[main]);
   };
 
   return (
