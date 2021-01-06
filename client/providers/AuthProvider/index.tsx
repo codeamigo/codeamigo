@@ -8,8 +8,6 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const { data, loading } = useMeQuery();
 
   useEffect(() => {
-    console.log(data);
-
     setUser({
       ...user,
       data,

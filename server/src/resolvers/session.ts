@@ -85,7 +85,7 @@ export class SessionResolver {
 
           const codeModules = await Promise.all(
             step!.codeModules.map(async (codeModule) => {
-              const { id, createdAt, updatedAt, ...rest } = codeModule;
+              const { id, ...rest } = codeModule;
 
               return await CodeModule.create({
                 ...rest,
@@ -95,7 +95,7 @@ export class SessionResolver {
 
           const checkpoints = await Promise.all(
             step!.checkpoints.map(async (checkpoint) => {
-              const { id, createdAt, updatedAt, ...rest } = checkpoint;
+              const { id, ...rest } = checkpoint;
 
               return await Checkpoint.create({ ...rest }).save();
             })
@@ -103,7 +103,7 @@ export class SessionResolver {
 
           const dependencies = await Promise.all(
             step!.dependencies.map(async (dependency) => {
-              const { id, createdAt, updatedAt, ...rest } = dependency;
+              const { id, ...rest } = dependency;
 
               return await Dependency.create({ ...rest }).save();
             })

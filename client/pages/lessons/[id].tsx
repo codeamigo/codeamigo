@@ -21,11 +21,10 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     if (!user.data?.me) router.push('/');
   }, [user]);
 
-  const { data } = useLessonQuery({
+  const { data, loading } = useLessonQuery({
     variables: { id },
   });
-  const { data: sessionData, loading } = useSessionQuery({
-    fetchPolicy: 'cache-and-network',
+  const { data: sessionData, loading: sessionLoading } = useSessionQuery({
     variables: { lessonId: id },
   });
 
@@ -33,19 +32,26 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     setShowSteps(!showSteps);
   };
 
-  if (!data) return null;
-  if (!data.lesson) return null;
+  // lesson
+  if (loading) return null;
+  // no lesson exists
+  if (!data || !data.lesson) {
+    if (typeof window !== 'undefined') {
+      router.push(`/`);
+    }
+    return null;
+  }
   if (!data.lesson.steps) return null;
 
-  if (loading) return null;
-
-  if (!sessionData) {
+  // session
+  if (sessionLoading) return null;
+  // no session exists
+  if (!sessionData || !sessionData.session) {
     if (typeof window !== 'undefined') {
       router.push(`/lessons/start/${id}`);
     }
     return null;
   }
-  if (!sessionData.session) return null;
   if (!sessionData.session.steps) return null;
 
   const stepId = currentStepId || sessionData.session.currentStep;

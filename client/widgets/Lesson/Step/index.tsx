@@ -21,10 +21,7 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
           <Editor step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
-          <iframe
-            id="frame"
-            src="https://codeamigo.vercel.app/preview.html"
-          ></iframe>
+          <iframe id="frame" src={process.env.NEXT_PUBLIC_PREVIEW_URL}></iframe>
         </div>
       </div>
     </>

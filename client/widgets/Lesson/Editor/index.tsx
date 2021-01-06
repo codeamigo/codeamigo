@@ -1,5 +1,6 @@
 import { CodeSandboxV2ResponseI } from '@api/types';
 import {
+  RegularCheckpointFragment,
   RegularStepFragment,
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
@@ -57,6 +58,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [files, setFiles] = useState({} as FilesType);
   const [dependencies, setDependencies] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
+  const [currentCheckpoint, setCurrentCheckpoint] = useState<
+    RegularCheckpointFragment | undefined
+  >(undefined);
   const [isEditorReady, setIsEditorReady] = useState(false);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -114,6 +118,19 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.dependencies]);
 
   useEffect(() => {
+    console.log(step.checkpoints);
+    const sortedCheckpoints = (step.checkpoints || [])
+      .slice()
+      .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
+    const nextCheckpoint = sortedCheckpoints.find(
+      (checkpoint) => !checkpoint.isCompleted
+    );
+
+    setCurrentCheckpoint(nextCheckpoint);
+  }, [step.checkpoints]);
+
+  useEffect(() => {
     window.addEventListener('message', (message) => {
       if (message.data.from === 'preview') {
         try {
@@ -121,10 +138,17 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           if (rest.isEditting) return;
 
           const result = JSON.parse(message.data.result);
-          if (result[result.length - 1].status === 'pass' && nextCheckpoint) {
+
+          console.log('result', result);
+          console.log('nextCheckpoint', currentCheckpoint);
+
+          if (
+            result[result.length - 1].status === 'pass' &&
+            currentCheckpoint
+          ) {
             completeCheckpoint({
               refetchQueries: ['Step'],
-              variables: { id: nextCheckpoint.id },
+              variables: { id: currentCheckpoint.id },
             });
           }
         } catch (e) {
@@ -132,15 +156,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         }
       }
     });
-  }, []);
 
-  const sortedCheckpoints = (step.checkpoints || [])
-    .slice()
-    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-
-  const nextCheckpoint = sortedCheckpoints.find(
-    (checkpoint) => !checkpoint.isCompleted
-  );
+    return () => window.removeEventListener('message', () => null);
+  }, [currentCheckpoint]);
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -236,15 +254,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         value: string,
         isTest?: boolean
       ) => {
-        // const iframe = document.getElementById('frame') as HTMLIFrameElement;
-        // console.log('iframe', iframe);
-        // if (!iframe) return;
-        // const iframeContentWindow = iframe.contentWindow;
-        // console.log('iframeContentWindow', iframeContentWindow);
-        // if (!iframeContentWindow) return;
+        const iframe = document.getElementById('frame') as HTMLIFrameElement;
+        if (!iframe) return;
+        const iframeContentWindow = iframe.contentWindow;
+        if (!iframeContentWindow) return;
 
         // send files and path to iframe
-        window.postMessage(
+        iframeContentWindow.postMessage(
           {
             files: { ...files, ...dependencies, [runPath]: value },
             from: 'editor',
@@ -360,7 +376,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     setupTypes();
 
     setIsEditorReady(true);
-    goToMain(files);
   };
 
   const editorDidMount = async (_: any, editor: any) => {
@@ -403,8 +418,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
               postCode(
                 files,
                 dependencies,
-                nextCheckpoint!.test,
-                files[nextCheckpoint!.test],
+                currentCheckpoint!.test,
+                files[currentCheckpoint!.test],
                 true
               )
             }
