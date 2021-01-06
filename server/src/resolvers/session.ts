@@ -29,8 +29,11 @@ class SessionInput {
 @Resolver()
 export class SessionResolver {
   @Query(() => [Session])
-  sessions(): Promise<Session[]> {
-    return Session.find({ relations: ["steps"] });
+  @UseMiddleware(isAuth)
+  async sessions(@Ctx() { req }: MyContext): Promise<Session[]> {
+    const student = await User.findOne({ id: req.session.userId });
+
+    return Session.find({ relations: ["steps"], where: { student } });
   }
 
   @Query(() => Session, { nullable: true })
@@ -141,8 +144,19 @@ export class SessionResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteSession(@Arg("id") id: number): Promise<boolean> {
-    await Session.delete(id);
-    return true;
+  @UseMiddleware(isAuth)
+  async deleteSession(
+    @Arg("id") id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    const student = await User.findOne({ id: req.session.userId });
+    const session = await Session.findOne({ where: { id, student } });
+
+    if (session) {
+      await Session.delete(id);
+      return true;
+    }
+
+    return false;
   }
 }

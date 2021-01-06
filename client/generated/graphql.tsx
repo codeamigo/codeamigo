@@ -545,6 +545,16 @@ export type DeleteDependencyMutation = (
   & Pick<Mutation, 'deleteDependency'>
 );
 
+export type DeleteSessionMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteSessionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteSession'>
+);
+
 export type DeleteStepMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
@@ -772,6 +782,21 @@ export type SessionQuery = (
   & { session?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'currentStep'>
+    & { steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & RegularStepFragment
+    )>> }
+  )> }
+);
+
+export type SessionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SessionsQuery = (
+  { __typename?: 'Query' }
+  & { sessions: Array<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id' | 'currentStep' | 'lessonId'>
     & { steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
@@ -1195,6 +1220,36 @@ export function useDeleteDependencyMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteDependencyMutationHookResult = ReturnType<typeof useDeleteDependencyMutation>;
 export type DeleteDependencyMutationResult = Apollo.MutationResult<DeleteDependencyMutation>;
 export type DeleteDependencyMutationOptions = Apollo.BaseMutationOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
+export const DeleteSessionDocument = gql`
+    mutation DeleteSession($id: Float!) {
+  deleteSession(id: $id)
+}
+    `;
+export type DeleteSessionMutationFn = Apollo.MutationFunction<DeleteSessionMutation, DeleteSessionMutationVariables>;
+
+/**
+ * __useDeleteSessionMutation__
+ *
+ * To run a mutation, you first call `useDeleteSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSessionMutation, { data, loading, error }] = useDeleteSessionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteSessionMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSessionMutation, DeleteSessionMutationVariables>) {
+        return Apollo.useMutation<DeleteSessionMutation, DeleteSessionMutationVariables>(DeleteSessionDocument, baseOptions);
+      }
+export type DeleteSessionMutationHookResult = ReturnType<typeof useDeleteSessionMutation>;
+export type DeleteSessionMutationResult = Apollo.MutationResult<DeleteSessionMutation>;
+export type DeleteSessionMutationOptions = Apollo.BaseMutationOptions<DeleteSessionMutation, DeleteSessionMutationVariables>;
 export const DeleteStepDocument = gql`
     mutation DeleteStep($id: Float!) {
   deleteStep(id: $id)
@@ -1751,6 +1806,43 @@ export function useSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Se
 export type SessionQueryHookResult = ReturnType<typeof useSessionQuery>;
 export type SessionLazyQueryHookResult = ReturnType<typeof useSessionLazyQuery>;
 export type SessionQueryResult = Apollo.QueryResult<SessionQuery, SessionQueryVariables>;
+export const SessionsDocument = gql`
+    query Sessions {
+  sessions {
+    id
+    currentStep
+    lessonId
+    steps {
+      ...RegularStep
+    }
+  }
+}
+    ${RegularStepFragmentDoc}`;
+
+/**
+ * __useSessionsQuery__
+ *
+ * To run a query within a React component, call `useSessionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSessionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSessionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSessionsQuery(baseOptions?: Apollo.QueryHookOptions<SessionsQuery, SessionsQueryVariables>) {
+        return Apollo.useQuery<SessionsQuery, SessionsQueryVariables>(SessionsDocument, baseOptions);
+      }
+export function useSessionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SessionsQuery, SessionsQueryVariables>) {
+          return Apollo.useLazyQuery<SessionsQuery, SessionsQueryVariables>(SessionsDocument, baseOptions);
+        }
+export type SessionsQueryHookResult = ReturnType<typeof useSessionsQuery>;
+export type SessionsLazyQueryHookResult = ReturnType<typeof useSessionsLazyQuery>;
+export type SessionsQueryResult = Apollo.QueryResult<SessionsQuery, SessionsQueryVariables>;
 export const StepDocument = gql`
     query Step($id: Int!) {
   step(id: $id) {

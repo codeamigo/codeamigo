@@ -1,0 +1,10 @@
+query Sessions {
+  sessions {
+    id
+    currentStep
+    lessonId
+    steps {
+      ...RegularStep
+    }
+  }
+}
