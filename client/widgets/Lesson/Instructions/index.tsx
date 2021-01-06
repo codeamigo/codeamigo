@@ -34,6 +34,7 @@ const Instructions: React.FC<Props> = (props) => {
 
   const nextStep = () => {
     if (!props.session?.steps) return;
+    if (!props.setCurrentStepId) return;
 
     const steps = props.session.steps
       .slice()
@@ -108,8 +109,8 @@ const Instructions: React.FC<Props> = (props) => {
 
 type Props = {
   isEditting?: boolean;
-  session: SessionQuery['session'];
-  setCurrentStepId: (n: number) => void;
+  session?: SessionQuery['session'];
+  setCurrentStepId?: (n: number) => void;
   step: RegularStepFragment;
 };
 

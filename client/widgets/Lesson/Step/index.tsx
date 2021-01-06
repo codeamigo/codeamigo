@@ -32,8 +32,8 @@ type Props = {
   currentStepId: number;
   isEditting?: boolean;
   lesson: LessonQuery['lesson'];
-  session: SessionQuery['session'];
-  setCurrentStepId: (n: number) => void;
+  session?: SessionQuery['session'];
+  setCurrentStepId?: (n: number) => void;
   toggleShowSteps: () => void;
 };
 
