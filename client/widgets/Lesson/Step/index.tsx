@@ -1,4 +1,4 @@
-import { LessonQuery, useStepQuery } from '@generated/graphql';
+import { LessonQuery, SessionQuery, useStepQuery } from '@generated/graphql';
 import Editor from '@widgets/Lesson/Editor';
 import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
@@ -32,6 +32,8 @@ type Props = {
   currentStepId: number;
   isEditting?: boolean;
   lesson: LessonQuery['lesson'];
+  session: SessionQuery['session'];
+  setCurrentStepId: (n: number) => void;
   toggleShowSteps: () => void;
 };
 

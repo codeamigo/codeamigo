@@ -13,7 +13,7 @@ import gfm from 'remark-gfm';
 
 import Icon from '../../../components/Icon';
 
-const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
+const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const sortedCheckpoints = (step.checkpoints || [])
     .slice()
     .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
@@ -195,12 +195,25 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
           </button>
         </div>
       )}
+      {!isEditting &&
+        checkpoints.some((checkpoint) => !!checkpoint.isCompleted) && (
+          <div className="mt-4">
+            <button
+              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              onClick={nextStep}
+              type="button"
+            >
+              Next Step
+            </button>
+          </div>
+        )}
     </>
   );
 };
 
 type Props = {
   isEditting?: boolean;
+  nextStep: () => void;
   step: RegularStepFragment;
 };
 

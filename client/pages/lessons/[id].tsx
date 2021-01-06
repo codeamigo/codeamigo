@@ -70,6 +70,8 @@ const Lesson: NextPage<{ id: string }> = (props) => {
         <Step
           currentStepId={stepId}
           lesson={data.lesson}
+          session={sessionData.session}
+          setCurrentStepId={setCurrentStepId}
           toggleShowSteps={toggleShowSteps}
         />
       </div>

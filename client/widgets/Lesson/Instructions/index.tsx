@@ -1,5 +1,6 @@
 import {
   RegularStepFragment,
+  SessionQuery,
   useUpdateStepInstructionsMutation,
 } from '@generated/graphql';
 import { ControlledEditor } from '@monaco-editor/react';
@@ -30,6 +31,20 @@ const Instructions: React.FC<Props> = (props) => {
   useEffect(() => {
     setMarkdown(step.instructions);
   }, [step.id]);
+
+  const nextStep = () => {
+    if (!props.session?.steps) return;
+
+    const steps = props.session.steps
+      .slice()
+      .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
+
+    const next = steps.find((nextStep) => nextStep.createdAt > step.createdAt);
+
+    if (!next) return;
+
+    props.setCurrentStepId(next?.id);
+  };
 
   return (
     <>
@@ -84,7 +99,7 @@ const Instructions: React.FC<Props> = (props) => {
           )}
         </div>
         <div className="flex flex-col">
-          <Checkpoints {...props} />
+          <Checkpoints {...props} nextStep={nextStep} />
         </div>
       </div>
     </>
@@ -93,6 +108,8 @@ const Instructions: React.FC<Props> = (props) => {
 
 type Props = {
   isEditting?: boolean;
+  session: SessionQuery['session'];
+  setCurrentStepId: (n: number) => void;
   step: RegularStepFragment;
 };
 
