@@ -10,6 +10,7 @@ export const getExtension = (file: string) => {
       return 'markdown';
     case 'ts':
     case 'tsx':
+    case 'spec':
       return 'typescript';
     case 'js':
     case 'jsx':

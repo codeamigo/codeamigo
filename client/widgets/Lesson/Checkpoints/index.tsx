@@ -57,7 +57,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
     [activeCheckpoint]
   );
 
-  if (!step.checkpoints) return null;
+  // if (!step.checkpoints) return null;
 
   const createCheckpoint = async () => {
     const len = step?.checkpoints?.length || 0;

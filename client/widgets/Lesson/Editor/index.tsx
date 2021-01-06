@@ -57,7 +57,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [files, setFiles] = useState({} as FilesType);
   const [dependencies, setDependencies] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
-  const [editorIsReady, setIsEditorReady] = useState(false);
+  const [isEditorReady, setIsEditorReady] = useState(false);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
@@ -65,25 +65,47 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
 
+  // Change Step
   useEffect(() => {
     if (!step.codeModules) return;
+    if (!isEditorReady) return;
 
     const mods = step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
       {}
     ) as FilesType;
 
+    const diff = Object.keys(mods).reduce((acc, file) => {
+      if (!files[file]) acc.push(file);
+      return acc;
+    }, [] as Array<string>);
+
+    // check difference between files and incoming modules
+    // if there is no difference then goToMain file
+    // if !files ({}) then goToMain file
+    // otherwise to to the new file
+    if (!Object.keys(files).length) {
+      goToMain(mods);
+    } else if (diff) {
+      goToMain(files, diff[0]);
+    } else {
+      goToMain(mods);
+    }
+
     setFiles(mods);
-  }, [step.id, step.codeModules]);
+  }, [step.id, step.codeModules, isEditorReady]);
 
+  // Files changed => set up editor models
   useEffect(() => {
-    console.log('useeffect', currentPath);
-    if (editorIsReady) {
-      editorRef.current.setModel(
-        monacoRef.current.editor.getModel(`${FILE}${currentPath}`)
-      );
+    if (isEditorReady) {
+      setupModels();
+    }
+  }, [files, isEditorReady]);
 
-      editorRef.current.focus();
+  // Path changed => set current model
+  useEffect(() => {
+    if (isEditorReady) {
+      setModel(currentPath);
     }
   }, [currentPath]);
 
@@ -133,12 +155,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       [file]: value,
     });
 
-    monacoRef.current.editor.createModel(
-      value,
-      getExtension(file),
-      `${FILE}${file}`
-    );
-
     setCurrentPath(file);
   };
 
@@ -147,7 +163,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
     if (!module) return;
 
-    monacoRef.current.editor.getModel(`${FILE}${file}`).dispose();
+    monacoRef.current.editor.getModel(`${FILE}${step.id}-${file}`).dispose();
 
     // remove file from files state
     const { [file]: tmp, ...rest } = files;
@@ -155,9 +171,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
     // delete module
     await deleteCodeModule({ variables: { id: module.id } });
-
-    // go back to main
-    goToMain(rest);
   };
 
   const updateFile = useCallback(
@@ -223,13 +236,15 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         value: string,
         isTest?: boolean
       ) => {
-        // @ts-ignore
-        const iframe =
-          // @ts-ignore
-          document.getElementById('frame').contentWindow;
+        // const iframe = document.getElementById('frame') as HTMLIFrameElement;
+        // console.log('iframe', iframe);
+        // if (!iframe) return;
+        // const iframeContentWindow = iframe.contentWindow;
+        // console.log('iframeContentWindow', iframeContentWindow);
+        // if (!iframeContentWindow) return;
 
         // send files and path to iframe
-        iframe.postMessage(
+        window.postMessage(
           {
             files: { ...files, ...dependencies, [runPath]: value },
             from: 'editor',
@@ -309,10 +324,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
   const setupModels = () => {
     Object.keys(files).map((file) => {
+      if (monacoRef.current.editor.getModel(`${FILE}${step.id}-${file}`))
+        return;
+
       monacoRef.current.editor.createModel(
         files[file],
         getExtension(file),
-        `${FILE}${file}`
+        `${FILE}${step.id}-${file}`
       );
     });
   };
@@ -339,7 +357,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     setupCommands();
     setupCompilerOptions();
     setupDiagnosticsOptions();
-    setupModels();
     setupTypes();
 
     setIsEditorReady(true);
@@ -357,14 +374,22 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     setupEditor();
   };
 
-  const goToMain = (files: FilesType) => {
+  const goToMain = (files: FilesType, file?: string) => {
     const main =
+      file ||
       Object.keys(files).find((file) => file === 'app.tsx') ||
       Object.keys(files).filter((n) => !n.includes('spec'))[0];
 
+    setModel(main);
     setCurrentPath(main);
-
     postCode(files, dependencies, main, files[main]);
+  };
+
+  const setModel = (path: string) => {
+    editorRef.current.setModel(
+      monacoRef.current.editor.getModel(`${FILE}${step.id}-${path}`)
+    );
+    editorRef.current.focus();
   };
 
   return (
