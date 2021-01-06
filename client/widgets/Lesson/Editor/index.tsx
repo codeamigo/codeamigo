@@ -139,9 +139,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
           const result = JSON.parse(message.data.result);
 
-          console.log('result', result);
-          console.log('nextCheckpoint', currentCheckpoint);
-
           if (
             result[result.length - 1].status === 'pass' &&
             currentCheckpoint

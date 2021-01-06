@@ -38,6 +38,9 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
 
   useEffect(() => {
     setCheckpoints(step?.checkpoints || []);
+    if (nextCheckpoint?.id !== activeCheckpoint?.id) {
+      setActiveCheckpoint(nextCheckpoint);
+    }
   }, [step?.checkpoints]);
 
   useEffect(() => {
