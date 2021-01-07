@@ -118,12 +118,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.dependencies]);
 
   useEffect(() => {
-    console.log(step.checkpoints);
-    const sortedCheckpoints = (step.checkpoints || [])
-      .slice()
-      .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-
-    const nextCheckpoint = sortedCheckpoints.find(
+    const nextCheckpoint = step.checkpoints?.find(
       (checkpoint) => !checkpoint.isCompleted
     );
 
@@ -210,6 +205,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const updateDependencies = async () => {
     let dependencyDependencies: { [key in string]: string } = {};
 
+    // clean this up, is findBestMatch necessary?
     const newDependencies = step.dependencies?.reduce(
       async (acc, { package: pkg, version }) => {
         const res: CodeSandboxV2ResponseI = await fetch(

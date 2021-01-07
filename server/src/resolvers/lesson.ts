@@ -32,8 +32,15 @@ export class LessonResolver {
   }
 
   @Query(() => Lesson, { nullable: true })
-  lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
-    return Lesson.findOne(id, { relations: ["owner", "steps"] });
+  async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
+    const lesson = await Lesson.createQueryBuilder()
+      .where("Lesson.id = :id", { id })
+      .leftJoinAndSelect("Lesson.owner", "owner")
+      .leftJoinAndSelect("Lesson.steps", "steps")
+      .addOrderBy("steps.createdAt", "ASC")
+      .getOne();
+
+    return lesson;
   }
 
   @Mutation(() => Lesson)

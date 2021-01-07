@@ -1,6 +1,7 @@
 import {
   RegularCheckpointFragment,
   RegularStepFragment,
+  useCheckpointsQuery,
   useCreateCheckpointMutation,
   useDeleteCheckpointMutation,
   useUpdateCheckpointMutation,
@@ -14,18 +15,9 @@ import gfm from 'remark-gfm';
 import Icon from '../../../components/Icon';
 
 const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
-  const sortedCheckpoints = (step.checkpoints || [])
-    .slice()
-    .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-  const nextCheckpoint = isEditting
-    ? sortedCheckpoints[0]
-    : sortedCheckpoints.find((checkpoint) => !checkpoint.isCompleted);
-
-  const [activeCheckpoint, setActiveCheckpoint] = useState<
-    RegularCheckpointFragment | undefined
-  >(nextCheckpoint || sortedCheckpoints[0]);
-  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
-
+  const { data, loading } = useCheckpointsQuery({
+    variables: { stepId: step.id },
+  });
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
@@ -35,9 +27,13 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
   );
+  const [activeCheckpoint, setActiveCheckpoint] = useState<
+    RegularCheckpointFragment | undefined
+  >(undefined);
+  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   useEffect(() => {
-    setCheckpoints(step?.checkpoints || []);
+    setCheckpoints(data?.checkpoints || []);
     if (nextCheckpoint?.id !== activeCheckpoint?.id) {
       setActiveCheckpoint(nextCheckpoint);
     }
@@ -53,20 +49,25 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
       if (!activeCheckpoint) return;
 
       updateCheckpointM({
-        refetchQueries: ['Step'],
+        refetchQueries: ['Checkpoints', 'Step'],
         variables: { description: value || '', id: activeCheckpoint.id },
       });
     }, 1000),
     [activeCheckpoint]
   );
 
-  // if (!step.checkpoints) return null;
+  if (loading) return null;
+  if (!data?.checkpoints) return null;
+
+  const nextCheckpoint = isEditting
+    ? data.checkpoints[0]
+    : data.checkpoints.find((checkpoint) => !checkpoint.isCompleted);
 
   const createCheckpoint = async () => {
     const len = step?.checkpoints?.length || 0;
 
     await createCheckpointM({
-      refetchQueries: ['Step'],
+      refetchQueries: ['Checkpoints', 'Step'],
       variables: { checkpointId: len + 1, stepId: step.id },
     });
   };
@@ -78,15 +79,18 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
       setActiveCheckpoint(checkpoints[len - 1 - 1]);
     }
 
-    await deleteCheckpointM({ refetchQueries: ['Step'], variables: { id } });
+    await deleteCheckpointM({
+      refetchQueries: ['Checkpoints', 'Step'],
+      variables: { id },
+    });
   };
 
   const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
 
   return (
     <>
-      {sortedCheckpoints.length
-        ? sortedCheckpoints.map((checkpoint, i) => {
+      {data.checkpoints.length
+        ? data.checkpoints.map((checkpoint, i) => {
             return (
               <div key={checkpoint.id}>
                 <h3

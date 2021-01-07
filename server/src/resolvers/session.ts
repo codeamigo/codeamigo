@@ -44,10 +44,17 @@ export class SessionResolver {
   ): Promise<Session | undefined> {
     const student = await User.findOne({ id: req.session.userId });
 
-    const session = await Session.findOne({
-      relations: ["steps"],
-      where: { lessonId, student },
-    });
+    const session = await Session.createQueryBuilder()
+      .where(
+        "Session.lessonId = :lessonId AND Session.student.id = :studentId",
+        {
+          lessonId,
+          studentId: student?.id,
+        }
+      )
+      .leftJoinAndSelect("Session.steps", "steps")
+      .addOrderBy("steps.createdAt", "ASC")
+      .getOne();
 
     return session;
   }
@@ -70,6 +77,7 @@ export class SessionResolver {
       { relations: ["steps", "students"] }
     );
 
+    console.log(lesson);
     if (!lesson) {
       return null;
     }
@@ -122,8 +130,6 @@ export class SessionResolver {
           }).save();
         })
       );
-
-      console.log(steps);
 
       const currentStep = steps.sort((a, b) =>
         b.createdAt < a.createdAt ? 1 : -1

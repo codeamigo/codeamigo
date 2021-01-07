@@ -31,6 +31,11 @@ export type Query = {
 };
 
 
+export type QueryCheckpointsArgs = {
+  stepId: Scalars['Float'];
+};
+
+
 export type QueryCheckpointArgs = {
   id: Scalars['Int'];
 };
@@ -719,6 +724,19 @@ export type UpdateStepNameMutation = (
   & { updateStepName?: Maybe<(
     { __typename?: 'Step' }
     & Pick<Step, 'id'>
+  )> }
+);
+
+export type CheckpointsQueryVariables = Exact<{
+  stepId: Scalars['Float'];
+}>;
+
+
+export type CheckpointsQuery = (
+  { __typename?: 'Query' }
+  & { checkpoints: Array<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
   )> }
 );
 
@@ -1653,6 +1671,39 @@ export function useUpdateStepNameMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateStepNameMutationHookResult = ReturnType<typeof useUpdateStepNameMutation>;
 export type UpdateStepNameMutationResult = Apollo.MutationResult<UpdateStepNameMutation>;
 export type UpdateStepNameMutationOptions = Apollo.BaseMutationOptions<UpdateStepNameMutation, UpdateStepNameMutationVariables>;
+export const CheckpointsDocument = gql`
+    query Checkpoints($stepId: Float!) {
+  checkpoints(stepId: $stepId) {
+    ...RegularCheckpoint
+  }
+}
+    ${RegularCheckpointFragmentDoc}`;
+
+/**
+ * __useCheckpointsQuery__
+ *
+ * To run a query within a React component, call `useCheckpointsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckpointsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckpointsQuery({
+ *   variables: {
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useCheckpointsQuery(baseOptions: Apollo.QueryHookOptions<CheckpointsQuery, CheckpointsQueryVariables>) {
+        return Apollo.useQuery<CheckpointsQuery, CheckpointsQueryVariables>(CheckpointsDocument, baseOptions);
+      }
+export function useCheckpointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckpointsQuery, CheckpointsQueryVariables>) {
+          return Apollo.useLazyQuery<CheckpointsQuery, CheckpointsQueryVariables>(CheckpointsDocument, baseOptions);
+        }
+export type CheckpointsQueryHookResult = ReturnType<typeof useCheckpointsQuery>;
+export type CheckpointsLazyQueryHookResult = ReturnType<typeof useCheckpointsLazyQuery>;
+export type CheckpointsQueryResult = Apollo.QueryResult<CheckpointsQuery, CheckpointsQueryVariables>;
 export const LessonDocument = gql`
     query Lesson($id: Int!) {
   lesson(id: $id) {

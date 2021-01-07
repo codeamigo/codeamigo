@@ -50,8 +50,16 @@ class UpdateCheckpointInput {
 @Resolver()
 export class CheckpointResolver {
   @Query(() => [Checkpoint])
-  checkpoints(): Promise<Checkpoint[]> {
-    return Checkpoint.find({ relations: ["step"] });
+  async checkpoints(@Arg("stepId") stepId: number): Promise<Checkpoint[]> {
+    const step = await Step.createQueryBuilder()
+      .where("Step.id = :stepId", {
+        stepId,
+      })
+      .leftJoinAndSelect("Step.checkpoints", "checkpoints")
+      .addOrderBy("checkpoints.createdAt", "ASC")
+      .getOne();
+
+    return step?.checkpoints || [];
   }
 
   @Query(() => Checkpoint, { nullable: true })

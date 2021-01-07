@@ -1,0 +1,5 @@
+query Checkpoints($stepId: Float!) {
+  checkpoints(stepId: $stepId) {
+    ...RegularCheckpoint
+  }
+}

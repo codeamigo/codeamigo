@@ -63,10 +63,17 @@ export class StepResolver {
   }
 
   @Query(() => Step, { nullable: true })
-  step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
-    return Step.findOne(id, {
-      relations: ["lesson", "checkpoints", "codeModules", "dependencies"],
-    });
+  async step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
+    const step = await Step.createQueryBuilder()
+      .where("Step.id = :id", { id })
+      .leftJoinAndSelect("Step.lesson", "lesson")
+      .leftJoinAndSelect("Step.codeModules", "codeModules")
+      .leftJoinAndSelect("Step.dependencies", "dependencies")
+      .leftJoinAndSelect("Step.checkpoints", "checkpoints")
+      .addOrderBy("checkpoints.createdAt", "ASC")
+      .getOne();
+
+    return step;
   }
 
   @Mutation(() => Step, { nullable: true })

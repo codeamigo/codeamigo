@@ -36,11 +36,9 @@ const Instructions: React.FC<Props> = (props) => {
     if (!props.session?.steps) return;
     if (!props.setCurrentStepId) return;
 
-    const steps = props.session.steps
-      .slice()
-      .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1));
-
-    const next = steps.find((nextStep) => nextStep.createdAt > step.createdAt);
+    const next = props.session.steps.find(
+      (nextStep) => nextStep.createdAt > step.createdAt
+    );
 
     if (!next) return;
 
