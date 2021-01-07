@@ -21,9 +21,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
-  const [checkpoints, setCheckpoints] = useState(
-    [] as Array<RegularCheckpointFragment>
-  );
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
   );
@@ -33,11 +30,12 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   useEffect(() => {
-    setCheckpoints(data?.checkpoints || []);
+    if (activeCheckpoint && isEditting) return;
+
     if (nextCheckpoint?.id !== activeCheckpoint?.id) {
       setActiveCheckpoint(nextCheckpoint);
     }
-  }, [step?.checkpoints]);
+  }, [data?.checkpoints]);
 
   useEffect(() => {
     setMarkdown(activeCheckpoint?.description);
@@ -59,12 +57,14 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   if (loading) return null;
   if (!data?.checkpoints) return null;
 
+  const { checkpoints } = data;
+
   const nextCheckpoint = isEditting
-    ? data.checkpoints[0]
-    : data.checkpoints.find((checkpoint) => !checkpoint.isCompleted);
+    ? checkpoints[0]
+    : checkpoints.find((checkpoint) => !checkpoint.isCompleted);
 
   const createCheckpoint = async () => {
-    const len = step?.checkpoints?.length || 0;
+    const len = data?.checkpoints?.length || 0;
 
     await createCheckpointM({
       refetchQueries: ['Checkpoints', 'Step'],
@@ -73,7 +73,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   };
 
   const deleteCheckpoint = async (id: number) => {
-    const len = step?.checkpoints?.length || 0;
+    const len = data?.checkpoints?.length || 0;
 
     if (activeCheckpoint?.id === id) {
       setActiveCheckpoint(checkpoints[len - 1 - 1]);
@@ -89,8 +89,8 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
 
   return (
     <>
-      {data.checkpoints.length
-        ? data.checkpoints.map((checkpoint, i) => {
+      {checkpoints.length
+        ? checkpoints.map((checkpoint, i) => {
             return (
               <div key={checkpoint.id}>
                 <h3
