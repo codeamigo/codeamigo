@@ -126,7 +126,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.checkpoints]);
 
   useEffect(() => {
-    window.addEventListener('message', (message) => {
+    const handleCompleteCheckpoint = (message: any) => {
       if (message.data.from === 'preview') {
         try {
           // don't complete checkpoint if editting
@@ -139,7 +139,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             currentCheckpoint
           ) {
             completeCheckpoint({
-              refetchQueries: ['Step'],
+              refetchQueries: ['Step', 'Checkpoints'],
               variables: { id: currentCheckpoint.id },
             });
           }
@@ -147,10 +147,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           console.log(e);
         }
       }
-    });
+    };
 
-    return () => window.removeEventListener('message', () => null);
-  }, [currentCheckpoint]);
+    window.addEventListener('message', handleCompleteCheckpoint);
+
+    return () =>
+      window.removeEventListener('message', handleCompleteCheckpoint);
+  });
 
   const createFile = async (file: string) => {
     const value = ``;
