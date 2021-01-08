@@ -22,9 +22,9 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className={`${
-        isActive ? 'h-full' : 'h-6'
-      } flex flex-col justify-between bg-gray-700 `}
+      className={`h-${isActive ? 'full max-h-full' : '0'} ${
+        isActive ? 'overflow-scroll' : 'overflow-hidden'
+      } max-h-6 min-h-6 transition-height duration-500 delay-75 bg-gray-700`}
     >
       <div className="bg-gray-900 sticky top-0">
         <ul className="flex justify-between">
@@ -45,20 +45,18 @@ const Console: React.FC<Props> = () => {
           </li>
         </ul>
       </div>
-      <div>
-        {stack.map((value, i) => {
-          return (
-            <div
-              className="bg-gray-700 border-black border-b text-white text-xs"
-              key={i}
-            >
-              <div className="px-2 py-1 flex items-start">
-                <span className="mr-3">{'>'}</span> {value.result}
-              </div>
+      {stack.map((value, i) => {
+        return (
+          <div
+            className="bg-gray-700 border-black border-b text-white text-xs"
+            key={i}
+          >
+            <div className="px-2 py-1 flex items-start">
+              <span className="mr-3">{'>'}</span> {value.result}
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
   );
 };

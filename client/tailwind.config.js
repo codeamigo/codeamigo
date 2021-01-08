@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      maxHeight: {
+        6: '1.5rem',
+      },
       minHeight: {
         0: '0',
         '1/5': '20%',
