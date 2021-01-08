@@ -19,17 +19,17 @@
     let oldwarn = console.warn;
     console.log = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
-      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      window.parent.postMessage({ result: msg, from: 'preview', type: 'log' }, '*')
       oldlog.apply(console, arguments);
     };
     console.info = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
-      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      window.parent.postMessage({ result: msg, from: 'preview', type: 'info' }, '*')
       oldinfo.apply(console, arguments);
     };
     console.warn = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
-      window.parent.postMessage({ result: msg, from: 'preview' }, '*')
+      window.parent.postMessage({ result: msg, from: 'preview', type: 'warn' }, '*')
       oldwarn.apply(console, arguments);
     };
   })();

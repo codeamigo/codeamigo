@@ -4,9 +4,21 @@ export type FilesType = { [key in string]: string };
 
 export type ModulesType = RegularCodeModuleFragment[];
 
-export type PreviewType = {
+export enum PreviewLogTypeEnum {
+  log,
+  info,
+  warn,
+}
+
+export type ToPreviewMsgType = {
   files: FilesType;
   from: 'editor';
   isTest: boolean;
   runPath: string;
+};
+
+export type FromPreviewMsgType = {
+  from: 'preview';
+  result: string;
+  type: keyof typeof PreviewLogTypeEnum;
 };

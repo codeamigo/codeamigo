@@ -3,6 +3,8 @@ import Editor from '@widgets/Lesson/Editor';
 import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
 
+import Console from '../../Console';
+
 const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
@@ -20,8 +22,13 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">
           <Editor step={data.step} {...rest} />
         </div>
-        <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
-          <iframe id="frame" src={process.env.NEXT_PUBLIC_PREVIEW_URL}></iframe>
+        <div className="flex flex-col justify-between w-full lg:h-full lg:overflow-scroll lg:w-1/4">
+          <iframe
+            className="w-full h-full"
+            id="frame"
+            src={process.env.NEXT_PUBLIC_PREVIEW_URL}
+          ></iframe>
+          <Console />
         </div>
       </div>
     </>

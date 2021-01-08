@@ -12,7 +12,7 @@ import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import EditorFiles from '../EditorFiles';
-import { FilesType, PreviewType } from './types';
+import { FilesType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
 
 const FILE = 'file:///';
@@ -262,7 +262,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             from: 'editor',
             isTest,
             runPath,
-          } as PreviewType,
+          } as ToPreviewMsgType,
           '*'
         );
       },
