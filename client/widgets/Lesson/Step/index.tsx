@@ -22,7 +22,7 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">
           <Editor step={data.step} {...rest} />
         </div>
-        <div className="flex flex-col justify-between w-full lg:h-full lg:overflow-scroll lg:w-1/4">
+        <div className="flex flex-col justify-between w-full lg:h-full lg:w-1/4">
           <iframe
             className="w-full h-full"
             id="frame"

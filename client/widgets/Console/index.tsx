@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '../../components/Icon';
 import { FromPreviewMsgType, PreviewLogTypeEnum } from '../Lesson/Editor/types';
 
 const Console: React.FC<Props> = () => {
+  const stackRef = useRef<HTMLDivElement>(null);
   const [stack, setStack] = useState<FromPreviewMsgType[]>([]);
   const [isActive, setIsActive] = useState<boolean>(true);
 
@@ -13,6 +14,9 @@ const Console: React.FC<Props> = () => {
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
       setStack((currentStack) => [...currentStack, event.data]);
+      if (stackRef.current) {
+        stackRef.current.scrollTop = stackRef.current.scrollHeight;
+      }
     };
 
     window.addEventListener('message', handleLog);
@@ -22,11 +26,12 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className={`h-${isActive ? 'full max-h-full' : '0'} ${
-        isActive ? 'overflow-scroll' : 'overflow-hidden'
-      } max-h-6 min-h-6 transition-height duration-500 delay-75 bg-gray-700`}
+      className="overflow-hidden min-h-6 transition-all duration-500 bg-gray-700"
+      style={{
+        height: isActive ? '100%' : '0%',
+      }}
     >
-      <div className="bg-gray-900 sticky top-0">
+      <div className="bg-gray-900">
         <ul className="flex justify-between">
           <li
             className={`${
@@ -45,18 +50,20 @@ const Console: React.FC<Props> = () => {
           </li>
         </ul>
       </div>
-      {stack.map((value, i) => {
-        return (
-          <div
-            className="bg-gray-700 border-black border-b text-white text-xs"
-            key={i}
-          >
-            <div className="px-2 py-1 flex items-start">
-              <span className="mr-3">{'>'}</span> {value.result}
+      <div className="overflow-scroll h-full" ref={stackRef}>
+        {stack.map((value, i) => {
+          return (
+            <div
+              className="bg-gray-700 border-black border-b text-white text-xs"
+              key={i}
+            >
+              <div className="px-2 py-1 flex items-start">
+                <span className="mr-3">{'>'}</span> {value.result}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 };
