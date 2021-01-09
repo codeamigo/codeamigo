@@ -26,7 +26,7 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className="overflow-hidden min-h-6 transition-all duration-500 bg-gray-700"
+      className="flex flex-col overflow-hidden min-h-6 transition-all duration-500 bg-gray-700"
       style={{
         height: isActive ? '100%' : '0%',
       }}
