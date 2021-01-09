@@ -1,6 +1,7 @@
 import '../styles/fonts/icomoon/style.css';
 import '../styles/globals.css';
 import 'github-markdown-css/github-markdown.css';
+import 'codeamigo-jest-lite/dist/prettify.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { client } from '@utils/withApollo';

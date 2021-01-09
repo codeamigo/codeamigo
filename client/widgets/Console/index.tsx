@@ -3,19 +3,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import Icon from '../../components/Icon';
 import { FromPreviewMsgType, PreviewLogTypeEnum } from '../Lesson/Editor/types';
 
+type TabType = 'console' | 'tests';
+
 const Console: React.FC<Props> = () => {
-  const stackRef = useRef<HTMLDivElement>(null);
-  const [stack, setStack] = useState<FromPreviewMsgType[]>([]);
-  const [isActive, setIsActive] = useState<boolean>(true);
+  const listRef = useRef<HTMLDivElement>(null);
+  const [logList, setLogList] = useState<FromPreviewMsgType[]>([]);
+  const [testList, setTestList] = useState<FromPreviewMsgType[]>([]);
+  const [activeTab, setActiveTab] = useState<TabType | ''>('');
 
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
       if (event.data.from !== 'preview') return;
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
-      setStack((currentStack) => [...currentStack, event.data]);
-      if (stackRef.current) {
-        stackRef.current.scrollTop = stackRef.current.scrollHeight;
+      if (event.data.type === 'test') {
+        setTestList([event.data]);
+      } else {
+        setLogList((currentList) => [...currentList, event.data]);
+      }
+      if (listRef.current) {
+        listRef.current.scrollTop = listRef.current.scrollHeight;
       }
     };
 
@@ -24,11 +31,29 @@ const Console: React.FC<Props> = () => {
     return () => window.removeEventListener('message', handleLog);
   });
 
+  const changeTab = (tab: 'console' | 'tests') => {
+    if (tab === activeTab) {
+      setActiveTab('');
+    } else {
+      setActiveTab(tab);
+    }
+  };
+
+  const resetList = () => {
+    if (activeTab === 'console') {
+      setLogList([]);
+    } else {
+      setTestList([]);
+    }
+  };
+
+  const list = activeTab === 'console' ? logList : testList;
+
   return (
     <div
       className="flex flex-col overflow-hidden min-h-6 transition-all duration-500 bg-gray-700"
       style={{
-        height: isActive ? '100%' : '0%',
+        height: activeTab ? '100%' : '0%',
       }}
     >
       <div className="bg-gray-900">
@@ -36,18 +61,17 @@ const Console: React.FC<Props> = () => {
           <ul className="flex justify-between">
             <li
               className={`${
-                isActive ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1 list-none cursor-pointer`}
-              onClick={() => setIsActive(!isActive)}
+                activeTab === 'console' ? 'bg-gray-700' : ''
+              } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
+              onClick={() => changeTab('console')}
             >
               Console
             </li>
             <li
               className={`${
-                ''
-                // isActive ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1 list-none cursor-pointer`}
-              onClick={() => setIsActive(!isActive)}
+                activeTab === 'tests' ? 'bg-gray-700' : ''
+              } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
+              onClick={() => changeTab('tests')}
             >
               Tests
             </li>
@@ -56,13 +80,13 @@ const Console: React.FC<Props> = () => {
             <Icon
               className="text-gray-700 hover:text-gray-400 transition-colors duration-300"
               name="erase"
-              onClick={() => setStack([])}
+              onClick={() => resetList()}
             />
           </div>
         </div>
       </div>
-      <div className="overflow-scroll h-full" ref={stackRef}>
-        {stack.map((value, i) => {
+      <div className="overflow-scroll h-full" ref={listRef}>
+        {list.map((value, i) => {
           return (
             <div
               className="bg-gray-700 border-black border-b text-white text-xs"

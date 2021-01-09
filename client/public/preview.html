@@ -32,6 +32,11 @@
       window.parent.postMessage({ result: msg, from: 'preview', type: 'warn' }, '*')
       oldwarn.apply(console, arguments);
     };
+    console.test = function (message) {
+      let msg = typeof message === 'string' ? message : JSON.stringify(message)
+      window.parent.postMessage({ result: msg, from: 'preview', type: 'test' }, '*')
+      oldlog.apply(console, arguments);
+    };
   })();
 
   const transformCode = (code, path) => {
@@ -76,7 +81,8 @@
 
   window.process = { env: { NODE_ENV: 'development' } }
 
-  const exported = {}
+  const cache = (path) => path.includes(MODULE_ROOT) && !path.includes('jest')
+  const cached = {}
 
   const runCode = (files, runPath) => {
     try {
@@ -91,15 +97,15 @@
       const exports = {};
       const module = { exports };
       eval(babelOutput.code);
-      
-      if (!exported[runPath] && path.includes(MODULE_ROOT)) {
-        exported[runPath] = module.exports
+
+      if (!cached[runPath] && cache(path)) {
+        cached[runPath] = module.exports
       }
-      
-      return exported[runPath] || module.exports;
+
+      return cached[runPath] || module.exports;
     } catch (e) {
       console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
-      console.log('Babel compliation error. Make sure that `findBestMatch` is working as intended!')
+      console.log('Babel compliation error.')
       console.log(`ERROR: ${e}`);
       console.log('⛔️⛔️⛔️⛔️⛔️⛔️⛔️⛔️')
     }
@@ -111,7 +117,7 @@
     if (data.files['index.html']) {
       document.querySelector('body').innerHTML = data.files['index.html']
     }
-    
+
     runCode(data.files, data.runPath);
   });
 </script>
