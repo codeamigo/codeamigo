@@ -1,16 +1,14 @@
 import InputField from '@components/Form/InputField';
 import { useLoginMutation } from '@generated/graphql';
 import { Form, Formik } from 'formik';
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import { useGlobalState } from '../../state';
+import { useApp } from '../../state2';
 import { toErrorMap } from '../../utils';
 
 const Login: React.FC = () => {
-  const router = useRouter();
   const [login, { data }] = useLoginMutation();
-  const [modal, setModal] = useGlobalState('modal');
+  const { actions, state } = useApp();
 
   return (
     <Formik
@@ -25,8 +23,8 @@ const Login: React.FC = () => {
         }
 
         if (data?.login.user) {
-          modal.callback();
-          setModal({ callback: () => null, name: null });
+          state.modal.callback();
+          actions.modal.resetModal();
         }
       }}
     >

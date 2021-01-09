@@ -1,25 +1,28 @@
 import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
-import { useGlobalState } from '../state';
+import { useApp } from '../state2';
 import Login from './Login';
 import Register from './Register';
 
 const Modals: React.FC<Props> = () => {
-  const [modal, setModal] = useGlobalState('modal');
+  const { actions, state } = useApp();
+  const { modal } = actions;
+  const { resetModal, setModal } = modal;
 
   const handleEscape = useCallback((event) => {
-    if (event.keyCode === 27) setModal({ callback: () => null, name: null });
+    if (event.keyCode === 27) resetModal();
   }, []);
 
   useEffect(() => {
-    if (modal.name) document.addEventListener('keydown', handleEscape, false);
+    if (state.modal.name)
+      document.addEventListener('keydown', handleEscape, false);
     return () => {
       document.removeEventListener('keydown', handleEscape, false);
     };
-  }, [modal.name]);
+  }, [state.modal.name]);
 
-  const isOpen = !!modal.name;
+  const isOpen = !!state.modal.name;
 
   return isOpen ? (
     <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -71,8 +74,8 @@ const Modals: React.FC<Props> = () => {
           className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
           role="dialog"
         >
-          {modal.name === 'login' && <Login />}
-          {modal.name === 'register' && <Register />}
+          {state.modal.name === 'login' && <Login />}
+          {state.modal.name === 'register' && <Register />}
         </div>
       </div>
     </div>

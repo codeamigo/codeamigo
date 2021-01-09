@@ -9,10 +9,6 @@ type ModalStateType = {
 };
 
 export const { useGlobalState } = createGlobalState({
-  modal: {
-    callback: () => null,
-    name: null,
-  } as ModalStateType,
   user: {
     data: undefined as MeQuery | undefined,
     loading: true as boolean,

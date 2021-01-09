@@ -5,11 +5,12 @@ import React, { useState } from 'react';
 import Icon from '../../../components/Icon';
 import { useLogoutMutation } from '../../../generated/graphql';
 import { useGlobalState } from '../../../state';
+import { useApp } from '../../../state2';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();
+  const { actions } = useApp();
   const [user, setUser] = useGlobalState('user');
-  const [_, setModal] = useGlobalState('modal');
 
   const [logout] = useLogoutMutation({ refetchQueries: ['Me'] });
 
@@ -139,7 +140,10 @@ const TopNav: React.FC<Props> = () => {
                 <button
                   className="hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
                   onClick={() =>
-                    setModal({ callback: () => null, name: 'login' })
+                    actions.modal.setModal({
+                      callback: () => null,
+                      name: 'login',
+                    })
                   }
                   role="button"
                 >
@@ -149,7 +153,10 @@ const TopNav: React.FC<Props> = () => {
                 <button
                   className="border-2 border-white hover:border-gray-300 hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
                   onClick={() =>
-                    setModal({ callback: () => null, name: 'register' })
+                    actions.modal.setModal({
+                      callback: () => null,
+                      name: 'register',
+                    })
                   }
                   role="button"
                 >

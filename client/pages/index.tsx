@@ -2,10 +2,11 @@ import { useRouter } from 'next/router';
 
 import { useLessonsQuery, useMeQuery } from '../generated/graphql';
 import { useGlobalState } from '../state';
+import { useApp } from '../state2';
 import withApollo from '../utils/withApollo';
 
 const Home = () => {
-  const [modals, setModal] = useGlobalState('modal');
+  const { actions } = useApp();
   const [user] = useGlobalState('user');
   const { data, error, loading } = useLessonsQuery();
   const router = useRouter();
@@ -14,7 +15,7 @@ const Home = () => {
     if (user.data?.me) {
       router.push(`/lessons/start/${id}`);
     } else {
-      setModal({
+      actions.modal.setModal({
         callback: () => router.push(`/lessons/start/${id}`),
         name: 'login',
       });
