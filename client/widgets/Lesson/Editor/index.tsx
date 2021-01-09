@@ -16,39 +16,6 @@ import { FilesType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
 
 const FILE = 'file:///';
-
-export const findBestMatch = (
-  files: FilesType | CodeSandboxV2ResponseI['contents'],
-  runPath: string
-) => {
-  switch (true) {
-    case !!files[runPath]: {
-      return runPath;
-    }
-    case !!files[`${MODULE_ROOT}/${runPath}/index.js`]: {
-      return `${MODULE_ROOT}/${runPath}/index.js`;
-    }
-    default:
-      const fileKeys = Object.keys(files);
-      const cleanRunPath = runPath.replace('./', '');
-
-      const opt1 = fileKeys.find((file) => file.includes(`${cleanRunPath}.js`));
-      const opt2 = fileKeys.find((file) => file.includes(cleanRunPath));
-
-      switch (true) {
-        case opt1 !== undefined: {
-          return opt1;
-        }
-        case opt2 !== undefined: {
-          return opt2;
-        }
-      }
-
-      console.error(`No file found for ${runPath}`);
-  }
-};
-export const MODULE_ROOT = '/node_modules';
-
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ step, ...rest }) => {
@@ -208,36 +175,29 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const updateDependencies = async () => {
     let dependencyDependencies: { [key in string]: string } = {};
 
-    // clean this up, is findBestMatch necessary?
-    const newDependencies = step.dependencies?.reduce(
+    const dependencies = step.dependencies?.reduce(
       async (acc, { package: pkg, version }) => {
         const res: CodeSandboxV2ResponseI = await fetch(
           `${CS_PKG_URL}/${pkg}/${version}.json`
         ).then((res) => res.json());
 
-        const pkgJson = res.contents[`${MODULE_ROOT}/${pkg}/package.json`];
-        const main = JSON.parse(pkgJson.content).main;
-        const mainModule = findBestMatch(res.contents, main);
-
         Object.keys(res.contents).map((value) => {
-          if (value !== mainModule)
-            dependencyDependencies = {
-              ...dependencyDependencies,
-              [value]: res.contents[value].content,
-            };
+          dependencyDependencies = {
+            ...dependencyDependencies,
+            [value]: res.contents[value].content,
+          };
         });
 
         return {
           ...(await acc),
           ...dependencyDependencies,
-          [mainModule!]: res.contents[mainModule!].content,
         };
       },
       {}
     );
 
     setDependencies({
-      ...(await newDependencies),
+      ...(await dependencies),
     });
   };
 

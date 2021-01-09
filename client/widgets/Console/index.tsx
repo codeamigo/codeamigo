@@ -32,23 +32,34 @@ const Console: React.FC<Props> = () => {
       }}
     >
       <div className="bg-gray-900">
-        <ul className="flex justify-between">
-          <li
-            className={`${
-              isActive ? 'bg-gray-700' : ''
-            } text-white text-xs px-4 py-1 list-none cursor-pointer`}
-            onClick={() => setIsActive(!isActive)}
-          >
-            Console
-          </li>
-          <li className="flex list-none pr-2">
+        <div className="flex justify-between">
+          <ul className="flex justify-between">
+            <li
+              className={`${
+                isActive ? 'bg-gray-700' : ''
+              } text-white text-xs px-4 py-1 list-none cursor-pointer`}
+              onClick={() => setIsActive(!isActive)}
+            >
+              Console
+            </li>
+            <li
+              className={`${
+                ''
+                // isActive ? 'bg-gray-700' : ''
+              } text-white text-xs px-4 py-1 list-none cursor-pointer`}
+              onClick={() => setIsActive(!isActive)}
+            >
+              Tests
+            </li>
+          </ul>
+          <div className="flex list-none pr-2">
             <Icon
-              className="text-gray-700 hover:text-gray-400 transition-colors duration-150"
+              className="text-gray-700 hover:text-gray-400 transition-colors duration-300"
               name="erase"
               onClick={() => setStack([])}
             />
-          </li>
-        </ul>
+          </div>
+        </div>
       </div>
       <div className="overflow-scroll h-full" ref={stackRef}>
         {stack.map((value, i) => {
