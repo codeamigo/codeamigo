@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import {
-  RegularCheckpointFragment,
   RegularStepFragment,
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
@@ -26,9 +25,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [files, setFiles] = useState({} as FilesType);
   const [dependencies, setDependencies] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
-  const [currentCheckpoint, setCurrentCheckpoint] = useState<
-    RegularCheckpointFragment | undefined
-  >(undefined);
   const [isEditorReady, setIsEditorReady] = useState(false);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -36,6 +32,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
+
+  console.log('checkpoint in editor', step.currentCheckpoint);
 
   // Change Step
   useEffect(() => {
@@ -86,14 +84,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.dependencies]);
 
   useEffect(() => {
-    const nextCheckpoint = step.checkpoints?.find(
-      (checkpoint) => !checkpoint.isCompleted
-    );
-
-    setCurrentCheckpoint(nextCheckpoint);
-  }, [step.checkpoints]);
-
-  useEffect(() => {
     const handleCompleteCheckpoint = (message: any) => {
       if (message.data.from === 'preview') {
         try {
@@ -102,13 +92,14 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
           const result = JSON.parse(message.data.result);
 
+          console.log('step', step);
           if (
             result[result.length - 1].status === 'pass' &&
-            currentCheckpoint
+            step.currentCheckpoint
           ) {
             completeCheckpoint({
               refetchQueries: ['Step', 'Checkpoints'],
-              variables: { id: currentCheckpoint.id },
+              variables: { id: step.currentCheckpoint.id },
             });
           }
         } catch (e) {
@@ -375,8 +366,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
               postCode(
                 files,
                 dependencies,
-                currentCheckpoint!.test,
-                files[currentCheckpoint!.test],
+                step.currentCheckpoint!.test,
+                files[step.currentCheckpoint!.test],
                 true
               )
             }

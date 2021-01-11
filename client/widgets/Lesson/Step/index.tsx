@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { currentCheckpointVar } from '👨‍💻apollo/cache/step';
 import { LessonQuery, SessionQuery, useStepQuery } from '👨‍💻generated/graphql';
 import Console from '👨‍💻widgets/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -12,6 +13,8 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
   });
 
   if (!data?.step) return null;
+
+  console.log(data.step.currentCheckpoint);
 
   return (
     <>

@@ -13,7 +13,7 @@ const Me = () => {
   const router = useRouter();
 
   const { data, error, loading } = useMeQuery();
-  const { data: sessionsData } = useSessionsQuery({
+  const { client, data: sessionsData } = useSessionsQuery({
     fetchPolicy: 'cache-and-network',
   });
 
@@ -44,12 +44,13 @@ const Me = () => {
               <Icon
                 className="text-red-800 absolute top-2 right-2"
                 name="trash"
-                onClick={() =>
+                onClick={() => {
                   deleteSession({
                     refetchQueries: ['Sessions'],
                     variables: { id: session.id },
-                  })
-                }
+                  });
+                  client.resetStore();
+                }}
               />
             </div>
           );

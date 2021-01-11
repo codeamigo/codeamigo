@@ -1,10 +1,14 @@
+extend type User {
+  isAuthenticated: Boolean
+}
+
+extend type Step {
+  currentCheckpoint: Checkpoint
+}
+
 type Modal {
   name: String
   callback: String
-}
-
-extend type User {
-  isAuthenticated: Boolean
 }
 
 extend type Query {

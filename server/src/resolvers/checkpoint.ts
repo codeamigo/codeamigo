@@ -26,8 +26,8 @@ describe('My Test', () => {
 })
 
 const runTests = async () => {
-    const results = await run()
-    console.log(results)
+  const results = await run()
+  console.test(results)
 }
 
 runTests()

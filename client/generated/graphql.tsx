@@ -89,16 +89,17 @@ export type CodeModule = {
 
 export type Step = {
   __typename?: 'Step';
-  id: Scalars['Float'];
+  checkpoints?: Maybe<Array<Checkpoint>>;
+  codeModules?: Maybe<Array<CodeModule>>;
   createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
+  currentCheckpoint?: Maybe<Checkpoint>;
+  dependencies?: Maybe<Array<Dependency>>;
+  id: Scalars['Float'];
   instructions?: Maybe<Scalars['String']>;
   lesson: Lesson;
+  name?: Maybe<Scalars['String']>;
   session: Session;
-  codeModules?: Maybe<Array<CodeModule>>;
-  checkpoints?: Maybe<Array<Checkpoint>>;
-  dependencies?: Maybe<Array<Dependency>>;
+  updatedAt: Scalars['String'];
 };
 
 export type Lesson = {
@@ -408,7 +409,10 @@ export type RegularMeFragment = (
 export type RegularStepFragment = (
   { __typename?: 'Step' }
   & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions'>
-  & { codeModules?: Maybe<Array<(
+  & { currentCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )>, codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
   )>>, checkpoints?: Maybe<Array<(
@@ -880,13 +884,6 @@ export const RegularMeFragmentDoc = gql`
   }
 }
     `;
-export const RegularCodeModuleFragmentDoc = gql`
-    fragment RegularCodeModule on CodeModule {
-  id
-  name
-  value
-}
-    `;
 export const RegularCheckpointFragmentDoc = gql`
     fragment RegularCheckpoint on Checkpoint {
   id
@@ -894,6 +891,13 @@ export const RegularCheckpointFragmentDoc = gql`
   description
   createdAt
   isCompleted
+}
+    `;
+export const RegularCodeModuleFragmentDoc = gql`
+    fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
 }
     `;
 export const RegularDependencyFragmentDoc = gql`
@@ -909,6 +913,9 @@ export const RegularStepFragmentDoc = gql`
   createdAt
   name
   instructions
+  currentCheckpoint @client {
+    ...RegularCheckpoint
+  }
   codeModules {
     ...RegularCodeModule
   }
@@ -919,8 +926,8 @@ export const RegularStepFragmentDoc = gql`
     ...RegularDependency
   }
 }
-    ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}
+    ${RegularCheckpointFragmentDoc}
+${RegularCodeModuleFragmentDoc}
 ${RegularDependencyFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
