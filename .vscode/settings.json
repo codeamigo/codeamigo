@@ -2,5 +2,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative"
 }

@@ -1,11 +1,12 @@
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
+
 import {
   useCreateSessionMutation,
   useMeQuery,
   useSessionQuery,
-} from '@generated/graphql';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+} from '👨‍💻generated/graphql';
 
 const StartLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);

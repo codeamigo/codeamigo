@@ -15,14 +15,15 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@api/*": ["./api/*"],
-      "@components/*": ["./components/*"],
-      "@generated/*": ["./generated/*"],
-      "@pages/*": ["./pages/*"],
-      "@modals/*": ["./modals/*"],
-      "@utils/*": ["./utils/*"],
-      "@state/*": ["./state/*"],
-      "@widgets/*": ["./widgets/*"]
+      "👨‍💻api/*": ["./api/*"],
+      "👨‍💻apollo/*": ["./apollo/*"],
+      "👨‍💻components/*": ["./components/*"],
+      "👨‍💻generated/*": ["./generated/*"],
+      "👨‍💻pages/*": ["./pages/*"],
+      "👨‍💻modals/*": ["./modals/*"],
+      "👨‍💻utils/*": ["./utils/*"],
+      "👨‍💻state/*": ["./state/*"],
+      "👨‍💻widgets/*": ["./widgets/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

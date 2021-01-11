@@ -1,5 +1,6 @@
-import Icon from '@components/Icon';
 import React, { useEffect, useRef, useState } from 'react';
+
+import Icon from '👨‍💻components/Icon';
 
 import styles from './FilesList.module.scss';
 import { isValidName } from './validation';

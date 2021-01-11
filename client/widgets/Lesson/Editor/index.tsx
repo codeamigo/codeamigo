@@ -1,4 +1,8 @@
-import { CodeSandboxV2ResponseI } from '@api/types';
+import { ControlledEditor, monaco } from '@monaco-editor/react';
+import { debounce } from 'debounce';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+
+import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import {
   RegularCheckpointFragment,
   RegularStepFragment,
@@ -6,10 +10,7 @@ import {
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleMutation,
-} from '@generated/graphql';
-import { ControlledEditor, monaco } from '@monaco-editor/react';
-import { debounce } from 'debounce';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+} from '👨‍💻generated/graphql';
 
 import EditorFiles from '../EditorFiles';
 import { FilesType, ToPreviewMsgType } from './types';

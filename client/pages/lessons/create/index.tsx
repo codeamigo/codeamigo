@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-import { useCreateLessonMutation } from '../../../generated/graphql';
+import { useCreateLessonMutation } from '👨‍💻generated/graphql';
 
 const CreateLesson = () => {
   const router = useRouter();

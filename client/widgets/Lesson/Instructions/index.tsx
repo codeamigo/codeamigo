@@ -1,13 +1,14 @@
-import {
-  RegularStepFragment,
-  SessionQuery,
-  useUpdateStepInstructionsMutation,
-} from '@generated/graphql';
 import { ControlledEditor } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
+
+import {
+  RegularStepFragment,
+  SessionQuery,
+  useUpdateStepInstructionsMutation,
+} from '👨‍💻generated/graphql';
 
 import Checkpoints from '../Checkpoints';
 

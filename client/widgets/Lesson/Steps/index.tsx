@@ -1,12 +1,13 @@
-import Icon from '@components/Icon';
+import { Transition } from '@headlessui/react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import Icon from '👨‍💻components/Icon';
 import {
   RegularStepFragment,
   useCreateStepMutation,
   useDeleteStepMutation,
   useUpdateStepNameMutation,
-} from '@generated/graphql';
-import { Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
+} from '👨‍💻generated/graphql';
 
 import styles from './Steps.module.scss';
 

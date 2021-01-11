@@ -1,11 +1,11 @@
-import Icon from '@components/Icon';
-import { useLogoutMutation, useMeQuery } from '@generated/graphql';
 import { Menu, Transition } from '@headlessui/react';
-import { useApp } from '@state/app';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { isAuthenticatedVar, modalVar } from '../../../apollo/cache';
+import { isAuthenticatedVar } from '👨‍💻apollo/cache/me';
+import { modalVar } from '👨‍💻apollo/cache/modal';
+import Icon from '👨‍💻components/Icon';
+import { useLogoutMutation, useMeQuery } from '👨‍💻generated/graphql';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();

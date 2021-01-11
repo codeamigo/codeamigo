@@ -1,9 +1,9 @@
-import { LessonQuery, SessionQuery, useStepQuery } from '@generated/graphql';
-import Editor from '@widgets/Lesson/Editor';
-import Instructions from '@widgets/Lesson/Instructions';
 import React from 'react';
 
-import Console from '../../Console';
+import { LessonQuery, SessionQuery, useStepQuery } from '👨‍💻generated/graphql';
+import Console from '👨‍💻widgets/Console';
+import Editor from '👨‍💻widgets/Lesson/Editor';
+import Instructions from '👨‍💻widgets/Lesson/Instructions';
 
 const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
   const { data } = useStepQuery({

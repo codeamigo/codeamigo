@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { isAuthenticatedVar } from '../../apollo/cache';
+import { isAuthenticatedVar } from '../../apollo/cache/me';
 import { useMeQuery } from '../../generated/graphql';
 
 const AuthProvider: React.FC<Props> = ({ children }) => {

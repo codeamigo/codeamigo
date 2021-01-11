@@ -1,3 +1,10 @@
+import { ControlledEditor } from '@monaco-editor/react';
+import debounce from 'debounce';
+import React, { useCallback, useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+
+import Icon from '👨‍💻components/Icon';
 import {
   RegularCheckpointFragment,
   RegularStepFragment,
@@ -5,14 +12,7 @@ import {
   useCreateCheckpointMutation,
   useDeleteCheckpointMutation,
   useUpdateCheckpointMutation,
-} from '@generated/graphql';
-import { ControlledEditor } from '@monaco-editor/react';
-import debounce from 'debounce';
-import React, { useCallback, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
-
-import Icon from '../../../components/Icon';
+} from '👨‍💻generated/graphql';
 
 const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const { data, loading } = useCheckpointsQuery({

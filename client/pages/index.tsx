@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 
-import { modalVar } from '../apollo/cache';
-import { useLessonsQuery, useMeQuery } from '../generated/graphql';
-import withApollo from '../utils/withApollo';
+import { modalVar } from '👨‍💻apollo/cache/modal';
+import { useLessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
+import withApollo from '👨‍💻utils/withApollo';
 
 const Home = () => {
   const { data: meData } = useMeQuery();

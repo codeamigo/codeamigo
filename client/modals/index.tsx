@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
-import { InitialModalState, modalVar } from '../apollo/cache';
+import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
 import Login from './Login';
 import Register from './Register';
@@ -9,14 +9,11 @@ import Register from './Register';
 const Modals: React.FC<Props> = () => {
   const { data } = useModalQuery();
 
-  console.log('data', data);
-
   const handleEscape = useCallback((event) => {
     if (event.keyCode === 27) modalVar(InitialModalState);
   }, []);
 
   useEffect(() => {
-    console.log(data);
     if (data?.modal?.name)
       document.addEventListener('keydown', handleEscape, false);
     return () => {

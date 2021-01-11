@@ -1264,11 +1264,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.11.tgz#fc25a4248a5e8d0837019b1d170146d07334abe0"
   integrity sha512-BJ97wAUuU3NUiUCp44xzUFquQEvnk1wu7q4CMEUYKJWjdkr0YWYDsm4RFtAvxYsNjLsKcrFt6RvK8r+mnzMbEQ==
 
-"@types/node@^10.5.1":
-  version "10.17.50"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-10.17.50.tgz#7a20902af591282aa9176baefc37d4372131c32d"
-  integrity sha512-vwX+/ija9xKc/z9VqMCdbf4WYcMTGsI0I/L/6shIF3qXURxZOhPQlPRHtjTpiNhAwn0paMJzlOQqw6mAGEQnTA==
-
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -2022,14 +2017,6 @@ bcrypt-pbkdf@^1.0.0:
   integrity sha1-pDAdOJtqQ/m2f/PKEaP2Y342Dp4=
   dependencies:
     tweetnacl "^0.14.3"
-
-betsy@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/betsy/-/betsy-1.0.2.tgz#e53abc4750d6a6a112a7835f723db0ca01a3b197"
-  integrity sha512-yt/OUTbSeCRj4uwbDnjTbnWgrLsgBl1nzJLdZH2eOtrf3SDH7svdoTMWOvTFhUdIM86pY6k21o/4SCIT6RYjig==
-  dependencies:
-    "@types/node" "^10.5.1"
-    tslib "^1.9.3"
 
 big.js@^5.2.2:
   version "5.2.2"
@@ -4778,11 +4765,6 @@ is-observable@^1.1.0:
   dependencies:
     symbol-observable "^1.1.0"
 
-is-plain-obj@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-1.1.0.tgz#71a50c8429dfca773c92a390a4a03b39fcd51d3e"
-  integrity sha1-caUMhCnfync8kqOQpKA7OfzVHT4=
-
 is-plain-obj@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/is-plain-obj/-/is-plain-obj-2.1.0.tgz#45e42e37fccf1f40da8e5f76ee21515840c09287"
@@ -5944,11 +5926,6 @@ node-releases@^1.1.65, node-releases@^1.1.67:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.67.tgz#28ebfcccd0baa6aad8e8d4d8fe4cbc49ae239c12"
   integrity sha512-V5QF9noGFl3EymEwUYzO+3NTDpGfQB4ve6Qfnzf3UNydMhjQRVPR1DZTuvWiLzaFJYw2fmDwAfnRNEVb64hSIg==
 
-non-blocking-json@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/non-blocking-json/-/non-blocking-json-1.1.1.tgz#2180c25ee0330475bdc5e14b27d0750d7c0d73a4"
-  integrity sha512-iweGQWA3+GZkjJEXhvtRh1fjo8DpnotpL8+13NSwaI28X6HaqlYTxAI/ZXawCmva2GS3NaOl5NdNudg3RyQreQ==
-
 noop-logger@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/noop-logger/-/noop-logger-0.1.1.tgz#94a2b1633c4f1317553007d8966fd0e841b6a4c2"
@@ -6155,24 +6132,6 @@ os-tmpdir@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
   integrity sha1-u+Z0BseaqFxc/sdm/lc0VV36EnQ=
-
-overmind-react@^27.0.0:
-  version "27.0.0"
-  resolved "https://registry.yarnpkg.com/overmind-react/-/overmind-react-27.0.0.tgz#91908468b38b96c2a4fb3fd210709b1cf6e62907"
-  integrity sha512-N3DBkw5HlvBRJO0Zv8M86XeTSHwkfM/79Jv0ZORiT35tflLe5UcrIk9VTB7YLkZUwDR2pHmjiLyHZS0PVQmZDA==
-  dependencies:
-    overmind "26.0.0"
-
-overmind@26.0.0, overmind@latest:
-  version "26.0.0"
-  resolved "https://registry.yarnpkg.com/overmind/-/overmind-26.0.0.tgz#53480c09e6b99005f3c814c199531c27eb295bb8"
-  integrity sha512-oSHOZgF84eQYNVRdswvwTt88az5Cbif49mH5sA2HcLDzX2oDH1CXDoNxcEGp60sTCryYt09d+3+LcXR1UEumLQ==
-  dependencies:
-    betsy "1.0.2"
-    is-plain-obj "^1.1.0"
-    non-blocking-json "1.1.1"
-    proxy-state-tree "6.1.0"
-    tslib "^1.10.0"
 
 p-cancelable@^1.0.0:
   version "1.1.0"
@@ -6648,13 +6607,6 @@ prop-types@15.7.2, prop-types@^15.7.2:
     loose-envify "^1.4.0"
     object-assign "^4.1.1"
     react-is "^16.8.1"
-
-proxy-state-tree@6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/proxy-state-tree/-/proxy-state-tree-6.1.0.tgz#7a85eb89328e5973dc21f30b82062cf58186095e"
-  integrity sha512-3vXW9NBjWutNakrRA4Wpy8EQ4knjjmGY583vQQxIR3xsvJ2iuUrGh5jSG+aVoccW0qWKNzaPdGAxpQXaQNdXrQ==
-  dependencies:
-    is-plain-obj "^1.1.0"
 
 prr@~1.0.1:
   version "1.0.1"

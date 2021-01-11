@@ -1,10 +1,10 @@
-import InputField from '@components/Form/InputField';
-import { useLoginMutation, useModalQuery } from '@generated/graphql';
 import { Form, Formik } from 'formik';
 import React from 'react';
 
-import { InitialModalState, modalVar } from '../../apollo/cache';
-import { toErrorMap } from '../../utils';
+import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
+import InputField from '👨‍💻components/Form/InputField';
+import { useLoginMutation, useModalQuery } from '👨‍💻generated/graphql';
+import { toErrorMap } from '👨‍💻utils/index';
 
 const Login: React.FC = () => {
   const [login] = useLoginMutation();

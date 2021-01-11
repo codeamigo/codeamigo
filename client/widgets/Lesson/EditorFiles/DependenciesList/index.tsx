@@ -1,11 +1,12 @@
-import Icon from '@components/Icon';
+import { Listbox, Transition } from '@headlessui/react';
+import React, { useEffect, useRef, useState } from 'react';
+
+import Icon from '👨‍💻components/Icon';
 import {
   RegularDependencyFragment,
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
-} from '@generated/graphql';
-import { Listbox, Transition } from '@headlessui/react';
-import React, { useEffect, useRef, useState } from 'react';
+} from '👨‍💻generated/graphql';
 
 import { AlgoliaSearchResultType } from '..';
 import styles from './DependenciesList.module.scss';

@@ -1,14 +1,15 @@
+import { NextPage } from 'next';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+
 import {
   useLessonQuery,
   useMeQuery,
   useSessionQuery,
-} from '@generated/graphql';
-import Info from '@widgets/Lesson/Info';
-import Step from '@widgets/Lesson/Step';
-import Steps from '@widgets/Lesson/Steps';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+} from '👨‍💻generated/graphql';
+import Info from '👨‍💻widgets/Lesson/Info';
+import Step from '👨‍💻widgets/Lesson/Step';
+import Steps from '👨‍💻widgets/Lesson/Steps';
 
 const Lesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);

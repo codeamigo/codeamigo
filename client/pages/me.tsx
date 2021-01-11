@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Icon from '../components/Icon';
+import Icon from '👨‍💻components/Icon';
 import {
   useDeleteSessionMutation,
   useMeQuery,
   useSessionsQuery,
-} from '../generated/graphql';
-import withApollo from '../utils/withApollo';
+} from '👨‍💻generated/graphql';
+import withApollo from '👨‍💻utils/withApollo';
 
 const Me = () => {
   const router = useRouter();
