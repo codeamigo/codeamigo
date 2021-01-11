@@ -24,8 +24,6 @@
     "graphql": "^15.4.0",
     "next": "10.0.3",
     "next-apollo": "^5.0.4",
-    "overmind": "latest",
-    "overmind-react": "^27.0.0",
     "postcss": "^7",
     "react": "17.0.1",
     "react-apollo": "^3.1.5",
