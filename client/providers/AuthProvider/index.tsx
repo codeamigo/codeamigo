@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
 
+import { isAuthenticatedVar } from '../../apollo/cache';
 import { useMeQuery } from '../../generated/graphql';
-import { useGlobalState } from '../../state';
 
 const AuthProvider: React.FC<Props> = ({ children }) => {
-  const [user, setUser] = useGlobalState('user');
   const { data, loading } = useMeQuery();
 
   useEffect(() => {
-    setUser({
-      ...user,
-      data,
-      loading,
-    });
+    if (data && data.me) {
+      isAuthenticatedVar(true);
+    }
   }, [data?.me, loading]);
 
   return <>{children}</>;

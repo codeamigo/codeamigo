@@ -1,4 +1,4 @@
-import { useLessonQuery } from '@generated/graphql';
+import { useLessonQuery, useMeQuery } from '@generated/graphql';
 import Info from '@widgets/Lesson/Info';
 import Step from '@widgets/Lesson/Step';
 import Steps from '@widgets/Lesson/Steps';
@@ -6,16 +6,13 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { useGlobalState } from '../../../../state';
-
 const EditLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
-  const [user] = useGlobalState('user');
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
 
   const router = useRouter();
-
+  const { data: meData } = useMeQuery();
   const { data } = useLessonQuery({
     variables: { id },
   });
@@ -28,7 +25,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
-  if (data.lesson.owner.id !== user.data?.me?.id) {
+  if (data.lesson.owner.id !== meData?.me?.id) {
     if (typeof window !== 'undefined') {
       router.push('/');
       return null;

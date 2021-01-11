@@ -1,28 +1,30 @@
 import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
-import { useApp } from '../state2';
+import { InitialModalState, modalVar } from '../apollo/cache';
+import { useModalQuery } from '../generated/graphql';
 import Login from './Login';
 import Register from './Register';
 
 const Modals: React.FC<Props> = () => {
-  const { actions, state } = useApp();
-  const { modal } = actions;
-  const { resetModal, setModal } = modal;
+  const { data } = useModalQuery();
+
+  console.log('data', data);
 
   const handleEscape = useCallback((event) => {
-    if (event.keyCode === 27) resetModal();
+    if (event.keyCode === 27) modalVar(InitialModalState);
   }, []);
 
   useEffect(() => {
-    if (state.modal.name)
+    console.log(data);
+    if (data?.modal?.name)
       document.addEventListener('keydown', handleEscape, false);
     return () => {
       document.removeEventListener('keydown', handleEscape, false);
     };
-  }, [state.modal.name]);
+  }, [data?.modal?.name]);
 
-  const isOpen = !!state.modal.name;
+  const isOpen = !!data?.modal?.name;
 
   return isOpen ? (
     <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -47,7 +49,7 @@ const Modals: React.FC<Props> = () => {
           <div
             aria-hidden="true"
             className="fixed inset-0 transition-opacity"
-            onClick={() => setModal({ callback: () => null, name: null })}
+            onClick={() => modalVar(InitialModalState)}
           >
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
           </div>
@@ -74,8 +76,8 @@ const Modals: React.FC<Props> = () => {
           className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
           role="dialog"
         >
-          {state.modal.name === 'login' && <Login />}
-          {state.modal.name === 'register' && <Register />}
+          {data?.modal?.name === 'login' && <Login />}
+          {data?.modal?.name === 'register' && <Register />}
         </div>
       </div>
     </div>

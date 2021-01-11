@@ -3,6 +3,7 @@ import '../styles/globals.css';
 import 'github-markdown-css/github-markdown.css';
 
 import { ApolloProvider } from '@apollo/client';
+import { config } from '@state/app';
 import { client } from '@utils/withApollo';
 import { AppProps } from 'next/app';
 import { createOvermind } from 'overmind';
@@ -12,7 +13,6 @@ import React from 'react';
 import Layout from '../layouts';
 import Modals from '../modals';
 import AuthProvider from '../providers/AuthProvider';
-import { config } from '../state2';
 
 export const overmind = createOvermind(config, { devtools: true });
 

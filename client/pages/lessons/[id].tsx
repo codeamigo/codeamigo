@@ -1,4 +1,8 @@
-import { useLessonQuery, useSessionQuery } from '@generated/graphql';
+import {
+  useLessonQuery,
+  useMeQuery,
+  useSessionQuery,
+} from '@generated/graphql';
 import Info from '@widgets/Lesson/Info';
 import Step from '@widgets/Lesson/Step';
 import Steps from '@widgets/Lesson/Steps';
@@ -6,20 +10,12 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { useGlobalState } from '../../state';
-
 const Lesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const router = useRouter();
-  const [user] = useGlobalState('user');
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
-
-  useEffect(() => {
-    if (user.loading) return;
-
-    if (!user.data?.me) router.push('/');
-  }, [user]);
+  const { data: meData, loading: meLoading } = useMeQuery();
 
   const { data, loading } = useLessonQuery({
     variables: { id },
@@ -27,6 +23,12 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   const { data: sessionData, loading: sessionLoading } = useSessionQuery({
     variables: { lessonId: id },
   });
+
+  useEffect(() => {
+    if (meLoading) return;
+
+    if (!meData?.me) router.push('/');
+  }, [meData]);
 
   const toggleShowSteps = () => {
     setShowSteps(!showSteps);

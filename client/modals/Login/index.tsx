@@ -1,20 +1,21 @@
 import InputField from '@components/Form/InputField';
-import { useLoginMutation } from '@generated/graphql';
+import { useLoginMutation, useModalQuery } from '@generated/graphql';
 import { Form, Formik } from 'formik';
 import React from 'react';
 
-import { useApp } from '../../state2';
+import { InitialModalState, modalVar } from '../../apollo/cache';
 import { toErrorMap } from '../../utils';
 
 const Login: React.FC = () => {
-  const [login, { data }] = useLoginMutation();
-  const { actions, state } = useApp();
+  const [login] = useLoginMutation();
+  const { data: modalData } = useModalQuery();
 
   return (
     <Formik
       initialValues={{ password: '', usernameOrEmail: '' }}
       onSubmit={async (values, { setErrors }) => {
         const { data } = await login({
+          awaitRefetchQueries: true,
           refetchQueries: ['Me'],
           variables: values,
         });
@@ -23,8 +24,9 @@ const Login: React.FC = () => {
         }
 
         if (data?.login.user) {
-          state.modal.callback();
-          actions.modal.resetModal();
+          // @ts-ignore
+          modalData?.modal?.callback();
+          modalVar(InitialModalState);
         }
       }}
     >

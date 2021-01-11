@@ -21,6 +21,7 @@
       "@pages/*": ["./pages/*"],
       "@modals/*": ["./modals/*"],
       "@utils/*": ["./utils/*"],
+      "@state/*": ["./state/*"],
       "@widgets/*": ["./widgets/*"]
     }
   },

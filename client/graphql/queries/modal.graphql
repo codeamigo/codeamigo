@@ -1,0 +1,6 @@
+query Modal {
+  modal @client {
+    name
+    callback
+  }
+}

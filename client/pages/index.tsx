@@ -1,21 +1,19 @@
 import { useRouter } from 'next/router';
 
+import { modalVar } from '../apollo/cache';
 import { useLessonsQuery, useMeQuery } from '../generated/graphql';
-import { useGlobalState } from '../state';
-import { useApp } from '../state2';
 import withApollo from '../utils/withApollo';
 
 const Home = () => {
-  const { actions } = useApp();
-  const [user] = useGlobalState('user');
-  const { data, error, loading } = useLessonsQuery();
+  const { data: meData } = useMeQuery();
+  const { data } = useLessonsQuery();
   const router = useRouter();
 
   const handleClick = (id: number) => {
-    if (user.data?.me) {
+    if (meData?.me?.isAuthenticated) {
       router.push(`/lessons/start/${id}`);
     } else {
-      actions.modal.setModal({
+      modalVar({
         callback: () => router.push(`/lessons/start/${id}`),
         name: 'login',
       });

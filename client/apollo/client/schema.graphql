@@ -1,0 +1,12 @@
+type Modal {
+  name: String
+  callback: String
+}
+
+extend type User {
+  isAuthenticated: Boolean
+}
+
+extend type Query {
+  modal: Modal
+}

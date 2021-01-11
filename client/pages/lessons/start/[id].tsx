@@ -1,28 +1,27 @@
+import {
+  useCreateSessionMutation,
+  useMeQuery,
+  useSessionQuery,
+} from '@generated/graphql';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-import {
-  useCreateSessionMutation,
-  useSessionQuery,
-} from '../../../generated/graphql';
-import { useGlobalState } from '../../../state';
-
 const StartLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const router = useRouter();
-  const [user] = useGlobalState('user');
   const [createSession] = useCreateSessionMutation();
+  const { data: meData, loading: meLoading } = useMeQuery();
   const { data, loading } = useSessionQuery({
     fetchPolicy: 'cache-and-network',
     variables: { lessonId: id },
   });
 
   useEffect(() => {
-    if (user.loading) return;
+    if (meLoading) return;
 
-    if (!user.data?.me) router.push('/');
-  }, [user]);
+    if (!meData?.me) router.push('/');
+  }, [meData]);
 
   useEffect(() => {
     async function create() {

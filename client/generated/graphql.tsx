@@ -15,29 +15,30 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  checkpoints: Array<Checkpoint>;
   checkpoint?: Maybe<Checkpoint>;
-  codeModules: Array<CodeModule>;
+  checkpoints: Array<Checkpoint>;
   codeModule?: Maybe<CodeModule>;
+  codeModules: Array<CodeModule>;
   dependencies: Array<Dependency>;
   dependency?: Maybe<Dependency>;
-  steps: Array<Step>;
-  step?: Maybe<Step>;
-  lessons: Array<Lesson>;
   lesson?: Maybe<Lesson>;
-  sessions: Array<Session>;
-  session?: Maybe<Session>;
+  lessons: Array<Lesson>;
   me?: Maybe<User>;
-};
-
-
-export type QueryCheckpointsArgs = {
-  stepId: Scalars['Float'];
+  modal?: Maybe<Modal>;
+  session?: Maybe<Session>;
+  sessions: Array<Session>;
+  step?: Maybe<Step>;
+  steps: Array<Step>;
 };
 
 
 export type QueryCheckpointArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryCheckpointsArgs = {
+  stepId: Scalars['Float'];
 };
 
 
@@ -51,11 +52,6 @@ export type QueryDependencyArgs = {
 };
 
 
-export type QueryStepArgs = {
-  id: Scalars['Int'];
-};
-
-
 export type QueryLessonArgs = {
   id: Scalars['Int'];
 };
@@ -63,6 +59,11 @@ export type QueryLessonArgs = {
 
 export type QuerySessionArgs = {
   lessonId: Scalars['Int'];
+};
+
+
+export type QueryStepArgs = {
+  id: Scalars['Int'];
 };
 
 export type Checkpoint = {
@@ -115,13 +116,14 @@ export type Lesson = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['Float'];
+  classes: Array<Session>;
   createdAt: Scalars['String'];
+  email: Scalars['String'];
+  id: Scalars['Float'];
+  isAuthenticated?: Maybe<Scalars['Boolean']>;
+  lessons: Array<Lesson>;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
-  email: Scalars['String'];
-  lessons: Array<Lesson>;
-  classes: Array<Session>;
 };
 
 export type Session = {
@@ -366,6 +368,12 @@ export type RegisterInput = {
 export type LoginInput = {
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type Modal = {
+  __typename?: 'Modal';
+  name?: Maybe<Scalars['String']>;
+  callback?: Maybe<Scalars['String']>;
 };
 
 export type RegularCheckpointFragment = (
@@ -782,11 +790,22 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
+    & Pick<User, 'id' | 'username' | 'isAuthenticated'>
     & { lessons: Array<(
       { __typename?: 'Lesson' }
       & Pick<Lesson, 'id'>
     )> }
+  )> }
+);
+
+export type ModalQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ModalQuery = (
+  { __typename?: 'Query' }
+  & { modal?: Maybe<(
+    { __typename?: 'Modal' }
+    & Pick<Modal, 'name' | 'callback'>
   )> }
 );
 
@@ -1789,6 +1808,7 @@ export const MeDocument = gql`
   me {
     id
     username
+    isAuthenticated @client
     lessons {
       id
     }
@@ -1820,6 +1840,39 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ModalDocument = gql`
+    query Modal {
+  modal @client {
+    name
+    callback
+  }
+}
+    `;
+
+/**
+ * __useModalQuery__
+ *
+ * To run a query within a React component, call `useModalQuery` and pass it any options that fit your needs.
+ * When your component renders, `useModalQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useModalQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useModalQuery(baseOptions?: Apollo.QueryHookOptions<ModalQuery, ModalQueryVariables>) {
+        return Apollo.useQuery<ModalQuery, ModalQueryVariables>(ModalDocument, baseOptions);
+      }
+export function useModalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ModalQuery, ModalQueryVariables>) {
+          return Apollo.useLazyQuery<ModalQuery, ModalQueryVariables>(ModalDocument, baseOptions);
+        }
+export type ModalQueryHookResult = ReturnType<typeof useModalQuery>;
+export type ModalLazyQueryHookResult = ReturnType<typeof useModalLazyQuery>;
+export type ModalQueryResult = Apollo.QueryResult<ModalQuery, ModalQueryVariables>;
 export const SessionDocument = gql`
     query Session($lessonId: Int!) {
   session(lessonId: $lessonId) {

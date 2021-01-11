@@ -1,14 +1,14 @@
 import InputField from '@components/Form/InputField';
-import { useRegisterMutation } from '@generated/graphql';
+import { useModalQuery, useRegisterMutation } from '@generated/graphql';
 import { Form, Formik } from 'formik';
 import React from 'react';
 
-import { useApp } from '../../state2';
+import { InitialModalState, modalVar } from '../../apollo/cache';
 import { toErrorMap } from '../../utils';
 
 const Register: React.FC = () => {
-  const { actions, state } = useApp();
-  const [register, { data }] = useRegisterMutation();
+  const [register] = useRegisterMutation();
+  const { data: modalData } = useModalQuery();
 
   return (
     <Formik
@@ -23,8 +23,9 @@ const Register: React.FC = () => {
         }
 
         if (data?.register.user) {
-          state.modal.callback();
-          actions.modal.resetModal();
+          // @ts-ignore
+          modalData?.modal?.callback();
+          modalVar(InitialModalState);
         }
       }}
     >

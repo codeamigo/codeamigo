@@ -1,17 +1,15 @@
+import Icon from '@components/Icon';
+import { useLogoutMutation, useMeQuery } from '@generated/graphql';
 import { Menu, Transition } from '@headlessui/react';
+import { useApp } from '@state/app';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import Icon from '../../../components/Icon';
-import { useLogoutMutation } from '../../../generated/graphql';
-import { useGlobalState } from '../../../state';
-import { useApp } from '../../../state2';
+import { isAuthenticatedVar, modalVar } from '../../../apollo/cache';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();
-  const { actions } = useApp();
-  const [user, setUser] = useGlobalState('user');
-
+  const { data, loading } = useMeQuery();
   const [logout] = useLogoutMutation({ refetchQueries: ['Me'] });
 
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,7 +77,7 @@ const TopNav: React.FC<Props> = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            {user.data && user.data.me && !user.loading ? (
+            {data?.me?.isAuthenticated && !loading ? (
               <div className="relative">
                 <Menu>
                   {({ open }) => (
@@ -122,8 +120,8 @@ const TopNav: React.FC<Props> = () => {
                             className="w-full inline-block text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={() => {
                               logout();
+                              isAuthenticatedVar(false);
                               router.push('/');
-                              setUser({ data: undefined, loading: false });
                             }}
                             role="menuitem"
                           >
@@ -140,7 +138,7 @@ const TopNav: React.FC<Props> = () => {
                 <button
                   className="hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
                   onClick={() =>
-                    actions.modal.setModal({
+                    modalVar({
                       callback: () => null,
                       name: 'login',
                     })
@@ -153,7 +151,7 @@ const TopNav: React.FC<Props> = () => {
                 <button
                   className="border-2 border-white hover:border-gray-300 hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
                   onClick={() =>
-                    actions.modal.setModal({
+                    modalVar({
                       callback: () => null,
                       name: 'register',
                     })
