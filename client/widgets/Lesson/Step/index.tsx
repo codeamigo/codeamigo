@@ -28,7 +28,7 @@ const Step: React.FC<Props> = ({ currentStepId: id, ...rest }) => {
             id="frame"
             src={process.env.NEXT_PUBLIC_PREVIEW_URL}
           ></iframe>
-          <Console />
+          <Console step={data.step} />
         </div>
       </div>
     </>

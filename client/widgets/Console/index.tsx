@@ -1,15 +1,27 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import Icon from '../../components/Icon';
+import Icon from '👨‍💻components/Icon';
+import { RegularStepFragment, useCheckpointsQuery } from '👨‍💻generated/graphql';
+import TestSummary from '👨‍💻widgets/Console/TestsSummary';
+
 import { FromPreviewMsgType, PreviewLogTypeEnum } from '../Lesson/Editor/types';
 
 type TabType = 'console' | 'tests';
 
-const Console: React.FC<Props> = () => {
+const Console: React.FC<Props> = ({ step }) => {
   const listRef = useRef<HTMLDivElement>(null);
+  const { data, loading } = useCheckpointsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: { stepId: step.id },
+  });
   const [logList, setLogList] = useState<FromPreviewMsgType[]>([]);
   const [testList, setTestList] = useState<FromPreviewMsgType[]>([]);
   const [activeTab, setActiveTab] = useState<TabType | ''>('');
+  const currentCheck = data?.checkpoints.find(
+    ({ id }) => id === step.currentCheckpointId
+  );
+
+  console.log(currentCheck);
 
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
@@ -64,6 +76,7 @@ const Console: React.FC<Props> = () => {
                 activeTab === 'console' ? 'bg-gray-700' : ''
               } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('console')}
+              role="button"
             >
               Console
             </li>
@@ -72,6 +85,7 @@ const Console: React.FC<Props> = () => {
                 activeTab === 'tests' ? 'bg-gray-700' : ''
               } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
+              role="button"
             >
               Tests
             </li>
@@ -86,6 +100,9 @@ const Console: React.FC<Props> = () => {
         </div>
       </div>
       <div className="overflow-scroll h-full" ref={listRef}>
+        {activeTab === 'tests' && (
+          <TestSummary checkpoint={currentCheck} list={list} />
+        )}
         {list.map((value, i) => {
           return (
             <div
@@ -103,6 +120,8 @@ const Console: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+type Props = {
+  step: RegularStepFragment;
+};
 
 export default Console;

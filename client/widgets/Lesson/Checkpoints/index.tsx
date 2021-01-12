@@ -32,7 +32,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
 
   useEffect(() => {
     if (!data?.checkpoints) return;
-    if (isEditting) return;
     if (currentCheckpointIdVar()) return;
 
     const nextCheckpoint = data.checkpoints.find(
@@ -48,7 +47,10 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
 
   useEffect(() => {
     setMarkdown(activeCheckpoint?.description);
-    if (isEditting) toggleView('editor');
+    if (isEditting) {
+      toggleView('editor');
+      currentCheckpointIdVar(activeCheckpoint?.id || null);
+    }
   }, [activeCheckpoint?.id]);
 
   const updateCheckpoint = useCallback(
