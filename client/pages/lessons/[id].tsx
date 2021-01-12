@@ -39,8 +39,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (loading) return null;
   // no lesson exists
 
-  debugger;
-
   if (!data || !data.lesson) {
     if (typeof window !== 'undefined') {
       router.push(`/`);

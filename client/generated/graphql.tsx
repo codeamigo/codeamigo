@@ -92,7 +92,7 @@ export type Step = {
   checkpoints?: Maybe<Array<Checkpoint>>;
   codeModules?: Maybe<Array<CodeModule>>;
   createdAt: Scalars['String'];
-  currentCheckpoint?: Maybe<Checkpoint>;
+  currentCheckpointId?: Maybe<Scalars['Float']>;
   dependencies?: Maybe<Array<Dependency>>;
   id: Scalars['Float'];
   instructions?: Maybe<Scalars['String']>;
@@ -408,11 +408,8 @@ export type RegularMeFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions'>
-  & { currentCheckpoint?: Maybe<(
-    { __typename?: 'Checkpoint' }
-    & RegularCheckpointFragment
-  )>, codeModules?: Maybe<Array<(
+  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions' | 'currentCheckpointId'>
+  & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
   )>>, checkpoints?: Maybe<Array<(
@@ -884,6 +881,13 @@ export const RegularMeFragmentDoc = gql`
   }
 }
     `;
+export const RegularCodeModuleFragmentDoc = gql`
+    fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
+}
+    `;
 export const RegularCheckpointFragmentDoc = gql`
     fragment RegularCheckpoint on Checkpoint {
   id
@@ -891,13 +895,6 @@ export const RegularCheckpointFragmentDoc = gql`
   description
   createdAt
   isCompleted
-}
-    `;
-export const RegularCodeModuleFragmentDoc = gql`
-    fragment RegularCodeModule on CodeModule {
-  id
-  name
-  value
 }
     `;
 export const RegularDependencyFragmentDoc = gql`
@@ -913,9 +910,7 @@ export const RegularStepFragmentDoc = gql`
   createdAt
   name
   instructions
-  currentCheckpoint @client {
-    ...RegularCheckpoint
-  }
+  currentCheckpointId @client
   codeModules {
     ...RegularCodeModule
   }
@@ -926,8 +921,8 @@ export const RegularStepFragmentDoc = gql`
     ...RegularDependency
   }
 }
-    ${RegularCheckpointFragmentDoc}
-${RegularCodeModuleFragmentDoc}
+    ${RegularCodeModuleFragmentDoc}
+${RegularCheckpointFragmentDoc}
 ${RegularDependencyFragmentDoc}`;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {

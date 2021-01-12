@@ -13,7 +13,6 @@ const Console: React.FC<Props> = () => {
 
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
-      console.log(event.data);
       if (event.data.from !== 'preview') return;
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
@@ -49,8 +48,6 @@ const Console: React.FC<Props> = () => {
   };
 
   const list = activeTab === 'console' ? logList : testList;
-
-  console.log(list);
 
   return (
     <div

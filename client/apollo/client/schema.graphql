@@ -3,7 +3,7 @@ extend type User {
 }
 
 extend type Step {
-  currentCheckpoint: Checkpoint
+  currentCheckpointId: Float
 }
 
 type Modal {

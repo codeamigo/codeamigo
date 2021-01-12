@@ -3,6 +3,7 @@ import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
+import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import {
   RegularStepFragment,
   useCompleteCheckpointMutation,
@@ -12,7 +13,7 @@ import {
 } from '👨‍💻generated/graphql';
 
 import EditorFiles from '../EditorFiles';
-import { FilesType, ToPreviewMsgType } from './types';
+import { FilesType, FromPreviewMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
 
 const FILE = 'file:///';
@@ -32,8 +33,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
-
-  console.log('checkpoint in editor', step.currentCheckpoint);
 
   // Change Step
   useEffect(() => {
@@ -84,27 +83,32 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.dependencies]);
 
   useEffect(() => {
-    const handleCompleteCheckpoint = (message: any) => {
-      if (message.data.from === 'preview') {
-        try {
-          // don't complete checkpoint if editting
-          if (rest.isEditting) return;
+    const handleCompleteCheckpoint = async (message: {
+      data: FromPreviewMsgType;
+    }) => {
+      if (message.data.from !== 'preview') return;
+      if (message.data.type !== 'test') return;
+      // don't complete checkpoint if editting
+      if (rest.isEditting) return;
 
-          const result = JSON.parse(message.data.result);
+      try {
+        const result = JSON.parse(message.data.result);
 
-          console.log('step', step);
-          if (
-            result[result.length - 1].status === 'pass' &&
-            step.currentCheckpoint
-          ) {
-            completeCheckpoint({
-              refetchQueries: ['Step', 'Checkpoints'],
-              variables: { id: step.currentCheckpoint.id },
-            });
-          }
-        } catch (e) {
-          console.log(e);
+        if (
+          result[result.length - 1].status === 'pass' &&
+          step.currentCheckpointId
+        ) {
+          await completeCheckpoint({
+            refetchQueries: ['Step', 'Checkpoints'],
+            variables: { id: step.currentCheckpointId },
+          });
+          const nextCheckpoint = step?.checkpoints?.find(
+            ({ isCompleted }) => !isCompleted
+          );
+          currentCheckpointIdVar(nextCheckpoint?.id || null);
         }
+      } catch (e) {
+        console.log(e);
       }
     };
 
@@ -112,7 +116,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
     return () =>
       window.removeEventListener('message', handleCompleteCheckpoint);
-  });
+  }, [step.currentCheckpointId]);
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -355,26 +359,33 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     editorRef.current.focus();
   };
 
+  const currentCheck = step.checkpoints?.find(
+    ({ id }) => id === step.currentCheckpointId
+  );
+  console.log('current checkpoint', currentCheck);
+
   return (
     <div className="w-full lg:h-full flex flex-col">
       <h3 className="flex justify-between">
         <span>Initial Code</span>
         <div className="flex">
-          <button
-            className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
-            onClick={() =>
-              postCode(
-                files,
-                dependencies,
-                step.currentCheckpoint!.test,
-                files[step.currentCheckpoint!.test],
-                true
-              )
-            }
-            type="button"
-          >
-            Test
-          </button>
+          {currentCheck && (
+            <button
+              className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+              onClick={() =>
+                postCode(
+                  files,
+                  dependencies,
+                  currentCheck.test,
+                  files[currentCheck.test],
+                  true
+                )
+              }
+              type="button"
+            >
+              Test
+            </button>
+          )}
         </div>
       </h3>
       <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">

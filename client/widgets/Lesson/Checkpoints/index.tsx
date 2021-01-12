@@ -4,10 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import { currentCheckpointVar } from '👨‍💻apollo/cache/step';
+import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import Icon from '👨‍💻components/Icon';
 import {
-  Checkpoint,
+  RegularCheckpointFragment,
   RegularStepFragment,
   useCheckpointsQuery,
   useCreateCheckpointMutation,
@@ -25,43 +25,48 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
   );
-  const [markdown, setMarkdown] = useState(step.currentCheckpoint?.description);
+  const [activeCheckpoint, setActiveCheckpoint] = useState<
+    RegularCheckpointFragment | undefined
+  >(undefined);
+  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   useEffect(() => {
-    const id = step?.currentCheckpoint?.id;
+    if (!data?.checkpoints) return;
+    if (isEditting) return;
+    if (currentCheckpointIdVar()) return;
 
-    const nextCheckpoint = isEditting
-      ? data?.checkpoints[0]
-      : data?.checkpoints.find((checkpoint) => !checkpoint.isCompleted);
+    const nextCheckpoint = data.checkpoints.find(
+      ({ isCompleted }) => !isCompleted
+    );
+    currentCheckpointIdVar(nextCheckpoint?.id || null);
+    setActiveCheckpoint(nextCheckpoint);
 
-    if (!nextCheckpoint) return;
-
-    if (!id) {
-      currentCheckpointVar(nextCheckpoint);
-    } else if (!step.checkpoints?.find(({ id }) => id === id)) {
-      currentCheckpointVar(nextCheckpoint);
-    }
+    return () => {
+      currentCheckpointIdVar(null);
+    };
   }, [data?.checkpoints]);
 
   useEffect(() => {
-    setMarkdown(step.currentCheckpoint?.description);
+    setMarkdown(activeCheckpoint?.description);
     if (isEditting) toggleView('editor');
-  }, [step.currentCheckpoint?.id]);
+  }, [activeCheckpoint?.id]);
 
   const updateCheckpoint = useCallback(
     debounce((value: string | undefined) => {
-      if (!step.currentCheckpoint) return;
+      if (!activeCheckpoint) return;
 
       updateCheckpointM({
         refetchQueries: ['Checkpoints', 'Step'],
-        variables: { description: value || '', id: step.currentCheckpoint.id },
+        variables: { description: value || '', id: activeCheckpoint.id },
       });
     }, 1000),
-    [step.currentCheckpoint]
+    [activeCheckpoint]
   );
 
   if (loading) return null;
   if (!data?.checkpoints) return null;
+
+  const { checkpoints } = data;
 
   const createCheckpoint = async () => {
     const len = data?.checkpoints?.length || 0;
@@ -75,8 +80,8 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const deleteCheckpoint = async (id: number) => {
     const len = data?.checkpoints?.length || 0;
 
-    if (step.currentCheckpoint?.id === id) {
-      currentCheckpointVar(data?.checkpoints[len - 1 - 1]);
+    if (activeCheckpoint?.id === id) {
+      setActiveCheckpoint(checkpoints[len - 1 - 1]);
     }
 
     await deleteCheckpointM({
@@ -85,26 +90,24 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     });
   };
 
-  const isCurrentCheckpoint = (id: number) => id === step.currentCheckpoint?.id;
-  const isStepComplete = !data?.checkpoints.find(
+  const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
+  const isStepComplete = !checkpoints.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
 
-  console.log(data.checkpoints);
-
   return (
     <>
-      {data?.checkpoints.length
-        ? data?.checkpoints.map((checkpoint, i) => {
+      {checkpoints.length
+        ? checkpoints.map((checkpoint, i) => {
             return (
               <div key={checkpoint.id}>
                 <h3
                   className="w-full flex justify-between items-center bg-gray-100 p-2 text-xs cursor-pointer"
                   onClick={() => {
                     if (isCurrentCheckpoint(checkpoint.id)) {
-                      currentCheckpointVar({} as Checkpoint);
+                      setActiveCheckpoint(undefined);
                     } else {
-                      currentCheckpointVar(checkpoint);
+                      setActiveCheckpoint(checkpoint);
                     }
                   }}
                 >
@@ -139,7 +142,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                           }
                         }}
                       />
-                      {i === data?.checkpoints.length - 1 ? (
+                      {i === checkpoints.length - 1 ? (
                         <button
                           className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
                           onClick={(e) => {
