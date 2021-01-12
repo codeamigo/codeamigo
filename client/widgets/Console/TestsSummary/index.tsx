@@ -37,9 +37,9 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
           ) : null}
         </div>
       </div>
-      {results.map((result) => {
+      {results.map((result, i) => {
         return (
-          <div className="text-sm">
+          <div className="text-sm" key={i}>
             <div className="flex justify-between text-white bg-gray-900 px-2 py-1">
               <span>{testPath(result.testPath)}</span>
               <Icon
@@ -50,11 +50,11 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
               />
             </div>
             <div className="px-2 py-1">
-              {result.errors.map((value, i) => (
-                <div key={i}>
-                  {parseError(value).map((val, j) => {
+              {result.errors.map((value, j) => (
+                <div key={j}>
+                  {parseError(value).map((val, k) => {
                     return (
-                      <div className="text-red-400" key={j}>
+                      <div className="text-red-400" key={k}>
                         {val}
                       </div>
                     );

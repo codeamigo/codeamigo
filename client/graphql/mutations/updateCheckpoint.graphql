@@ -16,6 +16,6 @@ mutation CompleteCheckpoint(
   completeCheckpoint(
     id: $id
   ) {
-    id
+    ...RegularCheckpoint
   }
 }

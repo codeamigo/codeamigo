@@ -661,7 +661,7 @@ export type CompleteCheckpointMutation = (
   { __typename?: 'Mutation' }
   & { completeCheckpoint?: Maybe<(
     { __typename?: 'Checkpoint' }
-    & Pick<Checkpoint, 'id'>
+    & RegularCheckpointFragment
   )> }
 );
 
@@ -1497,10 +1497,10 @@ export type UpdateCheckpointMutationOptions = Apollo.BaseMutationOptions<UpdateC
 export const CompleteCheckpointDocument = gql`
     mutation CompleteCheckpoint($id: Float!) {
   completeCheckpoint(id: $id) {
-    id
+    ...RegularCheckpoint
   }
 }
-    `;
+    ${RegularCheckpointFragmentDoc}`;
 export type CompleteCheckpointMutationFn = Apollo.MutationFunction<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
 
 /**
