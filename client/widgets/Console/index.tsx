@@ -100,21 +100,22 @@ const Console: React.FC<Props> = ({ step }) => {
         </div>
       </div>
       <div className="overflow-scroll h-full" ref={listRef}>
-        {activeTab === 'tests' && (
+        {activeTab === 'tests' ? (
           <TestSummary checkpoint={currentCheck} list={list} />
-        )}
-        {list.map((value, i) => {
-          return (
-            <div
-              className="bg-gray-700 border-black border-b text-white text-xs"
-              key={i}
-            >
-              <div className="px-2 py-1 flex items-start">
-                <span className="mr-3">{'>'}</span> {value.result}
+        ) : (
+          list.map((value, i) => {
+            return (
+              <div
+                className="bg-gray-700 border-black border-b text-white text-xs"
+                key={i}
+              >
+                <div className="px-2 py-1 flex items-start">
+                  <span className="mr-3">{'>'}</span> {value.result}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );
