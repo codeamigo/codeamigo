@@ -1,5 +1,6 @@
-import { RegularDependencyFragment } from '@generated/graphql';
 import React, { useState } from 'react';
+
+import { RegularDependencyFragment } from '👨‍💻generated/graphql';
 
 import { FilesType } from '../Editor/types';
 import DependenciesList from './DependenciesList';

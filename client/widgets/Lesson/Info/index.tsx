@@ -1,8 +1,9 @@
-import { LessonQuery } from '@generated/graphql';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Icon from '../../../components/Icon';
+import Icon from '👨‍💻components/Icon';
+import { LessonQuery } from '👨‍💻generated/graphql';
+
 import Form from './Form';
 import View from './View';
 
