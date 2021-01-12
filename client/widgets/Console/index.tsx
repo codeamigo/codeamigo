@@ -21,8 +21,6 @@ const Console: React.FC<Props> = ({ step }) => {
     ({ id }) => id === step.currentCheckpointId
   );
 
-  console.log(currentCheck);
-
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
       if (event.data.from !== 'preview') return;
@@ -42,6 +40,10 @@ const Console: React.FC<Props> = ({ step }) => {
 
     return () => window.removeEventListener('message', handleLog);
   });
+
+  useEffect(() => {
+    setTestList([]);
+  }, [step.currentCheckpointId]);
 
   const changeTab = (tab: 'console' | 'tests') => {
     if (tab === activeTab) {

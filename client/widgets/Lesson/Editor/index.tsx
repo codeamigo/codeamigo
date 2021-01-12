@@ -76,6 +76,14 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     if (isEditorReady) {
       setModel(currentPath);
     }
+
+    // Change checkpoint
+    if (currentPath.includes('spec')) {
+      const check = step?.checkpoints?.find(
+        (value) => value.test === currentPath
+      );
+      currentCheckpointIdVar(check?.id || null);
+    }
   }, [currentPath]);
 
   useEffect(() => {
@@ -362,7 +370,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
-  console.log('current checkpoint', currentCheck);
 
   return (
     <div className="w-full lg:h-full flex flex-col">

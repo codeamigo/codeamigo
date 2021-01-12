@@ -25,10 +25,10 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
   return (
     <div>
       <div className="px-2 py-1 sticky top-0 bg-gray-700 border-gray-300 border-b-2">
-        <div className="flex justify-between text-gray-300">
+        <div className="flex justify-between items-center text-gray-300">
           <span>{checkpoint.test} </span>
           {list.length ? (
-            <div>
+            <div className="text-sm">
               <span className="text-green-400 mr-2">
                 {passed.length} Passed
               </span>

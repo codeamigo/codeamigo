@@ -53,6 +53,14 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     }
   }, [activeCheckpoint?.id]);
 
+  useEffect(() => {
+    if (step.currentCheckpointId !== activeCheckpoint?.id) {
+      setActiveCheckpoint(
+        step.checkpoints?.find(({ id }) => id === step.currentCheckpointId)
+      );
+    }
+  }, [step.currentCheckpointId]);
+
   const updateCheckpoint = useCallback(
     debounce((value: string | undefined) => {
       if (!activeCheckpoint) return;
