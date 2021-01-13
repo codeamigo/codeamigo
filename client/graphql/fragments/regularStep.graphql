@@ -3,6 +3,7 @@ fragment RegularStep on Step {
   createdAt
   name
   instructions
+  isCompleted
   currentCheckpointId @client
   codeModules {
     ...RegularCodeModule

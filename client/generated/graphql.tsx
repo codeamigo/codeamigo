@@ -96,6 +96,7 @@ export type Step = {
   dependencies?: Maybe<Array<Dependency>>;
   id: Scalars['Float'];
   instructions?: Maybe<Scalars['String']>;
+  isCompleted?: Maybe<Scalars['String']>;
   lesson: Lesson;
   name?: Maybe<Scalars['String']>;
   session: Session;
@@ -410,7 +411,7 @@ export type RegularMeFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions' | 'currentCheckpointId'>
+  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions' | 'isCompleted' | 'currentCheckpointId'>
   & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
@@ -915,6 +916,7 @@ export const RegularStepFragmentDoc = gql`
   createdAt
   name
   instructions
+  isCompleted
   currentCheckpointId @client
   codeModules {
     ...RegularCodeModule
