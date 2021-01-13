@@ -32,11 +32,13 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
 
   useEffect(() => {
     if (!data?.checkpoints) return;
-    if (currentCheckpointIdVar()) return;
 
+    // console.log('checkpoints', data.checkpoints);
     const nextCheckpoint = data.checkpoints.find(
       ({ isCompleted }) => !isCompleted
     );
+    // console.log('next checkpoint', nextCheckpoint);
+
     currentCheckpointIdVar(nextCheckpoint?.id || null);
     setActiveCheckpoint(nextCheckpoint);
 
@@ -52,14 +54,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
       currentCheckpointIdVar(activeCheckpoint?.id || null);
     }
   }, [activeCheckpoint?.id]);
-
-  useEffect(() => {
-    if (step.currentCheckpointId !== activeCheckpoint?.id) {
-      setActiveCheckpoint(
-        step.checkpoints?.find(({ id }) => id === step.currentCheckpointId)
-      );
-    }
-  }, [step.currentCheckpointId]);
 
   const updateCheckpoint = useCallback(
     debounce((value: string | undefined) => {
@@ -100,10 +94,24 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     });
   };
 
+  const setCheckpoint = (checkpoint: RegularCheckpointFragment) => {
+    if (canSetCheckpoint(checkpoint)) {
+      if (isCurrentCheckpoint(checkpoint.id)) {
+        setActiveCheckpoint(undefined);
+      } else {
+        setActiveCheckpoint(checkpoint);
+      }
+    }
+  };
+
   const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
   const isStepComplete = !checkpoints.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
+  const canSetCheckpoint = (checkpoint: RegularCheckpointFragment) =>
+    isEditting ||
+    checkpoint.isCompleted ||
+    checkpoint.id === step.currentCheckpointId;
 
   return (
     <>
@@ -112,14 +120,14 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
             return (
               <div key={checkpoint.id}>
                 <h3
-                  className="w-full flex justify-between items-center bg-gray-100 p-2 text-xs cursor-pointer"
-                  onClick={() => {
-                    if (isCurrentCheckpoint(checkpoint.id)) {
-                      setActiveCheckpoint(undefined);
-                    } else {
-                      setActiveCheckpoint(checkpoint);
-                    }
-                  }}
+                  className={`w-full flex justify-between items-center bg-gray-100 p-2 text-xs ${
+                    canSetCheckpoint(checkpoint)
+                      ? 'cursor-pointer'
+                      : isCurrentCheckpoint(checkpoint.id)
+                      ? ''
+                      : 'opacity-50 cursor-not-allowed'
+                  }`}
+                  onClick={() => setCheckpoint(checkpoint)}
                 >
                   <span className="flex items-center">
                     <Icon

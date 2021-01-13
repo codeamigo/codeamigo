@@ -121,10 +121,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             refetchQueries: ['Step', 'Checkpoints'],
             variables: { id: step.currentCheckpointId },
           });
-          const nextCheckpoint = step?.checkpoints?.find(
-            ({ isCompleted }) => !isCompleted
-          );
-          currentCheckpointIdVar(nextCheckpoint?.id || null);
         }
       } catch (e) {
         console.log(e);
@@ -261,7 +257,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     runPath: string,
     value: string
   ) => {
-    if (isTestingVar()) return;
+    if (isTesting) return;
     isTestingVar(true);
     postMessage(files, dependencies, runPath, value, true);
   };
