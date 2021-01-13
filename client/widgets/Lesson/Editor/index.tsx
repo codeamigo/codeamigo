@@ -1,3 +1,4 @@
+import { useReactiveVar } from '@apollo/client';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
@@ -13,6 +14,7 @@ import {
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
+import Icon from '../../../components/Icon';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromPreviewMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
@@ -28,12 +30,19 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [dependencies, setDependencies] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
   const [isEditorReady, setIsEditorReady] = useState(false);
+  const isTesting = useReactiveVar(isTestingVar);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
+
+  useEffect(() => {
+    return () => {
+      isTestingVar(false);
+    };
+  }, []);
 
   // Change Step
   useEffect(() => {
@@ -400,7 +409,10 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         <div className="flex">
           {currentCheck && (
             <button
-              className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
+              className={`${
+                isTesting ? 'cursor-wait' : ''
+              } inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50`}
+              disabled={isTesting}
               onClick={() =>
                 testCode(
                   files,

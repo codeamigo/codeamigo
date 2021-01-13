@@ -24,8 +24,6 @@ const Console: React.FC<Props> = ({ step }) => {
     ({ id }) => id === step.currentCheckpointId
   );
 
-  console.log('isTesting', isTesting);
-
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
       if (event.data.from !== 'preview') return;
@@ -95,6 +93,9 @@ const Console: React.FC<Props> = ({ step }) => {
               role="button"
             >
               Tests
+            </li>
+            <li className="flex text-white text-xs px-2 py-1 list-none cursor-pointer transition-all duration-150">
+              {isTesting && <Icon className="animate-spin" name="cw" />}
             </li>
           </ul>
           <div className="flex list-none pr-2">
