@@ -10,7 +10,6 @@ const errStart = 'at Object.eval';
 
 const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
   if (!checkpoint) return null;
-
   const results = list.flatMap(
     (value) => JSON.parse(value.result) as TestResultType
   );

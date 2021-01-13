@@ -3,6 +3,7 @@ import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
+import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import {
   RegularStepFragment,
@@ -96,6 +97,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     }) => {
       if (message.data.from !== 'preview') return;
       if (message.data.type !== 'test') return;
+      isTestingVar(false);
       // don't complete checkpoint if editting
       if (rest.isEditting) return;
 
@@ -205,35 +207,55 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     });
   };
 
+  const postMessage = (
+    files: FilesType,
+    dependencies: FilesType,
+    runPath: string,
+    value: string,
+    isTest?: boolean
+  ) => {
+    const iframe = document.getElementById('frame') as HTMLIFrameElement;
+    if (!iframe) return;
+    const iframeContentWindow = iframe.contentWindow;
+    if (!iframeContentWindow) return;
+
+    // send files and path to iframe
+    iframeContentWindow.postMessage(
+      {
+        files: { ...files, ...dependencies, [runPath]: value },
+        from: 'editor',
+        isTest,
+        runPath,
+      } as ToPreviewMsgType,
+      '*'
+    );
+  };
+
   const postCode = useCallback(
     debounce(
       (
         files: FilesType,
         dependencies: FilesType,
         runPath: string,
-        value: string,
-        isTest?: boolean
+        value: string
       ) => {
-        const iframe = document.getElementById('frame') as HTMLIFrameElement;
-        if (!iframe) return;
-        const iframeContentWindow = iframe.contentWindow;
-        if (!iframeContentWindow) return;
-
-        // send files and path to iframe
-        iframeContentWindow.postMessage(
-          {
-            files: { ...files, ...dependencies, [runPath]: value },
-            from: 'editor',
-            isTest,
-            runPath,
-          } as ToPreviewMsgType,
-          '*'
-        );
+        postMessage(files, dependencies, runPath, value);
       },
       1500
     ),
     []
   );
+
+  const testCode = (
+    files: FilesType,
+    dependencies: FilesType,
+    runPath: string,
+    value: string
+  ) => {
+    if (isTestingVar()) return;
+    isTestingVar(true);
+    postMessage(files, dependencies, runPath, value, true);
+  };
 
   async function getDeps() {
     await updateDependencies();
@@ -380,12 +402,11 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             <button
               className="inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50"
               onClick={() =>
-                postCode(
+                testCode(
                   files,
                   dependencies,
                   currentCheck.test,
-                  files[currentCheck.test],
-                  true
+                  files[currentCheck.test]
                 )
               }
               type="button"
