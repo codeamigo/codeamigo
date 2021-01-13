@@ -30,8 +30,10 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   >(undefined);
   const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
+  // When checkpoint updates (isCompleted)
   useEffect(() => {
     if (!data?.checkpoints) return;
+    if (isEditting) return;
 
     // console.log('checkpoints', data.checkpoints);
     const nextCheckpoint = data.checkpoints.find(
@@ -47,6 +49,19 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     };
   }, [data?.checkpoints]);
 
+  // When user changes the editor file to a spec
+  useEffect(() => {
+    if (!data?.checkpoints) return;
+    if (!isEditting) return;
+
+    const checkpoint = data.checkpoints.find(
+      ({ id }) => id === step.currentCheckpointId
+    );
+
+    setActiveCheckpoint(checkpoint);
+  }, [step.currentCheckpointId]);
+
+  // When user changes the active checkpoint
   useEffect(() => {
     setMarkdown(activeCheckpoint?.description);
     if (isEditting) {
@@ -75,17 +90,22 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const createCheckpoint = async () => {
     const len = data?.checkpoints?.length || 0;
 
-    await createCheckpointM({
+    const { data: newCheckpoint } = await createCheckpointM({
+      awaitRefetchQueries: true,
       refetchQueries: ['Checkpoints', 'Step'],
       variables: { checkpointId: len + 1, stepId: step.id },
     });
+
+    if (newCheckpoint?.createCheckpoint) {
+      setCheckpoint(newCheckpoint.createCheckpoint);
+    }
   };
 
   const deleteCheckpoint = async (id: number) => {
     const len = data?.checkpoints?.length || 0;
 
     if (activeCheckpoint?.id === id) {
-      setActiveCheckpoint(checkpoints[len - 1 - 1]);
+      setCheckpoint(checkpoints[len - 1 - 1]);
     }
 
     await deleteCheckpointM({
