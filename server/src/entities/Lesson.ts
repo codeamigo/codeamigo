@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Session } from "./Session";
 import { Step } from "./Step";
 import { User } from "./User";
 
@@ -50,6 +51,12 @@ export class Lesson extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.lessons)
   owner: User;
+
+  @OneToMany(() => Session, (session) => session.lesson, {
+    cascade: true,
+  })
+  @Field(() => [Session], { defaultValue: [] })
+  sessions!: Session[];
 
   @OneToMany(() => Step, (step) => step.lesson, {
     cascade: true,

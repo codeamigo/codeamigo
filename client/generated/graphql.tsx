@@ -112,6 +112,7 @@ export type Lesson = {
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
+  sessions?: Maybe<Array<Session>>;
   steps?: Maybe<Array<Step>>;
 };
 
@@ -135,6 +136,7 @@ export type Session = {
   currentStep: Scalars['Float'];
   lessonId: Scalars['Float'];
   student: User;
+  lesson: Lesson;
   steps?: Maybe<Array<Step>>;
 };
 
@@ -835,7 +837,10 @@ export type SessionsQuery = (
   & { sessions: Array<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'currentStep' | 'lessonId'>
-    & { steps?: Maybe<Array<(
+    & { lesson: (
+      { __typename?: 'Lesson' }
+      & Pick<Lesson, 'title'>
+    ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
     )>> }
@@ -1918,6 +1923,9 @@ export const SessionsDocument = gql`
     id
     currentStep
     lessonId
+    lesson {
+      title
+    }
     steps {
       ...RegularStep
     }

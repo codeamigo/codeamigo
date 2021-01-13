@@ -33,7 +33,10 @@ export class SessionResolver {
   async sessions(@Ctx() { req }: MyContext): Promise<Session[]> {
     const student = await User.findOne({ id: req.session.userId });
 
-    return Session.find({ relations: ["steps"], where: { student } });
+    return Session.find({
+      relations: ["steps", "lesson"],
+      where: { student },
+    });
   }
 
   @Query(() => Session, { nullable: true })
@@ -52,6 +55,7 @@ export class SessionResolver {
           studentId: student?.id,
         }
       )
+      .leftJoinAndSelect("Session.lesson", "lesson")
       .leftJoinAndSelect("Session.steps", "steps")
       .addOrderBy("steps.createdAt", "ASC")
       .getOne();
@@ -74,10 +78,9 @@ export class SessionResolver {
     const lessonId = options.lessonId;
     const lesson = await Lesson.findOne(
       { id: lessonId },
-      { relations: ["steps", "students"] }
+      { relations: ["steps", "students", "sessions"] }
     );
 
-    console.log(lesson);
     if (!lesson) {
       return null;
     }
@@ -141,6 +144,9 @@ export class SessionResolver {
         steps,
         student,
       }).save();
+
+      await lesson.sessions.push(session);
+      await lesson.save();
 
       return session;
     } catch (e) {

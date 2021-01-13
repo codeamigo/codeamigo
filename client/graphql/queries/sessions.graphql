@@ -3,6 +3,9 @@ query Sessions {
     id
     currentStep
     lessonId
+    lesson {
+      title
+    }
     steps {
       ...RegularStep
     }

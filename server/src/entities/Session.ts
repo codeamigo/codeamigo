@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { Lesson } from "./Lesson";
 import { Step } from "./Step";
 import { User } from "./User";
 
@@ -39,6 +40,10 @@ export class Session extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.classes)
   student: User;
+
+  @Field(() => Lesson)
+  @ManyToOne(() => Lesson, (lesson) => lesson.sessions)
+  lesson: Lesson;
 
   @OneToMany(() => Step, (step) => step.session, {
     cascade: true,
