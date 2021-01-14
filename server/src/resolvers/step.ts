@@ -46,6 +46,12 @@ class StepNameInput {
 }
 
 @InputType()
+class CompleteStepInput {
+  @Field()
+  id: number;
+}
+
+@InputType()
 class CreateStepInput {
   @Field()
   name: string;
@@ -118,6 +124,21 @@ export class StepResolver {
 
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
+  async completeStep(
+    @Arg("options") options: CompleteStepInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    if (!step) {
+      return null;
+    }
+
+    await Step.update({ id: options.id }, { ...step, isCompleted: true });
+
+    return step;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateStepInstructions(
     @Arg("options") options: StepInstructionsInput
   ): Promise<Step | null> {
@@ -150,6 +171,7 @@ export class StepResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deleteStep(@Arg("id") id: number): Promise<boolean> {
     const step = await Step.findOne(id);
 
