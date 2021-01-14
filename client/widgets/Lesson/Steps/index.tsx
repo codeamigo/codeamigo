@@ -27,8 +27,6 @@ const Steps: React.FC<Props> = ({
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
 
-  console.log(steps);
-
   useEffect(() => {
     if (isAdding) {
       setTimeout(() => {

@@ -76,6 +76,8 @@ const Instructions: React.FC<Props> = (props) => {
 
     if (!next) return;
 
+    // TODO: replace setCurrentStepId w/ session.currentStep
+    // isEditting ? set lesson current step : set session
     props.setCurrentStepId(next?.id);
   };
 

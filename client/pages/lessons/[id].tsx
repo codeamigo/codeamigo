@@ -31,6 +31,10 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     if (!meData?.me) router.push('/');
   }, [meData]);
 
+  useEffect(() => {
+    setShowSteps(false);
+  }, [currentStepId]);
+
   const toggleShowSteps = () => {
     setShowSteps(!showSteps);
   };
