@@ -6,7 +6,9 @@ import gfm from 'remark-gfm';
 
 import {
   RegularStepFragment,
+  SessionDocument,
   SessionQuery,
+  useCompleteStepMutation,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
 
@@ -19,6 +21,7 @@ const Instructions: React.FC<Props> = (props) => {
     isEditting ? 'editor' : 'preview'
   );
   const [updateStepM] = useUpdateStepInstructionsMutation();
+  const [completeStep] = useCompleteStepMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
@@ -40,6 +43,36 @@ const Instructions: React.FC<Props> = (props) => {
     const next = props.session.steps.find(
       (nextStep) => nextStep.createdAt > step.createdAt
     );
+
+    completeStep({
+      update: (store, { data }) => {
+        const q = {
+          query: SessionDocument,
+          variables: { lessonId: props.session?.lesson.id },
+        };
+        const sessionData = store.readQuery<SessionQuery>(q);
+        if (!sessionData?.session) return;
+        if (!sessionData?.session?.steps) return;
+
+        store.writeQuery<SessionQuery>({
+          ...q,
+          data: {
+            session: {
+              ...sessionData.session,
+              steps: sessionData.session.steps.map((step) => {
+                if (step.id !== data?.completeStep?.id) return step;
+
+                return {
+                  ...step,
+                  isCompleted: true,
+                };
+              }),
+            },
+          },
+        });
+      },
+      variables: { id: props.step.id },
+    });
 
     if (!next) return;
 

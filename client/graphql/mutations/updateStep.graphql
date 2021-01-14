@@ -25,3 +25,15 @@ mutation UpdateStepName(
     id
   }
 }
+
+mutation CompleteStep(
+  $id: Float!
+) {
+  completeStep(
+    options: {
+      id: $id
+    }
+  ) {
+    id
+  }
+}

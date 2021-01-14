@@ -96,7 +96,7 @@ export type Step = {
   dependencies?: Maybe<Array<Dependency>>;
   id: Scalars['Float'];
   instructions?: Maybe<Scalars['String']>;
-  isCompleted?: Maybe<Scalars['String']>;
+  isCompleted?: Maybe<Scalars['Boolean']>;
   lesson: Lesson;
   name?: Maybe<Scalars['String']>;
   session: Session;
@@ -164,6 +164,7 @@ export type Mutation = {
   updateDependency?: Maybe<Dependency>;
   deleteDependency: Scalars['Boolean'];
   createStep?: Maybe<Step>;
+  completeStep?: Maybe<Step>;
   updateStepInstructions?: Maybe<Step>;
   updateStepName?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
@@ -238,6 +239,11 @@ export type MutationDeleteDependencyArgs = {
 
 export type MutationCreateStepArgs = {
   options: CreateStepInput;
+};
+
+
+export type MutationCompleteStepArgs = {
+  options: CompleteStepInput;
 };
 
 
@@ -330,6 +336,10 @@ export type DependencyInput = {
 export type CreateStepInput = {
   name: Scalars['String'];
   lessonId: Scalars['Float'];
+};
+
+export type CompleteStepInput = {
+  id: Scalars['Float'];
 };
 
 export type StepInstructionsInput = {
@@ -739,6 +749,19 @@ export type UpdateStepNameMutation = (
   )> }
 );
 
+export type CompleteStepMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type CompleteStepMutation = (
+  { __typename?: 'Mutation' }
+  & { completeStep?: Maybe<(
+    { __typename?: 'Step' }
+    & Pick<Step, 'id'>
+  )> }
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['Float'];
 }>;
@@ -823,7 +846,10 @@ export type SessionQuery = (
   & { session?: Maybe<(
     { __typename?: 'Session' }
     & Pick<Session, 'id' | 'currentStep'>
-    & { steps?: Maybe<Array<(
+    & { lesson: (
+      { __typename?: 'Lesson' }
+      & Pick<Lesson, 'title' | 'id'>
+    ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
     )>> }
@@ -1699,6 +1725,38 @@ export function useUpdateStepNameMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateStepNameMutationHookResult = ReturnType<typeof useUpdateStepNameMutation>;
 export type UpdateStepNameMutationResult = Apollo.MutationResult<UpdateStepNameMutation>;
 export type UpdateStepNameMutationOptions = Apollo.BaseMutationOptions<UpdateStepNameMutation, UpdateStepNameMutationVariables>;
+export const CompleteStepDocument = gql`
+    mutation CompleteStep($id: Float!) {
+  completeStep(options: {id: $id}) {
+    id
+  }
+}
+    `;
+export type CompleteStepMutationFn = Apollo.MutationFunction<CompleteStepMutation, CompleteStepMutationVariables>;
+
+/**
+ * __useCompleteStepMutation__
+ *
+ * To run a mutation, you first call `useCompleteStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeStepMutation, { data, loading, error }] = useCompleteStepMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCompleteStepMutation(baseOptions?: Apollo.MutationHookOptions<CompleteStepMutation, CompleteStepMutationVariables>) {
+        return Apollo.useMutation<CompleteStepMutation, CompleteStepMutationVariables>(CompleteStepDocument, baseOptions);
+      }
+export type CompleteStepMutationHookResult = ReturnType<typeof useCompleteStepMutation>;
+export type CompleteStepMutationResult = Apollo.MutationResult<CompleteStepMutation>;
+export type CompleteStepMutationOptions = Apollo.BaseMutationOptions<CompleteStepMutation, CompleteStepMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: Float!) {
   checkpoints(stepId: $stepId) {
@@ -1887,6 +1945,10 @@ export const SessionDocument = gql`
   session(lessonId: $lessonId) {
     id
     currentStep
+    lesson {
+      title
+      id
+    }
     steps {
       ...RegularStep
     }

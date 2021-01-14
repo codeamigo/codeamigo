@@ -2,6 +2,10 @@ query Session($lessonId: Int!) {
   session(lessonId: $lessonId) {
     id
     currentStep
+    lesson {
+      title
+      id
+    }
     steps {
       ...RegularStep
     }
