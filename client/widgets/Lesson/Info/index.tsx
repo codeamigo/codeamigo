@@ -45,10 +45,13 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
             {ping && (
               <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping-quick bg-green-400 opacity-50 rounded-full" />
             )}
-            <div className="h-full w-full bg-green-400 ring-green-800 ring rounded-full" />
+            <div className="h-full w-full bg-green-400 rounded-full" />
           </div>
         ) : (
-          <div className="bg-red-400 ring-red-800 ring h-2.5 w-2.5 rounded-full" />
+          <div className="relative flex h-3 w-3">
+            <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping bg-red-600 rounded-full" />
+            <div className="h-full w-full bg-red-600 rounded-full" />
+          </div>
         )}
       </div>
     </div>
