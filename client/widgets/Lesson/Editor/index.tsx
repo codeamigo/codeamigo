@@ -7,6 +7,8 @@ import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import {
+  CheckpointsDocument,
+  CheckpointsQuery,
   RegularStepFragment,
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
@@ -118,7 +120,32 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           step.currentCheckpointId
         ) {
           await completeCheckpoint({
-            refetchQueries: ['Step', 'Checkpoints'],
+            update: (store) => {
+              const q = {
+                query: CheckpointsDocument,
+                variables: { stepId: step.id },
+              };
+              const checkpointsData = store.readQuery<CheckpointsQuery>(q);
+              if (!checkpointsData?.checkpoints) return;
+
+              store.writeQuery<CheckpointsQuery>({
+                ...q,
+                data: {
+                  checkpoints: [
+                    ...checkpointsData.checkpoints.map((checkpoint) => {
+                      if (checkpoint.id !== step.currentCheckpointId) {
+                        return checkpoint;
+                      }
+
+                      return {
+                        ...checkpoint,
+                        isCompleted: true,
+                      };
+                    }),
+                  ],
+                },
+              });
+            },
             variables: { id: step.currentCheckpointId },
           });
         }

@@ -151,7 +151,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                 >
                   <span className="flex items-center">
                     <Icon
-                      className="text-gray-600 mr-2"
+                      className="text-gray-600 mr-2 w-2"
                       name={
                         isCurrentCheckpoint(checkpoint.id)
                           ? 'down-dir'

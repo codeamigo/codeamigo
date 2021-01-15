@@ -9,6 +9,7 @@ import {
   SessionDocument,
   SessionQuery,
   useCompleteStepMutation,
+  useSetNextStepMutation,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
 
@@ -22,6 +23,7 @@ const Instructions: React.FC<Props> = (props) => {
   );
   const [updateStepM] = useUpdateStepInstructionsMutation();
   const [completeStep] = useCompleteStepMutation();
+  const [setNextStep] = useSetNextStepMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
@@ -44,12 +46,33 @@ const Instructions: React.FC<Props> = (props) => {
       (nextStep) => nextStep.createdAt > step.createdAt
     );
 
+    const q = {
+      query: SessionDocument,
+      variables: { lessonId: props.session?.lesson.id },
+    };
+
+    if (next) {
+      setNextStep({
+        update: (store) => {
+          const sessionData = store.readQuery<SessionQuery>(q);
+          if (!sessionData?.session) return;
+
+          store.writeQuery<SessionQuery>({
+            ...q,
+            data: {
+              session: {
+                ...sessionData.session,
+                currentStep: next.id,
+              },
+            },
+          });
+        },
+        variables: { sessionId: props.session.id, stepId: next.id },
+      });
+    }
+
     completeStep({
       update: (store, { data }) => {
-        const q = {
-          query: SessionDocument,
-          variables: { lessonId: props.session?.lesson.id },
-        };
         const sessionData = store.readQuery<SessionQuery>(q);
         if (!sessionData?.session) return;
         if (!sessionData?.session?.steps) return;

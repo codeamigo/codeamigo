@@ -26,6 +26,14 @@ class SessionInput {
   lessonId!: number;
 }
 
+@InputType()
+class NextStepInput {
+  @Field()
+  sessionId!: number;
+  @Field()
+  stepId!: number;
+}
+
 @Resolver()
 export class SessionResolver {
   @Query(() => [Session])
@@ -170,5 +178,24 @@ export class SessionResolver {
     }
 
     return false;
+  }
+
+  @Mutation(() => Session, { nullable: true })
+  @UseMiddleware(isAuth)
+  async setNextStep(
+    @Arg("options") options: NextStepInput
+  ): Promise<Session | null> {
+    const session = await Session.findOne({ id: options.sessionId });
+
+    if (!session) {
+      return null;
+    }
+
+    await Session.update(
+      { id: options.sessionId },
+      { ...session, currentStep: options.stepId }
+    );
+
+    return session;
   }
 }

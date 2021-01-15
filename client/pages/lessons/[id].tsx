@@ -67,6 +67,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   return (
     <div className="flex">
       <Steps
+        activeSessionStepId={sessionData.session.currentStep}
         currentStepId={stepId}
         lessonId={data.lesson.id}
         setCurrentStepId={setCurrentStepId}

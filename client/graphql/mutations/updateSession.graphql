@@ -1,0 +1,5 @@
+mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
+  setNextStep(options: { sessionId: $sessionId, stepId: $stepId }) {
+    id
+  }
+}

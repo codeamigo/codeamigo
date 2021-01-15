@@ -174,6 +174,7 @@ export type Mutation = {
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   deleteSession: Scalars['Boolean'];
+  setNextStep?: Maybe<Session>;
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
@@ -294,6 +295,11 @@ export type MutationDeleteSessionArgs = {
 };
 
 
+export type MutationSetNextStepArgs = {
+  options: NextStepInput;
+};
+
+
 export type MutationRegisterArgs = {
   options: RegisterInput;
 };
@@ -359,6 +365,11 @@ export type LessonInput = {
 
 export type SessionInput = {
   lessonId: Scalars['Float'];
+};
+
+export type NextStepInput = {
+  sessionId: Scalars['Float'];
+  stepId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -718,6 +729,20 @@ export type UpdateLessonDescriptionMutation = (
   & { updateLessonDescription?: Maybe<(
     { __typename?: 'Lesson' }
     & Pick<Lesson, 'id'>
+  )> }
+);
+
+export type SetNextStepMutationVariables = Exact<{
+  sessionId: Scalars['Float'];
+  stepId: Scalars['Float'];
+}>;
+
+
+export type SetNextStepMutation = (
+  { __typename?: 'Mutation' }
+  & { setNextStep?: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id'>
   )> }
 );
 
@@ -1659,6 +1684,39 @@ export function useUpdateLessonDescriptionMutation(baseOptions?: Apollo.Mutation
 export type UpdateLessonDescriptionMutationHookResult = ReturnType<typeof useUpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationResult = Apollo.MutationResult<UpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
+export const SetNextStepDocument = gql`
+    mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
+  setNextStep(options: {sessionId: $sessionId, stepId: $stepId}) {
+    id
+  }
+}
+    `;
+export type SetNextStepMutationFn = Apollo.MutationFunction<SetNextStepMutation, SetNextStepMutationVariables>;
+
+/**
+ * __useSetNextStepMutation__
+ *
+ * To run a mutation, you first call `useSetNextStepMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetNextStepMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setNextStepMutation, { data, loading, error }] = useSetNextStepMutation({
+ *   variables: {
+ *      sessionId: // value for 'sessionId'
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useSetNextStepMutation(baseOptions?: Apollo.MutationHookOptions<SetNextStepMutation, SetNextStepMutationVariables>) {
+        return Apollo.useMutation<SetNextStepMutation, SetNextStepMutationVariables>(SetNextStepDocument, baseOptions);
+      }
+export type SetNextStepMutationHookResult = ReturnType<typeof useSetNextStepMutation>;
+export type SetNextStepMutationResult = Apollo.MutationResult<SetNextStepMutation>;
+export type SetNextStepMutationOptions = Apollo.BaseMutationOptions<SetNextStepMutation, SetNextStepMutationVariables>;
 export const UpdateStepInstructionsDocument = gql`
     mutation UpdateStepInstructions($id: Float!, $instructions: String!) {
   updateStepInstructions(options: {id: $id, instructions: $instructions}) {

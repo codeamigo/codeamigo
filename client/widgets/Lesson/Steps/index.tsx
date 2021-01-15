@@ -12,6 +12,7 @@ import {
 import styles from './Steps.module.scss';
 
 const Steps: React.FC<Props> = ({
+  activeSessionStepId,
   currentStepId,
   isEditting,
   lessonId,
@@ -26,6 +27,8 @@ const Steps: React.FC<Props> = ({
   const [deleteStepM] = useDeleteStepMutation();
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
+
+  console.log();
 
   useEffect(() => {
     if (isAdding) {
@@ -103,6 +106,9 @@ const Steps: React.FC<Props> = ({
     }
   };
 
+  const canGoToStep = (step: RegularStepFragment) =>
+    isEditting || step.isCompleted || step.id === activeSessionStepId;
+
   return (
     <Transition
       className="w-full absolute top-11 left-0 h-full bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
@@ -118,14 +124,18 @@ const Steps: React.FC<Props> = ({
         {steps.map((step, i) => {
           return (
             <li
-              className={`${isEditting ? 'cursor-text' : 'cursor-pointer'} ${
+              className={`${
+                canGoToStep(step)
+                  ? `cursor-pointer hover:text-blue-600 transition-colors duration-150 ${styles.STEP}`
+                  : 'cursor-not-allowed opacity-50'
+              } ${
                 currentStepId === step.id ? 'text-blue-600' : ''
-              } list-none w-full flex justify-between items-center ${
-                styles.STEP
-              }`}
+              } list-none w-full flex justify-between items-center`}
               key={step.id}
               onClick={() => {
-                setCurrentStepId(step.id);
+                if (canGoToStep(step)) {
+                  setCurrentStepId(step.id);
+                }
 
                 if (!isEditting) return;
                 setIsUpdating(step.id);
@@ -145,10 +155,7 @@ const Steps: React.FC<Props> = ({
                     type="text"
                   />
                 ) : (
-                  <span
-                    className="cursor-pointer hover:text-blue-600 transition-colors duration-150"
-                    role="button"
-                  >
+                  <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
                     {step.name || ''} {step.isCompleted ? '✅' : ''}
                   </span>
                 )}
@@ -203,6 +210,7 @@ const Steps: React.FC<Props> = ({
 };
 
 type Props = {
+  activeSessionStepId?: number;
   currentStepId: number;
   isEditting?: boolean;
   lessonId: number;
