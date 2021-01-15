@@ -1,4 +1,4 @@
-import { InMemoryCache } from '@apollo/client';
+import { InMemoryCache, makeVar } from '@apollo/client';
 
 import * as me from './me';
 import * as modal from './modal';
@@ -18,4 +18,10 @@ export default new InMemoryCache({
       fields: me.fields,
     },
   },
+});
+
+export const statusVar = makeVar({
+  connected: true,
+  error: '',
+  lastSaved: new Date().toISOString(),
 });

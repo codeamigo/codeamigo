@@ -11,6 +11,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'ping-quick': 'ping 0.5s linear infinite',
+      },
       maxHeight: {
         6: '1.5rem',
       },

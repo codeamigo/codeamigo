@@ -1,6 +1,8 @@
+import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { statusVar } from '👨‍💻apollo/cache';
 import Icon from '👨‍💻components/Icon';
 import { LessonQuery } from '👨‍💻generated/graphql';
 
@@ -9,6 +11,16 @@ import View from './View';
 
 const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
   const router = useRouter();
+  const status = useReactiveVar(statusVar);
+  const [ping, setPing] = useState(false);
+
+  useEffect(() => {
+    setPing(true);
+
+    setTimeout(() => {
+      setPing(false);
+    }, 1500);
+  }, [status.lastSaved]);
 
   return (
     <div className="w-full py-2 px-4 flex items-center bg-gray-800">
@@ -27,7 +39,18 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
       <div className="w-1/2">
         {isEditting ? <Form {...rest} /> : <View {...rest} />}
       </div>
-      <div className="w-1/4" />
+      <div className="w-1/4 flex justify-end">
+        {status.connected ? (
+          <div className="relative flex h-3 w-3">
+            {ping && (
+              <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping-quick bg-green-400 opacity-50 rounded-full" />
+            )}
+            <div className="h-full w-full bg-green-400 ring-green-800 ring rounded-full" />
+          </div>
+        ) : (
+          <div className="bg-red-400 ring-red-800 ring h-2.5 w-2.5 rounded-full" />
+        )}
+      </div>
     </div>
   );
 };
