@@ -62,8 +62,7 @@ See https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb
 ### Deploying Frontend
 
 ```
-1. cd client
-2. vercel --prod
+1. git push origin master
 ```
 
 ### Model
