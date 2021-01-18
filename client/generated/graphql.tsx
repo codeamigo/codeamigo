@@ -827,8 +827,11 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'createdAt' | 'id' | 'title' | 'updatedAt'>
-    & { owner: (
+    & Pick<Lesson, 'createdAt' | 'id' | 'likes' | 'title' | 'updatedAt'>
+    & { students?: Maybe<Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>>, owner: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
     ) }
@@ -1895,8 +1898,12 @@ export const LessonsDocument = gql`
   lessons {
     createdAt
     id
+    likes
     title
     updatedAt
+    students {
+      id
+    }
     owner {
       username
     }

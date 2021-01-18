@@ -28,7 +28,7 @@ class LessonInput {
 export class LessonResolver {
   @Query(() => [Lesson])
   lessons(): Promise<Lesson[]> {
-    return Lesson.find({ relations: ["owner", "steps"] });
+    return Lesson.find({ relations: ["owner", "steps", "students"] });
   }
 
   @Query(() => Lesson, { nullable: true })
