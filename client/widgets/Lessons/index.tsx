@@ -71,9 +71,11 @@ const Lessons: React.FC<Props> = () => {
             <div>{lesson.likes || 0}</div>
           </div> */}
               </div>
+            </div>
+            <div className="flex justify-between items-center mt-2 text-xs">
+              <LanguageBar steps={lesson.steps} />
               <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
             </div>
-            <LanguageBar steps={lesson.steps} />
           </div>
         ) : null;
       })}
