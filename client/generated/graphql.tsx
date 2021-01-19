@@ -800,6 +800,17 @@ export type CheckpointsQuery = (
   )> }
 );
 
+export type DependenciesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DependenciesQuery = (
+  { __typename?: 'Query' }
+  & { dependencies: Array<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
+  )> }
+);
+
 export type LessonQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -834,7 +845,16 @@ export type LessonsQuery = (
     )>>, owner: (
       { __typename?: 'User' }
       & Pick<User, 'username'>
-    ) }
+    ), steps?: Maybe<Array<(
+      { __typename?: 'Step' }
+      & { dependencies?: Maybe<Array<(
+        { __typename?: 'Dependency' }
+        & RegularDependencyFragment
+      )>>, codeModules?: Maybe<Array<(
+        { __typename?: 'CodeModule' }
+        & Pick<CodeModule, 'name'>
+      )>> }
+    )>> }
   )> }
 );
 
@@ -1851,6 +1871,38 @@ export function useCheckpointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CheckpointsQueryHookResult = ReturnType<typeof useCheckpointsQuery>;
 export type CheckpointsLazyQueryHookResult = ReturnType<typeof useCheckpointsLazyQuery>;
 export type CheckpointsQueryResult = Apollo.QueryResult<CheckpointsQuery, CheckpointsQueryVariables>;
+export const DependenciesDocument = gql`
+    query Dependencies {
+  dependencies {
+    ...RegularDependency
+  }
+}
+    ${RegularDependencyFragmentDoc}`;
+
+/**
+ * __useDependenciesQuery__
+ *
+ * To run a query within a React component, call `useDependenciesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDependenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDependenciesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDependenciesQuery(baseOptions?: Apollo.QueryHookOptions<DependenciesQuery, DependenciesQueryVariables>) {
+        return Apollo.useQuery<DependenciesQuery, DependenciesQueryVariables>(DependenciesDocument, baseOptions);
+      }
+export function useDependenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DependenciesQuery, DependenciesQueryVariables>) {
+          return Apollo.useLazyQuery<DependenciesQuery, DependenciesQueryVariables>(DependenciesDocument, baseOptions);
+        }
+export type DependenciesQueryHookResult = ReturnType<typeof useDependenciesQuery>;
+export type DependenciesLazyQueryHookResult = ReturnType<typeof useDependenciesLazyQuery>;
+export type DependenciesQueryResult = Apollo.QueryResult<DependenciesQuery, DependenciesQueryVariables>;
 export const LessonDocument = gql`
     query Lesson($id: Int!) {
   lesson(id: $id) {
@@ -1907,9 +1959,17 @@ export const LessonsDocument = gql`
     owner {
       username
     }
+    steps {
+      dependencies {
+        ...RegularDependency
+      }
+      codeModules {
+        name
+      }
+    }
   }
 }
-    `;
+    ${RegularDependencyFragmentDoc}`;
 
 /**
  * __useLessonsQuery__

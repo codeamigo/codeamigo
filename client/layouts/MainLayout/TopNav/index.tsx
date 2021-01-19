@@ -63,20 +63,25 @@ const TopNav: React.FC<Props> = () => {
             </button>
           </div>
           <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="hidden sm:block">
-              <div className="flex space-x-4">
-                <button
-                  className={`${
-                    router.pathname === '/' ? 'bg-gray-900 font-medium' : ''
-                  } text-white block px-3 py-2 rounded-md text-base`}
-                  onClick={() => router.push('/')}
-                >
-                  Dashboard
-                </button>
-              </div>
+            <div className="flex space-x-4">
+              <button
+                className={`font-bold text-xl text-white focus:outline-none`}
+                onClick={() => router.push('/')}
+              >
+                Codeamigo
+              </button>
             </div>
           </div>
-          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+          <div className="hidden sm:block">
+            <button
+              className={`flex items-center font-semibold text-sm bg-blue-600 text-white rounded-md p-2 focus:outline-none`}
+              onClick={() => router.push('/lessons/create')}
+            >
+              <Icon className="mr-1.5" name="plus-circled" />
+              <span>New Lesson</span>
+            </button>
+          </div>
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0">
             {data?.me?.isAuthenticated && !loading ? (
               <div className="relative">
                 <Menu>
@@ -171,14 +176,12 @@ const TopNav: React.FC<Props> = () => {
       {isMobileMenuOpen && (
         <div className="sm:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
             <button
-              className={`${
-                router.pathname === '/' ? 'bg-gray-900' : ''
-              } text-white block px-3 py-2 rounded-md text-base font-medium`}
-              onClick={() => router.push('/')}
+              className={`flex items-center font-semibold text-sm bg-blue-600 text-white rounded-md p-2 focus:outline-none`}
+              onClick={() => router.push('/lessons/create')}
             >
-              Dashboard
+              <Icon className="mr-1.5" name="plus-circled" />
+              <span>New Lesson</span>
             </button>
           </div>
         </div>

@@ -20,6 +20,7 @@ export default new InMemoryCache({
   },
 });
 
+// status of saved lesson (edit/take lessons)
 export const statusVar = makeVar({
   connected: true,
   error: '',

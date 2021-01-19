@@ -156,7 +156,7 @@ const Instructions: React.FC<Props> = (props) => {
             />
           )}
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col relative">
           <Checkpoints {...props} nextStep={nextStep} />
         </div>
       </div>

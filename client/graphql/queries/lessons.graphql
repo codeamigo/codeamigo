@@ -11,5 +11,10 @@ query Lessons {
     owner {
       username
     }
+    steps {
+      dependencies {
+        ...RegularDependency
+      }
+    }
   }
 }
