@@ -1,5 +1,6 @@
 import '../styles/fonts/icomoon/style.css';
 import '../styles/globals.css';
+import '../styles/hint/hint.min.css';
 import 'github-markdown-css/github-markdown.css';
 
 import { ApolloProvider } from '@apollo/client';

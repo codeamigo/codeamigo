@@ -5,6 +5,7 @@ import React from 'react';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery, useLessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
+import LanguageBar from '👨‍💻widgets/Lessons/LanguageBar';
 
 const Lessons: React.FC<Props> = () => {
   const { data: meData } = useMeQuery();
@@ -41,6 +42,8 @@ const Lessons: React.FC<Props> = () => {
     );
   };
 
+  console.log(data?.lessons);
+
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {data?.lessons.map((lesson) => {
@@ -70,6 +73,7 @@ const Lessons: React.FC<Props> = () => {
               </div>
               <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
             </div>
+            <LanguageBar steps={lesson.steps} />
           </div>
         ) : null;
       })}
