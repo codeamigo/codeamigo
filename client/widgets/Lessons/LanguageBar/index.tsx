@@ -3,7 +3,6 @@ import React from 'react';
 import { LessonsQuery } from '👨‍💻generated/graphql';
 import githubColors from '👨‍💻utils/githubColors';
 import { getFileExt, githubFileLanguage } from '👨‍💻utils/index';
-import { getExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 
 const LanguageBar: React.FC<Props> = ({ steps }) => {
   const codeModules = steps?.flatMap(({ codeModules }) => codeModules);
@@ -41,6 +40,7 @@ const LanguageBar: React.FC<Props> = ({ steps }) => {
               100
             ).toFixed(0)}%`}
             className="h-2 w-2 rounded-full hint--top hint--no-animate"
+            key={lang}
             style={{
               // @ts-ignore
               backgroundColor: githubColors[lang].color,

@@ -109,7 +109,7 @@ export type Lesson = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;

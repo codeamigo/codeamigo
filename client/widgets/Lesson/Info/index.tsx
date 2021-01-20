@@ -41,7 +41,12 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
       </div>
       <div className="w-1/4 flex justify-end">
         {status.connected ? (
-          <div className="relative flex h-3 w-3">
+          <div
+            aria-label={`Last saved: ${new Date(
+              status.lastSaved
+            ).toTimeString()}`}
+            className="relative flex h-3 w-3 hint--left hint--no-animate"
+          >
             {ping && (
               <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping-quick bg-green-400 opacity-50 rounded-full" />
             )}
