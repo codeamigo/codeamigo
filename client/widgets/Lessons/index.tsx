@@ -9,7 +9,7 @@ import LanguageBar from '👨‍💻widgets/Lessons/LanguageBar';
 
 const Lessons: React.FC<Props> = () => {
   const { data: meData } = useMeQuery();
-  const { data } = useLessonsQuery();
+  const { data } = useLessonsQuery({ fetchPolicy: 'cache-and-network' });
   const router = useRouter();
 
   const queryDeps =
