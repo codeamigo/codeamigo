@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
+import CreateLesson from './CreateLesson';
 import Login from './Login';
 import Register from './Register';
 
@@ -75,6 +76,7 @@ const Modals: React.FC<Props> = () => {
         >
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
+          {data?.modal?.name === 'createLesson' && <CreateLesson />}
         </div>
       </div>
     </div>

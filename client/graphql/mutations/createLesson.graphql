@@ -1,10 +1,21 @@
-mutation CreateLesson($title: String!) {
-  createLesson(options: { title: $title }) {
-    id
-    title
-    owner {
+mutation CreateLesson(
+  $title: String!
+  $description: String!
+  $template: String
+) {
+  createLesson(
+    options: { title: $title, description: $description, template: $template }
+  ) {
+    lesson {
       id
-      username
+      title
+      owner {
+        id
+        username
+      }
+    }
+    errors {
+      ...RegularError
     }
   }
 }

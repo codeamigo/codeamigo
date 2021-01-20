@@ -75,7 +75,9 @@ const TopNav: React.FC<Props> = () => {
           <div className="hidden sm:block">
             <button
               className={`flex items-center font-semibold text-sm bg-blue-600 text-white rounded-md p-2 focus:outline-none`}
-              onClick={() => router.push('/lessons/create')}
+              onClick={() =>
+                modalVar({ callback: () => null, name: 'createLesson' })
+              }
             >
               <Icon className="mr-1.5" name="plus-circled" />
               <span>New Lesson</span>

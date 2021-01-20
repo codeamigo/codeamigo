@@ -35,7 +35,7 @@ class LoginInput {
 }
 
 @ObjectType()
-class FieldError {
+export class FieldError {
   @Field()
   field: string;
   @Field()
@@ -88,7 +88,6 @@ export class UserResolver {
         username: options.username,
       }).save();
     } catch (e) {
-      console.log(e);
       if (e.detail && e.detail.includes("already exists")) {
         return {
           errors: [

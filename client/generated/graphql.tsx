@@ -163,23 +163,23 @@ export type Mutation = {
   createDependency?: Maybe<Dependency>;
   updateDependency?: Maybe<Dependency>;
   deleteDependency: Scalars['Boolean'];
+  register: UserResponse;
+  login: UserResponse;
+  logout: Scalars['Boolean'];
+  forgotPassword: Scalars['Boolean'];
+  changePassword: UserResponse;
   createStep?: Maybe<Step>;
   completeStep?: Maybe<Step>;
   updateStepInstructions?: Maybe<Step>;
   updateStepName?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
-  createLesson: Lesson;
+  createLesson: CreateLessonResponse;
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   deleteSession: Scalars['Boolean'];
   setNextStep?: Maybe<Session>;
-  register: UserResponse;
-  login: UserResponse;
-  logout: Scalars['Boolean'];
-  forgotPassword: Scalars['Boolean'];
-  changePassword: UserResponse;
 };
 
 
@@ -235,6 +235,27 @@ export type MutationUpdateDependencyArgs = {
 
 export type MutationDeleteDependencyArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationRegisterArgs = {
+  options: RegisterInput;
+};
+
+
+export type MutationLoginArgs = {
+  options: LoginInput;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -299,27 +320,6 @@ export type MutationSetNextStepArgs = {
   options: NextStepInput;
 };
 
-
-export type MutationRegisterArgs = {
-  options: RegisterInput;
-};
-
-
-export type MutationLoginArgs = {
-  options: LoginInput;
-};
-
-
-export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
-};
-
-
-export type MutationChangePasswordArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
-};
-
 export type CreateCheckpointInput = {
   checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
@@ -337,39 +337,6 @@ export type CodeModuleInput = {
 export type DependencyInput = {
   package: Scalars['String'];
   version: Scalars['String'];
-};
-
-export type CreateStepInput = {
-  name: Scalars['String'];
-  lessonId: Scalars['Float'];
-};
-
-export type CompleteStepInput = {
-  id: Scalars['Float'];
-};
-
-export type StepInstructionsInput = {
-  id: Scalars['Float'];
-  instructions: Scalars['String'];
-};
-
-export type StepNameInput = {
-  id: Scalars['Float'];
-  name: Scalars['String'];
-};
-
-export type LessonInput = {
-  title: Scalars['String'];
-  description?: Maybe<Scalars['String']>;
-};
-
-export type SessionInput = {
-  lessonId: Scalars['Float'];
-};
-
-export type NextStepInput = {
-  sessionId: Scalars['Float'];
-  stepId: Scalars['Float'];
 };
 
 export type UserResponse = {
@@ -393,6 +360,46 @@ export type RegisterInput = {
 export type LoginInput = {
   usernameOrEmail: Scalars['String'];
   password: Scalars['String'];
+};
+
+export type CreateStepInput = {
+  name: Scalars['String'];
+  lessonId: Scalars['Float'];
+};
+
+export type CompleteStepInput = {
+  id: Scalars['Float'];
+};
+
+export type StepInstructionsInput = {
+  id: Scalars['Float'];
+  instructions: Scalars['String'];
+};
+
+export type StepNameInput = {
+  id: Scalars['Float'];
+  name: Scalars['String'];
+};
+
+export type CreateLessonResponse = {
+  __typename?: 'CreateLessonResponse';
+  errors?: Maybe<Array<FieldError>>;
+  lesson?: Maybe<Lesson>;
+};
+
+export type LessonInput = {
+  title: Scalars['String'];
+  description: Scalars['String'];
+  template?: Maybe<Scalars['String']>;
+};
+
+export type SessionInput = {
+  lessonId: Scalars['Float'];
+};
+
+export type NextStepInput = {
+  sessionId: Scalars['Float'];
+  stepId: Scalars['Float'];
 };
 
 export type Modal = {
@@ -511,18 +518,26 @@ export type CreateDependencyMutation = (
 
 export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
+  description: Scalars['String'];
+  template?: Maybe<Scalars['String']>;
 }>;
 
 
 export type CreateLessonMutation = (
   { __typename?: 'Mutation' }
   & { createLesson: (
-    { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'title'>
-    & { owner: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    ) }
+    { __typename?: 'CreateLessonResponse' }
+    & { lesson?: Maybe<(
+      { __typename?: 'Lesson' }
+      & Pick<Lesson, 'id' | 'title'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id' | 'username'>
+      ) }
+    )>, errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & RegularErrorFragment
+    )>> }
   ) }
 );
 
@@ -1149,17 +1164,24 @@ export type CreateDependencyMutationHookResult = ReturnType<typeof useCreateDepe
 export type CreateDependencyMutationResult = Apollo.MutationResult<CreateDependencyMutation>;
 export type CreateDependencyMutationOptions = Apollo.BaseMutationOptions<CreateDependencyMutation, CreateDependencyMutationVariables>;
 export const CreateLessonDocument = gql`
-    mutation CreateLesson($title: String!) {
-  createLesson(options: {title: $title}) {
-    id
-    title
-    owner {
+    mutation CreateLesson($title: String!, $description: String!, $template: String) {
+  createLesson(
+    options: {title: $title, description: $description, template: $template}
+  ) {
+    lesson {
       id
-      username
+      title
+      owner {
+        id
+        username
+      }
+    }
+    errors {
+      ...RegularError
     }
   }
 }
-    `;
+    ${RegularErrorFragmentDoc}`;
 export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutation, CreateLessonMutationVariables>;
 
 /**
@@ -1176,6 +1198,8 @@ export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutatio
  * const [createLessonMutation, { data, loading, error }] = useCreateLessonMutation({
  *   variables: {
  *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      template: // value for 'template'
  *   },
  * });
  */

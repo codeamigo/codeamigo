@@ -5,6 +5,7 @@ import {
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
@@ -13,6 +14,7 @@ import {
 import { Lesson } from "../entities/Lesson";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
+import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
 import { StepResolver } from "./step";
 
@@ -20,8 +22,19 @@ import { StepResolver } from "./step";
 class LessonInput {
   @Field()
   title: string;
-  @Field({ nullable: true })
+  @Field()
   description: string;
+  @Field({ nullable: true })
+  template: string;
+}
+
+@ObjectType()
+class CreateLessonResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+
+  @Field(() => Lesson, { nullable: true })
+  lesson?: Lesson;
 }
 
 @Resolver()
@@ -51,19 +64,50 @@ export class LessonResolver {
     return lesson;
   }
 
-  @Mutation(() => Lesson)
+  @Mutation(() => CreateLessonResponse)
   @UseMiddleware(isAuth)
   async createLesson(
     @Arg("options") options: LessonInput,
     @Ctx() { req }: MyContext
-  ): Promise<Lesson> {
-    const owner = await User.findOne({ id: req.session.userId });
-    const stepResolver = new StepResolver();
+  ): Promise<CreateLessonResponse> {
+    try {
+      const owner = await User.findOne({ id: req.session.userId });
+      const stepResolver = new StepResolver();
 
-    const lesson = await Lesson.create({ ...options, owner }).save();
-    await stepResolver.createStep({ lessonId: lesson.id, name: "Step 1" });
+      if (!options.title) {
+        return {
+          errors: [{ field: "title", message: "A title is required." }],
+        };
+      }
 
-    return lesson;
+      if (!options.description) {
+        return {
+          errors: [
+            { field: "description", message: "A description is required." },
+          ],
+        };
+      }
+
+      const lesson = await Lesson.create({ ...options, owner }).save();
+      await stepResolver.createStep({ lessonId: lesson.id, name: "Step 1" });
+
+      return { lesson };
+    } catch (e) {
+      if (e.detail && e.detail.includes("already exists")) {
+        return {
+          errors: [
+            {
+              field: "title",
+              message: "Sorry, this title is already taken.",
+            },
+          ],
+        };
+      }
+
+      return {
+        errors: [{ field: "lesson", message: "Error creating lesson." }],
+      };
+    }
   }
 
   @Mutation(() => Lesson, { nullable: true })
