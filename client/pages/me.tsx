@@ -1,24 +1,11 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import Icon from '👨‍💻components/Icon';
-import {
-  useDeleteSessionMutation,
-  useMeQuery,
-  useSessionsQuery,
-} from '👨‍💻generated/graphql';
+import { useMeQuery } from '👨‍💻generated/graphql';
 import withApollo from '👨‍💻utils/withApollo';
-import LessonItem from '👨‍💻widgets/LessonsList/LessonItem';
+import SessionsList from '👨‍💻widgets/SessionsList';
 
 const Me = () => {
-  const router = useRouter();
-
   const { data, error, loading } = useMeQuery();
-  const { client, data: sessionsData } = useSessionsQuery({
-    fetchPolicy: 'cache-and-network',
-  });
-
-  const [deleteSession] = useDeleteSessionMutation();
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -29,11 +16,7 @@ const Me = () => {
         <div>{data?.me?.username}</div>
       </div>
       <div className="sm:w-3/4 w-full">
-        <div className="grid grid-cols-4 gap-6">
-          {sessionsData?.sessions.map((session) => {
-            return <LessonItem key={session.id} lesson={session.lesson} />;
-          })}
-        </div>
+        <SessionsList />
       </div>
     </div>
   );

@@ -42,6 +42,9 @@ export class SessionResolver {
     const student = await User.findOne({ id: req.session.userId });
 
     return Session.find({
+      order: {
+        updatedAt: "DESC",
+      },
       relations: [
         "steps",
         "lesson",
@@ -49,6 +52,7 @@ export class SessionResolver {
         "lesson.steps",
         "lesson.steps.codeModules",
         "lesson.steps.dependencies",
+        "lesson.students",
       ],
       where: { student },
     });

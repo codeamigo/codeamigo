@@ -26,7 +26,9 @@ const LessonsList: React.FC<Props> = () => {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {data?.lessons.map((lesson) => {
-        return showLesson(lesson) ? <LessonItem lesson={lesson} /> : null;
+        return showLesson(lesson) ? (
+          <LessonItem key={lesson.id} lesson={lesson} />
+        ) : null;
       })}
     </div>
   );

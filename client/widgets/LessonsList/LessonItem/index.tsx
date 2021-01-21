@@ -41,10 +41,6 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
             <Icon className="text-gray-500" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
-          {/* <div className="grid grid-cols-2 gap-0.5">
-  <Icon className="text-gray-500" name="heart" />{' '}
-  <div>{lesson.likes || 0}</div>
-</div> */}
         </div>
       </div>
       <div className="flex justify-between items-center mt-2 text-xs">
