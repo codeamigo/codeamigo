@@ -1,0 +1,21 @@
+fragment RegularLessonItem on Lesson {
+  createdAt
+  id
+  likes
+  title
+  updatedAt
+  students {
+    id
+  }
+  owner {
+    username
+  }
+  steps {
+    dependencies {
+      ...RegularDependency
+    }
+    codeModules {
+      name
+    }
+  }
+}

@@ -8,6 +8,7 @@ import {
   useSessionsQuery,
 } from '👨‍💻generated/graphql';
 import withApollo from '👨‍💻utils/withApollo';
+import LessonItem from '👨‍💻widgets/LessonsList/LessonItem';
 
 const Me = () => {
   const router = useRouter();
@@ -23,38 +24,16 @@ const Me = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div>
-      <div>{data?.me?.id}</div>
-      <div>{data?.me?.username}</div>
-
-      <div className="grid grid-cols-4 gap-6">
-        {sessionsData?.sessions.map((session) => {
-          return (
-            <div
-              className="p-3 rounded-lg border-gray-200 border-2 relative"
-              key={session.id}
-            >
-              <h2 className="text-xl">Lesson Id: {session.lessonId}</h2>
-              <button
-                onClick={() => router.push(`/lessons/${session.lessonId}`)}
-              >
-                Continue
-              </button>
-
-              <Icon
-                className="text-red-800 absolute top-2 right-2"
-                name="trash"
-                onClick={() => {
-                  deleteSession({
-                    refetchQueries: ['Sessions'],
-                    variables: { id: session.id },
-                  });
-                  client.resetStore();
-                }}
-              />
-            </div>
-          );
-        })}
+    <div className="flex flex-col sm:space-x-8 sm:flex-row">
+      <div className="sm:w-1/4 w-full mb-4">
+        <div>{data?.me?.username}</div>
+      </div>
+      <div className="sm:w-3/4 w-full">
+        <div className="grid grid-cols-4 gap-6">
+          {sessionsData?.sessions.map((session) => {
+            return <LessonItem key={session.id} lesson={session.lesson} />;
+          })}
+        </div>
       </div>
     </div>
   );

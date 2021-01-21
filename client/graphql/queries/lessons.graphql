@@ -1,23 +1,5 @@
 query Lessons {
   lessons {
-    createdAt
-    id
-    likes
-    title
-    updatedAt
-    students {
-      id
-    }
-    owner {
-      username
-    }
-    steps {
-      dependencies {
-        ...RegularDependency
-      }
-      codeModules {
-        name
-      }
-    }
+    ...RegularLessonItem
   }
 }

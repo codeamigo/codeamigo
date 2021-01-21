@@ -42,7 +42,14 @@ export class SessionResolver {
     const student = await User.findOne({ id: req.session.userId });
 
     return Session.find({
-      relations: ["steps", "lesson"],
+      relations: [
+        "steps",
+        "lesson",
+        "lesson.owner",
+        "lesson.steps",
+        "lesson.steps.codeModules",
+        "lesson.steps.dependencies",
+      ],
       where: { student },
     });
   }

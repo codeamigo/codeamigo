@@ -2,9 +2,8 @@ query Sessions {
   sessions {
     id
     currentStep
-    lessonId
     lesson {
-      title
+      ...RegularLessonItem
     }
     steps {
       ...RegularStep

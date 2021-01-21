@@ -428,6 +428,27 @@ export type RegularErrorFragment = (
   & Pick<FieldError, 'field' | 'message'>
 );
 
+export type RegularLessonItemFragment = (
+  { __typename?: 'Lesson' }
+  & Pick<Lesson, 'createdAt' | 'id' | 'likes' | 'title' | 'updatedAt'>
+  & { students?: Maybe<Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>>, owner: (
+    { __typename?: 'User' }
+    & Pick<User, 'username'>
+  ), steps?: Maybe<Array<(
+    { __typename?: 'Step' }
+    & { dependencies?: Maybe<Array<(
+      { __typename?: 'Dependency' }
+      & RegularDependencyFragment
+    )>>, codeModules?: Maybe<Array<(
+      { __typename?: 'CodeModule' }
+      & Pick<CodeModule, 'name'>
+    )>> }
+  )>> }
+);
+
 export type RegularMeFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'username'>
@@ -853,23 +874,7 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'createdAt' | 'id' | 'likes' | 'title' | 'updatedAt'>
-    & { students?: Maybe<Array<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )>>, owner: (
-      { __typename?: 'User' }
-      & Pick<User, 'username'>
-    ), steps?: Maybe<Array<(
-      { __typename?: 'Step' }
-      & { dependencies?: Maybe<Array<(
-        { __typename?: 'Dependency' }
-        & RegularDependencyFragment
-      )>>, codeModules?: Maybe<Array<(
-        { __typename?: 'CodeModule' }
-        & Pick<CodeModule, 'name'>
-      )>> }
-    )>> }
+    & RegularLessonItemFragment
   )> }
 );
 
@@ -926,10 +931,10 @@ export type SessionsQuery = (
   { __typename?: 'Query' }
   & { sessions: Array<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'currentStep' | 'lessonId'>
+    & Pick<Session, 'id' | 'currentStep'>
     & { lesson: (
       { __typename?: 'Lesson' }
-      & Pick<Lesson, 'title'>
+      & RegularLessonItemFragment
     ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
@@ -967,6 +972,36 @@ export const RegularErrorFragmentDoc = gql`
   message
 }
     `;
+export const RegularDependencyFragmentDoc = gql`
+    fragment RegularDependency on Dependency {
+  id
+  package
+  version
+}
+    `;
+export const RegularLessonItemFragmentDoc = gql`
+    fragment RegularLessonItem on Lesson {
+  createdAt
+  id
+  likes
+  title
+  updatedAt
+  students {
+    id
+  }
+  owner {
+    username
+  }
+  steps {
+    dependencies {
+      ...RegularDependency
+    }
+    codeModules {
+      name
+    }
+  }
+}
+    ${RegularDependencyFragmentDoc}`;
 export const RegularMeFragmentDoc = gql`
     fragment RegularMe on User {
   id
@@ -990,13 +1025,6 @@ export const RegularCheckpointFragmentDoc = gql`
   description
   createdAt
   isCompleted
-}
-    `;
-export const RegularDependencyFragmentDoc = gql`
-    fragment RegularDependency on Dependency {
-  id
-  package
-  version
 }
     `;
 export const RegularStepFragmentDoc = gql`
@@ -1972,28 +2000,10 @@ export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVaria
 export const LessonsDocument = gql`
     query Lessons {
   lessons {
-    createdAt
-    id
-    likes
-    title
-    updatedAt
-    students {
-      id
-    }
-    owner {
-      username
-    }
-    steps {
-      dependencies {
-        ...RegularDependency
-      }
-      codeModules {
-        name
-      }
-    }
+    ...RegularLessonItem
   }
 }
-    ${RegularDependencyFragmentDoc}`;
+    ${RegularLessonItemFragmentDoc}`;
 
 /**
  * __useLessonsQuery__
@@ -2135,16 +2145,16 @@ export const SessionsDocument = gql`
   sessions {
     id
     currentStep
-    lessonId
     lesson {
-      title
+      ...RegularLessonItem
     }
     steps {
       ...RegularStep
     }
   }
 }
-    ${RegularStepFragmentDoc}`;
+    ${RegularLessonItemFragmentDoc}
+${RegularStepFragmentDoc}`;
 
 /**
  * __useSessionsQuery__
