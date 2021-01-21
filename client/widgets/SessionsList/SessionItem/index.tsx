@@ -57,7 +57,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
         >
           {session.lesson.title}
         </a>
-        <div className="relative">
+        <div className="relative z-10">
           <Menu>
             {({ open }) => (
               <>
@@ -78,7 +78,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
                   show={open}
                 >
                   <div
-                    aria-labelledby="user-menu"
+                    aria-labelledby="session-menu"
                     aria-orientation="vertical"
                     className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
                     role="menu"
