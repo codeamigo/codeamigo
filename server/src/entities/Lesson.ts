@@ -35,8 +35,8 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true, type: "text", unique: true })
   title!: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   description: string;
 
   @Field()
