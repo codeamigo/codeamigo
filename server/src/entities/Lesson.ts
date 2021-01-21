@@ -32,7 +32,7 @@ export class Lesson extends BaseEntity {
   updatedAt = new Date();
 
   @Field()
-  @Column({ type: "text", unique: true })
+  @Column({ default: "", type: "text", unique: true })
   title!: string;
 
   @Field()
