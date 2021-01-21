@@ -128,11 +128,9 @@ const Instructions: React.FC<Props> = (props) => {
                 Preview
               </span>
             </>
-          ) : (
-            <span>Instructions</span>
-          )}
+          ) : null}
         </h3>
-        <div className="h-80 lg:min-h-3/5 lg:flex lg:flex-col rounded-md border border-gray-200 overflow-scroll">
+        <div className="h-80 lg:min-h-3/5 lg:flex lg:flex-col border border-r-0 border-gray-200 overflow-scroll">
           {view === 'editor' ? (
             <ControlledEditor
               onChange={(_, value) => {

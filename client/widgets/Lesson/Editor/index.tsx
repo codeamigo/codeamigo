@@ -426,9 +426,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   );
 
   return (
-    <div className="w-full lg:h-full flex flex-col">
-      <h3 className="flex justify-between">
-        <span>Initial Code</span>
+    <div className="w-full lg:h-full flex flex-col relative">
+      <h3 className="flex h-6 absolute z-10 right-0">
         <div className="flex">
           {currentCheck && (
             <button
@@ -451,7 +450,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           )}
         </div>
       </h3>
-      <div className="h-80 lg:h-full flex rounded-md border border-gray-200 whitespace-nowrap">
+      <div className="h-80 lg:h-full flex border border-gray-200 whitespace-nowrap">
         <div className="w-4/12 border-r border-gray-200">
           <EditorFiles
             createFile={createFile}
