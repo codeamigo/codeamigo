@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class MakeLessonTitleUnique1611146516541 implements MigrationInterface {
-  name = "MakeLessonTitleUnique1611146516541";
+export class UniqueTitle1611262519695 implements MigrationInterface {
+  name = "UniqueTitle1611262519695";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "lesson" DROP COLUMN "title"`);
-    await queryRunner.query(`ALTER TABLE "lesson" ADD "title" text NOT NULL`);
+    await queryRunner.query(`ALTER TABLE "lesson" ADD "title" text`);
     await queryRunner.query(
       `ALTER TABLE "lesson" ADD CONSTRAINT "UQ_19967be71e1113334304a55fa63" UNIQUE ("title")`
     );
@@ -25,7 +25,7 @@ export class MakeLessonTitleUnique1611146516541 implements MigrationInterface {
     );
     await queryRunner.query(`ALTER TABLE "lesson" DROP COLUMN "title"`);
     await queryRunner.query(
-      `ALTER TABLE "lesson" ADD "title" character varying NOT NULL`
+      `ALTER TABLE "lesson" ADD "title" character varying`
     );
   }
 }

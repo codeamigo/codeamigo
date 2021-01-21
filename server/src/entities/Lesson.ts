@@ -31,8 +31,8 @@ export class Lesson extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field()
-  @Column({ default: "", nullable: true, type: "text", unique: true })
+  @Field({ nullable: true })
+  @Column({ nullable: true, type: "text", unique: true })
   title!: string;
 
   @Field()
