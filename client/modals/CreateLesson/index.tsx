@@ -33,10 +33,16 @@ const CreateLesson: React.FC<Props> = () => {
               <h1 className="text-xl font-semibold flex mb-4">New Lesson</h1>
               <div className="flex flex-col gap-4">
                 <div className="w-1/2">
-                  <InputField label="Title" name="title" type="text" />
+                  <InputField
+                    label="Title"
+                    maxLength={35}
+                    name="title"
+                    type="text"
+                  />
                 </div>
                 <InputField
                   label="Description"
+                  maxLength={90}
                   name="description"
                   type="text"
                 />

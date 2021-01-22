@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { LessonsQuery, useLessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
+import { LessonsQuery, useLessonsQuery } from '👨‍💻generated/graphql';
 import LessonItem from '👨‍💻widgets/LessonsList/LessonItem';
 
 const LessonsList: React.FC<Props> = () => {

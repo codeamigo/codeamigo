@@ -18,8 +18,8 @@ const Form: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
   return (
     <input
       className="w-full text-center border-0 focus:ring-0 p-0 text-xl bg-gray-800 text-white"
-      defaultValue={lesson?.title}
-      maxLength={40}
+      defaultValue={lesson?.title || ''}
+      maxLength={35}
       name="title"
       onChange={updateLessonTitle}
       placeholder="Lesson title"

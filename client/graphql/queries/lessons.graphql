@@ -3,3 +3,9 @@ query Lessons {
     ...RegularLessonItem
   }
 }
+
+query UserLessons {
+  userLessons {
+    ...RegularLessonItem
+  }
+}

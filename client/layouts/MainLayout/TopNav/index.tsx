@@ -126,9 +126,9 @@ const TopNav: React.FC<Props> = () => {
                           <button
                             className="w-full inline-block text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={() => {
+                              router.push('/');
                               logout();
                               isAuthenticatedVar(false);
-                              router.push('/');
                             }}
                             role="menuitem"
                           >

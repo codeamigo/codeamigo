@@ -64,6 +64,24 @@ export class LessonResolver {
     return lesson;
   }
 
+  @Query(() => [Lesson], { nullable: true })
+  async userLessons(@Ctx() { req }: MyContext): Promise<Lesson[]> {
+    const owner = await User.findOne({ id: req.session.userId });
+
+    return Lesson.find({
+      relations: [
+        "owner",
+        "steps",
+        "students",
+        "steps.dependencies",
+        "steps.codeModules",
+      ],
+      where: {
+        owner,
+      },
+    });
+  }
+
   @Mutation(() => CreateLessonResponse)
   @UseMiddleware(isAuth)
   async createLesson(
