@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import { useUserLessonsQuery } from '👨‍💻generated/graphql';
-import LessonItem from '👨‍💻widgets/LessonsList/LessonItem';
+
+import LessonItem from './LessonItem';
 
 const UserLessonsList: React.FC<Props> = () => {
   const { data } = useUserLessonsQuery({ fetchPolicy: 'cache-and-network' });

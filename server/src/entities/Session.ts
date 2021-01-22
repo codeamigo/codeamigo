@@ -42,7 +42,7 @@ export class Session extends BaseEntity {
   student: User;
 
   @Field(() => Lesson)
-  @ManyToOne(() => Lesson, (lesson) => lesson.sessions)
+  @ManyToOne(() => Lesson, (lesson) => lesson.sessions, { onDelete: "CASCADE" })
   lesson: Lesson;
 
   @OneToMany(() => Step, (step) => step.session, {

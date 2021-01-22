@@ -620,6 +620,16 @@ export type DeleteDependencyMutation = (
   & Pick<Mutation, 'deleteDependency'>
 );
 
+export type DeleteLessonMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type DeleteLessonMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteLesson'>
+);
+
 export type DeleteSessionMutationVariables = Exact<{
   id: Scalars['Float'];
 }>;
@@ -1404,6 +1414,36 @@ export function useDeleteDependencyMutation(baseOptions?: Apollo.MutationHookOpt
 export type DeleteDependencyMutationHookResult = ReturnType<typeof useDeleteDependencyMutation>;
 export type DeleteDependencyMutationResult = Apollo.MutationResult<DeleteDependencyMutation>;
 export type DeleteDependencyMutationOptions = Apollo.BaseMutationOptions<DeleteDependencyMutation, DeleteDependencyMutationVariables>;
+export const DeleteLessonDocument = gql`
+    mutation DeleteLesson($id: Float!) {
+  deleteLesson(id: $id)
+}
+    `;
+export type DeleteLessonMutationFn = Apollo.MutationFunction<DeleteLessonMutation, DeleteLessonMutationVariables>;
+
+/**
+ * __useDeleteLessonMutation__
+ *
+ * To run a mutation, you first call `useDeleteLessonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLessonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLessonMutation, { data, loading, error }] = useDeleteLessonMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteLessonMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLessonMutation, DeleteLessonMutationVariables>) {
+        return Apollo.useMutation<DeleteLessonMutation, DeleteLessonMutationVariables>(DeleteLessonDocument, baseOptions);
+      }
+export type DeleteLessonMutationHookResult = ReturnType<typeof useDeleteLessonMutation>;
+export type DeleteLessonMutationResult = Apollo.MutationResult<DeleteLessonMutation>;
+export type DeleteLessonMutationOptions = Apollo.BaseMutationOptions<DeleteLessonMutation, DeleteLessonMutationVariables>;
 export const DeleteSessionDocument = gql`
     mutation DeleteSession($id: Float!) {
   deleteSession(id: $id)
