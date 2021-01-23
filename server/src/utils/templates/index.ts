@@ -15,6 +15,11 @@ const jsTemplate = {
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
+const htmlTemplate = {
+  codeModules: [{ name: "index.html", value: "" }],
+  dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
+} as ITemplate;
+
 const reactTsxTemplate = {
   codeModules: [
     {
@@ -54,6 +59,6 @@ export const getTemplate = (template: TemplatesType) => {
       return jsTemplate;
     default:
     case "html":
-      return jsTemplate;
+      return htmlTemplate;
   }
 };
