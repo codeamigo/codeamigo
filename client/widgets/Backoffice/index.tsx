@@ -12,11 +12,11 @@ const Backoffice: React.FC<Props> = () => {
   const router = useRouter();
   const [updateUserRole] = useUpdateUserRoleMutation();
 
-  // useEffect(() => {
-  //   if (data?.me?.role !== 'ADMIN') {
-  //     router.push('/me?tab=activity');
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (data?.me?.role !== 'ADMIN') {
+      router.push('/me?tab=activity');
+    }
+  }, []);
 
   return (
     <div>
