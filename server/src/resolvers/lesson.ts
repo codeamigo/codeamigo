@@ -16,6 +16,7 @@ import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
+import { TemplatesType } from "../utils/templates";
 import { StepResolver } from "./step";
 
 @InputType()
@@ -25,7 +26,7 @@ class LessonInput {
   @Field()
   description: string;
   @Field({ nullable: true })
-  template: string;
+  template: TemplatesType;
 }
 
 @InputType()
@@ -117,7 +118,11 @@ export class LessonResolver {
       }
 
       const lesson = await Lesson.create({ ...options, owner }).save();
-      await stepResolver.createStep({ lessonId: lesson.id, name: "Step 1" });
+      await stepResolver.createStep({
+        lessonId: lesson.id,
+        name: "Step 1",
+        template: options.template,
+      });
 
       return { lesson };
     } catch (e) {

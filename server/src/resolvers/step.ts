@@ -14,6 +14,7 @@ import { Dependency } from "../entities/Dependency";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
+import { getTemplate, TemplatesType } from "../utils/templates";
 
 export const DEFAULT_MD = `## Step \#
 
@@ -57,6 +58,8 @@ class CreateStepInput {
   name: string;
   @Field()
   lessonId: number;
+  @Field()
+  template: TemplatesType;
 }
 
 @Resolver()
@@ -96,22 +99,23 @@ export class StepResolver {
       return null;
     }
 
-    const appMod = await CodeModule.create({
-      name: "app.tsx",
-      value: "",
-    }).save();
-    const htmlMod = await CodeModule.create({
-      name: "index.html",
-      value: "<div id='root'></div>",
-    }).save();
-    const dependency = await Dependency.create({
-      package: "codeamigo-jest-lite",
-      version: "1.0.0-alpha.7",
-    }).save();
+    const template = getTemplate(options.template);
+
+    const codeModules = await Promise.all(
+      template.codeModules.map(
+        async (codeMod) => await CodeModule.create(codeMod).save()
+      )
+    );
+
+    const dependencies = await Promise.all(
+      template.dependencies.map(
+        async (dep) => await Dependency.create(dep).save()
+      )
+    );
 
     const step = await Step.create({
-      codeModules: [appMod, htmlMod],
-      dependencies: [dependency],
+      codeModules,
+      dependencies,
       instructions: DEFAULT_MD,
       name: options.name,
     }).save();
