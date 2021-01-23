@@ -176,9 +176,17 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseMiddleware(isAuth)
   async updateUserRole(
-    @Arg("options") options: UpdateUserInput
+    @Arg("options") options: UpdateUserInput,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(options.id);
+    const approver = await User.findOne({ id: req.session.userId });
+
+    if (!approver || approver.role !== "ADMIN") {
+      return {
+        errors: [{ field: "id", message: "Not a valid approver." }],
+      };
+    }
 
     if (!user) {
       return {
