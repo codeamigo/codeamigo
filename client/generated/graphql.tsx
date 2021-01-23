@@ -29,7 +29,7 @@ export type Query = {
   sessions: Array<Session>;
   step?: Maybe<Step>;
   steps: Array<Step>;
-  userLessons?: Maybe<Array<Lesson>>;
+  userLessons: Array<Lesson>;
 };
 
 
@@ -55,6 +55,11 @@ export type QueryDependencyArgs = {
 
 export type QueryLessonArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryLessonsArgs = {
+  options: LessonsInput;
 };
 
 
@@ -127,9 +132,15 @@ export type User = {
   id: Scalars['Float'];
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
+  role: Role;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
+
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export type Session = {
   __typename?: 'Session';
@@ -153,6 +164,10 @@ export type Dependency = {
   step: Step;
 };
 
+export type LessonsInput = {
+  status: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createCheckpoint?: Maybe<Checkpoint>;
@@ -168,6 +183,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updateUserRole: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
   createStep?: Maybe<Step>;
@@ -248,6 +264,11 @@ export type MutationRegisterArgs = {
 
 export type MutationLoginArgs = {
   options: LoginInput;
+};
+
+
+export type MutationUpdateUserRoleArgs = {
+  options: UpdateUserInput;
 };
 
 
@@ -371,6 +392,11 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
+export type UpdateUserInput = {
+  id: Scalars['Float'];
+  role: Scalars['String'];
+};
+
 export type CreateStepInput = {
   name: Scalars['String'];
   lessonId: Scalars['Float'];
@@ -480,6 +506,11 @@ export type RegularStepFragment = (
     { __typename?: 'Dependency' }
     & RegularDependencyFragment
   )>> }
+);
+
+export type RegularUserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'role' | 'username' | 'isAuthenticated'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -856,6 +887,26 @@ export type CompleteStepMutation = (
   )> }
 );
 
+export type UpdateUserRoleMutationVariables = Exact<{
+  id: Scalars['Float'];
+  role: Scalars['String'];
+}>;
+
+
+export type UpdateUserRoleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserRole: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['Float'];
 }>;
@@ -900,7 +951,9 @@ export type LessonQuery = (
   )> }
 );
 
-export type LessonsQueryVariables = Exact<{ [key: string]: never; }>;
+export type LessonsQueryVariables = Exact<{
+  status: Scalars['String'];
+}>;
 
 
 export type LessonsQuery = (
@@ -916,10 +969,10 @@ export type UserLessonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UserLessonsQuery = (
   { __typename?: 'Query' }
-  & { userLessons?: Maybe<Array<(
+  & { userLessons: Array<(
     { __typename?: 'Lesson' }
     & RegularLessonItemFragment
-  )>> }
+  )> }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -929,11 +982,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'isAuthenticated'>
-    & { lessons: Array<(
-      { __typename?: 'Lesson' }
-      & Pick<Lesson, 'id'>
-    )> }
+    & RegularUserFragment
   )> }
 );
 
@@ -1093,6 +1142,14 @@ export const RegularStepFragmentDoc = gql`
     ${RegularCodeModuleFragmentDoc}
 ${RegularCheckpointFragmentDoc}
 ${RegularDependencyFragmentDoc}`;
+export const RegularUserFragmentDoc = gql`
+    fragment RegularUser on User {
+  id
+  role
+  username
+  isAuthenticated @client
+}
+    `;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -1998,6 +2055,45 @@ export function useCompleteStepMutation(baseOptions?: Apollo.MutationHookOptions
 export type CompleteStepMutationHookResult = ReturnType<typeof useCompleteStepMutation>;
 export type CompleteStepMutationResult = Apollo.MutationResult<CompleteStepMutation>;
 export type CompleteStepMutationOptions = Apollo.BaseMutationOptions<CompleteStepMutation, CompleteStepMutationVariables>;
+export const UpdateUserRoleDocument = gql`
+    mutation UpdateUserRole($id: Float!, $role: String!) {
+  updateUserRole(options: {id: $id, role: $role}) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+export type UpdateUserRoleMutationFn = Apollo.MutationFunction<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+
+/**
+ * __useUpdateUserRoleMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserRoleMutation, { data, loading, error }] = useUpdateUserRoleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      role: // value for 'role'
+ *   },
+ * });
+ */
+export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>) {
+        return Apollo.useMutation<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>(UpdateUserRoleDocument, baseOptions);
+      }
+export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
+export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
+export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: Float!) {
   checkpoints(stepId: $stepId) {
@@ -2107,8 +2203,8 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons {
-  lessons {
+    query Lessons($status: String!) {
+  lessons(options: {status: $status}) {
     ...RegularLessonItem
   }
 }
@@ -2126,10 +2222,11 @@ export const LessonsDocument = gql`
  * @example
  * const { data, loading, error } = useLessonsQuery({
  *   variables: {
+ *      status: // value for 'status'
  *   },
  * });
  */
-export function useLessonsQuery(baseOptions?: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
+export function useLessonsQuery(baseOptions: Apollo.QueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
         return Apollo.useQuery<LessonsQuery, LessonsQueryVariables>(LessonsDocument, baseOptions);
       }
 export function useLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<LessonsQuery, LessonsQueryVariables>) {
@@ -2173,15 +2270,10 @@ export type UserLessonsQueryResult = Apollo.QueryResult<UserLessonsQuery, UserLe
 export const MeDocument = gql`
     query Me {
   me {
-    id
-    username
-    isAuthenticated @client
-    lessons {
-      id
-    }
+    ...RegularUser
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 
 /**
  * __useMeQuery__

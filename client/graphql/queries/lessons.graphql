@@ -1,5 +1,5 @@
-query Lessons {
-  lessons {
+query Lessons($status: String!) {
+  lessons(options: { status: $status }) {
     ...RegularLessonItem
   }
 }

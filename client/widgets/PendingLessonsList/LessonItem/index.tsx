@@ -6,7 +6,6 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
   LessonsQuery,
-  useDeleteLessonMutation,
   useMeQuery,
   useUpdateLessonStatusMutation,
 } from '👨‍💻generated/graphql';
@@ -14,7 +13,6 @@ import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonItem: React.FC<Props> = ({ lesson }) => {
   const { data: meData } = useMeQuery();
-  const [deleteLessonM] = useDeleteLessonMutation();
   const [updateLessonStatusM] = useUpdateLessonStatusMutation();
   const router = useRouter();
 
@@ -33,28 +31,14 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
     }
   };
 
-  const deleteLesson = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: number
-  ) => {
-    e.stopPropagation();
-    const yes = window.confirm('Are you sure you want to delete this lesson?');
-    if (yes) {
-      await deleteLessonM({
-        refetchQueries: ['UserLessons'],
-        variables: { id },
-      });
-    }
-  };
-
-  const publishLesson = async (
+  const approveLesson = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     id: number
   ) => {
     e.stopPropagation();
     await updateLessonStatusM({
-      refetchQueries: ['UserLessons'],
-      variables: { id, status: 'PENDING_PUBLISH' },
+      refetchQueries: ['Lessons'],
+      variables: { id, status: 'PUBLISHED' },
     });
   };
 
@@ -94,23 +78,13 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                     className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
-                    {lesson.status === 'EDITTING' && (
-                      <button
-                        className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={(e) => publishLesson(e, lesson.id)}
-                        role="menuitem"
-                      >
-                        <Icon className="text-blue-500 mr-2" name="rocket" />
-                        <span>Publish Lesson</span>
-                      </button>
-                    )}
                     <button
                       className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={(e) => deleteLesson(e, lesson.id)}
+                      onClick={(e) => approveLesson(e, lesson.id)}
                       role="menuitem"
                     >
-                      <Icon className="text-red-500 mr-2" name="trash" />{' '}
-                      <span>Delete Lesson</span>
+                      <span className="mr-2">✅</span>
+                      <span>Approve Lesson</span>
                     </button>
                   </div>
                 </Transition>

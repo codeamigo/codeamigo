@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -11,6 +11,15 @@ import {
 
 import { Lesson } from "./Lesson";
 import { Session } from "./Session";
+
+export enum RoleEnum {
+  ADMIN = "ADMIN",
+  USER = "USER",
+}
+
+registerEnumType(RoleEnum, {
+  name: "Role",
+});
 
 @ObjectType()
 @Entity()
@@ -26,6 +35,10 @@ export class User extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt = new Date();
+
+  @Field(() => RoleEnum)
+  @Column({ default: RoleEnum.USER, nullable: true, type: "text" })
+  role: keyof typeof RoleEnum;
 
   @Field()
   @Column({ type: "text", unique: true })

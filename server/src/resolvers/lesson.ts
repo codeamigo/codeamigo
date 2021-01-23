@@ -28,6 +28,12 @@ class LessonInput {
   template: string;
 }
 
+@InputType()
+class LessonsInput {
+  @Field()
+  status: LessonStatusType;
+}
+
 @ObjectType()
 class CreateLessonResponse {
   @Field(() => [FieldError], { nullable: true })
@@ -40,7 +46,7 @@ class CreateLessonResponse {
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
-  lessons(): Promise<Lesson[]> {
+  lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
     return Lesson.find({
       relations: [
         "owner",
@@ -49,22 +55,14 @@ export class LessonResolver {
         "steps.dependencies",
         "steps.codeModules",
       ],
+      where: {
+        status: options.status,
+      },
     });
   }
 
-  @Query(() => Lesson, { nullable: true })
-  async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
-    const lesson = await Lesson.createQueryBuilder()
-      .where("Lesson.id = :id", { id })
-      .leftJoinAndSelect("Lesson.owner", "owner")
-      .leftJoinAndSelect("Lesson.steps", "steps")
-      .addOrderBy("steps.createdAt", "ASC")
-      .getOne();
-
-    return lesson;
-  }
-
-  @Query(() => [Lesson], { nullable: true })
+  // TODO: combine w/ above lessons query
+  @Query(() => [Lesson])
   async userLessons(@Ctx() { req }: MyContext): Promise<Lesson[]> {
     const owner = await User.findOne({ id: req.session.userId });
 
@@ -80,6 +78,18 @@ export class LessonResolver {
         owner,
       },
     });
+  }
+
+  @Query(() => Lesson, { nullable: true })
+  async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
+    const lesson = await Lesson.createQueryBuilder()
+      .where("Lesson.id = :id", { id })
+      .leftJoinAndSelect("Lesson.owner", "owner")
+      .leftJoinAndSelect("Lesson.steps", "steps")
+      .addOrderBy("steps.createdAt", "ASC")
+      .getOne();
+
+    return lesson;
   }
 
   @Mutation(() => CreateLessonResponse)

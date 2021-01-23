@@ -1,0 +1,6 @@
+fragment RegularUser on User {
+  id
+  role
+  username
+  isAuthenticated @client
+}

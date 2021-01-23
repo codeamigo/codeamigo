@@ -8,11 +8,13 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import { v4 } from "uuid";
 
 import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
-import { User } from "../entities/User";
+import { RoleEnum, User } from "../entities/User";
+import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 
@@ -32,6 +34,14 @@ class LoginInput {
   usernameOrEmail: string;
   @Field()
   password: string;
+}
+
+@InputType()
+class UpdateUserInput {
+  @Field()
+  id: number;
+  @Field()
+  role: RoleEnum;
 }
 
 @ObjectType()
@@ -161,6 +171,29 @@ export class UserResolver {
         resolve(true);
       });
     });
+  }
+
+  @Mutation(() => UserResponse)
+  @UseMiddleware(isAuth)
+  async updateUserRole(
+    @Arg("options") options: UpdateUserInput
+  ): Promise<UserResponse> {
+    const user = await User.findOne(options.id);
+
+    if (!user) {
+      return {
+        errors: [{ field: "id", message: "No user found." }],
+      };
+    }
+
+    await User.update(
+      {
+        id: options.id,
+      },
+      { role: options.role }
+    );
+
+    return { user };
   }
 
   @Mutation(() => Boolean)

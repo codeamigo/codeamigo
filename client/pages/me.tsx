@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Icon from '👨‍💻components/Icon';
 import { useMeQuery } from '👨‍💻generated/graphql';
 import withApollo from '👨‍💻utils/withApollo';
+import Backoffice from '👨‍💻widgets/Backoffice';
 import SessionsList from '👨‍💻widgets/SessionsList';
 import UserLessonsList from '👨‍💻widgets/UserLessonsList';
 
@@ -30,7 +31,7 @@ const Me = () => {
   return (
     <div className="flex flex-col sm:space-x-8 sm:flex-row">
       <div className="sm:w-1/4 w-full mb-4">
-        <h2 className="font-semibold mb-4">User: {data?.me?.username}</h2>
+        <h2 className="font-semibold mb-2">User: {data?.me?.username}</h2>
         <button
           className={`${
             tab === 'activity' ? 'bg-blue-50' : ''
@@ -47,10 +48,21 @@ const Me = () => {
         >
           <Icon className="mr-2" name="book-open" /> Your Lessons
         </button>
+        {data?.me?.role === 'ADMIN' && (
+          <button
+            className={`${
+              tab === 'backoffice' ? 'bg-blue-50' : ''
+            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-blue-50 transition-colors text-left`}
+            onClick={() => setTab('backoffice')}
+          >
+            <Icon className="mr-2" name="flashlight" /> Backoffice
+          </button>
+        )}
       </div>
       <div className="sm:w-3/4 w-full">
         {tab === 'activity' && <SessionsList />}
         {tab === 'lessons' && <UserLessonsList />}
+        {tab === 'backoffice' && <Backoffice />}
       </div>
     </div>
   );

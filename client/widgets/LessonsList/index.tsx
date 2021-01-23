@@ -6,7 +6,10 @@ import { LessonsQuery, useLessonsQuery } from '👨‍💻generated/graphql';
 import LessonItem from './LessonItem';
 
 const LessonsList: React.FC<Props> = () => {
-  const { data } = useLessonsQuery({ fetchPolicy: 'cache-and-network' });
+  const { data } = useLessonsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: { status: 'PUBLISHED' },
+  });
   const router = useRouter();
 
   const queryDeps =

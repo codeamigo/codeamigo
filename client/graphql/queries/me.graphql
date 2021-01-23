@@ -1,10 +1,5 @@
 query Me {
   me {
-    id
-    username
-    isAuthenticated @client
-    lessons {
-      id
-    }
+    ...RegularUser
   }
 }

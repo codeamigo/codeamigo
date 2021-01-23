@@ -1,0 +1,11 @@
+mutation UpdateUserRole($id: Float!, $role: String!) {
+  updateUserRole(options: { id: $id, role: $role }) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
