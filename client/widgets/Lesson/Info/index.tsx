@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { statusVar } from '👨‍💻apollo/cache';
 import Icon from '👨‍💻components/Icon';
 import { LessonQuery } from '👨‍💻generated/graphql';
+import UserMenu from '👨‍💻widgets/UserMenu';
 
 import Form from './Form';
 import View from './View';
@@ -39,7 +40,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
       <div className="w-1/2">
         {isEditting ? <Form {...rest} /> : <View {...rest} />}
       </div>
-      <div className="w-1/4 flex justify-end">
+      <div className="w-1/4 flex justify-end items-center">
         {status.connected ? (
           <div
             aria-label={`Last saved: ${new Date(
@@ -58,6 +59,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
             <div className="h-full w-full bg-red-600 rounded-full" />
           </div>
         )}
+        <UserMenu />
       </div>
     </div>
   );
