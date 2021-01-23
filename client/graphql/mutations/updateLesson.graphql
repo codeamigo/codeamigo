@@ -9,3 +9,9 @@ mutation UpdateLessonDescription($id: Float!, $description: String!) {
     id
   }
 }
+
+mutation UpdateLessonStatus($id: Float!, $status: String!) {
+  updateLessonStatus(id: $id, status: $status) {
+    id
+  }
+}

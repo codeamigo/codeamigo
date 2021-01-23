@@ -2,6 +2,7 @@ fragment RegularLessonItem on Lesson {
   createdAt
   id
   likes
+  status
   title
   updatedAt
   students {

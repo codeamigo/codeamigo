@@ -3,6 +3,7 @@ query Lesson($id: Int!) {
     id
     title
     description
+    status
     owner {
       id
       username

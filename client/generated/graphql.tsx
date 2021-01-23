@@ -111,6 +111,7 @@ export type Lesson = {
   updatedAt: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
@@ -177,6 +178,7 @@ export type Mutation = {
   createLesson: CreateLessonResponse;
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
+  updateLessonStatus?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   deleteSession: Scalars['Boolean'];
@@ -298,6 +300,12 @@ export type MutationUpdateLessonTitleArgs = {
 
 export type MutationUpdateLessonDescriptionArgs = {
   description: Scalars['String'];
+  id: Scalars['Float'];
+};
+
+
+export type MutationUpdateLessonStatusArgs = {
+  status: Scalars['String'];
   id: Scalars['Float'];
 };
 
@@ -431,7 +439,7 @@ export type RegularErrorFragment = (
 
 export type RegularLessonItemFragment = (
   { __typename?: 'Lesson' }
-  & Pick<Lesson, 'createdAt' | 'id' | 'likes' | 'title' | 'updatedAt'>
+  & Pick<Lesson, 'createdAt' | 'id' | 'likes' | 'status' | 'title' | 'updatedAt'>
   & { students?: Maybe<Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
@@ -779,6 +787,20 @@ export type UpdateLessonDescriptionMutation = (
   )> }
 );
 
+export type UpdateLessonStatusMutationVariables = Exact<{
+  id: Scalars['Float'];
+  status: Scalars['String'];
+}>;
+
+
+export type UpdateLessonStatusMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonStatus?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id'>
+  )> }
+);
+
 export type SetNextStepMutationVariables = Exact<{
   sessionId: Scalars['Float'];
   stepId: Scalars['Float'];
@@ -867,7 +889,7 @@ export type LessonQuery = (
   { __typename?: 'Query' }
   & { lesson?: Maybe<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'title' | 'description'>
+    & Pick<Lesson, 'id' | 'title' | 'description' | 'status'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -1006,6 +1028,7 @@ export const RegularLessonItemFragmentDoc = gql`
   createdAt
   id
   likes
+  status
   title
   updatedAt
   students {
@@ -1811,6 +1834,39 @@ export function useUpdateLessonDescriptionMutation(baseOptions?: Apollo.Mutation
 export type UpdateLessonDescriptionMutationHookResult = ReturnType<typeof useUpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationResult = Apollo.MutationResult<UpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
+export const UpdateLessonStatusDocument = gql`
+    mutation UpdateLessonStatus($id: Float!, $status: String!) {
+  updateLessonStatus(id: $id, status: $status) {
+    id
+  }
+}
+    `;
+export type UpdateLessonStatusMutationFn = Apollo.MutationFunction<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
+
+/**
+ * __useUpdateLessonStatusMutation__
+ *
+ * To run a mutation, you first call `useUpdateLessonStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLessonStatusMutation, { data, loading, error }] = useUpdateLessonStatusMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useUpdateLessonStatusMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>(UpdateLessonStatusDocument, baseOptions);
+      }
+export type UpdateLessonStatusMutationHookResult = ReturnType<typeof useUpdateLessonStatusMutation>;
+export type UpdateLessonStatusMutationResult = Apollo.MutationResult<UpdateLessonStatusMutation>;
+export type UpdateLessonStatusMutationOptions = Apollo.BaseMutationOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
 export const SetNextStepDocument = gql`
     mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
   setNextStep(options: {sessionId: $sessionId, stepId: $stepId}) {
@@ -2013,6 +2069,7 @@ export const LessonDocument = gql`
     id
     title
     description
+    status
     owner {
       id
       username

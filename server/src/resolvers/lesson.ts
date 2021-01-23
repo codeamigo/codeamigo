@@ -11,7 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { Lesson } from "../entities/Lesson";
+import { Lesson, LessonStatusType } from "../entities/Lesson";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
@@ -129,6 +129,7 @@ export class LessonResolver {
   }
 
   @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateLessonTitle(
     @Arg("id") id: number,
     @Arg("title") title: string
@@ -144,6 +145,7 @@ export class LessonResolver {
   }
 
   @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateLessonDescription(
     @Arg("id") id: number,
     @Arg("description") description: string
@@ -158,7 +160,24 @@ export class LessonResolver {
     return lesson;
   }
 
+  @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateLessonStatus(
+    @Arg("id") id: number,
+    @Arg("status") status: LessonStatusType
+  ): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne(id);
+    if (!lesson) {
+      return null;
+    }
+
+    await Lesson.update({ id }, { ...lesson, status });
+
+    return lesson;
+  }
+
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async deleteLesson(@Arg("id") id: number): Promise<boolean> {
     await Lesson.delete(id);
     return true;

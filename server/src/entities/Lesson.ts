@@ -16,6 +16,7 @@ import { Session } from "./Session";
 import { Step } from "./Step";
 import { User } from "./User";
 
+export type LessonStatusType = "EDITTING" | "PENDING_PUBLISH" | "PUBLISHED";
 @ObjectType()
 @Entity()
 export class Lesson extends BaseEntity {
@@ -38,6 +39,10 @@ export class Lesson extends BaseEntity {
   @Field({ nullable: true })
   @Column({ nullable: true })
   description: string;
+
+  @Field(() => String, { nullable: true })
+  @Column({ default: "EDITTING", nullable: true })
+  status: LessonStatusType;
 
   @Field()
   @Column({ default: 0, type: "int" })
