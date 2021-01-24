@@ -16,7 +16,6 @@ import {
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
-import Icon from '../../../components/Icon';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromPreviewMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
@@ -444,7 +443,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             <button
               className={`${
                 isTesting ? 'cursor-wait' : ''
-              } inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none disabled:opacity-50`}
+              } inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none disabled:opacity-50`}
               disabled={isTesting}
               onClick={() =>
                 testCode(
