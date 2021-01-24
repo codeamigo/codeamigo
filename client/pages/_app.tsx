@@ -5,6 +5,7 @@ import 'github-markdown-css/github-markdown.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
 import React from 'react';
 
 import { client } from '👨‍💻utils/withApollo';
@@ -16,6 +17,15 @@ import AuthProvider from '../providers/AuthProvider';
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <ApolloProvider client={client}>
+      <Head>
+        <title>Codeamigo</title>
+        <script
+          async
+          data-domain="codeamigo.dev"
+          defer
+          src="https://plausible.io/js/plausible.js"
+        ></script>
+      </Head>
       <AuthProvider>
         <Layout pathname={router.pathname}>
           <Component {...pageProps} />

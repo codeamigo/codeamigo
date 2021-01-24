@@ -106,6 +106,14 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                     )}
                     <button
                       className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => router.push(`/lessons/edit/${lesson.id}`)}
+                      role="menuitem"
+                    >
+                      <Icon className="mr-2" name="keyboard" />{' '}
+                      <span>Edit Lesson</span>
+                    </button>
+                    <button
+                      className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={(e) => deleteLesson(e, lesson.id)}
                       role="menuitem"
                     >
