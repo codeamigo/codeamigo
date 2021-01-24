@@ -14,7 +14,7 @@ import { Dependency } from "../entities/Dependency";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
-import { getTemplate, TemplatesType } from "../utils/templates";
+import { getTemplate, ITemplate, TemplatesType } from "../utils/templates";
 
 export const DEFAULT_MD = `## Step \#
 
@@ -58,8 +58,10 @@ class CreateStepInput {
   name: string;
   @Field()
   lessonId: number;
-  @Field()
-  template: TemplatesType;
+  @Field({ nullable: true })
+  currentStepId?: number;
+  @Field({ nullable: true })
+  template?: TemplatesType;
 }
 
 @Resolver()
@@ -99,18 +101,39 @@ export class StepResolver {
       return null;
     }
 
-    const template = getTemplate(options.template);
+    let template: ITemplate;
+
+    if (options.currentStepId) {
+      const prevStep = await Step.findOne(options.currentStepId, {
+        relations: ["codeModules", "dependencies"],
+      });
+
+      if (!prevStep) return null;
+
+      template = {
+        codeModules: prevStep.codeModules,
+        dependencies: prevStep.dependencies,
+      };
+    } else {
+      template = getTemplate(options.template);
+    }
 
     const codeModules = await Promise.all(
-      template.codeModules.map(
-        async (codeMod) => await CodeModule.create(codeMod).save()
-      )
+      template.codeModules.map(async (codeModule) => {
+        const { id, ...rest } = codeModule;
+
+        return await CodeModule.create({
+          ...rest,
+        }).save();
+      })
     );
 
     const dependencies = await Promise.all(
-      template.dependencies.map(
-        async (dep) => await Dependency.create(dep).save()
-      )
+      template.dependencies.map(async (dependency) => {
+        const { id, ...rest } = dependency;
+
+        return await Dependency.create({ ...rest }).save();
+      })
     );
 
     const step = await Step.create({

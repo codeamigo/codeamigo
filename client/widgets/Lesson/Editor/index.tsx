@@ -90,7 +90,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     }
 
     // Change checkpoint
-    if (currentPath.includes('spec')) {
+    if (currentPath?.includes('spec')) {
       const check = step?.checkpoints?.find(
         (value) => value.test === currentPath
       );

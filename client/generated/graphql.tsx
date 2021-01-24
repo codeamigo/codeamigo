@@ -400,6 +400,8 @@ export type UpdateUserInput = {
 export type CreateStepInput = {
   name: Scalars['String'];
   lessonId: Scalars['Float'];
+  currentStepId?: Maybe<Scalars['Float']>;
+  template?: Maybe<Scalars['String']>;
 };
 
 export type CompleteStepInput = {
@@ -617,6 +619,7 @@ export type CreateSessionMutation = (
 
 export type CreateStepMutationVariables = Exact<{
   lessonId: Scalars['Float'];
+  currentStepId: Scalars['Float'];
   name: Scalars['String'];
 }>;
 
@@ -1372,8 +1375,10 @@ export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSession
 export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
 export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
 export const CreateStepDocument = gql`
-    mutation CreateStep($lessonId: Float!, $name: String!) {
-  createStep(options: {lessonId: $lessonId, name: $name}) {
+    mutation CreateStep($lessonId: Float!, $currentStepId: Float!, $name: String!) {
+  createStep(
+    options: {lessonId: $lessonId, currentStepId: $currentStepId, name: $name}
+  ) {
     ...RegularStep
   }
 }
@@ -1394,6 +1399,7 @@ export type CreateStepMutationFn = Apollo.MutationFunction<CreateStepMutation, C
  * const [createStepMutation, { data, loading, error }] = useCreateStepMutation({
  *   variables: {
  *      lessonId: // value for 'lessonId'
+ *      currentStepId: // value for 'currentStepId'
  *      name: // value for 'name'
  *   },
  * });

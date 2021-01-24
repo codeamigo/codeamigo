@@ -49,7 +49,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
   ],
 } as ITemplate;
 
-export const getTemplate = (template: TemplatesType) => {
+export const getTemplate = (template?: TemplatesType) => {
   switch (template) {
     case "react":
       return reactTsxTemplate;
