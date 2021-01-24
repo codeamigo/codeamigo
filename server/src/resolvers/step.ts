@@ -119,14 +119,16 @@ export class StepResolver {
     }
 
     const codeModules = await Promise.all(
-      template.codeModules.map(async (codeModule) => {
-        // @ts-ignore
-        const { id, ...rest } = codeModule;
+      template.codeModules
+        .filter((codeModule) => !codeModule.name.includes("spec"))
+        .map(async (codeModule) => {
+          // @ts-ignore
+          const { id, ...rest } = codeModule;
 
-        return await CodeModule.create({
-          ...rest,
-        }).save();
-      })
+          return await CodeModule.create({
+            ...rest,
+          }).save();
+        })
     );
 
     const dependencies = await Promise.all(
