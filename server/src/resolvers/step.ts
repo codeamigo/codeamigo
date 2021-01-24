@@ -120,6 +120,7 @@ export class StepResolver {
 
     const codeModules = await Promise.all(
       template.codeModules.map(async (codeModule) => {
+        // @ts-ignore
         const { id, ...rest } = codeModule;
 
         return await CodeModule.create({
@@ -130,6 +131,7 @@ export class StepResolver {
 
     const dependencies = await Promise.all(
       template.dependencies.map(async (dependency) => {
+        // @ts-ignore
         const { id, ...rest } = dependency;
 
         return await Dependency.create({ ...rest }).save();

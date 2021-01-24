@@ -16,7 +16,10 @@ const jsTemplate = {
 } as ITemplate;
 
 const htmlTemplate = {
-  codeModules: [{ name: "index.html", value: "" }],
+  codeModules: [
+    { name: "index.html", value: "" },
+    { name: "styles.css", value: "" },
+  ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
@@ -41,6 +44,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
       name: "index.html",
       value: "<div id='root'></div>",
     },
+    { name: "styles.css", value: "" },
   ],
   dependencies: [
     { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
