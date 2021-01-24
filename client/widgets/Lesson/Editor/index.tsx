@@ -271,6 +271,12 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         runPath: string,
         value: string
       ) => {
+        if (runPath === 'index.html' || runPath === 'styles.css') {
+          files[runPath] = value;
+          runPath = getMain(files);
+          value = files[runPath];
+        }
+
         postMessage(files, dependencies, runPath, value);
       },
       1500
@@ -403,11 +409,16 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     setupEditor();
   };
 
-  const goToMain = (files: FilesType, file?: string) => {
-    const main =
+  const getMain = (files: FilesType, file?: string) => {
+    return (
       file ||
       Object.keys(files).find((file) => file === 'app.tsx') ||
-      Object.keys(files).filter((n) => !n.includes('spec'))[0];
+      Object.keys(files).filter((n) => !n.includes('spec'))[0]
+    );
+  };
+
+  const goToMain = (files: FilesType, file?: string) => {
+    const main = getMain(files, file);
 
     setModel(main);
     setCurrentPath(main);
@@ -472,8 +483,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
                 ...files,
                 [currentPath]: value || '',
               });
-              postCode(files, dependencies, currentPath, value || '');
               updateFile(currentPath, value || '');
+              console.log('value', value);
+              postCode(files, dependencies, currentPath, value || '');
             }}
             options={{
               automaticLayout: true,

@@ -118,6 +118,17 @@
       document.querySelector('body').innerHTML = data.files['index.html']
     }
 
+    if (data.files['styles.css']) {
+      const head = document.head || document.getElementsByTagName('head')[0]
+      const style = document.createElement('style');
+      head.appendChild(style);
+
+      console.log(data.files['styles.css'])
+
+      style.type = 'text/css';
+      style.append(document.createTextNode(data.files['styles.css']))
+    }
+
     runCode(data.files, data.runPath);
   });
 </script>
