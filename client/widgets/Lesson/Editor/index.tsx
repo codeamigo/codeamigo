@@ -73,7 +73,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     }
 
     setFiles(mods);
-  }, [step.id, step.codeModules, isEditorReady]);
+  }, [step.id, step.codeModules?.length, isEditorReady]);
 
   // Files changed => set up editor models
   useEffect(() => {
