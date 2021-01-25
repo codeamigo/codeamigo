@@ -35,11 +35,9 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     if (!data?.checkpoints) return;
     if (isEditting) return;
 
-    // console.log('checkpoints', data.checkpoints);
     const nextCheckpoint = data.checkpoints.find(
       ({ isCompleted }) => !isCompleted
     );
-    // console.log('next checkpoint', nextCheckpoint);
 
     currentCheckpointIdVar(nextCheckpoint?.id || null);
     setActiveCheckpoint(nextCheckpoint);

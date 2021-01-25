@@ -35,7 +35,6 @@ const Backoffice: React.FC<Props> = () => {
               },
             });
             if (data?.updateUserRole.errors) {
-              console.log(data.updateUserRole);
               setErrors(toErrorMap(data.updateUserRole.errors));
               return;
             }

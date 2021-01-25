@@ -206,7 +206,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
         },
       });
     }, 1000),
-    [step?.id]
+    [step.codeModules]
   );
 
   const updateDependencies = async () => {
@@ -483,7 +483,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
                 [currentPath]: value || '',
               });
               updateFile(currentPath, value || '');
-              console.log('value', value);
               postCode(files, dependencies, currentPath, value || '');
             }}
             options={{
