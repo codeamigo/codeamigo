@@ -412,12 +412,14 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     return (
       file ||
       Object.keys(files).find((file) => file === 'app.tsx') ||
+      Object.keys(files).find((file) => file === 'index.html') ||
       Object.keys(files).filter((n) => !n.includes('spec'))[0]
     );
   };
 
   const goToMain = (files: FilesType, file?: string) => {
     const main = getMain(files, file);
+    console.log(main);
 
     setModel(main);
     setCurrentPath(main);

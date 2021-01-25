@@ -6,19 +6,19 @@ export interface ITemplate {
 export type TemplatesType = "react" | "typescript" | "javascript" | "html";
 
 const tsTemplate = {
-  codeModules: [{ name: "app.tsx", value: "" }],
+  codeModules: [{ name: "app.tsx", value: "// app.tsx" }],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
 const jsTemplate = {
-  codeModules: [{ name: "app.js", value: "" }],
+  codeModules: [{ name: "app.js", value: "// app.js" }],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
 const htmlTemplate = {
   codeModules: [
-    { name: "index.html", value: "" },
-    { name: "styles.css", value: "" },
+    { name: "index.html", value: "<div id='root'></div>" },
+    { name: "styles.css", value: "/* styles.css */" },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
@@ -44,7 +44,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
       name: "index.html",
       value: "<div id='root'></div>",
     },
-    { name: "styles.css", value: "" },
+    { name: "styles.css", value: "/* styles.css */" },
   ],
   dependencies: [
     { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
