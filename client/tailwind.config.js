@@ -15,6 +15,7 @@ module.exports = {
         'ping-quick': 'ping 0.5s linear infinite',
       },
       maxHeight: {
+        '3/5': '60%',
         6: '1.5rem',
       },
       minHeight: {
