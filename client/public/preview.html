@@ -14,15 +14,15 @@
 
   // hijack console log
   (function () {
-    let olderror = console.error;
+    // let olderror = console.error;
     let oldlog = console.log;
     let oldinfo = console.info;
     let oldwarn = console.warn;
-    console.error = function (message) {
-      let msg = typeof message === 'string' ? message : JSON.stringify(message)
-      window.parent.postMessage({ result: msg, from: 'preview', type: 'error' }, '*')
-      olderror.apply(console, arguments);
-    };
+    // console.error = function (message) {
+    //   let msg = typeof message === 'string' ? message : JSON.stringify(message)
+    //   window.parent.postMessage({ result: msg, from: 'preview', type: 'error' }, '*')
+    //   olderror.apply(console, arguments);
+    // };
     console.log = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
       window.parent.postMessage({ result: msg, from: 'preview', type: 'log' }, '*')
@@ -41,7 +41,7 @@
     console.test = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
       window.parent.postMessage({ result: msg, from: 'preview', type: 'test' }, '*')
-      oldlog.apply(console, arguments);
+      // oldlog.apply(console, arguments);
     };
   })();
 
