@@ -7,6 +7,7 @@ export type ModulesType = RegularCodeModuleFragment[];
 export enum PreviewLogTypeEnum {
   log,
   info,
+  error,
   test,
   warn,
 }

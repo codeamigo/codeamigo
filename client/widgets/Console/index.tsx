@@ -68,7 +68,7 @@ const Console: React.FC<Props> = ({ step }) => {
 
   return (
     <div
-      className="flex flex-col overflow-hidden min-h-6 transition-all duration-500 bg-gray-700"
+      className="flex flex-col overflow-hidden min-h-7 transition-all duration-500 bg-gray-700"
       style={{
         height: activeTab ? '100%' : '0%',
       }}
@@ -79,7 +79,7 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'console' ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
+              } text-white text-xs px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('console')}
               role="button"
             >
@@ -88,13 +88,13 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'tests' ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1 list-none cursor-pointer transition-all duration-150`}
+              } text-white text-xs px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
             >
               Tests
             </li>
-            <li className="flex text-white text-xs px-2 py-1 list-none cursor-pointer transition-all duration-150">
+            <li className="flex text-white text-xs px-2 py-1.5 list-none cursor-pointer transition-all duration-150">
               {isTesting && <Icon className="animate-spin" name="cw" />}
             </li>
           </ul>

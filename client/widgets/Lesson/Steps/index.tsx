@@ -109,7 +109,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="w-full absolute top-12 left-0 h-full bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
+      className="w-full absolute top-12 left-0 bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -117,6 +117,9 @@ const Steps: React.FC<Props> = ({
       leaveFrom="translate-x-0"
       leaveTo="-translate-x-full"
       show={showSteps}
+      style={{
+        height: 'calc(100% - 3rem)',
+      }}
     >
       <ol>
         {steps.map((step, i) => {

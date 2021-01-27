@@ -25,7 +25,7 @@ module.exports = {
         24: '6rem',
         '3/5': '60%',
         '4/5': '80%',
-        6: '1.5rem',
+        7: '2rem',
       },
       transition: {
         height: 'height',
