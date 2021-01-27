@@ -286,10 +286,12 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const testCode = (
     files: FilesType,
     dependencies: FilesType,
-    runPath: string,
-    value: string
+    runPath?: string,
+    value?: string
   ) => {
     if (isTesting) return;
+    if (!runPath) return;
+    if (!value) return;
     isTestingVar(true);
     postMessage(files, dependencies, runPath, value, true);
   };
@@ -486,14 +488,12 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
               });
               updateFile(currentPath, value || '');
               postCode(files, dependencies, currentPath, value || '');
-              if (currentCheck) {
-                testCode(
-                  files,
-                  dependencies,
-                  currentCheck?.test,
-                  files[currentCheck.test]
-                );
-              }
+              testCode(
+                files,
+                dependencies,
+                currentCheck?.test,
+                files[currentCheck.test]
+              );
             }}
             options={{
               automaticLayout: true,
