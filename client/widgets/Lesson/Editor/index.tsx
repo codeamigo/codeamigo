@@ -283,18 +283,22 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     []
   );
 
-  const testCode = (
-    files: FilesType,
-    dependencies: FilesType,
-    runPath?: string,
-    value?: string
-  ) => {
-    if (isTesting) return;
-    if (!runPath) return;
-    if (!value) return;
-    isTestingVar(true);
-    postMessage(files, dependencies, runPath, value, true);
-  };
+  const testCode = useCallback(
+    debounce(
+      (
+        files: FilesType,
+        dependencies: FilesType,
+        runPath: string,
+        value: string
+      ) => {
+        if (isTesting) return;
+        isTestingVar(true);
+        postMessage(files, dependencies, runPath, value, true);
+      },
+      1500
+    ),
+    []
+  );
 
   async function getDeps() {
     await updateDependencies();
