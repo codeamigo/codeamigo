@@ -22,8 +22,28 @@ class DependencyInput {
 @Resolver()
 export class DependencyResolver {
   @Query(() => [Dependency])
-  dependencies(): Promise<Dependency[]> {
-    return Dependency.find({ relations: ["step"] });
+  async dependencies(): Promise<Dependency[]> {
+    const dependencies = await Dependency.createQueryBuilder()
+      .leftJoinAndSelect("Dependency.step", "step")
+      .leftJoinAndSelect("step.lesson", "lesson")
+      .where("lesson.status = 'PUBLISHED'")
+      .getMany();
+
+    let deps: Dependency[] = [];
+
+    dependencies.forEach((value) => {
+      if (
+        !deps.find(
+          (dep) =>
+            dep.step.lesson?.id === value.step.lesson?.id &&
+            dep.package === value.package
+        )
+      ) {
+        deps.push(value);
+      }
+    });
+
+    return deps;
   }
 
   @Query(() => Dependency, { nullable: true })
