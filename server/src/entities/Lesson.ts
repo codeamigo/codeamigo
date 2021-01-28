@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -16,7 +16,15 @@ import { Session } from "./Session";
 import { Step } from "./Step";
 import { User } from "./User";
 
-export type LessonStatusType = "EDITTING" | "PENDING_PUBLISH" | "PUBLISHED";
+export enum LessonStatusTypeEnum {
+  EDITTING = "EDITTING",
+  PENDING_PUBLISH = "PENDING_PUBLISH",
+  PUBLISHED = "PUBLISHED",
+}
+
+registerEnumType(LessonStatusTypeEnum, {
+  name: "LessonStatus",
+});
 @ObjectType()
 @Entity()
 export class Lesson extends BaseEntity {
@@ -40,9 +48,13 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
-  @Field(() => String, { nullable: true })
-  @Column({ default: "EDITTING", nullable: true })
-  status: LessonStatusType;
+  @Field(() => LessonStatusTypeEnum, { nullable: true })
+  @Column({
+    default: LessonStatusTypeEnum.EDITTING,
+    nullable: true,
+    type: "text",
+  })
+  status: keyof typeof LessonStatusTypeEnum;
 
   @Field()
   @Column({ default: 0, type: "int" })

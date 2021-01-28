@@ -41,7 +41,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
     const yes = window.confirm('Are you sure you want to delete this lesson?');
     if (yes) {
       await deleteLessonM({
-        refetchQueries: ['UserLessons'],
+        refetchQueries: ['Lessons'],
         variables: { id },
       });
     }
@@ -53,7 +53,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   ) => {
     e.stopPropagation();
     await updateLessonStatusM({
-      refetchQueries: ['UserLessons'],
+      refetchQueries: ['Lessons'],
       variables: { id, status: 'PENDING_PUBLISH' },
     });
   };
@@ -94,24 +94,6 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                     className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
-                    {lesson.status === 'EDITTING' && (
-                      <button
-                        className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={(e) => publishLesson(e, lesson.id)}
-                        role="menuitem"
-                      >
-                        <Icon className="text-blue-500 mr-2" name="rocket" />
-                        <span>Publish Lesson</span>
-                      </button>
-                    )}
-                    <button
-                      className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => router.push(`/lessons/edit/${lesson.id}`)}
-                      role="menuitem"
-                    >
-                      <Icon className="mr-2" name="keyboard" />{' '}
-                      <span>Edit Lesson</span>
-                    </button>
                     <button
                       className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={(e) => deleteLesson(e, lesson.id)}

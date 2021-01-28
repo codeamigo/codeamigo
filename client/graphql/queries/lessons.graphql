@@ -1,11 +1,5 @@
-query Lessons($status: String!) {
-  lessons(options: { status: $status }) {
-    ...RegularLessonItem
-  }
-}
-
-query UserLessons {
-  userLessons {
+query Lessons($status: String!, $ownerId: Float) {
+  lessons(options: { status: $status, ownerId: $ownerId }) {
     ...RegularLessonItem
   }
 }

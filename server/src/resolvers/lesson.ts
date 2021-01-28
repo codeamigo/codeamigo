@@ -11,7 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { Lesson, LessonStatusType } from "../entities/Lesson";
+import { Lesson, LessonStatusTypeEnum } from "../entities/Lesson";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
@@ -32,7 +32,9 @@ class LessonInput {
 @InputType()
 class LessonsInput {
   @Field()
-  status: LessonStatusType;
+  status: LessonStatusTypeEnum;
+  @Field({ nullable: true })
+  ownerId?: number;
 }
 
 @ObjectType()
@@ -47,25 +49,10 @@ class CreateLessonResponse {
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
-  lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
-    return Lesson.find({
-      relations: [
-        "owner",
-        "steps",
-        "students",
-        "steps.dependencies",
-        "steps.codeModules",
-      ],
-      where: {
-        status: options.status,
-      },
-    });
-  }
-
-  // TODO: combine w/ above lessons query
-  @Query(() => [Lesson])
-  async userLessons(@Ctx() { req }: MyContext): Promise<Lesson[]> {
-    const owner = await User.findOne({ id: req.session.userId });
+  async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
+    const { status, ownerId } = options;
+    const owner = await User.findOne({ id: ownerId });
+    const where = owner ? { owner, status } : { status };
 
     return Lesson.find({
       relations: [
@@ -75,9 +62,7 @@ export class LessonResolver {
         "steps.dependencies",
         "steps.codeModules",
       ],
-      where: {
-        owner,
-      },
+      where,
     });
   }
 
@@ -179,7 +164,7 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   async updateLessonStatus(
     @Arg("id") id: number,
-    @Arg("status") status: LessonStatusType
+    @Arg("status") status: LessonStatusTypeEnum
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {

@@ -23,7 +23,7 @@ const SessionsList: React.FC<Props> = () => {
         })
       ) : (
         <div
-          className="flex flex-col justify-center items-center h-36 w-36 bg-gray-100 text-gray-600 rounded-md cursor-pointer hover:text-blue-600 transform hover:scale-105 transition-colors transition-transform duration-300"
+          className="flex flex-col justify-center items-center h-32 w-32 bg-gray-100 text-gray-600 rounded-md cursor-pointer hover:text-blue-600 transform hover:scale-105 transition-colors transition-transform duration-300"
           onClick={() => router.push('/')}
         >
           <Icon className="text-xl" name="plus-squared" />

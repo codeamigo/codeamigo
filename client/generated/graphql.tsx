@@ -29,7 +29,6 @@ export type Query = {
   sessions: Array<Session>;
   step?: Maybe<Step>;
   steps: Array<Step>;
-  userLessons: Array<Lesson>;
 };
 
 
@@ -116,13 +115,19 @@ export type Lesson = {
   updatedAt: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+  status?: Maybe<LessonStatus>;
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
   sessions?: Maybe<Array<Session>>;
   steps?: Maybe<Array<Step>>;
 };
+
+export enum LessonStatus {
+  Editting = 'EDITTING',
+  PendingPublish = 'PENDING_PUBLISH',
+  Published = 'PUBLISHED'
+}
 
 export type User = {
   __typename?: 'User';
@@ -166,6 +171,7 @@ export type Dependency = {
 
 export type LessonsInput = {
   status: Scalars['String'];
+  ownerId?: Maybe<Scalars['Float']>;
 };
 
 export type Mutation = {
@@ -956,23 +962,13 @@ export type LessonQuery = (
 
 export type LessonsQueryVariables = Exact<{
   status: Scalars['String'];
+  ownerId?: Maybe<Scalars['Float']>;
 }>;
 
 
 export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
-    { __typename?: 'Lesson' }
-    & RegularLessonItemFragment
-  )> }
-);
-
-export type UserLessonsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type UserLessonsQuery = (
-  { __typename?: 'Query' }
-  & { userLessons: Array<(
     { __typename?: 'Lesson' }
     & RegularLessonItemFragment
   )> }
@@ -2209,8 +2205,8 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons($status: String!) {
-  lessons(options: {status: $status}) {
+    query Lessons($status: String!, $ownerId: Float) {
+  lessons(options: {status: $status, ownerId: $ownerId}) {
     ...RegularLessonItem
   }
 }
@@ -2229,6 +2225,7 @@ export const LessonsDocument = gql`
  * const { data, loading, error } = useLessonsQuery({
  *   variables: {
  *      status: // value for 'status'
+ *      ownerId: // value for 'ownerId'
  *   },
  * });
  */
@@ -2241,38 +2238,6 @@ export function useLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Le
 export type LessonsQueryHookResult = ReturnType<typeof useLessonsQuery>;
 export type LessonsLazyQueryHookResult = ReturnType<typeof useLessonsLazyQuery>;
 export type LessonsQueryResult = Apollo.QueryResult<LessonsQuery, LessonsQueryVariables>;
-export const UserLessonsDocument = gql`
-    query UserLessons {
-  userLessons {
-    ...RegularLessonItem
-  }
-}
-    ${RegularLessonItemFragmentDoc}`;
-
-/**
- * __useUserLessonsQuery__
- *
- * To run a query within a React component, call `useUserLessonsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserLessonsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserLessonsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useUserLessonsQuery(baseOptions?: Apollo.QueryHookOptions<UserLessonsQuery, UserLessonsQueryVariables>) {
-        return Apollo.useQuery<UserLessonsQuery, UserLessonsQueryVariables>(UserLessonsDocument, baseOptions);
-      }
-export function useUserLessonsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserLessonsQuery, UserLessonsQueryVariables>) {
-          return Apollo.useLazyQuery<UserLessonsQuery, UserLessonsQueryVariables>(UserLessonsDocument, baseOptions);
-        }
-export type UserLessonsQueryHookResult = ReturnType<typeof useUserLessonsQuery>;
-export type UserLessonsLazyQueryHookResult = ReturnType<typeof useUserLessonsLazyQuery>;
-export type UserLessonsQueryResult = Apollo.QueryResult<UserLessonsQuery, UserLessonsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
