@@ -112,7 +112,12 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     });
   };
 
-  const setCheckpoint = (checkpoint: RegularCheckpointFragment) => {
+  const setCheckpoint = (checkpoint?: RegularCheckpointFragment) => {
+    if (!checkpoint) {
+      setActiveCheckpoint(undefined);
+      return;
+    }
+
     if (canSetCheckpoint(checkpoint)) {
       if (isCurrentCheckpoint(checkpoint.id)) {
         setActiveCheckpoint(undefined);
