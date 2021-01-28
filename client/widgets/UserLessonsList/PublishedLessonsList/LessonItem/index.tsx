@@ -8,30 +8,13 @@ import {
   LessonsQuery,
   useDeleteLessonMutation,
   useMeQuery,
-  useUpdateLessonStatusMutation,
 } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonItem: React.FC<Props> = ({ lesson }) => {
   const { data: meData } = useMeQuery();
   const [deleteLessonM] = useDeleteLessonMutation();
-  const [updateLessonStatusM] = useUpdateLessonStatusMutation();
   const router = useRouter();
-
-  const handleClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    id: number
-  ) => {
-    e.preventDefault();
-    if (meData?.me?.isAuthenticated) {
-      router.push(`/lessons/start/${id}`);
-    } else {
-      modalVar({
-        callback: () => router.push(`/lessons/start/${id}`),
-        name: 'login',
-      });
-    }
-  };
 
   const deleteLesson = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -47,24 +30,12 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
     }
   };
 
-  const publishLesson = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    id: number
-  ) => {
-    e.stopPropagation();
-    await updateLessonStatusM({
-      refetchQueries: ['Lessons'],
-      variables: { id, status: 'PENDING_PUBLISH' },
-    });
-  };
-
   return (
     <div className="p-3 rounded-lg border-gray-200 border" key={lesson.id}>
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"
-          href="/"
-          onClick={(e) => handleClick(e, lesson.id)}
+          href={`/lessons/start/${lesson.id}`}
         >
           {lesson.title}
         </a>
@@ -111,9 +82,12 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       </div>
       <h3 className="text-xs">By: {lesson.owner.username}</h3>
       <div className="flex justify-between mt-4 text-xs">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="grid grid-cols-2 gap-0.5">
-            <Icon className="text-gray-500" name="users" />{' '}
+        <div
+          aria-label={`${lesson.students?.length} Students`}
+          className="hint--top hint--no-animate"
+        >
+          <div className="flex">
+            <Icon className="text-gray-500 mr-1 cursor-auto" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
         </div>

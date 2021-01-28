@@ -80,7 +80,6 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                       onClick={(e) => publishLesson(e, lesson.id)}
                       role="menuitem"
                     >
-                      <Icon className="text-blue-500 mr-2" name="rocket" />
                       🚀&nbsp;<span>Publish Lesson</span>
                     </button>
                     <button
@@ -106,9 +105,12 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       </div>
       <h3 className="text-xs">By: {lesson.owner.username}</h3>
       <div className="flex justify-between mt-4 text-xs">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="grid grid-cols-2 gap-0.5">
-            <Icon className="text-gray-500" name="users" />{' '}
+        <div
+          aria-label={`${lesson.students?.length} Students`}
+          className="hint--top hint--no-animate"
+        >
+          <div className="flex">
+            <Icon className="text-gray-500 mr-1 cursor-auto" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
         </div>

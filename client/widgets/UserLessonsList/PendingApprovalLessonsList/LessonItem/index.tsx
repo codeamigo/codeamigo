@@ -3,11 +3,16 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
-import { LessonsQuery, useDeleteLessonMutation } from '👨‍💻generated/graphql';
+import {
+  LessonsQuery,
+  useDeleteLessonMutation,
+  useUpdateLessonStatusMutation,
+} from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonItem: React.FC<Props> = ({ lesson }) => {
   const [deleteLessonM] = useDeleteLessonMutation();
+  const [updateLessonStatusM] = useUpdateLessonStatusMutation();
   const router = useRouter();
 
   const deleteLesson = async (
@@ -24,12 +29,26 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
     }
   };
 
+  const unpublishLesson = async (
+    e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>,
+    id: number
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    router.push(`/lessons/edit/${lesson.id}`);
+    await updateLessonStatusM({
+      refetchQueries: ['Lessons'],
+      variables: { id, status: 'EDITTING' },
+    });
+  };
+
   return (
     <div className="p-3 rounded-lg border-gray-200 border" key={lesson.id}>
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"
-          href={`/lessons/edit/${lesson.id}`}
+          href="/"
+          onClick={(e) => unpublishLesson(e, lesson.id)}
         >
           {lesson.title}
         </a>
@@ -61,7 +80,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                   >
                     <button
                       className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => router.push(`/lessons/edit/${lesson.id}`)}
+                      onClick={(e) => unpublishLesson(e, lesson.id)}
                       role="menuitem"
                     >
                       📝&nbsp;<span>Edit Lesson</span>
@@ -82,9 +101,12 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       </div>
       <h3 className="text-xs">By: {lesson.owner.username}</h3>
       <div className="flex justify-between mt-4 text-xs">
-        <div className="grid grid-cols-2 gap-2">
-          <div className="grid grid-cols-2 gap-0.5">
-            <Icon className="text-gray-500" name="users" />{' '}
+        <div
+          aria-label={`${lesson.students?.length} Students`}
+          className="hint--top hint--no-animate"
+        >
+          <div className="flex">
+            <Icon className="text-gray-500 mr-1 cursor-auto" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
         </div>
