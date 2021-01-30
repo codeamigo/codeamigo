@@ -39,7 +39,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     );
 
     setActiveCheckpoint(checkpoint);
-  }, [step.currentCheckpointId]);
+  }, [step.currentCheckpointId, data?.checkpoints]);
 
   // When user changes the active checkpoint
   useEffect(() => {
