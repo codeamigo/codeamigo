@@ -114,6 +114,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   );
   const canSetCheckpoint = (checkpoint: RegularCheckpointFragment) =>
     isEditting ||
+    checkpoint.isTested ||
     checkpoint.isCompleted ||
     checkpoint.id === step.currentCheckpointId;
 
@@ -144,7 +145,10 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                     />
                     <span>Checkpoint {i + 1} </span>
                   </span>
-                  {!isEditting && checkpoint.isCompleted && <span>✅</span>}
+                  {!isEditting &&
+                    (checkpoint.isTested || checkpoint.isCompleted) && (
+                      <span>✅</span>
+                    )}
                   {isEditting && (
                     <div className="flex">
                       <Icon

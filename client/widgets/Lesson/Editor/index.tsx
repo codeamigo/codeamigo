@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsDocument,
   CheckpointsQuery,
@@ -100,7 +101,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     }) => {
       if (message.data.from !== 'preview') return;
       if (message.data.type !== 'test') return;
-      isTestingVar(false);
       // don't pass checkpoint if editting
       if (rest.isEditting) return;
 
@@ -114,6 +114,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });
+          isTestingVar(false);
         }
       } catch (e) {
         console.log(e);
@@ -259,23 +260,15 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     []
   );
 
-  const testCode = useCallback(
-    debounce(
-      (
-        files: FilesType,
-        dependencies: FilesType,
-        runPath: string,
-        value: string
-      ) => {
-        if (isTesting) return;
-        isTestingVar(true);
-        postMessage(files, dependencies, runPath, value, true);
-      },
-      1500
-    ),
-    []
-  );
-
+  const testCode = (
+    files: FilesType,
+    dependencies: FilesType,
+    runPath: string,
+    value: string
+  ) => {
+    isTestingVar(true);
+    postMessage(files, dependencies, runPath, value, true);
+  };
   async function getDeps() {
     await updateDependencies();
   }
@@ -417,6 +410,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
+  const isTested = currentCheck?.isTested || !currentCheck;
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
@@ -444,17 +438,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
               });
               updateFile(currentPath, value || '');
               postCode(files, dependencies, currentPath, value || '');
-              if (currentCheck) {
-                testCode(
-                  {
-                    ...files,
-                    [currentPath]: value || '',
-                  },
-                  dependencies,
-                  currentCheck?.test,
-                  files[currentCheck.test]
-                );
-              }
             }}
             options={{
               automaticLayout: true,
@@ -468,14 +451,30 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       </div>
       <div className="h-16 flex justify-end px-3 items-center w-full bg-gray-900">
         <button
-          className="justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-          disabled={
-            !step.checkpoints?.find(({ id }) => id === step.currentCheckpointId)
-              ?.isTested
+          className={`justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-white disabled:opacity-50 ${
+            isTested
+              ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+              : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+          }`}
+          disabled={isTesting}
+          onClick={() =>
+            isTested
+              ? completeCheckpoint()
+              : testCode(
+                  files,
+                  dependencies,
+                  currentCheck!.test,
+                  files[currentCheck!.test]
+                )
           }
-          onClick={() => completeCheckpoint()}
         >
-          Next
+          {isTesting ? (
+            <Icon className="animate-spin" name="cw" />
+          ) : isTested ? (
+            <>Next</>
+          ) : (
+            <>Test</>
+          )}
         </button>
       </div>
     </div>
