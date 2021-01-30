@@ -6,10 +6,7 @@ import gfm from 'remark-gfm';
 
 import {
   RegularStepFragment,
-  SessionDocument,
   SessionQuery,
-  useCompleteStepMutation,
-  useSetNextStepMutation,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
 
@@ -22,8 +19,6 @@ const Instructions: React.FC<Props> = (props) => {
     isEditting ? 'editor' : 'preview'
   );
   const [updateStepM] = useUpdateStepInstructionsMutation();
-  const [completeStep] = useCompleteStepMutation();
-  const [setNextStep] = useSetNextStepMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
@@ -37,72 +32,6 @@ const Instructions: React.FC<Props> = (props) => {
   useEffect(() => {
     setMarkdown(step.instructions);
   }, [step.id]);
-
-  const nextStep = () => {
-    if (!props.session?.steps) return;
-    if (!props.setCurrentStepId) return;
-
-    const next = props.session.steps.find(
-      (nextStep) => nextStep.createdAt > step.createdAt
-    );
-
-    const q = {
-      query: SessionDocument,
-      variables: { lessonId: props.session?.lesson.id },
-    };
-
-    if (next) {
-      setNextStep({
-        update: (store) => {
-          const sessionData = store.readQuery<SessionQuery>(q);
-          if (!sessionData?.session) return;
-
-          store.writeQuery<SessionQuery>({
-            ...q,
-            data: {
-              session: {
-                ...sessionData.session,
-                currentStep: next.id,
-              },
-            },
-          });
-        },
-        variables: { sessionId: props.session.id, stepId: next.id },
-      });
-    }
-
-    completeStep({
-      update: (store, { data }) => {
-        const sessionData = store.readQuery<SessionQuery>(q);
-        if (!sessionData?.session) return;
-        if (!sessionData?.session?.steps) return;
-
-        store.writeQuery<SessionQuery>({
-          ...q,
-          data: {
-            session: {
-              ...sessionData.session,
-              steps: sessionData.session.steps.map((step) => {
-                if (step.id !== data?.completeStep?.id) return step;
-
-                return {
-                  ...step,
-                  isCompleted: true,
-                };
-              }),
-            },
-          },
-        });
-      },
-      variables: { id: props.step.id },
-    });
-
-    if (!next) return;
-
-    // TODO: replace setCurrentStepId w/ session.currentStep
-    // isEditting ? set lesson current step : set session
-    props.setCurrentStepId(next?.id);
-  };
 
   return (
     <>
@@ -159,7 +88,7 @@ const Instructions: React.FC<Props> = (props) => {
           )}
         </div>
         <div className="flex flex-col relative">
-          <Checkpoints {...props} nextStep={nextStep} />
+          <Checkpoints {...props} />
         </div>
       </div>
     </>
@@ -168,8 +97,7 @@ const Instructions: React.FC<Props> = (props) => {
 
 type Props = {
   isEditting?: boolean;
-  session?: SessionQuery['session'];
-  setCurrentStepId?: (n: number) => void;
+  nextStep: () => void;
   step: RegularStepFragment;
 };
 

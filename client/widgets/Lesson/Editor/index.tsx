@@ -24,7 +24,7 @@ import { getExtension } from './utils';
 const FILE = 'file:///';
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
-const Editor: React.FC<Props> = ({ step, ...rest }) => {
+const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
@@ -114,6 +114,17 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });
+
+          // if it's the last checkpoint also complete it
+          if (
+            step.checkpoints &&
+            step.checkpoints.findIndex(
+              ({ id }) => id === step.currentCheckpointId
+            ) ===
+              step.checkpoints.length - 1
+          ) {
+            await completeCheckpoint();
+          }
           isTestingVar(false);
         }
       } catch (e) {
@@ -411,6 +422,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     ({ id }) => id === step.currentCheckpointId
   );
   const isTested = currentCheck?.isTested || !currentCheck;
+  const isStepComplete = !step.checkpoints?.find(
+    (checkpoint) => checkpoint.isCompleted === false
+  );
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
@@ -464,7 +478,9 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           }`}
           disabled={isTesting}
           onClick={() =>
-            isTested
+            isStepComplete
+              ? nextStep()
+              : isTested
               ? completeCheckpoint()
               : testCode(
                   files,
@@ -489,6 +505,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
 type Props = {
   isEditting?: boolean;
+  nextStep: () => void;
   step: RegularStepFragment;
 };
 

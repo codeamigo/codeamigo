@@ -59,7 +59,7 @@ const Console: React.FC<Props> = ({ step }) => {
 
   const resetList = () => {
     if (activeTab === 'console') {
-      // setLogList([]);
+      setLogList([]);
     } else {
       setTestList([]);
     }
@@ -96,9 +96,6 @@ const Console: React.FC<Props> = ({ step }) => {
               role="button"
             >
               Tests
-            </li>
-            <li className="flex text-white text-xs px-2 py-1.5 list-none cursor-pointer transition-all duration-150">
-              {isTesting && <Icon className="animate-spin" name="cw" />}
             </li>
           </ul>
           <div className="flex list-none pr-2">
