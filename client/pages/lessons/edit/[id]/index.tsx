@@ -46,11 +46,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         steps={data.lesson.steps}
       />
       <div className="w-full overflow-hidden lg:h-screen">
-        <Info
-          isEditting
-          lesson={data.lesson}
-          toggleShowSteps={toggleShowSteps}
-        />
+        <Info isEditting lesson={data.lesson} />
         <Step
           currentStepId={stepId}
           isEditting
