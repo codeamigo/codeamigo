@@ -519,7 +519,10 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
               : isTested
               ? completeCheckpoint()
               : testCode(
-                  files,
+                  {
+                    ...files,
+                    [currentPath]: files[currentPath],
+                  },
                   dependencies,
                   currentCheck!.test,
                   files[currentCheck!.test]
