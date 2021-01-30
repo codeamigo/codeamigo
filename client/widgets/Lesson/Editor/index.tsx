@@ -414,7 +414,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
-      <div className="h-80 lg:flex-1 flex border border-gray-200 whitespace-nowrap">
+      <div className="h-80 lg:flex-1 flex border border-gray-200 border-t-0 border-b-0 whitespace-nowrap">
         <div className="w-4/12 border-r border-gray-200">
           <EditorFiles
             createFile={createFile}
@@ -449,7 +449,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           />
         </div>
       </div>
-      <div className="h-16 flex justify-end px-3 items-center w-full bg-gray-900">
+      <div
+        className="h-16 flex justify-end px-3 items-center w-full bg-gray-900"
+        style={{
+          position: 'relative',
+          top: '-4px',
+        }}
+      >
         <button
           className={`justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-white disabled:opacity-50 ${
             isTested

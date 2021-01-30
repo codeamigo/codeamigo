@@ -1,4 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
+import { relative } from 'path';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
@@ -58,19 +59,21 @@ const Console: React.FC<Props> = ({ step }) => {
 
   const resetList = () => {
     if (activeTab === 'console') {
-      setLogList([]);
+      // setLogList([]);
     } else {
       setTestList([]);
     }
   };
 
-  const list = activeTab === 'console' ? logList : testList;
+  const list = activeTab === 'tests' ? testList : logList;
 
   return (
     <div
-      className="flex flex-col overflow-hidden min-h-7 transition-all duration-500 bg-gray-700"
+      className="flex flex-col overflow-hidden min-h-16 transition-all duration-500 bg-gray-700"
       style={{
         height: activeTab ? '100%' : '0%',
+        position: 'relative',
+        top: '-4px',
       }}
     >
       <div className="bg-gray-900">
@@ -79,7 +82,7 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'console' ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+              } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('console')}
               role="button"
             >
@@ -88,7 +91,7 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'tests' ? 'bg-gray-700' : ''
-              } text-white text-xs px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+              } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
             >

@@ -21,11 +21,11 @@ module.exports = {
       minHeight: {
         0: '0',
         '1/5': '20%',
+        16: '4rem',
         '2/5': '40%',
         24: '6rem',
         '3/5': '60%',
         '4/5': '80%',
-        7: '2rem',
       },
       transition: {
         height: 'height',
