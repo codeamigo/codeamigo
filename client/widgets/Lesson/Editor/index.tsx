@@ -27,6 +27,7 @@ const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
+  const submitRef = useRef<any>();
 
   const [files, setFiles] = useState({} as FilesType);
   const [dependencies, setDependencies] = useState({} as FilesType);
@@ -368,6 +369,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         editorRef.current.getAction('editor.action.formatDocument').run();
       }
     );
+
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
+      () => {
+        submitRef.current.click();
+      }
+    );
   };
 
   const setupModels = () => {
@@ -516,6 +524,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                   files[currentCheck!.test]
                 )
           }
+          ref={submitRef}
         >
           {isTesting ? (
             <Icon className="animate-spin" name="cw" />
