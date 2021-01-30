@@ -26,6 +26,20 @@ mutation UpdateStepName(
   }
 }
 
+mutation UpdateStepCheckpoint(
+  $id: Float!
+  $checkpointId: Float!
+) {
+  updateStepCheckpoint(
+    options: {
+      id: $id
+      checkpointId: $checkpointId
+    }
+  ) {
+    id
+  }
+}
+
 mutation CompleteStep(
   $id: Float!
 ) {

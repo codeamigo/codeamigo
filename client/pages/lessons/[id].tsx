@@ -75,7 +75,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
         steps={sessionData.session.steps}
       />
       <div className="w-full overflow-hidden lg:h-screen">
-        <Info lesson={data.lesson} toggleShowSteps={toggleShowSteps} />
+        <Info lesson={data.lesson} />
         <Step
           currentStepId={stepId}
           lesson={data.lesson}

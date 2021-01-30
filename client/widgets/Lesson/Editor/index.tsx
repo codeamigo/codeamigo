@@ -7,9 +7,9 @@ import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import {
-  CheckpointsDocument,
-  CheckpointsQuery,
   RegularStepFragment,
+  StepDocument,
+  StepQuery,
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
@@ -102,7 +102,10 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       if (message.data.from !== 'preview') return;
       if (message.data.type !== 'test') return;
       // don't pass checkpoint if editting
-      if (rest.isEditting) return;
+      if (rest.isEditting) {
+        isTestingVar(false);
+        return;
+      }
 
       try {
         const result = JSON.parse(message.data.result);
@@ -125,8 +128,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           ) {
             await completeCheckpoint();
           }
-          isTestingVar(false);
         }
+        isTestingVar(false);
       } catch (e) {
         console.log(e);
       }
@@ -142,7 +145,31 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     if (rest.isEditting) return;
     if (!step.currentCheckpointId) return;
 
+    const q = {
+      query: StepDocument,
+      variables: { id: step.id },
+    };
     await completeCheckpointM({
+      update: (store, { data }) => {
+        const stepData = store.readQuery<StepQuery>(q);
+        if (!stepData?.step) return;
+
+        // TODO: refactor this
+        const nextCheckpointId = stepData?.step?.checkpoints?.find(
+          ({ isCompleted }) => !isCompleted
+        )?.id;
+
+        store.writeQuery<StepQuery>({
+          ...q,
+          data: {
+            step: {
+              ...stepData.step,
+              currentCheckpointId:
+                nextCheckpointId || stepData.step.currentCheckpointId,
+            },
+          },
+        });
+      },
       variables: { id: step.currentCheckpointId },
     });
   };

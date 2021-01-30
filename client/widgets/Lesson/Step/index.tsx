@@ -99,7 +99,7 @@ const Step: React.FC<Props> = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:h-full-minus">
-        <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-1/4">
+        <div className="flex flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4">
           <Instructions nextStep={nextStep} step={data.step} {...rest} />
         </div>
         <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">

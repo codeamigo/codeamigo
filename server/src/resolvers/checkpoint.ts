@@ -124,9 +124,13 @@ export class CheckpointResolver {
     checkpoint.isCompleted = true;
     await checkpoint.save();
 
-    const step = await Step.findOne(checkpoint.step.id, {
-      relations: ["checkpoints"],
-    });
+    const step = await Step.createQueryBuilder()
+      .where("Step.id = :stepId", {
+        stepId: checkpoint.step.id,
+      })
+      .leftJoinAndSelect("Step.checkpoints", "checkpoints")
+      .addOrderBy("checkpoints.createdAt", "ASC")
+      .getOne();
 
     if (!step) {
       return checkpoint;
@@ -135,6 +139,8 @@ export class CheckpointResolver {
     const nextCheckpoint = step.checkpoints.find(
       ({ isCompleted }) => !isCompleted
     );
+
+    console.log("NEXT", nextCheckpoint);
 
     step.currentCheckpointId = nextCheckpoint?.id || null;
     await Step.save(step);

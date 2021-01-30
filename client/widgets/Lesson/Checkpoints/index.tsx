@@ -8,19 +8,21 @@ import Icon from '👨‍💻components/Icon';
 import {
   RegularCheckpointFragment,
   RegularStepFragment,
+  StepDocument,
+  StepQuery,
   useCheckpointsQuery,
-  useCreateCheckpointMutation,
   useDeleteCheckpointMutation,
   useUpdateCheckpointMutation,
+  useUpdateStepCheckpointMutation,
 } from '👨‍💻generated/graphql';
 
 const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const { data, loading } = useCheckpointsQuery({
     variables: { stepId: step.id },
   });
-  const [createCheckpointM] = useCreateCheckpointMutation();
   const [updateCheckpointM] = useUpdateCheckpointMutation();
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
+  const [updateStepCheckpoint] = useUpdateStepCheckpointMutation();
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
   );
@@ -29,10 +31,9 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   >(undefined);
   const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
-  // When user changes the editor file to a spec
+  // When user COMPLETES a checkpoint
   useEffect(() => {
     if (!data?.checkpoints) return;
-    // if (!isEditting) return;
 
     const checkpoint = data.checkpoints.find(
       ({ id }) => id === step.currentCheckpointId
@@ -46,6 +47,30 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     setMarkdown(activeCheckpoint?.description);
     if (isEditting) {
       toggleView('editor');
+    }
+    if (activeCheckpoint) {
+      const q = {
+        query: StepDocument,
+        variables: { id: step.id },
+      };
+
+      updateStepCheckpoint({
+        update: (store) => {
+          const stepData = store.readQuery<StepQuery>(q);
+          if (!stepData?.step) return;
+
+          store.writeQuery<StepQuery>({
+            ...q,
+            data: {
+              step: {
+                ...stepData.step,
+                currentCheckpointId: activeCheckpoint.id,
+              },
+            },
+          });
+        },
+        variables: { checkpointId: activeCheckpoint.id, id: step.id },
+      });
     }
   }, [activeCheckpoint?.id]);
 
@@ -65,20 +90,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   if (!data?.checkpoints) return null;
 
   const { checkpoints } = data;
-
-  const createCheckpoint = async () => {
-    const len = data?.checkpoints?.length || 0;
-
-    const { data: newCheckpoint } = await createCheckpointM({
-      awaitRefetchQueries: true,
-      refetchQueries: ['Checkpoints', 'Step'],
-      variables: { checkpointId: len + 1, stepId: step.id },
-    });
-
-    if (newCheckpoint?.createCheckpoint) {
-      setCheckpoint(newCheckpoint.createCheckpoint);
-    }
-  };
 
   const deleteCheckpoint = async (id: number) => {
     const len = data?.checkpoints?.length || 0;
@@ -223,15 +234,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
           })
         : null}
       <div className="flex justify-end p-3">
-        {isEditting && (
-          <button
-            className="text-xs font-medium inline-flex justify-center py-1.5 px-2.5 border border-transparent shadow-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            onClick={createCheckpoint}
-            type="button"
-          >
-            Add Checkpoint
-          </button>
-        )}
         {!isEditting && isStepComplete && (
           <button
             className="text-xs font-medium inline-flex justify-center py-1.5 px-2.5 border border-transparent shadow-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"

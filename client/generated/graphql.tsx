@@ -196,6 +196,7 @@ export type Mutation = {
   changePassword: UserResponse;
   createStep?: Maybe<Step>;
   completeStep?: Maybe<Step>;
+  updateStepCheckpoint?: Maybe<Step>;
   updateStepInstructions?: Maybe<Step>;
   updateStepName?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
@@ -302,7 +303,12 @@ export type MutationCreateStepArgs = {
 
 
 export type MutationCompleteStepArgs = {
-  options: CompleteStepInput;
+  options: UpdateStepInput;
+};
+
+
+export type MutationUpdateStepCheckpointArgs = {
+  options: UpdateStepCheckpointInput;
 };
 
 
@@ -417,8 +423,13 @@ export type CreateStepInput = {
   template?: Maybe<Scalars['String']>;
 };
 
-export type CompleteStepInput = {
+export type UpdateStepInput = {
   id: Scalars['Float'];
+};
+
+export type UpdateStepCheckpointInput = {
+  id: Scalars['Float'];
+  checkpointId: Scalars['Float'];
 };
 
 export type StepInstructionsInput = {
@@ -898,6 +909,20 @@ export type UpdateStepNameMutationVariables = Exact<{
 export type UpdateStepNameMutation = (
   { __typename?: 'Mutation' }
   & { updateStepName?: Maybe<(
+    { __typename?: 'Step' }
+    & Pick<Step, 'id'>
+  )> }
+);
+
+export type UpdateStepCheckpointMutationVariables = Exact<{
+  id: Scalars['Float'];
+  checkpointId: Scalars['Float'];
+}>;
+
+
+export type UpdateStepCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStepCheckpoint?: Maybe<(
     { __typename?: 'Step' }
     & Pick<Step, 'id'>
   )> }
@@ -2078,6 +2103,39 @@ export function useUpdateStepNameMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateStepNameMutationHookResult = ReturnType<typeof useUpdateStepNameMutation>;
 export type UpdateStepNameMutationResult = Apollo.MutationResult<UpdateStepNameMutation>;
 export type UpdateStepNameMutationOptions = Apollo.BaseMutationOptions<UpdateStepNameMutation, UpdateStepNameMutationVariables>;
+export const UpdateStepCheckpointDocument = gql`
+    mutation UpdateStepCheckpoint($id: Float!, $checkpointId: Float!) {
+  updateStepCheckpoint(options: {id: $id, checkpointId: $checkpointId}) {
+    id
+  }
+}
+    `;
+export type UpdateStepCheckpointMutationFn = Apollo.MutationFunction<UpdateStepCheckpointMutation, UpdateStepCheckpointMutationVariables>;
+
+/**
+ * __useUpdateStepCheckpointMutation__
+ *
+ * To run a mutation, you first call `useUpdateStepCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStepCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStepCheckpointMutation, { data, loading, error }] = useUpdateStepCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      checkpointId: // value for 'checkpointId'
+ *   },
+ * });
+ */
+export function useUpdateStepCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStepCheckpointMutation, UpdateStepCheckpointMutationVariables>) {
+        return Apollo.useMutation<UpdateStepCheckpointMutation, UpdateStepCheckpointMutationVariables>(UpdateStepCheckpointDocument, baseOptions);
+      }
+export type UpdateStepCheckpointMutationHookResult = ReturnType<typeof useUpdateStepCheckpointMutation>;
+export type UpdateStepCheckpointMutationResult = Apollo.MutationResult<UpdateStepCheckpointMutation>;
+export type UpdateStepCheckpointMutationOptions = Apollo.BaseMutationOptions<UpdateStepCheckpointMutation, UpdateStepCheckpointMutationVariables>;
 export const CompleteStepDocument = gql`
     mutation CompleteStep($id: Float!) {
   completeStep(options: {id: $id}) {

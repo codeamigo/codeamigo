@@ -47,9 +47,17 @@ class StepNameInput {
 }
 
 @InputType()
-class CompleteStepInput {
+class UpdateStepInput {
   @Field()
   id: number;
+}
+
+@InputType()
+class UpdateStepCheckpointInput {
+  @Field()
+  id: number;
+  @Field()
+  checkpointId: number;
 }
 
 @InputType()
@@ -169,7 +177,7 @@ export class StepResolver {
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
   async completeStep(
-    @Arg("options") options: CompleteStepInput
+    @Arg("options") options: UpdateStepInput
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
@@ -177,6 +185,22 @@ export class StepResolver {
     }
 
     await Step.update({ id: options.id }, { ...step, isCompleted: true });
+
+    return step;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateStepCheckpoint(
+    @Arg("options") options: UpdateStepCheckpointInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    if (!step) {
+      return null;
+    }
+
+    step.currentCheckpointId = options.checkpointId;
+    await Step.save(step);
 
     return step;
   }

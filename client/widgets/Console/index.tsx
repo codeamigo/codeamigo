@@ -1,8 +1,5 @@
-import { useReactiveVar } from '@apollo/client';
-import { relative } from 'path';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import { RegularStepFragment, useCheckpointsQuery } from '👨‍💻generated/graphql';
 import TestSummary from '👨‍💻widgets/Console/TestsSummary';
@@ -17,7 +14,6 @@ const Console: React.FC<Props> = ({ step }) => {
     fetchPolicy: 'cache-and-network',
     variables: { stepId: step.id },
   });
-  const isTesting = useReactiveVar(isTestingVar);
   const [logList, setLogList] = useState<FromPreviewMsgType[]>([]);
   const [testList, setTestList] = useState<FromPreviewMsgType[]>([]);
   const [activeTab, setActiveTab] = useState<TabType | ''>('');

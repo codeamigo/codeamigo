@@ -27,12 +27,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
     <div className="w-full py-2 px-4 flex items-center bg-gray-800">
       <div className="flex w-1/4">
         <Icon
-          className="text-white cursor-pointer text-xl"
-          name="list"
-          onClick={rest.toggleShowSteps}
-        />
-        <Icon
-          className="text-white cursor-pointer text-md ml-4"
+          className="text-white text-lg cursor-pointer text-md"
           name="home"
           onClick={() => router.push('/')}
         />
@@ -68,7 +63,6 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
 type Props = {
   isEditting?: boolean;
   lesson: LessonQuery['lesson'];
-  toggleShowSteps: () => void;
 };
 
 export default Info;

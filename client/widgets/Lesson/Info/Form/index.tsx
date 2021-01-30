@@ -3,7 +3,7 @@ import React from 'react';
 
 import { LessonQuery, useUpdateLessonTitleMutation } from '👨‍💻generated/graphql';
 
-const Form: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
+const Form: React.FC<Props> = ({ lesson }) => {
   const [updateLessonTitleM] = useUpdateLessonTitleMutation();
 
   const updateLessonTitle = debounce(
@@ -30,7 +30,6 @@ const Form: React.FC<Props> = ({ lesson, toggleShowSteps }) => {
 
 type Props = {
   lesson: LessonQuery['lesson'];
-  toggleShowSteps: () => void;
 };
 
 export default Form;

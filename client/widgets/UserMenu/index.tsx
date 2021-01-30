@@ -30,7 +30,7 @@ const UserMenu: React.FC<Props> = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="text-white h-8 w-8 rounded-full"
+                    className="text-white text-lg h-8 w-8 rounded-full"
                     name="user"
                   />
                 </Menu.Button>

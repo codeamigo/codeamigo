@@ -25,8 +25,14 @@ const Steps: React.FC<Props> = ({
   const [createStepM] = useCreateStepMutation();
   const [updateStepM] = useUpdateStepNameMutation();
   const [deleteStepM] = useDeleteStepMutation();
+
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
+  const [stepsHeight, setStepsHeight] = useState<string>(
+    // 3rem => header
+    // 4rem => footer
+    'calc(100% - 3rem - 4rem)'
+  );
 
   useEffect(() => {
     if (isAdding) {
@@ -35,6 +41,25 @@ const Steps: React.FC<Props> = ({
       }, 0);
     }
   }, [isAdding]);
+
+  useEffect(() => {
+    const changeStepsHeight = () => {
+      const instructions = document.getElementById('instructions');
+      const height = instructions?.offsetHeight || 0;
+      const newHeight = `${height - 4}px`;
+
+      if (newHeight !== stepsHeight) {
+        setStepsHeight(newHeight);
+      }
+    };
+
+    setTimeout(() => {
+      changeStepsHeight();
+    }, 100);
+    window.addEventListener('resize', changeStepsHeight);
+
+    return () => window.removeEventListener('resize', changeStepsHeight);
+  }, []);
 
   const createStep = async (name: string) => {
     const step = await createStepM({
@@ -109,7 +134,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="w-full absolute top-12 left-0 bg-white bg-opacity-90 py-2 px-4 z-10 md:w-1/4"
+      className="w-full absolute top-12 left-0 bg-white bg-opacity-90 py-2 px-4 z-10 lg:w-1/4"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -118,7 +143,7 @@ const Steps: React.FC<Props> = ({
       leaveTo="-translate-x-full"
       show={showSteps}
       style={{
-        height: 'calc(100% - 3rem)',
+        height: stepsHeight,
       }}
     >
       <ol>
