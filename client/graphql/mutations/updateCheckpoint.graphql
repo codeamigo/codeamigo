@@ -19,3 +19,13 @@ mutation CompleteCheckpoint(
     ...RegularCheckpoint
   }
 }
+
+mutation PassCheckpoint(
+  $id: Float!
+) {
+  passCheckpoint(
+    id: $id
+  ) {
+    ...RegularCheckpoint
+  }
+}

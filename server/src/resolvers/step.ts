@@ -84,6 +84,19 @@ export class StepResolver {
       .addOrderBy("checkpoints.createdAt", "ASC")
       .getOne();
 
+    if (!step) {
+      return undefined;
+    }
+
+    const currentCheckpoint = step.checkpoints.find(
+      (checkpoint) => !checkpoint.isCompleted
+    );
+
+    if (!step.currentCheckpointId) {
+      step.currentCheckpointId = currentCheckpoint?.id || null;
+      await Step.save(step);
+    }
+
     return step;
   }
 

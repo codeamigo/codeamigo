@@ -78,6 +78,7 @@ export type Checkpoint = {
   updatedAt: Scalars['String'];
   description: Scalars['String'];
   isCompleted: Scalars['Boolean'];
+  isTested: Scalars['Boolean'];
   test: Scalars['String'];
   moduleId: Scalars['Float'];
 };
@@ -94,18 +95,18 @@ export type CodeModule = {
 
 export type Step = {
   __typename?: 'Step';
-  checkpoints?: Maybe<Array<Checkpoint>>;
-  codeModules?: Maybe<Array<CodeModule>>;
-  createdAt: Scalars['String'];
-  currentCheckpointId?: Maybe<Scalars['Float']>;
-  dependencies?: Maybe<Array<Dependency>>;
   id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   instructions?: Maybe<Scalars['String']>;
+  currentCheckpointId?: Maybe<Scalars['Float']>;
   isCompleted?: Maybe<Scalars['Boolean']>;
   lesson: Lesson;
-  name?: Maybe<Scalars['String']>;
   session: Session;
-  updatedAt: Scalars['String'];
+  codeModules?: Maybe<Array<CodeModule>>;
+  checkpoints?: Maybe<Array<Checkpoint>>;
+  dependencies?: Maybe<Array<Dependency>>;
 };
 
 export type Lesson = {
@@ -179,6 +180,7 @@ export type Mutation = {
   createCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
   completeCheckpoint?: Maybe<Checkpoint>;
+  passCheckpoint?: Maybe<Checkpoint>;
   deleteCheckpoint: Scalars['Boolean'];
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
@@ -220,6 +222,11 @@ export type MutationUpdateCheckpointArgs = {
 
 
 export type MutationCompleteCheckpointArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationPassCheckpointArgs = {
   id: Scalars['Float'];
 };
 
@@ -453,7 +460,7 @@ export type Modal = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'test' | 'description' | 'createdAt' | 'isCompleted'>
+  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'isCompleted' | 'isTested' | 'test'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -503,7 +510,7 @@ export type RegularMeFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'name' | 'instructions' | 'isCompleted' | 'currentCheckpointId'>
+  & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'instructions' | 'isCompleted' | 'name'>
   & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
@@ -779,6 +786,19 @@ export type CompleteCheckpointMutationVariables = Exact<{
 export type CompleteCheckpointMutation = (
   { __typename?: 'Mutation' }
   & { completeCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )> }
+);
+
+export type PassCheckpointMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type PassCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { passCheckpoint?: Maybe<(
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
   )> }
@@ -1114,20 +1134,21 @@ export const RegularCodeModuleFragmentDoc = gql`
 export const RegularCheckpointFragmentDoc = gql`
     fragment RegularCheckpoint on Checkpoint {
   id
-  test
-  description
   createdAt
+  description
   isCompleted
+  isTested
+  test
 }
     `;
 export const RegularStepFragmentDoc = gql`
     fragment RegularStep on Step {
   id
   createdAt
-  name
+  currentCheckpointId
   instructions
   isCompleted
-  currentCheckpointId @client
+  name
   codeModules {
     ...RegularCodeModule
   }
@@ -1793,6 +1814,38 @@ export function useCompleteCheckpointMutation(baseOptions?: Apollo.MutationHookO
 export type CompleteCheckpointMutationHookResult = ReturnType<typeof useCompleteCheckpointMutation>;
 export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
 export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
+export const PassCheckpointDocument = gql`
+    mutation PassCheckpoint($id: Float!) {
+  passCheckpoint(id: $id) {
+    ...RegularCheckpoint
+  }
+}
+    ${RegularCheckpointFragmentDoc}`;
+export type PassCheckpointMutationFn = Apollo.MutationFunction<PassCheckpointMutation, PassCheckpointMutationVariables>;
+
+/**
+ * __usePassCheckpointMutation__
+ *
+ * To run a mutation, you first call `usePassCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePassCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [passCheckpointMutation, { data, loading, error }] = usePassCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function usePassCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<PassCheckpointMutation, PassCheckpointMutationVariables>) {
+        return Apollo.useMutation<PassCheckpointMutation, PassCheckpointMutationVariables>(PassCheckpointDocument, baseOptions);
+      }
+export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpointMutation>;
+export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
+export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
     mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
   updateCodeModule(id: $id, options: {name: $name, value: $value}) {

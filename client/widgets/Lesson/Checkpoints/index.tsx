@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import Icon from '👨‍💻components/Icon';
 import {
   RegularCheckpointFragment,
@@ -30,27 +29,10 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   >(undefined);
   const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
-  // When checkpoint updates (isCompleted)
-  useEffect(() => {
-    if (!data?.checkpoints) return;
-    if (isEditting) return;
-
-    const nextCheckpoint = data.checkpoints.find(
-      ({ isCompleted }) => !isCompleted
-    );
-
-    currentCheckpointIdVar(nextCheckpoint?.id || null);
-    setActiveCheckpoint(nextCheckpoint);
-
-    return () => {
-      currentCheckpointIdVar(null);
-    };
-  }, [data?.checkpoints]);
-
   // When user changes the editor file to a spec
   useEffect(() => {
     if (!data?.checkpoints) return;
-    if (!isEditting) return;
+    // if (!isEditting) return;
 
     const checkpoint = data.checkpoints.find(
       ({ id }) => id === step.currentCheckpointId
@@ -64,7 +46,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     setMarkdown(activeCheckpoint?.description);
     if (isEditting) {
       toggleView('editor');
-      currentCheckpointIdVar(activeCheckpoint?.id || null);
     }
   }, [activeCheckpoint?.id]);
 

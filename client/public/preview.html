@@ -41,7 +41,7 @@
     console.test = function (message) {
       let msg = typeof message === 'string' ? message : JSON.stringify(message)
       window.parent.postMessage({ result: msg, from: 'preview', type: 'test' }, '*')
-      // oldlog.apply(console, arguments);
+      oldlog.apply(console, arguments);
     };
   })();
 

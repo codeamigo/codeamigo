@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
-import { currentCheckpointIdVar } from '👨‍💻apollo/cache/step';
 import {
   CheckpointsDocument,
   CheckpointsQuery,
@@ -13,6 +12,7 @@ import {
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
+  usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
@@ -37,7 +37,8 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
 
-  const [completeCheckpoint] = useCompleteCheckpointMutation();
+  const [completeCheckpointM] = useCompleteCheckpointMutation();
+  const [passCheckpoint] = usePassCheckpointMutation();
 
   useEffect(() => {
     return () => {
@@ -87,14 +88,6 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
     if (isEditorReady) {
       setModel(currentPath);
     }
-
-    // Change checkpoint
-    if (currentPath?.includes('spec')) {
-      const check = step?.checkpoints?.find(
-        (value) => value.test === currentPath
-      );
-      currentCheckpointIdVar(check?.id || null);
-    }
   }, [currentPath]);
 
   useEffect(() => {
@@ -102,13 +95,13 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
   }, [step.dependencies]);
 
   useEffect(() => {
-    const handleCompleteCheckpoint = async (message: {
+    const handlePassCheckpoint = async (message: {
       data: FromPreviewMsgType;
     }) => {
       if (message.data.from !== 'preview') return;
       if (message.data.type !== 'test') return;
       isTestingVar(false);
-      // don't complete checkpoint if editting
+      // don't pass checkpoint if editting
       if (rest.isEditting) return;
 
       try {
@@ -118,33 +111,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
           result[result.length - 1].status === 'pass' &&
           step.currentCheckpointId
         ) {
-          await completeCheckpoint({
-            update: (store) => {
-              const q = {
-                query: CheckpointsDocument,
-                variables: { stepId: step.id },
-              };
-              const checkpointsData = store.readQuery<CheckpointsQuery>(q);
-              if (!checkpointsData?.checkpoints) return;
-
-              store.writeQuery<CheckpointsQuery>({
-                ...q,
-                data: {
-                  checkpoints: [
-                    ...checkpointsData.checkpoints.map((checkpoint) => {
-                      if (checkpoint.id !== step.currentCheckpointId) {
-                        return checkpoint;
-                      }
-
-                      return {
-                        ...checkpoint,
-                        isCompleted: true,
-                      };
-                    }),
-                  ],
-                },
-              });
-            },
+          await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });
         }
@@ -153,11 +120,20 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
       }
     };
 
-    window.addEventListener('message', handleCompleteCheckpoint);
+    window.addEventListener('message', handlePassCheckpoint);
 
-    return () =>
-      window.removeEventListener('message', handleCompleteCheckpoint);
+    return () => window.removeEventListener('message', handlePassCheckpoint);
   }, [step.currentCheckpointId]);
+
+  const completeCheckpoint = async () => {
+    // don't complete checkpoint if editting
+    if (rest.isEditting) return;
+    if (!step.currentCheckpointId) return;
+
+    await completeCheckpointM({
+      variables: { id: step.currentCheckpointId },
+    });
+  };
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -444,30 +420,7 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
-      {/* <h3 className="flex h-6 absolute z-10 right-0">
-        <div className="flex">
-          {currentCheck && (
-            <button
-              className={`${
-                isTesting ? 'cursor-wait' : ''
-              } inline-flex items-center px-2 border border-transparent shadow-xs text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none disabled:opacity-50`}
-              disabled={isTesting}
-              onClick={() =>
-                testCode(
-                  files,
-                  dependencies,
-                  currentCheck.test,
-                  files[currentCheck.test]
-                )
-              }
-              type="button"
-            >
-              Test
-            </button>
-          )}
-        </div>
-      </h3> */}
-      <div className="h-80 lg:h-full flex border border-gray-200 whitespace-nowrap">
+      <div className="h-80 lg:flex-1 flex border border-gray-200 whitespace-nowrap">
         <div className="w-4/12 border-r border-gray-200">
           <EditorFiles
             createFile={createFile}
@@ -512,6 +465,18 @@ const Editor: React.FC<Props> = ({ step, ...rest }) => {
             width="100%"
           />
         </div>
+      </div>
+      <div className="h-16 flex justify-end px-3 items-center w-full bg-gray-900">
+        <button
+          className="justify-center py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+          disabled={
+            !step.checkpoints?.find(({ id }) => id === step.currentCheckpointId)
+              ?.isTested
+          }
+          onClick={() => completeCheckpoint()}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

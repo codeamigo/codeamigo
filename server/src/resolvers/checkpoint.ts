@@ -114,12 +114,43 @@ export class CheckpointResolver {
   @Mutation(() => Checkpoint, { nullable: true })
   @UseMiddleware(isAuth)
   async completeCheckpoint(@Arg("id") id: number): Promise<Checkpoint | null> {
-    const checkpoint = await Checkpoint.findOne(id);
+    const checkpoint = await Checkpoint.findOne(id, {
+      relations: ["step"],
+    });
     if (!checkpoint) {
       return null;
     }
 
     checkpoint.isCompleted = true;
+    await checkpoint.save();
+
+    const step = await Step.findOne(checkpoint.step.id, {
+      relations: ["checkpoints"],
+    });
+
+    if (!step) {
+      return checkpoint;
+    }
+
+    const nextCheckpoint = step.checkpoints.find(
+      ({ isCompleted }) => !isCompleted
+    );
+
+    step.currentCheckpointId = nextCheckpoint?.id || null;
+    await Step.save(step);
+
+    return checkpoint;
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async passCheckpoint(@Arg("id") id: number): Promise<Checkpoint | null> {
+    const checkpoint = await Checkpoint.findOne(id);
+    if (!checkpoint) {
+      return null;
+    }
+
+    checkpoint.isTested = true;
     checkpoint.save();
 
     return checkpoint;

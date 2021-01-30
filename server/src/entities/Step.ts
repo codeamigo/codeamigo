@@ -39,6 +39,9 @@ export class Step extends BaseEntity {
   @Column()
   instructions!: string;
 
+  @Field(() => Number, { defaultValue: null, nullable: true })
+  currentCheckpointId: Number | null;
+
   @Field(() => Boolean, { defaultValue: false, nullable: true })
   @Column({ nullable: true })
   isCompleted?: boolean;

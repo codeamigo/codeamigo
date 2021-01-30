@@ -1,7 +1,8 @@
 fragment RegularCheckpoint on Checkpoint {
   id
-  test
-  description
   createdAt
+  description
   isCompleted
+  isTested
+  test
 }

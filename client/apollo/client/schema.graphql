@@ -2,10 +2,6 @@ extend type User {
   isAuthenticated: Boolean
 }
 
-extend type Step {
-  currentCheckpointId: Float
-}
-
 type Modal {
   name: String
   callback: String

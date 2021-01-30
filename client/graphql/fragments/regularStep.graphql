@@ -1,10 +1,10 @@
 fragment RegularStep on Step {
   id
   createdAt
-  name
+  currentCheckpointId
   instructions
   isCompleted
-  currentCheckpointId @client
+  name
   codeModules {
     ...RegularCodeModule
   }

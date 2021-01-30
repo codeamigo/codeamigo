@@ -12,7 +12,7 @@ type TabType = 'console' | 'tests';
 
 const Console: React.FC<Props> = ({ step }) => {
   const listRef = useRef<HTMLDivElement>(null);
-  const { data, loading } = useCheckpointsQuery({
+  const { data } = useCheckpointsQuery({
     fetchPolicy: 'cache-and-network',
     variables: { stepId: step.id },
   });
@@ -42,7 +42,7 @@ const Console: React.FC<Props> = ({ step }) => {
     window.addEventListener('message', handleLog);
 
     return () => window.removeEventListener('message', handleLog);
-  });
+  }, [step.currentCheckpointId]);
 
   useEffect(() => {
     setTestList([]);
