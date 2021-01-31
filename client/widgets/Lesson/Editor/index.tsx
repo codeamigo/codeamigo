@@ -67,6 +67,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     // if there is no difference then goToMain file
     // if !files ({}) then goToMain file
     // otherwise to to the new file
+    console.log(diff);
     if (!Object.keys(files).length) {
       goToMain(mods);
     } else if (diff) {
@@ -100,7 +101,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     const handlePassCheckpoint = async (message: {
       data: FromTestRunnerMsgType;
     }) => {
-      console.log(message.data);
       if (message.data.from !== 'testRunner') return;
       if (message.data.type !== 'test') return;
       // don't pass checkpoint if editting
