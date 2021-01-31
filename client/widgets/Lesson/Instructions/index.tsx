@@ -6,6 +6,7 @@ import gfm from 'remark-gfm';
 
 import Icon from '👨‍💻components/Icon';
 import {
+  LessonQuery,
   RegularStepFragment,
   useCreateCheckpointMutation,
   useUpdateStepInstructionsMutation,
@@ -44,6 +45,9 @@ const Instructions: React.FC<Props> = (props) => {
       variables: { checkpointId: len + 1, stepId: step.id },
     });
   };
+
+  const currentStepNum = props.steps.findIndex(({ id }) => id === step.id) + 1;
+  const totalSteps = props.steps.length;
 
   return (
     <>
@@ -119,6 +123,9 @@ const Instructions: React.FC<Props> = (props) => {
             name="list"
             onClick={props.toggleShowSteps}
           />
+          <div className="text-white text-sm font-semibold ml-3">
+            Step: {currentStepNum}/{totalSteps}
+          </div>
         </div>
         {isEditting && (
           <button
@@ -138,6 +145,7 @@ type Props = {
   isEditting?: boolean;
   nextStep: () => void;
   step: RegularStepFragment;
+  steps: RegularStepFragment[];
   toggleShowSteps: () => void;
 };
 
