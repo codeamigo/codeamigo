@@ -16,6 +16,7 @@ import {
   usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
+import { getFileExt } from '👨‍💻utils/index';
 
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
@@ -59,7 +60,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     ) as FilesType;
 
     const diff = Object.keys(mods).reduce((acc, file) => {
-      if (!files[file]) acc.push(file);
+      if (!files[file] && !file.includes('spec')) acc.push(file);
       return acc;
     }, [] as Array<string>);
 
@@ -67,7 +68,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     // if there is no difference then goToMain file
     // if !files ({}) then goToMain file
     // otherwise to to the new file
-    console.log(diff);
     if (!Object.keys(files).length) {
       goToMain(mods);
     } else if (diff) {
