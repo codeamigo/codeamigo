@@ -505,33 +505,34 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           top: '-4px',
         }}
       >
-        <button
-          aria-label="⌘ + Enter"
-          className={`flex items-center justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-white disabled:opacity-50 hint--top hint--no-animate ${
-            isTested
-              ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-              : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
-          }`}
-          disabled={isTesting}
-          onClick={() =>
-            isStepComplete
-              ? nextStep()
-              : isTested
-              ? completeCheckpoint()
-              : testCode(
-                  {
-                    ...files,
-                    [currentPath]: files[currentPath],
-                  },
-                  dependencies,
-                  currentCheck!.test,
-                  files[currentCheck!.test]
-                )
-          }
-          ref={submitRef}
-        >
-          {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
-        </button>
+        <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
+          <button
+            className={`flex items-center justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-white disabled:opacity-50 ${
+              isTested
+                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500'
+            }`}
+            disabled={isTesting}
+            onClick={() =>
+              isStepComplete
+                ? nextStep()
+                : isTested
+                ? completeCheckpoint()
+                : testCode(
+                    {
+                      ...files,
+                      [currentPath]: files[currentPath],
+                    },
+                    dependencies,
+                    currentCheck!.test,
+                    files[currentCheck!.test]
+                  )
+            }
+            ref={submitRef}
+          >
+            {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
+          </button>
+        </div>
       </div>
     </div>
   );
