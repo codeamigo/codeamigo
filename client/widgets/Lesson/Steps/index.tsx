@@ -55,7 +55,7 @@ const Steps: React.FC<Props> = ({
 
     setTimeout(() => {
       changeStepsHeight();
-    }, 100);
+    }, 2000);
     window.addEventListener('resize', changeStepsHeight);
 
     return () => window.removeEventListener('resize', changeStepsHeight);

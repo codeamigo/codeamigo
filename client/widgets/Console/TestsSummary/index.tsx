@@ -3,7 +3,10 @@ import React from 'react';
 import Icon from '👨‍💻components/Icon';
 import { RegularCheckpointFragment } from '👨‍💻generated/graphql';
 import { TestResultType } from '👨‍💻widgets/Console/types';
-import { FromPreviewMsgType } from '👨‍💻widgets/Lesson/Editor/types';
+import {
+  FromPreviewMsgType,
+  FromTestRunnerMsgType,
+} from '👨‍💻widgets/Lesson/Editor/types';
 
 const root = 'ROOT_DESCRIBE_BLOCK';
 const errStart = 'at Object.eval';
@@ -70,7 +73,7 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
 
 type Props = {
   checkpoint?: RegularCheckpointFragment;
-  list: FromPreviewMsgType[];
+  list: FromTestRunnerMsgType[];
 };
 
 export default TestSummary;

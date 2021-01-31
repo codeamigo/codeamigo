@@ -116,9 +116,12 @@ const Console: React.FC<Props> = ({ step }) => {
       </div>
       <div className="overflow-scroll h-full" ref={listRef}>
         {activeTab === 'tests' ? (
-          <TestSummary checkpoint={currentCheck} list={list} />
+          <TestSummary
+            checkpoint={currentCheck}
+            list={list as FromTestRunnerMsgType[]}
+          />
         ) : (
-          list.map((value, i) => {
+          (list as FromPreviewMsgType[]).map((value, i) => {
             return (
               <div
                 className="bg-gray-700 border-black border-b text-white text-xs"
