@@ -18,7 +18,7 @@ import {
 } from '👨‍💻generated/graphql';
 
 import EditorFiles from '../EditorFiles';
-import { FilesType, FromPreviewMsgType, ToPreviewMsgType } from './types';
+import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
 
 const FILE = 'file:///';
@@ -98,9 +98,10 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   useEffect(() => {
     const handlePassCheckpoint = async (message: {
-      data: FromPreviewMsgType;
+      data: FromTestRunnerMsgType;
     }) => {
-      if (message.data.from !== 'preview') return;
+      console.log(message.data);
+      if (message.data.from !== 'testRunner') return;
       if (message.data.type !== 'test') return;
       // don't pass checkpoint if editting
       if (rest.isEditting) {
@@ -261,7 +262,9 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     value: string,
     isTest?: boolean
   ) => {
-    const iframe = document.getElementById('frame') as HTMLIFrameElement;
+    const iframe = isTest
+      ? (document.getElementById('test-frame') as HTMLIFrameElement)
+      : (document.getElementById('frame') as HTMLIFrameElement);
     if (!iframe) return;
     const iframeContentWindow = iframe.contentWindow;
     if (!iframeContentWindow) return;

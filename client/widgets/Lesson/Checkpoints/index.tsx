@@ -233,17 +233,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
             );
           })
         : null}
-      <div className="flex justify-end p-3">
-        {!isEditting && isStepComplete && (
-          <button
-            className="text-xs font-medium inline-flex justify-center py-1.5 px-2.5 border border-transparent shadow-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            onClick={nextStep}
-            type="button"
-          >
-            Next Step
-          </button>
-        )}
-      </div>
     </>
   );
 };

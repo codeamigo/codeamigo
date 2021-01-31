@@ -4,7 +4,11 @@ import Icon from '👨‍💻components/Icon';
 import { RegularStepFragment, useCheckpointsQuery } from '👨‍💻generated/graphql';
 import TestSummary from '👨‍💻widgets/Console/TestsSummary';
 
-import { FromPreviewMsgType, PreviewLogTypeEnum } from '../Lesson/Editor/types';
+import {
+  FromPreviewMsgType,
+  FromTestRunnerMsgType,
+  PreviewLogTypeEnum,
+} from '../Lesson/Editor/types';
 
 type TabType = 'console' | 'tests';
 
@@ -15,7 +19,7 @@ const Console: React.FC<Props> = ({ step }) => {
     variables: { stepId: step.id },
   });
   const [logList, setLogList] = useState<FromPreviewMsgType[]>([]);
-  const [testList, setTestList] = useState<FromPreviewMsgType[]>([]);
+  const [testList, setTestList] = useState<FromTestRunnerMsgType[]>([]);
   const [activeTab, setActiveTab] = useState<TabType | ''>('');
   const currentCheck = data?.checkpoints.find(
     ({ id }) => id === step.currentCheckpointId
@@ -26,19 +30,26 @@ const Console: React.FC<Props> = ({ step }) => {
       if (event.data.from !== 'preview') return;
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
-      if (event.data.type === 'test') {
-        setTestList([event.data]);
-      } else {
-        setLogList((currentList) => [...currentList, event.data]);
-      }
+      setLogList((currentList) => [...currentList, event.data]);
       if (listRef.current) {
         listRef.current.scrollTop = listRef.current.scrollHeight;
       }
     };
 
-    window.addEventListener('message', handleLog);
+    const handleTest = (event: { data: FromTestRunnerMsgType }) => {
+      if (event.data.from !== 'testRunner') return;
+      if (!(event.data.type in PreviewLogTypeEnum)) return;
 
-    return () => window.removeEventListener('message', handleLog);
+      setTestList([event.data]);
+    };
+
+    window.addEventListener('message', handleLog);
+    window.addEventListener('message', handleTest);
+
+    return () => {
+      window.removeEventListener('message', handleLog);
+      window.removeEventListener('message', handleTest);
+    };
   }, [step.currentCheckpointId]);
 
   useEffect(() => {

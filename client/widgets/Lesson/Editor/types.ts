@@ -24,3 +24,9 @@ export type FromPreviewMsgType = {
   result: string;
   type: keyof typeof PreviewLogTypeEnum;
 };
+
+export type FromTestRunnerMsgType = {
+  from: 'testRunner';
+  result: string;
+  type: 'test';
+};
