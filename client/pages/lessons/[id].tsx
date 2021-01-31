@@ -51,8 +51,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   }
   if (!data.lesson.steps) return null;
 
-  // session
-  if (sessionLoading) return null;
   // no session exists
   if (!sessionData || !sessionData.session) {
     if (typeof window !== 'undefined') {
@@ -66,23 +64,29 @@ const Lesson: NextPage<{ id: string }> = (props) => {
 
   return (
     <div className="flex">
-      <Steps
-        activeSessionStepId={sessionData.session.currentStep}
-        currentStepId={stepId}
-        lessonId={data.lesson.id}
-        setCurrentStepId={setCurrentStepId}
-        showSteps={showSteps}
-        steps={sessionData.session.steps}
-      />
+      {sessionData ? (
+        <Steps
+          activeSessionStepId={sessionData.session.currentStep}
+          currentStepId={stepId}
+          lessonId={data.lesson.id}
+          setCurrentStepId={setCurrentStepId}
+          showSteps={showSteps}
+          steps={sessionData.session.steps}
+        />
+      ) : // TODO: loading states
+      null}
       <div className="w-full overflow-hidden lg:h-screen">
         <Info lesson={data.lesson} />
-        <Step
-          currentStepId={stepId}
-          lesson={data.lesson}
-          session={sessionData.session}
-          setCurrentStepId={setCurrentStepId}
-          toggleShowSteps={toggleShowSteps}
-        />
+        {sessionData.session ? (
+          <Step
+            currentStepId={stepId}
+            lesson={data.lesson}
+            session={sessionData.session}
+            setCurrentStepId={setCurrentStepId}
+            toggleShowSteps={toggleShowSteps}
+          />
+        ) : // TODO: loading states
+        null}
       </div>
     </div>
   );
