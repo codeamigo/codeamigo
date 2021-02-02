@@ -18,8 +18,9 @@ export enum RoleEnum {
 }
 
 export enum ThemeEnum {
-  COBALT = "COBALT",
   ALL_HALLOWS_EVE = "ALL_HALLOWS_EVE",
+  COBALT = "COBALT",
+  GITHUB = "GITHUB",
 }
 
 registerEnumType(RoleEnum, {

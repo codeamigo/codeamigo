@@ -1,5 +1,6 @@
 import ALL_HALLOWS_EVE from '../monacoThemes/ALL_HALLOWS_EVE.json';
 import COBALT from '../monacoThemes/COBALT.json';
+import GITHUB from '../monacoThemes/GITHUB.json';
 import base from './base';
 import { IThemes, MonacoThemeType } from './utils';
 
@@ -23,5 +24,6 @@ export const generateTheme = (theme: MonacoThemeType) => ({
 export const themes: IThemes = {
   ALL_HALLOWS_EVE: generateTheme(ALL_HALLOWS_EVE),
   COBALT: generateTheme(COBALT as MonacoThemeType),
+  GITHUB: generateTheme(GITHUB as MonacoThemeType),
   base,
 };

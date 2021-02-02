@@ -9,3 +9,15 @@ mutation UpdateUserRole($id: Float!, $role: String!) {
     }
   }
 }
+
+mutation UpdateUserTheme($theme: String!) {
+  updateUserTheme(options: { theme: $theme }) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}

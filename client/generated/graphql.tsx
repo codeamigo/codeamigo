@@ -150,8 +150,9 @@ export enum Role {
 }
 
 export enum Theme {
+  AllHallowsEve = 'ALL_HALLOWS_EVE',
   Cobalt = 'COBALT',
-  AllHallowsEve = 'ALL_HALLOWS_EVE'
+  Github = 'GITHUB'
 }
 
 export type Session = {
@@ -197,6 +198,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  updateUserTheme: UserResponse;
   updateUserRole: UserResponse;
   forgotPassword: Scalars['Boolean'];
   changePassword: UserResponse;
@@ -287,8 +289,13 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationUpdateUserThemeArgs = {
+  options: UpdateUserThemeInput;
+};
+
+
 export type MutationUpdateUserRoleArgs = {
-  options: UpdateUserInput;
+  options: UpdateUserRoleInput;
 };
 
 
@@ -417,7 +424,11 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
-export type UpdateUserInput = {
+export type UpdateUserThemeInput = {
+  theme: Scalars['String'];
+};
+
+export type UpdateUserRoleInput = {
   id: Scalars['Float'];
   role: Scalars['String'];
 };
@@ -947,6 +958,25 @@ export type UpdateUserRoleMutationVariables = Exact<{
 export type UpdateUserRoleMutation = (
   { __typename?: 'Mutation' }
   & { updateUserRole: (
+    { __typename?: 'UserResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'field' | 'message'>
+    )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
+export type UpdateUserThemeMutationVariables = Exact<{
+  theme: Scalars['String'];
+}>;
+
+
+export type UpdateUserThemeMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserTheme: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
@@ -2196,6 +2226,44 @@ export function useUpdateUserRoleMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateUserRoleMutationHookResult = ReturnType<typeof useUpdateUserRoleMutation>;
 export type UpdateUserRoleMutationResult = Apollo.MutationResult<UpdateUserRoleMutation>;
 export type UpdateUserRoleMutationOptions = Apollo.BaseMutationOptions<UpdateUserRoleMutation, UpdateUserRoleMutationVariables>;
+export const UpdateUserThemeDocument = gql`
+    mutation UpdateUserTheme($theme: String!) {
+  updateUserTheme(options: {theme: $theme}) {
+    errors {
+      field
+      message
+    }
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+export type UpdateUserThemeMutationFn = Apollo.MutationFunction<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>;
+
+/**
+ * __useUpdateUserThemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserThemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserThemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserThemeMutation, { data, loading, error }] = useUpdateUserThemeMutation({
+ *   variables: {
+ *      theme: // value for 'theme'
+ *   },
+ * });
+ */
+export function useUpdateUserThemeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>) {
+        return Apollo.useMutation<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>(UpdateUserThemeDocument, baseOptions);
+      }
+export type UpdateUserThemeMutationHookResult = ReturnType<typeof useUpdateUserThemeMutation>;
+export type UpdateUserThemeMutationResult = Apollo.MutationResult<UpdateUserThemeMutation>;
+export type UpdateUserThemeMutationOptions = Apollo.BaseMutationOptions<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: Float!) {
   checkpoints(stepId: $stepId) {

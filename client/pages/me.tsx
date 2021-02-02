@@ -6,6 +6,7 @@ import { useMeQuery } from '👨‍💻generated/graphql';
 import withApollo from '👨‍💻utils/withApollo';
 import Backoffice from '👨‍💻widgets/Backoffice';
 import SessionsList from '👨‍💻widgets/SessionsList';
+import Settings from '👨‍💻widgets/Settings';
 import UserLessonsList from '👨‍💻widgets/UserLessonsList';
 
 const Me = () => {
@@ -50,6 +51,14 @@ const Me = () => {
         >
           <Icon className="mr-2" name="book-open" /> Your Lessons
         </button>
+        <button
+          className={`${
+            tab === 'settings' ? 'bg-ternary-bg' : ''
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-ternary-bg transition-colors text-left`}
+          onClick={() => setTab('settings')}
+        >
+          <Icon className="mr-2" name="cog" /> Settings
+        </button>
         {data?.me?.role === 'ADMIN' && (
           <button
             className={`${
@@ -64,6 +73,7 @@ const Me = () => {
       <div className="sm:w-3/4 w-full">
         {tab === 'activity' && <SessionsList />}
         {tab === 'lessons' && <UserLessonsList />}
+        {tab === 'settings' && <Settings />}
         {tab === 'backoffice' && <Backoffice />}
       </div>
     </div>

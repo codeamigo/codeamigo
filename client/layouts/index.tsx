@@ -8,7 +8,7 @@ import MainLayout from './MainLayout';
 
 const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
   const { data, loading } = useMeQuery();
-  const theme = !loading && data?.me ? data.me.theme : null;
+  const theme = !loading && data?.me ? data.me?.theme || 'COBALT' : null;
 
   useEffect(() => {
     if (theme) {

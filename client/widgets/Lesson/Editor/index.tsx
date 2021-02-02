@@ -16,9 +16,8 @@ import {
   usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import { getFileExt } from '👨‍💻utils/index';
 
-import COBALT from '../../../styles/monacoThemes/COBALT.json';
+import GITHUB from '../../../styles/monacoThemes/GITHUB.json';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
@@ -414,8 +413,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupThemes = () => {
-    monacoRef.current.editor.defineTheme('COBALT', COBALT);
-    monacoRef.current.editor.setTheme('COBALT');
+    monacoRef.current.editor.defineTheme('GITHUB', GITHUB);
+    monacoRef.current.editor.setTheme('GITHUB');
   };
 
   const setupEditor = () => {

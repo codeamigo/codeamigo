@@ -13,7 +13,7 @@ import {
 import { v4 } from "uuid";
 
 import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
-import { RoleEnum, User } from "../entities/User";
+import { RoleEnum, ThemeEnum, User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext } from "../types";
 import { sendEmail } from "../utils/sendEmail";
@@ -37,11 +37,17 @@ class LoginInput {
 }
 
 @InputType()
-class UpdateUserInput {
+class UpdateUserRoleInput {
   @Field()
   id: number;
   @Field()
   role: RoleEnum;
+}
+
+@InputType()
+class UpdateUserThemeInput {
+  @Field()
+  theme: ThemeEnum;
 }
 
 @ObjectType()
@@ -175,8 +181,32 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   @UseMiddleware(isAuth)
+  async updateUserTheme(
+    @Arg("options") options: UpdateUserThemeInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const user = await User.findOne(req.session.userId);
+
+    if (!user) {
+      return {
+        errors: [{ field: "id", message: "No user found." }],
+      };
+    }
+
+    await User.update(
+      {
+        id: user.id,
+      },
+      { theme: options.theme }
+    );
+
+    return { user };
+  }
+
+  @Mutation(() => UserResponse)
+  @UseMiddleware(isAuth)
   async updateUserRole(
-    @Arg("options") options: UpdateUserInput,
+    @Arg("options") options: UpdateUserRoleInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(options.id);
