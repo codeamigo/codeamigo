@@ -139,6 +139,7 @@ export type User = {
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
   role: Role;
+  theme: Theme;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -146,6 +147,11 @@ export type User = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
+}
+
+export enum Theme {
+  Cobalt = 'COBALT',
+  AllHallowsEve = 'ALL_HALLOWS_EVE'
 }
 
 export type Session = {
@@ -510,15 +516,6 @@ export type RegularLessonItemFragment = (
   )>> }
 );
 
-export type RegularMeFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'username'>
-  & { lessons: Array<(
-    { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id'>
-  )> }
-);
-
 export type RegularStepFragment = (
   { __typename?: 'Step' }
   & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'instructions' | 'isCompleted' | 'name'>
@@ -536,7 +533,7 @@ export type RegularStepFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'role' | 'username' | 'isAuthenticated'>
+  & Pick<User, 'id' | 'role' | 'theme' | 'username' | 'isAuthenticated'>
 );
 
 export type ChangePasswordMutationVariables = Exact<{
@@ -1140,15 +1137,6 @@ export const RegularLessonItemFragmentDoc = gql`
   }
 }
     ${RegularDependencyFragmentDoc}`;
-export const RegularMeFragmentDoc = gql`
-    fragment RegularMe on User {
-  id
-  username
-  lessons {
-    id
-  }
-}
-    `;
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
   id
@@ -1191,6 +1179,7 @@ export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
   role
+  theme
   username
   isAuthenticated @client
 }

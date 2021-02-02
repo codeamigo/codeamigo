@@ -1,36 +1,35 @@
-import { themes } from './index';
+import monacoTheme from '../monacoThemes/allHallowsEve.json';
+import { generateTheme, themes } from './index';
 
-export interface ITheme {
-  [key: string]: string;
-}
+export type MonacoThemeType = typeof monacoTheme;
+export type ThemeType = ReturnType<typeof generateTheme>;
+export type MappedThemeType = ReturnType<typeof mapTheme>;
 
 export interface IThemes {
-  [key: string]: ITheme;
+  [key: string]: ThemeType;
 }
 
-export interface IMappedTheme {
-  [key: string]: string | null;
-}
-
-export const mapTheme = (variables: ITheme): IMappedTheme => {
+export const mapTheme = (variables: ThemeType) => {
   return {
     '--color-primary': variables.primary || '',
+    '--color-primary-bg': variables.primaryBg || '',
     '--color-secondary': variables.secondary || '',
+    '--color-secondary-bg': variables.secondaryBg || '',
     '--color-ternary': variables.ternary || '',
+    '--color-ternary-bg': variables.ternaryBg || '',
   };
 };
 
 export const applyTheme = (theme: string): void => {
-  const themeObject: IMappedTheme = mapTheme(themes[theme]);
+  const themeObject: MappedThemeType = mapTheme(themes[theme]);
   if (!themeObject) return;
 
   const root = document.documentElement;
 
   Object.keys(themeObject).forEach((property) => {
-    if (property === 'name') {
-      return;
-    }
-
-    root.style.setProperty(property, themeObject[property]);
+    root.style.setProperty(
+      property,
+      themeObject[property as keyof MappedThemeType]
+    );
   });
 };

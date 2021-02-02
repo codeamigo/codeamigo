@@ -69,10 +69,10 @@ const FilesList: React.FC<Props> = ({
   return (
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
-        <span className="text-sm font-semibold">{name}</span>
+        <span className="text-sm font-semibold text-primary">{name}</span>
         {onCreate && isEditting && (
           <Icon
-            className="text-sm text-gray-500 hover:text-black cursor-pointer"
+            className="text-sm text-primary hover:text-ternary cursor-pointer"
             name="plus-circled"
             onClick={() => setIsAdding(true)}
           />
@@ -85,8 +85,8 @@ const FilesList: React.FC<Props> = ({
             .map((path) => (
               <div
                 className={`${
-                  currentPath === path ? 'bg-gray-100' : ''
-                } flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
+                  currentPath === path ? 'bg-ternary-bg' : ''
+                } flex justify-between w-full px-1 py-1 text-primary hover:bg-ternary-bg ${
                   path === 'app.tsx' ? '' : styles.FILE
                 } ${setCurrentPath ? 'cursor-pointer' : ''}`}
                 key={path}

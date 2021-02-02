@@ -18,7 +18,7 @@ import {
 } from '👨‍💻generated/graphql';
 import { getFileExt } from '👨‍💻utils/index';
 
-import allHallowsEve from '../../../styles/monacoThemes/allHallowsEve.json';
+import COBALT from '../../../styles/monacoThemes/COBALT.json';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
@@ -414,8 +414,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupThemes = () => {
-    monacoRef.current.editor.defineTheme('allHallowsEve', allHallowsEve);
-    monacoRef.current.editor.setTheme('allHallowsEve');
+    monacoRef.current.editor.defineTheme('COBALT', COBALT);
+    monacoRef.current.editor.setTheme('COBALT');
   };
 
   const setupEditor = () => {

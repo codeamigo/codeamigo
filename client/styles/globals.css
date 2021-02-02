@@ -1,5 +1,18 @@
 @import './tailwind.css';
 
+/* 
+TODO: This file is not watched by nextjs
+and does not update automatically
+*/
+
 html {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-bg);
+}
+
+.markdown-body {
+  color: var(--color-secondary) !important;
+}
+
+.markdown-body pre {
+  color: var(--color-primary-bg) !important;
 }

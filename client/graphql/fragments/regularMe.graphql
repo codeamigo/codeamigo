@@ -1,7 +1,0 @@
-fragment RegularMe on User {
-  id
-  username
-  lessons {
-    id
-  }
-}

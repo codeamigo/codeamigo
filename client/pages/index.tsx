@@ -4,7 +4,7 @@ import LessonsList from '👨‍💻widgets/LessonsList';
 
 const Home = () => {
   return (
-    <div className="flex flex-col sm:space-x-8 sm:flex-row bg-primary">
+    <div className="flex flex-col sm:space-x-8 sm:flex-row">
       <div className="sm:w-1/4 w-full mb-4">
         <Dependencies />
       </div>

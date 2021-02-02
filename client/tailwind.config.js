@@ -19,8 +19,11 @@ module.exports = {
       },
       colors: {
         primary: 'var(--color-primary)',
+        'primary-bg': 'var(--color-primary-bg)',
         secondary: 'var(--color-secondary)',
+        'secondary-bg': 'var(--color-secondary-bg)',
         ternary: 'var(--color-ternary)',
+        'ternary-bg': 'var(--color-ternary-bg)',
       },
       maxHeight: {
         '3/5': '60%',

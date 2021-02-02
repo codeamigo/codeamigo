@@ -1,6 +1,7 @@
 fragment RegularUser on User {
   id
   role
+  theme
   username
   isAuthenticated @client
 }

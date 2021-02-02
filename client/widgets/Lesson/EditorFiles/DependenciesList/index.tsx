@@ -113,10 +113,10 @@ const DependenciesList: React.FC<Props> = ({
   return (
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
-        <span className="text-sm font-semibold">{name}</span>
+        <span className="text-sm text-primary font-semibold">{name}</span>
         {isEditting && (
           <Icon
-            className="text-sm text-gray-500 hover:text-black cursor-pointer"
+            className="text-sm text-primary hover:text-ternary cursor-pointer"
             name="plus-circled"
             onClick={() => setIsAdding(true)}
           />
@@ -129,7 +129,7 @@ const DependenciesList: React.FC<Props> = ({
             .sort((a, b) => a.package.localeCompare(b.package))
             .map((dep) => (
               <div
-                className={`flex justify-between w-full px-1 py-1 hover:bg-gray-100 ${
+                className={`flex justify-between w-full px-1 py-1 text-primary hover:bg-ternary-bg ${
                   dep.package !== 'codeamigo-jest-lite' ? styles.FILE : ''
                 }`}
                 key={dep.id}

@@ -17,8 +17,16 @@ export enum RoleEnum {
   USER = "USER",
 }
 
+export enum ThemeEnum {
+  COBALT = "COBALT",
+  ALL_HALLOWS_EVE = "ALL_HALLOWS_EVE",
+}
+
 registerEnumType(RoleEnum, {
   name: "Role",
+});
+registerEnumType(ThemeEnum, {
+  name: "Theme",
 });
 
 @ObjectType()
@@ -39,6 +47,10 @@ export class User extends BaseEntity {
   @Field(() => RoleEnum)
   @Column({ default: RoleEnum.USER, nullable: true, type: "text" })
   role: keyof typeof RoleEnum;
+
+  @Field(() => ThemeEnum)
+  @Column({ default: ThemeEnum.COBALT, nullable: true, type: "text" })
+  theme: keyof typeof ThemeEnum;
 
   @Field()
   @Column({ type: "text", unique: true })

@@ -17,7 +17,7 @@ import AuthProvider from '../providers/AuthProvider';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   // TODO: save this to the user object
-  const [theme, setTheme] = useState('allHallowsEve');
+  const [theme, setTheme] = useState('COBALT');
 
   useEffect(() => {
     applyTheme(theme);
