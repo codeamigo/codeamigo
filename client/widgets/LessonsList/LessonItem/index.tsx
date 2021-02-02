@@ -26,7 +26,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-gray-200 border" key={lesson.id}>
+    <div className="p-3 rounded-lg border-ternary border-2" key={lesson.id}>
       <a
         className="text-md text-blue-600 font-semibold hover:underline"
         href="/"
@@ -41,12 +41,12 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           className="hint--top hint--no-animate"
         >
           <div className="flex">
-            <Icon className="text-gray-500 mr-1 cursor-auto" name="users" />{' '}
+            <Icon className="text-primary mr-1 cursor-auto" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 text-xs">
+      <div className="flex justify-between items-center mt-2 text-xs text-primary">
         <LanguageBar steps={lesson.steps} />
         <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
       </div>

@@ -36,7 +36,7 @@ const ChangePassword: NextPage<{ token: string }> = (props) => {
               Change Password
             </h1>
             <div className="shadow overflow-hidden sm:rounded-md">
-              <div className="px-4 py-5 bg-white sm:p-6">
+              <div className="px-4 py-5 sm:p-6">
                 <div className="grid gap-6">
                   <InputField
                     label="New password"

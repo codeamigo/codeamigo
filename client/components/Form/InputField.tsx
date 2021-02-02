@@ -9,7 +9,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
   return (
     <div className="col-span-6 sm:col-span-4 mt">
       <label
-        className="block text-sm font-medium text-gray-700"
+        className="block text-sm font-medium text-primary"
         htmlFor={field.name}
       >
         {props.label}

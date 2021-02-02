@@ -60,8 +60,8 @@ const Dependencies: React.FC<Props> = () => {
                   <div
                     className={`text-xs text-primary-bg font-semibold px-2 py-0.5 rounded-md ${
                       values.checked.includes(pkg)
-                        ? 'bg-primary'
-                        : 'bg-secondary'
+                        ? 'bg-secondary'
+                        : 'bg-primary'
                     }`}
                   >
                     {depMap[pkg]}

@@ -43,7 +43,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-gray-200 border" key={lesson.id}>
+    <div className="p-3 rounded-lg border-ternary border-2" key={lesson.id}>
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"
@@ -75,18 +75,18 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                   <div
                     aria-labelledby="session-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+                    className="origin-top-right bg-primary-bg absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
                     <button
-                      className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="w-full flex items-center text-left px-3 py-2 text-sm text-primary hover:bg-secondary"
                       onClick={(e) => unpublishLesson(e, lesson.id)}
                       role="menuitem"
                     >
                       📝&nbsp;<span>Edit Lesson</span>
                     </button>
                     <button
-                      className="w-full flex items-center text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="w-full flex items-center text-left px-3 py-2 text-sm text-primary hover:bg-secondary"
                       onClick={(e) => deleteLesson(e, lesson.id)}
                       role="menuitem"
                     >
@@ -99,7 +99,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           </Menu>
         </div>
       </div>
-      <h3 className="text-xs">By: {lesson.owner.username}</h3>
+      <h3 className="text-xs text-primary">By: {lesson.owner.username}</h3>
       <div className="flex justify-between mt-4 text-xs">
         <div
           aria-label={`${lesson.students?.length} Students`}
@@ -111,7 +111,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 text-xs">
+      <div className="flex justify-between items-center mt-2 text-xs text-primary">
         <LanguageBar steps={lesson.steps} />
         <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
       </div>

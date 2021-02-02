@@ -112,7 +112,7 @@ const DependenciesList: React.FC<Props> = ({
 
   return (
     <>
-      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
+      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-ternary p-1 flex justify-between content-center">
         <span className="text-sm text-primary font-semibold">{name}</span>
         {isEditting && (
           <Icon
@@ -180,7 +180,7 @@ const DependenciesList: React.FC<Props> = ({
             >
               <div className="relative p-1">
                 <Transition
-                  className="w-full rounded-md shadow-md bg-white"
+                  className="w-full rounded-md shadow-md"
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"

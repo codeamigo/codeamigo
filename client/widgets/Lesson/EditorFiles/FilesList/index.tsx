@@ -68,7 +68,7 @@ const FilesList: React.FC<Props> = ({
 
   return (
     <>
-      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-gray-200 p-1 flex justify-between content-center">
+      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-ternary p-1 flex justify-between content-center">
         <span className="text-sm font-semibold text-primary">{name}</span>
         {onCreate && isEditting && (
           <Icon

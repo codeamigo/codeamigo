@@ -48,7 +48,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
   const percentComplete = Math.floor((completed.length / length) * 100);
 
   return (
-    <div className="p-3 rounded-lg border-gray-200 border" key={session.id}>
+    <div className="p-3 rounded-lg border-ternary border-2" key={session.id}>
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"
@@ -80,11 +80,11 @@ const SessionItem: React.FC<Props> = ({ session }) => {
                   <div
                     aria-labelledby="session-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5"
+                    className="origin-top-right bg-primary-bg absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
                     <button
-                      className="w-full inline-block text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      className="w-full inline-block text-left px-4 py-2 text-sm text-primary hover:bg-secondary"
                       onClick={(e) => deleteSession(e, session.id)}
                       role="menuitem"
                     >
@@ -97,7 +97,9 @@ const SessionItem: React.FC<Props> = ({ session }) => {
           </Menu>
         </div>
       </div>
-      <h3 className="text-xs">By: {session.lesson.owner.username}</h3>
+      <h3 className="text-xs text-primary">
+        By: {session.lesson.owner.username}
+      </h3>
       <div className="mt-4 text-xs">
         <div
           aria-label={`Completed: ${percentComplete}%`}
@@ -109,7 +111,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
           />
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 text-xs">
+      <div className="flex justify-between items-center mt-2 text-xs text-primary">
         <LanguageBar steps={session.lesson.steps} />
         <div>{new Date(parseInt(session.lesson.createdAt)).toDateString()}</div>
       </div>

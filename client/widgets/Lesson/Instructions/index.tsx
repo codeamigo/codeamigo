@@ -81,7 +81,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border border-r-0 border-gray-200 overflow-scroll`}
+          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border border-t-0 border-r-0 border-ternary overflow-scroll`}
         >
           {view === 'editor' ? (
             <ControlledEditor
@@ -111,18 +111,17 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="h-16 flex px-3 items-center justify-between w-full bg-gray-900"
+        className="h-16 flex px-3 items-center justify-between w-full bg-ternary-bg"
         style={{
           position: 'relative',
           top: '-4px',
         }}
       >
-        <div className="flex items-center">
-          <Icon
-            className="text-white text-2xl cursor-pointer"
-            name="list"
-            onClick={props.toggleShowSteps}
-          />
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={props.toggleShowSteps}
+        >
+          <Icon className="text-white text-2xl" name="list" />
           <div className="text-white text-sm font-semibold ml-3">
             Step: {currentStepNum}/{totalSteps}
           </div>

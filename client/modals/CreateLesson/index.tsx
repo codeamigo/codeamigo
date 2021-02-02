@@ -47,7 +47,7 @@ const CreateLesson: React.FC<Props> = () => {
                   type="text"
                 />
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-primary">
                     Templates
                   </label>
                   <div className="grid grid-cols-2 gap-3">

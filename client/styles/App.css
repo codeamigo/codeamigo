@@ -32453,7 +32453,7 @@ html {
 }
 
 .markdown-body {
-  color: var(--color-secondary) !important;
+  color: var(--color-primary) !important;
 }
 
 .markdown-body pre {

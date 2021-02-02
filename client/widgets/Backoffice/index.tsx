@@ -21,7 +21,7 @@ const Backoffice: React.FC<Props> = () => {
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="underline text-xl text-gray-700 font-bold mb-3">
+        <h2 className="underline text-xl text-primary font-bold mb-3">
           Create Admin
         </h2>
         <Formik
@@ -59,7 +59,7 @@ const Backoffice: React.FC<Props> = () => {
         </Formik>
       </div>
       <div className="mt-8">
-        <h2 className="underline text-xl text-gray-700 font-bold mb-3">
+        <h2 className="underline text-xl text-primary font-bold mb-3">
           Publish Pending Lessons
         </h2>
         <PendingLessonsList />

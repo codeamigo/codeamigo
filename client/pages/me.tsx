@@ -31,19 +31,21 @@ const Me = () => {
   return (
     <div className="flex flex-col sm:space-x-8 sm:flex-row">
       <div className="sm:w-1/4 w-full mb-4">
-        <h2 className="font-semibold mb-2">User: {data?.me?.username}</h2>
+        <h2 className="text-primary font-semibold mb-2">
+          User: {data?.me?.username}
+        </h2>
         <button
           className={`${
-            tab === 'activity' ? 'bg-blue-50' : ''
-          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-blue-50 transition-colors text-left`}
+            tab === 'activity' ? 'bg-ternary-bg' : ''
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-ternary-bg transition-colors text-left`}
           onClick={() => setTab('activity')}
         >
           <Icon className="mr-2" name="bell" /> Recent Activity
         </button>
         <button
           className={`${
-            tab === 'lessons' ? 'bg-blue-50' : ''
-          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-blue-50 transition-colors text-left`}
+            tab === 'lessons' ? 'bg-ternary-bg' : ''
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-ternary-bg transition-colors text-left`}
           onClick={() => setTab('lessons')}
         >
           <Icon className="mr-2" name="book-open" /> Your Lessons
@@ -51,8 +53,8 @@ const Me = () => {
         {data?.me?.role === 'ADMIN' && (
           <button
             className={`${
-              tab === 'backoffice' ? 'bg-blue-50' : ''
-            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-blue-50 transition-colors text-left`}
+              tab === 'backoffice' ? 'bg-ternary-bg' : ''
+            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-ternary-bg transition-colors text-left`}
             onClick={() => setTab('backoffice')}
           >
             <Icon className="mr-2" name="flashlight" /> Backoffice
