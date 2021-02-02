@@ -24,7 +24,7 @@ const UserMenu: React.FC<Props> = () => {
               <>
                 <Menu.Button
                   aria-haspopup="true"
-                  className={`bg-gray-800 flex text-sm rounded-full outline-none focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ${
+                  className={`bg-ternary flex text-sm rounded-full outline-none focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ${
                     open ? 'focus:ring-2' : ''
                   }`}
                 >

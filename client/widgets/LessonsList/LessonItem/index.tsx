@@ -34,8 +34,8 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       >
         {lesson.title}
       </a>
-      <h3 className="text-xs">By: {lesson.owner.username}</h3>
-      <div className="flex justify-between mt-4 text-xs">
+      <h3 className="text-xs text-secondary">By: {lesson.owner.username}</h3>
+      <div className="flex justify-between mt-4 text-xs text-secondary">
         <div
           aria-label={`${lesson.students?.length} Students`}
           className="hint--top hint--no-animate"

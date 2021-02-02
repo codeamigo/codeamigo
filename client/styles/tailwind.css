@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  ol li {
+    @apply list-decimal;
+  }
+
+  ul li {
+    @apply list-disc;
+  }
+}
+
+.lg\:h-full-minus{
+  height: calc(100% - 44px) !important;
+}

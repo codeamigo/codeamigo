@@ -28,7 +28,7 @@ const Dependencies: React.FC<Props> = () => {
   );
 
   return (
-    <div className="p-2 bg-gray-100 rounded-md">
+    <div className="p-2 bg-ternary rounded-md">
       <h4 className="font-semibold mb-2">Dependencies</h4>
       <Formik
         initialValues={{

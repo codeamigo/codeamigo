@@ -10,9 +10,17 @@ module.exports = {
     './widgets/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
+    backgroundColor: (theme) => ({
+      ...theme('colors'),
+    }),
     extend: {
       animation: {
         'ping-quick': 'ping 0.5s linear infinite',
+      },
+      colors: {
+        primary: 'var(--color-primary)',
+        secondary: 'var(--color-secondary)',
+        ternary: 'var(--color-ternary)',
       },
       maxHeight: {
         '3/5': '60%',

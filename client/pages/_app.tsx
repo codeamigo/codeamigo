@@ -1,12 +1,13 @@
 import '../styles/fonts/icomoon/style.css';
-import '../styles/globals.css';
+import '../styles/App.css';
 import '../styles/hint/hint.min.css';
 import 'github-markdown-css/github-markdown.css';
 
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { applyTheme } from 'styles/appThemes/utils';
 
 import { client } from '👨‍💻utils/withApollo';
 
@@ -15,6 +16,13 @@ import Modals from '../modals';
 import AuthProvider from '../providers/AuthProvider';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
+  // TODO: save this to the user object
+  const [theme, setTheme] = useState('allHallowsEve');
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
   return (
     <ApolloProvider client={client}>
       <Head>

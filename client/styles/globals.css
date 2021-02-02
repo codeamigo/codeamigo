@@ -1,17 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './tailwind.css';
 
-@layer base {
-  ol li {
-    @apply list-decimal;
-  }
-
-  ul li {
-    @apply list-disc;
-  }
-}
-
-.lg\:h-full-minus{
-  height: calc(100% - 44px) !important;
+html {
+  background-color: var(--color-primary);
 }

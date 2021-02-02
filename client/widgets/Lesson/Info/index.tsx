@@ -24,7 +24,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
   }, [status.lastSaved]);
 
   return (
-    <div className="w-full py-2 px-4 flex items-center bg-gray-800">
+    <div className="w-full py-2 px-4 flex items-center bg-ternary">
       <div className="flex w-1/4">
         <Icon
           className="text-white text-lg cursor-pointer text-md"
