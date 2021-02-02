@@ -6,8 +6,7 @@ import 'github-markdown-css/github-markdown.css';
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
-import { applyTheme } from 'styles/appThemes/utils';
+import React from 'react';
 
 import { client } from '👨‍💻utils/withApollo';
 
@@ -16,13 +15,6 @@ import Modals from '../modals';
 import AuthProvider from '../providers/AuthProvider';
 
 function MyApp({ Component, pageProps, router }: AppProps) {
-  // TODO: save this to the user object
-  const [theme, setTheme] = useState('COBALT');
-
-  useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
-
   return (
     <ApolloProvider client={client}>
       <Head>

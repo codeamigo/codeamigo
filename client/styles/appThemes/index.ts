@@ -3,8 +3,6 @@ import COBALT from '../monacoThemes/COBALT.json';
 import base from './base';
 import { IThemes, MonacoThemeType } from './utils';
 
-export const DEFAULT_THEME: string = 'base';
-
 export const generateTheme = (theme: MonacoThemeType) => ({
   primary: '#d4d4d4',
   primaryBg: theme.colors['editor.background'],

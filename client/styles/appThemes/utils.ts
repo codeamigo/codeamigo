@@ -1,4 +1,4 @@
-import monacoTheme from '../monacoThemes/allHallowsEve.json';
+import monacoTheme from '../monacoThemes/ALL_HALLOWS_EVE.json';
 import { generateTheme, themes } from './index';
 
 export type MonacoThemeType = typeof monacoTheme;
