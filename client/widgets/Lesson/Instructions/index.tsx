@@ -81,7 +81,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border border-t-0 border-r-0 border-ternary overflow-scroll`}
+          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-ternary overflow-scroll`}
         >
           {view === 'editor' ? (
             <ControlledEditor
