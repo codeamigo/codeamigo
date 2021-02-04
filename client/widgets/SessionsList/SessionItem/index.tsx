@@ -48,7 +48,10 @@ const SessionItem: React.FC<Props> = ({ session }) => {
   const percentComplete = Math.floor((completed.length / length) * 100);
 
   return (
-    <div className="p-3 rounded-lg border-accent border-2" key={session.id}>
+    <div
+      className="p-3 rounded-lg border-bg-nav-lighter border-2"
+      key={session.id}
+    >
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"

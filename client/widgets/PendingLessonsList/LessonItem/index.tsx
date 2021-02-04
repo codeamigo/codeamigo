@@ -43,7 +43,10 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-accent border-2" key={lesson.id}>
+    <div
+      className="p-3 rounded-lg border-bg-nav-lighter border-2"
+      key={lesson.id}
+    >
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"

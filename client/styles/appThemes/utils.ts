@@ -2,8 +2,10 @@ import monacoTheme from '../monacoThemes/ALL_HALLOWS_EVE.json';
 import { generateTheme, themes } from './index';
 
 const Color = require('color');
-const lighten = (clr: string, val: number) => Color(clr).lighten(val).rgb().string();
-const darken = (clr: string, val: number) => Color(clr).darken(val).rgb().string();
+const lighten = (clr: string, val: number) =>
+  Color(clr).lighten(val).rgb().string();
+const darken = (clr: string, val: number) =>
+  Color(clr).darken(val).rgb().string();
 
 export type MonacoThemeType = typeof monacoTheme;
 export type ThemeType = ReturnType<typeof generateTheme>;

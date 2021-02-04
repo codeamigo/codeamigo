@@ -17,7 +17,7 @@ import {
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
-import GITHUB from '../../../styles/monacoThemes/GITHUB.json';
+import ALL_HALLOWS_EVE from '../../../styles/monacoThemes/ALL_HALLOWS_EVE.json';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { getExtension } from './utils';
@@ -320,7 +320,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     const reactNamespace = 'React';
     const hasNativeTypescript = false;
 
-    // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
+    // https://ALL_HALLOWS_EVE.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
       {
         allowJs: true,
@@ -413,8 +413,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupThemes = () => {
-    monacoRef.current.editor.defineTheme('GITHUB', GITHUB);
-    monacoRef.current.editor.setTheme('GITHUB');
+    monacoRef.current.editor.defineTheme('ALL_HALLOWS_EVE', ALL_HALLOWS_EVE);
+    monacoRef.current.editor.setTheme('ALL_HALLOWS_EVE');
   };
 
   const setupEditor = () => {
