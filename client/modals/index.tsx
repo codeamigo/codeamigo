@@ -49,7 +49,7 @@ const Modals: React.FC<Props> = () => {
             className="fixed inset-0 transition-opacity"
             onClick={() => modalVar(InitialModalState)}
           >
-            <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+            <div className="absolute inset-0 opacity-75"></div>
           </div>
         </Transition>
 
@@ -71,7 +71,7 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
+          className="bg-bg-primary inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
           role="dialog"
         >
           {data?.modal?.name === 'login' && <Login />}

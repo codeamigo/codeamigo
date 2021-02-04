@@ -1,20 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
-import {
-  LessonsQuery,
-  useDeleteLessonMutation,
-  useMeQuery,
-} from '👨‍💻generated/graphql';
+import { LessonsQuery, useDeleteLessonMutation } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonItem: React.FC<Props> = ({ lesson }) => {
-  const { data: meData } = useMeQuery();
   const [deleteLessonM] = useDeleteLessonMutation();
-  const router = useRouter();
 
   const deleteLesson = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -31,7 +23,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-ternary border-2" key={lesson.id}>
+    <div className="p-3 rounded-lg border-accent border-2" key={lesson.id}>
       <div className="flex justify-between items-start">
         <a
           className="text-md text-blue-600 font-semibold hover:underline"
@@ -62,11 +54,11 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                   <div
                     aria-labelledby="session-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right bg-primary-bg absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                    className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
                     <button
-                      className="w-full flex items-center text-left px-3 py-2 text-sm text-primary hover:bg-secondary"
+                      className="w-full flex items-center text-left px-3 py-2 text-sm text-text-primary hover:bg-accent"
                       onClick={(e) => deleteLesson(e, lesson.id)}
                       role="menuitem"
                     >
@@ -80,7 +72,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           </Menu>
         </div>
       </div>
-      <h3 className="text-xs text-primary">By: {lesson.owner.username}</h3>
+      <h3 className="text-xs text-text-primary">By: {lesson.owner.username}</h3>
       <div className="flex justify-between mt-4 text-xs">
         <div
           aria-label={`${lesson.students?.length} Students`}
@@ -92,7 +84,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 text-xs text-primary">
+      <div className="flex justify-between items-center mt-2 text-xs text-text-primary">
         <LanguageBar steps={lesson.steps} />
         <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
       </div>

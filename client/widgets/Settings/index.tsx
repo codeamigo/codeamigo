@@ -13,8 +13,8 @@ const Settings: React.FC<Props> = () => {
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="underline text-xl text-primary font-bold mb-3">
-          Create Admin
+        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+          Choose Theme
         </h2>
         <Formik
           initialValues={{ theme: '' }}

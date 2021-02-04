@@ -136,7 +136,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
             return (
               <div key={checkpoint.id}>
                 <h3
-                  className={`w-full flex justify-between items-center bg-ternary-bg p-2 text-xs ${
+                  className={`w-full flex justify-between items-center bg-bg-nav p-2 text-xs ${
                     canSetCheckpoint(checkpoint)
                       ? 'cursor-pointer'
                       : isCurrentCheckpoint(checkpoint.id)
@@ -147,14 +147,14 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                 >
                   <span className="flex items-center">
                     <Icon
-                      className="mr-2 w-2 text-primary"
+                      className="mr-2 w-2 text-text-primary"
                       name={
                         isCurrentCheckpoint(checkpoint.id)
                           ? 'down-dir'
                           : 'right-dir'
                       }
                     />
-                    <span className="text-primary">Checkpoint {i + 1} </span>
+                    <span className="text-text-primary">Checkpoint {i + 1} </span>
                   </span>
                   {!isEditting &&
                     (checkpoint.isTested || checkpoint.isCompleted) && (
@@ -163,7 +163,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                   {isEditting && (
                     <div className="flex">
                       <Icon
-                        className="text-primary text-lg leading-none"
+                        className="text-text-primary text-lg leading-none"
                         name={
                           view === 'editor' &&
                           isCurrentCheckpoint(checkpoint.id)

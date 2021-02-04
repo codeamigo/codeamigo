@@ -1,5 +1,4 @@
 import { Menu, Transition } from '@headlessui/react';
-import router from 'next/dist/next-server/lib/router/router';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -24,7 +23,7 @@ const UserMenu: React.FC<Props> = () => {
               <>
                 <Menu.Button
                   aria-haspopup="true"
-                  className={`bg-ternary-bg flex text-sm rounded-full outline-none focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ${
+                  className={`bg-bg-nav flex text-sm rounded-full outline-none focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ${
                     open ? 'focus:ring-2' : ''
                   }`}
                 >
@@ -46,18 +45,18 @@ const UserMenu: React.FC<Props> = () => {
                   <div
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right bg-primary-bg absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                    className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
                     <button
-                      className="w-full inline-block text-left px-4 py-2 text-sm text-primary hover:bg-secondary"
+                      className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent"
                       onClick={() => router.push('/me')}
                       role="menuitem"
                     >
                       Your Profile
                     </button>
                     <button
-                      className="w-full inline-block text-left px-4 py-2 text-sm text-primary hover:bg-secondary"
+                      className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent"
                       onClick={() => {
                         router.push('/');
                         logout();

@@ -7,7 +7,7 @@ import { LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonItem: React.FC<Props> = ({ lesson }) => {
-  const { data: meData } = useMeQuery();
+  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-and-network' });
   const router = useRouter();
 
   const handleClick = (
@@ -26,7 +26,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-ternary border-2" key={lesson.id}>
+    <div className="p-3 rounded-lg border-accent border-2" key={lesson.id}>
       <a
         className="text-md text-blue-600 font-semibold hover:underline"
         href="/"
@@ -34,19 +34,19 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       >
         {lesson.title}
       </a>
-      <h3 className="text-xs text-primary">By: {lesson.owner.username}</h3>
-      <div className="flex justify-between mt-4 text-xs text-primary">
+      <h3 className="text-xs text-text-primary">By: {lesson.owner.username}</h3>
+      <div className="flex justify-between mt-4 text-xs text-text-primary">
         <div
           aria-label={`${lesson.students?.length} Students`}
           className="hint--top hint--no-animate"
         >
           <div className="flex">
-            <Icon className="text-primary mr-1 cursor-auto" name="users" />{' '}
+            <Icon className="text-text-primary mr-1 cursor-auto" name="users" />{' '}
             <div>{lesson.students?.length}</div>
           </div>
         </div>
       </div>
-      <div className="flex justify-between items-center mt-2 text-xs text-primary">
+      <div className="flex justify-between items-center mt-2 text-xs text-text-primary">
         <LanguageBar steps={lesson.steps} />
         <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
       </div>

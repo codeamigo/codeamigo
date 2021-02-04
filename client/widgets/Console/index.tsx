@@ -76,7 +76,7 @@ const Console: React.FC<Props> = ({ step }) => {
 
   return (
     <div
-      className="flex flex-col overflow-hidden min-h-16 transition-all duration-500 bg-ternary-bg"
+      className="flex flex-col overflow-hidden min-h-16 transition-all duration-500 bg-bg-nav"
       style={{
         height: activeTab ? '100%' : '0%',
         position: 'relative',
@@ -88,7 +88,7 @@ const Console: React.FC<Props> = ({ step }) => {
           <ul className="flex justify-between">
             <li
               className={`${
-                activeTab === 'console' ? 'bg-ternary-bg' : ''
+                activeTab === 'console' ? 'bg-bg-nav' : ''
               } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('console')}
               role="button"
@@ -97,7 +97,7 @@ const Console: React.FC<Props> = ({ step }) => {
             </li>
             <li
               className={`${
-                activeTab === 'tests' ? 'bg-ternary-bg' : ''
+                activeTab === 'tests' ? 'bg-bg-nav' : ''
               } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
@@ -107,7 +107,7 @@ const Console: React.FC<Props> = ({ step }) => {
           </ul>
           <div className="flex list-none pr-2">
             <Icon
-              className="text-primary hover:text-gray-400 transition-colors duration-300"
+              className="text-text-primary hover:text-gray-400 transition-colors duration-300"
               name="erase"
               onClick={() => resetList()}
             />
@@ -124,7 +124,7 @@ const Console: React.FC<Props> = ({ step }) => {
           (list as FromPreviewMsgType[]).map((value, i) => {
             return (
               <div
-                className="bg-ternary-bg border-black border-b text-white text-xs"
+                className="bg-bg-nav border-black border-b text-white text-xs"
                 key={i}
               >
                 <div className="px-2 py-1 flex items-start">

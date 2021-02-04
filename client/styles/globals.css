@@ -6,13 +6,13 @@ and does not update automatically
 */
 
 html {
-  background-color: var(--color-primary-bg);
+  background-color: var(--bg-primary);
 }
 
 .markdown-body {
-  color: var(--color-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 .markdown-body pre {
-  color: var(--color-primary-bg) !important;
+  color: var(--bg-primary) !important;
 }

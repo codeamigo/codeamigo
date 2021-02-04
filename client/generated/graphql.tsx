@@ -139,7 +139,7 @@ export type User = {
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
   role: Role;
-  theme: Theme;
+  theme: Scalars['String'];
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -147,12 +147,6 @@ export type User = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
-}
-
-export enum Theme {
-  AllHallowsEve = 'ALL_HALLOWS_EVE',
-  Cobalt = 'COBALT',
-  Github = 'GITHUB'
 }
 
 export type Session = {

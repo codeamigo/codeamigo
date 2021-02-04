@@ -18,7 +18,7 @@ const PublishedLessonsList: React.FC<Props> = () => {
 
   return data?.lessons.length ? (
     <div className="mt-8">
-      <h2 className="border-b-2 text-xl text-primary font-bold mb-4">
+      <h2 className="border-b-2 text-xl text-text-primary font-bold mb-4">
         🚀 Published
       </h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">

@@ -28,8 +28,8 @@ const Dependencies: React.FC<Props> = () => {
   );
 
   return (
-    <div className="p-2 bg-ternary-bg rounded-md">
-      <h4 className="font-semibold mb-2 text-primary">Dependencies</h4>
+    <div className="p-2 bg-bg-nav rounded-md">
+      <h4 className="font-semibold mb-2 text-text-primary">Dependencies</h4>
       <Formik
         initialValues={{
           checked: queryDeps ? queryDeps.split('|') : [],
@@ -55,13 +55,13 @@ const Dependencies: React.FC<Props> = () => {
                       type="checkbox"
                       value={pkg}
                     />{' '}
-                    <div className="text-primary inline-block">{pkg}</div>
+                    <div className="text-text-primary inline-block">{pkg}</div>
                   </div>
                   <div
-                    className={`text-xs text-primary-bg font-semibold px-2 py-0.5 rounded-md ${
+                    className={`text-xs text-text-primary font-semibold px-2 py-0.5 rounded-md ${
                       values.checked.includes(pkg)
-                        ? 'bg-secondary'
-                        : 'bg-primary'
+                        ? 'bg-accent'
+                        : 'bg-bg-primary'
                     }`}
                   >
                     {depMap[pkg]}

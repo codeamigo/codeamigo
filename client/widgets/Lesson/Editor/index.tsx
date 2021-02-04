@@ -472,8 +472,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
-      <div className="h-80 lg:flex-1 flex border border-ternary border-t-0 border-b-0 whitespace-nowrap">
-        <div className="w-4/12 border-r border-ternary">
+      <div className="h-80 lg:flex-1 flex border border-accent border-t-0 border-b-0 whitespace-nowrap">
+        <div className="w-4/12 border-r border-accent">
           <EditorFiles
             createFile={createFile}
             currentPath={currentPath}
@@ -508,7 +508,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         </div>
       </div>
       <div
-        className="h-16 flex justify-end px-3 items-center w-full bg-ternary-bg"
+        className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav"
         style={{
           position: 'relative',
           top: '-4px',

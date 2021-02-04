@@ -81,7 +81,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-ternary overflow-scroll`}
+          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-accent overflow-scroll`}
         >
           {view === 'editor' ? (
             <ControlledEditor
@@ -111,7 +111,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="h-16 flex px-3 items-center justify-between w-full bg-ternary-bg"
+        className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav"
         style={{
           position: 'relative',
           top: '-4px',

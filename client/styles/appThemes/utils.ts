@@ -11,12 +11,11 @@ export interface IThemes {
 
 export const mapTheme = (variables: ThemeType) => {
   return {
-    '--color-primary': variables.primary || '',
-    '--color-primary-bg': variables.primaryBg || '',
-    '--color-secondary': variables.secondary || '',
-    '--color-secondary-bg': variables.secondaryBg || '',
-    '--color-ternary': variables.ternary || '',
-    '--color-ternary-bg': variables.ternaryBg || '',
+    '--accent': variables.accent || '',
+    '--bg-nav': variables.bgNav || '',
+    '--bg-primary': variables.bgPrimary || '',
+    '--text-primary': variables.textPrimary || '',
+    '--text-secondary': variables.textSecondary || '',
   };
 };
 

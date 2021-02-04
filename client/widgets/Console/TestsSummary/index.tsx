@@ -42,7 +42,7 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
       {results.map((result, i) => {
         return (
           <div className="text-sm" key={i}>
-            <div className="flex justify-between text-white bg-secondary-bg px-2 py-1">
+            <div className="flex justify-between text-white px-2 py-1">
               <span>{testPath(result.testPath)}</span>
               <Icon
                 className={

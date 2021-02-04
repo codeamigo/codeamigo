@@ -36,7 +36,7 @@ const Login: React.FC = () => {
             <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">
               Login
             </h1>
-            <div className="px-4 py-5 bg-white sm:p-6">
+            <div className="px-4 py-5 sm:p-6">
               <div className="grid gap-6">
                 <InputField
                   label="Email or username"
