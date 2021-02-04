@@ -1,8 +1,3 @@
-const Color = require('color');
-
-const lighten = (clr, val) => Color(clr).lighten(val).rgb().string();
-const darken = (clr, val) => Color(clr).darken(val).rgb().string();
-
 module.exports = {
   // or 'media' or 'class'
   darkMode: false,
@@ -15,9 +10,6 @@ module.exports = {
     './widgets/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    backgroundColor: (theme) => ({
-      ...theme('colors'),
-    }),
     extend: {
       animation: {
         'ping-quick': 'ping 0.5s linear infinite',
@@ -25,6 +17,7 @@ module.exports = {
       colors: {
         accent: 'var(--accent)',
         'bg-nav': 'var(--bg-nav)',
+        'bg-nav-lighter': 'var(--bg-nav-lighter)',
         'bg-primary': 'var(--bg-primary)',
         'text-primary': 'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',

@@ -508,7 +508,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         </div>
       </div>
       <div
-        className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav"
+        className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-accent"
         style={{
           position: 'relative',
           top: '-4px',

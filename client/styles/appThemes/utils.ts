@@ -1,6 +1,10 @@
 import monacoTheme from '../monacoThemes/ALL_HALLOWS_EVE.json';
 import { generateTheme, themes } from './index';
 
+const Color = require('color');
+const lighten = (clr: string, val: number) => Color(clr).lighten(val).rgb().string();
+const darken = (clr: string, val: number) => Color(clr).darken(val).rgb().string();
+
 export type MonacoThemeType = typeof monacoTheme;
 export type ThemeType = ReturnType<typeof generateTheme>;
 export type MappedThemeType = ReturnType<typeof mapTheme>;
@@ -13,6 +17,7 @@ export const mapTheme = (variables: ThemeType) => {
   return {
     '--accent': variables.accent || '',
     '--bg-nav': variables.bgNav || '',
+    '--bg-nav-lighter': lighten(variables.bgNav, 3),
     '--bg-primary': variables.bgPrimary || '',
     '--text-primary': variables.textPrimary || '',
     '--text-secondary': variables.textSecondary || '',

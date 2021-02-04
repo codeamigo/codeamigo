@@ -111,7 +111,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav"
+        className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-accent"
         style={{
           position: 'relative',
           top: '-4px',
