@@ -13,9 +13,9 @@ import {
 import { v4 } from "uuid";
 
 import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
-import { RoleEnum, ThemeEnum, User } from "../entities/User";
+import { RoleEnum, User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
-import { MyContext } from "../types";
+import { MyContext, ThemeEnum } from "../types";
 import { sendEmail } from "../utils/sendEmail";
 
 @InputType()
@@ -46,8 +46,8 @@ class UpdateUserRoleInput {
 
 @InputType()
 class UpdateUserThemeInput {
-  @Field()
-  theme: ThemeEnum;
+  @Field(() => String)
+  theme: keyof typeof ThemeEnum;
 }
 
 @ObjectType()
@@ -197,7 +197,7 @@ export class UserResolver {
       {
         id: user.id,
       },
-      { theme: options.theme }
+      { theme: ThemeEnum[options.theme] }
     );
 
     return { user };

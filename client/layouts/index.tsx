@@ -11,8 +11,8 @@ const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
   const theme = loading
     ? null
     : data?.me
-    ? data.me?.theme || 'COBALT'
-    : 'COBALT';
+    ? data.me?.theme || 'cobalt'
+    : 'cobalt';
 
   useEffect(() => {
     if (theme) {

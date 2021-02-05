@@ -1,4 +1,4 @@
-import monacoTheme from '../monacoThemes/ALL_HALLOWS_EVE.json';
+import monacoTheme from '../monacoThemes/All Hallows Eve.json';
 import { generateTheme, themes } from './index';
 
 const Color = require('color');

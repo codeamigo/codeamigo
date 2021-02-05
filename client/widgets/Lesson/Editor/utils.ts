@@ -19,3 +19,9 @@ export const getExtension = (file: string) => {
       return ext;
   }
 };
+
+export const camalize = (str: string) => {
+  return str
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+};

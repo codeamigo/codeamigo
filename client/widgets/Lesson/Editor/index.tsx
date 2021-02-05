@@ -13,14 +13,15 @@ import {
   useCompleteCheckpointMutation,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
+  useMeQuery,
   usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
-import ALL_HALLOWS_EVE from '../../../styles/monacoThemes/ALL_HALLOWS_EVE.json';
+import * as THEMES from '../../../styles/monacoThemes';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
-import { getExtension } from './utils';
+import { camalize, getExtension } from './utils';
 
 const FILE = 'file:///';
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
@@ -42,6 +43,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
+
+  const { data: meData } = useMeQuery();
 
   useEffect(() => {
     return () => {
@@ -320,7 +323,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     const reactNamespace = 'React';
     const hasNativeTypescript = false;
 
-    // https://ALL_HALLOWS_EVE.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
+    // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
       {
         allowJs: true,
@@ -413,8 +416,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupThemes = () => {
-    monacoRef.current.editor.defineTheme('ALL_HALLOWS_EVE', ALL_HALLOWS_EVE);
-    monacoRef.current.editor.setTheme('ALL_HALLOWS_EVE');
+    let themeName = meData?.me?.theme || 'cobalt';
+    let theme = THEMES[themeName as keyof typeof THEMES];
+    let standardThemeName = themeName.split('_').map(camalize).join('');
+    monacoRef.current.editor.defineTheme(standardThemeName, theme);
+    monacoRef.current.editor.setTheme(standardThemeName);
   };
 
   const setupEditor = () => {

@@ -27,7 +27,7 @@ const Me = () => {
   }, [tab]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // if (error) return <div>{error.toString()}</div>;
 
   return (
     <div className="flex flex-col sm:space-x-8 sm:flex-row">

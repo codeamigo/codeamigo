@@ -9,18 +9,13 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 
+import { ThemeEnum } from "../types";
 import { Lesson } from "./Lesson";
 import { Session } from "./Session";
 
 export enum RoleEnum {
   ADMIN = "ADMIN",
   USER = "USER",
-}
-
-export enum ThemeEnum {
-  ALL_HALLOWS_EVE = "ALL_HALLOWS_EVE",
-  COBALT = "COBALT",
-  GITHUB = "GITHUB",
 }
 
 registerEnumType(RoleEnum, {
@@ -50,8 +45,13 @@ export class User extends BaseEntity {
   role: keyof typeof RoleEnum;
 
   @Field(() => ThemeEnum)
-  @Column({ default: ThemeEnum.COBALT, nullable: true, type: "text" })
-  theme: keyof typeof ThemeEnum;
+  @Column({
+    default: ThemeEnum.cobalt,
+    enum: ThemeEnum,
+    nullable: true,
+    type: "enum",
+  })
+  theme: ThemeEnum;
 
   @Field()
   @Column({ type: "text", unique: true })

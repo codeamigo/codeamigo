@@ -139,7 +139,7 @@ export type User = {
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
   role: Role;
-  theme: Scalars['String'];
+  theme: Theme;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
 };
@@ -147,6 +147,57 @@ export type User = {
 export enum Role {
   Admin = 'ADMIN',
   User = 'USER'
+}
+
+export enum Theme {
+  Active4d = 'active4d',
+  AllHallowsEve = 'all_hallows_eve',
+  Amy = 'amy',
+  BirdsOfParadise = 'birds_of_paradise',
+  Blackboard = 'blackboard',
+  BrillianceBlack = 'brilliance_black',
+  BrillianceDull = 'brilliance_dull',
+  ChromeDevtools = 'chrome_devtools',
+  CloudsMidnight = 'clouds_midnight',
+  Clouds = 'clouds',
+  Cobalt = 'cobalt',
+  Dawn = 'dawn',
+  Dreamweaver = 'dreamweaver',
+  Eiffel = 'eiffel',
+  EspressoLibre = 'espresso_libre',
+  Github = 'github',
+  Idle = 'idle',
+  Katzenmilch = 'katzenmilch',
+  KuroirTheme = 'kuroir_theme',
+  Lazy = 'lazy',
+  MagicwbAmiga = 'magicwb__amiga_',
+  MerbivoreSoft = 'merbivore_soft',
+  Merbivore = 'merbivore',
+  MonokaiBright = 'monokai_bright',
+  Monokai = 'monokai',
+  NightOwl = 'night_owl',
+  OceanicNext = 'oceanic_next',
+  PastelsOnDark = 'pastels_on_dark',
+  SlushAndPoppies = 'slush_and_poppies',
+  SolarizedDark = 'solarized_dark',
+  SolarizedLight = 'solarized_light',
+  Spacecadet = 'spacecadet',
+  Sunburst = 'sunburst',
+  TextmateMacClassic = 'textmate_mac_classic_',
+  TomorrowNightBlue = 'tomorrow_night_blue',
+  TomorrowNightBright = 'tomorrow_night_bright',
+  TomorrowNightEighties = 'tomorrow_night_eighties',
+  TomorrowNight = 'tomorrow_night',
+  Tomorrow = 'tomorrow',
+  Twilight = 'twilight',
+  UpstreamSunburst = 'upstream_sunburst',
+  VibrantInk = 'vibrant_ink',
+  XcodeDefault = 'xcode_default',
+  Zenburnesque = 'zenburnesque',
+  Iplastic = 'iplastic',
+  Idlefingers = 'idlefingers',
+  Krtheme = 'krtheme',
+  Monoindustrial = 'monoindustrial'
 }
 
 export type Session = {
