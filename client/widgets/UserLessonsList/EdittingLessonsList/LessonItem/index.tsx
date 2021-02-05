@@ -41,10 +41,13 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
   };
 
   return (
-    <div className="p-3 rounded-lg border-bg-nav-lighter border-2" key={lesson.id}>
+    <div
+      className="p-3 rounded-lg border-bg-nav-lighter border-2"
+      key={lesson.id}
+    >
       <div className="flex justify-between items-start">
         <a
-          className="text-md text-blue-600 font-semibold hover:underline"
+          className="text-md text-accent font-semibold hover:underline"
           href={`/lessons/edit/${lesson.id}`}
         >
           {lesson.title}
@@ -110,8 +113,8 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
           className="hint--top hint--no-animate"
         >
           <div className="flex">
-            <Icon className="text-gray-500 mr-1 cursor-auto" name="users" />{' '}
-            <div>{lesson.students?.length}</div>
+            <Icon className="text-text-primary mr-1 cursor-auto" name="users" />{' '}
+            <div className="text-text-primary">{lesson.students?.length}</div>
           </div>
         </div>
       </div>

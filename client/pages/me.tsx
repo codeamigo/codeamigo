@@ -38,7 +38,7 @@ const Me = () => {
         <button
           className={`${
             tab === 'activity' ? 'bg-bg-nav' : ''
-          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-bg-nav transition-colors text-left`}
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
           onClick={() => setTab('activity')}
         >
           <Icon className="mr-2" name="bell" /> Recent Activity
@@ -46,7 +46,7 @@ const Me = () => {
         <button
           className={`${
             tab === 'lessons' ? 'bg-bg-nav' : ''
-          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-bg-nav transition-colors text-left`}
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
           onClick={() => setTab('lessons')}
         >
           <Icon className="mr-2" name="book-open" /> Your Lessons
@@ -54,7 +54,7 @@ const Me = () => {
         <button
           className={`${
             tab === 'settings' ? 'bg-bg-nav' : ''
-          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-bg-nav transition-colors text-left`}
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
           onClick={() => setTab('settings')}
         >
           <Icon className="mr-2" name="cog" /> Settings
@@ -63,7 +63,7 @@ const Me = () => {
           <button
             className={`${
               tab === 'backoffice' ? 'bg-bg-nav' : ''
-            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-blue-600 hover:bg-bg-nav transition-colors text-left`}
+            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
             onClick={() => setTab('backoffice')}
           >
             <Icon className="mr-2" name="flashlight" /> Backoffice

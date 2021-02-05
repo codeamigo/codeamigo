@@ -54,7 +54,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
     >
       <div className="flex justify-between items-start">
         <a
-          className="text-md text-blue-600 font-semibold hover:underline"
+          className="text-md text-accent font-semibold hover:underline"
           href="/"
           onClick={(e) => handleClick(e, session.lesson.id)}
         >

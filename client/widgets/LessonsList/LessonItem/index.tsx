@@ -31,7 +31,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
       key={lesson.id}
     >
       <a
-        className="text-md text-blue-600 font-semibold hover:underline"
+        className="text-md text-accent font-semibold hover:underline"
         href="/"
         onClick={(e) => handleClick(e, lesson.id)}
       >
@@ -45,7 +45,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
         >
           <div className="flex">
             <Icon className="text-text-primary mr-1 cursor-auto" name="users" />{' '}
-            <div>{lesson.students?.length}</div>
+            <div className="text-text-primary">{lesson.students?.length}</div>
           </div>
         </div>
       </div>
