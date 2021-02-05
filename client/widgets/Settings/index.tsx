@@ -1,9 +1,14 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
+import { generateTheme } from 'styles/appThemes';
+import { mapTheme } from 'styles/appThemes/utils';
 
 import InputField from '👨‍💻components/Form/InputField';
 import { useUpdateUserThemeMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
+
+import { themes } from '../../styles/appThemes';
+import themeList from '../../styles/monacoThemes/themelist.json';
 
 const Settings: React.FC<Props> = () => {
   const [updateUserTheme] = useUpdateUserThemeMutation({
@@ -12,11 +17,11 @@ const Settings: React.FC<Props> = () => {
 
   return (
     <div>
-      <div className="md:w-1/4">
+      <div>
         <h2 className="underline text-xl text-text-primary font-bold mb-3">
           Choose Theme
         </h2>
-        <Formik
+        {/* <Formik
           initialValues={{ theme: '' }}
           onSubmit={async (values, { setErrors }) => {
             const { data } = await updateUserTheme({
@@ -42,7 +47,30 @@ const Settings: React.FC<Props> = () => {
               </button>
             </Form>
           )}
-        </Formik>
+        </Formik> */}
+        <div className="grid grid-cols-4 gap-10">
+          {Object.keys(themes).map((theme) => {
+            const mTheme = mapTheme(themes[theme]);
+
+            return (
+              <div
+                className="h-32 w-full rounded-lg p-3"
+                style={{
+                  background: mTheme['--bg-primary'],
+                  border: `2px solid ${mTheme['--bg-nav-lighter']}`,
+                }}
+              >
+                <div
+                  className="font-semibold"
+                  style={{ color: mTheme['--text-primary'] }}
+                >
+                  {/* @ts-ignore */}
+                  {themeList[theme]}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

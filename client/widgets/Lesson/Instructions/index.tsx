@@ -60,7 +60,7 @@ const Instructions: React.FC<Props> = (props) => {
             <>
               <span
                 className={`cursor-pointer ${
-                  view === 'editor' ? 'text-blue-600' : 'text-black'
+                  view === 'editor' ? 'text-accent' : 'text-black'
                 }`}
                 onClick={() => toggleView('editor')}
               >
@@ -69,7 +69,7 @@ const Instructions: React.FC<Props> = (props) => {
               |
               <span
                 className={`cursor-pointer ${
-                  view === 'preview' ? 'text-blue-600' : 'text-black'
+                  view === 'preview' ? 'text-accent' : 'text-black'
                 }`}
                 onClick={() => toggleView('preview')}
               >
@@ -128,7 +128,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         {isEditting && (
           <button
-            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-white bg-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             onClick={createCheckpoint}
             type="button"
           >

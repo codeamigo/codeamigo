@@ -56,7 +56,7 @@ const Login: React.FC = () => {
               </button>
               <div className="text-xs w-full text-center my-1">or</div>
               <button
-                className="w-full justify-center text-sm font-medium rounded-md text-blue-600 focus:outline-none"
+                className="w-full justify-center text-sm font-medium rounded-md text-accent focus:outline-none"
                 onClick={() =>
                   modalVar({ callback: () => null, name: 'register' })
                 }

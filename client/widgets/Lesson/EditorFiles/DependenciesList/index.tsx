@@ -210,7 +210,7 @@ const DependenciesList: React.FC<Props> = ({
                             >
                               <span
                                 className={`${
-                                  active ? 'text-white' : 'text-blue-600'
+                                  active ? 'text-primary' : 'text-accent'
                                 } text-xs flex items-center`}
                               >
                                 {result.name} {result.version}

@@ -152,10 +152,10 @@ const Steps: React.FC<Props> = ({
             <li
               className={`${
                 canGoToStep(step)
-                  ? `cursor-pointer hover:text-blue-600 transition-colors duration-150 ${styles.STEP}`
+                  ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
                   : 'cursor-not-allowed opacity-50'
               } ${
-                currentStepId === step.id ? 'text-blue-600' : ''
+                currentStepId === step.id ? 'text-accent' : ''
               } text-text-primary list-none w-full flex justify-between items-center`}
               key={step.id}
               onClick={() => {
@@ -224,7 +224,7 @@ const Steps: React.FC<Props> = ({
       )}
       {isEditting && (
         <button
-          className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
+          className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
           onClick={() => setIsAdding(true)}
           type="button"
         >
