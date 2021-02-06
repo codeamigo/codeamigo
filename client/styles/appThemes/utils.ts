@@ -19,7 +19,10 @@ export const mapTheme = (variables: ThemeType) => {
   return {
     '--accent': variables.accent || '',
     '--bg-nav': variables.bgNav || '',
-    '--bg-nav-lighter': lighten(variables.bgNav, 2),
+    '--bg-nav-offset':
+      variables.base === 'vs-dark'
+        ? lighten(variables.bgNav, 2)
+        : darken(variables.bgNav, 2),
     '--bg-primary': variables.bgPrimary || '',
     '--text-primary': variables.textPrimary || '',
     '--text-secondary': variables.textSecondary || '',

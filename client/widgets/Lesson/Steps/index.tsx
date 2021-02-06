@@ -46,7 +46,7 @@ const Steps: React.FC<Props> = ({
     const changeStepsHeight = () => {
       const instructions = document.getElementById('instructions');
       const height = instructions?.offsetHeight || 0;
-      const newHeight = `${height - 4}px`;
+      const newHeight = `${height}px`;
 
       if (newHeight !== stepsHeight) {
         setStepsHeight(newHeight);

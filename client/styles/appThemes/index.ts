@@ -50,13 +50,17 @@ import zenburnesque from '../monacoThemes/Zenburnesque.json';
 import { IThemes, MonacoThemeType } from './utils';
 
 export const generateTheme = (theme: MonacoThemeType) => ({
-  accent: '#3dc9b0',
+  accent: theme.rules.find(({ token }) => token === 'keyword')?.foreground
+    ? '#' + theme.rules.find(({ token }) => token === 'keyword')?.foreground
+    : '#3dc9b0',
+  base: theme.base,
   bgNav: theme.rules.find(({ token }) => token === 'markup.heading')?.background
     ? '#' +
       theme.rules.find(({ token }) => token === 'markup.heading')?.background
     : theme.colors['editor.selectionBackground'],
   bgPrimary: theme.colors['editor.background'],
-  textPrimary: VS_DARK.semanticTokenColors.newOperator,
+  textPrimary:
+    theme.base === 'vs-dark' ? VS_DARK.semanticTokenColors.newOperator : '#000',
   textSecondary: theme.rules.find(({ token }) => token === 'constant')
     ?.foreground
     ? '#' + theme.rules.find(({ token }) => token === 'constant')?.foreground

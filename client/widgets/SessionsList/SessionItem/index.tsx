@@ -49,7 +49,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
 
   return (
     <div
-      className="p-3 rounded-lg border-bg-nav-lighter border-2"
+      className="p-3 rounded-lg border-bg-nav-offset border-2"
       key={session.id}
     >
       <div className="flex justify-between items-start">

@@ -58,7 +58,7 @@ const Settings: React.FC<Props> = () => {
                 onClick={() => updateUserTheme({ variables: { theme } })}
                 style={{
                   background: mTheme['--bg-primary'],
-                  border: `2px solid ${mTheme['--bg-nav-lighter']}`,
+                  border: `2px solid ${mTheme['--bg-nav-offset']}`,
                 }}
               >
                 <div

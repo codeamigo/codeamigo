@@ -110,13 +110,7 @@ const Instructions: React.FC<Props> = (props) => {
           <Checkpoints {...props} />
         </div>
       </div>
-      <div
-        className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-accent"
-        style={{
-          position: 'relative',
-          top: '-4px',
-        }}
-      >
+      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-accent">
         <div
           className="flex items-center cursor-pointer"
           onClick={props.toggleShowSteps}
@@ -128,7 +122,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         {isEditting && (
           <button
-            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-white bg-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-white bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             onClick={createCheckpoint}
             type="button"
           >

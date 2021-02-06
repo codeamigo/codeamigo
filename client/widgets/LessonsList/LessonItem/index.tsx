@@ -27,7 +27,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
 
   return (
     <div
-      className="p-3 rounded-lg border-bg-nav-lighter border-2"
+      className="p-3 rounded-lg border-bg-nav-offset border-2"
       key={lesson.id}
     >
       <a

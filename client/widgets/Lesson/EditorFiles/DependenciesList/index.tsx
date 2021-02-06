@@ -204,7 +204,7 @@ const DependenciesList: React.FC<Props> = ({
                             <div
                               className={`${
                                 active
-                                  ? 'text-white bg-blue-600'
+                                  ? 'text-primary bg-accent'
                                   : 'text-gray-900'
                               } cursor-pointer select-none relative py-1 px-2`}
                             >

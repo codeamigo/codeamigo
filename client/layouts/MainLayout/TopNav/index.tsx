@@ -11,7 +11,7 @@ const TopNav: React.FC<Props> = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-bg-nav border-b border-bg-nav-lighter">
+    <nav className="bg-bg-nav border-b border-bg-nav-offset">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between h-16">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -70,7 +70,7 @@ const TopNav: React.FC<Props> = () => {
           </div>
           <div className="hidden sm:block">
             <button
-              className={`flex items-center font-semibold text-sm bg-blue-600 text-white rounded-md p-2 focus:outline-none`}
+              className={`flex items-center font-semibold text-sm bg-accent text-text-primary rounded-md p-2 focus:outline-none`}
               onClick={() =>
                 modalVar({ callback: () => null, name: 'createLesson' })
               }
@@ -87,7 +87,7 @@ const TopNav: React.FC<Props> = () => {
         <div className="sm:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
             <button
-              className={`flex items-center font-semibold text-sm bg-blue-600 text-white rounded-md p-2 focus:outline-none`}
+              className={`flex items-center font-semibold text-sm bg-accent text-text-primary rounded-md p-2 focus:outline-none`}
               onClick={() =>
                 modalVar({ callback: () => null, name: 'createLesson' })
               }

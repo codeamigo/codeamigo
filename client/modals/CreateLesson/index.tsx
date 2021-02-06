@@ -30,7 +30,9 @@ const CreateLesson: React.FC<Props> = () => {
         return (
           <Form>
             <div className="max-w-2xl mx-auto py-6 sm:px-6">
-              <h1 className="text-xl font-semibold flex mb-4">New Lesson</h1>
+              <h1 className="text-xl font-semibold flex mb-4 text-text-primary">
+                New Lesson
+              </h1>
               <div className="flex flex-col gap-4">
                 <div className="w-1/2">
                   <InputField
@@ -66,7 +68,7 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg"
                         />
-                        <div className="text-sm font-semibold">
+                        <div className="text-sm text-text-primary font-semibold">
                           React TypeScript
                         </div>
                       </div>
@@ -86,7 +88,9 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg"
                         />
-                        <div className="text-sm font-semibold">HTML/CSS</div>
+                        <div className="text-sm text-text-primary font-semibold">
+                          HTML/CSS
+                        </div>
                       </div>
                     </label>
                     <label
@@ -104,7 +108,7 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg"
                         />
-                        <div className="text-sm font-semibold">
+                        <div className="text-sm text-text-primary font-semibold">
                           Vanilla TypeScript
                         </div>
                       </div>
@@ -124,7 +128,7 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg"
                         />
-                        <div className="text-sm font-semibold">
+                        <div className="text-sm text-text-primary font-semibold">
                           Vanilla JavaScript
                         </div>
                       </div>
@@ -134,7 +138,7 @@ const CreateLesson: React.FC<Props> = () => {
               </div>
               <div className="pt-4 text-right">
                 <button
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
                   disabled={isSubmitting}
                   type="submit"
                 >
