@@ -61,11 +61,11 @@ const Settings: React.FC<Props> = () => {
                   </div>
                   <div
                     className="h-3 w-20 rounded-full mt-3"
-                    style={{ background: mTheme['--accent'] }}
+                    style={{ background: mTheme['--bg-nav'] }}
                   ></div>
                   <div
                     className="h-3 w-28 rounded-full mt-3"
-                    style={{ background: mTheme['--text-primary'] }}
+                    style={{ background: mTheme['--accent'] }}
                   ></div>
                 </label>
                 // <div
