@@ -1,4 +1,3 @@
-import { ControlledEditor } from '@monaco-editor/react';
 import debounce from 'debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -154,7 +153,9 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                           : 'right-dir'
                       }
                     />
-                    <span className="text-text-primary">Checkpoint {i + 1} </span>
+                    <span className="text-text-primary">
+                      Checkpoint {i + 1}{' '}
+                    </span>
                   </span>
                   {!isEditting &&
                     (checkpoint.isTested || checkpoint.isCompleted) && (
@@ -206,19 +207,16 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                     } min-h-24 overflow-scroll`}
                   >
                     {view === 'editor' ? (
-                      <ControlledEditor
-                        onChange={(_, value) => {
-                          setMarkdown(value || '');
-                          updateCheckpoint(value);
+                      <textarea
+                        className="h-full w-full bg-bg-primary text-text-primary border-none"
+                        defaultValue={markdown || ''}
+                        onChange={(
+                          e: React.ChangeEvent<HTMLTextAreaElement>
+                        ) => {
+                          setMarkdown(e.currentTarget.value);
+                          updateCheckpoint(e.currentTarget.value);
                         }}
-                        options={{
-                          automaticLayout: true,
-                          minimap: { enabled: false },
-                          quickSuggestions: false,
-                          scrollBeyondLastLine: false,
-                          wordWrap: 'on',
-                        }}
-                        value={markdown}
+                        style={{ resize: 'none' }}
                       />
                     ) : (
                       <ReactMarkdown

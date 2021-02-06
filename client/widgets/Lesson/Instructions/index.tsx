@@ -1,4 +1,3 @@
-import { ControlledEditor } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -6,7 +5,6 @@ import gfm from 'remark-gfm';
 
 import Icon from '👨‍💻components/Icon';
 import {
-  LessonQuery,
   RegularStepFragment,
   useCreateCheckpointMutation,
   useUpdateStepInstructionsMutation,
@@ -84,20 +82,15 @@ const Instructions: React.FC<Props> = (props) => {
           } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-accent overflow-scroll`}
         >
           {view === 'editor' ? (
-            <ControlledEditor
-              onChange={(_, value) => {
-                setMarkdown(value);
-                updateStep(step.id, value);
+            <textarea
+              className="h-full bg-bg-primary text-text-primary border-none"
+              defaultValue={markdown || ''}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                setMarkdown(e.currentTarget.value);
+                updateStep(step.id, e.currentTarget.value);
               }}
-              options={{
-                automaticLayout: true,
-                minimap: { enabled: false },
-                quickSuggestions: false,
-                scrollBeyondLastLine: false,
-                wordWrap: 'on',
-              }}
-              value={markdown}
-            />
+              style={{ resize: 'none' }}
+            ></textarea>
           ) : (
             <ReactMarkdown
               children={markdown || ''}
@@ -122,7 +115,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         {isEditting && (
           <button
-            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-white bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             onClick={createCheckpoint}
             type="button"
           >
