@@ -55,6 +55,7 @@ const Settings: React.FC<Props> = () => {
             return (
               <div
                 className="h-32 w-full rounded-lg p-3"
+                onClick={() => updateUserTheme({ variables: { theme } })}
                 style={{
                   background: mTheme['--bg-primary'],
                   border: `2px solid ${mTheme['--bg-nav-lighter']}`,
