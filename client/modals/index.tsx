@@ -46,7 +46,7 @@ const Modals: React.FC<Props> = () => {
         >
           <div
             aria-hidden="true"
-            className="fixed inset-0 transition-opacity bg-bg-nav opacity-20"
+            className="fixed inset-0 transition-opacity bg-bg-nav opacity-50"
             onClick={() => modalVar(InitialModalState)}
           >
             <div className="absolute inset-0 opacity-75"></div>
