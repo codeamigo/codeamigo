@@ -27,7 +27,7 @@ const Settings: React.FC<Props> = () => {
           Choose Theme
         </h2>
         <Formik initialValues={{ theme: data.me.theme }} onSubmit={() => {}}>
-          <div className="grid grid-cols-4 gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
             {Object.keys(themes).map((theme) => {
               const mTheme = mapTheme(themes[theme]);
               console.log(theme);
