@@ -1,11 +1,8 @@
-import { Field, Form, Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import React from 'react';
-import { generateTheme } from 'styles/appThemes';
 import { mapTheme } from 'styles/appThemes/utils';
 
-import InputField from '👨‍💻components/Form/InputField';
 import { useMeQuery, useUpdateUserThemeMutation } from '👨‍💻generated/graphql';
-import { toErrorMap } from '👨‍💻utils/index';
 
 import { themes } from '../../styles/appThemes';
 import themeList from '../../styles/monacoThemes/themelist.json';
@@ -68,22 +65,6 @@ const Settings: React.FC<Props> = () => {
                     style={{ background: mTheme['--accent'] }}
                   ></div>
                 </label>
-                // <div
-                //   className="h-32 w-full rounded-lg p-3"
-                //   onClick={() => updateUserTheme({ variables: { theme } })}
-                //   style={{
-                //     background: mTheme['--bg-primary'],
-                //     border: `2px solid ${mTheme['--bg-nav-offset']}`,
-                //   }}
-                // >
-                //   <div
-                //     className="font-semibold"
-                //     style={{ color: mTheme['--text-primary'] }}
-                //   >
-                //     {/* @ts-ignore */}
-                //     {themeList[theme]}
-                //   </div>
-                // </div>
               );
             })}
           </div>

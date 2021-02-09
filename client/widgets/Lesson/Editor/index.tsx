@@ -272,10 +272,20 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     const iframeContentWindow = iframe.contentWindow;
     if (!iframeContentWindow) return;
 
+    // old files for old iframe
+    const files_DEPRECATED = { ...files, [runPath]: value };
+    // assets for parcel
+    const assets = Object.keys(files_DEPRECATED).map((file) => ({
+      content: files_DEPRECATED[file],
+      isEntry: true,
+      name: file,
+    }));
+
     // send files and path to iframe
     iframeContentWindow.postMessage(
       {
-        files: { ...files, ...dependencies, [runPath]: value },
+        assets,
+        files: files_DEPRECATED,
         from: 'editor',
         isTest,
         runPath,
@@ -458,7 +468,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
     setModel(main);
     setCurrentPath(main);
-    postCode(files, dependencies, main, files[main]);
+    postMessage(files, dependencies, main, files[main]);
   };
 
   const setModel = (path: string) => {
