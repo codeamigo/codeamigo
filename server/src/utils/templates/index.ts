@@ -5,6 +5,10 @@ export interface ITemplate {
 
 export type TemplatesType = "react" | "typescript" | "javascript" | "html";
 
+const css = `html, body {
+  background-color: white;
+}`;
+
 const tsTemplate = {
   codeModules: [{ name: "app.tsx", value: "// app.tsx" }],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
@@ -17,8 +21,24 @@ const jsTemplate = {
 
 const htmlTemplate = {
   codeModules: [
-    { name: "index.html", value: "<div id='root'></div>" },
-    { name: "styles.css", value: "/* styles.css */" },
+    {
+      name: "index.html",
+      value: `<html>
+
+<head>
+  <link href='./styles.css' rel='stylesheet' />
+</head>
+
+<body>
+  <div id='root'>Hello World!</div>
+</body>
+
+</html>`,
+    },
+    {
+      name: "styles.css",
+      value: css,
+    },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
@@ -42,9 +62,20 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     },
     {
       name: "index.html",
-      value: "<div id='root'></div>",
+      value: `<html>
+
+<head>
+  <link href='./styles.css' rel='stylesheet' />
+</head>
+
+<body>
+  <div id='root'></div>
+</body>
+<script src='./app.tsx'></script>
+
+</html>`,
     },
-    { name: "styles.css", value: "/* styles.css */" },
+    { name: "styles.css", value: css },
   ],
   dependencies: [
     { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
