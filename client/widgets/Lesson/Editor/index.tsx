@@ -17,6 +17,7 @@ import {
   usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
+import { getFileExt } from '👨‍💻utils/index';
 
 import * as THEMES from '../../../styles/monacoThemes';
 import EditorFiles from '../EditorFiles';
@@ -276,7 +277,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     // assets for parcel
     const assets = Object.keys(files_DEPRECATED).map((file) => ({
       content: files_DEPRECATED[file],
-      isEntry: true,
+      isEntry: file === 'index.html',
       name: file,
     }));
 
@@ -493,7 +494,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     setModel(main);
     setCurrentPath(main);
     const assets = prepareAssets(files);
-    postMessage(assets, dependencies, main, files[main]);
+    postMessage(assets, main, files[main]);
   };
 
   const setModel = (path: string) => {
