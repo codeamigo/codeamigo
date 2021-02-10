@@ -97,7 +97,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   }, [currentPath]);
 
   useEffect(() => {
-    updateDependencies();
+    console.log('here');
+    updateDependencies_DEPRECATED();
   }, [step.dependencies]);
 
   useEffect(() => {
@@ -225,14 +226,14 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           value: code,
         },
       });
-    }, 1000),
+    }, 500),
     [step.codeModules]
   );
 
-  const updateDependencies = async () => {
+  const updateDependencies_DEPRECATED = async () => {
     let dependencyDependencies: { [key in string]: string } = {};
 
-    const dependencies = step.dependencies?.reduce(
+    const deps = step.dependencies?.reduce(
       async (acc, { package: pkg, version }) => {
         const res: CodeSandboxV2ResponseI = await fetch(
           `${CS_PKG_URL}/${pkg}/${version}.json`
@@ -252,15 +253,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       },
       {}
     );
-
     setDependencies({
-      ...(await dependencies),
+      ...(await deps),
     });
   };
 
   const postMessage = (
     files: FilesType,
-    dependencies: FilesType,
     runPath: string,
     value: string,
     isTest?: boolean
@@ -285,7 +284,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     iframeContentWindow.postMessage(
       {
         assets,
-        files: files_DEPRECATED,
+        dependencies: step.dependencies,
         from: 'editor',
         isTest,
         runPath,
@@ -294,24 +293,48 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     );
   };
 
-  const postCode = useCallback(
-    debounce(
-      (
-        files: FilesType,
-        dependencies: FilesType,
-        runPath: string,
-        value: string
-      ) => {
-        if (runPath === 'index.html' || runPath === 'styles.css') {
-          files[runPath] = value;
-          runPath = getMain(files);
-          value = files[runPath];
-        }
+  const postMessage_DEPRECATED = (
+    files: FilesType,
+    dependencies: FilesType,
+    runPath: string,
+    value: string,
+    isTest?: boolean
+  ) => {
+    const iframe = isTest
+      ? (document.getElementById('test-frame') as HTMLIFrameElement)
+      : (document.getElementById('frame') as HTMLIFrameElement);
+    if (!iframe) return;
+    const iframeContentWindow = iframe.contentWindow;
+    if (!iframeContentWindow) return;
 
-        postMessage(files, dependencies, runPath, value);
+    // send files and path to iframe
+    iframeContentWindow.postMessage(
+      {
+        files: { ...files, ...dependencies, [runPath]: value },
+        from: 'editor',
+        isTest,
+        runPath,
       },
-      1500
-    ),
+      '*'
+    );
+  };
+
+  const prepareAssets = (files: FilesType) => {
+    const assets = Object.keys(files).reduce((acc, cur) => {
+      if (!cur.includes('spec')) {
+        acc[cur] = files[cur];
+      }
+
+      return acc;
+    }, {} as { [key in string]: string });
+    return assets;
+  };
+
+  const postCode = useCallback(
+    debounce((files: FilesType, runPath: string, value: string) => {
+      const assets = prepareAssets(files);
+      postMessage(assets, runPath, value);
+    }, 500),
     []
   );
 
@@ -322,10 +345,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     value: string
   ) => {
     isTestingVar(true);
-    postMessage(files, dependencies, runPath, value, true);
+    postMessage_DEPRECATED(files, dependencies, runPath, value, true);
   };
+
   async function getDeps() {
-    await updateDependencies();
+    await updateDependencies_DEPRECATED();
   }
 
   const setupCompilerOptions = () => {
@@ -468,7 +492,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
     setModel(main);
     setCurrentPath(main);
-    postMessage(files, dependencies, main, files[main]);
+    const assets = prepareAssets(files);
+    postMessage(assets, dependencies, main, files[main]);
   };
 
   const setModel = (path: string) => {
@@ -511,10 +536,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 [currentPath]: value || '',
               });
               updateFile(currentPath, value || '');
-              postCode(files, dependencies, currentPath, value || '');
+              postCode(files, currentPath, value || '');
             }}
             options={{
               automaticLayout: true,
+              fontSize: '14px',
               minimap: { enabled: false },
               scrollBeyondLastLine: false,
               wordWrap: 'on',
