@@ -16,7 +16,7 @@ export enum PreviewLogTypeEnum {
 }
 
 export type ToPreviewMsgType = {
-  assets: { content: string; isEntry: boolean; name: string }[];
+  assetBuffer: Buffer;
   dependencies: RegularDependencyFragment[];
   from: 'editor';
   isTest: boolean;
