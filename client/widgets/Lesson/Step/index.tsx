@@ -119,11 +119,6 @@ const Step: React.FC<Props> = ({
             id="frame"
             src={process.env.NEXT_PUBLIC_PREVIEW_URL}
           ></iframe>
-          <iframe
-            className="h-1 w-1"
-            id="test-frame"
-            src={process.env.NEXT_PUBLIC_TEST_URL}
-          ></iframe>
           <Console step={data.step} />
         </div>
       </div>

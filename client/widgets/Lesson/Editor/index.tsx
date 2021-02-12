@@ -33,7 +33,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const submitRef = useRef<any>();
 
   const [files, setFiles] = useState({} as FilesType);
-  const [dependencies, setDependencies] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
   const [isEditorReady, setIsEditorReady] = useState(false);
   const isTesting = useReactiveVar(isTestingVar);
@@ -96,11 +95,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       setModel(currentPath);
     }
   }, [currentPath]);
-
-  useEffect(() => {
-    console.log('here');
-    updateDependencies_DEPRECATED();
-  }, [step.dependencies]);
 
   useEffect(() => {
     const handlePassCheckpoint = async (message: {
@@ -231,43 +225,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     [step.codeModules]
   );
 
-  const updateDependencies_DEPRECATED = async () => {
-    let dependencyDependencies: { [key in string]: string } = {};
-
-    const deps = step.dependencies?.reduce(
-      async (acc, { package: pkg, version }) => {
-        const res: CodeSandboxV2ResponseI = await fetch(
-          `${CS_PKG_URL}/${pkg}/${version}.json`
-        ).then((res) => res.json());
-
-        Object.keys(res.contents).map((value) => {
-          dependencyDependencies = {
-            ...dependencyDependencies,
-            [value]: res.contents[value].content,
-          };
-        });
-
-        return {
-          ...(await acc),
-          ...dependencyDependencies,
-        };
-      },
-      {}
-    );
-    setDependencies({
-      ...(await deps),
-    });
-  };
-
   const postMessage = (
     files: FilesType,
     runPath: string,
     value: string,
     isTest?: boolean
   ) => {
-    const iframe = isTest
-      ? (document.getElementById('test-frame') as HTMLIFrameElement)
-      : (document.getElementById('frame') as HTMLIFrameElement);
+    const iframe = document.getElementById('frame') as HTMLIFrameElement;
     if (!iframe) return;
     const iframeContentWindow = iframe.contentWindow;
     if (!iframeContentWindow) return;
@@ -276,7 +240,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     // assets for parcel
     const assets = Object.keys(newFiles).map((file) => ({
       content: newFiles[file],
-      isEntry: file === 'index.html',
+      isEntry: isTest ? file === runPath : file === 'index.html',
       name: file,
     }));
 
@@ -289,32 +253,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         isTest,
         runPath,
       } as ToPreviewMsgType,
-      '*'
-    );
-  };
-
-  const postMessage_DEPRECATED = (
-    files: FilesType,
-    dependencies: FilesType,
-    runPath: string,
-    value: string,
-    isTest?: boolean
-  ) => {
-    const iframe = isTest
-      ? (document.getElementById('test-frame') as HTMLIFrameElement)
-      : (document.getElementById('frame') as HTMLIFrameElement);
-    if (!iframe) return;
-    const iframeContentWindow = iframe.contentWindow;
-    if (!iframeContentWindow) return;
-
-    // send files and path to iframe
-    iframeContentWindow.postMessage(
-      {
-        files: { ...files, ...dependencies, [runPath]: value },
-        from: 'editor',
-        isTest,
-        runPath,
-      },
       '*'
     );
   };
@@ -338,19 +276,10 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     []
   );
 
-  const testCode = (
-    files: FilesType,
-    dependencies: FilesType,
-    runPath: string,
-    value: string
-  ) => {
+  const testCode = (files: FilesType, runPath: string, value: string) => {
     isTestingVar(true);
-    postMessage_DEPRECATED(files, dependencies, runPath, value, true);
+    postMessage(files, runPath, value, true);
   };
-
-  async function getDeps() {
-    await updateDependencies_DEPRECATED();
-  }
 
   const setupCompilerOptions = () => {
     const jsxFactory = 'React.createElement';
@@ -468,8 +397,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const editorDidMount = async (_: any, editor: any) => {
-    await getDeps();
-
     const monacoInstance = await monaco.init();
 
     editorRef.current = editor;
@@ -568,7 +495,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                       ...files,
                       [currentPath]: files[currentPath],
                     },
-                    dependencies,
                     currentCheck!.test,
                     files[currentCheck!.test]
                   )
