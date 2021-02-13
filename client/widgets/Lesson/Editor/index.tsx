@@ -35,6 +35,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const [files, setFiles] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
   const [isEditorReady, setIsEditorReady] = useState(false);
+  const [isBundlerReady, setIsBundlerReady] = useState(false);
   const isTesting = useReactiveVar(isTestingVar);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -50,6 +51,18 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     return () => {
       isTestingVar(false);
     };
+  }, []);
+
+  useEffect(() => {
+    const handleBundlerReadyMessages = (e: MessageEvent) => {
+      if (e.data.from === 'bundler') {
+        setIsBundlerReady(e.data.bundlingState === 'Symbol(BUNDLING_FINISHED)');
+      }
+    };
+
+    window.addEventListener('message', handleBundlerReadyMessages);
+    return () =>
+      window.removeEventListener('message', handleBundlerReadyMessages);
   }, []);
 
   // Change Step
@@ -342,6 +355,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     editorRef.current.addCommand(
       monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
       () => {
+        console.log(submitRef.current);
         submitRef.current.click();
       }
     );
@@ -458,6 +472,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
             editorDidMount={editorDidMount}
             language={'typescript'}
             onChange={(_, value) => {
+              setIsBundlerReady(false);
               setFiles({
                 ...files,
                 [currentPath]: value || '',
@@ -484,7 +499,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
                 : 'text-primary bg-accent focus:ring-blue-500'
             }`}
-            disabled={isTesting}
+            disabled={isTesting || !isBundlerReady}
             onClick={() =>
               isStepComplete
                 ? nextStep()
