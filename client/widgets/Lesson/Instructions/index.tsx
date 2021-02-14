@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   RegularStepFragment,
@@ -79,7 +80,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-accent overflow-scroll`}
+          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset overflow-scroll`}
         >
           {view === 'editor' ? (
             <textarea
@@ -103,7 +104,7 @@ const Instructions: React.FC<Props> = (props) => {
           <Checkpoints {...props} />
         </div>
       </div>
-      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-accent">
+      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-bg-nav-offset">
         <div
           className="flex items-center cursor-pointer"
           onClick={props.toggleShowSteps}
@@ -114,13 +115,9 @@ const Instructions: React.FC<Props> = (props) => {
           </div>
         </div>
         {isEditting && (
-          <button
-            className="text-sm font-medium inline-flex justify-center items-center h-8 px-2 border border-transparent shadow-sm rounded-md text-text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-            onClick={createCheckpoint}
-            type="button"
-          >
+          <Button onClick={createCheckpoint} type="button">
             Add Checkpoint
-          </button>
+          </Button>
         )}
       </div>
     </>

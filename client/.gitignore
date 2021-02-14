@@ -34,4 +34,4 @@ yarn-error.log*
 .vercel
 
 # css
-./styles/App.css
+.styles/App.css

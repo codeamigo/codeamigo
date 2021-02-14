@@ -1,6 +1,7 @@
 import { Transition } from '@headlessui/react';
 import React, { useEffect, useRef, useState } from 'react';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   RegularStepFragment,
@@ -156,7 +157,7 @@ const Steps: React.FC<Props> = ({
                   : 'cursor-not-allowed opacity-50'
               } ${
                 currentStepId === step.id ? 'text-accent' : ''
-              } text-text-primary list-none w-full flex justify-between items-center`}
+              } text-text-primary list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
               key={step.id}
               onClick={() => {
                 if (canGoToStep(step)) {
@@ -173,7 +174,7 @@ const Steps: React.FC<Props> = ({
               <div className="flex w-full">
                 {isUpdating === step.id ? (
                   <input
-                    className="w-full text-md text-gray-900 px-0 py-0 border-none border-b-2 border-blue-50 bg-transparent focus:ring-0"
+                    className="w-full text-md text-text-primary px-0 py-0 border-none border-b-2 border-blue-50 bg-transparent focus:ring-0"
                     defaultValue={step.name || ''}
                     onBlur={(e) => handleUpdateBlur(e, step.id)}
                     onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
@@ -188,7 +189,7 @@ const Steps: React.FC<Props> = ({
               </div>
               {isEditting && isUpdating === step.id && (
                 <Icon
-                  className="text-gray-500 mr-2 hover:text-green-600 transition-colors duration-150"
+                  className="text-text-primary mr-2 hover:text-green-600 transition-colors duration-150"
                   name="check"
                   // handled by blur
                   onClick={() => null}
@@ -223,13 +224,13 @@ const Steps: React.FC<Props> = ({
         />
       )}
       {isEditting && (
-        <button
-          className="inline-flex justify-center py-2 px-4 mt-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-accent hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 whitespace-nowrap"
+        <Button
+          className="mt-3"
           onClick={() => setIsAdding(true)}
           type="button"
         >
           Add Step
-        </button>
+        </Button>
       )}
     </Transition>
   );

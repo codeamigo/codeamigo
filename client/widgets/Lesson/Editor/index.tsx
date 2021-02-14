@@ -5,6 +5,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
   RegularStepFragment,
@@ -454,8 +455,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   return (
     <div className="w-full lg:h-full flex flex-col relative">
-      <div className="h-80 lg:flex-1 flex border border-accent border-t-0 border-b-0 whitespace-nowrap">
-        <div className="w-4/12 border-r border-accent">
+      <div className="h-80 lg:flex-1 flex border border-bg-nav-offset border-t-0 border-b-0 whitespace-nowrap">
+        <div className="w-4/12 border-r border-bg-nav-offset">
           <EditorFiles
             createFile={createFile}
             currentPath={currentPath}
@@ -491,13 +492,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           />
         </div>
       </div>
-      <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-accent">
+      <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
         <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
           <button
-            className={`flex items-center justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-white disabled:opacity-50 ${
+            className={`flex items-center justify-center w-20 h-8 py-1 px-2 border border-transparent shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 text-bg-nav-primary disabled:opacity-50 ${
               isTested
                 ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                : 'text-primary bg-accent focus:ring-blue-500'
+                : 'bg-accent focus:ring-blue-500'
             }`}
             disabled={isTesting || !isBundlerReady}
             onClick={() =>

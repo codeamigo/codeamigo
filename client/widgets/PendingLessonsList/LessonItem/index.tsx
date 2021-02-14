@@ -82,7 +82,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                     role="menu"
                   >
                     <button
-                      className="w-full flex items-center text-left px-3 py-2 text-sm text-text-primary hover:bg-accent"
+                      className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
                       onClick={(e) => approveLesson(e, lesson.id)}
                       role="menuitem"
                     >

@@ -76,7 +76,7 @@ const Console: React.FC<Props> = ({ step }) => {
 
   return (
     <div
-      className="flex flex-col overflow-hidden min-h-16 transition-all duration-500 bg-bg-nav border-t border-accent"
+      className="flex flex-col overflow-hidden min-h-16 transition-all duration-500 bg-bg-nav border-t border-bg-nav-offset"
       style={{
         height: activeTab ? '100%' : '0%',
       }}

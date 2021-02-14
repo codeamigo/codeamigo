@@ -112,7 +112,7 @@ const DependenciesList: React.FC<Props> = ({
 
   return (
     <>
-      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-accent p-1 flex justify-between content-center">
+      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
         <span className="text-sm text-text-primary font-semibold">{name}</span>
         {isEditting && (
           <Icon

@@ -87,7 +87,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
                     role="menu"
                   >
                     <button
-                      className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent"
+                      className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
                       onClick={(e) => deleteSession(e, session.id)}
                       role="menuitem"
                     >

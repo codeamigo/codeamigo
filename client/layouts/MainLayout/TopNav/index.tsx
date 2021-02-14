@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
@@ -18,7 +19,7 @@ const TopNav: React.FC<Props> = () => {
             {/* <!-- Mobile menu button--> */}
             <button
               aria-expanded="false"
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="inline-flex items-center justify-center p-2 rounded-md text-text-secondary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             >
               <span className="sr-only">Open main menu</span>
               {isMobileMenuOpen ? (
@@ -69,15 +70,14 @@ const TopNav: React.FC<Props> = () => {
             </div>
           </div>
           <div className="hidden sm:block">
-            <button
-              className={`flex items-center font-semibold text-sm bg-accent text-text-primary rounded-md p-2 focus:outline-none`}
+            <Button
               onClick={() =>
                 modalVar({ callback: () => null, name: 'createLesson' })
               }
             >
               <Icon className="mr-1.5" name="plus-circled" />
               <span>New Lesson</span>
-            </button>
+            </Button>
           </div>
           <UserMenu />
         </div>
@@ -86,15 +86,14 @@ const TopNav: React.FC<Props> = () => {
       {isMobileMenuOpen && (
         <div className="sm:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1">
-            <button
-              className={`flex items-center font-semibold text-sm bg-accent text-text-primary rounded-md p-2 focus:outline-none`}
+            <Button
               onClick={() =>
                 modalVar({ callback: () => null, name: 'createLesson' })
               }
             >
               <Icon className="mr-1.5" name="plus-circled" />
               <span>New Lesson</span>
-            </button>
+            </Button>
           </div>
         </div>
       )}

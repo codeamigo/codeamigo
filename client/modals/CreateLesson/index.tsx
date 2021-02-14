@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
+import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import { useCreateLessonMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
@@ -136,14 +137,15 @@ const CreateLesson: React.FC<Props> = () => {
                   </div>
                 </div>
               </div>
-              <div className="pt-4 text-right">
-                <button
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              <button></button>
+              <div className="text-right">
+                <Button
+                  className="inline-flex"
                   disabled={isSubmitting}
                   type="submit"
                 >
-                  Go!
-                </button>
+                  Let's Go!
+                </Button>
               </div>
             </div>
           </Form>
