@@ -54,12 +54,16 @@ const Instructions: React.FC<Props> = (props) => {
         className="w-full lg:h-full flex flex-col overflow-scroll flex-1"
         id="instructions"
       >
-        <h3>
+        <h3
+          className={`w-full flex justify-between items-center bg-bg-nav text-xs ${
+            isEditting ? 'p-2' : ''
+          }`}
+        >
           {isEditting ? (
             <>
               <span
                 className={`cursor-pointer ${
-                  view === 'editor' ? 'text-accent' : 'text-black'
+                  view === 'editor' ? 'text-accent' : 'text-text-primary'
                 }`}
                 onClick={() => toggleView('editor')}
               >
@@ -68,7 +72,7 @@ const Instructions: React.FC<Props> = (props) => {
               |
               <span
                 className={`cursor-pointer ${
-                  view === 'preview' ? 'text-accent' : 'text-black'
+                  view === 'preview' ? 'text-accent' : 'text-text-primary'
                 }`}
                 onClick={() => toggleView('preview')}
               >
