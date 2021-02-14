@@ -16,7 +16,8 @@ const EdittingLessonsList: React.FC<Props> = () => {
     variables: { ownerId: meData.me.id, status: 'EDITTING' },
   });
 
-  if (loading && !data?.lessons) return null;
+  if (loading && !data?.lessons)
+    return <div className="text-text-primary">Loading...</div>;
 
   return (
     <div>

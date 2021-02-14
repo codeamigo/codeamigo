@@ -13,8 +13,8 @@ const SessionsList: React.FC<Props> = () => {
     fetchPolicy: 'cache-and-network',
   });
 
-  if (loading && !data?.sessions) return null;
-  if (loading) return <div className="text-text-primary">Loading...</div>;
+  if (loading && !data?.sessions)
+    return <div className="text-text-primary">Loading...</div>;
 
   return (
     <div>
