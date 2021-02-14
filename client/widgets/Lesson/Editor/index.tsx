@@ -37,6 +37,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const [currentPath, setCurrentPath] = useState('');
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [isBundlerReady, setIsBundlerReady] = useState(false);
+  const [isWorkerReady, setIsWorkerReady] = useState(false);
   const isTesting = useReactiveVar(isTestingVar);
 
   const [createCodeModule] = useCreateCodeModuleMutation();
@@ -66,10 +67,23 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       window.removeEventListener('message', handleBundlerReadyMessages);
   }, []);
 
+  useEffect(() => {
+    const handleWorkerReadyMessages = (e: MessageEvent) => {
+      if (e.data.from === 'bundler') {
+        setIsWorkerReady(e.data.workerState === 'Symbol(WORKER_STATE_SUCCESS)');
+      }
+    };
+
+    window.addEventListener('message', handleWorkerReadyMessages);
+    return () =>
+      window.removeEventListener('message', handleWorkerReadyMessages);
+  }, []);
+
   // Change Step
   useEffect(() => {
     if (!step.codeModules) return;
     if (!isEditorReady) return;
+    if (!isWorkerReady) return;
 
     const mods = step.codeModules.reduce(
       (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
@@ -94,7 +108,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     }
 
     setFiles(mods);
-  }, [step.id, step.codeModules?.length, isEditorReady]);
+  }, [step.id, step.codeModules?.length, isEditorReady, isWorkerReady]);
 
   // Files changed => set up editor models
   useEffect(() => {
