@@ -14,8 +14,7 @@ const PublishedLessonsList: React.FC<Props> = () => {
     variables: { ownerId: meData.me.id, status: 'PUBLISHED' },
   });
 
-  if (loading && !data?.lessons)
-    return <div className="text-text-primary">Loading...</div>;
+  if (loading && !data?.lessons) return null;
 
   return data?.lessons.length ? (
     <div className="mt-8">
