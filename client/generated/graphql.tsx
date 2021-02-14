@@ -838,7 +838,7 @@ export type UpdateCheckpointMutation = (
   { __typename?: 'Mutation' }
   & { updateCheckpoint?: Maybe<(
     { __typename?: 'Checkpoint' }
-    & Pick<Checkpoint, 'id'>
+    & Pick<Checkpoint, 'id' | 'description'>
   )> }
 );
 
@@ -1842,6 +1842,7 @@ export const UpdateCheckpointDocument = gql`
     mutation UpdateCheckpoint($id: Float!, $description: String!) {
   updateCheckpoint(id: $id, options: {description: $description}) {
     id
+    description
   }
 }
     `;

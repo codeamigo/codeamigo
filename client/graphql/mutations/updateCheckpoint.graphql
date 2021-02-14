@@ -6,7 +6,8 @@ mutation UpdateCheckpoint(
     id: $id
     options: { description: $description }
   ) {
-    id
+    id,
+    description
   }
 }
 

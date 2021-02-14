@@ -14,7 +14,7 @@ const SessionsList: React.FC<Props> = () => {
   });
 
   if (loading && !data?.sessions) return null;
-  if (loading) return <>Loading...</>;
+  if (loading) return <div className="text-text-primary">Loading...</div>;
 
   return (
     <div>

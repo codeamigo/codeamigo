@@ -5,6 +5,8 @@ import gfm from 'remark-gfm';
 
 import Icon from '👨‍💻components/Icon';
 import {
+  CheckpointsDocument,
+  CheckpointsQuery,
   RegularCheckpointFragment,
   RegularStepFragment,
   StepDocument,
@@ -15,7 +17,7 @@ import {
   useUpdateStepCheckpointMutation,
 } from '👨‍💻generated/graphql';
 
-const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
+const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
   const { data, loading } = useCheckpointsQuery({
     variables: { stepId: step.id },
   });
@@ -28,11 +30,11 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   const [activeCheckpoint, setActiveCheckpoint] = useState<
     RegularCheckpointFragment | undefined
   >(undefined);
-  const [markdown, setMarkdown] = useState(activeCheckpoint?.description);
 
   // When user COMPLETES a checkpoint
   useEffect(() => {
     if (!data?.checkpoints) return;
+    if (isEditting) return;
 
     const checkpoint = data.checkpoints.find(
       ({ id }) => id === step.currentCheckpointId
@@ -43,7 +45,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
 
   // When user changes the active checkpoint
   useEffect(() => {
-    setMarkdown(activeCheckpoint?.description);
     if (isEditting) {
       toggleView('editor');
     }
@@ -77,8 +78,30 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
     debounce((value: string | undefined) => {
       if (!activeCheckpoint) return;
 
+      const q = {
+        query: CheckpointsDocument,
+        variables: { stepId: step.id },
+      };
+
       updateCheckpointM({
-        refetchQueries: ['Checkpoints', 'Step'],
+        update: (store, { data }) => {
+          const checkpointsData = store.readQuery<CheckpointsQuery>(q);
+          if (!checkpointsData?.checkpoints) return;
+
+          store.writeQuery<CheckpointsQuery>({
+            ...q,
+            data: {
+              checkpoints: checkpointsData.checkpoints.map((checkpoint) => {
+                if (checkpoint.id !== activeCheckpoint.id) return checkpoint;
+
+                return {
+                  ...checkpoint,
+                  description: data?.updateCheckpoint?.description || '',
+                };
+              }),
+            },
+          });
+        },
         variables: { description: value || '', id: activeCheckpoint.id },
       });
     }, 1000),
@@ -119,9 +142,6 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
   };
 
   const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
-  const isStepComplete = !checkpoints.find(
-    (checkpoint) => checkpoint.isCompleted === false
-  );
   const canSetCheckpoint = (checkpoint: RegularCheckpointFragment) =>
     isEditting ||
     checkpoint.isTested ||
@@ -161,7 +181,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                     (checkpoint.isTested || checkpoint.isCompleted) && (
                       <span>✅</span>
                     )}
-                  {isEditting && (
+                  {isEditting && isCurrentCheckpoint(checkpoint.id) && (
                     <div className="flex">
                       <Icon
                         className="text-text-primary text-lg leading-none"
@@ -209,19 +229,19 @@ const Checkpoints: React.FC<Props> = ({ isEditting, nextStep, step }) => {
                     {view === 'editor' ? (
                       <textarea
                         className="h-full w-full bg-bg-primary text-text-primary border-none"
-                        defaultValue={markdown || ''}
+                        defaultValue={checkpoint.description || ''}
                         onChange={(
                           e: React.ChangeEvent<HTMLTextAreaElement>
                         ) => {
-                          setMarkdown(e.currentTarget.value);
                           updateCheckpoint(e.currentTarget.value);
                         }}
                         style={{ resize: 'none' }}
                       />
                     ) : (
                       <ReactMarkdown
-                        children={markdown || ''}
+                        children={checkpoint.description || ''}
                         className="markdown-body px-6 py-4"
+                        key={checkpoint.description}
                         plugins={[gfm]}
                       />
                     )}
