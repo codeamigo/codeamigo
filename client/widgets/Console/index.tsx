@@ -73,6 +73,11 @@ const Console: React.FC<Props> = ({ step }) => {
   };
 
   const list = activeTab === 'tests' ? testList : logList;
+  const testFailure = testList.filter((value) => {
+    return JSON.parse(value.result).some(
+      ({ status }: { status: string }) => status === 'fail'
+    );
+  }).length;
 
   return (
     <div
@@ -96,11 +101,14 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'tests' ? 'bg-bg-nav' : ''
-              } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+              } flex align-center text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
             >
               Tests
+              {testFailure ? (
+                <Icon className="ml-2 text-red-600" name="cancel-circled" />
+              ) : null}
             </li>
           </ul>
           <div className="flex list-none pr-2">
