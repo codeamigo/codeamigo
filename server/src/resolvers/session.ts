@@ -41,21 +41,23 @@ export class SessionResolver {
   async sessions(@Ctx() { req }: MyContext): Promise<Session[]> {
     const student = await User.findOne({ id: req.session.userId });
 
-    return Session.find({
-      order: {
-        updatedAt: "DESC",
-      },
-      relations: [
-        "steps",
-        "lesson",
-        "lesson.owner",
-        "lesson.steps",
-        "lesson.steps.codeModules",
-        "lesson.steps.dependencies",
-        "lesson.students",
-      ],
-      where: { student },
-    });
+    if (!student) {
+      return [];
+    }
+
+    const sessions = await Session.createQueryBuilder()
+      .where("Session.student.id = :studentId", {
+        studentId: student.id,
+      })
+      .leftJoinAndSelect("Session.steps", "steps")
+      .leftJoinAndSelect("Session.lesson", "lesson")
+      .leftJoinAndSelect("lesson.owner", "owner")
+      .leftJoinAndSelect("lesson.steps", "lessonSteps")
+      .leftJoinAndSelect("lessonSteps.codeModules", "codeModules")
+      .addOrderBy("Session.updatedAt", "DESC")
+      .getMany();
+
+    return sessions;
   }
 
   @Query(() => Session, { nullable: true })
