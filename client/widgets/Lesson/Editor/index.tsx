@@ -8,6 +8,7 @@ import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
+  RegularDependencyFragment,
   RegularStepFragment,
   StepDocument,
   StepQuery,
@@ -123,6 +124,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       setModel(currentPath);
     }
   }, [currentPath]);
+
+  // Dependencies changed => update bundle
+  useEffect(() => {
+    postCode(files, currentPath, files[currentPath], step.dependencies || []);
+  }, [step.dependencies]);
 
   useEffect(() => {
     const handlePassCheckpoint = async (message: {
@@ -257,6 +263,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     files: FilesType,
     runPath: string,
     value: string,
+    dependencies: RegularDependencyFragment[],
     isTest?: boolean
   ) => {
     const iframe = document.getElementById('frame') as HTMLIFrameElement;
@@ -276,7 +283,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     iframeContentWindow.postMessage(
       {
         assetBuffer: Buffer.from(JSON.stringify(assets), 'utf-8'),
-        dependencies: step.dependencies,
+        dependencies,
         from: 'editor',
         isTest,
         runPath,
@@ -297,16 +304,29 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const postCode = useCallback(
-    debounce((files: FilesType, runPath: string, value: string) => {
-      const assets = prepareAssets(files);
-      postMessage(assets, runPath, value);
-    }, 500),
+    debounce(
+      (
+        files: FilesType,
+        runPath: string,
+        value: string,
+        dependencies: RegularDependencyFragment[]
+      ) => {
+        const assets = prepareAssets(files);
+        postMessage(assets, runPath, value, dependencies);
+      },
+      500
+    ),
     []
   );
 
-  const testCode = (files: FilesType, runPath: string, value: string) => {
+  const testCode = (
+    files: FilesType,
+    runPath: string,
+    value: string,
+    dependencies: RegularDependencyFragment[]
+  ) => {
     isTestingVar(true);
-    postMessage(files, runPath, value, true);
+    postMessage(files, runPath, value, dependencies, true);
   };
 
   const setupCompilerOptions = () => {
@@ -449,7 +469,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     setModel(main);
     setCurrentPath(main);
     const assets = prepareAssets(files);
-    postMessage(assets, main, files[main]);
+    postMessage(assets, main, files[main], step.dependencies || []);
   };
 
   const setModel = (path: string) => {
@@ -493,7 +513,12 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 [currentPath]: value || '',
               });
               updateFile(currentPath, value || '');
-              postCode(files, currentPath, value || '');
+              postCode(
+                files,
+                currentPath,
+                value || '',
+                step.dependencies || []
+              );
             }}
             options={{
               automaticLayout: true,
@@ -526,7 +551,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                       [currentPath]: files[currentPath],
                     },
                     currentCheck!.test,
-                    files[currentCheck!.test]
+                    files[currentCheck!.test],
+                    step.dependencies || []
                   )
             }
             ref={submitRef}

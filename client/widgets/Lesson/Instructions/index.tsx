@@ -39,7 +39,6 @@ const Instructions: React.FC<Props> = (props) => {
     const len = step.checkpoints?.length || 0;
 
     await createCheckpointM({
-      awaitRefetchQueries: true,
       refetchQueries: ['Checkpoints', 'Step'],
       variables: { checkpointId: len + 1, stepId: step.id },
     });

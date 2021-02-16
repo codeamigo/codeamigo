@@ -18,6 +18,8 @@ const EditorFiles: React.FC<Props> = ({
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));
 
+  console.log(tests);
+
   return (
     <>
       <FilesList
