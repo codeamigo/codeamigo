@@ -12,12 +12,6 @@ export const isValidName = (
     return result;
   }
 
-  if (!validExt.includes(name.split('.')[1])) {
-    result.valid = false;
-    result.reason = `File extension ${name.split('.')[1]} is not allowed.`;
-    return result;
-  }
-
   if (files && files.includes(name)) {
     result.valid = false;
     result.reason = 'Filename already taken.';
@@ -33,18 +27,6 @@ export const isValidName = (
   if (name.split('.')[1] === 'html' && name.split('.')[0] !== 'index') {
     result.valid = false;
     result.reason = 'Only index.html allowed.';
-    return result;
-  }
-
-  if (name.split('.')[1] === 'css' && files && files.includes('styles.css')) {
-    result.valid = false;
-    result.reason = 'Only styles.css allowed.';
-    return result;
-  }
-
-  if (name.split('.')[1] === 'css' && name.split('.')[0] !== 'styles') {
-    result.valid = false;
-    result.reason = 'Only styles.css allowed.';
     return result;
   }
 

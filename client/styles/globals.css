@@ -16,3 +16,7 @@ html {
 .markdown-body pre {
   color: var(--bg-primary) !important;
 }
+
+.st0 {
+  fill: var(--text-primary) !important;
+}

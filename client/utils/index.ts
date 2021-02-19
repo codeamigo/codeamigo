@@ -35,6 +35,8 @@ export const githubFileLanguage = (ext: string) => {
     case 'tsx':
     case 'ts':
       return 'TypeScript';
+    case 'vue':
+      return 'Vue';
     default:
       return ext;
   }

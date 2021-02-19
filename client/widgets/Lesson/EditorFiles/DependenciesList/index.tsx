@@ -102,7 +102,7 @@ const DependenciesList: React.FC<Props> = ({
       variables: {
         package: result.name,
         stepId,
-        version: result.version,
+        version: result.tags.next || result.tags.latest,
       },
     });
 
@@ -213,7 +213,8 @@ const DependenciesList: React.FC<Props> = ({
                                   active ? 'text-primary' : 'text-accent'
                                 } text-xs flex items-center`}
                               >
-                                {result.name} {result.version}
+                                {result.name}{' '}
+                                {result.tags.next || result.tags.latest}
                               </span>
                             </div>
                           );

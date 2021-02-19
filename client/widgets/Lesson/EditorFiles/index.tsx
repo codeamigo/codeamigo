@@ -6,7 +6,11 @@ import { FilesType } from '../Editor/types';
 import DependenciesList from './DependenciesList';
 import FilesList from './FilesList';
 
-export type AlgoliaSearchResultType = { name: string; version: string };
+export type AlgoliaSearchResultType = {
+  name: string;
+  tags: { lates: string; next: string };
+  version: string;
+};
 
 const EditorFiles: React.FC<Props> = ({
   createFile,
@@ -17,8 +21,6 @@ const EditorFiles: React.FC<Props> = ({
 }) => {
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));
-
-  console.log(tests);
 
   return (
     <>

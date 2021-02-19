@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
+import { Icon as LogoIcon, Logo } from '👨‍💻components/Logos';
 import UserMenu from '👨‍💻widgets/UserMenu';
+
+import styles from './TopNav.module.scss';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();
@@ -19,7 +22,7 @@ const TopNav: React.FC<Props> = () => {
             {/* <!-- Mobile menu button--> */}
             <button
               aria-expanded="false"
-              className="inline-flex items-center justify-center p-2 rounded-md text-text-secondary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              className="inline-flex items-center justify-center p-2 rounded-md text-text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             >
               <span className="sr-only">Open main menu</span>
               {isMobileMenuOpen ? (
@@ -59,13 +62,14 @@ const TopNav: React.FC<Props> = () => {
               )}
             </button>
           </div>
-          <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+          <div className="h-full flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex space-x-4">
               <button
-                className={`font-bold text-xl text-text-primary focus:outline-none`}
+                className={`flex items-center font-bold text-xl text-text-primary focus:outline-none`}
                 onClick={() => router.push('/')}
               >
-                Codeamigo
+                <Logo className="w-12 mr-1.5" />
+                <span>Codeamigo</span>
               </button>
             </div>
           </div>
