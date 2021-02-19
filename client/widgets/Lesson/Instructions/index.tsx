@@ -68,7 +68,6 @@ const Instructions: React.FC<Props> = (props) => {
               >
                 Edit Instructions
               </span>
-              |
               <span
                 className={`cursor-pointer ${
                   view === 'preview' ? 'text-accent' : 'text-text-primary'
@@ -112,8 +111,8 @@ const Instructions: React.FC<Props> = (props) => {
           className="flex items-center cursor-pointer"
           onClick={props.toggleShowSteps}
         >
-          <Icon className="text-white text-2xl" name="list" />
-          <div className="text-white text-sm font-semibold ml-3">
+          <Icon className="text-text-primary text-2xl" name="list" />
+          <div className="text-text-primary text-sm font-semibold ml-3">
             Step: {currentStepNum}/{totalSteps}
           </div>
         </div>

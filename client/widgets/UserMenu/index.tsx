@@ -29,7 +29,7 @@ const UserMenu: React.FC<Props> = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="text-white text-lg h-8 w-8 rounded-full"
+                    className="text-text-primary text-lg h-8 w-8 rounded-full"
                     name="user"
                   />
                 </Menu.Button>
@@ -75,7 +75,7 @@ const UserMenu: React.FC<Props> = () => {
       ) : (
         <>
           <button
-            className="hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
+            className="hover:text-gray-300 transition duration-150 text-text-primary px-3 py-1.5 rounded-md text-sm font-medium"
             onClick={() =>
               modalVar({
                 callback: () => null,
@@ -88,7 +88,7 @@ const UserMenu: React.FC<Props> = () => {
           </button>
 
           <button
-            className="border-2 border-white hover:border-gray-300 hover:text-gray-300 transition duration-150 text-white px-3 py-1.5 rounded-md text-sm font-medium"
+            className="border-2 border-white hover:border-gray-300 hover:text-gray-300 transition duration-150 text-text-primary px-3 py-1.5 rounded-md text-sm font-medium"
             onClick={() =>
               modalVar({
                 callback: () => null,

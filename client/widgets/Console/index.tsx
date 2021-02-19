@@ -92,7 +92,7 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'console' ? 'bg-bg-nav' : ''
-              } text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+              } text-text-primary text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('console')}
               role="button"
             >
@@ -101,7 +101,7 @@ const Console: React.FC<Props> = ({ step }) => {
             <li
               className={`${
                 activeTab === 'tests' ? 'bg-bg-nav' : ''
-              } flex align-center text-white text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+              } flex align-center text-text-primary text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
             >
@@ -130,7 +130,7 @@ const Console: React.FC<Props> = ({ step }) => {
           (list as FromPreviewMsgType[]).map((value, i) => {
             return (
               <div
-                className="bg-bg-nav border-black border-b text-white text-xs"
+                className="bg-bg-nav border-black border-b text-text-primary text-xs"
                 key={i}
               >
                 <div className="px-2 py-1 flex items-start">

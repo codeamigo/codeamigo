@@ -202,7 +202,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
                       />
                       {i === checkpoints.length - 1 ? (
                         <button
-                          className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                          className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-text-primary bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
                           onClick={(e) => {
                             e.stopPropagation();
                             const yes = window.confirm(

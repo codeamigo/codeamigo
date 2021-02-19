@@ -27,7 +27,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
     <div className="w-full py-2 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset relative">
       <div className="flex w-1/4">
         <Icon
-          className="text-white text-lg cursor-pointer text-md"
+          className="text-text-primary text-lg cursor-pointer text-md"
           name="home"
           onClick={() => router.push('/')}
         />
