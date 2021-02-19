@@ -8,7 +8,7 @@ import FilesList from './FilesList';
 
 export type AlgoliaSearchResultType = {
   name: string;
-  tags: { lates: string; next: string };
+  tags: { latest: string; next: string };
   version: string;
 };
 
