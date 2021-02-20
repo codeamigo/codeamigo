@@ -74,9 +74,13 @@ const Console: React.FC<Props> = ({ step }) => {
 
   const list = activeTab === 'tests' ? testList : logList;
   const testFailure = testList.filter((value) => {
-    return JSON.parse(value.result).some(
-      ({ status }: { status: string }) => status === 'fail'
-    );
+    try {
+      return JSON.parse(value.result).some(
+        ({ status }: { status: string }) => status === 'fail'
+      );
+    } catch (e) {
+      return false;
+    }
   }).length;
 
   return (

@@ -19,7 +19,7 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
 
   const passed = results.filter((value) => value.status === 'pass');
   const testPath = (path: string[]) =>
-    path.filter((p) => p !== root).join(' > ');
+    path?.filter((p) => p !== root).join(' > ');
   const parseError = (error: string) => {
     return error.split(errStart)[0].split('\n');
   };
@@ -43,16 +43,16 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
         return (
           <div className="text-sm" key={i}>
             <div className="flex justify-between text-text-primary px-2 py-1">
-              <span>{testPath(result.testPath)}</span>
+              <span>{testPath(result?.testPath)}</span>
               <Icon
                 className={
-                  result.status === 'pass' ? 'text-green-600' : 'text-red-600'
+                  result?.status === 'pass' ? 'text-green-600' : 'text-red-600'
                 }
-                name={result.status === 'pass' ? 'check' : 'cancel-circled'}
+                name={result?.status === 'pass' ? 'check' : 'cancel-circled'}
               />
             </div>
             <div className="px-2 py-1">
-              {result.errors.map((value, j) => (
+              {result?.errors?.map((value, j) => (
                 <div key={j}>
                   {parseError(value).map((val, k) => {
                     return (
