@@ -43,7 +43,7 @@ const LanguageBar: React.FC<Props> = ({ steps }) => {
             key={lang}
             style={{
               // @ts-ignore
-              backgroundColor: githubColors[lang].color,
+              backgroundColor: githubColors[lang]?.color,
             }}
           ></div>
         );

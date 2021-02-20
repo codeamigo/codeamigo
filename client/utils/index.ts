@@ -27,9 +27,12 @@ export const githubFileLanguage = (ext: string) => {
   switch (ext) {
     case 'css':
       return 'CSS';
+    case 'elm':
+      return 'Elm';
     case 'html':
       return 'HTML';
     case 'jsx':
+    case 'json':
     case 'js':
       return 'JavaScript';
     case 'tsx':
@@ -37,6 +40,10 @@ export const githubFileLanguage = (ext: string) => {
       return 'TypeScript';
     case 'vue':
       return 'Vue';
+    case 'sass':
+      return 'Sass';
+    case 'scss':
+      return 'SCSS';
     default:
       return ext;
   }
