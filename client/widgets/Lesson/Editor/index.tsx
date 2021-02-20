@@ -34,7 +34,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const monacoRef = useRef<any>();
   const submitRef = useRef<any>();
 
-  const [files, setFiles] = useState({} as FilesType);
+  // const [files, setFiles] = useState({} as FilesType);
   const [currentPath, setCurrentPath] = useState('');
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [isBundlerReady, setIsBundlerReady] = useState(false);
@@ -49,6 +49,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const [passCheckpoint] = usePassCheckpointMutation();
 
   const { data: meData } = useMeQuery();
+
+  const files = step?.codeModules?.reduce(
+    (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+    {}
+  ) as FilesType;
 
   useEffect(() => {
     return () => {
@@ -86,30 +91,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     if (!isEditorReady) return;
     if (!isWorkerReady) return;
 
-    const mods = step.codeModules.reduce(
-      (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-      {}
-    ) as FilesType;
-
-    const diff = Object.keys(mods).reduce((acc, file) => {
-      if (!files[file] && !file.includes('spec')) acc.push(file);
-      return acc;
-    }, [] as Array<string>);
-
-    // check difference between files and incoming modules
-    // if there is no difference then goToMain file
-    // if !files ({}) then goToMain file
-    // otherwise to to the new file
-    if (!Object.keys(files).length) {
-      goToMain(mods);
-    } else if (diff) {
-      goToMain(files, diff[0]);
-    } else {
-      goToMain(mods);
-    }
-
-    setFiles(mods);
-  }, [step.id, step.codeModules?.length, isEditorReady, isWorkerReady]);
+    goToMain(files);
+  }, [step.id, step.codeModules, isEditorReady, isWorkerReady]);
 
   // Files changed => set up editor models
   useEffect(() => {
@@ -217,10 +200,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       variables: { name: file, stepId: step.id, value },
     });
 
-    setFiles({
-      ...files,
-      [file]: value,
-    });
+    monacoRef.current.editor.createModel(
+      files[file],
+      getExtension(file),
+      `${FILE}${step.id}-${file}`
+    );
 
     setCurrentPath(file);
   };
@@ -232,12 +216,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
     monacoRef.current.editor.getModel(`${FILE}${step.id}-${file}`).dispose();
 
-    // remove file from files state
-    const { [file]: tmp, ...rest } = files;
-    setFiles(rest);
-
     // delete module
-    await deleteCodeModule({ variables: { id: module.id } });
+    await deleteCodeModule({
+      refetchQueries: ['Step'],
+      variables: { id: module.id },
+    });
+
+    goToMain(files);
   };
 
   const updateFile = useCallback(
@@ -508,10 +493,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
             language={'typescript'}
             onChange={(_, value) => {
               setIsBundlerReady(false);
-              setFiles({
-                ...files,
-                [currentPath]: value || '',
-              });
               updateFile(currentPath, value || '');
               postCode(
                 files,

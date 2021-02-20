@@ -10,6 +10,22 @@ export default new InMemoryCache({
         ...modal.fields,
       },
     },
+    Step: {
+      fields: {
+        checkpoints: {
+          merge(_, incoming) {
+            console.log('incoming', incoming);
+            return incoming;
+          },
+        },
+        codeModules: {
+          merge(_, incoming) {
+            console.log('incoming codemod', incoming);
+            return incoming;
+          },
+        },
+      },
+    },
     User: {
       fields: me.fields,
     },
