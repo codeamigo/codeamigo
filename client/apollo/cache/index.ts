@@ -8,19 +8,22 @@ export default new InMemoryCache({
     Query: {
       fields: {
         ...modal.fields,
+        checkpoints: {
+          merge(_, incoming) {
+            return incoming;
+          },
+        },
       },
     },
     Step: {
       fields: {
         checkpoints: {
           merge(_, incoming) {
-            console.log('incoming', incoming);
             return incoming;
           },
         },
         codeModules: {
           merge(_, incoming) {
-            console.log('incoming codemod', incoming);
             return incoming;
           },
         },
