@@ -29,6 +29,7 @@ export type Query = {
   sessions: Array<Session>;
   step?: Maybe<Step>;
   steps: Array<Step>;
+  users?: Maybe<Array<User>>;
 };
 
 
@@ -1173,6 +1174,17 @@ export type StepsQuery = (
     { __typename?: 'Step' }
     & RegularStepFragment
   )> }
+);
+
+export type StudentsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type StudentsQuery = (
+  { __typename?: 'Query' }
+  & { users?: Maybe<Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'email' | 'createdAt'>
+  )>> }
 );
 
 export const RegularErrorFragmentDoc = gql`
@@ -2663,3 +2675,37 @@ export function useStepsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Step
 export type StepsQueryHookResult = ReturnType<typeof useStepsQuery>;
 export type StepsLazyQueryHookResult = ReturnType<typeof useStepsLazyQuery>;
 export type StepsQueryResult = Apollo.QueryResult<StepsQuery, StepsQueryVariables>;
+export const StudentsDocument = gql`
+    query Students {
+  users {
+    id
+    email
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useStudentsQuery__
+ *
+ * To run a query within a React component, call `useStudentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStudentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStudentsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStudentsQuery(baseOptions?: Apollo.QueryHookOptions<StudentsQuery, StudentsQueryVariables>) {
+        return Apollo.useQuery<StudentsQuery, StudentsQueryVariables>(StudentsDocument, baseOptions);
+      }
+export function useStudentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StudentsQuery, StudentsQueryVariables>) {
+          return Apollo.useLazyQuery<StudentsQuery, StudentsQueryVariables>(StudentsDocument, baseOptions);
+        }
+export type StudentsQueryHookResult = ReturnType<typeof useStudentsQuery>;
+export type StudentsLazyQueryHookResult = ReturnType<typeof useStudentsLazyQuery>;
+export type StudentsQueryResult = Apollo.QueryResult<StudentsQuery, StudentsQueryVariables>;

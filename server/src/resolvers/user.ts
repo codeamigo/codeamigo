@@ -69,6 +69,11 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
+  @Query(() => [User], { nullable: true })
+  async users() {
+    return await User.find();
+  }
+
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
     if (!req.session.userId) {

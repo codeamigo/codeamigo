@@ -6,6 +6,7 @@ import InputField from '👨‍💻components/Form/InputField';
 import { useMeQuery, useUpdateUserRoleMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 import PendingLessonsList from '👨‍💻widgets/PendingLessonsList';
+import StudentList from '👨‍💻widgets/StudentList';
 
 const Backoffice: React.FC<Props> = () => {
   const { data } = useMeQuery();
@@ -63,6 +64,12 @@ const Backoffice: React.FC<Props> = () => {
           Publish Pending Lessons
         </h2>
         <PendingLessonsList />
+      </div>
+      <div className="mt-8">
+        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+          Students (beta testers)
+        </h2>
+        <StudentList />
       </div>
     </div>
   );

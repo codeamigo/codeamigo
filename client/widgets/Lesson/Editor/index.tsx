@@ -319,6 +319,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       .getModel(`${FILE}${step.id}-${runPath}`)
       .getValue();
     postMessage(files, runPath, value, dependencies, true);
+
+    // fallback if test-runner fails to post
+    setTimeout(() => {
+      isTestingVar(false);
+    }, 3000);
   };
 
   const setupCompilerOptions = () => {
