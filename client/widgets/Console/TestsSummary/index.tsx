@@ -2,7 +2,7 @@ import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { RegularCheckpointFragment } from '👨‍💻generated/graphql';
-import { TestResultType } from '👨‍💻widgets/Console/types';
+import { TestBundlerErrType, TestResultType } from '👨‍💻widgets/Console/types';
 import {
   FromPreviewMsgType,
   FromTestRunnerMsgType,
@@ -16,6 +16,14 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
   const results = list.flatMap(
     (value) => JSON.parse(value.result) as TestResultType
   );
+
+  let bundlerErr: TestBundlerErrType | null = null;
+  try {
+    // @ts-ignore
+    bundlerErr = results && results[0].severity;
+  } catch (e) {
+    // nothing
+  }
 
   const passed = results.filter((value) => value.status === 'pass');
   const testPath = (path: string[]) =>
@@ -39,34 +47,42 @@ const TestSummary: React.FC<Props> = ({ checkpoint, list }) => {
           ) : null}
         </div>
       </div>
-      {results.map((result, i) => {
-        return (
-          <div className="text-sm" key={i}>
-            <div className="flex justify-between text-text-primary px-2 py-1">
-              <span>{testPath(result?.testPath)}</span>
-              <Icon
-                className={
-                  result?.status === 'pass' ? 'text-green-600' : 'text-red-600'
-                }
-                name={result?.status === 'pass' ? 'check' : 'cancel-circled'}
-              />
+      {bundlerErr ? (
+        <div className="text-sm text-text-primary px-2 py-1 break-words">
+          {JSON.stringify(results[0])}
+        </div>
+      ) : (
+        results.map((result, i) => {
+          return (
+            <div className="text-sm" key={i}>
+              <div className="flex justify-between text-text-primary px-2 py-1">
+                <span>{testPath(result?.testPath)}</span>
+                <Icon
+                  className={
+                    result?.status === 'pass'
+                      ? 'text-green-600'
+                      : 'text-red-600'
+                  }
+                  name={result?.status === 'pass' ? 'check' : 'cancel-circled'}
+                />
+              </div>
+              <div className="px-2 py-1">
+                {result?.errors?.map((value, j) => (
+                  <div key={j}>
+                    {parseError(value).map((val, k) => {
+                      return (
+                        <div className="text-red-400" key={k}>
+                          {val}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="px-2 py-1">
-              {result?.errors?.map((value, j) => (
-                <div key={j}>
-                  {parseError(value).map((val, k) => {
-                    return (
-                      <div className="text-red-400" key={k}>
-                        {val}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })
+      )}
     </div>
   );
 };

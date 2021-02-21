@@ -879,7 +879,7 @@ export type UpdateCodeModuleMutation = (
   { __typename?: 'Mutation' }
   & { updateCodeModule?: Maybe<(
     { __typename?: 'CodeModule' }
-    & Pick<CodeModule, 'id'>
+    & RegularCodeModuleFragment
   )> }
 );
 
@@ -1939,10 +1939,10 @@ export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheck
 export const UpdateCodeModuleDocument = gql`
     mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
   updateCodeModule(id: $id, options: {name: $name, value: $value}) {
-    id
+    ...RegularCodeModule
   }
 }
-    `;
+    ${RegularCodeModuleFragmentDoc}`;
 export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 
 /**

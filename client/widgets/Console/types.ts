@@ -4,3 +4,8 @@ export type TestResultType = {
   status: 'pass' | 'fail';
   testPath: Array<string>;
 };
+
+export type TestBundlerErrType = {
+  diagnostics: any;
+  type: 'failure';
+};

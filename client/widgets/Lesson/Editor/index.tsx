@@ -233,6 +233,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
       if (!currentModule) return;
 
+      const q = {
+        query: StepDocument,
+        variables: { id: step.id },
+      };
+
       await updateCodeModule({
         variables: {
           id: currentModule.id,
@@ -307,10 +312,12 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const testCode = (
     files: FilesType,
     runPath: string,
-    value: string,
     dependencies: RegularDependencyFragment[]
   ) => {
     isTestingVar(true);
+    const value = monacoRef.current.editor
+      .getModel(`${FILE}${step.id}-${runPath}`)
+      .getValue();
     postMessage(files, runPath, value, dependencies, true);
   };
 
@@ -375,7 +382,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     editorRef.current.addCommand(
       monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
       () => {
-        console.log(submitRef.current);
         submitRef.current.click();
       }
     );
@@ -532,7 +538,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                       [currentPath]: files[currentPath],
                     },
                     currentCheck!.test,
-                    files[currentCheck!.test],
                     step.dependencies || []
                   )
             }

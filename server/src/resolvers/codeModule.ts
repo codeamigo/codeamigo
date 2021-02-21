@@ -61,8 +61,13 @@ export class CodeModuleResolver {
     }
 
     await CodeModule.update({ id }, { ...options });
+    const newCodeModule = await CodeModule.findOne(id);
 
-    return codeModule;
+    if (!newCodeModule) {
+      return null;
+    }
+
+    return newCodeModule;
   }
 
   @Mutation(() => Boolean)
