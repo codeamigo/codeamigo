@@ -33,6 +33,29 @@ const runTests = async () => {
 runTests()
 `;
 
+const VUE_TEST = `import { core, enzyme } from 'codeamigo-jest-lite'
+
+const { describe, it, run, expect } = core
+import { mount } from '@vue/test-utils'
+
+import App from './App.vue'
+
+const wrapper = mount(App)
+
+describe('Hello vue', () => {
+  it('renders', () => {
+    expect(wrapper.find('div').text()).toBe('Hello Vue!')
+  })
+})
+
+const runTests = async () => {
+  const results = await run()
+  console.test(results)
+}
+
+runTests()
+`;
+
 @InputType()
 class CreateCheckpointInput {
   @Field()
@@ -76,23 +99,32 @@ export class CheckpointResolver {
   ): Promise<Checkpoint | null> {
     let step = await Step.findOne(
       { id: options.stepId },
-      { relations: ["codeModules"] }
+      { relations: ["codeModules", "dependencies"] }
     );
 
     if (!step) {
       return null;
     }
 
-    const test = `checkpoint-${options.checkpointId}.spec.ts`;
+    const name = `checkpoint-${options.checkpointId}.spec.ts`;
+    // TODO: make more dynamic
+    const isVue =
+      step.dependencies.find((value) => value.package === "vue") &&
+      step.dependencies.find((value) => value.package === "@vue/test-utils");
+
     const newModule = await CodeModule.create({
-      name: test,
-      value: DEFAULT_TEST,
+      name,
+      value: isVue ? VUE_TEST : DEFAULT_TEST,
     }).save();
 
     step.codeModules.push(newModule);
     await step.save();
 
-    return Checkpoint.create({ moduleId: newModule.id, step, test }).save();
+    return Checkpoint.create({
+      moduleId: newModule.id,
+      step,
+      test: name,
+    }).save();
   }
 
   @Mutation(() => Checkpoint, { nullable: true })

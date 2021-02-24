@@ -76,6 +76,26 @@ const CreateLesson: React.FC<Props> = () => {
                     </label>
                     <label
                       className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      htmlFor="vue-template"
+                    >
+                      <Field
+                        id="vue-template"
+                        name="template"
+                        type="radio"
+                        value="vue"
+                      />{' '}
+                      <div className="flex flex-col items-start ml-2">
+                        <img
+                          className="h-6 mt-1"
+                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg"
+                        />
+                        <div className="text-sm text-text-primary font-semibold">
+                          Vue 3.0
+                        </div>
+                      </div>
+                    </label>
+                    <label
+                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
                       htmlFor="html-template"
                     >
                       <Field
