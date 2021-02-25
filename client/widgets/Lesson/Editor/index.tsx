@@ -19,12 +19,11 @@ import {
   usePassCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import { getFileExt } from '👨‍💻utils/index';
 
 import * as THEMES from '../../../styles/monacoThemes';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
-import { camalize, getExtension } from './utils';
+import { camalize, getExtension, getModelExtension } from './utils';
 
 const FILE = 'file:///';
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
@@ -202,7 +201,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
     monacoRef.current.editor.createModel(
       files[file],
-      getExtension(file),
+      getModelExtension(file),
       `${FILE}${step.id}-${file}`
     );
 
@@ -399,7 +398,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
       monacoRef.current.editor.createModel(
         files[file],
-        getExtension(file),
+        getModelExtension(file),
         `${FILE}${step.id}-${file}`
       );
     });
