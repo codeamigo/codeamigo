@@ -172,7 +172,7 @@ export class CheckpointResolver {
       ({ isCompleted }) => !isCompleted
     );
 
-    step.currentCheckpointId = nextCheckpoint?.id || null;
+    step.currentCheckpointId = nextCheckpoint?.id;
     await Step.save(step);
 
     return checkpoint;
