@@ -23,7 +23,7 @@ import {
 import * as THEMES from '../../../styles/monacoThemes';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
-import { camalize, getExtension, getModelExtension } from './utils';
+import { camalize, getModelExtension } from './utils';
 
 const FILE = 'file:///';
 const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
@@ -167,7 +167,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       variables: { id: step.id },
     };
     await completeCheckpointM({
-      update: (store, { data }) => {
+      update: (store) => {
         const stepData = store.readQuery<StepQuery>(q);
         if (!stepData?.step) return;
 
@@ -231,11 +231,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       );
 
       if (!currentModule) return;
-
-      const q = {
-        query: StepDocument,
-        variables: { id: step.id },
-      };
 
       await updateCodeModule({
         variables: {

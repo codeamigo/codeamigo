@@ -40,7 +40,8 @@ export class Step extends BaseEntity {
   instructions!: string;
 
   @Field(() => Number, { defaultValue: null, nullable: true })
-  currentCheckpointId: Number | null;
+  @Column({ nullable: true })
+  currentCheckpointId?: number;
 
   @Field(() => Boolean, { defaultValue: false, nullable: true })
   @Column({ nullable: true })

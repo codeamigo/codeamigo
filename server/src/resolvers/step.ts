@@ -101,7 +101,7 @@ export class StepResolver {
     );
 
     if (!step.currentCheckpointId) {
-      step.currentCheckpointId = currentCheckpoint?.id || null;
+      step.currentCheckpointId = currentCheckpoint?.id;
       await Step.save(step);
     }
 
@@ -201,6 +201,8 @@ export class StepResolver {
 
     step.currentCheckpointId = options.checkpointId;
     await Step.save(step);
+    console.log("UPDATING");
+    console.log(step);
 
     return step;
   }
