@@ -201,8 +201,6 @@ export class StepResolver {
 
     step.currentCheckpointId = options.checkpointId;
     await Step.save(step);
-    console.log("UPDATING");
-    console.log(step);
 
     return step;
   }

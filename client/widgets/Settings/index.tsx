@@ -15,8 +15,6 @@ const Settings: React.FC<Props> = () => {
 
   if (!data?.me?.theme) return null;
 
-  console.log(data.me.theme);
-
   return (
     <div>
       <div>
@@ -27,7 +25,6 @@ const Settings: React.FC<Props> = () => {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
             {Object.keys(themes).map((theme) => {
               const mTheme = mapTheme(themes[theme]);
-              console.log(theme);
 
               return (
                 <label

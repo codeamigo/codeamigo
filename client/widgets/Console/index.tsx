@@ -25,8 +25,6 @@ const Console: React.FC<Props> = ({ step }) => {
     ({ id }) => id === step.currentCheckpointId
   );
 
-  console.log('currentCheck', currentCheck);
-
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
       if (event.data.from !== 'preview') return;
