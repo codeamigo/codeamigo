@@ -52,7 +52,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const files = step?.codeModules?.reduce(
     (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
     {}
-  ) as FilesType;
+  ) as FilesType | undefined;
 
   useEffect(() => {
     return () => {
@@ -89,13 +89,14 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     if (!step.codeModules) return;
     if (!isEditorReady) return;
     if (!isWorkerReady) return;
+    if (!files) return;
 
     goToMain(files);
   }, [step.id, step.codeModules, isEditorReady, isWorkerReady]);
 
   // Files changed => set up editor models
   useEffect(() => {
-    if (isEditorReady) {
+    if (isEditorReady && files) {
       setupModels();
     }
   }, [files, isEditorReady]);
@@ -109,6 +110,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   // Dependencies changed => update bundle
   useEffect(() => {
+    if (!files) return;
     postCode(files, currentPath, files[currentPath], step.dependencies || []);
   }, [step.dependencies]);
 
@@ -200,7 +202,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     });
 
     monacoRef.current.editor.createModel(
-      files[file],
+      files![file],
       getModelExtension(file),
       `${FILE}${step.id}-${file}`
     );
@@ -212,6 +214,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     const module = step?.codeModules?.find((module) => module.name === file);
 
     if (!module) return;
+    if (!files) return;
 
     monacoRef.current.editor.getModel(`${FILE}${step.id}-${file}`).dispose();
 
@@ -387,12 +390,12 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupModels = () => {
-    Object.keys(files).map((file) => {
+    Object.keys(files!).map((file) => {
       if (monacoRef.current.editor.getModel(`${FILE}${step.id}-${file}`))
         return;
 
       monacoRef.current.editor.createModel(
-        files[file],
+        files![file],
         getModelExtension(file),
         `${FILE}${step.id}-${file}`
       );
@@ -486,7 +489,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
             currentPath={currentPath}
             deleteFile={deleteFile}
             dependencies={step.dependencies}
-            files={files}
+            files={files!}
             setCurrentPath={setCurrentPath}
             stepId={step.id}
             {...rest}
@@ -500,7 +503,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
               setIsBundlerReady(false);
               updateFile(currentPath, value || '');
               postCode(
-                files,
+                files!,
                 currentPath,
                 value || '',
                 step.dependencies || []
@@ -534,7 +537,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 : testCode(
                     {
                       ...files,
-                      [currentPath]: files[currentPath],
+                      [currentPath]: files![currentPath],
                     },
                     currentCheck!.test,
                     step.dependencies || []
