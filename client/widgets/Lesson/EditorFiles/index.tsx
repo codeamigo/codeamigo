@@ -19,6 +19,7 @@ const EditorFiles: React.FC<Props> = ({
   setCurrentPath,
   ...rest
 }) => {
+  if (!files) return null;
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));
 
