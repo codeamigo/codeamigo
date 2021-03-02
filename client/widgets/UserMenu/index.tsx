@@ -1,6 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
-import { signIn, signOut, useSession } from 'next-auth/client';
 import React from 'react';
 
 import { isAuthenticatedVar } from '👨‍💻apollo/cache/me';
@@ -77,13 +76,12 @@ const UserMenu: React.FC<Props> = () => {
         <>
           <button
             className="hover:text-gray-300 transition duration-150 text-text-primary px-3 py-1.5 rounded-md text-sm font-medium"
-            // onClick={() =>
-            //   modalVar({
-            //     callback: () => null,
-            //     name: 'login',
-            //   })
-            // }
-            onClick={() => signIn()}
+            onClick={() =>
+              modalVar({
+                callback: () => null,
+                name: 'login',
+              })
+            }
             role="button"
           >
             Login

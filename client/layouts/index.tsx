@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { applyTheme } from 'styles/appThemes/utils';
 
@@ -7,6 +8,7 @@ import LessonLayout from './LessonLayout';
 import MainLayout from './MainLayout';
 
 const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
+  const [session] = useSession();
   const { data, loading } = useMeQuery();
   const theme = loading
     ? null
@@ -19,6 +21,8 @@ const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
       applyTheme(theme);
     }
   }, [theme]);
+
+  console.log(session);
 
   if (!theme) return null;
   switch (pathname) {

@@ -1,4 +1,7 @@
+import * as githubPng from 'assets/github.png';
+import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
+import { signIn, signOut, useSession } from 'next-auth/client';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
@@ -34,11 +37,19 @@ const Login: React.FC = () => {
       {({ isSubmitting }) => (
         <Form>
           <div className="max-w-lg mx-auto py-6 sm:px-6">
-            <h1 className="text-2xl text-blue-800 font-semibold justify-center flex mb-4">
+            <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
               Login
             </h1>
-            <div className="px-4 py-5 sm:p-6">
-              <div className="grid gap-6">
+            <div className="flex justify-center gap-3">
+              <button onClick={() => signIn('google')} type="button">
+                <img className="h-7" src={googlePng} />
+              </button>
+              <button onClick={() => signIn('github')} type="button">
+                <img className="h-7" src={githubPng} />
+              </button>
+            </div>
+            <div className="px-4 sm:p-6">
+              <div className="grid gap-3">
                 <InputField
                   label="Email or username"
                   name="usernameOrEmail"
@@ -47,7 +58,7 @@ const Login: React.FC = () => {
                 <InputField label="Password" name="password" type="password" />
               </div>
             </div>
-            <div className="px-4 py-3 w-full sm:px-6">
+            <div className="px-4 w-full sm:px-6">
               <Button
                 className="w-full justify-center"
                 disabled={isSubmitting}
@@ -55,7 +66,7 @@ const Login: React.FC = () => {
               >
                 Login
               </Button>
-              <div className="text-xs w-full text-text-primary text-center my-1">
+              <div className="text-xs w-full text-text-primary text-center my-1 mt-3">
                 or
               </div>
               <button
