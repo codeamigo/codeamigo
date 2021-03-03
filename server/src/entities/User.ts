@@ -58,6 +58,10 @@ export class User extends BaseEntity {
   githubId: number;
 
   @Field()
+  @Column({ nullable: true, type: "text", unique: true })
+  googleId: string;
+
+  @Field()
   @Column({ type: "text", unique: true })
   username!: string;
 

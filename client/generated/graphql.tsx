@@ -137,6 +137,7 @@ export type User = {
   createdAt: Scalars['String'];
   email: Scalars['String'];
   githubId: Scalars['Float'];
+  googleId: Scalars['String'];
   id: Scalars['Float'];
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
@@ -245,6 +246,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   githubLogin: UserResponse;
+  googleLogin: UserResponse;
   logout: Scalars['Boolean'];
   updateUserTheme: UserResponse;
   updateUserRole: UserResponse;
@@ -339,6 +341,11 @@ export type MutationLoginArgs = {
 
 export type MutationGithubLoginArgs = {
   options: GitHubLoginInput;
+};
+
+
+export type MutationGoogleLoginArgs = {
+  options: GoogleLoginInput;
 };
 
 
@@ -480,6 +487,12 @@ export type LoginInput = {
 export type GitHubLoginInput = {
   id: Scalars['Float'];
   accessToken: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type GoogleLoginInput = {
+  id: Scalars['String'];
+  email: Scalars['String'];
   username: Scalars['String'];
 };
 
@@ -828,6 +841,24 @@ export type GitHubLoginMutation = (
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'message' | 'field'>
     )>>, user?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username' | 'createdAt'>
+    )> }
+  ) }
+);
+
+export type GoogleLoginMutationVariables = Exact<{
+  id: Scalars['String'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+}>;
+
+
+export type GoogleLoginMutation = (
+  { __typename?: 'Mutation' }
+  & { googleLogin: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'createdAt'>
     )> }
@@ -1855,6 +1886,44 @@ export function useGitHubLoginMutation(baseOptions?: Apollo.MutationHookOptions<
 export type GitHubLoginMutationHookResult = ReturnType<typeof useGitHubLoginMutation>;
 export type GitHubLoginMutationResult = Apollo.MutationResult<GitHubLoginMutation>;
 export type GitHubLoginMutationOptions = Apollo.BaseMutationOptions<GitHubLoginMutation, GitHubLoginMutationVariables>;
+export const GoogleLoginDocument = gql`
+    mutation GoogleLogin($id: String!, $username: String!, $email: String!) {
+  googleLogin(options: {id: $id, username: $username, email: $email}) {
+    user {
+      id
+      username
+      createdAt
+    }
+  }
+}
+    `;
+export type GoogleLoginMutationFn = Apollo.MutationFunction<GoogleLoginMutation, GoogleLoginMutationVariables>;
+
+/**
+ * __useGoogleLoginMutation__
+ *
+ * To run a mutation, you first call `useGoogleLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGoogleLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [googleLoginMutation, { data, loading, error }] = useGoogleLoginMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      username: // value for 'username'
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useGoogleLoginMutation(baseOptions?: Apollo.MutationHookOptions<GoogleLoginMutation, GoogleLoginMutationVariables>) {
+        return Apollo.useMutation<GoogleLoginMutation, GoogleLoginMutationVariables>(GoogleLoginDocument, baseOptions);
+      }
+export type GoogleLoginMutationHookResult = ReturnType<typeof useGoogleLoginMutation>;
+export type GoogleLoginMutationResult = Apollo.MutationResult<GoogleLoginMutation>;
+export type GoogleLoginMutationOptions = Apollo.BaseMutationOptions<GoogleLoginMutation, GoogleLoginMutationVariables>;
 export const LogoutDocument = gql`
     mutation Logout {
   logout

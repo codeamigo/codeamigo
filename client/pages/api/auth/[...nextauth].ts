@@ -45,6 +45,10 @@ export default NextAuth({
         // return true;
         return `/auth/github/${account.accessToken}/${account.id}/${profile.login}`;
       }
+
+      if (account.provider === 'google') {
+        return `/auth/google/${profile.name}/${profile.email}/${profile.id}`;
+      }
     },
   },
   debug: false,

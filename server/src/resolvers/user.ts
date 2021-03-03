@@ -47,6 +47,16 @@ class GitHubLoginInput {
 }
 
 @InputType()
+class GoogleLoginInput {
+  @Field()
+  id: string;
+  @Field()
+  email: string;
+  @Field()
+  username: string;
+}
+
+@InputType()
 class UpdateUserRoleInput {
   @Field()
   id: number;
@@ -196,10 +206,31 @@ export class UserResolver {
       }).save();
     }
 
-    console.log(user);
     req.session.userId = user.id;
-    console.log("GITHUB");
-    console.log(req.session);
+
+    return {
+      user,
+    };
+  }
+
+  @Mutation(() => UserResponse)
+  async googleLogin(
+    @Arg("options") options: GoogleLoginInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    let user = await User.findOne({
+      where: { googleId: options.id },
+    });
+
+    if (!user) {
+      user = await User.create({
+        email: options.email,
+        googleId: options.id,
+        username: options.username,
+      }).save();
+    }
+
+    req.session.userId = user.id;
 
     return {
       user,
