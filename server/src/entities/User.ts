@@ -54,15 +54,23 @@ export class User extends BaseEntity {
   theme: ThemeEnum;
 
   @Field()
+  @Column({ nullable: true, type: "text", unique: true })
+  githubId: number;
+
+  @Field()
+  @Column({ nullable: true, type: "text", unique: true })
+  googleId: string;
+
+  @Field()
   @Column({ type: "text", unique: true })
   username!: string;
 
   @Field()
-  @Column({ type: "text", unique: true })
-  email!: string;
+  @Column({ nullable: true, type: "text", unique: true })
+  email: string;
 
-  @Column({ type: "text" })
-  password!: string;
+  @Column({ nullable: true, type: "text" })
+  password: string;
 
   @Field(() => [Lesson])
   @OneToMany(() => Lesson, (lesson) => lesson.owner)

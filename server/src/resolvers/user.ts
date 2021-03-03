@@ -37,6 +37,26 @@ class LoginInput {
 }
 
 @InputType()
+class GitHubLoginInput {
+  @Field()
+  id: number;
+  @Field()
+  accessToken: string;
+  @Field()
+  username: string;
+}
+
+@InputType()
+class GoogleLoginInput {
+  @Field()
+  id: string;
+  @Field()
+  email: string;
+  @Field()
+  username: string;
+}
+
+@InputType()
 class UpdateUserRoleInput {
   @Field()
   id: number;
@@ -76,6 +96,8 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   async me(@Ctx() { req }: MyContext) {
+    console.log("ME");
+    console.log(req.session);
     if (!req.session.userId) {
       return null;
     }
@@ -159,6 +181,53 @@ export class UserResolver {
       return {
         errors: [{ field: "password", message: "Incorrect password." }],
       };
+    }
+
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
+  }
+
+  @Mutation(() => UserResponse)
+  async githubLogin(
+    @Arg("options") options: GitHubLoginInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    let user = await User.findOne({
+      where: { githubId: options.id },
+    });
+
+    if (!user) {
+      user = await User.create({
+        githubId: options.id,
+        username: "github-" + options.username,
+      }).save();
+    }
+
+    req.session.userId = user.id;
+
+    return {
+      user,
+    };
+  }
+
+  @Mutation(() => UserResponse)
+  async googleLogin(
+    @Arg("options") options: GoogleLoginInput,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    let user = await User.findOne({
+      where: { googleId: options.id },
+    });
+
+    if (!user) {
+      user = await User.create({
+        email: options.email,
+        googleId: options.id,
+        username: options.username,
+      }).save();
     }
 
     req.session.userId = user.id;

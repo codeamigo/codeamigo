@@ -71,7 +71,7 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="bg-bg-primary inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full"
+          className="bg-bg-primary inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full"
           role="dialog"
         >
           {data?.modal?.name === 'login' && <Login />}
