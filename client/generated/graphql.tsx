@@ -1248,7 +1248,7 @@ export type StudentsQuery = (
   { __typename?: 'Query' }
   & { users?: Maybe<Array<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email' | 'createdAt'>
+    & Pick<User, 'id' | 'username' | 'createdAt'>
   )>> }
 );
 
@@ -2824,7 +2824,7 @@ export const StudentsDocument = gql`
     query Students {
   users {
     id
-    email
+    username
     createdAt
   }
 }
