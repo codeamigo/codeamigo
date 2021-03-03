@@ -6,7 +6,6 @@ import 'github-markdown-css/github-markdown.css';
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { Provider } from 'next-auth/client';
 import React from 'react';
 
 import { client } from '👨‍💻utils/withApollo';
@@ -53,11 +52,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <meta content="#ffffff" name="theme-color"></meta>
       </Head>
       <AuthProvider>
-        <Provider session={pageProps.session}>
-          <Layout pathname={router.pathname}>
-            <Component {...pageProps} />
-          </Layout>
-        </Provider>
+        <Layout pathname={router.pathname}>
+          <Component {...pageProps} />
+        </Layout>
         <Modals />
       </AuthProvider>
     </ApolloProvider>

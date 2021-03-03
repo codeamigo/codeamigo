@@ -1,7 +1,7 @@
 import * as githubPng from 'assets/github.png';
 import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { signIn } from 'next-auth/client';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
@@ -34,13 +34,13 @@ const Login: React.FC = () => {
         }
       }}
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, values }) => (
         <Form>
           <div className="max-w-lg mx-auto py-6 sm:px-6">
             <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
               Login
             </h1>
-            <div className="flex justify-center gap-3">
+            <div className="flex justify-center gap-6">
               <button onClick={() => signIn('google')} type="button">
                 <img className="h-7" src={googlePng} />
               </button>
@@ -55,7 +55,12 @@ const Login: React.FC = () => {
                   name="usernameOrEmail"
                   type="text"
                 />
-                <InputField label="Password" name="password" type="password" />
+                <InputField
+                  className={values.usernameOrEmail ? '' : 'hidden'}
+                  label="Password"
+                  name="password"
+                  type="password"
+                />
               </div>
             </div>
             <div className="px-4 w-full sm:px-6">
