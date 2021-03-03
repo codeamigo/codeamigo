@@ -7,6 +7,8 @@ const GithubHandler: React.FC<Props> = () => {
   const router = useRouter();
   const [login] = useGitHubLoginMutation();
 
+  console.log(router);
+
   useEffect(() => {
     if (router.query.slug) {
       const doLogin = async () => {
@@ -20,7 +22,7 @@ const GithubHandler: React.FC<Props> = () => {
           },
         });
 
-        router.replace('/');
+        router.back();
       };
 
       doLogin();

@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
   useCreateSessionMutation,
   useMeQuery,
@@ -21,12 +22,13 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
   useEffect(() => {
     if (meLoading) return;
 
-    if (!meData?.me) router.push('/');
+    if (!meData?.me) modalVar({ callback: () => null, name: 'login' });
   }, [meData]);
 
   useEffect(() => {
     async function create() {
       if (loading) return;
+      if (!meData?.me) return;
 
       if (!data?.session?.id) {
         await createSession({
