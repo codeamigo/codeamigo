@@ -3,7 +3,6 @@ import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { CodeSandboxV2ResponseI } from '👨‍💻api/types';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
@@ -21,12 +20,13 @@ import {
 } from '👨‍💻generated/graphql';
 
 import * as THEMES from '../../../styles/monacoThemes';
+// import { CodeSandboxV2ResponseI } from '../../../types/codesandbox';
 import EditorFiles from '../EditorFiles';
 import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { camalize, getModelExtension } from './utils';
 
 const FILE = 'file:///';
-const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
+// const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const editorRef = useRef<any>();
