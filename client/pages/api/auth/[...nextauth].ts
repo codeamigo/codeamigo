@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client';
+import { NextApiHandler } from 'next';
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
 import { client } from '👨‍💻utils/withApollo';
 
 // @ts-ignore
-export default NextAuth({
+const options = {
   // A database is optional, but required to persist accounts in a database
   //   database: process.env.NEXT_PUBLIC_API_URL,
   callbacks: {
@@ -67,4 +68,8 @@ export default NextAuth({
       scope: 'user:email',
     }),
   ],
-});
+};
+
+// @ts-ignore
+const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
+export default authHandler;
