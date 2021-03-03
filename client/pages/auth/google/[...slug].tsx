@@ -10,9 +10,12 @@ const GoogleHandler: React.FC<Props> = () => {
   useEffect(() => {
     if (router.query.slug) {
       const doLogin = async () => {
-        const [username, email, id] = router.query.slug as string[];
+        const [username, email, id, redirection] = router.query
+          .slug as string[];
 
         await login({
+          awaitRefetchQueries: true,
+          refetchQueries: ['Me'],
           variables: {
             email,
             id,
@@ -20,7 +23,7 @@ const GoogleHandler: React.FC<Props> = () => {
           },
         });
 
-        router.replace('/');
+        router.replace(redirection);
       };
 
       doLogin();

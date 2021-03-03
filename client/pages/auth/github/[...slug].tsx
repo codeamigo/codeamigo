@@ -12,9 +12,12 @@ const GithubHandler: React.FC<Props> = () => {
   useEffect(() => {
     if (router.query.slug) {
       const doLogin = async () => {
-        const [accessToken, id, username] = router.query.slug as string[];
+        const [accessToken, id, username, redirection] = router.query
+          .slug as string[];
 
         await login({
+          awaitRefetchQueries: true,
+          refetchQueries: ['Me'],
           variables: {
             accessToken,
             id: parseInt(id),
@@ -22,7 +25,7 @@ const GithubHandler: React.FC<Props> = () => {
           },
         });
 
-        router.replace('/');
+        router.replace(redirection);
       };
 
       doLogin();

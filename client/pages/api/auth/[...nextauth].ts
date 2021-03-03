@@ -5,11 +5,17 @@ import Providers from 'next-auth/providers';
 
 import { client } from '👨‍💻utils/withApollo';
 
+let redirection = '';
+
 // @ts-ignore
 const options = {
   // A database is optional, but required to persist accounts in a database
   //   database: process.env.NEXT_PUBLIC_API_URL,
   callbacks: {
+    async redirect(url: string) {
+      redirection = url;
+      return Promise.resolve(url);
+    },
     async signIn(_: any, account: any, profile: any) {
       if (account.provider === 'github') {
         // const mutation = gql`
@@ -44,12 +50,18 @@ const options = {
         // });
 
         // return true;
-        return `/auth/github/${account.accessToken}/${account.id}/${profile.login}`;
+        return `/auth/github/${account.accessToken}/${account.id}/${
+          profile.login
+        }/${encodeURIComponent(redirection)}`;
       }
 
       if (account.provider === 'google') {
-        return `/auth/google/${profile.name}/${profile.email}/${profile.id}`;
+        return `/auth/google/${profile.name}/${profile.email}/${
+          profile.id
+        }/${encodeURIComponent(redirection)}`;
       }
+
+      return true;
     },
   },
   debug: false,

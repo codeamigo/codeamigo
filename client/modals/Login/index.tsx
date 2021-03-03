@@ -1,6 +1,7 @@
 import * as githubPng from 'assets/github.png';
 import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
 import React from 'react';
 
@@ -11,6 +12,7 @@ import { useLoginMutation, useModalQuery } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
 const Login: React.FC = () => {
+  const router = useRouter();
   const [login] = useLoginMutation();
   const { data: modalData } = useModalQuery();
 
@@ -41,10 +43,16 @@ const Login: React.FC = () => {
               Login
             </h1>
             <div className="flex justify-center gap-6">
-              <button onClick={() => signIn('google')} type="button">
+              <button
+                onClick={() => signIn('google', { callbackUrl: router.asPath })}
+                type="button"
+              >
                 <img className="h-7" src={googlePng} />
               </button>
-              <button onClick={() => signIn('github')} type="button">
+              <button
+                onClick={() => signIn('github', { callbackUrl: router.asPath })}
+                type="button"
+              >
                 <img className="h-7" src={githubPng} />
               </button>
             </div>
