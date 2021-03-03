@@ -22,9 +22,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <script
           async
           data-domain="codeamigo.dev"
+          data-exclude="/api/auth/*"
           defer
-          src="https://plausible.io/js/plausible.js"
+          src="https://plausible.io/js/plausible.exclusions.js"
         ></script>
+
         <link
           href="/favicon/apple-touch-icon.png"
           rel="apple-touch-icon"
