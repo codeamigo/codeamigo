@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 
 import { useGoogleLoginMutation } from '👨‍💻generated/graphql';
 
-const GithubHandler: React.FC<Props> = () => {
+const GoogleHandler: React.FC<Props> = () => {
   const router = useRouter();
   const [login] = useGoogleLoginMutation();
 
@@ -20,7 +20,7 @@ const GithubHandler: React.FC<Props> = () => {
           },
         });
 
-        router.back();
+        router.replace('/');
       };
 
       doLogin();
@@ -32,4 +32,4 @@ const GithubHandler: React.FC<Props> = () => {
 
 type Props = {};
 
-export default GithubHandler;
+export default GoogleHandler;

@@ -22,7 +22,7 @@ const GithubHandler: React.FC<Props> = () => {
           },
         });
 
-        router.back();
+        router.replace('/');
       };
 
       doLogin();
