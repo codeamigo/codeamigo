@@ -1,7 +1,7 @@
 query Students {
   users {
     id
-    email
+    username
     createdAt
   }
 }
