@@ -12,7 +12,8 @@ const StudentList: React.FC<Props> = () => {
       {data.users.map((user) => {
         return (
           <div className="text-text-primary">
-            {user.email} {new Date(Number(user.createdAt)).toLocaleDateString()}
+            {user.username}{' '}
+            {new Date(Number(user.createdAt)).toLocaleDateString()}
           </div>
         );
       })}
