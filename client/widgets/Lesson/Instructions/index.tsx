@@ -14,7 +14,7 @@ import {
 import Checkpoints from '../Checkpoints';
 
 const Instructions: React.FC<Props> = (props) => {
-  const { isEditting, step } = props;
+  const { isEditting, showSteps, step, toggleShowSteps } = props;
   const [markdown, setMarkdown] = useState(step?.instructions);
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditting ? 'editor' : 'preview'
@@ -109,9 +109,12 @@ const Instructions: React.FC<Props> = (props) => {
       <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-bg-nav-offset">
         <div
           className="flex items-center cursor-pointer"
-          onClick={props.toggleShowSteps}
+          onClick={toggleShowSteps}
         >
-          <Icon className="text-text-primary text-2xl" name="list" />
+          <Icon
+            className="text-text-primary text-2xl w-4"
+            name={showSteps ? 'cancel-squared' : 'list'}
+          />
           <div className="text-text-primary text-sm font-semibold ml-3">
             Step: {currentStepNum}/{totalSteps}
           </div>
@@ -129,6 +132,7 @@ const Instructions: React.FC<Props> = (props) => {
 type Props = {
   isEditting?: boolean;
   nextStep: () => void;
+  showSteps: boolean;
   step: RegularStepFragment;
   steps: RegularStepFragment[];
   toggleShowSteps: () => void;

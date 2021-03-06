@@ -51,6 +51,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
           currentStepId={stepId}
           isEditting
           lesson={data.lesson}
+          showSteps={showSteps}
           toggleShowSteps={toggleShowSteps}
         />
       </div>

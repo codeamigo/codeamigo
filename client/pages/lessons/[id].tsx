@@ -83,6 +83,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
             lesson={data.lesson}
             session={sessionData.session}
             setCurrentStepId={setCurrentStepId}
+            showSteps={showSteps}
             toggleShowSteps={toggleShowSteps}
           />
         ) : // TODO: loading states

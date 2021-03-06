@@ -17,6 +17,7 @@ const Step: React.FC<Props> = ({
   currentStepId: id,
   session,
   setCurrentStepId,
+  showSteps,
   ...rest
 }) => {
   const [completeStep] = useCompleteStepMutation();
@@ -103,6 +104,7 @@ const Step: React.FC<Props> = ({
         <div className="flex flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4">
           <Instructions
             nextStep={nextStep}
+            showSteps={showSteps}
             step={data.step}
             steps={
               (session?.steps || rest.lesson?.steps) as RegularStepFragment[]
@@ -132,6 +134,7 @@ type Props = {
   lesson: LessonQuery['lesson'];
   session?: SessionQuery['session'];
   setCurrentStepId?: (n: number) => void;
+  showSteps: boolean;
   toggleShowSteps: () => void;
 };
 
