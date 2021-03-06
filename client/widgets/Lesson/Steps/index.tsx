@@ -1,5 +1,6 @@
 import { Transition } from '@headlessui/react';
 import React, { useEffect, useRef, useState } from 'react';
+import useOnClickOutside from 'use-onclickoutside';
 
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
@@ -18,9 +19,11 @@ const Steps: React.FC<Props> = ({
   isEditting,
   lessonId,
   setCurrentStepId,
+  setShowSteps,
   showSteps,
   steps,
 }) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const updateRef = useRef<HTMLInputElement>(null);
   const [createStepM] = useCreateStepMutation();
@@ -34,6 +37,10 @@ const Steps: React.FC<Props> = ({
     // 4rem => footer
     'calc(100% - 3rem - 4rem)'
   );
+
+  useOnClickOutside(wrapperRef, () => {
+    setTimeout(() => setShowSteps(false), 150);
+  });
 
   useEffect(() => {
     if (isAdding) {
@@ -149,123 +156,125 @@ const Steps: React.FC<Props> = ({
         height: stepsHeight,
       }}
     >
-      <ol>
-        {steps.map((step, i) => {
-          return (
-            <li
-              className={`${
-                canGoToStep(step)
-                  ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
-                  : 'cursor-not-allowed opacity-50'
-              } ${
-                currentStepId === step.id ? 'text-accent' : ''
-              } text-text-primary list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
-              key={step.id}
-              onClick={() => {
-                if (canGoToStep(step)) {
-                  setCurrentStepId(step.id);
-                }
+      <div className="h-full" ref={wrapperRef}>
+        <ol>
+          {steps.map((step, i) => {
+            return (
+              <li
+                className={`${
+                  canGoToStep(step)
+                    ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
+                    : 'cursor-not-allowed opacity-50'
+                } ${
+                  currentStepId === step.id ? 'text-accent' : ''
+                } text-text-primary list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
+                key={step.id}
+                onClick={() => {
+                  if (canGoToStep(step)) {
+                    setCurrentStepId(step.id);
+                  }
 
-                if (!isEditting) return;
+                  if (!isEditting) return;
+                }}
+              >
+                <div className="flex w-full">
+                  {isUpdating === step.id ? (
+                    <input
+                      className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
+                      defaultValue={step.name || ''}
+                      onBlur={(e) => handleUpdateBlur(e, step.id)}
+                      onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
+                      ref={updateRef}
+                      type="text"
+                    />
+                  ) : (
+                    <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
+                      {step.name || ''} {step.isCompleted ? '✅' : ''}
+                    </span>
+                  )}
+                </div>
+                {isEditting && isUpdating === step.id && (
+                  <div className="flex">
+                    <Button className="ml-1 py-0" type="submit">
+                      Submit
+                    </Button>
+                    <a
+                      className="ml-2 text-text-primary text-sm"
+                      onClick={(
+                        e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+                      ) => {
+                        e.stopPropagation();
+                        setIsAdding(false);
+                      }}
+                    >
+                      Cancel
+                    </a>
+                  </div>
+                )}
+                {isEditting && !isUpdating && (
+                  <div className="flex">
+                    <Icon
+                      className="text-text-primary hidden mr-2"
+                      name="pencil"
+                      onClick={() => {
+                        setIsUpdating(step.id);
+                        setTimeout(() => {
+                          updateRef.current?.focus();
+                        }, 0);
+                      }}
+                    />
+                    <Icon
+                      className="text-text-secondary hidden"
+                      name="minus-circled"
+                      onClick={(e) => {
+                        const yes = window.confirm(
+                          'Are you sure you want to delete this step?'
+                        );
+
+                        if (yes) {
+                          deleteStep(step.id, i);
+                        }
+                      }}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+        {isAdding && (
+          <div className="w-full flex py-2 items-center">
+            <input
+              className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
+              onBlur={handleBlur}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
+              type="text"
+            />
+            <Button className="ml-1 py-0" type="submit">
+              Submit
+            </Button>
+            <a
+              className="ml-2 text-text-primary text-sm cursor-pointer"
+              onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+                e.stopPropagation();
+                setIsAdding(false);
               }}
             >
-              <div className="flex w-full">
-                {isUpdating === step.id ? (
-                  <input
-                    className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
-                    defaultValue={step.name || ''}
-                    onBlur={(e) => handleUpdateBlur(e, step.id)}
-                    onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
-                    ref={updateRef}
-                    type="text"
-                  />
-                ) : (
-                  <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
-                    {step.name || ''} {step.isCompleted ? '✅' : ''}
-                  </span>
-                )}
-              </div>
-              {isEditting && isUpdating === step.id && (
-                <div className="flex">
-                  <Button className="ml-1 py-0" type="submit">
-                    Submit
-                  </Button>
-                  <a
-                    className="ml-2 text-text-primary text-sm"
-                    onClick={(
-                      e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-                    ) => {
-                      e.stopPropagation();
-                      setIsAdding(false);
-                    }}
-                  >
-                    Cancel
-                  </a>
-                </div>
-              )}
-              {isEditting && !isUpdating && (
-                <div className="flex">
-                  <Icon
-                    className="text-text-primary hidden mr-2"
-                    name="pencil"
-                    onClick={() => {
-                      setIsUpdating(step.id);
-                      setTimeout(() => {
-                        updateRef.current?.focus();
-                      }, 0);
-                    }}
-                  />
-                  <Icon
-                    className="text-text-secondary hidden"
-                    name="minus-circled"
-                    onClick={(e) => {
-                      const yes = window.confirm(
-                        'Are you sure you want to delete this step?'
-                      );
-
-                      if (yes) {
-                        deleteStep(step.id, i);
-                      }
-                    }}
-                  />
-                </div>
-              )}
-            </li>
-          );
-        })}
-      </ol>
-      {isAdding && (
-        <div className="w-full flex py-2 items-center">
-          <input
-            className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
-            onBlur={handleBlur}
-            onKeyDown={handleKeyDown}
-            ref={inputRef}
-            type="text"
-          />
-          <Button className="ml-1 py-0" type="submit">
-            Submit
-          </Button>
-          <a
-            className="ml-2 text-text-primary text-sm cursor-pointer"
-            onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-              e.stopPropagation();
-              setIsAdding(false);
-            }}
+              Cancel
+            </a>
+          </div>
+        )}
+        {isEditting && !isAdding && !isUpdating && (
+          <Button
+            className="mt-3"
+            onClick={() => setIsAdding(true)}
+            type="button"
           >
-            Cancel
-          </a>
-        </div>
-      )}
-      {isEditting && !isAdding && !isUpdating && (
-        <Button
-          className="mt-3"
-          onClick={() => setIsAdding(true)}
-          type="button"
-        >
-          New Step
-        </Button>
-      )}
+            New Step
+          </Button>
+        )}
+      </div>
     </Transition>
   );
 };
@@ -276,6 +285,7 @@ type Props = {
   isEditting?: boolean;
   lessonId: number;
   setCurrentStepId: (n: number) => void;
+  setShowSteps: (val: boolean) => void;
   showSteps: boolean;
   steps: RegularStepFragment[];
 };

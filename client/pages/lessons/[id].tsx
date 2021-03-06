@@ -35,10 +35,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     setShowSteps(false);
   }, [currentStepId]);
 
-  const toggleShowSteps = () => {
-    setShowSteps(!showSteps);
-  };
-
   // lesson
   if (loading) return null;
   // no lesson exists
@@ -70,6 +66,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
           currentStepId={stepId}
           lessonId={data.lesson.id}
           setCurrentStepId={setCurrentStepId}
+          setShowSteps={setShowSteps}
           showSteps={showSteps}
           steps={sessionData.session.steps}
         />
@@ -83,8 +80,8 @@ const Lesson: NextPage<{ id: string }> = (props) => {
             lesson={data.lesson}
             session={sessionData.session}
             setCurrentStepId={setCurrentStepId}
+            setShowSteps={setShowSteps}
             showSteps={showSteps}
-            toggleShowSteps={toggleShowSteps}
           />
         ) : // TODO: loading states
         null}

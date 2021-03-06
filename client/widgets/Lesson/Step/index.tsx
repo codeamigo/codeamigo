@@ -134,8 +134,8 @@ type Props = {
   lesson: LessonQuery['lesson'];
   session?: SessionQuery['session'];
   setCurrentStepId?: (n: number) => void;
+  setShowSteps: (val: boolean) => void;
   showSteps: boolean;
-  toggleShowSteps: () => void;
 };
 
 export default Step;

@@ -18,10 +18,6 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
     variables: { id },
   });
 
-  const toggleShowSteps = () => {
-    setShowSteps(!showSteps);
-  };
-
   if (!data) return null;
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
@@ -42,6 +38,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         isEditting
         lessonId={data.lesson.id}
         setCurrentStepId={setCurrentStepId}
+        setShowSteps={setShowSteps}
         showSteps={showSteps}
         steps={data.lesson.steps}
       />
@@ -51,8 +48,8 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
           currentStepId={stepId}
           isEditting
           lesson={data.lesson}
+          setShowSteps={setShowSteps}
           showSteps={showSteps}
-          toggleShowSteps={toggleShowSteps}
         />
       </div>
     </div>
