@@ -96,8 +96,10 @@ const Steps: React.FC<Props> = ({
     const value = event.currentTarget.value;
 
     if (value) {
-      createStep(value);
+      return createStep(value);
     }
+
+    setIsAdding(false);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -165,16 +167,12 @@ const Steps: React.FC<Props> = ({
                 }
 
                 if (!isEditting) return;
-                setIsUpdating(step.id);
-                setTimeout(() => {
-                  updateRef.current?.focus();
-                }, 0);
               }}
             >
               <div className="flex w-full">
                 {isUpdating === step.id ? (
                   <input
-                    className="w-full text-md text-text-primary px-0 py-0 border-none border-b-2 border-blue-50 bg-transparent focus:ring-0"
+                    className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
                     defaultValue={step.name || ''}
                     onBlur={(e) => handleUpdateBlur(e, step.id)}
                     onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
@@ -188,48 +186,84 @@ const Steps: React.FC<Props> = ({
                 )}
               </div>
               {isEditting && isUpdating === step.id && (
-                <Icon
-                  className="text-text-primary mr-2 hover:text-green-600 transition-colors duration-150"
-                  name="check"
-                  // handled by blur
-                  onClick={() => null}
-                />
+                <div className="flex">
+                  <Button className="ml-1 py-0" type="submit">
+                    Submit
+                  </Button>
+                  <a
+                    className="ml-2 text-text-primary text-sm"
+                    onClick={(
+                      e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+                    ) => {
+                      e.stopPropagation();
+                      setIsAdding(false);
+                    }}
+                  >
+                    Cancel
+                  </a>
+                </div>
               )}
               {isEditting && !isUpdating && (
-                <Icon
-                  className="text-red-600 hidden"
-                  name="minus-circled"
-                  onClick={(e) => {
-                    const yes = window.confirm(
-                      'Are you sure you want to delete this step?'
-                    );
+                <div className="flex">
+                  <Icon
+                    className="text-text-primary hidden mr-2"
+                    name="pencil"
+                    onClick={() => {
+                      setIsUpdating(step.id);
+                      setTimeout(() => {
+                        updateRef.current?.focus();
+                      }, 0);
+                    }}
+                  />
+                  <Icon
+                    className="text-text-secondary hidden"
+                    name="minus-circled"
+                    onClick={(e) => {
+                      const yes = window.confirm(
+                        'Are you sure you want to delete this step?'
+                      );
 
-                    if (yes) {
-                      deleteStep(step.id, i);
-                    }
-                  }}
-                />
+                      if (yes) {
+                        deleteStep(step.id, i);
+                      }
+                    }}
+                  />
+                </div>
               )}
             </li>
           );
         })}
       </ol>
       {isAdding && (
-        <input
-          className="w-full text-sm px-2 py-1"
-          onBlur={handleBlur}
-          onKeyDown={handleKeyDown}
-          ref={inputRef}
-          type="text"
-        />
+        <div className="w-full flex py-2 items-center">
+          <input
+            className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
+            onBlur={handleBlur}
+            onKeyDown={handleKeyDown}
+            ref={inputRef}
+            type="text"
+          />
+          <Button className="ml-1 py-0" type="submit">
+            Submit
+          </Button>
+          <a
+            className="ml-2 text-text-primary text-sm cursor-pointer"
+            onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+              e.stopPropagation();
+              setIsAdding(false);
+            }}
+          >
+            Cancel
+          </a>
+        </div>
       )}
-      {isEditting && (
+      {isEditting && !isAdding && !isUpdating && (
         <Button
           className="mt-3"
           onClick={() => setIsAdding(true)}
           type="button"
         >
-          Add Step
+          New Step
         </Button>
       )}
     </Transition>
