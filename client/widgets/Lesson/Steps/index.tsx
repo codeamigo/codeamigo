@@ -189,7 +189,7 @@ const Steps: React.FC<Props> = ({
                     />
                   ) : (
                     <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
-                      {step.name || ''} {step.isCompleted ? '✅' : ''}
+                      {step.isCompleted ? '✅' : ''} {step.name || ''}
                     </span>
                   )}
                 </div>
@@ -227,6 +227,7 @@ const Steps: React.FC<Props> = ({
                       className="text-text-secondary hidden"
                       name="minus-circled"
                       onClick={(e) => {
+                        e.stopPropagation();
                         const yes = window.confirm(
                           'Are you sure you want to delete this step?'
                         );
