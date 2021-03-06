@@ -65,8 +65,7 @@ const LessonItem: React.FC<Props> = ({ lesson }) => {
                       onClick={(e) => deleteLesson(e, lesson.id)}
                       role="menuitem"
                     >
-                      <Icon className="text-red-500 mr-2" name="trash" />{' '}
-                      <span>Delete Lesson</span>
+                      🚮&nbsp;<span>Delete Lesson</span>
                     </button>
                   </div>
                 </Transition>
