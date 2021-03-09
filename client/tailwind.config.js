@@ -43,6 +43,7 @@ module.exports = {
   variants: {
     extend: {
       borderWidth: ['first'],
+      cursor: ['disabled'],
       margin: ['first'],
       opacity: ['disabled'],
     },

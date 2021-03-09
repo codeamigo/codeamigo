@@ -1,60 +1,43 @@
-import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { statusVar } from '👨‍💻apollo/cache';
 import Icon from '👨‍💻components/Icon';
 import { LessonQuery } from '👨‍💻generated/graphql';
+import LessonOptions from '👨‍💻widgets/Lesson/Info/LessonOptions';
+import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 import Form from './Form';
 import View from './View';
 
+export const LessonInfoHeaderHeight = '2.75';
+
 const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
   const router = useRouter();
-  const status = useReactiveVar(statusVar);
-  const [ping, setPing] = useState(false);
-
-  useEffect(() => {
-    setPing(true);
-
-    setTimeout(() => {
-      setPing(false);
-    }, 1500);
-  }, [status.lastSaved]);
 
   return (
-    <div className="w-full py-2 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset relative">
-      <div className="flex w-1/4">
+    <div
+      className="w-full py-1 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset relative"
+      style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
+    >
+      <div className="w-1/4 flex items-center">
         <Icon
-          className="text-text-primary text-lg cursor-pointer text-md"
+          className="text-text-primary text-lg cursor-pointer text-md mr-4"
           name="home"
           onClick={() => router.push('/')}
         />
+        <StatusIndicator />
       </div>
       <div className="w-1/2">
         {isEditting ? <Form {...rest} /> : <View {...rest} />}
       </div>
       <div className="w-1/4 flex justify-end items-center">
-        {status.connected ? (
-          <div
-            aria-label={`Last saved: ${new Date(
-              status.lastSaved
-            ).toTimeString()}`}
-            className="relative flex h-3 w-3 hint--left hint--no-animate"
-          >
-            {ping && (
-              <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping-quick bg-green-400 opacity-50 rounded-full" />
-            )}
-            <div className="h-full w-full bg-green-400 rounded-full" />
-          </div>
-        ) : (
-          <div className="relative flex h-3 w-3">
-            <div className="h-4 w-4 absolute -left-0.5 -top-0.5 inline-flex animate-ping bg-red-600 rounded-full" />
-            <div className="h-full w-full bg-red-600 rounded-full" />
-          </div>
-        )}
-        <UserMenu />
+        <div className="flex items-center">
+          {isEditting ? <LessonOptions /> : null}
+        </div>
+        <div className="flex items-center">
+          <UserMenu />
+        </div>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import {
   useDeleteStepMutation,
   useUpdateStepNameMutation,
 } from '👨‍💻generated/graphql';
+import { LessonInfoHeaderHeight } from '👨‍💻widgets/Lesson/Info';
 
 import styles from './Steps.module.scss';
 
@@ -35,7 +36,7 @@ const Steps: React.FC<Props> = ({
   const [stepsHeight, setStepsHeight] = useState<string>(
     // 3rem => header
     // 4rem => footer
-    'calc(100% - 3rem - 4rem)'
+    `calc(100% - ${LessonInfoHeaderHeight}rem - 4rem)`
   );
 
   useOnClickOutside(wrapperRef, () => {
