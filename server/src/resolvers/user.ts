@@ -91,7 +91,9 @@ class UserResponse {
 export class UserResolver {
   @Query(() => [User], { nullable: true })
   async users() {
-    return await User.find();
+    const users = await User.find();
+
+    return users.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
   }
 
   @Query(() => User, { nullable: true })
