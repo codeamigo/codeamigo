@@ -1,13 +1,54 @@
 import { Menu, Transition } from '@headlessui/react';
 import React, { useState } from 'react';
+import useOnClickOutside from 'use-onclickoutside';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
+import {
+  LessonDocument,
+  LessonLabel,
+  LessonQuery,
+  useUpdateLessonLabelMutation,
+} from '👨‍💻generated/graphql';
 
-const Label: React.FC<Props> = () => {
+const Label: React.FC<Props> = ({ lesson }) => {
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
   const [showOptions, setShowOptions] = useState(false);
+  const [updateLabelM] = useUpdateLessonLabelMutation();
+
+  if (!lesson) return null;
+
+  useOnClickOutside(wrapperRef, () => {
+    setShowOptions(false);
+  });
+
+  const updateLabel = (label: LessonLabel) => {
+    const q = {
+      query: LessonDocument,
+      variables: { id: lesson.id },
+    };
+
+    updateLabelM({
+      update: (store) => {
+        const lessonData = store.readQuery<LessonQuery>(q);
+        if (!lessonData?.lesson) return;
+
+        store.writeQuery<LessonQuery>({
+          ...q,
+          data: {
+            lesson: {
+              ...lessonData.lesson,
+              label,
+            },
+          },
+        });
+      },
+      variables: { id: lesson.id, label },
+    });
+  };
 
   return (
-    <div>
+    <div ref={wrapperRef}>
       <div
         className="flex items-center text-text-primary text-sm cursor-pointer"
         onClick={() => setShowOptions(!showOptions)}
@@ -40,24 +81,45 @@ const Label: React.FC<Props> = () => {
                   className="origin-top-left bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                   role="menu"
                 >
-                  <button
-                    className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
+                  <Button
+                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    onClick={() => updateLabel(LessonLabel.Beginner)}
                     role="menuitem"
                   >
-                    <span>Beginner</span>
-                  </button>
-                  <button
-                    className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
+                    <div className="w-full flex items-center">
+                      <div className="w-3 h-3 mr-2 rounded-full bg-green-600"></div>
+                      <span>Beginner</span>
+                    </div>
+                    {lesson.label === LessonLabel.Beginner ? (
+                      <div>✅</div>
+                    ) : null}
+                  </Button>
+                  <Button
+                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    onClick={() => updateLabel(LessonLabel.Intermediate)}
                     role="menuitem"
                   >
-                    <span>Intermediate</span>
-                  </button>
-                  <button
-                    className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
+                    <div className="w-full flex items-center">
+                      <div className="w-3 h-3 mr-2 rounded-full bg-yellow-300"></div>
+                      <span>Intermediate</span>
+                    </div>
+                    {lesson.label === LessonLabel.Intermediate ? (
+                      <div>✅</div>
+                    ) : null}
+                  </Button>
+                  <Button
+                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    onClick={() => updateLabel(LessonLabel.Advanced)}
                     role="menuitem"
                   >
-                    <span>Advanced</span>
-                  </button>
+                    <div className="w-full flex items-center">
+                      <div className="w-3 h-3 mr-2 rounded-full bg-red-600"></div>
+                      <span>Advanced</span>
+                    </div>
+                    {lesson.label === LessonLabel.Advanced ? (
+                      <div>✅</div>
+                    ) : null}
+                  </Button>
                 </div>
               </Transition>
             </>
@@ -68,6 +130,8 @@ const Label: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+type Props = {
+  lesson: LessonQuery['lesson'];
+};
 
 export default Label;

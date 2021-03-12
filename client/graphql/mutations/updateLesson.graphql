@@ -15,3 +15,9 @@ mutation UpdateLessonStatus($id: Float!, $status: String!) {
     id
   }
 }
+
+mutation UpdateLessonLabel($id: Float!, $label: String!) {
+  updateLessonLabel(id: $id, label: $label) {
+    id
+  }
+}

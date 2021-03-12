@@ -11,7 +11,11 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { Lesson, LessonStatusTypeEnum } from "../entities/Lesson";
+import {
+  Lesson,
+  LessonLabelEnum,
+  LessonStatusTypeEnum,
+} from "../entities/Lesson";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
@@ -172,6 +176,22 @@ export class LessonResolver {
     }
 
     await Lesson.update({ id }, { ...lesson, status });
+
+    return lesson;
+  }
+
+  @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateLessonLabel(
+    @Arg("id") id: number,
+    @Arg("label") label: LessonLabelEnum
+  ): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne(id);
+    if (!lesson) {
+      return null;
+    }
+
+    await Lesson.update({ id }, { ...lesson, label });
 
     return lesson;
   }

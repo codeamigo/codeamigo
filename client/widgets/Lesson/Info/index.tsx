@@ -36,7 +36,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
         </div>
         <div className="w-1/4 flex justify-end items-center">
           <div className="flex items-center">
-            {isEditting ? (
+            {isEditting && rest.lesson ? (
               <LessonOptions
                 setShowOptions={setShowOptions}
                 showOptions={showOptions}
@@ -49,7 +49,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
         </div>
       </div>
       <Transition show={showOptions}>
-        <Options />
+        <Options {...rest} />
       </Transition>
     </div>
   );
