@@ -602,7 +602,7 @@ export type RegularErrorFragment = (
 
 export type RegularLessonItemFragment = (
   { __typename?: 'Lesson' }
-  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'updatedAt'>
+  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt'>
   & { students?: Maybe<Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
@@ -1323,6 +1323,7 @@ export const RegularLessonItemFragmentDoc = gql`
   likes
   status
   title
+  thumbnail
   updatedAt
   students {
     id

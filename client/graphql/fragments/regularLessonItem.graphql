@@ -5,6 +5,7 @@ fragment RegularLessonItem on Lesson {
   likes
   status
   title
+  thumbnail
   updatedAt
   students {
     id
