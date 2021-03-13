@@ -17,6 +17,7 @@
     "paths": {
       "👨‍💻api/*": ["./api/*"],
       "👨‍💻apollo/*": ["./apollo/*"],
+      "👨‍💻assets/*": ["./assets/*"],
       "👨‍💻components/*": ["./components/*"],
       "👨‍💻generated/*": ["./generated/*"],
       "👨‍💻pages/*": ["./pages/*"],

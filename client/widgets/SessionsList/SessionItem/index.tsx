@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
+import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import {
   SessionsQuery,
@@ -52,7 +53,9 @@ const SessionItem: React.FC<Props> = ({ session }) => {
     <div className="rounded-lg border-bg-nav-offset border-4 overflow-hidden">
       <div
         className="h-48 bg-center bg-cover bg-no-repeat border-b-2 border-bg-nav-offset"
-        style={{ backgroundImage: `url(${session.lesson.thumbnail}` }}
+        style={{
+          backgroundImage: `url(${session.lesson.thumbnail || codeamigoPng}`,
+        }}
       />
       <div className="p-3" key={session.id}>
         <div className="flex justify-between items-start">

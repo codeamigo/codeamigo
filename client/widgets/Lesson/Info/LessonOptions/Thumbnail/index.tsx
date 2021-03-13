@@ -19,10 +19,6 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
 
   if (!lesson) return null;
 
-  useEffect(() => {
-    console.log(url);
-  }, [url]);
-
   useOnClickOutside(wrapperRef, () => {
     setShowOptions(false);
   });
@@ -104,11 +100,27 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
                 >
                   <div className="p-3">
                     {url ? (
-                      <div className="relative w-36 h-36">
-                        <img className="h-full w-full" src={url} />
+                      <div
+                        className="relative w-56 h-36 bg-center bg-cover bg-no-repeat"
+                        style={{ backgroundImage: `url(${url})` }}
+                      >
                         <div
                           className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-accent"
-                          onClick={() => setUrl(null)}
+                          onClick={() => {
+                            const yes = window.confirm(
+                              'Are you sure you want to delete this thumbnail?'
+                            );
+
+                            if (yes) {
+                              setUrl(null);
+                              updateThumbnail({
+                                variables: {
+                                  id: lesson.id,
+                                  thumbnail: undefined,
+                                },
+                              });
+                            }
+                          }}
                         >
                           <Icon className="text-text-primary" name="cancel" />
                         </div>
@@ -116,7 +128,7 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
                     ) : (
                       <div
                         {...getRootProps()}
-                        className={`text-text-primary border-dashed p-6 border-2 ${
+                        className={`w-56 h-36 flex flex-col items-center text-text-primary border-dashed p-6 border-2 ${
                           isDragActive
                             ? 'border-bg-nav'
                             : 'border-bg-nav-offset'

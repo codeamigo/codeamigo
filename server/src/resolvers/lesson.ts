@@ -200,7 +200,7 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   async updateLessonThumbnail(
     @Arg("id") id: number,
-    @Arg("thumbnail") thumbnail: string
+    @Arg("thumbnail", { nullable: true }) thumbnail?: string
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {

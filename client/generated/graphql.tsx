@@ -440,7 +440,7 @@ export type MutationUpdateLessonLabelArgs = {
 
 
 export type MutationUpdateLessonThumbnailArgs = {
-  thumbnail: Scalars['String'];
+  thumbnail?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
 };
 
@@ -1029,7 +1029,7 @@ export type UpdateLessonLabelMutation = (
 
 export type UpdateLessonThumbnailMutationVariables = Exact<{
   id: Scalars['Float'];
-  thumbnail: Scalars['String'];
+  thumbnail?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -2312,7 +2312,7 @@ export type UpdateLessonLabelMutationHookResult = ReturnType<typeof useUpdateLes
 export type UpdateLessonLabelMutationResult = Apollo.MutationResult<UpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationOptions = Apollo.BaseMutationOptions<UpdateLessonLabelMutation, UpdateLessonLabelMutationVariables>;
 export const UpdateLessonThumbnailDocument = gql`
-    mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String!) {
+    mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
     id
   }
