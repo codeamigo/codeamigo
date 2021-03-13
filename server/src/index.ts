@@ -5,7 +5,7 @@ import { ApolloServer } from "apollo-server-express";
 import cloudinary from "cloudinary";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import express, { response } from "express";
+import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
