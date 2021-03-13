@@ -196,6 +196,22 @@ export class LessonResolver {
     return lesson;
   }
 
+  @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateLessonThumbnail(
+    @Arg("id") id: number,
+    @Arg("thumbnail") thumbnail: string
+  ): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne(id);
+    if (!lesson) {
+      return null;
+    }
+
+    await Lesson.update({ id }, { ...lesson, thumbnail });
+
+    return lesson;
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteLesson(@Arg("id") id: number): Promise<boolean> {

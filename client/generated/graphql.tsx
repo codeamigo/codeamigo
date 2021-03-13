@@ -117,6 +117,7 @@ export type Lesson = {
   updatedAt: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
+  thumbnail?: Maybe<Scalars['String']>;
   status?: Maybe<LessonStatus>;
   label?: Maybe<LessonLabel>;
   likes: Scalars['Float'];
@@ -270,6 +271,7 @@ export type Mutation = {
   updateLessonDescription?: Maybe<Lesson>;
   updateLessonStatus?: Maybe<Lesson>;
   updateLessonLabel?: Maybe<Lesson>;
+  updateLessonThumbnail?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   deleteSession: Scalars['Boolean'];
@@ -433,6 +435,12 @@ export type MutationUpdateLessonStatusArgs = {
 
 export type MutationUpdateLessonLabelArgs = {
   label: Scalars['String'];
+  id: Scalars['Float'];
+};
+
+
+export type MutationUpdateLessonThumbnailArgs = {
+  thumbnail: Scalars['String'];
   id: Scalars['Float'];
 };
 
@@ -1019,6 +1027,20 @@ export type UpdateLessonLabelMutation = (
   )> }
 );
 
+export type UpdateLessonThumbnailMutationVariables = Exact<{
+  id: Scalars['Float'];
+  thumbnail: Scalars['String'];
+}>;
+
+
+export type UpdateLessonThumbnailMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonThumbnail?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id'>
+  )> }
+);
+
 export type SetNextStepMutationVariables = Exact<{
   sessionId: Scalars['Float'];
   stepId: Scalars['Float'];
@@ -1160,7 +1182,7 @@ export type LessonQuery = (
   { __typename?: 'Query' }
   & { lesson?: Maybe<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'title'>
+    & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'thumbnail' | 'title'>
     & { owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
@@ -2288,6 +2310,39 @@ export function useUpdateLessonLabelMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateLessonLabelMutationHookResult = ReturnType<typeof useUpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationResult = Apollo.MutationResult<UpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationOptions = Apollo.BaseMutationOptions<UpdateLessonLabelMutation, UpdateLessonLabelMutationVariables>;
+export const UpdateLessonThumbnailDocument = gql`
+    mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String!) {
+  updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
+    id
+  }
+}
+    `;
+export type UpdateLessonThumbnailMutationFn = Apollo.MutationFunction<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>;
+
+/**
+ * __useUpdateLessonThumbnailMutation__
+ *
+ * To run a mutation, you first call `useUpdateLessonThumbnailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonThumbnailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLessonThumbnailMutation, { data, loading, error }] = useUpdateLessonThumbnailMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      thumbnail: // value for 'thumbnail'
+ *   },
+ * });
+ */
+export function useUpdateLessonThumbnailMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>(UpdateLessonThumbnailDocument, baseOptions);
+      }
+export type UpdateLessonThumbnailMutationHookResult = ReturnType<typeof useUpdateLessonThumbnailMutation>;
+export type UpdateLessonThumbnailMutationResult = Apollo.MutationResult<UpdateLessonThumbnailMutation>;
+export type UpdateLessonThumbnailMutationOptions = Apollo.BaseMutationOptions<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>;
 export const SetNextStepDocument = gql`
     mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
   setNextStep(options: {sessionId: $sessionId, stepId: $stepId}) {
@@ -2601,6 +2656,7 @@ export const LessonDocument = gql`
     description
     label
     status
+    thumbnail
     title
     owner {
       id

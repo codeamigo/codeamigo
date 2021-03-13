@@ -2,9 +2,10 @@ import "reflect-metadata";
 import "dotenv-safe/config";
 
 import { ApolloServer } from "apollo-server-express";
+import cloudinary from "cloudinary";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import express from "express";
+import express, { response } from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
@@ -87,6 +88,21 @@ const main = async () => {
   });
 
   apolloServer.applyMiddleware({ app, cors: false });
+
+  cloudinary.v2.config({
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+  });
+
+  app.get("/sign_img_upload", async (_, res) => {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const signature = await cloudinary.v2.utils.api_sign_request(
+      { timestamp },
+      process.env.CLOUDINARY_API_SECRET
+    );
+
+    res.json({ signature, timestamp });
+  });
 
   app.listen(parseInt(process.env.PORT), () => {
     console.log(`Server started on localhost:${process.env.PORT}`);

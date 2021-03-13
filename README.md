@@ -54,7 +54,6 @@ Visit http://localhost:3000
 ### Migrations
 ```
 1. npx typeorm migration:generate -n <DbChange>
-2. Move migration to migrations folder
 
 See https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb1b3
 ```
@@ -64,7 +63,3 @@ See https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb
 ```
 1. git push origin master
 ```
-
-### Model
-
-https://youtu.be/I6ypD7qv3Z8?t=14231
