@@ -13,7 +13,7 @@ import {
 const Thumbnail: React.FC<Props> = ({ lesson }) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [url, setUrl] = useState<string | null>(lesson.thumbnail || null);
+  const [url, setUrl] = useState<string | null>(lesson?.thumbnail || null);
 
   const [updateThumbnail] = useUpdateLessonThumbnailMutation();
 
