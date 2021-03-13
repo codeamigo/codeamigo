@@ -5,5 +5,9 @@ declare namespace NodeJS {
     REDIS_URL: string;
     PORT: string;
     SESSION_SECRET: string;
+    GITHUB_CLIENT_ID: string;
+    GITHUB_CLIENT_SECRET: string;
+    CLOUDINARY_API_KEY: string;
+    CLOUDINARY_API_SECRET: string;
   }
 }

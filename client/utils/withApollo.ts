@@ -6,7 +6,7 @@ import cache, { statusVar } from '👨‍💻apollo/cache';
 
 const httpLink = new HttpLink({
   credentials: 'include',
-  uri: process.env.NEXT_PUBLIC_API_URL,
+  uri: `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
 });
 
 const errorLink = onError(({ networkError }) => {

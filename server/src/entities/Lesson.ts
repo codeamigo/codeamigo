@@ -22,8 +22,17 @@ export enum LessonStatusTypeEnum {
   PUBLISHED = "PUBLISHED",
 }
 
+export enum LessonLabelEnum {
+  BEGINNER = "BEGINNER",
+  INTERMEDIATE = "INTERMEDIATE",
+  ADVANCED = "ADVANCED",
+}
+
 registerEnumType(LessonStatusTypeEnum, {
   name: "LessonStatus",
+});
+registerEnumType(LessonLabelEnum, {
+  name: "LessonLabel",
 });
 @ObjectType()
 @Entity()
@@ -48,6 +57,10 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true })
   description: string;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  thumbnail: string;
+
   @Field(() => LessonStatusTypeEnum, { nullable: true })
   @Column({
     default: LessonStatusTypeEnum.EDITTING,
@@ -55,6 +68,13 @@ export class Lesson extends BaseEntity {
     type: "text",
   })
   status: keyof typeof LessonStatusTypeEnum;
+
+  @Field(() => LessonLabelEnum, { nullable: true })
+  @Column({
+    nullable: true,
+    type: "text",
+  })
+  label: keyof typeof LessonLabelEnum;
 
   @Field()
   @Column({ default: 0, type: "int" })

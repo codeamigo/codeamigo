@@ -1,9 +1,11 @@
 query Lesson($id: Int!) {
   lesson(id: $id) {
     id
-    title
     description
+    label
     status
+    thumbnail
+    title
     owner {
       id
       username

@@ -1,10 +1,19 @@
 import React from 'react';
 
 import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
+import { LessonQuery } from '👨‍💻generated/graphql';
+import Label from '👨‍💻widgets/Lesson/Info/LessonOptions/Label';
+import Thumbnail from '👨‍💻widgets/Lesson/Info/LessonOptions/Thumbnail';
 
-const LessonOptions: React.FC<Props> = () => {
+const LessonOptions: React.FC<Props> = ({ setShowOptions, showOptions }) => {
   return (
-    <div>
+    <div className="flex items-center">
+      <Icon
+        className="text-text-primary mr-2"
+        name="list-add"
+        onClick={() => setShowOptions(!showOptions)}
+      />
       <Button className="py-1" disabled>
         Publish
       </Button>
@@ -12,6 +21,22 @@ const LessonOptions: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+export const Options: React.FC<OptionsProps> = (props) => {
+  return (
+    <div className="flex justify-end w-full gap-6 py-2 pr-16 px-4 bg-bg-primary border-b border-bg-nav-offset absolute z-10 shadow-lg">
+      <Thumbnail {...props} />
+      <Label {...props} />
+    </div>
+  );
+};
+
+type Props = {
+  setShowOptions: (val: boolean) => void;
+  showOptions: boolean;
+};
+
+type OptionsProps = {
+  lesson: LessonQuery['lesson'];
+};
 
 export default LessonOptions;

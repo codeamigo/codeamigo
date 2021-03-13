@@ -6,5 +6,8 @@
   "password": "postgres",
   "database": "codeamigodb",
   "entities": ["dist/entities/*.js"],
-  "migrations": ["dist/migrations/*.js"]
+  "migrations": ["dist/migrations/*.js"],
+  "cli": {
+    "migrationsDir": "src/migrations"
+  }
 }

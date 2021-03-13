@@ -1,9 +1,11 @@
 fragment RegularLessonItem on Lesson {
-  createdAt
   id
+  createdAt
+  label
   likes
   status
   title
+  thumbnail
   updatedAt
   students {
     id
