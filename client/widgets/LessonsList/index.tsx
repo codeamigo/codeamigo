@@ -2,8 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { LessonsQuery, useLessonsQuery } from '👨‍💻generated/graphql';
-
-import LessonItem from './LessonItem';
+import LessonListItem from '👨‍💻widgets/LessonListItem';
 
 const LessonsList: React.FC<Props> = () => {
   const { data } = useLessonsQuery({
@@ -31,7 +30,7 @@ const LessonsList: React.FC<Props> = () => {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {data?.lessons.map((lesson) => {
         return showLesson(lesson) ? (
-          <LessonItem key={lesson.id} lesson={lesson} />
+          <LessonListItem key={lesson.id} lesson={lesson} />
         ) : null;
       })}
     </div>
