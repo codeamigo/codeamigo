@@ -2,10 +2,11 @@ mutation UpdateCodeModule(
   $id: Float!
   $name: String!
   $value: String!
+  $lessonId: Float
 ) {
   updateCodeModule(
     id: $id
-    options: { name: $name, value: $value }
+    options: { name: $name, value: $value, lessonId: $lessonId }
   ) {
     ...RegularCodeModule
   }

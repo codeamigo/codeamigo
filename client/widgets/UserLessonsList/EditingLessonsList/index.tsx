@@ -12,7 +12,7 @@ import {
 } from '👨‍💻generated/graphql';
 import LessonListItem from '👨‍💻widgets/LessonListItem';
 
-const EdittingLessonsList: React.FC<Props> = () => {
+const EditingLessonsList: React.FC<Props> = () => {
   const { data: meData } = useMeQuery();
 
   if (!meData?.me) return null;
@@ -57,7 +57,7 @@ const EdittingLessonsList: React.FC<Props> = () => {
   return (
     <div>
       <h2 className="border-b-2 text-xl text-text-primary font-bold mb-4">
-        📝 Editting
+        📝 Editing
       </h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {data?.lessons.length ? (
@@ -144,4 +144,4 @@ const EdittingLessonsList: React.FC<Props> = () => {
 
 type Props = {};
 
-export default EdittingLessonsList;
+export default EditingLessonsList;

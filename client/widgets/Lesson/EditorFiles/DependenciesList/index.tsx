@@ -13,7 +13,7 @@ import styles from './DependenciesList.module.scss';
 
 const DependenciesList: React.FC<Props> = ({
   dependencies,
-  isEditting,
+  isEditing,
   name,
   stepId,
 }) => {
@@ -114,7 +114,7 @@ const DependenciesList: React.FC<Props> = ({
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
         <span className="text-sm text-text-primary font-semibold">{name}</span>
-        {isEditting && (
+        {isEditing && (
           <Icon
             className="text-sm text-text-primary hover:text-accent cursor-pointer"
             name="plus-circled"
@@ -137,7 +137,7 @@ const DependenciesList: React.FC<Props> = ({
                 <div className="text-xs">
                   {dep.package} {dep.version}
                 </div>
-                {isEditting && (
+                {isEditing && (
                   <Icon
                     className="text-red-600 text-sm hidden cursor-pointer"
                     name="minus-circled"
@@ -234,7 +234,7 @@ const DependenciesList: React.FC<Props> = ({
 
 type Props = {
   dependencies?: RegularDependencyFragment[] | null;
-  isEditting?: boolean;
+  isEditing?: boolean;
   name: string;
   stepId: number;
 };

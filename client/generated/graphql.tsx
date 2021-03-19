@@ -476,6 +476,7 @@ export type UpdateCheckpointInput = {
 export type CodeModuleInput = {
   name: Scalars['String'];
   value: Scalars['String'];
+  lessonId?: Maybe<Scalars['Float']>;
 };
 
 export type DependencyInput = {
@@ -960,6 +961,7 @@ export type UpdateCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
   value: Scalars['String'];
+  lessonId?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -2146,8 +2148,11 @@ export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpoi
 export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
 export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
-    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!) {
-  updateCodeModule(id: $id, options: {name: $name, value: $value}) {
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $lessonId: Float) {
+  updateCodeModule(
+    id: $id
+    options: {name: $name, value: $value, lessonId: $lessonId}
+  ) {
     ...RegularCodeModule
   }
 }
@@ -2170,6 +2175,7 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModul
  *      id: // value for 'id'
  *      name: // value for 'name'
  *      value: // value for 'value'
+ *      lessonId: // value for 'lessonId'
  *   },
  * });
  */

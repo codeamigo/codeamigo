@@ -13,7 +13,7 @@ import View from './View';
 
 export const LessonInfoHeaderHeight = '2.75';
 
-const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
+const Info: React.FC<Props> = ({ isEditing, ...rest }) => {
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
 
@@ -32,11 +32,11 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
           <StatusIndicator />
         </div>
         <div className="w-1/2">
-          {isEditting ? <Form {...rest} /> : <View {...rest} />}
+          {isEditing ? <Form {...rest} /> : <View {...rest} />}
         </div>
         <div className="w-1/4 flex justify-end items-center">
           <div className="flex items-center">
-            {isEditting && rest.lesson ? (
+            {isEditing && rest.lesson ? (
               <LessonOptions
                 setShowOptions={setShowOptions}
                 showOptions={showOptions}
@@ -56,7 +56,7 @@ const Info: React.FC<Props> = ({ isEditting, ...rest }) => {
 };
 
 type Props = {
-  isEditting?: boolean;
+  isEditing?: boolean;
   lesson: LessonQuery['lesson'];
 };
 

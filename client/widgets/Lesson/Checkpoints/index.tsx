@@ -17,7 +17,7 @@ import {
   useUpdateStepCheckpointMutation,
 } from '👨‍💻generated/graphql';
 
-const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
+const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
   const { data, loading } = useCheckpointsQuery({
     variables: { stepId: step.id },
   });
@@ -25,7 +25,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
   const [deleteCheckpointM] = useDeleteCheckpointMutation();
   const [updateStepCheckpoint] = useUpdateStepCheckpointMutation();
   const [view, toggleView] = useState<'editor' | 'preview'>(
-    isEditting ? 'editor' : 'preview'
+    isEditing ? 'editor' : 'preview'
   );
   const [activeCheckpoint, setActiveCheckpoint] = useState<
     RegularCheckpointFragment | undefined
@@ -34,7 +34,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
   // When user COMPLETES a checkpoint
   useEffect(() => {
     if (!data?.checkpoints) return;
-    if (isEditting) return;
+    if (isEditing) return;
 
     const checkpoint = data.checkpoints.find(
       ({ id }) => id === step.currentCheckpointId
@@ -45,7 +45,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
 
   // When user changes the active checkpoint
   useEffect(() => {
-    if (isEditting) {
+    if (isEditing) {
       toggleView('editor');
     }
     if (activeCheckpoint) {
@@ -143,7 +143,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
 
   const isCurrentCheckpoint = (id: number) => id === activeCheckpoint?.id;
   const canSetCheckpoint = (checkpoint: RegularCheckpointFragment) =>
-    isEditting ||
+    isEditing ||
     checkpoint.isTested ||
     checkpoint.isCompleted ||
     checkpoint.id === step.currentCheckpointId;
@@ -177,11 +177,11 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
                       Checkpoint {i + 1}{' '}
                     </span>
                   </span>
-                  {!isEditting &&
+                  {!isEditing &&
                     (checkpoint.isTested || checkpoint.isCompleted) && (
                       <span>✅</span>
                     )}
-                  {isEditting && isCurrentCheckpoint(checkpoint.id) && (
+                  {isEditing && isCurrentCheckpoint(checkpoint.id) && (
                     <div className="flex">
                       <Icon
                         className="text-text-primary text-lg leading-none"
@@ -223,7 +223,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
                 {isCurrentCheckpoint(checkpoint.id) && (
                   <div
                     className={`${
-                      isEditting ? 'h-24' : ''
+                      isEditing ? 'h-24' : ''
                     } min-h-24 overflow-scroll`}
                   >
                     {view === 'editor' ? (
@@ -256,7 +256,7 @@ const Checkpoints: React.FC<Props> = ({ isEditting, step }) => {
 };
 
 type Props = {
-  isEditting?: boolean;
+  isEditing?: boolean;
   nextStep: () => void;
   step: RegularStepFragment;
 };

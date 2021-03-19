@@ -20,17 +20,13 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
   });
 
   useEffect(() => {
-    if (meLoading) return;
-
-    if (!meData?.me) modalVar({ callback: () => null, name: 'login' });
-  }, [meData]);
-
-  useEffect(() => {
     async function create() {
       if (loading) return;
-      if (!meData?.me) return;
+      if (meLoading) return;
 
-      if (!data?.session?.id) {
+      if (!meData?.me?.isAuthenticated) {
+        router.replace(`/lessons/preview/${id}`);
+      } else if (!data?.session?.id) {
         await createSession({
           awaitRefetchQueries: true,
           refetchQueries: ['Session'],
@@ -43,7 +39,7 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
     }
 
     create();
-  }, [loading]);
+  }, [loading, meLoading]);
 
   // handle
   return null;

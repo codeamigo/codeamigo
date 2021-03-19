@@ -17,7 +17,7 @@ import styles from './Steps.module.scss';
 const Steps: React.FC<Props> = ({
   activeSessionStepId,
   currentStepId,
-  isEditting,
+  isEditing,
   lessonId,
   setCurrentStepId,
   setShowSteps,
@@ -141,7 +141,7 @@ const Steps: React.FC<Props> = ({
   };
 
   const canGoToStep = (step: RegularStepFragment) =>
-    isEditting || step.isCompleted || step.id === activeSessionStepId;
+    isEditing || step.isCompleted || step.id === activeSessionStepId;
 
   return (
     <Transition
@@ -175,7 +175,7 @@ const Steps: React.FC<Props> = ({
                     setCurrentStepId(step.id);
                   }
 
-                  if (!isEditting) return;
+                  if (!isEditing) return;
                 }}
               >
                 <div className="flex w-full">
@@ -194,7 +194,7 @@ const Steps: React.FC<Props> = ({
                     </span>
                   )}
                 </div>
-                {isEditting && isUpdating === step.id && (
+                {isEditing && isUpdating === step.id && (
                   <div className="flex">
                     <Button className="ml-1 py-0" type="submit">
                       Submit
@@ -212,7 +212,7 @@ const Steps: React.FC<Props> = ({
                     </a>
                   </div>
                 )}
-                {isEditting && !isUpdating && (
+                {isEditing && !isUpdating && (
                   <div className="flex">
                     <Icon
                       className="text-text-primary hidden mr-2"
@@ -267,7 +267,7 @@ const Steps: React.FC<Props> = ({
             </a>
           </div>
         )}
-        {isEditting && !isAdding && !isUpdating && (
+        {isEditing && !isAdding && !isUpdating && (
           <Button
             className="mt-3"
             onClick={() => setIsAdding(true)}
@@ -284,7 +284,7 @@ const Steps: React.FC<Props> = ({
 type Props = {
   activeSessionStepId?: number;
   currentStepId: number;
-  isEditting?: boolean;
+  isEditing?: boolean;
   lessonId: number;
   setCurrentStepId: (n: number) => void;
   setShowSteps: (val: boolean) => void;

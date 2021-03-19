@@ -33,7 +33,7 @@ const EditorFiles: React.FC<Props> = ({
         setCurrentPath={setCurrentPath}
         {...rest}
       />
-      {rest.isEditting && (
+      {rest.isEditing && (
         <FilesList
           files={tests}
           name={'Tests'}
@@ -52,7 +52,7 @@ type Props = {
   deleteFile: (path: string) => void;
   dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
-  isEditting?: boolean;
+  isEditing?: boolean;
   setCurrentPath: (path: string) => void;
   stepId: number;
 };

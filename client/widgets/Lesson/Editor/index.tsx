@@ -7,6 +7,7 @@ import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
+  LessonQuery,
   RegularDependencyFragment,
   RegularStepFragment,
   StepDocument,
@@ -121,7 +122,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       if (message.data.from !== 'testRunner') return;
       if (message.data.type !== 'test') return;
       // don't pass checkpoint if editting
-      if (rest.isEditting) {
+      if (rest.isEditing) {
         isTestingVar(false);
         return;
       }
@@ -161,7 +162,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const completeCheckpoint = async () => {
     // don't complete checkpoint if editting
-    if (rest.isEditting) return;
+    if (rest.isEditing) return;
     if (!step.currentCheckpointId) return;
 
     const q = {
@@ -238,6 +239,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       await updateCodeModule({
         variables: {
           id: currentModule.id,
+          lessonId: rest.isPreviewing ? rest?.lesson?.id : null,
           name: path,
           value: code,
         },
@@ -554,7 +556,9 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 };
 
 type Props = {
-  isEditting?: boolean;
+  isEditing?: boolean;
+  isPreviewing?: boolean;
+  lesson: LessonQuery['lesson'];
   nextStep: () => void;
   step: RegularStepFragment;
 };

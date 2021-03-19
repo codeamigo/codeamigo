@@ -1,5 +1,7 @@
+import { MyContext } from "src/types";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Int,
@@ -9,6 +11,7 @@ import {
 } from "type-graphql";
 
 import { CodeModule } from "../entities/CodeModule";
+import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 
 @InputType()
@@ -17,6 +20,8 @@ class CodeModuleInput {
   name: string;
   @Field()
   value: string;
+  @Field({ nullable: true })
+  lessonId?: number;
 }
 
 @Resolver()
@@ -53,11 +58,24 @@ export class CodeModuleResolver {
   @Mutation(() => CodeModule, { nullable: true })
   async updateCodeModule(
     @Arg("id") id: number,
-    @Arg("options") options: CodeModuleInput
+    @Arg("options") options: CodeModuleInput,
+    @Ctx() { req }: MyContext
   ): Promise<CodeModule | null> {
     const codeModule = await CodeModule.findOne(id);
     if (!codeModule) {
       return null;
+    }
+
+    let lesson;
+    if (options.lessonId) {
+      lesson = await Lesson.findOne(
+        { id: options.lessonId },
+        { relations: ["owner"] }
+      );
+
+      if (lesson?.owner.id !== req.session.userId) {
+        return null;
+      }
     }
 
     await CodeModule.update({ id }, { ...options });
