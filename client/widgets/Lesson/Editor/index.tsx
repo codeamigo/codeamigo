@@ -1,6 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
@@ -31,6 +32,7 @@ const FILE = 'file:///';
 // const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
+  const router = useRouter();
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const submitRef = useRef<any>();
@@ -128,13 +130,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         return;
       }
 
-      // prompt register if previewing
-      if (rest.isPreviewing) {
-        isTestingVar(false);
-        modalVar({ callback: () => null, name: 'registerAfterPreview' });
-        return;
-      }
-
       try {
         const result = JSON.parse(message.data.result);
 
@@ -142,6 +137,18 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           result[result.length - 1].status === 'pass' &&
           step.currentCheckpointId
         ) {
+          // prompt register if previewing
+          if (rest.isPreviewing) {
+            isTestingVar(false);
+            modalVar({
+              callback: () =>
+                rest?.lesson?.id &&
+                router.push(`/lessons/start/${rest.lesson.id}`),
+              name: 'registerAfterPreview',
+            });
+            return;
+          }
+
           await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });

@@ -8,12 +8,14 @@ const RegisterAfterPreview: React.FC<Props> = () => {
     <div className="max-w-lg mx-auto p-6 lg:px-8">
       <div className="text-3xl">🎉</div>
       <div className="text-xl text-text-primary font-semibold">Nice work!</div>
-      <div className="text-text-primary">To continue please sign up.</div>
+      <div className="text-text-primary">
+        To continue and save your changes please sign up.
+      </div>
       <Button
         className="mt-3"
         onClick={() =>
           modalVar({
-            callback: () => null,
+            callback: modalVar().callback,
             name: 'register',
           })
         }
