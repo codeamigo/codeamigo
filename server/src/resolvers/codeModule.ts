@@ -78,7 +78,9 @@ export class CodeModuleResolver {
       }
     }
 
-    await CodeModule.update({ id }, { ...options });
+    const { lessonId, ...rest } = options;
+
+    await CodeModule.update({ id }, { ...rest });
     const newCodeModule = await CodeModule.findOne(id);
 
     if (!newCodeModule) {
