@@ -310,14 +310,26 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const testCode = (
     files: FilesType,
-    runPath: string,
+    currentPath: string,
+    testPath: string,
     dependencies: RegularDependencyFragment[]
   ) => {
     isTestingVar(true);
-    const value = monacoRef.current.editor
-      .getModel(`${FILE}${step.id}-${runPath}`)
+    const testValue = monacoRef.current.editor
+      .getModel(`${FILE}${step.id}-${testPath}`)
       .getValue();
-    postMessage(files, runPath, value, dependencies, true);
+    const currentValue = monacoRef.current.editor
+      .getModel(`${FILE}${step.id}-${currentPath}`)
+      .getValue();
+
+    console.log({ ...files, [currentPath]: currentValue });
+    postMessage(
+      { ...files, [currentPath]: currentValue },
+      testPath,
+      testValue,
+      dependencies,
+      true
+    );
 
     // fallback if test-runner fails to post
     setTimeout(() => {
@@ -528,7 +540,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
             className={`w-20 p-2 justify-center`}
             disabled={isTesting || !isBundlerReady}
             forwardedRef={submitRef}
-            onClick={() =>
+            onClick={() => {
               isStepComplete
                 ? nextStep()
                 : isTested
@@ -536,12 +548,12 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 : testCode(
                     {
                       ...files,
-                      [currentPath]: files![currentPath],
                     },
+                    currentPath,
                     currentCheck!.test,
                     step.dependencies || []
-                  )
-            }
+                  );
+            }}
           >
             {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
           </Button>
