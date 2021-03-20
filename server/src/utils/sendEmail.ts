@@ -4,22 +4,16 @@ import nodemailer from "nodemailer";
 export async function sendEmail(to: string, html: string) {
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
-    // true for 465, false for other ports
     auth: {
-      // generated ethereal user
-      pass: "zjR45NHVsNAsZVB55v",
-      user: "wmhju7tm6d373oa6@ethereal.email", // generated ethereal password
+      pass: "G$yXB.NKk|)+p.o0D@[~",
+      user: "philip@codeamigo.dev",
     },
-
-    host: "smtp.ethereal.email",
-
-    port: 587,
-    secure: false,
+    service: "gmail",
   });
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
-    from: '"Fred Foo 👻" <foo@example.com>',
+    from: '"codeamigo.dev" <philip@codeamigo.dev>',
     html,
 
     subject: "Change password",
