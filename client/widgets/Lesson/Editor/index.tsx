@@ -4,6 +4,7 @@ import { debounce } from 'debounce';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
@@ -124,6 +125,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       // don't pass checkpoint if editting
       if (rest.isEditing) {
         isTestingVar(false);
+        return;
+      }
+
+      // prompt register if previewing
+      if (rest.isPreviewing) {
+        isTestingVar(false);
+        modalVar({ callback: () => null, name: 'registerAfterPreview' });
         return;
       }
 
@@ -322,7 +330,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       .getModel(`${FILE}${step.id}-${currentPath}`)
       .getValue();
 
-    console.log({ ...files, [currentPath]: currentValue });
     postMessage(
       { ...files, [currentPath]: currentValue },
       testPath,
