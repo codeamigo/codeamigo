@@ -131,6 +131,7 @@ const Instructions: React.FC<Props> = (props) => {
 
 type Props = {
   isEditing?: boolean;
+  isPreviewing?: boolean;
   nextStep: () => void;
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;

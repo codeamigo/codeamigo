@@ -7,6 +7,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
   LessonQuery,
@@ -549,6 +550,17 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         </div>
       </div>
       <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
+        {rest.isPreviewing && (
+          <div
+            aria-label="Preview Mode. Changes will not be saved! Login to save your work."
+            className="hint--top hint--no-animate"
+          >
+            <div className="flex text-text-primary text-sm mr-3">
+              <Icon className="text-text-primary mr-1" name="info-circled" />{' '}
+              Preview Mode
+            </div>
+          </div>
+        )}
         <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
           <Button
             className={`w-20 p-2 justify-center`}
