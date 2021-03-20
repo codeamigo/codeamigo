@@ -32,7 +32,7 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
         steps={data.lesson.steps}
       />
       <div className="w-full overflow-hidden lg:h-screen">
-        <Info lesson={data.lesson} />
+        <Info isPreviewing lesson={data.lesson} />
         <Step
           currentStepId={stepId}
           isPreviewing

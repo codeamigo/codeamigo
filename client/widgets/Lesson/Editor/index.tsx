@@ -525,12 +525,9 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
         <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
           <Button
-            className={`w-20 p-2 justify-center ${
-              isTested
-                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                : 'bg-accent focus:ring-blue-500'
-            }`}
+            className={`w-20 p-2 justify-center`}
             disabled={isTesting || !isBundlerReady}
+            forwardedRef={submitRef}
             onClick={() =>
               isStepComplete
                 ? nextStep()
@@ -545,7 +542,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                     step.dependencies || []
                   )
             }
-            ref={submitRef}
           >
             {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
           </Button>

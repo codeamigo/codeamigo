@@ -13,7 +13,7 @@ import View from './View';
 
 export const LessonInfoHeaderHeight = '2.75';
 
-const Info: React.FC<Props> = ({ isEditing, ...rest }) => {
+const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
 
@@ -29,7 +29,7 @@ const Info: React.FC<Props> = ({ isEditing, ...rest }) => {
             name="home"
             onClick={() => router.push('/')}
           />
-          <StatusIndicator />
+          <StatusIndicator isPreviewing={isPreviewing} />
         </div>
         <div className="w-1/2">
           {isEditing ? <Form {...rest} /> : <View {...rest} />}
@@ -57,6 +57,7 @@ const Info: React.FC<Props> = ({ isEditing, ...rest }) => {
 
 type Props = {
   isEditing?: boolean;
+  isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
 };
 
