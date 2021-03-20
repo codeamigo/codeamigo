@@ -1,9 +1,6 @@
-import { gql } from '@apollo/client';
 import { NextApiHandler } from 'next';
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
-
-import { client } from '👨‍💻utils/withApollo';
 
 let redirection = '';
 

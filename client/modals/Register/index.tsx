@@ -86,6 +86,21 @@ const Register: React.FC = () => {
               >
                 Register
               </button>
+              <div className="text-xs w-full text-text-primary text-center my-1 mt-3">
+                or
+              </div>
+              <button
+                className="w-full justify-center text-sm font-medium rounded-md text-accent focus:outline-none"
+                onClick={() =>
+                  modalVar({
+                    callback: modalVar().callback,
+                    name: 'login',
+                  })
+                }
+                type="button"
+              >
+                Login
+              </button>
             </div>
           </div>
         </Form>

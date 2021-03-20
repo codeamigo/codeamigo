@@ -23,7 +23,10 @@ const GoogleHandler: React.FC<Props> = () => {
           },
         });
 
-        router.replace(redirection);
+        // if the user was previewing replace w/ start
+        const url = redirection.replace('preview', 'start');
+
+        router.replace(url);
       };
 
       doLogin();
