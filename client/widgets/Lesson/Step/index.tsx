@@ -94,7 +94,7 @@ const Step: React.FC<Props> = ({
     if (!next) return;
 
     // TODO: replace setCurrentStepId w/ session.currentStep
-    // isEditting ? set lesson current step : set session
+    // isEditing ? set lesson current step : set session
     setCurrentStepId(next?.id);
   };
 
@@ -130,7 +130,8 @@ const Step: React.FC<Props> = ({
 
 type Props = {
   currentStepId: number;
-  isEditting?: boolean;
+  isEditing?: boolean;
+  isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
   session?: SessionQuery['session'];
   setCurrentStepId?: (n: number) => void;

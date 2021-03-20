@@ -9,7 +9,7 @@ import { toErrorMap } from '../../utils';
 
 const ChangePassword: NextPage<{ token: string }> = (props) => {
   const router = useRouter();
-  const [changePassword, { data }] = useChangePasswordMutation();
+  const [changePassword] = useChangePasswordMutation();
 
   return (
     <Formik

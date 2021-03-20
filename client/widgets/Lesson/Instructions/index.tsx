@@ -14,10 +14,10 @@ import {
 import Checkpoints from '../Checkpoints';
 
 const Instructions: React.FC<Props> = (props) => {
-  const { isEditting, setShowSteps, showSteps, step } = props;
+  const { isEditing, setShowSteps, showSteps, step } = props;
   const [markdown, setMarkdown] = useState(step?.instructions);
   const [view, toggleView] = useState<'editor' | 'preview'>(
-    isEditting ? 'editor' : 'preview'
+    isEditing ? 'editor' : 'preview'
   );
   const [updateStepM] = useUpdateStepInstructionsMutation();
   const [createCheckpointM] = useCreateCheckpointMutation();
@@ -55,10 +55,10 @@ const Instructions: React.FC<Props> = (props) => {
       >
         <h3
           className={`w-full flex justify-between items-center bg-bg-nav text-xs ${
-            isEditting ? 'p-2' : ''
+            isEditing ? 'p-2' : ''
           }`}
         >
-          {isEditting ? (
+          {isEditing ? (
             <>
               <span
                 className={`cursor-pointer ${
@@ -119,7 +119,7 @@ const Instructions: React.FC<Props> = (props) => {
             Step: {currentStepNum}/{totalSteps}
           </div>
         </div>
-        {isEditting && (
+        {isEditing && (
           <Button onClick={createCheckpoint} type="button">
             Add Checkpoint
           </Button>
@@ -130,7 +130,7 @@ const Instructions: React.FC<Props> = (props) => {
 };
 
 type Props = {
-  isEditting?: boolean;
+  isEditing?: boolean;
   nextStep: () => void;
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;

@@ -1,19 +1,16 @@
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { useLessonQuery, useMeQuery } from '👨‍💻generated/graphql';
+import { useLessonQuery } from '👨‍💻generated/graphql';
 import Info from '👨‍💻widgets/Lesson/Info';
 import Step from '👨‍💻widgets/Lesson/Step';
 import Steps from '👨‍💻widgets/Lesson/Steps';
 
-const EditLesson: NextPage<{ id: string }> = (props) => {
+const PreviewLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
 
-  const router = useRouter();
-  const { data: meData } = useMeQuery();
   const { data } = useLessonQuery({
     variables: { id },
   });
@@ -22,20 +19,12 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
-  if (data.lesson.owner.id !== meData?.me?.id) {
-    if (typeof window !== 'undefined') {
-      router.push('/');
-      return null;
-    }
-  }
-
   const stepId = currentStepId || data.lesson.steps[0].id;
 
   return (
     <div className="flex">
       <Steps
         currentStepId={stepId}
-        isEditting
         lessonId={data.lesson.id}
         setCurrentStepId={setCurrentStepId}
         setShowSteps={setShowSteps}
@@ -43,10 +32,10 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         steps={data.lesson.steps}
       />
       <div className="w-full overflow-hidden lg:h-screen">
-        <Info isEditting lesson={data.lesson} />
+        <Info isPreviewing lesson={data.lesson} />
         <Step
           currentStepId={stepId}
-          isEditting
+          isPreviewing
           lesson={data.lesson}
           setShowSteps={setShowSteps}
           showSteps={showSteps}
@@ -56,8 +45,8 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
   );
 };
 
-EditLesson.getInitialProps = ({ query }) => ({
+PreviewLesson.getInitialProps = ({ query }) => ({
   id: query.id as string,
 });
 
-export default EditLesson;
+export default PreviewLesson;

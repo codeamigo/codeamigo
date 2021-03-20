@@ -1,5 +1,7 @@
+import { MyContext } from "src/types";
 import {
   Arg,
+  Ctx,
   Field,
   InputType,
   Int,
@@ -190,9 +192,9 @@ export class StepResolver {
   }
 
   @Mutation(() => Step, { nullable: true })
-  @UseMiddleware(isAuth)
   async updateStepCheckpoint(
-    @Arg("options") options: UpdateStepCheckpointInput
+    @Arg("options") options: UpdateStepCheckpointInput,
+    @Ctx() { req }: MyContext
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
@@ -200,7 +202,9 @@ export class StepResolver {
     }
 
     step.currentCheckpointId = options.checkpointId;
-    await Step.save(step);
+    if (req.session.userId) {
+      await Step.save(step);
+    }
 
     return step;
   }

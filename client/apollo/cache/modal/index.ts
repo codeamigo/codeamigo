@@ -1,6 +1,10 @@
 import { makeVar } from '@apollo/client';
 
-export type ModalNameType = 'login' | 'register' | 'createLesson';
+export type ModalNameType =
+  | 'createLesson'
+  | 'login'
+  | 'register'
+  | 'registerAfterPreview';
 export type ModalType = { callback: Function; name: null | ModalNameType };
 export const InitialModalState = { callback: () => null, name: null };
 

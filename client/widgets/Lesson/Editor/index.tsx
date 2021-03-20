@@ -1,12 +1,15 @@
 import { useReactiveVar } from '@apollo/client';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
+import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners/index';
 import {
+  LessonQuery,
   RegularDependencyFragment,
   RegularStepFragment,
   StepDocument,
@@ -29,6 +32,7 @@ const FILE = 'file:///';
 // const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
 
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
+  const router = useRouter();
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const submitRef = useRef<any>();
@@ -121,7 +125,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       if (message.data.from !== 'testRunner') return;
       if (message.data.type !== 'test') return;
       // don't pass checkpoint if editting
-      if (rest.isEditting) {
+      if (rest.isEditing) {
         isTestingVar(false);
         return;
       }
@@ -133,6 +137,18 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
           result[result.length - 1].status === 'pass' &&
           step.currentCheckpointId
         ) {
+          // prompt register if previewing
+          if (rest.isPreviewing) {
+            isTestingVar(false);
+            modalVar({
+              callback: () =>
+                rest?.lesson?.id &&
+                router.push(`/lessons/start/${rest.lesson.id}`),
+              name: 'registerAfterPreview',
+            });
+            return;
+          }
+
           await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });
@@ -161,7 +177,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const completeCheckpoint = async () => {
     // don't complete checkpoint if editting
-    if (rest.isEditting) return;
+    if (rest.isEditing) return;
     if (!step.currentCheckpointId) return;
 
     const q = {
@@ -238,6 +254,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       await updateCodeModule({
         variables: {
           id: currentModule.id,
+          lessonId: rest.isPreviewing ? rest?.lesson?.id : null,
           name: path,
           value: code,
         },
@@ -308,14 +325,25 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const testCode = (
     files: FilesType,
-    runPath: string,
+    currentPath: string,
+    testPath: string,
     dependencies: RegularDependencyFragment[]
   ) => {
     isTestingVar(true);
-    const value = monacoRef.current.editor
-      .getModel(`${FILE}${step.id}-${runPath}`)
+    const testValue = monacoRef.current.editor
+      .getModel(`${FILE}${step.id}-${testPath}`)
       .getValue();
-    postMessage(files, runPath, value, dependencies, true);
+    const currentValue = monacoRef.current.editor
+      .getModel(`${FILE}${step.id}-${currentPath}`)
+      .getValue();
+
+    postMessage(
+      { ...files, [currentPath]: currentValue },
+      testPath,
+      testValue,
+      dependencies,
+      true
+    );
 
     // fallback if test-runner fails to post
     setTimeout(() => {
@@ -523,13 +551,10 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
       <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
         <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
           <Button
-            className={`w-20 p-2 justify-center ${
-              isTested
-                ? 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                : 'bg-accent focus:ring-blue-500'
-            }`}
+            className={`w-20 p-2 justify-center`}
             disabled={isTesting || !isBundlerReady}
-            onClick={() =>
+            forwardedRef={submitRef}
+            onClick={() => {
               isStepComplete
                 ? nextStep()
                 : isTested
@@ -537,13 +562,12 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
                 : testCode(
                     {
                       ...files,
-                      [currentPath]: files![currentPath],
                     },
+                    currentPath,
                     currentCheck!.test,
                     step.dependencies || []
-                  )
-            }
-            ref={submitRef}
+                  );
+            }}
           >
             {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
           </Button>
@@ -554,7 +578,9 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 };
 
 type Props = {
-  isEditting?: boolean;
+  isEditing?: boolean;
+  isPreviewing?: boolean;
+  lesson: LessonQuery['lesson'];
   nextStep: () => void;
   step: RegularStepFragment;
 };

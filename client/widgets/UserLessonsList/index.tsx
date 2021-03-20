@@ -1,13 +1,13 @@
 import React from 'react';
 
-import EdittingLessonsList from '👨‍💻widgets/UserLessonsList/EdittingLessonsList';
+import EditingLessonsList from '👨‍💻widgets/UserLessonsList/EditingLessonsList';
 import PendingApprovalLessonsList from '👨‍💻widgets/UserLessonsList/PendingApprovalLessonsList';
 import PublishedLessonsList from '👨‍💻widgets/UserLessonsList/PublishedLessonsList';
 
 const UserLessonsList: React.FC<Props> = () => {
   return (
     <div>
-      <EdittingLessonsList />
+      <EditingLessonsList />
       <PendingApprovalLessonsList />
       <PublishedLessonsList />
     </div>

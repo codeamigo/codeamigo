@@ -30,7 +30,7 @@ const CreateLesson: React.FC<Props> = () => {
       {({ isSubmitting }) => {
         return (
           <Form>
-            <div className="max-w-2xl mx-auto py-6 sm:px-6">
+            <div className="max-w-lg mx-auto p-6 lg:px-8">
               <h1 className="text-xl font-semibold flex mb-4 text-text-primary">
                 New Lesson
               </h1>

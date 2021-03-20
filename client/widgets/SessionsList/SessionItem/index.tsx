@@ -1,35 +1,12 @@
 import { Menu, Transition } from '@headlessui/react';
-import { useRouter } from 'next/router';
 import React from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
-import {
-  SessionsQuery,
-  useDeleteSessionMutation,
-  useMeQuery,
-} from '👨‍💻generated/graphql';
+import { SessionsQuery, useDeleteSessionMutation } from '👨‍💻generated/graphql';
 import LessonListItem from '👨‍💻widgets/LessonListItem';
 
 const SessionItem: React.FC<Props> = ({ session }) => {
-  const { data: meData } = useMeQuery();
   const [deleteSessionM] = useDeleteSessionMutation();
-  const router = useRouter();
-
-  const handleClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    id: number
-  ) => {
-    e.preventDefault();
-    if (meData?.me?.isAuthenticated) {
-      router.push(`/lessons/start/${id}`);
-    } else {
-      modalVar({
-        callback: () => router.push(`/lessons/start/${id}`),
-        name: 'login',
-      });
-    }
-  };
 
   const deleteSession = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,

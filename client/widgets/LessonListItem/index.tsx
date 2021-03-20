@@ -1,31 +1,12 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
-  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-and-network' });
-  const router = useRouter();
-
-  const handleClick = (
-    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    id: number
-  ) => {
-    e.preventDefault();
-    if (meData?.me?.isAuthenticated) {
-      router.push(`/lessons/start/${id}`);
-    } else {
-      modalVar({
-        callback: () => router.push(`/lessons/start/${id}`),
-        name: 'login',
-      });
-    }
-  };
-
   return (
     <div className="rounded-lg border-bg-nav-offset border-4">
       <div className="p-2 border-b-4 border-bg-nav-offset">
@@ -38,8 +19,7 @@ const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
         <div className="flex justify-between items-center">
           <a
             className="text-md text-accent font-semibold hover:underline"
-            href="/"
-            onClick={(e) => handleClick(e, lesson.id)}
+            href={`/lessons/start/${lesson.id}`}
           >
             {lesson.title}
           </a>

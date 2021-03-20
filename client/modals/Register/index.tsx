@@ -36,7 +36,7 @@ const Register: React.FC = () => {
     >
       {({ isSubmitting, isValid, values }) => (
         <Form>
-          <div className="max-w-lg mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="max-w-lg mx-auto p-6 lg:px-8">
             <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
               Sign Up
             </h1>

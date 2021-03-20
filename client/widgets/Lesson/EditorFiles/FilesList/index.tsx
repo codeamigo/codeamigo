@@ -9,7 +9,7 @@ import { isValidName } from './validation';
 const FilesList: React.FC<Props> = ({
   currentPath,
   files,
-  isEditting,
+  isEditing,
   name,
   onCreate,
   onDelete,
@@ -70,7 +70,7 @@ const FilesList: React.FC<Props> = ({
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
         <span className="text-sm font-semibold text-text-primary">{name}</span>
-        {onCreate && isEditting && (
+        {onCreate && isEditing && (
           <Icon
             className="text-sm text-text-primary hover:text-accent cursor-pointer"
             name="plus-circled"
@@ -96,7 +96,7 @@ const FilesList: React.FC<Props> = ({
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
                   <span>{path}</span>
                 </div>
-                {onDelete && isEditting && (
+                {onDelete && isEditing && (
                   <Icon
                     className="text-red-600 text-sm hidden"
                     name="minus-circled"
@@ -138,7 +138,7 @@ const FilesList: React.FC<Props> = ({
 type Props = {
   currentPath?: string;
   files?: Array<string>;
-  isEditting?: boolean;
+  isEditing?: boolean;
   name: string;
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
