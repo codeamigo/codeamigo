@@ -4,9 +4,18 @@ export type ModalNameType =
   | 'createLesson'
   | 'login'
   | 'register'
-  | 'registerAfterPreview';
-export type ModalType = { callback: Function; name: null | ModalNameType };
-export const InitialModalState = { callback: () => null, name: null };
+  | 'registerAfterPreview'
+  | 'resetPasswordSent';
+export type ModalType = {
+  callback: Function;
+  data?: any;
+  name: null | ModalNameType;
+};
+export const InitialModalState = {
+  callback: () => null,
+  data: null,
+  name: null,
+};
 
 export const modalVar = makeVar(InitialModalState as ModalType);
 

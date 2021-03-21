@@ -2,6 +2,7 @@ import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
+import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
@@ -76,12 +77,13 @@ const Modals: React.FC<Props> = () => {
           className="bg-bg-primary inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full"
           role="dialog"
         >
+          {/* eslint-disable */}
           {data?.modal?.name === 'createLesson' && <CreateLesson />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
-          {data?.modal?.name === 'registerAfterPreview' && (
-            <RegisterAfterPreview />
-          )}
+          {data?.modal?.name === 'registerAfterPreview' && <RegisterAfterPreview />}
+          {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
+          {/* eslint-enable */}
         </div>
       </div>
     </div>
