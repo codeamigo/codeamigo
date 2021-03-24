@@ -3,18 +3,45 @@ import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
-import { useLoginMutation, useModalQuery } from '👨‍💻generated/graphql';
+import {
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useModalQuery,
+} from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
 const Login: React.FC = () => {
   const router = useRouter();
   const [login] = useLoginMutation();
+  const [
+    forgotPassword,
+    { data: forgotPasswordData, loading },
+  ] = useForgotPasswordMutation();
   const { data: modalData } = useModalQuery();
+
+  useEffect(() => {
+    if (forgotPasswordData?.forgotPassword) {
+      modalVar({
+        callback: () => null,
+        data: forgotPasswordData?.forgotPassword,
+        name: 'resetPasswordSent',
+      });
+
+      return;
+    }
+
+    // no email
+    if (forgotPasswordData?.forgotPassword === '') {
+      window.alert(
+        'Sorry, we could not find an email address for this account.'
+      );
+    }
+  }, [forgotPasswordData]);
 
   return (
     <Formik
@@ -57,24 +84,39 @@ const Login: React.FC = () => {
               </button>
             </div>
             <div className="px-4 sm:p-6">
-              <div className="grid gap-3">
+              <div className="flex flex-col gap-3">
                 <InputField
                   label="Email or username"
                   name="usernameOrEmail"
                   type="text"
                 />
-                <InputField
-                  className={values.usernameOrEmail ? '' : 'hidden'}
-                  label="Password"
-                  name="password"
-                  type="password"
-                />
+                <div
+                  className={`relative ${
+                    values.usernameOrEmail ? '' : 'hidden'
+                  }`}
+                >
+                  <InputField
+                    label="Password"
+                    name="password"
+                    type="password"
+                  />
+                  <div
+                    className="absolute top-0.5 right-0 text-text-primary text-xs cursor-pointer underline"
+                    onClick={() =>
+                      forgotPassword({
+                        variables: { usernameOrEmail: values.usernameOrEmail },
+                      })
+                    }
+                  >
+                    Forgot password?
+                  </div>
+                </div>
               </div>
             </div>
             <div className="px-4 w-full sm:px-6">
               <Button
                 className="w-full justify-center"
-                disabled={isSubmitting}
+                disabled={isSubmitting || loading}
                 type="submit"
               >
                 Login
@@ -84,6 +126,7 @@ const Login: React.FC = () => {
               </div>
               <button
                 className="w-full justify-center text-sm font-medium rounded-md text-accent focus:outline-none"
+                disabled={isSubmitting || loading}
                 onClick={() =>
                   modalVar({ callback: () => null, name: 'register' })
                 }

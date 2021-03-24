@@ -308,15 +308,22 @@ export class UserResolver {
     return { user };
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => String)
   async forgotPassword(
-    @Arg("email") email: string,
+    @Arg("usernameOrEmail") usernameOrEmail: string,
     @Ctx() { redis }: MyContext
-  ): Promise<boolean> {
-    const user = await User.findOne({ where: { email } });
+  ): Promise<string> {
+    let user = await User.findOne({
+      where: { username: usernameOrEmail },
+    });
+    if (!user) {
+      user = await User.findOne({
+        where: { email: usernameOrEmail },
+      });
+    }
 
     if (!user) {
-      return false;
+      return "";
     }
 
     const token = v4();
@@ -328,12 +335,14 @@ export class UserResolver {
       1000 * 60 * 60 * 24 * 3
     );
 
-    // TODO, ENV
     const action = `<a href="${process.env.CORS_ORIGIN}/change-password/${token}">Reset password</a>`;
 
-    await sendEmail(email, action);
+    if (!user.email) {
+      return "";
+    }
 
-    return true;
+    await sendEmail(user.email, action);
+    return user.email;
   }
 
   @Mutation(() => UserResponse)

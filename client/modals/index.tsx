@@ -1,13 +1,16 @@
 import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
+import Icon from '👨‍💻components/Icon';
+import ChangePassword from '👨‍💻modals/ChangePassword';
+import CreateLesson from '👨‍💻modals/CreateLesson';
+import Login from '👨‍💻modals/Login';
+import Register from '👨‍💻modals/Register';
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
+import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
-import CreateLesson from './CreateLesson';
-import Login from './Login';
-import Register from './Register';
 
 const Modals: React.FC<Props> = () => {
   const { data } = useModalQuery();
@@ -73,15 +76,26 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="bg-bg-primary inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full"
+          className="bg-bg-primary inline-block align-bottom rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full"
           role="dialog"
         >
+          <div
+            className="absolute -top-3 -right-3 flex items-center justify-center bg-bg-primary w-10 h-10 rounded-full"
+            onClick={() => modalVar(InitialModalState)}
+          >
+            <Icon
+              className="text-text-primary text-3xl"
+              name="cancel-circled"
+            />
+          </div>
+          {/* eslint-disable */}
+          {data?.modal?.name === 'changePassword' && <ChangePassword />}
           {data?.modal?.name === 'createLesson' && <CreateLesson />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
-          {data?.modal?.name === 'registerAfterPreview' && (
-            <RegisterAfterPreview />
-          )}
+          {data?.modal?.name === 'registerAfterPreview' && <RegisterAfterPreview />}
+          {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
+          {/* eslint-enable */}
         </div>
       </div>
     </div>

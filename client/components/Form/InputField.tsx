@@ -22,7 +22,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
         name={field.name}
         type={props.type}
       />
-      {error && <div className="mt-1 text-xs text-red-600">{error}</div>}
+      {error && <div className="mt-1 text-xs text-accent">🔥 {error}</div>}
     </div>
   );
 };
