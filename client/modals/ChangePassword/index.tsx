@@ -4,13 +4,17 @@ import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import InputField from '👨‍💻components/Form/InputField';
-import { useChangePasswordMutation } from '👨‍💻generated/graphql';
+import {
+  useChangePasswordMutation,
+  useLoginMutation,
+} from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
 const ChangePassword: React.FC<Props> = () => {
   const router = useRouter();
   const tempPw = modalVar().data;
   const [changePassword] = useChangePasswordMutation();
+  const [login] = useLoginMutation();
 
   return (
     <Formik
@@ -23,11 +27,21 @@ const ChangePassword: React.FC<Props> = () => {
           },
         });
         if (data?.changePassword.errors) {
-          setErrors(toErrorMap(data.changePassword.errors));
+          setErrors({
+            newPassword: toErrorMap(data.changePassword.errors).token,
+          });
         }
 
-        console.log(data);
         if (data?.changePassword.user) {
+          login({
+            awaitRefetchQueries: true,
+            refetchQueries: ['Me'],
+            variables: {
+              password: values.newPassword,
+              usernameOrEmail: data.changePassword.user.username,
+            },
+          });
+
           router.push('/');
           modalVar(InitialModalState);
         }
