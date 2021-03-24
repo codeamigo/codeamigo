@@ -8,6 +8,7 @@ export async function sendEmail(to: string, html: string) {
       pass: "G$yXB.NKk|)+p.o0D@[~",
       user: "philip@codeamigo.dev",
     },
+    from: "philip@codeamigo.dev",
     service: "gmail",
   });
 
