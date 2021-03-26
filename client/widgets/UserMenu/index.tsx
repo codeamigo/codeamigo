@@ -9,7 +9,7 @@ import { useLogoutMutation, useMeQuery } from '👨‍💻generated/graphql';
 
 const UserMenu: React.FC<Props> = () => {
   const router = useRouter();
-  const { data, loading } = useMeQuery();
+  const { data, loading } = useMeQuery({ fetchPolicy: 'cache-and-network' });
   const [logout] = useLogoutMutation({ refetchQueries: ['Me'] });
 
   if (loading) return null;

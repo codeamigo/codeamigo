@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
 import React from 'react';
 
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
-import { LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
+import { LessonsQuery } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
 const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
