@@ -346,7 +346,7 @@ export class UserResolver {
   }
 
   @Mutation(() => UserResponse)
-  async changePassword(
+  async changePasswordFromToken(
     @Arg("token") token: string,
     @Arg("newPassword") newPassword: string,
     @Ctx() { redis }: MyContext

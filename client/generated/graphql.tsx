@@ -259,7 +259,7 @@ export type Mutation = {
   updateUserTheme: UserResponse;
   updateUserRole: UserResponse;
   forgotPassword: Scalars['String'];
-  changePassword: UserResponse;
+  changePasswordFromToken: UserResponse;
   createStep?: Maybe<Step>;
   completeStep?: Maybe<Step>;
   updateStepCheckpoint?: Maybe<Step>;
@@ -374,7 +374,7 @@ export type MutationForgotPasswordArgs = {
 };
 
 
-export type MutationChangePasswordArgs = {
+export type MutationChangePasswordFromTokenArgs = {
   newPassword: Scalars['String'];
   token: Scalars['String'];
 };
@@ -642,15 +642,15 @@ export type RegularUserFragment = (
   & Pick<User, 'id' | 'role' | 'theme' | 'username' | 'isAuthenticated'>
 );
 
-export type ChangePasswordMutationVariables = Exact<{
+export type ChangePasswordFromTokenMutationVariables = Exact<{
   token: Scalars['String'];
   newPassword: Scalars['String'];
 }>;
 
 
-export type ChangePasswordMutation = (
+export type ChangePasswordFromTokenMutation = (
   { __typename?: 'Mutation' }
-  & { changePassword: (
+  & { changePasswordFromToken: (
     { __typename?: 'UserResponse' }
     & { errors?: Maybe<Array<(
       { __typename?: 'FieldError' }
@@ -1390,9 +1390,9 @@ export const RegularUserFragmentDoc = gql`
   isAuthenticated @client
 }
     `;
-export const ChangePasswordDocument = gql`
-    mutation ChangePassword($token: String!, $newPassword: String!) {
-  changePassword(token: $token, newPassword: $newPassword) {
+export const ChangePasswordFromTokenDocument = gql`
+    mutation ChangePasswordFromToken($token: String!, $newPassword: String!) {
+  changePasswordFromToken(token: $token, newPassword: $newPassword) {
     errors {
       ...RegularError
     }
@@ -1403,32 +1403,32 @@ export const ChangePasswordDocument = gql`
   }
 }
     ${RegularErrorFragmentDoc}`;
-export type ChangePasswordMutationFn = Apollo.MutationFunction<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export type ChangePasswordFromTokenMutationFn = Apollo.MutationFunction<ChangePasswordFromTokenMutation, ChangePasswordFromTokenMutationVariables>;
 
 /**
- * __useChangePasswordMutation__
+ * __useChangePasswordFromTokenMutation__
  *
- * To run a mutation, you first call `useChangePasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useChangePasswordMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useChangePasswordFromTokenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePasswordFromTokenMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [changePasswordMutation, { data, loading, error }] = useChangePasswordMutation({
+ * const [changePasswordFromTokenMutation, { data, loading, error }] = useChangePasswordFromTokenMutation({
  *   variables: {
  *      token: // value for 'token'
  *      newPassword: // value for 'newPassword'
  *   },
  * });
  */
-export function useChangePasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordMutation, ChangePasswordMutationVariables>) {
-        return Apollo.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument, baseOptions);
+export function useChangePasswordFromTokenMutation(baseOptions?: Apollo.MutationHookOptions<ChangePasswordFromTokenMutation, ChangePasswordFromTokenMutationVariables>) {
+        return Apollo.useMutation<ChangePasswordFromTokenMutation, ChangePasswordFromTokenMutationVariables>(ChangePasswordFromTokenDocument, baseOptions);
       }
-export type ChangePasswordMutationHookResult = ReturnType<typeof useChangePasswordMutation>;
-export type ChangePasswordMutationResult = Apollo.MutationResult<ChangePasswordMutation>;
-export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordMutation, ChangePasswordMutationVariables>;
+export type ChangePasswordFromTokenMutationHookResult = ReturnType<typeof useChangePasswordFromTokenMutation>;
+export type ChangePasswordFromTokenMutationResult = Apollo.MutationResult<ChangePasswordFromTokenMutation>;
+export type ChangePasswordFromTokenMutationOptions = Apollo.BaseMutationOptions<ChangePasswordFromTokenMutation, ChangePasswordFromTokenMutationVariables>;
 export const CreateCheckpointDocument = gql`
     mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
   createCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
