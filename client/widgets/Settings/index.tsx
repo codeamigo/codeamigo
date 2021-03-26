@@ -1,8 +1,10 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { mapTheme } from 'styles/appThemes/utils';
 
+import InputField from '👨‍💻components/Form/InputField';
 import { useMeQuery, useUpdateUserThemeMutation } from '👨‍💻generated/graphql';
+import { toErrorMap } from '👨‍💻utils/index';
 
 import { themes } from '../../styles/appThemes';
 import themeList from '../../styles/monacoThemes/themelist.json';
@@ -17,54 +19,51 @@ const Settings: React.FC<Props> = () => {
 
   return (
     <div>
-      <div>
+      <div className="md:w-1/4">
         <h2 className="underline text-xl text-text-primary font-bold mb-3">
-          Choose Theme
+          Change Password
         </h2>
-        <Formik initialValues={{ theme: data.me.theme }} onSubmit={() => {}}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
-            {Object.keys(themes).map((theme) => {
-              const mTheme = mapTheme(themes[theme]);
-
-              return (
-                <label
-                  className="w-full px-2 py-3 border rounded-md cursor-pointer"
-                  htmlFor={`${theme}-template`}
-                  onClick={() => updateUserTheme({ variables: { theme } })}
-                  style={{
-                    background: mTheme['--bg-primary'],
-                    border: `2px solid ${mTheme['--bg-nav-offset']}`,
-                  }}
-                >
-                  <div className="flex items-center">
-                    <Field
-                      id={`${theme}-template`}
-                      name="theme"
-                      type="radio"
-                      value={theme}
-                    />{' '}
-                    <div className="flex flex-col items-start ml-2">
-                      <div
-                        className="text-sm font-semibold"
-                        style={{ color: mTheme['--text-primary'] }}
-                      >
-                        {/* @ts-ignore */}
-                        {themeList[theme]}
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="h-3 w-20 rounded-full mt-3"
-                    style={{ background: mTheme['--bg-nav'] }}
-                  ></div>
-                  <div
-                    className="h-3 w-28 rounded-full mt-3"
-                    style={{ background: mTheme['--accent'] }}
-                  ></div>
-                </label>
-              );
-            })}
-          </div>
+        <Formik
+          initialValues={{}}
+          onSubmit={async (values, { setErrors }) => {
+            // const { data } = await updateUserRole({
+            //   variables: {
+            //     // @ts-ignore
+            //     id: values.id,
+            //     role: 'ADMIN',
+            //   },
+            // });
+            // if (data?.updateUserRole.errors) {
+            //   setErrors(toErrorMap(data.updateUserRole.errors));
+            //   return;
+            // }
+            // window.alert(
+            //   `${data?.updateUserRole.user?.username} is now an ADMIN.`
+            // );
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="flex flex-col gap-3">
+              <InputField
+                label="Current Password"
+                name="currentPassword"
+                type="text"
+              />
+              <InputField label="New Password" name="newPassword" type="text" />
+              <InputField
+                label="Confirm Password"
+                name="confirmPassword"
+                type="text"
+              />
+              <button
+                className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                disabled={isSubmitting}
+                type="submit"
+              >
+                Submit
+              </button>
+            </Form>
+          )}
         </Formik>
       </div>
     </div>
