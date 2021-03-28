@@ -5,7 +5,7 @@ import React from 'react';
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import InputField from '👨‍💻components/Form/InputField';
 import {
-  useChangePasswordMutation,
+  useChangePasswordFromTokenMutation,
   useLoginMutation,
 } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
@@ -13,32 +13,32 @@ import { toErrorMap } from '👨‍💻utils/index';
 const ChangePassword: React.FC<Props> = () => {
   const router = useRouter();
   const tempPw = modalVar().data;
-  const [changePassword] = useChangePasswordMutation();
+  const [changePasswordFromToken] = useChangePasswordFromTokenMutation();
   const [login] = useLoginMutation();
 
   return (
     <Formik
       initialValues={{ newPassword: '', tempPw }}
       onSubmit={async (values, { setErrors }) => {
-        const { data } = await changePassword({
+        const { data } = await changePasswordFromToken({
           variables: {
             ...values,
             token: tempPw,
           },
         });
-        if (data?.changePassword.errors) {
+        if (data?.changePasswordFromToken.errors) {
           setErrors({
-            newPassword: toErrorMap(data.changePassword.errors).token,
+            newPassword: toErrorMap(data.changePasswordFromToken.errors).token,
           });
         }
 
-        if (data?.changePassword.user) {
+        if (data?.changePasswordFromToken.user) {
           login({
             awaitRefetchQueries: true,
             refetchQueries: ['Me'],
             variables: {
               password: values.newPassword,
-              usernameOrEmail: data.changePassword.user.username,
+              usernameOrEmail: data.changePasswordFromToken.user.username,
             },
           });
 

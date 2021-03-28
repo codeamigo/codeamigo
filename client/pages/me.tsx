@@ -7,6 +7,7 @@ import withApollo from '👨‍💻utils/withApollo';
 import Backoffice from '👨‍💻widgets/Backoffice';
 import SessionsList from '👨‍💻widgets/SessionsList';
 import Settings from '👨‍💻widgets/Settings';
+import Themes from '👨‍💻widgets/Themes';
 import UserLessonsList from '👨‍💻widgets/UserLessonsList';
 
 const Me = () => {
@@ -53,6 +54,14 @@ const Me = () => {
         </button>
         <button
           className={`${
+            tab === 'themes' ? 'bg-bg-nav' : ''
+          } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
+          onClick={() => setTab('themes')}
+        >
+          <Icon className="mr-2" name="palette" /> Themes
+        </button>
+        <button
+          className={`${
             tab === 'settings' ? 'bg-bg-nav' : ''
           } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
           onClick={() => setTab('settings')}
@@ -73,6 +82,7 @@ const Me = () => {
       <div className="sm:w-3/4 w-full">
         {tab === 'activity' && <SessionsList />}
         {tab === 'lessons' && <UserLessonsList />}
+        {tab === 'themes' && <Themes />}
         {tab === 'settings' && <Settings />}
         {tab === 'backoffice' && <Backoffice />}
       </div>

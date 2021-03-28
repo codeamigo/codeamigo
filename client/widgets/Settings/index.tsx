@@ -1,70 +1,80 @@
-import { Field, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import React from 'react';
 import { mapTheme } from 'styles/appThemes/utils';
 
-import { useMeQuery, useUpdateUserThemeMutation } from '👨‍💻generated/graphql';
+import InputField from '👨‍💻components/Form/InputField';
+import {
+  useChangePasswordFromPasswordMutation,
+  useMeQuery,
+  useUpdateUserThemeMutation,
+} from '👨‍💻generated/graphql';
+import { toErrorMap } from '👨‍💻utils/index';
 
 import { themes } from '../../styles/appThemes';
 import themeList from '../../styles/monacoThemes/themelist.json';
 
 const Settings: React.FC<Props> = () => {
-  const { data } = useMeQuery();
-  const [updateUserTheme] = useUpdateUserThemeMutation({
-    refetchQueries: ['Me'],
-  });
-
-  if (!data?.me?.theme) return null;
+  const [changePassword] = useChangePasswordFromPasswordMutation();
 
   return (
     <div>
-      <div>
+      <div className="md:w-1/4">
         <h2 className="underline text-xl text-text-primary font-bold mb-3">
-          Choose Theme
+          Change Password
         </h2>
-        <Formik initialValues={{ theme: data.me.theme }} onSubmit={() => {}}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10">
-            {Object.keys(themes).map((theme) => {
-              const mTheme = mapTheme(themes[theme]);
+        <Formik
+          initialValues={{
+            confirmPassword: '',
+            newPassword: '',
+            oldPassword: '',
+          }}
+          onSubmit={async (values, { resetForm, setErrors }) => {
+            if (values.newPassword !== values.confirmPassword) {
+              setErrors({ confirmPassword: 'Passwords do not match.' });
+              return;
+            }
 
-              return (
-                <label
-                  className="w-full px-2 py-3 border rounded-md cursor-pointer"
-                  htmlFor={`${theme}-template`}
-                  onClick={() => updateUserTheme({ variables: { theme } })}
-                  style={{
-                    background: mTheme['--bg-primary'],
-                    border: `2px solid ${mTheme['--bg-nav-offset']}`,
-                  }}
-                >
-                  <div className="flex items-center">
-                    <Field
-                      id={`${theme}-template`}
-                      name="theme"
-                      type="radio"
-                      value={theme}
-                    />{' '}
-                    <div className="flex flex-col items-start ml-2">
-                      <div
-                        className="text-sm font-semibold"
-                        style={{ color: mTheme['--text-primary'] }}
-                      >
-                        {/* @ts-ignore */}
-                        {themeList[theme]}
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="h-3 w-20 rounded-full mt-3"
-                    style={{ background: mTheme['--bg-nav'] }}
-                  ></div>
-                  <div
-                    className="h-3 w-28 rounded-full mt-3"
-                    style={{ background: mTheme['--accent'] }}
-                  ></div>
-                </label>
-              );
-            })}
-          </div>
+            const { data } = await changePassword({
+              variables: {
+                ...values,
+              },
+            });
+            if (data?.changePasswordFromPassword.errors) {
+              setErrors(toErrorMap(data.changePasswordFromPassword.errors));
+              return;
+            }
+
+            resetForm();
+
+            window.alert('Your password has been changed.');
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="flex flex-col gap-3">
+              <InputField
+                label="Current Password"
+                name="oldPassword"
+                type="password"
+              />
+              <InputField
+                label="New Password"
+                name="newPassword"
+                type="password"
+              />
+              <InputField
+                label="Confirm Password"
+                name="confirmPassword"
+                type="password"
+              />
+              <button
+                className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                disabled={isSubmitting}
+                type="submit"
+              >
+                Submit
+              </button>
+            </Form>
+          )}
         </Formik>
       </div>
     </div>
