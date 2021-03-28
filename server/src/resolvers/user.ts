@@ -378,4 +378,34 @@ export class UserResolver {
 
     return { user };
   }
+
+  @Mutation(() => UserResponse)
+  async changePasswordFromPassword(
+    @Arg("oldPassword") oldPassword: string,
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const user = await User.findOne(req.session.userId);
+
+    if (!user) {
+      return {
+        errors: [{ field: "oldPassword", message: "Could not find user." }],
+      };
+    }
+
+    const valid = await argon2.verify(user.password, oldPassword);
+
+    if (!valid) {
+      return {
+        errors: [{ field: "oldPassword", message: "Incorrect password." }],
+      };
+    }
+
+    await User.update(
+      { id: user.id },
+      { password: await argon2.hash(newPassword) }
+    );
+
+    return { user };
+  }
 }

@@ -3,19 +3,18 @@ import React from 'react';
 import { mapTheme } from 'styles/appThemes/utils';
 
 import InputField from '👨‍💻components/Form/InputField';
-import { useMeQuery, useUpdateUserThemeMutation } from '👨‍💻generated/graphql';
+import {
+  useChangePasswordFromPasswordMutation,
+  useMeQuery,
+  useUpdateUserThemeMutation,
+} from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
 import { themes } from '../../styles/appThemes';
 import themeList from '../../styles/monacoThemes/themelist.json';
 
 const Settings: React.FC<Props> = () => {
-  const { data } = useMeQuery();
-  const [updateUserTheme] = useUpdateUserThemeMutation({
-    refetchQueries: ['Me'],
-  });
-
-  if (!data?.me?.theme) return null;
+  const [changePassword] = useChangePasswordFromPasswordMutation();
 
   return (
     <div>
@@ -24,36 +23,48 @@ const Settings: React.FC<Props> = () => {
           Change Password
         </h2>
         <Formik
-          initialValues={{}}
-          onSubmit={async (values, { setErrors }) => {
-            // const { data } = await updateUserRole({
-            //   variables: {
-            //     // @ts-ignore
-            //     id: values.id,
-            //     role: 'ADMIN',
-            //   },
-            // });
-            // if (data?.updateUserRole.errors) {
-            //   setErrors(toErrorMap(data.updateUserRole.errors));
-            //   return;
-            // }
-            // window.alert(
-            //   `${data?.updateUserRole.user?.username} is now an ADMIN.`
-            // );
+          initialValues={{
+            confirmPassword: '',
+            newPassword: '',
+            oldPassword: '',
+          }}
+          onSubmit={async (values, { resetForm, setErrors }) => {
+            if (values.newPassword !== values.confirmPassword) {
+              setErrors({ confirmPassword: 'Passwords do not match.' });
+              return;
+            }
+
+            const { data } = await changePassword({
+              variables: {
+                ...values,
+              },
+            });
+            if (data?.changePasswordFromPassword.errors) {
+              setErrors(toErrorMap(data.changePasswordFromPassword.errors));
+              return;
+            }
+
+            resetForm();
+
+            window.alert('Your password has been changed.');
           }}
         >
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-3">
               <InputField
                 label="Current Password"
-                name="currentPassword"
-                type="text"
+                name="oldPassword"
+                type="password"
               />
-              <InputField label="New Password" name="newPassword" type="text" />
+              <InputField
+                label="New Password"
+                name="newPassword"
+                type="password"
+              />
               <InputField
                 label="Confirm Password"
                 name="confirmPassword"
-                type="text"
+                type="password"
               />
               <button
                 className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
