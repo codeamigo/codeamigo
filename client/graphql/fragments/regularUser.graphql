@@ -1,5 +1,6 @@
 fragment RegularUser on User {
   id
+  email
   role
   theme
   username

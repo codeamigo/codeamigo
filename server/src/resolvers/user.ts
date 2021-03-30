@@ -408,4 +408,30 @@ export class UserResolver {
 
     return { user };
   }
+
+  @Mutation(() => UserResponse)
+  async changeEmail(
+    @Arg("newEmail") newEmail: string,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const user = await User.findOne(req.session.userId);
+
+    if (!user) {
+      return {
+        errors: [{ field: "newEmail", message: "Could not find user." }],
+      };
+    }
+
+    const existingUser = await User.findOne({ where: { email: newEmail } });
+
+    if (existingUser) {
+      return {
+        errors: [{ field: "newEmail", message: "Email is already taken." }],
+      };
+    }
+
+    await User.update({ id: user.id }, { email: newEmail });
+
+    return { user };
+  }
 }
