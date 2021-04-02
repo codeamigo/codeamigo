@@ -10,6 +10,7 @@ const statusMap: { [key in string]: string } = {
 /* eslint-enable */
 
 const Preview: React.FC<Props> = () => {
+  const [width, setWidth] = useState('0%');
   const [bundlerState, setBundlerState] = useState('');
   const [bundlerStateVisible, setBundlerStateVisible] = useState(true);
 
@@ -25,8 +26,10 @@ const Preview: React.FC<Props> = () => {
   }, []);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
     if (bundlerState === 'Symbol(BUNDLING_FINISHED)') {
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         // hide progress bar
         setBundlerStateVisible(false);
         setBundlerState('');
@@ -35,15 +38,25 @@ const Preview: React.FC<Props> = () => {
           setBundlerStateVisible(true);
         }, 201);
       }, 201);
-
-      return () => clearTimeout(timeout);
     }
+
+    setWidth(statusMap[bundlerState]);
+
+    return () => clearTimeout(timeout);
   }, [bundlerState]);
 
-  const width =
-    typeof bundlerState === 'string'
-      ? statusMap[(bundlerState as unknown) as string]
-      : '33%' || '33%';
+  useEffect(() => {
+    if (bundlerState === 'Symbol(BUNDLING_RUNNING)') {
+      const interval = setInterval(() => {
+        const percent = parseInt(width);
+        if (percent > 90) return;
+        const numeral = Math.floor(Math.random() * 5);
+        setWidth(`${percent + numeral}%`);
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [bundlerState, width]);
 
   return (
     <>
