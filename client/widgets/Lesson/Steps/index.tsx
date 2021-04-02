@@ -44,11 +44,15 @@ const Steps: React.FC<Props> = ({
   });
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
     if (isAdding) {
-      setTimeout(() => {
+      timeout = setTimeout(() => {
         inputRef.current!.focus();
       }, 0);
     }
+
+    return () => timeout && clearTimeout(timeout);
   }, [isAdding]);
 
   useEffect(() => {
@@ -62,12 +66,15 @@ const Steps: React.FC<Props> = ({
       }
     };
 
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       changeStepsHeight();
     }, 2000);
     window.addEventListener('resize', changeStepsHeight);
 
-    return () => window.removeEventListener('resize', changeStepsHeight);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', changeStepsHeight);
+    };
   }, []);
 
   const createStep = async (name: string) => {

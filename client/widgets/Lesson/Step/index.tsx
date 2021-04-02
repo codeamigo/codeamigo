@@ -12,6 +12,7 @@ import {
 import Console from '👨‍💻widgets/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
+import Preview from '👨‍💻widgets/Lesson/Preview';
 
 const Step: React.FC<Props> = ({
   currentStepId: id,
@@ -116,11 +117,7 @@ const Step: React.FC<Props> = ({
           <Editor nextStep={nextStep} step={data.step} {...rest} />
         </div>
         <div className="flex flex-col justify-between w-full lg:h-full lg:w-1/4">
-          <iframe
-            className="w-full h-full"
-            id="frame"
-            src={process.env.NEXT_PUBLIC_PREVIEW_URL}
-          ></iframe>
+          <Preview />
           <Console step={data.step} />
         </div>
       </div>

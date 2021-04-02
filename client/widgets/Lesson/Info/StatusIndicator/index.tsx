@@ -11,9 +11,11 @@ const StatusIndicator: React.FC<Props> = ({ isPreviewing }) => {
   useEffect(() => {
     setPing(true);
 
-    setTimeout(() => {
+    var timeout = setTimeout(() => {
       setPing(false);
     }, 1500);
+
+    return () => clearTimeout(timeout);
   }, [status.lastSaved]);
 
   return isPreviewing ? (
