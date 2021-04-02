@@ -15,7 +15,7 @@ const UserMenu: React.FC<Props> = () => {
   if (loading) return null;
 
   return (
-    <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0">
+    <div className="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0">
       {data?.me?.isAuthenticated ? (
         <div className="relative">
           <Menu>

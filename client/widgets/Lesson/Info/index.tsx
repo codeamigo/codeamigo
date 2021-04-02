@@ -41,7 +41,14 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
                 setShowOptions={setShowOptions}
                 showOptions={showOptions}
               />
-            ) : null}
+            ) : (
+              <a
+                href="https://github.com/codeamigo/questions/issues"
+                target="_blank"
+              >
+                <Icon className="text-text-primary text-lg" name="lifebuoy" />
+              </a>
+            )}
           </div>
           <div className="flex items-center">
             <UserMenu />

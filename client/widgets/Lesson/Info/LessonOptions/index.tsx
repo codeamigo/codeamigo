@@ -23,7 +23,7 @@ const LessonOptions: React.FC<Props> = ({ setShowOptions, showOptions }) => {
 
 export const Options: React.FC<OptionsProps> = (props) => {
   return (
-    <div className="flex justify-end w-full gap-6 py-2 pr-16 px-4 bg-bg-primary border-b border-bg-nav-offset absolute z-10 shadow-lg">
+    <div className="flex justify-end w-full gap-6 py-2 pr-16 px-4 bg-bg-primary border-b border-bg-nav-offset absolute z-20 shadow-lg">
       <Thumbnail {...props} />
       <Label {...props} />
     </div>
