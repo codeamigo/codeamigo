@@ -48,13 +48,14 @@ const Preview: React.FC<Props> = () => {
   return (
     <>
       <div className="p-2">
-        <div className="relative w-full rounded-xl overflow-hidden px-2 py-1 text-xs text-text-primary bg-bg-nav">
+        <div className="relative w-full rounded-xl overflow-hidden px-2 py-1 text-xs text-text-primary cursor-text">
           <div
             className={`${
               bundlerStateVisible ? '' : 'hidden'
             } absolute bg-accent h-full top-0 left-0 transition-width transition-all duration-200`}
             style={{ width }}
           ></div>
+          <div className="absolute bg-bg-nav-offset h-full w-full top-0 left-0 opacity-50"></div>
           <div className="z-10 relative font-semibold">
             {process.env.NEXT_PUBLIC_PREVIEW_URL}
           </div>
