@@ -9,10 +9,9 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
-import Console from '👨‍💻widgets/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
-import Preview from '👨‍💻widgets/Lesson/Preview';
+import Output from '👨‍💻widgets/Lesson/Output';
 
 const Step: React.FC<Props> = ({
   currentStepId: id,
@@ -102,24 +101,17 @@ const Step: React.FC<Props> = ({
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:h-full-minus">
-        <div className="flex flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4">
-          <Instructions
-            nextStep={nextStep}
-            showSteps={showSteps}
-            step={data.step}
-            steps={
-              (session?.steps || rest.lesson?.steps) as RegularStepFragment[]
-            }
-            {...rest}
-          />
-        </div>
-        <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">
-          <Editor nextStep={nextStep} step={data.step} {...rest} />
-        </div>
-        <div className="flex flex-col justify-between w-full lg:h-full lg:w-1/4">
-          <Preview />
-          <Console step={data.step} />
-        </div>
+        <Instructions
+          nextStep={nextStep}
+          showSteps={showSteps}
+          step={data.step}
+          steps={
+            (session?.steps || rest.lesson?.steps) as RegularStepFragment[]
+          }
+          {...rest}
+        />
+        <Editor nextStep={nextStep} step={data.step} {...rest} />
+        <Output step={data.step} />
       </div>
     </>
   );

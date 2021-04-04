@@ -510,79 +510,81 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   );
 
   return (
-    <div className="w-full lg:h-full flex flex-col relative">
-      <div className="h-80 lg:flex-1 flex border border-bg-nav-offset border-t-0 border-b-0 whitespace-nowrap">
-        <div className="w-4/12 border-r border-bg-nav-offset">
-          <EditorFiles
-            createFile={createFile}
-            currentPath={currentPath}
-            deleteFile={deleteFile}
-            dependencies={step.dependencies}
-            files={files!}
-            setCurrentPath={setCurrentPath}
-            stepId={step.id}
-            {...rest}
-          />
-        </div>
-        <div className="w-8/12 h-80 lg:h-full">
-          <ControlledEditor
-            editorDidMount={editorDidMount}
-            language={'typescript'}
-            onChange={(_, value) => {
-              setIsBundlerReady(false);
-              updateFile(currentPath, value || '');
-              postCode(
-                files!,
-                currentPath,
-                value || '',
-                step.dependencies || []
-              );
-            }}
-            options={{
-              automaticLayout: true,
-              fontSize: '14px',
-              minimap: { enabled: false },
-              scrollBeyondLastLine: false,
-              wordWrap: 'on',
-            }}
-            width="100%"
-          />
-        </div>
-      </div>
-      <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
-        {rest.isPreviewing && (
-          <div
-            aria-label="Preview Mode. Changes will not be saved! Login to save your work."
-            className="hint--top hint--no-animate"
-          >
-            <div className="flex text-text-primary text-sm mr-3">
-              <Icon className="text-text-primary mr-1" name="info-circled" />{' '}
-              Preview Mode
-            </div>
+    <div className="flex w-full lg:h-full lg:overflow-scroll lg:w-2/4">
+      <div className="w-full lg:h-full flex flex-col relative">
+        <div className="h-80 lg:flex-1 flex border border-bg-nav-offset border-t-0 border-b-0 whitespace-nowrap">
+          <div className="w-4/12 border-r border-bg-nav-offset">
+            <EditorFiles
+              createFile={createFile}
+              currentPath={currentPath}
+              deleteFile={deleteFile}
+              dependencies={step.dependencies}
+              files={files!}
+              setCurrentPath={setCurrentPath}
+              stepId={step.id}
+              {...rest}
+            />
           </div>
-        )}
-        <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
-          <Button
-            className={`w-20 p-2 justify-center`}
-            disabled={isTesting || !isBundlerReady}
-            forwardedRef={submitRef}
-            onClick={() => {
-              isStepComplete
-                ? nextStep()
-                : isTested
-                ? completeCheckpoint()
-                : testCode(
-                    {
-                      ...files,
-                    },
-                    currentPath,
-                    currentCheck!.test,
-                    step.dependencies || []
-                  );
-            }}
-          >
-            {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
-          </Button>
+          <div className="w-8/12 h-80 lg:h-full">
+            <ControlledEditor
+              editorDidMount={editorDidMount}
+              language={'typescript'}
+              onChange={(_, value) => {
+                setIsBundlerReady(false);
+                updateFile(currentPath, value || '');
+                postCode(
+                  files!,
+                  currentPath,
+                  value || '',
+                  step.dependencies || []
+                );
+              }}
+              options={{
+                automaticLayout: true,
+                fontSize: '14px',
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                wordWrap: 'on',
+              }}
+              width="100%"
+            />
+          </div>
+        </div>
+        <div className="h-16 flex justify-end px-3 items-center w-full bg-bg-nav border-t border-bg-nav-offset">
+          {rest.isPreviewing && (
+            <div
+              aria-label="Preview Mode. Changes will not be saved! Login to save your work."
+              className="hint--top hint--no-animate"
+            >
+              <div className="flex text-text-primary text-sm mr-3">
+                <Icon className="text-text-primary mr-1" name="info-circled" />{' '}
+                Preview Mode
+              </div>
+            </div>
+          )}
+          <div aria-label="⌘ + Enter" className="hint--top hint--no-animate">
+            <Button
+              className={`w-20 p-2 justify-center`}
+              disabled={isTesting || !isBundlerReady}
+              forwardedRef={submitRef}
+              onClick={() => {
+                isStepComplete
+                  ? nextStep()
+                  : isTested
+                  ? completeCheckpoint()
+                  : testCode(
+                      {
+                        ...files,
+                      },
+                      currentPath,
+                      currentCheck!.test,
+                      step.dependencies || []
+                    );
+              }}
+            >
+              {isTesting ? <Spinner /> : isTested ? <>Next</> : <>Test</>}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

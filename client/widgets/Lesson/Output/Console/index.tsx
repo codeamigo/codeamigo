@@ -2,13 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { RegularStepFragment, useCheckpointsQuery } from '👨‍💻generated/graphql';
-import TestSummary from '👨‍💻widgets/Console/TestsSummary';
-
 import {
   FromPreviewMsgType,
   FromTestRunnerMsgType,
   PreviewLogTypeEnum,
-} from '../Lesson/Editor/types';
+} from '👨‍💻widgets/Lesson/Editor/types';
+import TestSummary from '👨‍💻widgets/Lesson/Output/Console/TestsSummary';
 
 type TabType = 'console' | 'tests';
 

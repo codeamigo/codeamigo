@@ -2,11 +2,11 @@ import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { RegularCheckpointFragment } from '👨‍💻generated/graphql';
-import { TestBundlerErrType, TestResultType } from '👨‍💻widgets/Console/types';
+import { FromTestRunnerMsgType } from '👨‍💻widgets/Lesson/Editor/types';
 import {
-  FromPreviewMsgType,
-  FromTestRunnerMsgType,
-} from '👨‍💻widgets/Lesson/Editor/types';
+  TestBundlerErrType,
+  TestResultType,
+} from '👨‍💻widgets/Lesson/Output/Console/types';
 
 const root = 'ROOT_DESCRIBE_BLOCK';
 const errStart = 'at Object.eval';

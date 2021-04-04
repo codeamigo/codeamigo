@@ -20,7 +20,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
   return (
     <div className="relative">
       <div
-        className="w-full py-1 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset relative z-20"
+        className="w-full py-1 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset relative z-30"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
         <div className="w-1/4 flex items-center">

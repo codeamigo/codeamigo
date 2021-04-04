@@ -48,7 +48,7 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <>
+    <div className="flex flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4">
       <div
         className="w-full lg:h-full flex flex-col overflow-scroll flex-1"
         id="instructions"
@@ -125,7 +125,7 @@ const Instructions: React.FC<Props> = (props) => {
           </Button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
