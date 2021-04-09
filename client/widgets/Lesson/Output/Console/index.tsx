@@ -26,6 +26,7 @@ const Console: React.FC<Props> = ({ step }) => {
 
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
+      console.log(event);
       if (event.data.from !== 'preview') return;
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
@@ -89,13 +90,13 @@ const Console: React.FC<Props> = ({ step }) => {
         height: activeTab ? '100%' : '0%',
       }}
     >
-      <div className="bg-gray-900">
+      <div className="bg-bg-nav">
         <div className="flex justify-between">
           <ul className="flex justify-between">
             <li
               className={`${
-                activeTab === 'console' ? 'bg-bg-nav' : ''
-              } text-text-primary text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+                activeTab === 'console' ? 'text-accent' : 'text-text-primary'
+              } font-semibold text-sm px-4 py-5 list-none cursor-pointer transition-all duration-150 border-r border-accent`}
               onClick={() => changeTab('console')}
               role="button"
             >
@@ -103,8 +104,8 @@ const Console: React.FC<Props> = ({ step }) => {
             </li>
             <li
               className={`${
-                activeTab === 'tests' ? 'bg-bg-nav' : ''
-              } flex align-center text-text-primary text-sm px-4 py-1.5 list-none cursor-pointer transition-all duration-150`}
+                activeTab === 'tests' ? 'text-accent' : 'text-text-primary'
+              } flex align-center font-semibold text-sm px-4 py-5 list-none cursor-pointer transition-all duration-150`}
               onClick={() => changeTab('tests')}
               role="button"
             >
@@ -123,7 +124,12 @@ const Console: React.FC<Props> = ({ step }) => {
           </div>
         </div>
       </div>
-      <div className="overflow-scroll h-full" ref={listRef}>
+      <div
+        className={`overflow-scroll h-full ${
+          activeTab ? 'border-t border-accent' : ''
+        }`}
+        ref={listRef}
+      >
         {activeTab === 'tests' ? (
           <TestSummary
             checkpoint={currentCheck}
@@ -131,13 +137,27 @@ const Console: React.FC<Props> = ({ step }) => {
           />
         ) : (
           (list as FromPreviewMsgType[]).map((value, i) => {
+            console.log(value);
             return (
               <div
-                className="bg-bg-nav border-black border-b text-text-primary text-xs"
+                className={`border-bg-nav-offset border-b text-xs ${
+                  value.type === 'error'
+                    ? 'bg-red-900 text-red-100'
+                    : value.type === 'warn'
+                    ? 'bg-yellow-900 text-yellow-100'
+                    : 'bg-bg-nav text-text-primary'
+                }`}
                 key={i}
               >
                 <div className="px-2 py-1 flex items-start">
-                  <span className="mr-3">{'>'}</span> {value.result}
+                  <div className="flex items-center">
+                    {value.type === 'error' && <span className="w-5">⛔️</span>}
+                    {value.type === 'warn' && (
+                      <span className="w-5 text-yellow-100">⚠️</span>
+                    )}
+                    {value.type === 'log' && <span className="w-5">{'>'}</span>}
+                  </div>{' '}
+                  <div>{value.result}</div>
                 </div>
               </div>
             );
