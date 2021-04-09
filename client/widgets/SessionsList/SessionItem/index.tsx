@@ -26,6 +26,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
 
   return (
     <LessonListItem
+      href={`/lessons/start/${session.lesson.id}`}
       lesson={session.lesson}
       options={
         <div className="relative z-10">

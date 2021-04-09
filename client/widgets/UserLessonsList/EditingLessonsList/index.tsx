@@ -64,6 +64,7 @@ const EditingLessonsList: React.FC<Props> = () => {
           data?.lessons?.map((lesson) => {
             return (
               <LessonListItem
+                href={`/lessons/edit/${lesson.id}`}
                 key={lesson.id}
                 lesson={lesson}
                 options={
