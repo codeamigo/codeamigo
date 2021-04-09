@@ -4,18 +4,32 @@ import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   LessonQuery,
+  useLessonQuery,
   useUpdateLessonStatusMutation,
 } from '👨‍💻generated/graphql';
 import Label from '👨‍💻widgets/Lesson/Info/LessonOptions/Label';
 import Thumbnail from '👨‍💻widgets/Lesson/Info/LessonOptions/Thumbnail';
 
 const LessonOptions: React.FC<Props> = ({
-  lesson,
+  lessonId,
   setShowOptions,
   showOptions,
 }) => {
-  if (!lesson) return null;
+  const { data } = useLessonQuery({
+    variables: { id: lessonId },
+  });
   const [updateLessonStatusM] = useUpdateLessonStatusMutation();
+  const lesson = data?.lesson;
+
+  if (!lesson) return null;
+
+  let disabledMessage;
+  if (!lesson.label) {
+    disabledMessage = 'A label is required.';
+  }
+  if (!lesson.thumbnail) {
+    disabledMessage = 'A thumbnail (jpg, png, gif) is required.';
+  }
 
   const publishLesson = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -39,9 +53,20 @@ const LessonOptions: React.FC<Props> = ({
           Awaiting Approval
         </Button>
       ) : (
-        <Button className="py-1" onClick={(e) => publishLesson(e, lesson.id)}>
-          Publish
-        </Button>
+        <div
+          aria-label={disabledMessage}
+          className={`${
+            !!disabledMessage ? 'hint--no-animate hint--bottom-left' : ''
+          }`}
+        >
+          <Button
+            className="py-1"
+            disabled={!!disabledMessage}
+            onClick={(e) => publishLesson(e, lesson.id)}
+          >
+            Publish
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -57,7 +82,7 @@ export const Options: React.FC<OptionsProps> = (props) => {
 };
 
 type Props = {
-  lesson: LessonQuery['lesson'];
+  lessonId: number;
   setShowOptions: (val: boolean) => void;
   showOptions: boolean;
 };

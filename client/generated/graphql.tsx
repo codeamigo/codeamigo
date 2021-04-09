@@ -271,8 +271,8 @@ export type Mutation = {
   createLesson: CreateLessonResponse;
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
-  updateLessonStatus?: Maybe<Lesson>;
   updateLessonLabel?: Maybe<Lesson>;
+  updateLessonStatus?: Maybe<Lesson>;
   updateLessonThumbnail?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
@@ -440,14 +440,14 @@ export type MutationUpdateLessonDescriptionArgs = {
 };
 
 
-export type MutationUpdateLessonStatusArgs = {
-  status: Scalars['String'];
+export type MutationUpdateLessonLabelArgs = {
+  label: Scalars['String'];
   id: Scalars['Float'];
 };
 
 
-export type MutationUpdateLessonLabelArgs = {
-  label: Scalars['String'];
+export type MutationUpdateLessonStatusArgs = {
+  status: Scalars['String'];
   id: Scalars['Float'];
 };
 
@@ -612,6 +612,18 @@ export type RegularDependencyFragment = (
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
+);
+
+export type RegularLessonFragment = (
+  { __typename?: 'Lesson' }
+  & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'thumbnail' | 'title'>
+  & { owner: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ), steps?: Maybe<Array<(
+    { __typename?: 'Step' }
+    & RegularStepFragment
+  )>> }
 );
 
 export type RegularLessonItemFragment = (
@@ -1053,20 +1065,6 @@ export type UpdateLessonDescriptionMutation = (
   )> }
 );
 
-export type UpdateLessonStatusMutationVariables = Exact<{
-  id: Scalars['Float'];
-  status: Scalars['String'];
-}>;
-
-
-export type UpdateLessonStatusMutation = (
-  { __typename?: 'Mutation' }
-  & { updateLessonStatus?: Maybe<(
-    { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id'>
-  )> }
-);
-
 export type UpdateLessonLabelMutationVariables = Exact<{
   id: Scalars['Float'];
   label: Scalars['String'];
@@ -1081,6 +1079,20 @@ export type UpdateLessonLabelMutation = (
   )> }
 );
 
+export type UpdateLessonStatusMutationVariables = Exact<{
+  id: Scalars['Float'];
+  status: Scalars['String'];
+}>;
+
+
+export type UpdateLessonStatusMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonStatus?: Maybe<(
+    { __typename?: 'Lesson' }
+    & RegularLessonFragment
+  )> }
+);
+
 export type UpdateLessonThumbnailMutationVariables = Exact<{
   id: Scalars['Float'];
   thumbnail?: Maybe<Scalars['String']>;
@@ -1091,7 +1103,7 @@ export type UpdateLessonThumbnailMutation = (
   { __typename?: 'Mutation' }
   & { updateLessonThumbnail?: Maybe<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id'>
+    & RegularLessonFragment
   )> }
 );
 
@@ -1362,6 +1374,23 @@ export const RegularErrorFragmentDoc = gql`
   message
 }
     `;
+export const RegularCodeModuleFragmentDoc = gql`
+    fragment RegularCodeModule on CodeModule {
+  id
+  name
+  value
+}
+    `;
+export const RegularCheckpointFragmentDoc = gql`
+    fragment RegularCheckpoint on Checkpoint {
+  id
+  createdAt
+  description
+  isCompleted
+  isTested
+  test
+}
+    `;
 export const RegularDependencyFragmentDoc = gql`
     fragment RegularDependency on Dependency {
   id
@@ -1369,6 +1398,44 @@ export const RegularDependencyFragmentDoc = gql`
   version
 }
     `;
+export const RegularStepFragmentDoc = gql`
+    fragment RegularStep on Step {
+  id
+  createdAt
+  currentCheckpointId
+  instructions
+  isCompleted
+  name
+  codeModules {
+    ...RegularCodeModule
+  }
+  checkpoints {
+    ...RegularCheckpoint
+  }
+  dependencies {
+    ...RegularDependency
+  }
+}
+    ${RegularCodeModuleFragmentDoc}
+${RegularCheckpointFragmentDoc}
+${RegularDependencyFragmentDoc}`;
+export const RegularLessonFragmentDoc = gql`
+    fragment RegularLesson on Lesson {
+  id
+  description
+  label
+  status
+  thumbnail
+  title
+  owner {
+    id
+    username
+  }
+  steps {
+    ...RegularStep
+  }
+}
+    ${RegularStepFragmentDoc}`;
 export const RegularLessonItemFragmentDoc = gql`
     fragment RegularLessonItem on Lesson {
   id
@@ -1395,44 +1462,6 @@ export const RegularLessonItemFragmentDoc = gql`
   }
 }
     ${RegularDependencyFragmentDoc}`;
-export const RegularCodeModuleFragmentDoc = gql`
-    fragment RegularCodeModule on CodeModule {
-  id
-  name
-  value
-}
-    `;
-export const RegularCheckpointFragmentDoc = gql`
-    fragment RegularCheckpoint on Checkpoint {
-  id
-  createdAt
-  description
-  isCompleted
-  isTested
-  test
-}
-    `;
-export const RegularStepFragmentDoc = gql`
-    fragment RegularStep on Step {
-  id
-  createdAt
-  currentCheckpointId
-  instructions
-  isCompleted
-  name
-  codeModules {
-    ...RegularCodeModule
-  }
-  checkpoints {
-    ...RegularCheckpoint
-  }
-  dependencies {
-    ...RegularDependency
-  }
-}
-    ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}
-${RegularDependencyFragmentDoc}`;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -2382,39 +2411,6 @@ export function useUpdateLessonDescriptionMutation(baseOptions?: Apollo.Mutation
 export type UpdateLessonDescriptionMutationHookResult = ReturnType<typeof useUpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationResult = Apollo.MutationResult<UpdateLessonDescriptionMutation>;
 export type UpdateLessonDescriptionMutationOptions = Apollo.BaseMutationOptions<UpdateLessonDescriptionMutation, UpdateLessonDescriptionMutationVariables>;
-export const UpdateLessonStatusDocument = gql`
-    mutation UpdateLessonStatus($id: Float!, $status: String!) {
-  updateLessonStatus(id: $id, status: $status) {
-    id
-  }
-}
-    `;
-export type UpdateLessonStatusMutationFn = Apollo.MutationFunction<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
-
-/**
- * __useUpdateLessonStatusMutation__
- *
- * To run a mutation, you first call `useUpdateLessonStatusMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateLessonStatusMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateLessonStatusMutation, { data, loading, error }] = useUpdateLessonStatusMutation({
- *   variables: {
- *      id: // value for 'id'
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useUpdateLessonStatusMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>) {
-        return Apollo.useMutation<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>(UpdateLessonStatusDocument, baseOptions);
-      }
-export type UpdateLessonStatusMutationHookResult = ReturnType<typeof useUpdateLessonStatusMutation>;
-export type UpdateLessonStatusMutationResult = Apollo.MutationResult<UpdateLessonStatusMutation>;
-export type UpdateLessonStatusMutationOptions = Apollo.BaseMutationOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
 export const UpdateLessonLabelDocument = gql`
     mutation UpdateLessonLabel($id: Float!, $label: String!) {
   updateLessonLabel(id: $id, label: $label) {
@@ -2448,13 +2444,46 @@ export function useUpdateLessonLabelMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateLessonLabelMutationHookResult = ReturnType<typeof useUpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationResult = Apollo.MutationResult<UpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationOptions = Apollo.BaseMutationOptions<UpdateLessonLabelMutation, UpdateLessonLabelMutationVariables>;
+export const UpdateLessonStatusDocument = gql`
+    mutation UpdateLessonStatus($id: Float!, $status: String!) {
+  updateLessonStatus(id: $id, status: $status) {
+    ...RegularLesson
+  }
+}
+    ${RegularLessonFragmentDoc}`;
+export type UpdateLessonStatusMutationFn = Apollo.MutationFunction<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
+
+/**
+ * __useUpdateLessonStatusMutation__
+ *
+ * To run a mutation, you first call `useUpdateLessonStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLessonStatusMutation, { data, loading, error }] = useUpdateLessonStatusMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useUpdateLessonStatusMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>(UpdateLessonStatusDocument, baseOptions);
+      }
+export type UpdateLessonStatusMutationHookResult = ReturnType<typeof useUpdateLessonStatusMutation>;
+export type UpdateLessonStatusMutationResult = Apollo.MutationResult<UpdateLessonStatusMutation>;
+export type UpdateLessonStatusMutationOptions = Apollo.BaseMutationOptions<UpdateLessonStatusMutation, UpdateLessonStatusMutationVariables>;
 export const UpdateLessonThumbnailDocument = gql`
     mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
-    id
+    ...RegularLesson
   }
 }
-    `;
+    ${RegularLessonFragmentDoc}`;
 export type UpdateLessonThumbnailMutationFn = Apollo.MutationFunction<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>;
 
 /**

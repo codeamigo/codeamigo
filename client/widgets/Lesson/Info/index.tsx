@@ -38,7 +38,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
           <div className="flex items-center">
             {isEditing && rest.lesson ? (
               <LessonOptions
-                lesson={rest.lesson}
+                lessonId={rest.lesson.id}
                 setShowOptions={setShowOptions}
                 showOptions={showOptions}
               />
