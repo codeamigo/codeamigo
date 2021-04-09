@@ -652,7 +652,7 @@ export type RegularStepFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'role' | 'theme' | 'username' | 'email' | 'isAuthenticated'>
+  & Pick<User, 'id' | 'email' | 'role' | 'theme' | 'username' | 'isAuthenticated'>
 );
 
 export type ChangeEmailMutationVariables = Exact<{
@@ -1436,10 +1436,10 @@ ${RegularDependencyFragmentDoc}`;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
+  email
   role
   theme
   username
-  email
   isAuthenticated @client
 }
     `;

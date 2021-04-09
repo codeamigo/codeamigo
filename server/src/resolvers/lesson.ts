@@ -169,12 +169,21 @@ export class LessonResolver {
   async updateLessonStatus(
     @Arg("id") id: number,
     @Arg("status") status: LessonStatusTypeEnum
-  ): Promise<Lesson | null> {
+  ): Promise<Lesson | null | FieldError[]> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
       return null;
     }
 
+    if (status === "PENDING_PUBLISH") {
+      if (!lesson.thumbnail) {
+        return [{ field: "thumbnail", message: "A thumbnail is required." }];
+      }
+
+      if (!lesson.label) {
+        return [{ field: "label", message: "A label is required." }];
+      }
+    }
     await Lesson.update({ id }, { ...lesson, status });
 
     return lesson;
