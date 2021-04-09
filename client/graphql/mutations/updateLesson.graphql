@@ -10,20 +10,20 @@ mutation UpdateLessonDescription($id: Float!, $description: String!) {
   }
 }
 
-mutation UpdateLessonStatus($id: Float!, $status: String!) {
-  updateLessonStatus(id: $id, status: $status) {
-    id
-  }
-}
-
 mutation UpdateLessonLabel($id: Float!, $label: String!) {
   updateLessonLabel(id: $id, label: $label) {
     id
   }
 }
 
+mutation UpdateLessonStatus($id: Float!, $status: String!) {
+  updateLessonStatus(id: $id, status: $status) {
+    ...RegularLesson
+  }
+}
+
 mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
-    id
+    ...RegularLesson
   }
 }

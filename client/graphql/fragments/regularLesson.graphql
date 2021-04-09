@@ -1,0 +1,15 @@
+fragment RegularLesson on Lesson {
+  id
+  description
+  label
+  status
+  thumbnail
+  title
+  owner {
+    id
+    username
+  }
+  steps {
+    ...RegularStep
+  }
+}

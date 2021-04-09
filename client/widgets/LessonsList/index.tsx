@@ -30,7 +30,11 @@ const LessonsList: React.FC<Props> = () => {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {data?.lessons.map((lesson) => {
         return showLesson(lesson) ? (
-          <LessonListItem key={lesson.id} lesson={lesson} />
+          <LessonListItem
+            href={`/lessons/start/${lesson.id}`}
+            key={lesson.id}
+            lesson={lesson}
+          />
         ) : null;
       })}
     </div>

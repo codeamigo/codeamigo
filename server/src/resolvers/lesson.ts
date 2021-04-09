@@ -50,6 +50,15 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
+const relations = [
+  "owner",
+  "steps",
+  "students",
+  "steps.dependencies",
+  "steps.codeModules",
+  "steps.checkpoints",
+];
+
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
@@ -59,13 +68,7 @@ export class LessonResolver {
     const where = owner ? { owner, status } : { status };
 
     return Lesson.find({
-      relations: [
-        "owner",
-        "steps",
-        "students",
-        "steps.dependencies",
-        "steps.codeModules",
-      ],
+      relations,
       where,
     });
   }
@@ -166,22 +169,6 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
-  async updateLessonStatus(
-    @Arg("id") id: number,
-    @Arg("status") status: LessonStatusTypeEnum
-  ): Promise<Lesson | null> {
-    const lesson = await Lesson.findOne(id);
-    if (!lesson) {
-      return null;
-    }
-
-    await Lesson.update({ id }, { ...lesson, status });
-
-    return lesson;
-  }
-
-  @Mutation(() => Lesson, { nullable: true })
-  @UseMiddleware(isAuth)
   async updateLessonLabel(
     @Arg("id") id: number,
     @Arg("label") label: LessonLabelEnum
@@ -198,18 +185,48 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
-  async updateLessonThumbnail(
+  async updateLessonStatus(
     @Arg("id") id: number,
-    @Arg("thumbnail", { nullable: true }) thumbnail?: string
-  ): Promise<Lesson | null> {
-    const lesson = await Lesson.findOne(id);
+    @Arg("status") status: LessonStatusTypeEnum
+  ): Promise<Lesson | null | FieldError[]> {
+    const lesson = await Lesson.findOne(id, { relations });
     if (!lesson) {
       return null;
     }
 
-    await Lesson.update({ id }, { ...lesson, thumbnail });
+    if (status === "PENDING_PUBLISH") {
+      if (!lesson.thumbnail) {
+        return [{ field: "thumbnail", message: "A thumbnail is required." }];
+      }
 
-    return lesson;
+      if (!lesson.label) {
+        return [{ field: "label", message: "A label is required." }];
+      }
+    }
+
+    Object.assign(lesson, { status });
+
+    return lesson.save();
+  }
+
+  @Mutation(() => Lesson, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateLessonThumbnail(
+    @Arg("id") id: number,
+    @Arg("thumbnail", { nullable: true }) thumbnail?: string
+  ): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne({
+      relations,
+      where: { id },
+    });
+
+    if (!lesson) {
+      return null;
+    }
+
+    Object.assign(lesson, { thumbnail });
+
+    return lesson.save();
   }
 
   @Mutation(() => Boolean)

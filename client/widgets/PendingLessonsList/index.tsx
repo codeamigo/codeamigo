@@ -30,6 +30,7 @@ const PendingLessonsList: React.FC<Props> = () => {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
       {data?.lessons.map((lesson) => (
         <LessonListItem
+          href={`/lessons/edit/${lesson.id}`}
           key={lesson.id}
           lesson={lesson}
           options={

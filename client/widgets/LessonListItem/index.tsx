@@ -5,7 +5,12 @@ import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
 
-const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
+const LessonListItem: React.FC<Props> = ({
+  href,
+  lesson,
+  options,
+  progress,
+}) => {
   return (
     <div className="rounded-lg border-bg-nav-offset border-4">
       <div className="p-2 border-b-4 border-bg-nav-offset">
@@ -18,7 +23,7 @@ const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
         <div className="flex justify-between items-center">
           <a
             className="text-md text-accent font-semibold hover:underline"
-            href={`/lessons/start/${lesson.id}`}
+            href={href}
           >
             {lesson.title}
           </a>
@@ -56,6 +61,7 @@ const LessonListItem: React.FC<Props> = ({ lesson, options, progress }) => {
 };
 
 type Props = {
+  href: string;
   lesson: LessonsQuery['lessons'][0];
   options?: React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,

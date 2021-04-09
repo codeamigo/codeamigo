@@ -62,6 +62,7 @@ const PendingApprovalLessonsList: React.FC<Props> = () => {
         {data.lessons.map((lesson) => {
           return (
             <LessonListItem
+              href={`/lessons/start/${lesson.id}`}
               key={lesson.id}
               lesson={lesson}
               options={
