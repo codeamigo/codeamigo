@@ -15,12 +15,34 @@ const css = `html, body {
 }`;
 
 const tsTemplate = {
-  codeModules: [{ name: "app.tsx", value: "// app.tsx" }],
+  codeModules: [
+    {
+      name: "index.html",
+      value: `<html>
+<body>
+</body>
+
+<script src='./app.ts'></script>
+</html>`,
+    },
+    { name: "app.ts", value: "// app.ts" },
+  ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
 const jsTemplate = {
-  codeModules: [{ name: "app.js", value: "// app.js" }],
+  codeModules: [
+    {
+      name: "index.html",
+      value: `<html>
+<body>
+</body>
+
+<script src='./app.js'></script>
+</html>`,
+    },
+    { name: "app.js", value: "// app.js" },
+  ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
 } as ITemplate;
 
