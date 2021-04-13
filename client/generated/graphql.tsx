@@ -90,6 +90,7 @@ export type CodeModule = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  isEntry?: Maybe<Scalars['Boolean']>;
   value?: Maybe<Scalars['String']>;
   step: Step;
 };
@@ -601,7 +602,7 @@ export type RegularCheckpointFragment = (
 
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
-  & Pick<CodeModule, 'id' | 'name' | 'value'>
+  & Pick<CodeModule, 'id' | 'isEntry' | 'name' | 'value'>
 );
 
 export type RegularDependencyFragment = (
@@ -1377,6 +1378,7 @@ export const RegularErrorFragmentDoc = gql`
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
   id
+  isEntry
   name
   value
 }

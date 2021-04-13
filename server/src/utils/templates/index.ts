@@ -1,5 +1,5 @@
 export interface ITemplate {
-  codeModules: { name: string; value: string }[];
+  codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies: { package: string; version: string }[];
 }
 
@@ -14,7 +14,7 @@ const css = `html, body {
   background-color: white;
 }`;
 
-const tsTemplate = {
+const tsTemplate: ITemplate = {
   codeModules: [
     {
       name: "index.html",
@@ -25,12 +25,12 @@ const tsTemplate = {
 <script src='./app.ts'></script>
 </html>`,
     },
-    { name: "app.ts", value: "// app.ts" },
+    { isEntry: true, name: "app.ts", value: "// app.ts" },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
-} as ITemplate;
+};
 
-const jsTemplate = {
+const jsTemplate: ITemplate = {
   codeModules: [
     {
       name: "index.html",
@@ -41,14 +41,15 @@ const jsTemplate = {
 <script src='./app.js'></script>
 </html>`,
     },
-    { name: "app.js", value: "// app.js" },
+    { isEntry: true, name: "app.js", value: "// app.js" },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
-} as ITemplate;
+};
 
-const htmlTemplate = {
+const htmlTemplate: ITemplate = {
   codeModules: [
     {
+      isEntry: true,
       name: "index.html",
       value: `<html>
 
@@ -68,11 +69,12 @@ const htmlTemplate = {
     },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
-} as ITemplate;
+};
 
-const reactTsxTemplate = {
+const reactTsxTemplate: ITemplate = {
   codeModules: [
     {
+      isEntry: true,
       name: "app.tsx",
       value: `import React from 'react'
 import ReactDOM from 'react-dom'
@@ -109,11 +111,12 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     { package: "react-dom", version: "17.0.1" },
     { package: "react", version: "17.0.1" },
   ],
-} as ITemplate;
+};
 
-const vueTemplate = {
+const vueTemplate: ITemplate = {
   codeModules: [
     {
+      isEntry: true,
       name: "App.vue",
       value: `<template>
   <div>Hello {{ name }}!</div>
@@ -159,7 +162,7 @@ app.mount("#app");`,
     { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
     { package: "vue", version: "3.0.5" },
   ],
-} as ITemplate;
+};
 
 export const getTemplate = (template?: TemplatesType) => {
   switch (template) {

@@ -1,5 +1,6 @@
 fragment RegularCodeModule on CodeModule {
   id
+  isEntry
   name
   value
 }
