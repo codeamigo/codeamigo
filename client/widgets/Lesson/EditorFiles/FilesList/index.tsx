@@ -20,7 +20,10 @@ const FilesList: React.FC<Props> = ({
   onDelete,
   setCurrentPath,
 }) => {
-  const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
+  const [
+    updateCodeModuleEntryFile,
+    { loading },
+  ] = useUpdateCodeModuleEntryFileMutation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState('');
@@ -103,16 +106,23 @@ const FilesList: React.FC<Props> = ({
                 key={path}
                 onClick={() => setCurrentPath && setCurrentPath(path)}
               >
-                <div className="text-xs flex items-center">
+                <div
+                  className={`text-xs flex items-center ${
+                    loading ? 'animate-pulse' : ''
+                  }`}
+                >
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
                   <span>{path}</span>
                   {isEditing && isEntry(path) && (
-                    <Icon className="text-xs ml-1" name="star" />
+                    <Icon
+                      className={`text-xs ml-1 ${loading ? 'hidden' : ''}`}
+                      name="star"
+                    />
                   )}
                   {isEditing && !isEntry(path) && (
                     // update entry file
                     <Icon
-                      className="text-xs ml-1"
+                      className={`text-xs ml-1 ${loading ? 'hidden' : ''}`}
                       name="star-empty"
                       onClick={() =>
                         updateCodeModuleEntryFile({
