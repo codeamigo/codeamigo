@@ -493,7 +493,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const goToMain = (files: FilesType, file?: string) => {
     const main = getMain(files, file);
-    debugger;
 
     setModel(main);
     setCurrentPath(main);
@@ -522,6 +521,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         <div className="h-80 lg:flex-1 flex border border-bg-nav-offset border-t-0 border-b-0 whitespace-nowrap">
           <div className="w-4/12 border-r border-bg-nav-offset">
             <EditorFiles
+              codeModules={step.codeModules}
               createFile={createFile}
               currentPath={currentPath}
               deleteFile={deleteFile}

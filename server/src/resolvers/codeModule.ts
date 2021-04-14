@@ -24,6 +24,14 @@ class CodeModuleInput {
   lessonId?: number;
 }
 
+@InputType()
+class CodeModuleUpdateEntryInput {
+  @Field({ nullable: true })
+  newId?: number;
+  @Field({ nullable: true })
+  oldId?: number;
+}
+
 @Resolver()
 export class CodeModuleResolver {
   @Query(() => [CodeModule])
@@ -88,6 +96,25 @@ export class CodeModuleResolver {
     }
 
     return newCodeModule;
+  }
+
+  @Mutation(() => CodeModule, { nullable: true })
+  async updateCodeModuleEntryFile(
+    @Arg("options") options: CodeModuleUpdateEntryInput
+  ): Promise<CodeModule | null> {
+    const oldEntry = await CodeModule.findOne(options.oldId);
+    const newEntry = await CodeModule.findOne(options.newId);
+    if (!oldEntry || !newEntry) {
+      return null;
+    }
+
+    Object.assign(oldEntry, { isEntry: false });
+    await oldEntry.save();
+
+    Object.assign(newEntry, { isEntry: true });
+    await newEntry.save();
+
+    return newEntry;
   }
 
   @Mutation(() => Boolean)
