@@ -30,6 +30,10 @@ export class CodeModule extends BaseEntity {
   @Column()
   name!: string;
 
+  @Field(() => Boolean, { defaultValue: false })
+  @Column({ nullable: true })
+  isEntry: boolean;
+
   @Field(() => String, { defaultValue: `` })
   @Column()
   value!: string;

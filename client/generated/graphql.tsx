@@ -90,6 +90,7 @@ export type CodeModule = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   name?: Maybe<Scalars['String']>;
+  isEntry?: Maybe<Scalars['Boolean']>;
   value?: Maybe<Scalars['String']>;
   step: Step;
 };
@@ -247,6 +248,7 @@ export type Mutation = {
   deleteCheckpoint: Scalars['Boolean'];
   createCodeModule?: Maybe<CodeModule>;
   updateCodeModule?: Maybe<CodeModule>;
+  updateCodeModuleEntryFile?: Maybe<CodeModule>;
   deleteCodeModule: Scalars['Boolean'];
   createDependency?: Maybe<Dependency>;
   updateDependency?: Maybe<Dependency>;
@@ -316,6 +318,11 @@ export type MutationCreateCodeModuleArgs = {
 export type MutationUpdateCodeModuleArgs = {
   options: CodeModuleInput;
   id: Scalars['Float'];
+};
+
+
+export type MutationUpdateCodeModuleEntryFileArgs = {
+  options: CodeModuleUpdateEntryInput;
 };
 
 
@@ -492,6 +499,11 @@ export type CodeModuleInput = {
   lessonId?: Maybe<Scalars['Float']>;
 };
 
+export type CodeModuleUpdateEntryInput = {
+  newId?: Maybe<Scalars['Float']>;
+  oldId?: Maybe<Scalars['Float']>;
+};
+
 export type DependencyInput = {
   package: Scalars['String'];
   version: Scalars['String'];
@@ -601,7 +613,7 @@ export type RegularCheckpointFragment = (
 
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
-  & Pick<CodeModule, 'id' | 'name' | 'value'>
+  & Pick<CodeModule, 'id' | 'isEntry' | 'name' | 'value'>
 );
 
 export type RegularDependencyFragment = (
@@ -1037,6 +1049,20 @@ export type UpdateCodeModuleMutation = (
   )> }
 );
 
+export type UpdateCodeModuleEntryFileMutationVariables = Exact<{
+  newId?: Maybe<Scalars['Float']>;
+  oldId?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type UpdateCodeModuleEntryFileMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCodeModuleEntryFile?: Maybe<(
+    { __typename?: 'CodeModule' }
+    & RegularCodeModuleFragment
+  )> }
+);
+
 export type UpdateLessonTitleMutationVariables = Exact<{
   id: Scalars['Float'];
   title: Scalars['String'];
@@ -1377,6 +1403,7 @@ export const RegularErrorFragmentDoc = gql`
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
   id
+  isEntry
   name
   value
 }
@@ -2345,6 +2372,39 @@ export function useUpdateCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
+export const UpdateCodeModuleEntryFileDocument = gql`
+    mutation UpdateCodeModuleEntryFile($newId: Float, $oldId: Float) {
+  updateCodeModuleEntryFile(options: {newId: $newId, oldId: $oldId}) {
+    ...RegularCodeModule
+  }
+}
+    ${RegularCodeModuleFragmentDoc}`;
+export type UpdateCodeModuleEntryFileMutationFn = Apollo.MutationFunction<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>;
+
+/**
+ * __useUpdateCodeModuleEntryFileMutation__
+ *
+ * To run a mutation, you first call `useUpdateCodeModuleEntryFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCodeModuleEntryFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCodeModuleEntryFileMutation, { data, loading, error }] = useUpdateCodeModuleEntryFileMutation({
+ *   variables: {
+ *      newId: // value for 'newId'
+ *      oldId: // value for 'oldId'
+ *   },
+ * });
+ */
+export function useUpdateCodeModuleEntryFileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>) {
+        return Apollo.useMutation<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>(UpdateCodeModuleEntryFileDocument, baseOptions);
+      }
+export type UpdateCodeModuleEntryFileMutationHookResult = ReturnType<typeof useUpdateCodeModuleEntryFileMutation>;
+export type UpdateCodeModuleEntryFileMutationResult = Apollo.MutationResult<UpdateCodeModuleEntryFileMutation>;
+export type UpdateCodeModuleEntryFileMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>;
 export const UpdateLessonTitleDocument = gql`
     mutation UpdateLessonTitle($id: Float!, $title: String!) {
   updateLessonTitle(id: $id, title: $title) {

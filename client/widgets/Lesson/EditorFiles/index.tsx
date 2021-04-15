@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
-import { RegularDependencyFragment } from '👨‍💻generated/graphql';
+import {
+  RegularCodeModuleFragment,
+  RegularDependencyFragment,
+} from '👨‍💻generated/graphql';
 
 import { FilesType } from '../Editor/types';
 import DependenciesList from './DependenciesList';
@@ -47,6 +50,7 @@ const EditorFiles: React.FC<Props> = ({
 };
 
 type Props = {
+  codeModules?: RegularCodeModuleFragment[] | null;
   createFile: (path: string) => void;
   currentPath: string;
   deleteFile: (path: string) => void;

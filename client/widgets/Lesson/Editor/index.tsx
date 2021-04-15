@@ -280,6 +280,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     // assets for parcel
     const assets = Object.keys(newFiles).map((file) => ({
       content: newFiles[file],
+      // parcel entry is different than codeModule entry
       isEntry: isTest ? file === runPath : file === 'index.html',
       name: file,
     }));
@@ -479,6 +480,11 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const getMain = (files: FilesType, file?: string) => {
     return (
       file ||
+      // code module isEntry check here.
+      Object.keys(files).find((file) => {
+        const mod = step?.codeModules?.find(({ isEntry }) => !!isEntry);
+        return mod?.name === file;
+      }) ||
       Object.keys(files).find((file) => file === 'app.tsx') ||
       Object.keys(files).find((file) => file === 'index.html') ||
       Object.keys(files).filter((n) => !n.includes('spec'))[0]
@@ -515,6 +521,7 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
         <div className="h-80 lg:flex-1 flex border border-bg-nav-offset border-t-0 border-b-0 whitespace-nowrap">
           <div className="w-4/12 border-r border-bg-nav-offset">
             <EditorFiles
+              codeModules={step.codeModules}
               createFile={createFile}
               currentPath={currentPath}
               deleteFile={deleteFile}

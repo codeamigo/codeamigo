@@ -11,3 +11,14 @@ mutation UpdateCodeModule(
     ...RegularCodeModule
   }
 }
+
+mutation UpdateCodeModuleEntryFile(
+  $newId: Float
+  $oldId: Float
+) {
+  updateCodeModuleEntryFile(
+    options: { newId: $newId, oldId: $oldId }
+  ) {
+    ...RegularCodeModule
+  }
+}

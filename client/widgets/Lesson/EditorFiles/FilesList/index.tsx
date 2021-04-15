@@ -1,12 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
+import {
+  RegularCodeModuleFragment,
+  useUpdateCodeModuleEntryFileMutation,
+} from '👨‍💻generated/graphql';
 import { getExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 
 import styles from './FilesList.module.scss';
 import { isValidName } from './validation';
 
 const FilesList: React.FC<Props> = ({
+  codeModules,
   currentPath,
   files,
   isEditing,
@@ -15,9 +20,15 @@ const FilesList: React.FC<Props> = ({
   onDelete,
   setCurrentPath,
 }) => {
+  const [
+    updateCodeModuleEntryFile,
+    { loading },
+  ] = useUpdateCodeModuleEntryFileMutation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState('');
+
+  console.log(codeModules);
 
   useEffect(() => {
     if (isAdding) {
@@ -66,6 +77,9 @@ const FilesList: React.FC<Props> = ({
     return `${base}/${ext}.svg`;
   };
 
+  const isEntry = (file: string) =>
+    codeModules?.find(({ name }) => name === file)?.isEntry;
+
   return (
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
@@ -92,9 +106,34 @@ const FilesList: React.FC<Props> = ({
                 key={path}
                 onClick={() => setCurrentPath && setCurrentPath(path)}
               >
-                <div className="text-xs flex items-center">
+                <div
+                  className={`text-xs flex items-center ${
+                    loading ? 'opacity-30' : ''
+                  }`}
+                >
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
                   <span>{path}</span>
+                  {isEditing && isEntry(path) && (
+                    <Icon className={`text-xs ml-1`} name="star" />
+                  )}
+                  {isEditing && !isEntry(path) && (
+                    // update entry file
+                    <Icon
+                      className={`empty-star hidden text-xs ml-1 ${styles.emptyStar}`}
+                      name="star-empty"
+                      onClick={() =>
+                        updateCodeModuleEntryFile({
+                          variables: {
+                            newId: codeModules?.find(
+                              ({ name }) => name === path
+                            )?.id,
+                            oldId: codeModules?.find(({ isEntry }) => !!isEntry)
+                              ?.id,
+                          },
+                        })
+                      }
+                    />
+                  )}
                 </div>
                 {onDelete && isEditing && (
                   <Icon
@@ -136,6 +175,7 @@ const FilesList: React.FC<Props> = ({
 };
 
 type Props = {
+  codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;
   files?: Array<string>;
   isEditing?: boolean;
