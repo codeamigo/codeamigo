@@ -108,21 +108,18 @@ const FilesList: React.FC<Props> = ({
               >
                 <div
                   className={`text-xs flex items-center ${
-                    loading ? 'animate-pulse' : ''
+                    loading ? 'opacity-30' : ''
                   }`}
                 >
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
                   <span>{path}</span>
                   {isEditing && isEntry(path) && (
-                    <Icon
-                      className={`text-xs ml-1 ${loading ? 'hidden' : ''}`}
-                      name="star"
-                    />
+                    <Icon className={`text-xs ml-1`} name="star" />
                   )}
                   {isEditing && !isEntry(path) && (
                     // update entry file
                     <Icon
-                      className={`text-xs ml-1 ${loading ? 'hidden' : ''}`}
+                      className={`empty-star hidden text-xs ml-1 ${styles.emptyStar}`}
                       name="star-empty"
                       onClick={() =>
                         updateCodeModuleEntryFile({
