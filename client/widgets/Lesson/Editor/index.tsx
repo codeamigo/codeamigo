@@ -446,32 +446,28 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   };
 
   const setupTypes = async () => {
-    step.dependencies?.map(async (dep) => {
-      let response;
+    let deps: CodeSandboxV1ResponseI;
 
+    step.dependencies?.map(async (dep) => {
       try {
-        response = await fetch(
+        const initial = await fetch(
           `${CS_TYPES_URL}/${dep.package}/${dep.version}.json`
         );
+        deps = await initial.json();
       } catch (e) {
         try {
-          response = await fetch(
+          const fallback = await fetch(
             `${CS_TYPES_FALLBACK_URL}/${dep.package}/${dep.version}.json`
           );
+          deps = await fallback.json();
         } catch (e) {
           console.error(e);
         }
       }
 
-      if (!response) return;
-
       try {
-        const deps: CodeSandboxV1ResponseI = await response.json();
-
         Object.keys(deps.files).map((file) => {
           const code = deps.files[file].module.code;
-
-          console.log(`${FILE}node_modules${file}`);
 
           monacoRef.current.languages.typescript.typescriptDefaults.addExtraLib(
             code,
