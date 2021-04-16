@@ -25,6 +25,7 @@ export type Query = {
   lessons: Array<Lesson>;
   me?: Maybe<User>;
   modal?: Maybe<Modal>;
+  profileColorScheme?: Maybe<Scalars['String']>;
   session?: Maybe<Session>;
   sessions: Array<Session>;
   step?: Maybe<Step>;
@@ -60,6 +61,11 @@ export type QueryLessonArgs = {
 
 export type QueryLessonsArgs = {
   options: LessonsInput;
+};
+
+
+export type QueryProfileColorSchemeArgs = {
+  id?: Maybe<Scalars['Float']>;
 };
 
 
@@ -145,11 +151,11 @@ export type User = {
   classes: Array<Session>;
   createdAt: Scalars['String'];
   email: Scalars['String'];
-  githubId: Scalars['Float'];
-  googleId: Scalars['String'];
   id: Scalars['Float'];
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   lessons: Array<Lesson>;
+  profileColorScheme: Scalars['String'];
+  profilePic: Scalars['String'];
   role: Role;
   theme: Theme;
   updatedAt: Scalars['String'];
@@ -253,6 +259,7 @@ export type Mutation = {
   createDependency?: Maybe<Dependency>;
   updateDependency?: Maybe<Dependency>;
   deleteDependency: Scalars['Boolean'];
+  updateProfileColorScheme?: Maybe<Scalars['String']>;
   register: UserResponse;
   login: UserResponse;
   githubLogin: UserResponse;
@@ -646,7 +653,7 @@ export type RegularLessonItemFragment = (
     & Pick<User, 'id'>
   )>>, owner: (
     { __typename?: 'User' }
-    & Pick<User, 'username'>
+    & Pick<User, 'id' | 'username'>
   ), steps?: Maybe<Array<(
     { __typename?: 'Step' }
     & { dependencies?: Maybe<Array<(
@@ -1241,6 +1248,14 @@ export type UpdateUserThemeMutation = (
   ) }
 );
 
+export type UpdateProfileColorSchemeMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UpdateProfileColorSchemeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updateProfileColorScheme'>
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['Float'];
 }>;
@@ -1308,6 +1323,16 @@ export type MeQuery = (
     { __typename?: 'User' }
     & RegularUserFragment
   )> }
+);
+
+export type ProfileColorSchemeQueryVariables = Exact<{
+  id?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type ProfileColorSchemeQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'profileColorScheme'>
 );
 
 export type ModalQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1477,6 +1502,7 @@ export const RegularLessonItemFragmentDoc = gql`
     id
   }
   owner {
+    id
     username
   }
   steps {
@@ -2811,6 +2837,35 @@ export function useUpdateUserThemeMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateUserThemeMutationHookResult = ReturnType<typeof useUpdateUserThemeMutation>;
 export type UpdateUserThemeMutationResult = Apollo.MutationResult<UpdateUserThemeMutation>;
 export type UpdateUserThemeMutationOptions = Apollo.BaseMutationOptions<UpdateUserThemeMutation, UpdateUserThemeMutationVariables>;
+export const UpdateProfileColorSchemeDocument = gql`
+    mutation UpdateProfileColorScheme {
+  updateProfileColorScheme
+}
+    `;
+export type UpdateProfileColorSchemeMutationFn = Apollo.MutationFunction<UpdateProfileColorSchemeMutation, UpdateProfileColorSchemeMutationVariables>;
+
+/**
+ * __useUpdateProfileColorSchemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileColorSchemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileColorSchemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileColorSchemeMutation, { data, loading, error }] = useUpdateProfileColorSchemeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUpdateProfileColorSchemeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileColorSchemeMutation, UpdateProfileColorSchemeMutationVariables>) {
+        return Apollo.useMutation<UpdateProfileColorSchemeMutation, UpdateProfileColorSchemeMutationVariables>(UpdateProfileColorSchemeDocument, baseOptions);
+      }
+export type UpdateProfileColorSchemeMutationHookResult = ReturnType<typeof useUpdateProfileColorSchemeMutation>;
+export type UpdateProfileColorSchemeMutationResult = Apollo.MutationResult<UpdateProfileColorSchemeMutation>;
+export type UpdateProfileColorSchemeMutationOptions = Apollo.BaseMutationOptions<UpdateProfileColorSchemeMutation, UpdateProfileColorSchemeMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: Float!) {
   checkpoints(stepId: $stepId) {
@@ -2987,6 +3042,37 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const ProfileColorSchemeDocument = gql`
+    query ProfileColorScheme($id: Float) {
+  profileColorScheme(id: $id)
+}
+    `;
+
+/**
+ * __useProfileColorSchemeQuery__
+ *
+ * To run a query within a React component, call `useProfileColorSchemeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfileColorSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProfileColorSchemeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useProfileColorSchemeQuery(baseOptions?: Apollo.QueryHookOptions<ProfileColorSchemeQuery, ProfileColorSchemeQueryVariables>) {
+        return Apollo.useQuery<ProfileColorSchemeQuery, ProfileColorSchemeQueryVariables>(ProfileColorSchemeDocument, baseOptions);
+      }
+export function useProfileColorSchemeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfileColorSchemeQuery, ProfileColorSchemeQueryVariables>) {
+          return Apollo.useLazyQuery<ProfileColorSchemeQuery, ProfileColorSchemeQueryVariables>(ProfileColorSchemeDocument, baseOptions);
+        }
+export type ProfileColorSchemeQueryHookResult = ReturnType<typeof useProfileColorSchemeQuery>;
+export type ProfileColorSchemeLazyQueryHookResult = ReturnType<typeof useProfileColorSchemeLazyQuery>;
+export type ProfileColorSchemeQueryResult = Apollo.QueryResult<ProfileColorSchemeQuery, ProfileColorSchemeQueryVariables>;
 export const ModalDocument = gql`
     query Modal {
   modal @client {

@@ -4,6 +4,7 @@ import {
   Ctx,
   Field,
   InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -16,6 +17,7 @@ import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
 import { RoleEnum, User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext, ThemeEnum } from "../types";
+import { generateProfileScheme, randomHexColor } from "../utils/randomHexColor";
 import { sendEmail } from "../utils/sendEmail";
 
 @InputType()
@@ -103,6 +105,57 @@ export class UserResolver {
     }
 
     return await User.findOne(req.session.userId, { relations: ["lessons"] });
+  }
+
+  @Query(() => String, { nullable: true })
+  async profileColorScheme(
+    @Arg("id", { nullable: true }) id: number,
+    @Ctx() { req }: MyContext
+  ) {
+    if (!id && !req.session.userId) {
+      return null;
+    }
+
+    const user = await User.findOne(id || req.session.userId);
+
+    if (!user) {
+      return null;
+    }
+
+    if (user.profileColorScheme) {
+      return user.profileColorScheme;
+    }
+
+    const profileColorScheme = generateProfileScheme();
+
+    Object.assign(user, { profileColorScheme });
+
+    await user.save();
+
+    return user.profileColorScheme;
+  }
+
+  @Mutation(() => String, { nullable: true })
+  async updateProfileColorScheme(
+    @Ctx() { req }: MyContext
+  ): Promise<String | null> {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const user = await User.findOne(req.session.userId);
+
+    if (!user) {
+      return null;
+    }
+
+    const profileColorScheme = generateProfileScheme();
+
+    Object.assign(user, { profileColorScheme });
+
+    await user.save();
+
+    return user.profileColorScheme;
   }
 
   @Mutation(() => UserResponse)

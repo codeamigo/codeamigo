@@ -4,6 +4,7 @@ import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
 import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
+import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
 const LessonListItem: React.FC<Props> = ({
   href,
@@ -29,8 +30,11 @@ const LessonListItem: React.FC<Props> = ({
           </a>
           {options ? options : null}
         </div>
-        <h3 className="text-xs text-text-primary">
-          By: {lesson.owner.username}
+        <h3 className="text-xs text-text-primary flex items-center">
+          <div className="h-8 w-8 p-1 mr-1 bg-bg-nav border border-bg-nav-offset rounded-full">
+            <ProfileLogo userId={lesson.owner.id} />
+          </div>{' '}
+          {lesson.owner.username}
         </h3>
         {progress ? progress : null}
         {lesson.students?.length ? (

@@ -11,6 +11,7 @@ fragment RegularLessonItem on Lesson {
     id
   }
   owner {
+    id
     username
   }
   steps {
