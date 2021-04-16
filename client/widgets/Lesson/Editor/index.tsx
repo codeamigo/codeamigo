@@ -33,6 +33,8 @@ import { camalize, getModelExtension } from './utils';
 const FILE = 'file:///';
 const CS_TYPES_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings/@types';
+const CS_TYPES_FALLBACK_URL =
+  'https://prod-packager-packages.codesandbox.io/v1/typings';
 
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const router = useRouter();
@@ -445,10 +447,25 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
 
   const setupTypes = async () => {
     step.dependencies?.map(async (dep) => {
+      let response;
+
       try {
-        const response = await fetch(
+        response = await fetch(
           `${CS_TYPES_URL}/${dep.package}/${dep.version}.json`
         );
+      } catch (e) {
+        try {
+          response = await fetch(
+            `${CS_TYPES_FALLBACK_URL}/${dep.package}/${dep.version}.json`
+          );
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      if (!response) return;
+
+      try {
         const deps: CodeSandboxV1ResponseI = await response.json();
 
         Object.keys(deps.files).map((file) => {
