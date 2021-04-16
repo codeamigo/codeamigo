@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Icon from '👨‍💻components/Icon';
 import {
   RegularCodeModuleFragment,
+  useStepQuery,
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
 import { getExtension } from '👨‍💻widgets/Lesson/Editor/utils';
@@ -19,11 +20,13 @@ const FilesList: React.FC<Props> = ({
   onCreate,
   onDelete,
   setCurrentPath,
+  stepId,
 }) => {
-  const [
-    updateCodeModuleEntryFile,
-    { loading },
-  ] = useUpdateCodeModuleEntryFileMutation();
+  const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
+  const { loading } = useStepQuery({
+    fetchPolicy: 'cache-only',
+    variables: { id: stepId },
+  });
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState('');
@@ -183,6 +186,7 @@ type Props = {
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
   setCurrentPath?: (path: string) => void;
+  stepId: number;
 };
 
 export default FilesList;
