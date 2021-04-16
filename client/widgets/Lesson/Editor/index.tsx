@@ -3,6 +3,7 @@ import { ControlledEditor, monaco } from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
@@ -30,7 +31,8 @@ import { FilesType, FromTestRunnerMsgType, ToPreviewMsgType } from './types';
 import { camalize, getModelExtension } from './utils';
 
 const FILE = 'file:///';
-// const CS_PKG_URL = 'https://prod-packager-packages.codesandbox.io/v2/packages';
+const CS_TYPES_URL =
+  'https://prod-packager-packages.codesandbox.io/v1/typings/@types';
 
 const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
   const router = useRouter();
@@ -58,6 +60,8 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
     {}
   ) as FilesType | undefined;
+
+  const dependencies = step.dependencies;
 
   useEffect(() => {
     return () => {
@@ -118,6 +122,13 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     if (!files) return;
     postCode(files, currentPath, files[currentPath], step.dependencies || []);
   }, [step.dependencies]);
+
+  // Dependencies changed => setup types
+  useEffect(() => {
+    if (!step.dependencies) return;
+    if (!isEditorReady) return;
+    setupTypes();
+  }, [step.dependencies, isEditorReady]);
 
   useEffect(() => {
     const handlePassCheckpoint = async (message: {
@@ -432,22 +443,28 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     });
   };
 
-  const setupTypes = () => {
-    // const fakeFiles = Object.keys(dependencyDependencies).reduce(
-    //   (acc, curr) => ({
-    //     ...acc,
-    //     [curr]: dependencyDependencies[curr],
-    //   }),
-    //   {}
-    // );
-    // for (const fileName in fakeFiles) {
-    //   const fakePath = `file:///node_modules/@types/${fileName}`;
-    //   monacoInstance.languages.typescript.typescriptDefaults.addExtraLib(
-    //     // @ts-ignore
-    //     fakeFiles[fileName],
-    //     fakePath
-    //   );
-    // }
+  const setupTypes = async () => {
+    step.dependencies?.map(async (dep) => {
+      try {
+        const response = await fetch(
+          `${CS_TYPES_URL}/${dep.package}/${dep.version}.json`
+        );
+        const deps: CodeSandboxV1ResponseI = await response.json();
+
+        Object.keys(deps.files).map((file) => {
+          const code = deps.files[file].module.code;
+
+          console.log(`${FILE}node_modules${file}`);
+
+          monacoRef.current.languages.typescript.typescriptDefaults.addExtraLib(
+            code,
+            `${FILE}node_modules${file}`
+          );
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    });
   };
 
   const setupThemes = () => {
@@ -462,7 +479,6 @@ const Editor: React.FC<Props> = ({ nextStep, step, ...rest }) => {
     setupCommands();
     setupCompilerOptions();
     setupDiagnosticsOptions();
-    setupTypes();
     setupThemes();
 
     setIsEditorReady(true);

@@ -31,8 +31,6 @@ const FilesList: React.FC<Props> = ({
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState('');
 
-  console.log(codeModules);
-
   useEffect(() => {
     if (isAdding) {
       setTimeout(() => {

@@ -26,7 +26,6 @@ const Console: React.FC<Props> = ({ step }) => {
 
   useEffect(() => {
     const handleLog = (event: { data: FromPreviewMsgType }) => {
-      console.log(event);
       if (event.data.from !== 'preview') return;
       if (!(event.data.type in PreviewLogTypeEnum)) return;
 
