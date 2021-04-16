@@ -3,3 +3,7 @@ query Me {
     ...RegularUser
   }
 }
+
+query ProfileColorScheme($id: Float) {
+  profileColorScheme(id: $id)
+}

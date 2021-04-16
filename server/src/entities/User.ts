@@ -53,11 +53,17 @@ export class User extends BaseEntity {
   })
   theme: ThemeEnum;
 
-  @Field()
+  @Field(() => String)
+  @Column({ nullable: true })
+  profilePic: string;
+
+  @Field(() => String)
+  @Column({ nullable: true })
+  profileColorScheme: string;
+
   @Column({ nullable: true, type: "text", unique: true })
   githubId: number;
 
-  @Field()
   @Column({ nullable: true, type: "text", unique: true })
   googleId: string;
 

@@ -21,3 +21,7 @@ mutation UpdateUserTheme($theme: String!) {
     }
   }
 }
+
+mutation UpdateProfileColorScheme {
+  updateProfileColorScheme
+}
