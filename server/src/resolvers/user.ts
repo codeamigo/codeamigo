@@ -4,7 +4,6 @@ import {
   Ctx,
   Field,
   InputType,
-  Int,
   Mutation,
   ObjectType,
   Query,
@@ -17,7 +16,7 @@ import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
 import { RoleEnum, User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext, ThemeEnum } from "../types";
-import { generateProfileScheme, randomHexColor } from "../utils/randomHexColor";
+import { generateProfileScheme } from "../utils/randomHexColor";
 import { sendEmail } from "../utils/sendEmail";
 
 @InputType()
