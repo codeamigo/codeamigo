@@ -1,0 +1,5 @@
+mutation updateDependencyVersion($id: Float!, $version: String!) {
+  updateDependencyVersion(id: $id, version: $version) {
+    ...RegularDependency
+  }
+}

@@ -6,10 +6,13 @@ import {
   RegularDependencyFragment,
   useCreateDependencyMutation,
   useDeleteDependencyMutation,
+  useUpdateDependencyVersionMutation,
 } from '👨‍💻generated/graphql';
 
 import { AlgoliaSearchResultType } from '..';
 import styles from './DependenciesList.module.scss';
+
+type AlgoliaVersionsType = { [key in string]: string };
 
 const DependenciesList: React.FC<Props> = ({
   dependencies,
@@ -20,12 +23,23 @@ const DependenciesList: React.FC<Props> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const optionsRef = useRef<HTMLUListElement>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [searchResults, setSearchResults] = useState<
+  const [dependencySearchResults, setDependencySearchResults] = useState<
     Array<AlgoliaSearchResultType>
   >([]);
+  const [
+    versionSearchResults,
+    setVersionSearchResults,
+  ] = useState<AlgoliaVersionsType>({});
+  const [isSearchingVersions, setIsSearchingVersions] = useState<boolean>(
+    false
+  );
+  const [isChangingVersion, setIsChangingVersion] = useState<false | number>(
+    false
+  );
 
   const [createDependencyM] = useCreateDependencyMutation();
   const [deleteDependency] = useDeleteDependencyMutation();
+  const [updateDependencyVersion] = useUpdateDependencyVersionMutation();
 
   useEffect(() => {
     if (isAdding) {
@@ -34,6 +48,22 @@ const DependenciesList: React.FC<Props> = ({
       }, 0);
     }
   }, [isAdding]);
+
+  const searchVersions = async (dep: RegularDependencyFragment) => {
+    setIsChangingVersion(dep.id);
+    setIsSearchingVersions(true);
+    const url = `https://ofcncog2cu-dsn.algolia.net/1/indexes/npm-search/${dep.package}?attributes=versions&x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser%20(lite)&x-algolia-application-id=OFCNCOG2CU&x-algolia-api-key=00383ecd8441ead30b1b0ff981c426f5`;
+
+    const response: {
+      objectID: string;
+      versions: { [key in string]: string };
+    } = await fetch(url, {
+      headers: { 'Content-Type': 'application/json' },
+    }).then((res) => res.json());
+
+    setIsSearchingVersions(false);
+    setVersionSearchResults(response.versions);
+  };
 
   const searchDeps = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = `https://ofcncog2cu-dsn.algolia.net/1/indexes/npm-search/query?x-algolia-agent=Algolia%20for%20JavaScript%20(3.33.0)%3B%20Browser&x-algolia-application-id=OFCNCOG2CU&x-algolia-api-key=00383ecd8441ead30b1b0ff981c426f5`;
@@ -51,10 +81,12 @@ const DependenciesList: React.FC<Props> = ({
       method: 'POST',
     }).then((res) => res.json());
 
-    setSearchResults(response.hits);
+    setDependencySearchResults(response.hits);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     if (
       e.relatedTarget &&
       (optionsRef.current === e.relatedTarget ||
@@ -66,7 +98,18 @@ const DependenciesList: React.FC<Props> = ({
     }
 
     setIsAdding(false);
-    setSearchResults([]);
+    setIsChangingVersion(false);
+    setDependencySearchResults([]);
+    setVersionSearchResults({});
+  };
+
+  const handleVersionChange = (
+    e: React.ChangeEvent<HTMLSelectElement>,
+    id: number
+  ) => {
+    const version = e.currentTarget.value as string;
+
+    updateDependencyVersion({ variables: { id, version } });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -107,7 +150,13 @@ const DependenciesList: React.FC<Props> = ({
     });
 
     setIsAdding(false);
-    setSearchResults([]);
+    setDependencySearchResults([]);
+  };
+
+  const filterDepVersions = (v: AlgoliaVersionsType) => {
+    return Object.keys(v).filter(
+      (val) => !val.includes('experimental') && !val.includes('0.0.0')
+    );
   };
 
   return (
@@ -134,26 +183,56 @@ const DependenciesList: React.FC<Props> = ({
                 }`}
                 key={dep.id}
               >
-                <div className="text-xs">
-                  {dep.package} {dep.version}
+                <div className="text-xs flex items-center">
+                  {dep.package}{' '}
+                  {isChangingVersion === dep.id &&
+                  versionSearchResults &&
+                  filterDepVersions(versionSearchResults) &&
+                  filterDepVersions(versionSearchResults).length > 0 ? (
+                    <select
+                      className="text-black h-4 w-24 p-0 pl-1 text-xs ml-2 outline-none border-none"
+                      defaultValue={dep.version!}
+                      onBlur={handleBlur}
+                      onChange={(e) => handleVersionChange(e, dep.id)}
+                    >
+                      {filterDepVersions(versionSearchResults).map(
+                        (result, i) => (
+                          <option key={i}>{result}</option>
+                        )
+                      )}
+                    </select>
+                  ) : (
+                    dep.version
+                  )}
                 </div>
                 {isEditing && (
-                  <Icon
-                    className="text-red-600 text-sm hidden cursor-pointer"
-                    name="minus-circled"
-                    onClick={() => {
-                      const yes = window.confirm(
-                        'Are you sure you want to delete this dependency?'
-                      );
+                  <div className="flex items-center">
+                    {isSearchingVersions && isChangingVersion === dep.id ? (
+                      <span className="mr-2">...</span>
+                    ) : (
+                      <Icon
+                        className="text-text-primary text-sm hidden cursor-pointer opacity-70 hover:opacity-100 mr-2"
+                        name="pencil"
+                        onClick={() => searchVersions(dep)}
+                      />
+                    )}
+                    <Icon
+                      className="text-red-600 text-sm hidden cursor-pointer opacity-70 hover:opacity-100"
+                      name="minus-circled"
+                      onClick={() => {
+                        const yes = window.confirm(
+                          'Are you sure you want to delete this dependency?'
+                        );
 
-                      if (yes) {
-                        deleteDependency({
-                          refetchQueries: ['Step'],
-                          variables: { id: dep.id },
-                        });
-                      }
-                    }}
-                  />
+                        if (yes) {
+                          deleteDependency({
+                            refetchQueries: ['Step'],
+                            variables: { id: dep.id },
+                          });
+                        }
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             ))}
@@ -170,7 +249,7 @@ const DependenciesList: React.FC<Props> = ({
               />
             </div>
           )}
-          {searchResults && searchResults.length > 0 && (
+          {dependencySearchResults && dependencySearchResults.length > 0 && (
             <Listbox
               onBlur={handleBlur}
               /* @ts-ignore */
@@ -184,7 +263,7 @@ const DependenciesList: React.FC<Props> = ({
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
-                  show={searchResults.length > 0}
+                  show={dependencySearchResults.length > 0}
                 >
                   <Listbox.Options
                     className="outline-none"
@@ -192,7 +271,7 @@ const DependenciesList: React.FC<Props> = ({
                     ref={optionsRef}
                     static={isAdding}
                   >
-                    {searchResults.map((result, i) => (
+                    {dependencySearchResults.map((result, i) => (
                       <Listbox.Option
                         className="outline-none"
                         key={i}

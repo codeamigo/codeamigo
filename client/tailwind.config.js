@@ -22,6 +22,9 @@ module.exports = {
         'text-primary': 'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
       },
+      fontSize: {
+        xxs: '.5rem',
+      },
       maxHeight: {
         '3/5': '60%',
         6: '1.5rem',

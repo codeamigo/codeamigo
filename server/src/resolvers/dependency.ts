@@ -85,6 +85,22 @@ export class DependencyResolver {
     return dependency;
   }
 
+  @Mutation(() => Dependency, { nullable: true })
+  async updateDependencyVersion(
+    @Arg("id") id: number,
+    @Arg("version") version: String
+  ): Promise<Dependency | null> {
+    const dependency = await Dependency.findOne(id);
+    if (!dependency) {
+      return null;
+    }
+
+    Object.assign(dependency, { version });
+    await dependency.save();
+
+    return dependency;
+  }
+
   @Mutation(() => Boolean)
   async deleteDependency(@Arg("id") id: number): Promise<boolean> {
     await Dependency.delete(id);

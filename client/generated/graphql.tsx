@@ -258,6 +258,7 @@ export type Mutation = {
   deleteCodeModule: Scalars['Boolean'];
   createDependency?: Maybe<Dependency>;
   updateDependency?: Maybe<Dependency>;
+  updateDependencyVersion?: Maybe<Dependency>;
   deleteDependency: Scalars['Boolean'];
   updateProfileColorScheme?: Maybe<Scalars['String']>;
   register: UserResponse;
@@ -346,6 +347,12 @@ export type MutationCreateDependencyArgs = {
 
 export type MutationUpdateDependencyArgs = {
   options: DependencyInput;
+  id: Scalars['Float'];
+};
+
+
+export type MutationUpdateDependencyVersionArgs = {
+  version: Scalars['String'];
   id: Scalars['Float'];
 };
 
@@ -1067,6 +1074,20 @@ export type UpdateCodeModuleEntryFileMutation = (
   & { updateCodeModuleEntryFile?: Maybe<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
+  )> }
+);
+
+export type UpdateDependencyVersionMutationVariables = Exact<{
+  id: Scalars['Float'];
+  version: Scalars['String'];
+}>;
+
+
+export type UpdateDependencyVersionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateDependencyVersion?: Maybe<(
+    { __typename?: 'Dependency' }
+    & RegularDependencyFragment
   )> }
 );
 
@@ -2431,6 +2452,39 @@ export function useUpdateCodeModuleEntryFileMutation(baseOptions?: Apollo.Mutati
 export type UpdateCodeModuleEntryFileMutationHookResult = ReturnType<typeof useUpdateCodeModuleEntryFileMutation>;
 export type UpdateCodeModuleEntryFileMutationResult = Apollo.MutationResult<UpdateCodeModuleEntryFileMutation>;
 export type UpdateCodeModuleEntryFileMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>;
+export const UpdateDependencyVersionDocument = gql`
+    mutation updateDependencyVersion($id: Float!, $version: String!) {
+  updateDependencyVersion(id: $id, version: $version) {
+    ...RegularDependency
+  }
+}
+    ${RegularDependencyFragmentDoc}`;
+export type UpdateDependencyVersionMutationFn = Apollo.MutationFunction<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>;
+
+/**
+ * __useUpdateDependencyVersionMutation__
+ *
+ * To run a mutation, you first call `useUpdateDependencyVersionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDependencyVersionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateDependencyVersionMutation, { data, loading, error }] = useUpdateDependencyVersionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      version: // value for 'version'
+ *   },
+ * });
+ */
+export function useUpdateDependencyVersionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>) {
+        return Apollo.useMutation<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>(UpdateDependencyVersionDocument, baseOptions);
+      }
+export type UpdateDependencyVersionMutationHookResult = ReturnType<typeof useUpdateDependencyVersionMutation>;
+export type UpdateDependencyVersionMutationResult = Apollo.MutationResult<UpdateDependencyVersionMutation>;
+export type UpdateDependencyVersionMutationOptions = Apollo.BaseMutationOptions<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>;
 export const UpdateLessonTitleDocument = gql`
     mutation UpdateLessonTitle($id: Float!, $title: String!) {
   updateLessonTitle(id: $id, title: $title) {
