@@ -1,3 +1,10 @@
+import {
+  CodeEditor,
+  SandpackLayout,
+  SandpackPreview,
+  SandpackProvider,
+  useActiveCode,
+} from '@codesandbox/sandpack-react';
 import React from 'react';
 
 import {
@@ -10,6 +17,7 @@ import {
   useStepQuery,
 } from '👨‍💻generated/graphql';
 import Editor from '👨‍💻widgets/Lesson/Editor';
+import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 import Output from '👨‍💻widgets/Lesson/Output';
 
@@ -98,6 +106,8 @@ const Step: React.FC<Props> = ({
     setCurrentStepId(next?.id);
   };
 
+  if (!data.step.codeModules) return null;
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:h-full-minus">
@@ -110,7 +120,13 @@ const Step: React.FC<Props> = ({
           }
           {...rest}
         />
-        <Editor nextStep={nextStep} step={data.step} {...rest} />
+        {/* <Editor nextStep={nextStep} step={data.step} {...rest} /> */}
+        <SandpackProvider template="react">
+          <SandpackLayout>
+            <EditorV2 />
+            <SandpackPreview />
+          </SandpackLayout>
+        </SandpackProvider>
         <Output step={data.step} />
       </div>
     </>
