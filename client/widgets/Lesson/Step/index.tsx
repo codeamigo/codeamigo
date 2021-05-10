@@ -1,5 +1,8 @@
+import '@codesandbox/sandpack-react/dist/index.css';
+
 import {
   CodeEditor,
+  FileTabs,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
@@ -121,8 +124,32 @@ const Step: React.FC<Props> = ({
           {...rest}
         />
         {/* <Editor nextStep={nextStep} step={data.step} {...rest} /> */}
-        <SandpackProvider template="react">
+        <SandpackProvider
+          customSetup={{
+            dependencies: data.step.dependencies?.reduce(
+              (acc, curr) => {
+                // @ts-ignore
+                acc[curr.package] = curr.version;
+                return acc;
+              },
+              {
+                'react-scripts': '4.0.0',
+              }
+            ),
+            files: data.step.codeModules.reduce(
+              (acc, curr) => {
+                // @ts-ignore
+                if (curr.name == 'index.html') return acc;
+                // @ts-ignore
+                acc[curr.name] = curr.value;
+                return acc;
+              },
+              { 'test.spec.js': '' } as { [key in string]: string }
+            ),
+          }}
+        >
           <SandpackLayout>
+            <FileTabs />
             <EditorV2 />
             <SandpackPreview />
           </SandpackLayout>

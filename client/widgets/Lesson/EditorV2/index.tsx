@@ -3,11 +3,13 @@ import {
   useActiveCode,
   useSandpack,
 } from '@codesandbox/sandpack-react';
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import Button from '👨‍💻components/Button';
 
 const EditorV2: React.FC<Props> = () => {
   const { code, updateCode } = useActiveCode();
-  const { sandpack } = useSandpack();
+  const { dispatch, sandpack } = useSandpack();
   const { activePath, files } = sandpack;
 
   const handleCodeChange = (code: string) => {
@@ -15,7 +17,21 @@ const EditorV2: React.FC<Props> = () => {
     console.log(activePath, code);
   };
 
-  return <CodeEditor code={code} onCodeUpdate={handleCodeChange} />;
+  useEffect(() => {
+    window.addEventListener('message', (ev) => {
+      console.log(ev);
+    });
+  }, []);
+
+  return (
+    <div>
+      {/* @ts-ignore */}
+      <Button onClick={() => dispatch({ type: 'run-all-tests' })}>
+        Run Tests
+      </Button>
+      <CodeEditor code={code} onCodeUpdate={handleCodeChange} />
+    </div>
+  );
 };
 
 type Props = {};

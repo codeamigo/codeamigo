@@ -50,11 +50,11 @@ const htmlTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "index.html",
+      name: "/index.html",
       value: `<html>
 
 <head>
-  <link href='./styles.css' rel='stylesheet' />
+  <link href='/styles.css' rel='stylesheet' />
 </head>
 
 <body>
@@ -64,8 +64,41 @@ const htmlTemplate: ITemplate = {
 </html>`,
     },
     {
-      name: "styles.css",
+      name: "/styles.css",
       value: css,
+    },
+    {
+      name: "/sandbox.config.json",
+      value: `{
+  "template": "static"
+}
+      `,
+    },
+    {
+      name: "/package.json",
+      value: `{
+  "name": "html",
+  "version": "1.0.0",
+  "description": "",
+  "main": "/index.html",
+  "scripts": {
+    "start": "serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codesandbox-app/static-template.git"
+  },
+  "keywords": [],
+  "author": "Ives van Hoorne",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codesandbox-app/static-template/issues"
+  },
+  "homepage": "https://github.com/codesandbox-app/static-template#readme",
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
+}`,
     },
   ],
   dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
@@ -75,7 +108,7 @@ const reactTsxTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "app.tsx",
+      name: "/app.tsx",
       value: `import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -89,22 +122,19 @@ const HelloWorld = (
 ReactDOM.render(HelloWorld, document.getElementById('root'));
 `,
     },
-    {
-      name: "index.html",
-      value: `<html>
-
-<head>
-  <link href='./styles.css' rel='stylesheet' />
-</head>
-
-<body>
-  <div id='root'></div>
-</body>
-<script src='./app.tsx'></script>
-
-</html>`,
-    },
     { name: "styles.css", value: css },
+    {
+      name: "/package.json",
+      value: `{
+  "dependencies": {
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-scripts": "^4.0.0"
+  },
+  "main": "/app.tsx",
+  "name": "sandpack-project"
+}`,
+    },
   ],
   dependencies: [
     { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
