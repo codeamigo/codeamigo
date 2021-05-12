@@ -51,13 +51,13 @@ const EditorFiles: React.FC<Props> = ({
 
 type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
-  createFile: (path: string) => void;
-  currentPath: string;
-  deleteFile: (path: string) => void;
+  createFile?: (path: string) => void;
+  currentPath?: string;
+  deleteFile?: (path: string) => void;
   dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
   isEditing?: boolean;
-  setCurrentPath: (path: string) => void;
+  setCurrentPath?: (path: string) => void;
   stepId: number;
 };
 

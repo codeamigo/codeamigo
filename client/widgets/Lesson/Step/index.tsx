@@ -20,6 +20,8 @@ import {
   useStepQuery,
 } from '👨‍💻generated/graphql';
 import Editor from '👨‍💻widgets/Lesson/Editor';
+import { FilesType } from '👨‍💻widgets/Lesson/Editor/types';
+import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 import Output from '👨‍💻widgets/Lesson/Output';
@@ -111,6 +113,11 @@ const Step: React.FC<Props> = ({
 
   if (!data.step.codeModules) return null;
 
+  const files = data.step.codeModules.reduce(
+    (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
+    {}
+  ) as FilesType | undefined;
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:h-full-minus">
@@ -124,37 +131,50 @@ const Step: React.FC<Props> = ({
           {...rest}
         />
         {/* <Editor nextStep={nextStep} step={data.step} {...rest} /> */}
-        <SandpackProvider
-          customSetup={{
-            dependencies: data.step.dependencies?.reduce(
-              (acc, curr) => {
-                // @ts-ignore
-                acc[curr.package] = curr.version;
-                return acc;
-              },
-              {
-                'react-scripts': '4.0.0',
-              }
-            ),
-            files: data.step.codeModules.reduce(
-              (acc, curr) => {
-                // @ts-ignore
-                if (curr.name == 'index.html') return acc;
-                // @ts-ignore
-                acc[curr.name] = curr.value;
-                return acc;
-              },
-              { 'test.spec.js': '' } as { [key in string]: string }
-            ),
-          }}
-        >
-          <SandpackLayout>
-            <FileTabs />
-            <EditorV2 />
-            <SandpackPreview />
-          </SandpackLayout>
-        </SandpackProvider>
-        <Output step={data.step} />
+        <div className="w-full h-full">
+          <SandpackProvider
+            customSetup={{
+              dependencies: data.step.dependencies?.reduce(
+                (acc, curr) => {
+                  // @ts-ignore
+                  acc[curr.package] = curr.version;
+                  return acc;
+                },
+                {
+                  'react-scripts': '4.0.0',
+                }
+              ),
+              files: data.step.codeModules.reduce(
+                (acc, curr) => {
+                  // @ts-ignore
+                  if (curr.name == 'index.html') return acc;
+                  // @ts-ignore
+                  acc[curr.name] = curr.value;
+                  return acc;
+                },
+                { 'test.spec.js': '' } as { [key in string]: string }
+              ),
+            }}
+          >
+            <SandpackLayout>
+              <div className="flex flex-col">
+                <EditorFiles
+                  codeModules={data.step.codeModules}
+                  // createFile={createFile}
+                  // currentPath={currentPath}
+                  // deleteFile={deleteFile}
+                  dependencies={data.step.dependencies}
+                  files={files!}
+                  stepId={data.step.id}
+                  {...rest}
+                />
+              </div>
+              <EditorV2 />
+              <SandpackPreview />
+            </SandpackLayout>
+          </SandpackProvider>
+          {/* <Output step={data.step} /> */}
+        </div>
       </div>
     </>
   );
