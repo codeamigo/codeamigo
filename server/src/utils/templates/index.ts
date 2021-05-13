@@ -27,7 +27,7 @@ const tsTemplate: ITemplate = {
     },
     { isEntry: true, name: "app.ts", value: "// app.ts" },
   ],
-  dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
+  dependencies: [],
 };
 
 const jsTemplate: ITemplate = {
@@ -43,7 +43,7 @@ const jsTemplate: ITemplate = {
     },
     { isEntry: true, name: "app.js", value: "// app.js" },
   ],
-  dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
+  dependencies: [],
 };
 
 const htmlTemplate: ITemplate = {
@@ -101,7 +101,7 @@ const htmlTemplate: ITemplate = {
 }`,
     },
   ],
-  dependencies: [{ package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" }],
+  dependencies: [],
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -111,6 +111,8 @@ const reactTsxTemplate: ITemplate = {
       name: "/app.tsx",
       value: `import React from 'react'
 import ReactDOM from 'react-dom'
+
+import "./styles.css";
 
 const HelloWorld = (
     <div>
@@ -122,7 +124,7 @@ const HelloWorld = (
 ReactDOM.render(HelloWorld, document.getElementById('root'));
 `,
     },
-    { name: "styles.css", value: css },
+    { name: "/styles.css", value: css },
     {
       name: "/package.json",
       value: `{
@@ -137,7 +139,6 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     },
   ],
   dependencies: [
-    { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
     { package: "react-dom", version: "17.0.1" },
     { package: "react", version: "17.0.1" },
   ],
@@ -185,11 +186,10 @@ import App from "./App.vue";
 const app = createApp(App);
 app.mount("#app");`,
     },
-    { name: "styles.css", value: css },
+    { name: "/styles.css", value: css },
   ],
   dependencies: [
     { package: "@vue/test-utils", version: "2.0.0-rc.1" },
-    { package: "codeamigo-jest-lite", version: "1.0.0-alpha.7" },
     { package: "vue", version: "3.0.5" },
   ],
 };

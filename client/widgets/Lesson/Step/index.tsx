@@ -163,7 +163,6 @@ const Step: React.FC<Props> = ({
                   // createFile={createFile}
                   // currentPath={currentPath}
                   // deleteFile={deleteFile}
-                  dependencies={data.step.dependencies}
                   files={files!}
                   stepId={data.step.id}
                   {...rest}

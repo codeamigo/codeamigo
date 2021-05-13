@@ -1,3 +1,4 @@
+import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useState } from 'react';
 
 import {
@@ -6,7 +7,6 @@ import {
 } from '👨‍💻generated/graphql';
 
 import { FilesType } from '../Editor/types';
-import DependenciesList from './DependenciesList';
 import FilesList from './FilesList';
 
 export type AlgoliaSearchResultType = {
@@ -19,9 +19,11 @@ const EditorFiles: React.FC<Props> = ({
   createFile,
   deleteFile,
   files,
-  setCurrentPath,
   ...rest
 }) => {
+  const { sandpack } = useSandpack();
+  const { setActiveFile } = sandpack;
+
   if (!files) return null;
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
   const tests = Object.keys(files).filter((file) => file.includes('spec'));
@@ -33,18 +35,9 @@ const EditorFiles: React.FC<Props> = ({
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
-        setCurrentPath={setCurrentPath}
         {...rest}
       />
-      {rest.isEditing && (
-        <FilesList
-          files={tests}
-          name={'Tests'}
-          setCurrentPath={setCurrentPath}
-          {...rest}
-        />
-      )}
-      <DependenciesList name={'Dependencies'} {...rest} />
+      {rest.isEditing && <FilesList files={tests} name={'Tests'} {...rest} />}
     </>
   );
 };
@@ -54,10 +47,8 @@ type Props = {
   createFile?: (path: string) => void;
   currentPath?: string;
   deleteFile?: (path: string) => void;
-  dependencies?: RegularDependencyFragment[] | null;
   files: FilesType;
   isEditing?: boolean;
-  setCurrentPath?: (path: string) => void;
   stepId: number;
 };
 

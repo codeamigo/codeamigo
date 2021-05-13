@@ -1,3 +1,4 @@
+import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
@@ -19,9 +20,10 @@ const FilesList: React.FC<Props> = ({
   name,
   onCreate,
   onDelete,
-  setCurrentPath,
   stepId,
 }) => {
+  const { sandpack } = useSandpack();
+  const { setActiveFile } = sandpack;
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
   const { loading } = useStepQuery({
     fetchPolicy: 'cache-only',
@@ -101,11 +103,11 @@ const FilesList: React.FC<Props> = ({
               <div
                 className={`${
                   currentPath === path ? 'bg-bg-nav' : ''
-                } flex justify-between w-full px-1 py-1 text-text-primary hover:bg-bg-nav ${
+                } flex justify-between w-full px-1 py-1 text-text-primary hover:bg-bg-nav cursor-pointer ${
                   styles.FILE
-                } ${setCurrentPath ? 'cursor-pointer' : ''}`}
+                }`}
                 key={path}
-                onClick={() => setCurrentPath && setCurrentPath(path)}
+                onClick={() => setActiveFile(path)}
               >
                 <div
                   className={`text-xs flex items-center ${
@@ -183,7 +185,6 @@ type Props = {
   name: string;
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
-  setCurrentPath?: (path: string) => void;
   stepId: number;
 };
 

@@ -4,18 +4,13 @@ import React from 'react';
 
 import { useDependenciesQuery } from '👨‍💻generated/graphql';
 
-const CODEAMIGO_DEPS = ['codeamigo-jest-lite'];
-
 const Dependencies: React.FC<Props> = () => {
   const { data } = useDependenciesQuery();
   const router = useRouter();
 
   const queryDeps = router.query.deps as string;
-  const filterCodeamigoDeps = data?.dependencies.filter(
-    ({ package: pkg }) => !CODEAMIGO_DEPS.includes(pkg)
-  );
   const depMap =
-    filterCodeamigoDeps?.reduce((acc, curr) => {
+    data?.dependencies?.reduce((acc, curr) => {
       if (acc[curr.package]) {
         acc[curr.package] = acc[curr.package] + 1;
       } else {
