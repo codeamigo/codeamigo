@@ -6,7 +6,7 @@ import {
   FromPreviewMsgType,
   FromTestRunnerMsgType,
   PreviewLogTypeEnum,
-} from '👨‍💻widgets/Lesson/Editor/types';
+} from '👨‍💻widgets/Lesson/EditorV2/types';
 import TestSummary from '👨‍💻widgets/Lesson/Output/Console/TestsSummary';
 
 type TabType = 'console' | 'tests';

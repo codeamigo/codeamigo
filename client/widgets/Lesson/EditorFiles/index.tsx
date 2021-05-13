@@ -8,7 +8,7 @@ import {
   useDeleteCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
-import { FilesType } from '../Editor/types';
+import { FilesType } from '../EditorV2/types';
 import FilesList from './FilesList';
 
 export type AlgoliaSearchResultType = {
@@ -20,8 +20,6 @@ export type AlgoliaSearchResultType = {
 const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
-  const { sandpack } = useSandpack();
-  const { setActiveFile } = sandpack;
 
   const createFile = async (file: string) => {
     const value = ``;

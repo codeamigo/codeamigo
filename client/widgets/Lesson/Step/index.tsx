@@ -1,12 +1,9 @@
 import '@codesandbox/sandpack-react/dist/index.css';
 
 import {
-  CodeEditor,
-  FileTabs,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
-  useActiveCode,
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
@@ -143,16 +140,13 @@ const Step: React.FC<Props> = ({
                   'react-scripts': '4.0.0',
                 }
               ),
-              files: data.step.codeModules.reduce(
-                (acc, curr) => {
-                  // @ts-ignore
-                  if (curr.name == 'index.html') return acc;
-                  // @ts-ignore
-                  acc[curr.name] = curr.value;
-                  return acc;
-                },
-                { 'test.spec.js': '' } as { [key in string]: string }
-              ),
+              files: data.step.codeModules.reduce((acc, curr) => {
+                // @ts-ignore
+                if (curr.name == 'index.html') return acc;
+                // @ts-ignore
+                acc[curr.name] = curr.value;
+                return acc;
+              }, {} as { [key in string]: string }),
             }}
           >
             <SandpackLayout>
@@ -166,7 +160,7 @@ const Step: React.FC<Props> = ({
                   {...rest}
                 />
               </div>
-              <EditorV2 />
+              <EditorV2 codeModules={data.step.codeModules} {...rest} />
               <SandpackPreview />
             </SandpackLayout>
           </SandpackProvider>

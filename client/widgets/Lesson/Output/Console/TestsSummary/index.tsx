@@ -2,7 +2,7 @@ import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { RegularCheckpointFragment } from '👨‍💻generated/graphql';
-import { FromTestRunnerMsgType } from '👨‍💻widgets/Lesson/Editor/types';
+import { FromTestRunnerMsgType } from '👨‍💻widgets/Lesson/EditorV2/types';
 import {
   TestBundlerErrType,
   TestResultType,
