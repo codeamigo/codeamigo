@@ -19,10 +19,9 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
-import Editor from '👨‍💻widgets/Lesson/Editor';
-import { FilesType } from '👨‍💻widgets/Lesson/Editor/types';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
+import { FilesType } from '👨‍💻widgets/Lesson/EditorV2/types';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 import Output from '👨‍💻widgets/Lesson/Output';
 
@@ -160,7 +159,6 @@ const Step: React.FC<Props> = ({
               <div className="flex flex-col">
                 <EditorFiles
                   codeModules={data.step.codeModules}
-                  // createFile={createFile}
                   // currentPath={currentPath}
                   // deleteFile={deleteFile}
                   files={files!}

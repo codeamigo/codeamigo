@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import {
   RegularCodeModuleFragment,
   RegularDependencyFragment,
+  useCreateCodeModuleMutation,
+  useDeleteCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
 import { FilesType } from '../Editor/types';
@@ -15,14 +17,32 @@ export type AlgoliaSearchResultType = {
   version: string;
 };
 
-const EditorFiles: React.FC<Props> = ({
-  createFile,
-  deleteFile,
-  files,
-  ...rest
-}) => {
+const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
+  const [createCodeModule] = useCreateCodeModuleMutation();
+  const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const { sandpack } = useSandpack();
   const { setActiveFile } = sandpack;
+
+  const createFile = async (file: string) => {
+    const value = ``;
+
+    await createCodeModule({
+      refetchQueries: ['Step'],
+      variables: { name: file, stepId: rest.stepId, value },
+    });
+  };
+
+  const deleteFile = async (file: string) => {
+    const module = rest.codeModules?.find((module) => module.name === file);
+
+    if (!module) return;
+    if (!files) return;
+
+    await deleteCodeModule({
+      refetchQueries: ['Step'],
+      variables: { id: module.id },
+    });
+  };
 
   if (!files) return null;
   const docs = Object.keys(files).filter((file) => !file.includes('spec'));
@@ -44,9 +64,6 @@ const EditorFiles: React.FC<Props> = ({
 
 type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
-  createFile?: (path: string) => void;
-  currentPath?: string;
-  deleteFile?: (path: string) => void;
   files: FilesType;
   isEditing?: boolean;
   stepId: number;

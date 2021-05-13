@@ -7,7 +7,7 @@ import {
   useStepQuery,
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
-import { getExtension } from '👨‍💻widgets/Lesson/Editor/utils';
+import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import styles from './FilesList.module.scss';
 import { isValidName } from './validation';
