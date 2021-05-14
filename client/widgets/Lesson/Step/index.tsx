@@ -6,6 +6,8 @@ import {
   SandpackProvider,
 } from '@codesandbox/sandpack-react';
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 import {
   LessonQuery,
@@ -31,10 +33,28 @@ const Step: React.FC<Props> = ({
 }) => {
   const [completeStep] = useCompleteStepMutation();
   const [setNextStep] = useSetNextStepMutation();
+  const [cachedFiles, setCachedFiles] = useState<
+    null | { [key in string]: string }
+  >(null);
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
   });
+
+  useEffect(() => {
+    console.log('codemodules changed');
+    if (data?.step?.codeModules) {
+      setCachedFiles(
+        data.step.codeModules.reduce((acc, curr) => {
+          // @ts-ignore
+          if (curr.name == 'index.html') return acc;
+          // @ts-ignore
+          acc[curr.name] = curr.value;
+          return acc;
+        }, {} as { [key in string]: string })
+      );
+    }
+  }, [data?.step?.codeModules?.length]);
 
   if (!data) return null;
   if (!data.step) return null;
@@ -108,6 +128,7 @@ const Step: React.FC<Props> = ({
   };
 
   if (!data.step.codeModules) return null;
+  if (!cachedFiles) return null;
 
   const files = data.step.codeModules.reduce(
     (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
@@ -140,13 +161,7 @@ const Step: React.FC<Props> = ({
                   'react-scripts': '4.0.0',
                 }
               ),
-              files: data.step.codeModules.reduce((acc, curr) => {
-                // @ts-ignore
-                if (curr.name == 'index.html') return acc;
-                // @ts-ignore
-                acc[curr.name] = curr.value;
-                return acc;
-              }, {} as { [key in string]: string }),
+              files: cachedFiles,
             }}
           >
             <SandpackLayout>
