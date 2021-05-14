@@ -42,7 +42,6 @@ const Step: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    console.log('codemodules changed');
     if (data?.step?.codeModules) {
       setCachedFiles(
         data.step.codeModules.reduce((acc, curr) => {
@@ -51,7 +50,7 @@ const Step: React.FC<Props> = ({
           // @ts-ignore
           acc[curr.name] = curr.value;
           return acc;
-        }, {} as { [key in string]: string })
+        }, cachedFiles || ({} as { [key in string]: string }))
       );
     }
   }, [data?.step?.codeModules?.length]);
