@@ -50,7 +50,7 @@ const Step: React.FC<Props> = ({
           // @ts-ignore
           acc[curr.name] = curr.value;
           return acc;
-        }, cachedFiles || ({} as { [key in string]: string }))
+        }, {} as { [key in string]: string })
       );
     }
   }, [data?.step?.codeModules?.length]);
@@ -161,6 +161,9 @@ const Step: React.FC<Props> = ({
                 }
               ),
               files: cachedFiles,
+              main:
+                data.step.codeModules.find(({ isEntry }) => isEntry)?.name ||
+                undefined,
             }}
           >
             <SandpackLayout>

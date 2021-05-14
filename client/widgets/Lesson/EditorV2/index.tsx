@@ -56,7 +56,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
       <Button onClick={() => dispatch({ type: 'run-all-tests' })}>
         Run Tests
       </Button>
-      {sandpack.activePath}
       <CodeEditor code={code} onCodeUpdate={handleCodeUpdate} />
     </div>
   );
