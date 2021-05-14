@@ -25,7 +25,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
 
   useEffect(() => {
     window.addEventListener('message', (ev) => {
-      // console.log(ev);
+      console.log(ev);
     });
   }, []);
 
@@ -51,7 +51,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   };
 
   return (
-    <div>
+    <div className="sm:w-1/3">
       {/* @ts-ignore */}
       <Button onClick={() => dispatch({ type: 'run-all-tests' })}>
         Run Tests

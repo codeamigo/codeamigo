@@ -7,6 +7,7 @@ import {
   useStepQuery,
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
+import { getFileName } from '👨‍💻utils/stringUtils';
 import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import styles from './FilesList.module.scss';
@@ -44,6 +45,11 @@ const FilesList: React.FC<Props> = ({
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     const isValid = isValidName(value, files);
+
+    if (!value) {
+      setIsAdding(false);
+      return;
+    }
 
     if (!isValid.valid) {
       setError(isValid.reason);
@@ -115,7 +121,7 @@ const FilesList: React.FC<Props> = ({
                   }`}
                 >
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
-                  <span>{path}</span>
+                  <span>{getFileName(path)}</span>
                   {isEditing && isEntry(path) && (
                     <Icon className={`text-xs ml-1`} name="star" />
                   )}

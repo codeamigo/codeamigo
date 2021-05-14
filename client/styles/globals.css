@@ -20,3 +20,17 @@ html {
 .st0 {
   fill: var(--text-primary) !important;
 }
+
+.sp-wrapper {
+  height: 100% !important;
+}
+
+.sp-layout {
+  height: 100% !important;
+  border: 0px !important;
+  border-radius: 0 !important;
+}
+
+.sp-stack {
+  height: 100% !important;
+}

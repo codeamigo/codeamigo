@@ -32496,6 +32496,21 @@ html {
   fill: var(--text-primary) !important;
 }
 
+.sp-wrapper {
+  height: 100% !important;
+}
+
+.sp-layout {
+  height: 100% !important;
+  border: 0px !important;
+  border-radius: 0 !important;
+  border-left: 1px solid var(--bg-nav-offset);
+}
+
+.sp-stack {
+  height: 100% !important;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
