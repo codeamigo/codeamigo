@@ -71,7 +71,7 @@ export class CheckpointResolver {
       return null;
     }
 
-    const name = `checkpoint-${options.checkpointId}.spec.ts`;
+    const name = `checkpoint-${options.checkpointId}.spec.tsx`;
 
     const newModule = await CodeModule.create({
       name,
