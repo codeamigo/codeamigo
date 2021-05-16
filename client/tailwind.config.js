@@ -22,6 +22,9 @@ module.exports = {
         'text-primary': 'var(--text-primary)',
         'text-secondary': 'var(--text-secondary)',
       },
+      cursor: {
+        'col-resize': 'col-resize',
+      },
       fontSize: {
         xxs: '.5rem',
       },

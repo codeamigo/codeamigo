@@ -31,6 +31,10 @@ html {
   border-radius: 0 !important;
 }
 
+.sp-layout>:not(:first-child) {
+  border: 0px !important;
+}
+
 .sp-stack {
   height: 100% !important;
 }

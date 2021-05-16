@@ -171,8 +171,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
         try {
           Object.keys(deps.files).map((file) => {
             const code = deps.files[file].module.code;
-            console.log(file);
-            console.log(code);
             const uri = `${FILE}node_modules${file}`;
 
             monacoRef.current.languages.typescript.typescriptDefaults.addExtraLib(
@@ -206,7 +204,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   };
 
   return (
-    <div className="sm:w-1/3">
+    <div className="sm:w-1/3 relative">
       <ControlledEditor
         editorDidMount={editorDidMount}
         language={'typescript'}
@@ -223,6 +221,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
         value={code}
         width="100%"
       />
+      <div className="absolute right-0 top-0 h-full w-2 bg-bg-nav-offset cursor-col-resize" />
     </div>
   );
 };

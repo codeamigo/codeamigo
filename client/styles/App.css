@@ -11556,6 +11556,10 @@ ul li {
   cursor: not-allowed;
 }
 
+.cursor-col-resize {
+  cursor: col-resize;
+}
+
 .disabled\:cursor-auto:disabled {
   cursor: auto;
 }
@@ -11582,6 +11586,10 @@ ul li {
 
 .disabled\:cursor-not-allowed:disabled {
   cursor: not-allowed;
+}
+
+.disabled\:cursor-col-resize:disabled {
+  cursor: col-resize;
 }
 
 .block {
@@ -32504,7 +32512,10 @@ html {
   height: 100% !important;
   border: 0px !important;
   border-radius: 0 !important;
-  border-left: 1px solid var(--bg-nav-offset);
+}
+
+.sp-layout>:not(:first-child) {
+  border: 0px !important;
 }
 
 .sp-stack {
@@ -43347,6 +43358,10 @@ html {
     cursor: not-allowed;
   }
 
+  .sm\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .sm\:disabled\:cursor-auto:disabled {
     cursor: auto;
   }
@@ -43373,6 +43388,10 @@ html {
 
   .sm\:disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
+  }
+
+  .sm\:disabled\:cursor-col-resize:disabled {
+    cursor: col-resize;
   }
 
   .sm\:block {
@@ -75055,6 +75074,10 @@ html {
     cursor: not-allowed;
   }
 
+  .md\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .md\:disabled\:cursor-auto:disabled {
     cursor: auto;
   }
@@ -75081,6 +75104,10 @@ html {
 
   .md\:disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
+  }
+
+  .md\:disabled\:cursor-col-resize:disabled {
+    cursor: col-resize;
   }
 
   .md\:block {
@@ -106763,6 +106790,10 @@ html {
     cursor: not-allowed;
   }
 
+  .lg\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .lg\:disabled\:cursor-auto:disabled {
     cursor: auto;
   }
@@ -106789,6 +106820,10 @@ html {
 
   .lg\:disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
+  }
+
+  .lg\:disabled\:cursor-col-resize:disabled {
+    cursor: col-resize;
   }
 
   .lg\:block {
@@ -138471,6 +138506,10 @@ html {
     cursor: not-allowed;
   }
 
+  .xl\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .xl\:disabled\:cursor-auto:disabled {
     cursor: auto;
   }
@@ -138497,6 +138536,10 @@ html {
 
   .xl\:disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
+  }
+
+  .xl\:disabled\:cursor-col-resize:disabled {
+    cursor: col-resize;
   }
 
   .xl\:block {
@@ -170179,6 +170222,10 @@ html {
     cursor: not-allowed;
   }
 
+  .\32xl\:cursor-col-resize {
+    cursor: col-resize;
+  }
+
   .\32xl\:disabled\:cursor-auto:disabled {
     cursor: auto;
   }
@@ -170205,6 +170252,10 @@ html {
 
   .\32xl\:disabled\:cursor-not-allowed:disabled {
     cursor: not-allowed;
+  }
+
+  .\32xl\:disabled\:cursor-col-resize:disabled {
+    cursor: col-resize;
   }
 
   .\32xl\:block {
