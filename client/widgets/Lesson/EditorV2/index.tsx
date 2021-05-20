@@ -3,7 +3,6 @@ import { ControlledEditor, monaco } from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
-import Button from '👨‍💻components/Button';
 import {
   LessonQuery,
   RegularCodeModuleFragment,
@@ -39,12 +38,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
     }
     // TODO: fix check
   }, [codeModules?.length, monacoRef.current]);
-
-  useEffect(() => {
-    window.addEventListener('message', (ev) => {
-      console.log(ev);
-    });
-  }, []);
 
   const handleCodeUpdate = (newCode: string) => {
     updateCode(newCode);
@@ -204,25 +197,22 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   };
 
   return (
-    <div className="sm:w-1/3 relative">
-      <ControlledEditor
-        editorDidMount={editorDidMount}
-        language={'typescript'}
-        onChange={(_, value) => {
-          handleCodeUpdate(value as string);
-        }}
-        options={{
-          automaticLayout: true,
-          fontSize: '14px',
-          minimap: { enabled: false },
-          scrollBeyondLastLine: false,
-          wordWrap: 'on',
-        }}
-        value={code}
-        width="100%"
-      />
-      <div className="absolute right-0 top-0 h-full w-2 bg-bg-nav-offset cursor-col-resize" />
-    </div>
+    <ControlledEditor
+      editorDidMount={editorDidMount}
+      language={'typescript'}
+      onChange={(_, value) => {
+        handleCodeUpdate(value as string);
+      }}
+      options={{
+        automaticLayout: true,
+        fontSize: '14px',
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        wordWrap: 'on',
+      }}
+      value={code}
+      width="100%"
+    />
   );
 };
 

@@ -18,11 +18,12 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
+import Console from '👨‍💻widgets/Lesson/Console';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
 import { FilesType } from '👨‍💻widgets/Lesson/EditorV2/types';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
-import Output from '👨‍💻widgets/Lesson/Output';
+import Separator from '👨‍💻widgets/Lesson/Separator';
 
 const Step: React.FC<Props> = ({
   currentStepId: id,
@@ -167,7 +168,7 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="sm:w-1/6 flex flex-col bg-bg-primary border-r border-bg-nav-offset z-10">
+              <div className="md:w-1/6 w-2/6 flex flex-col bg-bg-primary border-r border-bg-nav-offset z-10">
                 <EditorFiles
                   codeModules={data.step.codeModules}
                   // currentPath={currentPath}
@@ -177,11 +178,16 @@ const Step: React.FC<Props> = ({
                   {...rest}
                 />
               </div>
-              <EditorV2 codeModules={data.step.codeModules} {...rest} />
-              <SandpackPreview />
+              <div className="md:w-2/6 w-4/6 flex">
+                <EditorV2 codeModules={data.step.codeModules} {...rest} />
+              </div>
+              {/* <Separator /> */}
+              <div className="md:w-3/6 w-full flex flex-col flex-grow">
+                <SandpackPreview />
+                <Console />
+              </div>
             </SandpackLayout>
           </SandpackProvider>
-          {/* <Output step={data.step} /> */}
         </div>
       </div>
     </>
