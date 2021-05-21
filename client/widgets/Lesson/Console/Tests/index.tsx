@@ -6,21 +6,29 @@ const Tests: React.FC<Props> = () => {
   const { dispatch } = useSandpack();
 
   useEffect(() => {
-    // @ts-ignore
-    dispatch({ type: 'run-all-tests' });
-  }, []);
-
-  useEffect(() => {
     const handleTestResults = (msg: MessageEvent<any>) => {
-      console.log(msg);
+      if (msg.data.type === 'test') {
+        console.log(msg);
+      }
     };
 
     window.addEventListener('message', handleTestResults);
 
     return () => window.removeEventListener('message', handleTestResults);
-  });
+  }, []);
 
-  return <div></div>;
+  const runTests = () => {
+    // @ts-ignore
+    dispatch({ type: 'run-all-tests' });
+  };
+
+  return (
+    <div>
+      <div className="text-text-primary" onClick={() => runTests()}>
+        Run tests
+      </div>
+    </div>
+  );
 };
 
 type Props = {};
