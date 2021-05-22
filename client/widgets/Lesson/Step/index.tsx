@@ -183,7 +183,7 @@ const Step: React.FC<Props> = ({
               </div>
               {/* <Separator /> */}
               <div className="md:w-3/6 w-full flex flex-col flex-grow">
-                <SandpackPreview />
+                <SandpackPreview showSandpackErrorOverlay={false} />
                 <Console />
               </div>
             </SandpackLayout>
