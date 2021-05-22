@@ -46,10 +46,10 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className="bg-bg-primary flex flex-col border-l border-bg-nav-offset h-full"
+      className="bg-bg-primary h-full flex flex-col border-l border-bg-nav-offset overflow-scroll"
       style={{ backgroundColor: '#242424' }}
     >
-      <div className="bg-bg-primary border-b border-bg-nav-offset flex sticky top-0">
+      <div className="bg-bg-primary border-b border-bg-nav-offset flex sticky top-0 z-10">
         <div
           className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
             activeTab === 'console' ? 'bg-bg-nav-offset' : ''

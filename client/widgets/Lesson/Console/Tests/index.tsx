@@ -45,11 +45,8 @@ const Tests: React.FC<Props> = () => {
   };
 
   return (
-    <div className="h-1/2">
-      <div
-        className="text-text-primary overflow-scroll"
-        onClick={() => runTests()}
-      >
+    <div>
+      <div className="text-text-primary" onClick={() => runTests()}>
         <div className="flex justify-between items-center border-b-2">
           <div className="px-4 py-3 text-xl font-semibold sticky top-0">
             Test Summary
@@ -78,7 +75,9 @@ const Tests: React.FC<Props> = () => {
               {suite.errors.map((val) =>
                 val.message.split('//').map((value) => {
                   return (
-                    <div className="text-text-primary text-md">{value}</div>
+                    <div className="text-text-primary text-md mb-1">
+                      {value}
+                    </div>
                   );
                 })
               )}
