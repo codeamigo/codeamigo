@@ -21,6 +21,7 @@ const Tests: React.FC<Props> = () => {
       switch (msg.data.event) {
         case 'test_end':
           setSuites((curr) => [...(curr || []), msg.data.test]);
+          break;
         case 'total_test_end':
           setIsRunning(false);
           break;
@@ -29,8 +30,6 @@ const Tests: React.FC<Props> = () => {
           setSuites([]);
           break;
       }
-
-      console.log(msg.data);
     };
 
     window.addEventListener('message', handleTestResults);
@@ -52,38 +51,38 @@ const Tests: React.FC<Props> = () => {
             Test Summary
           </div>
           <div
-            className="flex px-4 py-3 text-md font-medium cursor-pointer"
+            className="flex px-4 py-3 text-md font-medium cursor-pointer items-center"
             onClick={() => runTests()}
             role="button"
           >
-            <Icon className="mr-2" name={isRunning ? 'pause' : 'play'} />
+            <Icon
+              className="mr-2 text-lg"
+              name={isRunning ? 'pause' : 'play'}
+            />
             {isRunning ? 'Running' : 'Run Tests'}
           </div>
         </div>
       </div>
       <div className="p-4">
-        {suites?.map((suite) =>
-          suite.status === 'fail' ? (
-            <div className="mb-4">
-              <div
-                className={`text-lg ${
-                  suite.status === 'fail' ? 'text-red-400' : 'text-green-500'
-                }`}
-              >
-                {suite.blocks.join(' > ')} {'> ' + suite.name}
-              </div>
-              {suite.errors.map((val) =>
-                val.message.split('//').map((value) => {
-                  return (
-                    <div className="text-text-primary text-md mb-1">
-                      {value}
-                    </div>
-                  );
-                })
-              )}
+        {suites?.map((suite) => (
+          <div className="mb-4">
+            <div
+              className={`text-lg ${
+                suite.status === 'fail' ? 'text-red-400' : 'text-green-500'
+              }`}
+            >
+              {suite.status === 'pass' ? <>✅</> : null}{' '}
+              {suite.blocks.join(' > ')} {'> ' + suite.name}
             </div>
-          ) : null
-        )}
+            {suite.errors.map((val) =>
+              val.message.split('//').map((value) => {
+                return (
+                  <div className="text-text-primary text-md mb-1">{value}</div>
+                );
+              })
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
