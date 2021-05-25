@@ -64,10 +64,10 @@ const Tests: React.FC<Props> = () => {
         </div>
       </div>
       <div className="p-4">
-        {suites?.map((suite) => (
-          <div className="mb-4">
+        {suites?.map((suite, i) => (
+          <div className="mb-4" key={i}>
             <div
-              className={`text-lg ${
+              className={`text-md font-bold ${
                 suite.status === 'fail' ? 'text-red-400' : 'text-green-500'
               }`}
             >
@@ -75,9 +75,11 @@ const Tests: React.FC<Props> = () => {
               {suite.blocks.join(' > ')} {'> ' + suite.name}
             </div>
             {suite.errors.map((val) =>
-              val.message.split('//').map((value) => {
+              val.message.split('//').map((value, i) => {
                 return (
-                  <div className="text-text-primary text-md mb-1">{value}</div>
+                  <div className="text-text-primary text-md mb-1" key={i}>
+                    {value}
+                  </div>
                 );
               })
             )}

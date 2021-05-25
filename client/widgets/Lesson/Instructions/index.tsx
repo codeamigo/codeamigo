@@ -3,11 +3,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
+  LessonQuery,
   RegularStepFragment,
-  useCreateCheckpointMutation,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
 
@@ -20,7 +19,6 @@ const Instructions: React.FC<Props> = (props) => {
     isEditing ? 'editor' : 'preview'
   );
   const [updateStepM] = useUpdateStepInstructionsMutation();
-  const [createCheckpointM] = useCreateCheckpointMutation();
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
@@ -34,15 +32,6 @@ const Instructions: React.FC<Props> = (props) => {
   useEffect(() => {
     setMarkdown(step.instructions);
   }, [step.id]);
-
-  const createCheckpoint = async () => {
-    const len = step.checkpoints?.length || 0;
-
-    await createCheckpointM({
-      refetchQueries: ['Checkpoints', 'Step'],
-      variables: { checkpointId: len + 1, stepId: step.id },
-    });
-  };
 
   const currentStepNum = props.steps.findIndex(({ id }) => id === step.id) + 1;
   const totalSteps = props.steps.length;
@@ -119,11 +108,6 @@ const Instructions: React.FC<Props> = (props) => {
             Step: {currentStepNum}/{totalSteps}
           </div>
         </div>
-        {isEditing && (
-          <Button onClick={createCheckpoint} type="button">
-            Add Checkpoint
-          </Button>
-        )}
       </div>
     </div>
   );
@@ -132,6 +116,7 @@ const Instructions: React.FC<Props> = (props) => {
 type Props = {
   isEditing?: boolean;
   isPreviewing?: boolean;
+  lesson: LessonQuery['lesson'];
   nextStep: () => void;
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;

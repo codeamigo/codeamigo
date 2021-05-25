@@ -21,7 +21,7 @@ const CS_TYPES_FALLBACK_URL =
 const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const { code, updateCode } = useActiveCode();
-  const { dispatch, sandpack } = useSandpack();
+  const { sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
   const pathRef = useRef(sandpack.activePath);

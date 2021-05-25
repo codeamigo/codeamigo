@@ -18,6 +18,7 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
+import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
@@ -168,15 +169,18 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="md:w-1/6 w-2/6 flex flex-col bg-bg-primary border-r border-bg-nav-offset z-10">
-                <EditorFiles
-                  codeModules={data.step.codeModules}
-                  // currentPath={currentPath}
-                  // deleteFile={deleteFile}
-                  files={files!}
-                  stepId={data.step.id}
-                  {...rest}
-                />
+              <div className="md:w-1/6 w-2/6 flex flex-col justify-between bg-bg-primary border-r border-bg-nav-offset z-10">
+                <div className="h-full">
+                  <EditorFiles
+                    codeModules={data.step.codeModules}
+                    files={files!}
+                    stepId={data.step.id}
+                    {...rest}
+                  />
+                </div>
+                <div className="p-2">
+                  <CTA {...rest} nextStep={nextStep} step={data.step} />
+                </div>
               </div>
               <div className="md:w-2/6 w-4/6 flex">
                 <EditorV2 codeModules={data.step.codeModules} {...rest} />
