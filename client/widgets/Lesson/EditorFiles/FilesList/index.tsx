@@ -1,3 +1,4 @@
+import { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
 import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -76,17 +77,22 @@ const FilesList: React.FC<Props> = ({
     }
   };
 
-  const getImageSrc = (path: string) => {
-    const ext = getExtension(path);
-    const base =
-      'https://cdn.jsdelivr.net/gh/PKief/vscode-material-icon-theme@master/icons';
-    return `${base}/${ext}.svg`;
-  };
-
   const isEntry = (file: string) =>
     codeModules?.find(({ name }) => name === file)?.isEntry;
 
-  if (!files) return null;
+  const finalFiles = Object.keys(sandpack.files)
+    .filter((val) =>
+      name === 'Tests' ? val.includes('spec') : !val.includes('spec')
+    )
+    .reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr]: {
+          ...sandpack.files[curr],
+        },
+      };
+    }, {} as SandpackBundlerFiles);
+  console.log(finalFiles);
 
   return (
     <>
@@ -103,7 +109,7 @@ const FilesList: React.FC<Props> = ({
       <div>
         <ModuleList
           activePath={sandpack.activePath}
-          files={sandpack.files}
+          files={finalFiles}
           prefixedPath="/"
           selectFile={sandpack.openFile}
         />
@@ -198,7 +204,7 @@ type Props = {
   currentPath?: string;
   files?: Array<string>;
   isEditing?: boolean;
-  name: string;
+  name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
   stepId: number;
