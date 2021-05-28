@@ -14,46 +14,11 @@ import { CodeModule } from "../entities/CodeModule";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
 
-const DEFAULT_TEST = `import { core, enzyme } from 'codeamigo-jest-lite'
-
-const { describe, it, run, expect } = core
-const { mount } = enzyme
-
-describe('My Test', () => {
+const DEFAULT_TEST = `describe('My Test', () => {
   it('runs', () => {
-    expect(true).toBe(true)
+    expect('123').toBe('123')
   })
 })
-
-const runTests = async () => {
-  const results = await run()
-  console.test(results)
-}
-
-runTests()
-`;
-
-const VUE_TEST = `import { core, enzyme } from 'codeamigo-jest-lite'
-
-const { describe, it, run, expect } = core
-import { mount } from '@vue/test-utils'
-
-import App from './App.vue'
-
-const wrapper = mount(App)
-
-describe('Hello vue', () => {
-  it('renders', () => {
-    expect(wrapper.find('div').text()).toBe('Hello Vue!')
-  })
-})
-
-const runTests = async () => {
-  const results = await run()
-  console.test(results)
-}
-
-runTests()
 `;
 
 @InputType()
@@ -106,15 +71,11 @@ export class CheckpointResolver {
       return null;
     }
 
-    const name = `checkpoint-${options.checkpointId}.spec.ts`;
-    // TODO: make more dynamic
-    const isVue =
-      step.dependencies.find((value) => value.package === "vue") &&
-      step.dependencies.find((value) => value.package === "@vue/test-utils");
+    const name = `/checkpoint-${options.checkpointId}.spec.tsx`;
 
     const newModule = await CodeModule.create({
       name,
-      value: isVue ? VUE_TEST : DEFAULT_TEST,
+      value: DEFAULT_TEST,
     }).save();
 
     step.codeModules.push(newModule);

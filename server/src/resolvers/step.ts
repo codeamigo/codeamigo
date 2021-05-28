@@ -12,7 +12,6 @@ import {
 } from "type-graphql";
 
 import { CodeModule } from "../entities/CodeModule";
-import { Dependency } from "../entities/Dependency";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
@@ -154,18 +153,8 @@ export class StepResolver {
         })
     );
 
-    const dependencies = await Promise.all(
-      template.dependencies.map(async (dependency) => {
-        // @ts-ignore
-        const { id, ...rest } = dependency;
-
-        return await Dependency.create({ ...rest }).save();
-      })
-    );
-
     const step = await Step.create({
       codeModules,
-      dependencies,
       instructions: DEFAULT_MD,
       name: options.name,
     }).save();

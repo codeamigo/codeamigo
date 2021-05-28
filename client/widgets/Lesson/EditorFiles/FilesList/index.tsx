@@ -1,3 +1,5 @@
+import { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
+import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
@@ -6,22 +8,21 @@ import {
   useStepQuery,
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
-import { getExtension } from '👨‍💻widgets/Lesson/Editor/utils';
+import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/ModuleList';
+import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
-import styles from './FilesList.module.scss';
 import { isValidName } from './validation';
 
 const FilesList: React.FC<Props> = ({
   codeModules,
-  currentPath,
   files,
   isEditing,
   name,
   onCreate,
-  onDelete,
-  setCurrentPath,
   stepId,
 }) => {
+  const { sandpack } = useSandpack();
+  const { setActiveFile } = sandpack;
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
   const { loading } = useStepQuery({
     fetchPolicy: 'cache-only',
@@ -42,6 +43,11 @@ const FilesList: React.FC<Props> = ({
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     const isValid = isValidName(value, files);
+
+    if (!value) {
+      setIsAdding(false);
+      return;
+    }
 
     if (!isValid.valid) {
       setError(isValid.reason);
@@ -71,15 +77,22 @@ const FilesList: React.FC<Props> = ({
     }
   };
 
-  const getImageSrc = (path: string) => {
-    const ext = getExtension(path);
-    const base =
-      'https://cdn.jsdelivr.net/gh/PKief/vscode-material-icon-theme@master/icons';
-    return `${base}/${ext}.svg`;
-  };
-
   const isEntry = (file: string) =>
     codeModules?.find(({ name }) => name === file)?.isEntry;
+
+  const finalFiles = Object.keys(sandpack.files)
+    .filter((val) =>
+      name === 'Tests' ? val.includes('spec') : !val.includes('spec')
+    )
+    .reduce((acc, curr) => {
+      return {
+        ...acc,
+        [curr]: {
+          ...sandpack.files[curr],
+        },
+      };
+    }, {} as SandpackBundlerFiles);
+  console.log(finalFiles);
 
   return (
     <>
@@ -94,6 +107,31 @@ const FilesList: React.FC<Props> = ({
         )}
       </div>
       <div>
+        <ModuleList
+          activePath={sandpack.activePath}
+          files={finalFiles}
+          prefixedPath="/"
+          selectFile={sandpack.openFile}
+        />
+        {isAdding && (
+          <div className="px-1 pb-2 relative">
+            <input
+              className="w-full text-xs px-2 py-1"
+              onBlur={handleBlur}
+              onChange={() => setError('')}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
+              type="text"
+            />
+            {error && (
+              <div className="text-red-600 text-xs absolute -bottom-2.5">
+                {error}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {/* <div>
         {files &&
           files
             .sort((a, b) => (a < b ? -1 : 1))
@@ -101,11 +139,11 @@ const FilesList: React.FC<Props> = ({
               <div
                 className={`${
                   currentPath === path ? 'bg-bg-nav' : ''
-                } flex justify-between w-full px-1 py-1 text-text-primary hover:bg-bg-nav ${
+                } flex justify-between w-full px-1 py-1 text-text-primary hover:bg-bg-nav cursor-pointer ${
                   styles.FILE
-                } ${setCurrentPath ? 'cursor-pointer' : ''}`}
+                }`}
                 key={path}
-                onClick={() => setCurrentPath && setCurrentPath(path)}
+                onClick={() => setActiveFile(path)}
               >
                 <div
                   className={`text-xs flex items-center ${
@@ -113,7 +151,7 @@ const FilesList: React.FC<Props> = ({
                   }`}
                 >
                   <img className="w-3.5 mr-1" src={getImageSrc(path)} />
-                  <span>{path}</span>
+                  <span>{getFileName(path)}</span>
                   {isEditing && isEntry(path) && (
                     <Icon className={`text-xs ml-1`} name="star" />
                   )}
@@ -154,23 +192,9 @@ const FilesList: React.FC<Props> = ({
               </div>
             ))}
         {isAdding && (
-          <div className="px-1 pb-2 relative">
-            <input
-              className="w-full text-xs px-2 py-1"
-              onBlur={handleBlur}
-              onChange={() => setError('')}
-              onKeyDown={handleKeyDown}
-              ref={inputRef}
-              type="text"
-            />
-            {error && (
-              <div className="text-red-600 text-xs absolute -bottom-2.5">
-                {error}
-              </div>
-            )}
-          </div>
+          
         )}
-      </div>
+      </div> */}
     </>
   );
 };
@@ -180,10 +204,9 @@ type Props = {
   currentPath?: string;
   files?: Array<string>;
   isEditing?: boolean;
-  name: string;
+  name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
   onDelete?: (path: string) => void;
-  setCurrentPath?: (path: string) => void;
   stepId: number;
 };
 
