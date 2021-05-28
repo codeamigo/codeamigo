@@ -7,20 +7,17 @@ import {
   useStepQuery,
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
-import { getFileName } from '👨‍💻utils/stringUtils';
+import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/ModuleList';
 import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
-import styles from './FilesList.module.scss';
 import { isValidName } from './validation';
 
 const FilesList: React.FC<Props> = ({
   codeModules,
-  currentPath,
   files,
   isEditing,
   name,
   onCreate,
-  onDelete,
   stepId,
 }) => {
   const { sandpack } = useSandpack();
@@ -89,6 +86,8 @@ const FilesList: React.FC<Props> = ({
   const isEntry = (file: string) =>
     codeModules?.find(({ name }) => name === file)?.isEntry;
 
+  if (!files) return null;
+
   return (
     <>
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
@@ -102,6 +101,31 @@ const FilesList: React.FC<Props> = ({
         )}
       </div>
       <div>
+        <ModuleList
+          activePath={sandpack.activePath}
+          files={sandpack.files}
+          prefixedPath="/"
+          selectFile={sandpack.openFile}
+        />
+        {isAdding && (
+          <div className="px-1 pb-2 relative">
+            <input
+              className="w-full text-xs px-2 py-1"
+              onBlur={handleBlur}
+              onChange={() => setError('')}
+              onKeyDown={handleKeyDown}
+              ref={inputRef}
+              type="text"
+            />
+            {error && (
+              <div className="text-red-600 text-xs absolute -bottom-2.5">
+                {error}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+      {/* <div>
         {files &&
           files
             .sort((a, b) => (a < b ? -1 : 1))
@@ -162,23 +186,9 @@ const FilesList: React.FC<Props> = ({
               </div>
             ))}
         {isAdding && (
-          <div className="px-1 pb-2 relative">
-            <input
-              className="w-full text-xs px-2 py-1"
-              onBlur={handleBlur}
-              onChange={() => setError('')}
-              onKeyDown={handleKeyDown}
-              ref={inputRef}
-              type="text"
-            />
-            {error && (
-              <div className="text-red-600 text-xs absolute -bottom-2.5">
-                {error}
-              </div>
-            )}
-          </div>
+          
         )}
-      </div>
+      </div> */}
     </>
   );
 };

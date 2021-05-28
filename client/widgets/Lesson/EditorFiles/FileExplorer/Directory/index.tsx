@@ -1,0 +1,51 @@
+import type { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
+import * as React from 'react';
+
+import { File } from '../File';
+import { ModuleList } from '../ModuleList';
+
+export interface Props {
+  activePath: string;
+  depth: number;
+  files: SandpackBundlerFiles;
+  prefixedPath: string;
+  selectFile: (path: string) => void;
+}
+
+interface State {
+  open: boolean;
+}
+
+export class Directory extends React.Component<Props, State> {
+  state = {
+    open: true,
+  };
+
+  toggleOpen = (): void => {
+    this.setState((state) => ({ open: !state.open }));
+  };
+
+  render(): React.ReactElement {
+    const { activePath, depth, files, prefixedPath, selectFile } = this.props;
+
+    return (
+      <div key={prefixedPath}>
+        <File
+          depth={depth}
+          onClick={this.toggleOpen}
+          path={prefixedPath + '/'}
+        />
+
+        {this.state.open ? (
+          <ModuleList
+            activePath={activePath}
+            depth={depth}
+            files={files}
+            prefixedPath={prefixedPath}
+            selectFile={selectFile}
+          />
+        ) : null}
+      </div>
+    );
+  }
+}

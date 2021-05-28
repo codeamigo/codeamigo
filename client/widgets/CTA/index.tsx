@@ -45,9 +45,6 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
-    console.log(message.data);
-    console.log(testsRef.current);
-
     switch (message.data.event) {
       case 'test_end':
         testsRef.current = [...testsRef.current, message.data.test];

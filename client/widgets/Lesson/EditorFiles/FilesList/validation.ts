@@ -12,12 +12,6 @@ export const isValidName = (
     return result;
   }
 
-  if (name.includes('/')) {
-    result.valid = false;
-    result.reason = 'No trailing slashes allowed.';
-    return result;
-  }
-
   if (files && files.includes(name)) {
     result.valid = false;
     result.reason = 'Filename already taken.';
