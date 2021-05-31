@@ -19,10 +19,10 @@ const FilesList: React.FC<Props> = ({
   isEditing,
   name,
   onCreate,
+  onDelete,
   stepId,
 }) => {
   const { sandpack } = useSandpack();
-  const { setActiveFile } = sandpack;
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
   const { loading } = useStepQuery({
     fetchPolicy: 'cache-only',
@@ -110,6 +110,7 @@ const FilesList: React.FC<Props> = ({
         <ModuleList
           activePath={sandpack.activePath}
           files={finalFiles}
+          onDelete={onDelete}
           prefixedPath="/"
           selectFile={sandpack.openFile}
         />
@@ -206,7 +207,7 @@ type Props = {
   isEditing?: boolean;
   name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
-  onDelete?: (path: string) => void;
+  onDelete: (path: string, isDirectory?: boolean) => void;
   stepId: number;
 };
 

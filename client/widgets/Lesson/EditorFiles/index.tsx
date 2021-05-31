@@ -30,11 +30,20 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
     });
   };
 
-  const deleteFile = async (file: string) => {
-    const module = rest.codeModules?.find((module) => module.name === file);
+  const deleteFile = async (file: string, isDirectory?: boolean) => {
+    const confirm = window.confirm(`Are you sure you want to delete ${file}?`);
+
+    if (!confirm) return;
+
+    const module = rest.codeModules?.find(
+      (module) => module.name!.indexOf(file) > -1
+    );
 
     if (!module) return;
-    if (!files) return;
+    if (module.isEntry) {
+      window.alert('Cannot delete entry file.');
+      return;
+    }
 
     await deleteCodeModule({
       refetchQueries: ['Step'],
@@ -55,7 +64,14 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
         onDelete={deleteFile}
         {...rest}
       />
-      {rest.isEditing && <FilesList files={tests} name={'Tests'} {...rest} />}
+      {rest.isEditing && (
+        <FilesList
+          files={tests}
+          name={'Tests'}
+          onDelete={deleteFile}
+          {...rest}
+        />
+      )}
     </>
   );
 };

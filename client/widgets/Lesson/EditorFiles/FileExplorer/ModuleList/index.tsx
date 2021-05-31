@@ -4,20 +4,13 @@ import * as React from 'react';
 import { Directory } from '../Directory';
 import { File } from '../File';
 
-export interface Props {
-  activePath: string;
-  depth?: number;
-  files: SandpackBundlerFiles;
-  prefixedPath: string;
-  selectFile: (path: string) => void;
-}
-
 export class ModuleList extends React.PureComponent<Props> {
   render(): JSX.Element {
     const {
       activePath,
       depth = 0,
       files,
+      onDelete,
       prefixedPath,
       selectFile,
     } = this.props;
@@ -44,6 +37,7 @@ export class ModuleList extends React.PureComponent<Props> {
             depth={depth + 1}
             files={files}
             key={dir}
+            onDelete={onDelete}
             prefixedPath={dir}
             selectFile={selectFile}
           />
@@ -53,7 +47,9 @@ export class ModuleList extends React.PureComponent<Props> {
           <File
             active={activePath === file.path}
             depth={depth + 1}
+            isDirectory={false}
             key={file.path}
+            onDelete={onDelete}
             path={file.path}
             selectFile={this.props.selectFile}
           />
@@ -61,4 +57,13 @@ export class ModuleList extends React.PureComponent<Props> {
       </div>
     );
   }
+}
+
+export interface Props {
+  activePath: string;
+  depth?: number;
+  files: SandpackBundlerFiles;
+  onDelete: (path: string, isDirectory?: boolean) => void;
+  prefixedPath: string;
+  selectFile: (path: string) => void;
 }

@@ -50,6 +50,7 @@ module.exports = {
     extend: {
       borderWidth: ['first'],
       cursor: ['disabled'],
+      display: ['group-hover'],
       margin: ['first'],
       opacity: ['disabled'],
     },
