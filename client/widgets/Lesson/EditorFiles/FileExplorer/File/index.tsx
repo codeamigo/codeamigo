@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import Icon from '👨‍💻components/Icon';
+import { IconType } from '👨‍💻components/Icon/types';
 import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import { Props as OwnProps } from '../../FilesList';
@@ -50,7 +51,9 @@ export class File extends React.PureComponent<Props & OwnProps> {
             // update entry file
             <Icon
               className={`empty-star hidden group-hover:block text-xs ml-1`}
-              name={`${this.isEntry(fileName) ? 'star' : 'star-empty'}`}
+              name={
+                `${this.isEntry(fileName) ? 'star' : 'star-empty'}` as IconType
+              }
               onClick={() =>
                 this.props.onUpdateCodeModuleEntryFile &&
                 this.props.onUpdateCodeModuleEntryFile({
