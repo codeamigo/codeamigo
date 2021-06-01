@@ -26,6 +26,11 @@ import { FilesType } from '👨‍💻widgets/Lesson/EditorV2/types';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
+const modToFile = (acc: { [key in string]: string }, curr: any) => ({
+  ...acc,
+  [curr.name as string]: curr.value,
+});
+
 const Step: React.FC<Props> = ({
   currentStepId: id,
   session,
@@ -38,6 +43,7 @@ const Step: React.FC<Props> = ({
   const [cachedFiles, setCachedFiles] = useState<
     null | { [key in string]: string }
   >(null);
+  const [cachedMain, setCachedMain] = useState<string | undefined>(undefined);
   const { data } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
@@ -45,17 +51,14 @@ const Step: React.FC<Props> = ({
 
   useEffect(() => {
     if (data?.step?.codeModules) {
-      setCachedFiles(
-        data.step.codeModules.reduce((acc, curr) => {
-          // @ts-ignore
-          if (curr.name == 'index.html') return acc;
-          // @ts-ignore
-          acc[curr.name] = curr.value;
-          return acc;
-        }, {} as { [key in string]: string })
-      );
+      const files = data.step.codeModules.reduce(modToFile, {});
+      const main =
+        data.step.codeModules.find(({ isEntry }) => isEntry)?.name || undefined;
+
+      setCachedFiles(files);
+      setCachedMain(main);
     }
-  }, [data?.step?.codeModules?.length]);
+  }, [data?.step?.id]);
 
   if (!data) return null;
   if (!data.step) return null;
@@ -131,10 +134,7 @@ const Step: React.FC<Props> = ({
   if (!data.step.codeModules) return null;
   if (!cachedFiles) return null;
 
-  const files = data.step.codeModules.reduce(
-    (acc, curr) => ({ ...acc, [curr.name as string]: curr.value }),
-    {}
-  ) as FilesType | undefined;
+  const files = data.step.codeModules.reduce(modToFile, {});
 
   return (
     <>
@@ -152,20 +152,8 @@ const Step: React.FC<Props> = ({
         <div className="w-full h-full">
           <SandpackProvider
             customSetup={{
-              dependencies: data.step.dependencies?.reduce(
-                (acc, curr) => {
-                  // @ts-ignore
-                  acc[curr.package] = curr.version;
-                  return acc;
-                },
-                {
-                  'react-scripts': '4.0.0',
-                }
-              ),
               files: cachedFiles,
-              main:
-                data.step.codeModules.find(({ isEntry }) => isEntry)?.name ||
-                undefined,
+              main: cachedMain,
             }}
           >
             <SandpackLayout>

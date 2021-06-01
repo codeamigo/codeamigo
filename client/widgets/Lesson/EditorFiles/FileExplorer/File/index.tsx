@@ -32,8 +32,6 @@ export class File extends React.PureComponent<Props & OwnProps> {
   render(): React.ReactElement {
     const fileName = this.props.path.split('/').filter(Boolean).pop();
 
-    console.log(this.props);
-
     return (
       <button
         className="w-full bg-bg-primary text-text-primary flex justify-between items-center focus:outline-none group h-5"
