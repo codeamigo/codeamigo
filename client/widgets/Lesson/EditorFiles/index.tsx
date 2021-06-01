@@ -6,6 +6,7 @@ import {
   RegularDependencyFragment,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
+  useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
 
 import { FilesType } from '../EditorV2/types';
@@ -20,6 +21,7 @@ export type AlgoliaSearchResultType = {
 const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
+  const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -31,46 +33,45 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
   };
 
   const deleteFile = async (file: string, isDirectory?: boolean) => {
-    const confirm = window.confirm(`Are you sure you want to delete ${file}?`);
+    const confirm = window.confirm(
+      isDirectory
+        ? `Are you sure you want to delete the folder ${file} and its contents?`
+        : `Are you sure you want to delete ${file}?`
+    );
 
     if (!confirm) return;
 
-    const module = rest.codeModules?.find(
+    const modules = rest.codeModules?.filter(
       (module) => module.name!.indexOf(file) > -1
     );
 
-    if (!module) return;
-    if (module.isEntry) {
-      window.alert('Cannot delete entry file.');
-      return;
-    }
+    if (!modules?.length) return;
 
-    await deleteCodeModule({
-      refetchQueries: ['Step'],
-      variables: { id: module.id },
+    modules.map(async (val) => {
+      if (val.isEntry) {
+        window.alert('Cannot delete entry file.');
+        return;
+      }
+      await deleteCodeModule({
+        refetchQueries: ['Step'],
+        variables: { id: val.id },
+      });
     });
   };
 
   if (!files) return null;
-  const docs = Object.keys(files).filter((file) => !file.includes('spec'));
-  const tests = Object.keys(files).filter((file) => file.includes('spec'));
 
   return (
     <>
       <FilesList
-        files={docs}
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
+        onUpdateCodeModuleEntryFile={updateCodeModuleEntryFile}
         {...rest}
       />
       {rest.isEditing && (
-        <FilesList
-          files={tests}
-          name={'Tests'}
-          onDelete={deleteFile}
-          {...rest}
-        />
+        <FilesList name={'Tests'} onDelete={deleteFile} {...rest} />
       )}
     </>
   );

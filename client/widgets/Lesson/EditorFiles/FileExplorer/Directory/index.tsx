@@ -1,6 +1,7 @@
 import type { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
 import * as React from 'react';
 
+import { Props as OwnProps } from '../../FilesList';
 import { File } from '../File';
 import { ModuleList } from '../ModuleList';
 
@@ -8,7 +9,7 @@ interface State {
   open: boolean;
 }
 
-export class Directory extends React.Component<Props, State> {
+export class Directory extends React.Component<Props & OwnProps, State> {
   state = {
     open: true,
   };
@@ -18,35 +19,18 @@ export class Directory extends React.Component<Props, State> {
   };
 
   render(): React.ReactElement {
-    const {
-      activePath,
-      depth,
-      files,
-      onDelete,
-      prefixedPath,
-      selectFile,
-    } = this.props;
+    const { depth, onDelete, prefixedPath } = this.props;
 
     return (
       <div key={prefixedPath}>
         <File
-          depth={depth}
           isDirectory
           onClick={this.toggleOpen}
-          onDelete={onDelete}
           path={prefixedPath + '/'}
+          {...this.props}
         />
 
-        {this.state.open ? (
-          <ModuleList
-            activePath={activePath}
-            depth={depth}
-            files={files}
-            onDelete={onDelete}
-            prefixedPath={prefixedPath}
-            selectFile={selectFile}
-          />
-        ) : null}
+        {this.state.open ? <ModuleList {...this.props} /> : null}
       </div>
     );
   }
@@ -56,7 +40,6 @@ export interface Props {
   activePath: string;
   depth: number;
   files: SandpackBundlerFiles;
-  onDelete: (path: string, isDirectory?: boolean) => void;
   prefixedPath: string;
   selectFile: (path: string) => void;
 }

@@ -3,31 +3,14 @@ import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
-import {
-  RegularCodeModuleFragment,
-  useStepQuery,
-  useUpdateCodeModuleEntryFileMutation,
-} from '👨‍💻generated/graphql';
+import { RegularCodeModuleFragment } from '👨‍💻generated/graphql';
 import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/ModuleList';
-import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import { isValidName } from './validation';
 
-const FilesList: React.FC<Props> = ({
-  codeModules,
-  files,
-  isEditing,
-  name,
-  onCreate,
-  onDelete,
-  stepId,
-}) => {
+const FilesList: React.FC<Props> = (props) => {
+  const { isEditing, name, onCreate, stepId } = props;
   const { sandpack } = useSandpack();
-  const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
-  const { loading } = useStepQuery({
-    fetchPolicy: 'cache-only',
-    variables: { id: stepId },
-  });
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState('');
@@ -42,7 +25,7 @@ const FilesList: React.FC<Props> = ({
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
-    const isValid = isValidName(value, files);
+    const isValid = isValidName(value, Object.keys(sandpack.files));
 
     if (!value) {
       setIsAdding(false);
@@ -65,7 +48,7 @@ const FilesList: React.FC<Props> = ({
     if (event.key === 'Enter' && onCreate) {
       const value = event.currentTarget.value;
 
-      const isValid = isValidName(value, files);
+      const isValid = isValidName(value, Object.keys(sandpack.files));
 
       if (!isValid.valid) {
         setError(isValid.reason);
@@ -76,9 +59,6 @@ const FilesList: React.FC<Props> = ({
       setIsAdding(false);
     }
   };
-
-  const isEntry = (file: string) =>
-    codeModules?.find(({ name }) => name === file)?.isEntry;
 
   const finalFiles = Object.keys(sandpack.files)
     .filter((val) =>
@@ -110,9 +90,9 @@ const FilesList: React.FC<Props> = ({
         <ModuleList
           activePath={sandpack.activePath}
           files={finalFiles}
-          onDelete={onDelete}
           prefixedPath="/"
           selectFile={sandpack.openFile}
+          {...props}
         />
         {isAdding && (
           <div className="px-1 pb-2 relative">
@@ -200,14 +180,16 @@ const FilesList: React.FC<Props> = ({
   );
 };
 
-type Props = {
+export type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;
-  files?: Array<string>;
   isEditing?: boolean;
   name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
   onDelete: (path: string, isDirectory?: boolean) => void;
+  onUpdateCodeModuleEntryFile?: (variables: {
+    variables: { newId: any; oldId: any };
+  }) => void;
   stepId: number;
 };
 
