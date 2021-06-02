@@ -7,14 +7,7 @@ import { File } from '../File';
 
 export class ModuleList extends React.PureComponent<Props & OwnProps> {
   render(): JSX.Element {
-    const {
-      activePath,
-      depth = 0,
-      files,
-      onDelete,
-      prefixedPath,
-      selectFile,
-    } = this.props;
+    const { activePath, depth = 0, files, prefixedPath } = this.props;
 
     const fileListWithoutPrefix = Object.keys(files)
       .filter((file) => file.startsWith(prefixedPath))
@@ -33,7 +26,12 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
     return (
       <div>
         {Array.from(directoriesToShow).map((dir) => (
-          <Directory depth={depth + 1} key={dir} {...this.props} />
+          <Directory
+            depth={depth + 1}
+            key={dir}
+            {...this.props}
+            prefixedPath={dir}
+          />
         ))}
 
         {filesToShow.map((file) => (

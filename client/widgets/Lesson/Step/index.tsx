@@ -22,7 +22,6 @@ import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import EditorV2 from '👨‍💻widgets/Lesson/EditorV2';
-import { FilesType } from '👨‍💻widgets/Lesson/EditorV2/types';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
@@ -58,7 +57,7 @@ const Step: React.FC<Props> = ({
       setCachedFiles(files);
       setCachedMain(main);
     }
-  }, [data?.step?.id]);
+  }, [data?.step?.id, data?.step?.codeModules?.length]);
 
   if (!data) return null;
   if (!data.step) return null;

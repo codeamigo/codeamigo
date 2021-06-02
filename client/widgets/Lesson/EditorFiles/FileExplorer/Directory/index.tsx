@@ -19,7 +19,7 @@ export class Directory extends React.Component<Props & OwnProps, State> {
   };
 
   render(): React.ReactElement {
-    const { depth, onDelete, prefixedPath } = this.props;
+    const { prefixedPath } = this.props;
 
     return (
       <div key={prefixedPath}>

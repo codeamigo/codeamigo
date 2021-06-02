@@ -9,7 +9,7 @@ import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/M
 import { isValidName } from './validation';
 
 const FilesList: React.FC<Props> = (props) => {
-  const { isEditing, name, onCreate, stepId } = props;
+  const { isEditing, name, onCreate } = props;
   const { sandpack } = useSandpack();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -72,7 +72,6 @@ const FilesList: React.FC<Props> = (props) => {
         },
       };
     }, {} as SandpackBundlerFiles);
-  console.log(finalFiles);
 
   return (
     <>
