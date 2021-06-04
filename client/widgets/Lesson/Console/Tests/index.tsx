@@ -18,9 +18,16 @@ const Tests: React.FC<Props> = () => {
     const handleTestResults = (msg: MessageEvent<CodeSandboxTestMsgType>) => {
       if (msg.data.type !== 'test') return;
 
+      console.log(msg.data);
+
       switch (msg.data.event) {
         case 'test_end':
-          setSuites((curr) => [...(curr || []), msg.data.test]);
+          setSuites((curr) => {
+            if (curr?.find((val) => val.name === msg.data.test.name))
+              return curr;
+
+            return [...(curr || []), msg.data.test];
+          });
           break;
         case 'total_test_end':
           setIsRunning(false);
@@ -45,7 +52,7 @@ const Tests: React.FC<Props> = () => {
 
   return (
     <div>
-      <div className="text-text-primary" onClick={() => runTests()}>
+      <div className="text-text-primary">
         <div className="flex justify-between items-center border-b-2">
           <div className="px-4 py-3 text-xl font-semibold sticky top-0">
             Test Summary
