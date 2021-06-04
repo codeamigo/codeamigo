@@ -49,15 +49,36 @@ const Step: React.FC<Props> = ({
   });
 
   useEffect(() => {
-    if (data?.step?.codeModules) {
-      const files = data.step.codeModules.reduce(modToFile, {});
-      const main =
-        data.step.codeModules.find(({ isEntry }) => isEntry)?.name || undefined;
+    if (data?.step?.codeModules && data.step.checkpoints) {
+      let mods = data.step.codeModules;
+      // if theres a test only eval that test
+      // to allow multiple checkpoints
+      const test = data.step.checkpoints.find(
+        ({ id }) => id === data.step?.currentCheckpointId
+      )?.test;
+      if (test) {
+        mods = data.step.codeModules.filter((val) => {
+          if (val.name?.includes('spec')) {
+            debugger;
+            if (val.name === test) return true;
+            else return false;
+          }
+
+          return true;
+        });
+      }
+
+      const files = mods.reduce(modToFile, {});
+      const main = mods.find(({ isEntry }) => isEntry)?.name || undefined;
 
       setCachedFiles(files);
       setCachedMain(main);
     }
-  }, [data?.step?.id, data?.step?.codeModules?.length]);
+  }, [
+    data?.step?.id,
+    data?.step?.codeModules?.length,
+    data?.step?.currentCheckpointId,
+  ]);
 
   if (!data) return null;
   if (!data.step) return null;
