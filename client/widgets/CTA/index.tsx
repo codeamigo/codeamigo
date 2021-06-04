@@ -102,6 +102,18 @@ const CTA: React.FC<Props> = ({
   };
 
   const completeCheckpoint = async () => {
+    //  prompt register if previewing
+    if (isPreviewing) {
+      modalVar({
+        callback: () =>
+          lesson?.id
+            ? router.push(`/lessons/start/${lesson.id}`)
+            : router.push('/home'),
+        name: 'registerAfterPreview',
+      });
+      return;
+    }
+
     // don't complete checkpoint if editting
     if (isEditing) return;
     if (!step.currentCheckpointId) return;
