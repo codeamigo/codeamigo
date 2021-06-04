@@ -24,10 +24,11 @@ export class Directory extends React.Component<Props & OwnProps, State> {
     return (
       <div key={prefixedPath}>
         <File
+          {...this.props}
           isDirectory
           onClick={this.toggleOpen}
           path={prefixedPath + '/'}
-          {...this.props}
+          selectFile={undefined}
         />
 
         {this.state.open ? <ModuleList {...this.props} /> : null}

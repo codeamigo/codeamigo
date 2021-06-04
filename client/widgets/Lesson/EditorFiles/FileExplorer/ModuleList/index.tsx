@@ -27,21 +27,21 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
       <div>
         {Array.from(directoriesToShow).map((dir) => (
           <Directory
+            {...this.props}
             depth={depth + 1}
             key={dir}
-            {...this.props}
             prefixedPath={dir}
           />
         ))}
 
         {filesToShow.map((file) => (
           <File
+            {...this.props}
             active={activePath === file.path}
             depth={depth + 1}
             isDirectory={false}
             key={file.path}
             path={file.path}
-            {...this.props}
           />
         ))}
       </div>
