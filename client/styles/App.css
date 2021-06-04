@@ -32596,7 +32596,7 @@ html {
 }
 
 .sp-stack {
-  height: 100% !important;
+  height: 50% !important;
 }
 
 @media (min-width: 640px) {
