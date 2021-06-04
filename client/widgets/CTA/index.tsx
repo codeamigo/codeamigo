@@ -141,6 +141,17 @@ const CTA: React.FC<Props> = ({
     dispatch({ type: 'run-all-tests' });
   };
 
+  const promptRegistration = () => {
+    //  prompt register if previewing
+    modalVar({
+      callback: () =>
+        lesson?.id
+          ? router.push(`/lessons/start/${lesson.id}`)
+          : router.push('/home'),
+      name: 'registerAfterPreview',
+    });
+  };
+
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
@@ -149,20 +160,13 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
-  const f = isEditing
+  const f = isPreviewing
+    ? promptRegistration
+    : isEditing
     ? createCheckpoint
     : isTested
     ? isStepComplete
-      ? isPreviewing //  prompt register if previewing
-        ? () =>
-            modalVar({
-              callback: () =>
-                lesson?.id
-                  ? router.push(`/lessons/start/${lesson.id}`)
-                  : router.push('/home'),
-              name: 'registerAfterPreview',
-            })
-        : nextStep
+      ? nextStep
       : completeCheckpoint
     : runTests;
 
