@@ -23,7 +23,7 @@ export const getExtension = (file: string) => {
 };
 
 export const getModelExtension = (file: string) => {
-  const ext = file.split('.')[1];
+  const ext = file.split('.')[file.split('.').length - 1];
 
   switch (ext) {
     case 'vue':

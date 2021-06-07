@@ -9,7 +9,11 @@ import {
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import { camalize } from '👨‍💻widgets/Lesson/EditorV2/utils';
+import {
+  camalize,
+  getExtension,
+  getModelExtension,
+} from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import * as THEMES from '../../../styles/monacoThemes';
 const FILE = 'inmemory://model/';
@@ -199,7 +203,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   return (
     <ControlledEditor
       editorDidMount={editorDidMount}
-      language={'typescript'}
+      language={getModelExtension(sandpack.activePath)}
       onChange={(_, value) => {
         handleCodeUpdate(value as string);
       }}
