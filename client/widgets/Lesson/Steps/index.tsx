@@ -225,7 +225,8 @@ const Steps: React.FC<Props> = ({
                     <Icon
                       className="text-text-primary hidden mr-2"
                       name="pencil"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setIsUpdating(step.id);
                         setTimeout(() => {
                           updateRef.current?.focus();
