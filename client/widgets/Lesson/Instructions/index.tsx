@@ -30,11 +30,18 @@ const Instructions: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
+    // hack so that instructions update
+    toggleView('preview');
     setMarkdown(step.instructions);
+    setTimeout(() => {
+      toggleView('editor');
+    }, 10);
   }, [step.id]);
 
   const currentStepNum = props.steps.findIndex(({ id }) => id === step.id) + 1;
   const totalSteps = props.steps.length;
+
+  console.log(markdown);
 
   return (
     <div className="flex flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset">

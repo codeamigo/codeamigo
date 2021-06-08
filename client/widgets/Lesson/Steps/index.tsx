@@ -180,6 +180,7 @@ const Steps: React.FC<Props> = ({
                 onClick={() => {
                   if (canGoToStep(step)) {
                     setCurrentStepId(step.id);
+                    setShowSteps(false);
                   }
 
                   if (!isEditing) return;

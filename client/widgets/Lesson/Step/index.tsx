@@ -59,7 +59,6 @@ const Step: React.FC<Props> = ({
       if (test) {
         mods = data.step.codeModules.filter((val) => {
           if (val.name?.includes('spec')) {
-            debugger;
             if (val.name === test) return true;
             else return false;
           }
