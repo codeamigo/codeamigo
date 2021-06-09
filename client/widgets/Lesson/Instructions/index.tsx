@@ -34,7 +34,7 @@ const Instructions: React.FC<Props> = (props) => {
     toggleView('preview');
     setMarkdown(step.instructions);
     setTimeout(() => {
-      toggleView('editor');
+      toggleView(isEditing ? 'editor' : 'preview');
     }, 10);
   }, [step.id]);
 
