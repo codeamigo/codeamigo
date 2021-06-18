@@ -189,7 +189,7 @@ const Step: React.FC<Props> = ({
                   <CTA {...rest} nextStep={nextStep} step={data.step} />
                 </div>
               </div>
-              <div className="md:w-2/6 md:h-full h-24 w-4/6 flex">
+              <div className="md:w-2/6 md:h-full h-96 w-4/6 flex">
                 <EditorV2 codeModules={data.step.codeModules} {...rest} />
               </div>
               {/* <Separator /> */}
