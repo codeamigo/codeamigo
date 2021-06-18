@@ -1,11 +1,12 @@
+import { useReactiveVar } from '@apollo/client';
 import { useSandpack } from '@codesandbox/sandpack-react';
 import router from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
-import { useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
+import { Spinner } from '👨‍💻components/Spinners';
 import {
   LessonQuery,
   RegularStepFragment,
@@ -31,6 +32,7 @@ const CTA: React.FC<Props> = ({
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
+  const isTesting = useReactiveVar(isTestingVar);
 
   const testsRef = useRef<TestDataType[]>([]);
   const { dispatch } = sandpack;
@@ -45,6 +47,7 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
+    console.log(message.data.event);
     switch (message.data.event) {
       case 'test_end':
         testsRef.current = [...testsRef.current, message.data.test];
@@ -52,7 +55,7 @@ const CTA: React.FC<Props> = ({
       case 'total_test_end':
         isTestingVar(false);
         if (testsRef.current.some(({ status }) => status === 'fail')) {
-          alert('Tests failure.');
+          return;
         } else {
           //  prompt register if previewing
           if (isPreviewing) {
@@ -136,6 +139,7 @@ const CTA: React.FC<Props> = ({
   };
 
   const runTests = () => {
+    isTestingVar(true);
     testsRef.current = [];
     // @ts-ignore
     dispatch({ type: 'run-all-tests' });
@@ -173,10 +177,11 @@ const CTA: React.FC<Props> = ({
   return (
     <Button
       className="h-14 justify-center w-full text-lg"
+      disabled={isTestingVar()}
       onClick={f}
       type="button"
     >
-      {text}
+      {isTesting ? <Spinner /> : text}
     </Button>
   );
 };
