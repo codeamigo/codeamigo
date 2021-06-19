@@ -1,11 +1,12 @@
+import { useReactiveVar } from '@apollo/client';
 import { useSandpack } from '@codesandbox/sandpack-react';
-import router from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
-import { useCallback } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef } from 'react';
 
-import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
+import { Spinner } from '👨‍💻components/Spinners';
 import {
   LessonQuery,
   RegularStepFragment,
@@ -27,13 +28,16 @@ const CTA: React.FC<Props> = ({
   nextStep,
   step,
 }) => {
+  const router = useRouter();
   const sandpack = useSandpack();
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
+  const isTesting = useReactiveVar(isTestingVar);
 
   const testsRef = useRef<TestDataType[]>([]);
   const { dispatch } = sandpack;
+  const { bundlerState } = sandpack.sandpack;
 
   const handlePassCheckpoint = async (
     message: MessageEvent<CodeSandboxTestMsgType>
@@ -52,7 +56,8 @@ const CTA: React.FC<Props> = ({
       case 'total_test_end':
         isTestingVar(false);
         if (testsRef.current.some(({ status }) => status === 'fail')) {
-          alert('Tests failure.');
+          testFailureVar(true);
+          return;
         } else {
           //  prompt register if previewing
           if (isPreviewing) {
@@ -60,7 +65,7 @@ const CTA: React.FC<Props> = ({
               callback: () =>
                 lesson?.id
                   ? router.push(`/lessons/start/${lesson.id}`)
-                  : router.push('/home'),
+                  : router.push('/'),
               name: 'registerAfterPreview',
             });
             return;
@@ -72,16 +77,18 @@ const CTA: React.FC<Props> = ({
             variables: { id: step.currentCheckpointId },
           });
 
-          // if it's the last checkpoint also complete it
-          if (
+          const lastCheckpointForStep =
             step.checkpoints &&
             step.checkpoints.findIndex(
               ({ id }) => id === step.currentCheckpointId
             ) ===
-              step.checkpoints.length - 1
-          ) {
-            await completeCheckpoint();
-          }
+              step.checkpoints.length - 1;
+
+          modalVar({
+            callback: () =>
+              lastCheckpointForStep ? nextStep() : completeCheckpoint(),
+            name: 'testsPassed',
+          });
         }
     }
   };
@@ -136,9 +143,15 @@ const CTA: React.FC<Props> = ({
   };
 
   const runTests = () => {
+    isTestingVar(true);
+    testFailureVar(false);
     testsRef.current = [];
     // @ts-ignore
     dispatch({ type: 'run-all-tests' });
+
+    setTimeout(() => {
+      isTestingVar(false);
+    }, 3000);
   };
 
   const promptRegistration = () => {
@@ -147,7 +160,7 @@ const CTA: React.FC<Props> = ({
       callback: () =>
         lesson?.id
           ? router.push(`/lessons/start/${lesson.id}`)
-          : router.push('/home'),
+          : router.push('/'),
       name: 'registerAfterPreview',
     });
   };
@@ -160,6 +173,7 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
+  const spinner = isTesting || !bundlerState;
   const f = isPreviewing
     ? promptRegistration
     : isEditing
@@ -173,10 +187,11 @@ const CTA: React.FC<Props> = ({
   return (
     <Button
       className="h-14 justify-center w-full text-lg"
+      disabled={spinner}
       onClick={f}
       type="button"
     >
-      {text}
+      {spinner ? <Spinner /> : text}
     </Button>
   );
 };

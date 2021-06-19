@@ -5,10 +5,12 @@ import {
   SandpackPreview,
   SandpackProvider,
 } from '@codesandbox/sandpack-react';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
   LessonQuery,
   RegularStepFragment,
@@ -37,6 +39,7 @@ const Step: React.FC<Props> = ({
   showSteps,
   ...rest
 }) => {
+  const router = useRouter();
   const [completeStep] = useCompleteStepMutation();
   const [setNextStep] = useSetNextStepMutation();
   const [cachedFiles, setCachedFiles] = useState<
@@ -143,7 +146,17 @@ const Step: React.FC<Props> = ({
       variables: { id: data.step.id },
     });
 
-    if (!next) return;
+    if (!next) {
+      modalVar({
+        callback: () => router.push('/'),
+        data: {
+          lessonTitle: session.lesson.title,
+        },
+        name: 'lessonFinished',
+      });
+
+      return;
+    }
 
     // TODO: replace setCurrentStepId w/ session.currentStep
     // isEditing ? set lesson current step : set session
