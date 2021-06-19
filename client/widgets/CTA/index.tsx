@@ -37,6 +37,7 @@ const CTA: React.FC<Props> = ({
 
   const testsRef = useRef<TestDataType[]>([]);
   const { dispatch } = sandpack;
+  const { bundlerState } = sandpack.sandpack;
 
   const handlePassCheckpoint = async (
     message: MessageEvent<CodeSandboxTestMsgType>
@@ -172,6 +173,7 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
+  const spinner = isTesting || !bundlerState;
   const f = isPreviewing
     ? promptRegistration
     : isEditing
@@ -185,11 +187,11 @@ const CTA: React.FC<Props> = ({
   return (
     <Button
       className="h-14 justify-center w-full text-lg"
-      disabled={isTestingVar()}
+      disabled={spinner}
       onClick={f}
       type="button"
     >
-      {isTesting ? <Spinner /> : text}
+      {spinner ? <Spinner /> : text}
     </Button>
   );
 };
