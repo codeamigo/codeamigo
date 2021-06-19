@@ -3,6 +3,7 @@ import * as React from 'react';
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
 import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
+import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 
 import { Props as OwnProps } from '../../FilesList';
 
@@ -44,7 +45,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
           <img className="w-3 mr-1" src={this.getImageSrc(fileName)} />
           {fileName}
         </div>
-        <div className="flex items-center pr-1">
+        <div className="flex items-center pr-2">
           {this.props.isEditing && this.props.onUpdateCodeModuleEntryFile && (
             // update entry file
             <Icon
@@ -67,15 +68,20 @@ export class File extends React.PureComponent<Props & OwnProps> {
               }
             />
           )}
-          <Icon
-            className={
-              'text-text-primary text-xs ml-1 hidden group-hover:block'
-            }
-            name="cancel-circled"
-            onClick={() =>
-              this.props.onDelete(fileName!, this.props.isDirectory)
-            }
-          />
+          {this.props.isEditing && (
+            <Icon
+              className={
+                'text-text-primary text-xs ml-1 hidden group-hover:block'
+              }
+              name="cancel-circled"
+              onClick={() =>
+                this.props.onDelete(fileName!, this.props.isDirectory)
+              }
+            />
+          )}
+          {this.props.active && (
+            <StatusIndicator isPreviewing={this.props.isPreviewing} />
+          )}
         </div>
       </button>
     );

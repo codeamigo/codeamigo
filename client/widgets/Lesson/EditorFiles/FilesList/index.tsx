@@ -119,6 +119,7 @@ export type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;
   isEditing?: boolean;
+  isPreviewing?: boolean;
   name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
   onDelete: (path: string, isDirectory?: boolean) => void;

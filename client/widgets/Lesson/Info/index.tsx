@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import Icon from '👨‍💻components/Icon';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import LessonOptions, { Options } from '👨‍💻widgets/Lesson/Info/LessonOptions';
-import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 import Form from './Form';
@@ -29,7 +28,6 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
             name="home"
             onClick={() => router.push('/')}
           />
-          <StatusIndicator isPreviewing={isPreviewing} />
         </div>
         <div className="w-1/2">
           {isEditing ? <Form {...rest} /> : <View {...rest} />}
