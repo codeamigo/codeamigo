@@ -1,9 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
 import { useSandpack } from '@codesandbox/sandpack-react';
-import router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef } from 'react';
 
-import { isTestingVar } from '👨‍💻apollo/cache/lesson';
+import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
@@ -28,6 +28,7 @@ const CTA: React.FC<Props> = ({
   nextStep,
   step,
 }) => {
+  const router = useRouter();
   const sandpack = useSandpack();
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
@@ -54,6 +55,7 @@ const CTA: React.FC<Props> = ({
       case 'total_test_end':
         isTestingVar(false);
         if (testsRef.current.some(({ status }) => status === 'fail')) {
+          testFailureVar(true);
           return;
         } else {
           //  prompt register if previewing
@@ -62,7 +64,7 @@ const CTA: React.FC<Props> = ({
               callback: () =>
                 lesson?.id
                   ? router.push(`/lessons/start/${lesson.id}`)
-                  : router.push('/home'),
+                  : router.push('/'),
               name: 'registerAfterPreview',
             });
             return;
@@ -74,22 +76,18 @@ const CTA: React.FC<Props> = ({
             variables: { id: step.currentCheckpointId },
           });
 
-          // if it's the last checkpoint also complete it
-          if (
+          const lastCheckpointForStep =
             step.checkpoints &&
             step.checkpoints.findIndex(
               ({ id }) => id === step.currentCheckpointId
             ) ===
-              step.checkpoints.length - 1
-          ) {
-            await completeCheckpoint();
-            // otherwise show a success message
-          } else {
-            modalVar({
-              callback: () => completeCheckpoint(),
-              name: 'testsPassed',
-            });
-          }
+              step.checkpoints.length - 1;
+
+          modalVar({
+            callback: () =>
+              lastCheckpointForStep ? nextStep() : completeCheckpoint(),
+            name: 'testsPassed',
+          });
         }
     }
   };
@@ -145,9 +143,14 @@ const CTA: React.FC<Props> = ({
 
   const runTests = () => {
     isTestingVar(true);
+    testFailureVar(false);
     testsRef.current = [];
     // @ts-ignore
     dispatch({ type: 'run-all-tests' });
+
+    setTimeout(() => {
+      isTestingVar(false);
+    }, 3000);
   };
 
   const promptRegistration = () => {
@@ -156,7 +159,7 @@ const CTA: React.FC<Props> = ({
       callback: () =>
         lesson?.id
           ? router.push(`/lessons/start/${lesson.id}`)
-          : router.push('/home'),
+          : router.push('/'),
       name: 'registerAfterPreview',
     });
   };

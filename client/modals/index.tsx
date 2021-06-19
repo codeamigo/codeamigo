@@ -4,10 +4,12 @@ import React, { useCallback, useEffect } from 'react';
 import Icon from '👨‍💻components/Icon';
 import ChangePassword from '👨‍💻modals/ChangePassword';
 import CreateLesson from '👨‍💻modals/CreateLesson';
+import LessonFinished from '👨‍💻modals/LessonFinished';
 import Login from '👨‍💻modals/Login';
 import Register from '👨‍💻modals/Register';
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
 import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
+import TestsPassed from '👨‍💻modals/TestsPassed';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
@@ -91,10 +93,12 @@ const Modals: React.FC<Props> = () => {
           {/* eslint-disable */}
           {data?.modal?.name === 'changePassword' && <ChangePassword />}
           {data?.modal?.name === 'createLesson' && <CreateLesson />}
+          {data?.modal?.name === 'lessonFinished' && <LessonFinished />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
           {data?.modal?.name === 'registerAfterPreview' && <RegisterAfterPreview />}
           {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
+          {data?.modal?.name === 'testsPassed' && <TestsPassed />}
           {/* eslint-enable */}
         </div>
       </div>

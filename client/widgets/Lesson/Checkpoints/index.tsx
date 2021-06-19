@@ -1,8 +1,10 @@
+import { useReactiveVar } from '@apollo/client';
 import debounce from 'debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
+import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsDocument,
@@ -30,6 +32,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
   const [activeCheckpoint, setActiveCheckpoint] = useState<
     RegularCheckpointFragment | undefined
   >(undefined);
+  const testFailure = useReactiveVar(testFailureVar);
 
   // When user COMPLETES a checkpoint
   useEffect(() => {
@@ -180,6 +183,12 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                   {!isEditing &&
                     (checkpoint.isTested || checkpoint.isCompleted) && (
                       <span>✅</span>
+                    )}
+                  {!isEditing &&
+                    testFailure &&
+                    isCurrentCheckpoint(checkpoint.id) &&
+                    (!checkpoint.isTested || !checkpoint.isCompleted) && (
+                      <span>❌</span>
                     )}
                   {isEditing && isCurrentCheckpoint(checkpoint.id) && (
                     <div className="flex">

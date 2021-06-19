@@ -1,7 +1,9 @@
+import { useReactiveVar } from '@apollo/client';
 import { Console as ConsoleFeed, Decode } from 'console-feed';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 
+import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
 let consoleFeed: { Console: typeof ConsoleFeed; Decode: typeof Decode };
@@ -25,6 +27,7 @@ const Console: React.FC<Props> = () => {
   const listRef = useRef<HTMLDivElement>(null);
   const [logList, setLogList] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
+  const testFailure = useReactiveVar(testFailureVar);
 
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
@@ -43,6 +46,12 @@ const Console: React.FC<Props> = () => {
 
     return () => window.removeEventListener('message', handleLogs);
   }, []);
+
+  useEffect(() => {
+    if (testFailure) {
+      setActiveTab('tests');
+    }
+  }, [testFailure]);
 
   return (
     <div
