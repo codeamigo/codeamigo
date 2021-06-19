@@ -42,7 +42,21 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex sm:flex-col w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset">
+    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset">
+      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => !showSteps && setShowSteps(true)}
+        >
+          <Icon
+            className="text-text-primary text-2xl w-4"
+            name={showSteps ? 'cancel-squared' : 'list'}
+          />
+          <div className="text-text-primary text-sm font-semibold ml-3">
+            Step: {currentStepNum}/{totalSteps}
+          </div>
+        </div>
+      </div>
       <div
         className="w-full lg:h-full flex flex-col overflow-scroll flex-1"
         id="instructions"
@@ -98,20 +112,6 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         <div className="flex flex-col flex-1 relative">
           <Checkpoints {...props} />
-        </div>
-      </div>
-      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav border-t border-bg-nav-offset">
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => !showSteps && setShowSteps(true)}
-        >
-          <Icon
-            className="text-text-primary text-2xl w-4"
-            name={showSteps ? 'cancel-squared' : 'list'}
-          />
-          <div className="text-text-primary text-sm font-semibold ml-3">
-            Step: {currentStepNum}/{totalSteps}
-          </div>
         </div>
       </div>
     </div>

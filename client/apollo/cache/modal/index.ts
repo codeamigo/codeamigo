@@ -6,7 +6,8 @@ export type ModalNameType =
   | 'login'
   | 'register'
   | 'registerAfterPreview'
-  | 'resetPasswordSent';
+  | 'resetPasswordSent'
+  | 'testsPass';
 export type ModalType = {
   callback: Function;
   data?: any;

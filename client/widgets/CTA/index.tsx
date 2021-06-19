@@ -47,7 +47,6 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
-    console.log(message.data.event);
     switch (message.data.event) {
       case 'test_end':
         testsRef.current = [...testsRef.current, message.data.test];
@@ -84,6 +83,12 @@ const CTA: React.FC<Props> = ({
               step.checkpoints.length - 1
           ) {
             await completeCheckpoint();
+            // otherwise show a success message
+          } else {
+            modalVar({
+              callback: () => completeCheckpoint(),
+              name: 'testsPassed',
+            });
           }
         }
     }

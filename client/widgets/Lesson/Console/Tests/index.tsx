@@ -18,8 +18,6 @@ const Tests: React.FC<Props> = () => {
     const handleTestResults = (msg: MessageEvent<CodeSandboxTestMsgType>) => {
       if (msg.data.type !== 'test') return;
 
-      console.log(msg.data);
-
       switch (msg.data.event) {
         case 'test_end':
           setSuites((curr) => {
