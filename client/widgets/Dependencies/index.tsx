@@ -2,19 +2,23 @@ import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import { useDependenciesQuery } from '👨‍💻generated/graphql';
+import {
+  useDependenciesQuery,
+  useDepsFromPkgsQuery,
+} from '👨‍💻generated/graphql';
 
 const Dependencies: React.FC<Props> = () => {
-  const { data } = useDependenciesQuery();
+  const { data } = useDepsFromPkgsQuery();
+
   const router = useRouter();
 
   const queryDeps = router.query.deps as string;
   const depMap =
-    data?.dependencies?.reduce((acc, curr) => {
-      if (acc[curr.package]) {
-        acc[curr.package] = acc[curr.package] + 1;
+    data?.deps.reduce((acc, curr) => {
+      if (acc[curr]) {
+        acc[curr] = acc[curr] + 1;
       } else {
-        acc[curr.package] = 1;
+        acc[curr] = 1;
       }
       return acc;
     }, {} as { [key in string]: number }) || {};

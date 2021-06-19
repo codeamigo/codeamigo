@@ -39,6 +39,28 @@ export class CodeModuleResolver {
     return CodeModule.find({ relations: ["step"] });
   }
 
+  @Query(() => [String])
+  async deps(): Promise<String[]> {
+    const mods = await CodeModule.createQueryBuilder()
+      .leftJoinAndSelect("CodeModule.step", "step")
+      .leftJoinAndSelect("step.lesson", "lesson")
+      .where("lesson.status = 'PUBLISHED'")
+      .getMany();
+
+    const pkgs = mods.filter(({ name }) => name === "/package.json");
+    const values = pkgs.map(({ value }) => value);
+
+    const deps = [] as string[];
+
+    values.forEach((pkg) => {
+      const { dependencies } = JSON.parse(pkg) as { dependencies: string[] };
+      console.log(Object.keys(dependencies));
+      Object.keys(dependencies).forEach((val) => deps.push(val));
+    });
+
+    return deps;
+  }
+
   @Query(() => CodeModule, { nullable: true })
   codeModule(
     @Arg("id", () => Int) id: number

@@ -21,6 +21,7 @@ export type Query = {
   codeModules: Array<CodeModule>;
   dependencies: Array<Dependency>;
   dependency?: Maybe<Dependency>;
+  deps: Array<Scalars['String']>;
   lesson?: Maybe<Lesson>;
   lessons: Array<Lesson>;
   me?: Maybe<User>;
@@ -1288,6 +1289,14 @@ export type CheckpointsQuery = (
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
   )> }
+);
+
+export type DepsFromPkgsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DepsFromPkgsQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'deps'>
 );
 
 export type DependenciesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -2953,6 +2962,36 @@ export function useCheckpointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CheckpointsQueryHookResult = ReturnType<typeof useCheckpointsQuery>;
 export type CheckpointsLazyQueryHookResult = ReturnType<typeof useCheckpointsLazyQuery>;
 export type CheckpointsQueryResult = Apollo.QueryResult<CheckpointsQuery, CheckpointsQueryVariables>;
+export const DepsFromPkgsDocument = gql`
+    query DepsFromPkgs {
+  deps
+}
+    `;
+
+/**
+ * __useDepsFromPkgsQuery__
+ *
+ * To run a query within a React component, call `useDepsFromPkgsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useDepsFromPkgsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useDepsFromPkgsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDepsFromPkgsQuery(baseOptions?: Apollo.QueryHookOptions<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>) {
+        return Apollo.useQuery<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>(DepsFromPkgsDocument, baseOptions);
+      }
+export function useDepsFromPkgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>) {
+          return Apollo.useLazyQuery<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>(DepsFromPkgsDocument, baseOptions);
+        }
+export type DepsFromPkgsQueryHookResult = ReturnType<typeof useDepsFromPkgsQuery>;
+export type DepsFromPkgsLazyQueryHookResult = ReturnType<typeof useDepsFromPkgsLazyQuery>;
+export type DepsFromPkgsQueryResult = Apollo.QueryResult<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>;
 export const DependenciesDocument = gql`
     query Dependencies {
   dependencies {
