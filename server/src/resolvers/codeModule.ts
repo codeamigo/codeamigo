@@ -54,7 +54,6 @@ export class CodeModuleResolver {
 
     values.forEach((pkg) => {
       const { dependencies } = JSON.parse(pkg) as { dependencies: string[] };
-      console.log(Object.keys(dependencies));
       Object.keys(dependencies).forEach((val) => deps.push(val));
     });
 

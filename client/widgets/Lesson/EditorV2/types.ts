@@ -1,7 +1,4 @@
-import {
-  RegularCodeModuleFragment,
-  RegularDependencyFragment,
-} from '../../../generated/graphql';
+import { RegularCodeModuleFragment } from '../../../generated/graphql';
 
 export type FilesType = { [key in string]: string };
 
@@ -17,7 +14,6 @@ export enum PreviewLogTypeEnum {
 
 export type ToPreviewMsgType = {
   assetBuffer: Buffer;
-  dependencies: RegularDependencyFragment[];
   from: 'editor';
   isTest: boolean;
   runPath: string;

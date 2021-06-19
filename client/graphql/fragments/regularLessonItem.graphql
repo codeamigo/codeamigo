@@ -15,11 +15,9 @@ fragment RegularLessonItem on Lesson {
     username
   }
   steps {
-    dependencies {
-      ...RegularDependency
-    }
     codeModules {
-      name
+      name,
+      value
     }
   }
 }

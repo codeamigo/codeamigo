@@ -1,5 +1,0 @@
-fragment RegularDependency on Dependency {
-  id
-  package
-  version
-}

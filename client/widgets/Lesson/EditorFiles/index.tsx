@@ -1,9 +1,7 @@
-import { useSandpack } from '@codesandbox/sandpack-react';
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   RegularCodeModuleFragment,
-  RegularDependencyFragment,
   useCreateCodeModuleMutation,
   useDeleteCodeModuleMutation,
   useUpdateCodeModuleEntryFileMutation,

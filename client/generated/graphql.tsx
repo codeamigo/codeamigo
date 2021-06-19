@@ -631,11 +631,6 @@ export type RegularCodeModuleFragment = (
   & Pick<CodeModule, 'id' | 'isEntry' | 'name' | 'value'>
 );
 
-export type RegularDependencyFragment = (
-  { __typename?: 'Dependency' }
-  & Pick<Dependency, 'id' | 'package' | 'version'>
-);
-
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
@@ -664,12 +659,9 @@ export type RegularLessonItemFragment = (
     & Pick<User, 'id' | 'username'>
   ), steps?: Maybe<Array<(
     { __typename?: 'Step' }
-    & { dependencies?: Maybe<Array<(
-      { __typename?: 'Dependency' }
-      & RegularDependencyFragment
-    )>>, codeModules?: Maybe<Array<(
+    & { codeModules?: Maybe<Array<(
       { __typename?: 'CodeModule' }
-      & Pick<CodeModule, 'name'>
+      & Pick<CodeModule, 'name' | 'value'>
     )>> }
   )>> }
 );
@@ -683,9 +675,6 @@ export type RegularStepFragment = (
   )>>, checkpoints?: Maybe<Array<(
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
-  )>>, dependencies?: Maybe<Array<(
-    { __typename?: 'Dependency' }
-    & RegularDependencyFragment
   )>> }
 );
 
@@ -779,21 +768,6 @@ export type CreateCodeModuleMutation = (
   & { createCodeModule?: Maybe<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
-  )> }
-);
-
-export type CreateDependencyMutationVariables = Exact<{
-  stepId: Scalars['Float'];
-  package: Scalars['String'];
-  version: Scalars['String'];
-}>;
-
-
-export type CreateDependencyMutation = (
-  { __typename?: 'Mutation' }
-  & { createDependency?: Maybe<(
-    { __typename?: 'Dependency' }
-    & RegularDependencyFragment
   )> }
 );
 
@@ -1078,20 +1052,6 @@ export type UpdateCodeModuleEntryFileMutation = (
   )> }
 );
 
-export type UpdateDependencyVersionMutationVariables = Exact<{
-  id: Scalars['Float'];
-  version: Scalars['String'];
-}>;
-
-
-export type UpdateDependencyVersionMutation = (
-  { __typename?: 'Mutation' }
-  & { updateDependencyVersion?: Maybe<(
-    { __typename?: 'Dependency' }
-    & RegularDependencyFragment
-  )> }
-);
-
 export type UpdateLessonTitleMutationVariables = Exact<{
   id: Scalars['Float'];
   title: Scalars['String'];
@@ -1299,17 +1259,6 @@ export type DepsFromPkgsQuery = (
   & Pick<Query, 'deps'>
 );
 
-export type DependenciesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type DependenciesQuery = (
-  { __typename?: 'Query' }
-  & { dependencies: Array<(
-    { __typename?: 'Dependency' }
-    & RegularDependencyFragment
-  )> }
-);
-
 export type LessonQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1473,13 +1422,6 @@ export const RegularCheckpointFragmentDoc = gql`
   test
 }
     `;
-export const RegularDependencyFragmentDoc = gql`
-    fragment RegularDependency on Dependency {
-  id
-  package
-  version
-}
-    `;
 export const RegularStepFragmentDoc = gql`
     fragment RegularStep on Step {
   id
@@ -1494,13 +1436,9 @@ export const RegularStepFragmentDoc = gql`
   checkpoints {
     ...RegularCheckpoint
   }
-  dependencies {
-    ...RegularDependency
-  }
 }
     ${RegularCodeModuleFragmentDoc}
-${RegularCheckpointFragmentDoc}
-${RegularDependencyFragmentDoc}`;
+${RegularCheckpointFragmentDoc}`;
 export const RegularLessonFragmentDoc = gql`
     fragment RegularLesson on Lesson {
   id
@@ -1536,15 +1474,13 @@ export const RegularLessonItemFragmentDoc = gql`
     username
   }
   steps {
-    dependencies {
-      ...RegularDependency
-    }
     codeModules {
       name
+      value
     }
   }
 }
-    ${RegularDependencyFragmentDoc}`;
+    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -1739,43 +1675,6 @@ export function useCreateCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCodeModuleMutation>;
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
 export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
-export const CreateDependencyDocument = gql`
-    mutation CreateDependency($stepId: Float!, $package: String!, $version: String!) {
-  createDependency(
-    stepId: $stepId
-    options: {package: $package, version: $version}
-  ) {
-    ...RegularDependency
-  }
-}
-    ${RegularDependencyFragmentDoc}`;
-export type CreateDependencyMutationFn = Apollo.MutationFunction<CreateDependencyMutation, CreateDependencyMutationVariables>;
-
-/**
- * __useCreateDependencyMutation__
- *
- * To run a mutation, you first call `useCreateDependencyMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDependencyMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDependencyMutation, { data, loading, error }] = useCreateDependencyMutation({
- *   variables: {
- *      stepId: // value for 'stepId'
- *      package: // value for 'package'
- *      version: // value for 'version'
- *   },
- * });
- */
-export function useCreateDependencyMutation(baseOptions?: Apollo.MutationHookOptions<CreateDependencyMutation, CreateDependencyMutationVariables>) {
-        return Apollo.useMutation<CreateDependencyMutation, CreateDependencyMutationVariables>(CreateDependencyDocument, baseOptions);
-      }
-export type CreateDependencyMutationHookResult = ReturnType<typeof useCreateDependencyMutation>;
-export type CreateDependencyMutationResult = Apollo.MutationResult<CreateDependencyMutation>;
-export type CreateDependencyMutationOptions = Apollo.BaseMutationOptions<CreateDependencyMutation, CreateDependencyMutationVariables>;
 export const CreateLessonDocument = gql`
     mutation CreateLesson($title: String!, $description: String!, $template: String) {
   createLesson(
@@ -2461,39 +2360,6 @@ export function useUpdateCodeModuleEntryFileMutation(baseOptions?: Apollo.Mutati
 export type UpdateCodeModuleEntryFileMutationHookResult = ReturnType<typeof useUpdateCodeModuleEntryFileMutation>;
 export type UpdateCodeModuleEntryFileMutationResult = Apollo.MutationResult<UpdateCodeModuleEntryFileMutation>;
 export type UpdateCodeModuleEntryFileMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleEntryFileMutation, UpdateCodeModuleEntryFileMutationVariables>;
-export const UpdateDependencyVersionDocument = gql`
-    mutation updateDependencyVersion($id: Float!, $version: String!) {
-  updateDependencyVersion(id: $id, version: $version) {
-    ...RegularDependency
-  }
-}
-    ${RegularDependencyFragmentDoc}`;
-export type UpdateDependencyVersionMutationFn = Apollo.MutationFunction<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>;
-
-/**
- * __useUpdateDependencyVersionMutation__
- *
- * To run a mutation, you first call `useUpdateDependencyVersionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDependencyVersionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateDependencyVersionMutation, { data, loading, error }] = useUpdateDependencyVersionMutation({
- *   variables: {
- *      id: // value for 'id'
- *      version: // value for 'version'
- *   },
- * });
- */
-export function useUpdateDependencyVersionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>) {
-        return Apollo.useMutation<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>(UpdateDependencyVersionDocument, baseOptions);
-      }
-export type UpdateDependencyVersionMutationHookResult = ReturnType<typeof useUpdateDependencyVersionMutation>;
-export type UpdateDependencyVersionMutationResult = Apollo.MutationResult<UpdateDependencyVersionMutation>;
-export type UpdateDependencyVersionMutationOptions = Apollo.BaseMutationOptions<UpdateDependencyVersionMutation, UpdateDependencyVersionMutationVariables>;
 export const UpdateLessonTitleDocument = gql`
     mutation UpdateLessonTitle($id: Float!, $title: String!) {
   updateLessonTitle(id: $id, title: $title) {
@@ -2992,38 +2858,6 @@ export function useDepsFromPkgsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type DepsFromPkgsQueryHookResult = ReturnType<typeof useDepsFromPkgsQuery>;
 export type DepsFromPkgsLazyQueryHookResult = ReturnType<typeof useDepsFromPkgsLazyQuery>;
 export type DepsFromPkgsQueryResult = Apollo.QueryResult<DepsFromPkgsQuery, DepsFromPkgsQueryVariables>;
-export const DependenciesDocument = gql`
-    query Dependencies {
-  dependencies {
-    ...RegularDependency
-  }
-}
-    ${RegularDependencyFragmentDoc}`;
-
-/**
- * __useDependenciesQuery__
- *
- * To run a query within a React component, call `useDependenciesQuery` and pass it any options that fit your needs.
- * When your component renders, `useDependenciesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useDependenciesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useDependenciesQuery(baseOptions?: Apollo.QueryHookOptions<DependenciesQuery, DependenciesQueryVariables>) {
-        return Apollo.useQuery<DependenciesQuery, DependenciesQueryVariables>(DependenciesDocument, baseOptions);
-      }
-export function useDependenciesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<DependenciesQuery, DependenciesQueryVariables>) {
-          return Apollo.useLazyQuery<DependenciesQuery, DependenciesQueryVariables>(DependenciesDocument, baseOptions);
-        }
-export type DependenciesQueryHookResult = ReturnType<typeof useDependenciesQuery>;
-export type DependenciesLazyQueryHookResult = ReturnType<typeof useDependenciesLazyQuery>;
-export type DependenciesQueryResult = Apollo.QueryResult<DependenciesQuery, DependenciesQueryVariables>;
 export const LessonDocument = gql`
     query Lesson($id: Int!) {
   lesson(id: $id) {

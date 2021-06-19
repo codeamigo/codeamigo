@@ -19,9 +19,14 @@ const LessonsList: React.FC<Props> = () => {
     return (
       queryDeps.length === 0 ||
       lesson.steps?.some((step) => {
-        return step.dependencies?.some((dependency) =>
-          queryDeps.includes(dependency.package)
-        );
+        return step.codeModules?.some((codeModule) => {
+          if (codeModule.name === '/package.json') {
+            const value = JSON.parse(codeModule.value!);
+            return Object.keys(value.dependencies).some((value) =>
+              queryDeps.includes(value)
+            );
+          }
+        });
       })
     );
   };

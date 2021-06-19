@@ -2,10 +2,7 @@ import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import {
-  useDependenciesQuery,
-  useDepsFromPkgsQuery,
-} from '👨‍💻generated/graphql';
+import { useDepsFromPkgsQuery } from '👨‍💻generated/graphql';
 
 const Dependencies: React.FC<Props> = () => {
   const { data } = useDepsFromPkgsQuery();
