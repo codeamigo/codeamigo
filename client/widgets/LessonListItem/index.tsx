@@ -3,7 +3,7 @@ import React from 'react';
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
-import LanguageBar from '👨‍💻widgets/LessonsList/LanguageBar';
+import LanguageBar from '👨‍💻widgets/LanguageBar';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
 const LessonListItem: React.FC<Props> = ({

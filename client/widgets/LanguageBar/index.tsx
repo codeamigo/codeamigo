@@ -30,20 +30,20 @@ const LanguageBar: React.FC<Props> = ({ steps }) => {
   );
 
   return (
-    <div className="flex flex-wrap gap-2 w-10">
+    <div className="flex items-center">
       {sortedLangs.map((lang) => {
         if (lang === 'total') return;
+        const ratio = languageMap[lang] / languageMap.total;
         return (
           <div
-            aria-label={`${lang}: ${(
-              (languageMap[lang] / languageMap.total) *
-              100
-            ).toFixed(0)}%`}
-            className="h-2 w-2 rounded-full hint--top hint--no-animate"
+            aria-label={`${lang}: ${(ratio * 100).toFixed(0)}%`}
+            className="rounded-full hint--top hint--no-animate"
             key={lang}
             style={{
               // @ts-ignore
               backgroundColor: githubColors[lang]?.color,
+              height: `1rem`,
+              width: `${ratio * 4}rem`,
             }}
           ></div>
         );
