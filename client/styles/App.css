@@ -32573,7 +32573,7 @@ html {
 }
 
 .markdown-body pre {
-  color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 .st0 {

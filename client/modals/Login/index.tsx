@@ -77,6 +77,7 @@ const Login: React.FC = () => {
                 <img className="h-7" src={googlePng} />
               </button>
               <button
+                className="bg-bg-nav-offset"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 type="button"
               >

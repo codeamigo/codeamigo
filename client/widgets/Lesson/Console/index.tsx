@@ -55,13 +55,13 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className="bg-bg-primary h-full flex flex-col border-l border-bg-nav-offset overflow-scroll"
+      className="bg-bg-primary h-full flex flex-col overflow-scroll"
       style={{ backgroundColor: '#242424' }}
     >
-      <div className="bg-bg-primary border-b border-bg-nav-offset flex sticky top-0 z-10">
+      <div className="bg-bg-primary border-b border-t border-bg-nav flex sticky top-0 z-10">
         <div
           className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-            activeTab === 'console' ? 'bg-bg-nav-offset' : ''
+            activeTab === 'console' ? 'bg-bg-nav' : ''
           }`}
           onClick={() => setActiveTab('console')}
         >
@@ -69,7 +69,7 @@ const Console: React.FC<Props> = () => {
         </div>
         <div
           className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-            activeTab === 'tests' ? 'bg-bg-nav-offset' : ''
+            activeTab === 'tests' ? 'bg-bg-nav' : ''
           }`}
           onClick={() => setActiveTab('tests')}
         >

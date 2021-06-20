@@ -52,7 +52,7 @@ const Tests: React.FC<Props> = () => {
     <div>
       <div className="text-text-primary">
         <div className="flex justify-between items-center border-b-2">
-          <div className="px-4 py-3 text-xl font-semibold sticky top-0">
+          <div className="px-4 py-3 text-xl font-semibold sticky top-0 text-text-primary">
             Test Summary
           </div>
           <div

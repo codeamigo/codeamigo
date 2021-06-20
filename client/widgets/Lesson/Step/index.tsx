@@ -206,7 +206,7 @@ const Step: React.FC<Props> = ({
                 <EditorV2 codeModules={data.step.codeModules} {...rest} />
               </div>
               {/* <Separator /> */}
-              <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow">
+              <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav">
                 <SandpackPreview showSandpackErrorOverlay={false} />
                 <Console />
               </div>
