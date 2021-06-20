@@ -48,13 +48,28 @@ export class CodeModuleResolver {
       .getMany();
 
     const pkgs = mods.filter(({ name }) => name === "/package.json");
-    const values = pkgs.map(({ value }) => value);
+    const depsPerLesson = pkgs.reduce((acc, { value, step }) => {
+      const deps = JSON.parse(value).dependencies;
+      if (acc[step.lesson.id]) {
+        return {
+          ...acc,
+          [step.lesson.id]: [
+            ...new Set([...acc[step.lesson.id], ...Object.keys(deps)]),
+          ],
+        };
+      } else {
+        return {
+          ...acc,
+          [step.lesson.id]: Object.keys(deps),
+        };
+      }
+    }, {} as { [key in number]: string[] });
 
     const deps = [] as string[];
 
-    values.forEach((pkg) => {
-      const { dependencies } = JSON.parse(pkg) as { dependencies: string[] };
-      Object.keys(dependencies).forEach((val) => deps.push(val));
+    Object.keys(depsPerLesson).forEach((lesson: string) => {
+      const lessonDeps = depsPerLesson[parseInt(lesson)];
+      lessonDeps.forEach((val) => deps.push(val));
     });
 
     return deps;
