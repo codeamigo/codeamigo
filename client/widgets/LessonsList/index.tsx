@@ -14,10 +14,15 @@ const LessonsList: React.FC<Props> = () => {
   const queryDeps =
     (router.query.deps as string)?.split('|').filter((x) => !!x) || [];
 
+  const queryLevels =
+    (router.query.levels as string)?.split('|').filter((x) => !!x) || [];
+
   // Move filtering to BE
   const showLesson = (lesson: LessonsQuery['lessons'][0]) => {
+    if (queryLevels.length === 0 && queryDeps.length === 0) return true;
+
     return (
-      queryDeps.length === 0 ||
+      queryLevels.includes(lesson.label || '') ||
       lesson.steps?.some((step) => {
         return step.codeModules?.some((codeModule) => {
           if (codeModule.name === '/package.json') {

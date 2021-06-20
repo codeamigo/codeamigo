@@ -32,7 +32,13 @@ const Dependencies: React.FC<Props> = () => {
         }}
         onSubmit={() => Promise.resolve()}
         validate={(values) => {
-          router.replace(`/?deps=${values.checked.join('|')}`);
+          router.replace({
+            pathname: '/',
+            query: {
+              ...router.query,
+              deps: values.checked.join('|'),
+            },
+          });
         }}
       >
         {({ values }) => (
