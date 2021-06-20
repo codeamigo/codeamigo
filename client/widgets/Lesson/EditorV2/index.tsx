@@ -131,7 +131,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
   };
 
   const setupThemes = () => {
-    let themeName = meData?.me?.theme || 'cobalt';
+    let themeName = meData?.me?.theme || 'idle';
     let theme = THEMES[themeName as keyof typeof THEMES];
     let standardThemeName = themeName.split('_').map(camalize).join('');
     monacoRef.current.editor.defineTheme(standardThemeName, theme);
