@@ -163,10 +163,9 @@ const Step: React.FC<Props> = ({
     setCurrentStepId(next?.id);
   };
 
-  // if (!data.step.codeModules) return null;
-  // if (!cachedFiles) return null;
-
   const files = data.step?.codeModules?.reduce(modToFile, {});
+
+  if (!cachedFiles) return null;
 
   return (
     <>
@@ -184,7 +183,7 @@ const Step: React.FC<Props> = ({
         <div className="w-full h-full">
           <SandpackProvider
             customSetup={{
-              files: cachedFiles || {},
+              files: cachedFiles,
               main: cachedMain,
             }}
           >
