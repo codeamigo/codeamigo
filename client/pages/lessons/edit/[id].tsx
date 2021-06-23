@@ -14,7 +14,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
 
   const router = useRouter();
   const { data: meData } = useMeQuery();
-  const { data } = useLessonQuery({
+  const { data, loading } = useLessonQuery({
     variables: { id },
   });
 

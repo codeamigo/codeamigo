@@ -35,10 +35,12 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     setShowSteps(false);
   }, [currentStepId]);
 
+  console.log(loading);
+
   // lesson
   if (loading) return null;
-  // no lesson exists
 
+  // no lesson exists
   if (!data || !data.lesson) {
     if (typeof window !== 'undefined') {
       router.push(`/`);
@@ -57,6 +59,8 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (!sessionData.session.steps) return null;
 
   const stepId = currentStepId || sessionData.session.currentStep;
+
+  console.log(sessionData);
 
   return (
     <div className="flex">

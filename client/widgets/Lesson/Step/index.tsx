@@ -46,10 +46,12 @@ const Step: React.FC<Props> = ({
     null | { [key in string]: string }
   >(null);
   const [cachedMain, setCachedMain] = useState<string | undefined>(undefined);
-  const { data } = useStepQuery({
+  const { data: newData, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
   });
+
+  const data = newData || previousData;
 
   useEffect(() => {
     if (data?.step?.codeModules && data.step.checkpoints) {
@@ -179,7 +181,6 @@ const Step: React.FC<Props> = ({
           }
           {...rest}
         />
-        {/* <Editor nextStep={nextStep} step={data.step} {...rest} /> */}
         <div className="w-full h-full">
           <SandpackProvider
             customSetup={{
