@@ -25,6 +25,7 @@ const CTA: React.FC<Props> = ({
   isEditing,
   isPreviewing,
   lesson,
+  loading,
   nextStep,
   step,
 }) => {
@@ -173,7 +174,7 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
-  const spinner = isTesting || !bundlerState;
+  const spinner = isTesting || !bundlerState || loading;
   const f = isPreviewing
     ? promptRegistration
     : isEditing
@@ -200,6 +201,7 @@ type Props = {
   isEditing?: boolean;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
+  loading: boolean;
   nextStep: () => void;
   step: RegularStepFragment;
 };

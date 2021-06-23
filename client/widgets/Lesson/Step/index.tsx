@@ -46,7 +46,7 @@ const Step: React.FC<Props> = ({
     null | { [key in string]: string }
   >(null);
   const [cachedMain, setCachedMain] = useState<string | undefined>(undefined);
-  const { data: newData, previousData } = useStepQuery({
+  const { data: newData, loading, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
   });
@@ -199,7 +199,12 @@ const Step: React.FC<Props> = ({
                   />
                 </div>
                 <div className="p-2">
-                  <CTA {...rest} nextStep={nextStep} step={data.step} />
+                  <CTA
+                    {...rest}
+                    loading={loading}
+                    nextStep={nextStep}
+                    step={data.step}
+                  />
                 </div>
               </div>
               <div className="md:w-2/6 md:h-full h-96 w-4/6 flex">
