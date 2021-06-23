@@ -22,10 +22,10 @@ const CS_TYPES_URL =
 const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
-const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
+const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const { code, updateCode } = useActiveCode();
-  const { sandpack } = useSandpack();
+  const { dispatch, sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
   const pathRef = useRef(sandpack.activePath);
@@ -42,6 +42,10 @@ const EditorV2: React.FC<Props> = ({ codeModules, ...rest }) => {
     }
     // TODO: fix check
   }, [codeModules?.length, monacoRef.current]);
+
+  useEffect(() => {
+    dispatch({ type: 'refresh' });
+  }, [stepId]);
 
   const handleCodeUpdate = (newCode: string) => {
     updateCode(newCode);
@@ -224,6 +228,7 @@ type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
+  stepId?: number;
 };
 
 export default EditorV2;
