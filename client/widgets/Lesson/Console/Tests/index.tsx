@@ -1,8 +1,10 @@
+import { useReactiveVar } from '@apollo/client';
 import { useSandpack } from '@codesandbox/sandpack-react';
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+import { isTestingVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import {
   CodeSandboxTestMsgType,
@@ -13,6 +15,7 @@ const Tests: React.FC<Props> = () => {
   const { dispatch } = useSandpack();
   const [suites, setSuites] = useState<TestDataType[]>();
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const isTesting = useReactiveVar(isTestingVar);
 
   useEffect(() => {
     const handleTestResults = (msg: MessageEvent<CodeSandboxTestMsgType>) => {
@@ -29,6 +32,7 @@ const Tests: React.FC<Props> = () => {
           break;
         case 'total_test_end':
           setIsRunning(false);
+          isTestingVar(false);
           break;
         case 'total_test_start':
           setIsRunning(true);
@@ -43,7 +47,8 @@ const Tests: React.FC<Props> = () => {
   }, []);
 
   const runTests = () => {
-    if (isRunning) return;
+    isTestingVar(true);
+    if (isRunning || isTesting) return;
     // @ts-ignore
     dispatch({ type: 'run-all-tests' });
   };
@@ -62,9 +67,9 @@ const Tests: React.FC<Props> = () => {
           >
             <Icon
               className="mr-2 text-lg"
-              name={isRunning ? 'pause' : 'play'}
+              name={isRunning || isTesting ? 'pause' : 'play'}
             />
-            {isRunning ? 'Running' : 'Run Tests'}
+            {isRunning || isTesting ? 'Running' : 'Run Tests'}
           </div>
         </div>
       </div>
