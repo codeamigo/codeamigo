@@ -67,6 +67,8 @@ export const generateTheme = (theme: MonacoThemeType) => ({
     : theme.colors['editor.foreground'],
 });
 
+export const DEFAULT_THEME = 'idle';
+
 export const themes: IThemes = {
   active4d: generateTheme(active4d as MonacoThemeType),
   all_hallows_eve: generateTheme(all_hallows_eve),

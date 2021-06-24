@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { DEFAULT_THEME } from 'styles/appThemes';
 import { applyTheme } from 'styles/appThemes/utils';
 
 import { useMeQuery } from '👨‍💻generated/graphql';
@@ -8,7 +9,11 @@ import MainLayout from './MainLayout';
 
 const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
   const { data, loading } = useMeQuery();
-  const theme = loading ? null : data?.me ? data.me?.theme || 'idle' : 'idle';
+  const theme = loading
+    ? null
+    : data?.me
+    ? data.me?.theme || DEFAULT_THEME
+    : DEFAULT_THEME;
 
   useEffect(() => {
     if (theme) {

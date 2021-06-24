@@ -2,8 +2,11 @@ import { useReactiveVar } from '@apollo/client';
 import { Console as ConsoleFeed, Decode } from 'console-feed';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
+import { DEFAULT_THEME } from 'styles/appThemes';
+import * as themes from 'styles/monacoThemes';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
+import { Theme, useMeQuery } from '👨‍💻generated/graphql';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
 let consoleFeed: { Console: typeof ConsoleFeed; Decode: typeof Decode };
@@ -29,6 +32,8 @@ const Console: React.FC<Props> = () => {
   const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
   const testFailure = useReactiveVar(testFailureVar);
 
+  const { data } = useMeQuery();
+
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
       if (msg.data.type === 'console') {
@@ -53,10 +58,16 @@ const Console: React.FC<Props> = () => {
     }
   }, [testFailure]);
 
+  // @ts-ignore
+  const { base } = themes[data?.me?.theme || DEFAULT_THEME];
+
   return (
     <div
       className="bg-bg-primary h-full flex flex-col overflow-scroll"
-      style={{ backgroundColor: '#242424' }}
+      style={{
+        backgroundColor:
+          activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
+      }}
     >
       <div className="bg-bg-primary border-b border-t border-bg-nav flex sticky top-0 z-10">
         <div
@@ -87,7 +98,7 @@ const Console: React.FC<Props> = () => {
               BASE_FONT_SIZE: '13px',
               LOG_RESULT_BACKGROUND: 'blue',
             }}
-            variant="dark"
+            variant={'dark'}
           />
         </div>
         <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
