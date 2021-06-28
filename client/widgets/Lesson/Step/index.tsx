@@ -207,7 +207,7 @@ const Step: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <div className="md:w-2/6 md:h-full h-96 w-4/6 flex">
+              <div className="md:w-2/6 md:h-full h-96 w-4/6 flex z-20">
                 <EditorV2
                   codeModules={data.step.codeModules}
                   stepId={data.step.id}
