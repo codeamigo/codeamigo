@@ -68,17 +68,20 @@ export class File extends React.PureComponent<Props & OwnProps> {
               }
             />
           )}
-          {this.props.isEditing && fileName && !fileName.includes('spec') && (
-            <Icon
-              className={
-                'text-text-primary text-xs ml-1 hidden group-hover:block'
-              }
-              name="cancel-circled"
-              onClick={() =>
-                this.props.onDelete(fileName!, this.props.isDirectory)
-              }
-            />
-          )}
+          {this.props.isEditing &&
+            fileName &&
+            !fileName.includes('spec') &&
+            !this.isEntry(fileName) && (
+              <Icon
+                className={
+                  'text-text-primary text-xs ml-1 hidden group-hover:block'
+                }
+                name="cancel-circled"
+                onClick={() =>
+                  this.props.onDelete(fileName!, this.props.isDirectory)
+                }
+              />
+            )}
           {this.props.active && (
             <StatusIndicator isPreviewing={this.props.isPreviewing} />
           )}
