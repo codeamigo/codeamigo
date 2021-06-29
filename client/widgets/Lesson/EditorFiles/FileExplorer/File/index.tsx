@@ -68,7 +68,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
               }
             />
           )}
-          {this.props.isEditing && (
+          {this.props.isEditing && fileName && !fileName.includes('spec') && (
             <Icon
               className={
                 'text-text-primary text-xs ml-1 hidden group-hover:block'

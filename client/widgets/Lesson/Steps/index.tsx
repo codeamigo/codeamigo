@@ -186,7 +186,7 @@ const Steps: React.FC<Props> = ({
                   if (!isEditing) return;
                 }}
               >
-                <div className="flex w-full">
+                <div className="flex w-full overflow-hidden whitespace-nowrap">
                   {isUpdating === step.id ? (
                     <input
                       className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
