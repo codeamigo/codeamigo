@@ -32591,7 +32591,6 @@ html {
 }
 
 .sp-layout>:not(:first-child) {
-  border: 0px !important;
   margin-top: 0px !important;
 }
 

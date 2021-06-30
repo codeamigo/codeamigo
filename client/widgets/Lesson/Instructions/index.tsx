@@ -38,7 +38,7 @@ const Instructions: React.FC<Props> = (props) => {
     }, 10);
     // hack to scroll back to top of div
     if (document) {
-      document?.getElementById('instructions')?.scrollIntoView();
+      document?.getElementById('markdown-parent')?.scrollTo({ top: 0 });
     }
   }, [step.id]);
 
@@ -46,10 +46,7 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div
-      className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset"
-      id="instructions"
-    >
+    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset">
       <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset">
         <div
           className="flex items-center cursor-pointer"
@@ -98,6 +95,7 @@ const Instructions: React.FC<Props> = (props) => {
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
           } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset overflow-scroll`}
+          id="markdown-parent"
         >
           {view === 'editor' ? (
             <textarea
