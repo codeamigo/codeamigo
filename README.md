@@ -51,6 +51,12 @@ Visit http://localhost:3000
 4. dokku tags:deploy api latest
 ```
 
+### Update letsencrypt
+```
+1. ssh root@104.236.11.118
+2. dokku letsencrypt api
+```
+
 ### Migrations
 ```
 1. npx typeorm migration:generate -n <DbChange>
