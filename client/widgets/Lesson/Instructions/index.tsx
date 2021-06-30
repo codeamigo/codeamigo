@@ -36,13 +36,20 @@ const Instructions: React.FC<Props> = (props) => {
     setTimeout(() => {
       toggleView(isEditing ? 'editor' : 'preview');
     }, 10);
+    // hack to scroll back to top of div
+    if (document) {
+      document?.getElementById('instructions')?.scrollIntoView();
+    }
   }, [step.id]);
 
   const currentStepNum = props.steps.findIndex(({ id }) => id === step.id) + 1;
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset">
+    <div
+      className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-1/4 border-r border-bg-nav-offset"
+      id="instructions"
+    >
       <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset">
         <div
           className="flex items-center cursor-pointer"
