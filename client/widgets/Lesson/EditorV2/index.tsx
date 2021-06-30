@@ -213,7 +213,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
       }}
       options={{
         automaticLayout: true,
-        fontSize: '14px',
+        fontSize: '12px',
         minimap: { enabled: false },
         scrollBeyondLastLine: false,
         wordWrap: 'on',

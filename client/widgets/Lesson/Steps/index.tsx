@@ -152,7 +152,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="w-full absolute top-11 border-r border-bg-nav-offset left-0 bg-bg-primary bg-opacity-5 py-2 px-4 z-10 lg:w-1/5"
+      className="w-full overflow-auto absolute top-11 border-r border-bg-nav-offset left-0 bg-bg-primary bg-opacity-5 py-2 px-4 z-10 lg:w-1/5"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
