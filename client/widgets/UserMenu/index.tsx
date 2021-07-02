@@ -5,12 +5,27 @@ import React from 'react';
 import { isAuthenticatedVar } from '👨‍💻apollo/cache/me';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
-import { useLogoutMutation, useMeQuery } from '👨‍💻generated/graphql';
+import {
+  MeDocument,
+  MeQuery,
+  useLogoutMutation,
+  useMeQuery,
+} from '👨‍💻generated/graphql';
 
 const UserMenu: React.FC<Props> = () => {
   const router = useRouter();
   const { data, loading } = useMeQuery({ fetchPolicy: 'cache-and-network' });
-  const [logout] = useLogoutMutation({ refetchQueries: ['Me'] });
+  const [logout] = useLogoutMutation({
+    refetchQueries: ['Me'],
+    update: (store) => {
+      store.writeQuery<MeQuery>({
+        data: {
+          me: null,
+        },
+        query: MeDocument,
+      });
+    },
+  });
 
   if (loading) return null;
 
