@@ -22,7 +22,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <script
           async
           data-domain="codeamigo.dev"
-          data-exclude="/auth/*"
+          data-exclude="/auth/*/*"
           defer
           src="https://plausible.io/js/plausible.exclusions.js"
         ></script>
