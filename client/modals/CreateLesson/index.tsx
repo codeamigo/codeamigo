@@ -76,6 +76,26 @@ const CreateLesson: React.FC<Props> = () => {
                     </label>
                     <label
                       className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      htmlFor="angular-template"
+                    >
+                      <Field
+                        id="angular-template"
+                        name="template"
+                        type="radio"
+                        value="angular"
+                      />{' '}
+                      <div className="flex flex-col items-start ml-2">
+                        <img
+                          className="h-6 mt-1"
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png"
+                        />
+                        <div className="text-sm text-text-primary font-semibold">
+                          Angular
+                        </div>
+                      </div>
+                    </label>
+                    <label
+                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
                       htmlFor="vue-template"
                     >
                       <Field
