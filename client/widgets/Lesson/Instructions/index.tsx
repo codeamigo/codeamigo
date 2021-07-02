@@ -67,7 +67,7 @@ const Instructions: React.FC<Props> = (props) => {
       >
         <h3
           className={`w-full flex justify-between items-center bg-bg-nav text-xs ${
-            isEditing ? 'p-2' : ''
+            isEditing ? 'p-1.5 border-b border-bg-nav-offset' : ''
           }`}
         >
           {isEditing ? (
