@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
 
+import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import { useChangeEmailMutation, useMeQuery } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
@@ -44,13 +45,13 @@ const ChangeEmail: React.FC<Props> = () => {
                 type="email"
               />
               <InputField label="New Email" name="newEmail" type="email" />
-              <button
-                className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              <Button
+                className="justify-center"
                 disabled={isSubmitting}
                 type="submit"
               >
                 Submit
-              </button>
+              </Button>
             </Form>
           )}
         </Formik>

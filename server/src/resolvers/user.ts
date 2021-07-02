@@ -13,6 +13,8 @@ import {
 import { v4 } from "uuid";
 
 import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
+import { Lesson } from "../entities/Lesson";
+import { Session } from "../entities/Session";
 import { RoleEnum, User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { MyContext, ThemeEnum } from "../types";
@@ -155,6 +157,49 @@ export class UserResolver {
     await user.save();
 
     return user.profileColorScheme;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deleteUser(@Ctx() ctx: MyContext): Promise<boolean> {
+    try {
+      const id = ctx.req.session.userId;
+      const user = await User.findOne(id, {
+        relations: ["classes", "lessons"],
+      });
+
+      if (!user) {
+        return false;
+      }
+
+      // First need to delete the users sessions (classes) and lessons.
+      const sessionIds = user.classes.map(({ id }) => id);
+      const sessions = await Session.findByIds(sessionIds);
+      const lessonIds = user.lessons.map(({ id }) => id);
+      const lessons = await Lesson.findByIds(lessonIds);
+
+      await Promise.all(
+        sessions.map(async (session) => {
+          const { id } = session;
+
+          return await Session.delete(id);
+        })
+      );
+
+      await Promise.all(
+        lessons.map(async (lesson) => {
+          const { id } = lesson;
+
+          return await Lesson.delete(id);
+        })
+      );
+
+      await User.delete(id);
+      await this.logout(ctx);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @Mutation(() => UserResponse)
