@@ -71,16 +71,16 @@ const Me = () => {
           >
             <Icon className="mr-2" name="cog" /> Settings
           </button>
-          {/* {data?.me?.role === 'ADMIN' && ( */}
-          <button
-            className={`${
-              tab === 'backoffice' ? 'bg-bg-nav' : ''
-            } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
-            onClick={() => setTab('backoffice')}
-          >
-            <Icon className="mr-2" name="flashlight" /> Backoffice
-          </button>
-          {/* )} */}
+          {data?.me?.role === 'ADMIN' && (
+            <button
+              className={`${
+                tab === 'backoffice' ? 'bg-bg-nav' : ''
+              } mt-2 flex items-center px-3 py-2 w-full rounded-md font-bold text-text-primary hover:bg-bg-nav transition-colors text-left`}
+              onClick={() => setTab('backoffice')}
+            >
+              <Icon className="mr-2" name="flashlight" /> Backoffice
+            </button>
+          )}
         </div>
       </div>
       <div className="sm:w-3/4 w-full">

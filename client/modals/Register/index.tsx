@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/client';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
+import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import { useModalQuery, useRegisterMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
@@ -80,13 +81,13 @@ const Register: React.FC = () => {
               </div>
             </div>
             <div className="px-4 sm:px-6">
-              <button
-                className="w-full justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              <Button
+                className="w-full justify-center"
                 disabled={isSubmitting || !isValid}
                 type="submit"
               >
                 Register
-              </button>
+              </Button>
               <div className="text-xs w-full text-text-primary text-center my-1 mt-3">
                 or
               </div>
