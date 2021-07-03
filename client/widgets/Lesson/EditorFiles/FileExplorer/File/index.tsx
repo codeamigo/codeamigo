@@ -35,7 +35,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
 
     return (
       <button
-        className="w-full bg-bg-primary text-text-primary flex justify-between items-center focus:outline-none group h-5"
+        className="w-full bg-bg-primary text-text-primary overflow-hidden whitespace-nowrap flex justify-between items-center focus:outline-none group h-5"
         data-active={this.props.active}
         onClick={this.props.selectFile ? this.selectFile : this.props.onClick}
         style={{ paddingLeft: 8 * this.props.depth + 'px' }}
