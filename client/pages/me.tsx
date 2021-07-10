@@ -15,7 +15,9 @@ const Me = () => {
   const router = useRouter();
   const { data, error, loading } = useMeQuery();
 
-  const [tab, setTab] = useState<string | undefined>('activity');
+  const [tab, setTab] = useState<string | undefined>(
+    (router.query.tab as string) || 'activity'
+  );
 
   useEffect(() => {
     if (!router.query.tab) return;
@@ -24,7 +26,7 @@ const Me = () => {
 
   useEffect(() => {
     if (tab !== router.query.tab) {
-      router.replace(`/me?tab=${tab}`);
+      router.push(`/me?tab=${tab}`);
     }
   }, [tab]);
 
