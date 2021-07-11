@@ -17,6 +17,7 @@ import {
 
 import * as THEMES from '../../../styles/monacoThemes';
 const FILE = 'inmemory://model/';
+const URN = 'urn:';
 const CS_TYPES_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings/@types';
 const CS_TYPES_FALLBACK_URL =
@@ -35,6 +36,15 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   useEffect(() => {
     pathRef.current = sandpack.activePath;
   }, [sandpack.activePath]);
+
+  useEffect(() => {
+    if (!monacoRef.current) return;
+    if (!sandpack.activePath) return;
+    const model = monacoRef.current.editor.getModel(
+      `${URN}${sandpack.activePath}`
+    );
+    editorRef.current.setModel(model);
+  }, [sandpack.activePath, monacoRef.current, editorRef.current]);
 
   useEffect(() => {
     if (monacoRef.current) {
@@ -134,6 +144,21 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
     // );
   };
 
+  const setupModels = () => {
+    codeModules?.map((mod) => {
+      monacoRef.current.editor.createModel(
+        mod.value,
+        getExtension(mod.name || ''),
+        `${URN}${mod.name}`
+      );
+    });
+
+    const model = monacoRef.current.editor.getModel(
+      `${URN}${sandpack.activePath}`
+    );
+    editorRef.current.setModel(model);
+  };
+
   const setupThemes = () => {
     let themeName = meData?.me?.theme || 'idle';
     let theme = THEMES[themeName as keyof typeof THEMES];
@@ -189,6 +214,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   };
 
   const setupEditor = () => {
+    setupModels();
     setupCommands();
     setupCompilerOptions();
     setupDiagnosticsOptions();
@@ -207,7 +233,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   return (
     <ControlledEditor
       editorDidMount={editorDidMount}
-      language={getModelExtension(sandpack.activePath)}
       onChange={(_, value) => {
         handleCodeUpdate(value as string);
       }}
@@ -218,7 +243,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
         scrollBeyondLastLine: false,
         wordWrap: 'on',
       }}
-      value={code}
       width="100%"
     />
   );

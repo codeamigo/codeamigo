@@ -1365,7 +1365,7 @@
   dependencies:
     state-local "^1.0.6"
 
-"@monaco-editor/react@^3.7.2":
+"@monaco-editor/react@^3.8.3":
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/@monaco-editor/react/-/react-3.8.3.tgz#36d19278fdee2a7f97fd193c0596df531b183a5e"
   integrity sha512-wd+XzqATnUoODHSm2JMZi5OV9qeC8hdoSgoZHsTceXyH3Z/oktUtFbjaYeK0XL/lnXAScSYue81GA2UsiAx0sQ==

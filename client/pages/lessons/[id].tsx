@@ -35,8 +35,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     setShowSteps(false);
   }, [currentStepId]);
 
-  console.log(loading);
-
   // lesson
   if (loading) return null;
 
@@ -59,8 +57,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   if (!sessionData.session.steps) return null;
 
   const stepId = currentStepId || sessionData.session.currentStep;
-
-  console.log(sessionData);
 
   return (
     <div className="flex">
