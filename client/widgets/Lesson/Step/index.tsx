@@ -1,6 +1,8 @@
 import '@codesandbox/sandpack-react/dist/index.css';
 
 import {
+  CodeEditor,
+  SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
@@ -213,6 +215,7 @@ const Step: React.FC<Props> = ({
                   stepId={data.step.id}
                   {...rest}
                 />
+                {/* <SandpackCodeEditor /> */}
               </div>
               {/* <Separator /> */}
               <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav">
