@@ -47,6 +47,17 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   }, [sandpack.activePath, monacoRef.current, editorRef.current]);
 
   useEffect(() => {
+    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+      setupModels();
+    }
+  }, [
+    codeModules?.length,
+    monacoRef.current,
+    editorRef.current,
+    sandpack.activePath,
+  ]);
+
+  useEffect(() => {
     if (monacoRef.current) {
       setupTypes();
     }
@@ -146,6 +157,10 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
 
   const setupModels = () => {
     codeModules?.map((mod) => {
+      const model = monacoRef.current.editor.getModel(`${URN}${mod.name}`);
+
+      if (model) return;
+
       monacoRef.current.editor.createModel(
         mod.value,
         getExtension(mod.name || ''),
@@ -214,7 +229,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   };
 
   const setupEditor = () => {
-    setupModels();
     setupCommands();
     setupCompilerOptions();
     setupDiagnosticsOptions();
