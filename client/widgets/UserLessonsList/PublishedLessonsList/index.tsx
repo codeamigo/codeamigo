@@ -1,4 +1,5 @@
 import { Menu, Transition } from '@headlessui/react';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
@@ -10,6 +11,7 @@ import {
 import LessonListItem from '👨‍💻widgets/LessonListItem';
 
 const PublishedLessonsList: React.FC<Props> = () => {
+  const router = useRouter();
   const { data: meData } = useMeQuery();
   const [deleteLessonM] = useDeleteLessonMutation();
 
@@ -75,6 +77,15 @@ const PublishedLessonsList: React.FC<Props> = () => {
                             className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                             role="menu"
                           >
+                            <button
+                              className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
+                              onClick={() =>
+                                router.push(`/lessons/edit/${lesson.id}`)
+                              }
+                              role="menuitem"
+                            >
+                              📝&nbsp;<span>Edit Lesson</span>
+                            </button>
                             <button
                               className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
                               onClick={(e) => deleteLesson(e, lesson.id)}
