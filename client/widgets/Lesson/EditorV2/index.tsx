@@ -46,6 +46,17 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
     editorRef.current.setModel(model);
   }, [sandpack.activePath, monacoRef.current, editorRef.current]);
 
+  // When step changes reinit models
+  useEffect(() => {
+    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+      monacoRef.current.editor
+        .getModels()
+        .forEach((model: any) => model.dispose());
+      setupModels();
+    }
+  }, [stepId, monacoRef.current, editorRef.current, sandpack.activePath]);
+
+  // When file added add to models
   useEffect(() => {
     if (monacoRef.current && editorRef.current && sandpack.activePath) {
       setupModels();
