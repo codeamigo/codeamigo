@@ -1,20 +1,16 @@
 import '@codesandbox/sandpack-react/dist/index.css';
 
-import { useReactiveVar } from '@apollo/client';
 import {
-  CodeEditor,
-  SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
 } from '@codesandbox/sandpack-react';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
-import { isDraggingVar } from '👨‍💻apollo/cache/preview';
 import {
   LessonQuery,
   RegularStepFragment,
@@ -43,6 +39,8 @@ const Step: React.FC<Props> = ({
   showSteps,
   ...rest
 }) => {
+  const previewRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation();
   const [setNextStep] = useSetNextStepMutation();
@@ -54,6 +52,12 @@ const Step: React.FC<Props> = ({
     fetchPolicy: 'cache-and-network',
     variables: { id },
   });
+  const [initialPreviewWidth, setInitialPreviewWidth] = useState<null | number>(
+    null
+  );
+  const [initialEditorWidth, setInitialEditorWidth] = useState<null | number>(
+    null
+  );
 
   const data = newData || previousData;
 
@@ -87,6 +91,18 @@ const Step: React.FC<Props> = ({
     data?.step?.codeModules?.length,
     data?.step?.currentCheckpointId,
   ]);
+
+  useEffect(() => {
+    if (previewRef.current) {
+      setInitialPreviewWidth(previewRef.current.offsetWidth);
+    }
+  }, [previewRef.current]);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      setInitialEditorWidth(editorRef.current.offsetWidth);
+    }
+  }, [editorRef.current]);
 
   if (!data) return null;
   if (!data.step) return null;
@@ -169,6 +185,20 @@ const Step: React.FC<Props> = ({
     setCurrentStepId(next?.id);
   };
 
+  const updateWidths = (x: number) => {
+    if (
+      previewRef.current &&
+      editorRef.current &&
+      initialPreviewWidth &&
+      initialEditorWidth
+    ) {
+      console.log(x);
+      console.log(previewRef.current.offsetWidth);
+      editorRef.current.style.width = initialEditorWidth - x + 'px';
+      previewRef.current.style.width = initialPreviewWidth + x + 'px';
+    }
+  };
+
   const files = data.step?.codeModules?.reduce(modToFile, {});
 
   if (!cachedFiles) return null;
@@ -193,7 +223,7 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="md:w-1/6 w-2/6 flex flex-col justify-between bg-bg-primary z-10">
+              <div className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-10">
                 <div className="h-full">
                   <EditorFiles
                     codeModules={data.step.codeModules}
@@ -211,16 +241,21 @@ const Step: React.FC<Props> = ({
                   />
                 </div>
               </div>
-              <div className="md:w-2/6 md:h-full h-96 w-4/6 flex z-20">
+              <div
+                className="md:w-2/6 w-4/6 md:h-full h-96 flex z-20"
+                ref={editorRef}
+              >
                 <EditorV2
                   codeModules={data.step.codeModules}
                   stepId={data.step.id}
                   {...rest}
                 />
-                {/* <SandpackCodeEditor /> */}
-                <Separator />
+                <Separator onChangeX={updateWidths} />
               </div>
-              <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav">
+              <div
+                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav"
+                ref={previewRef}
+              >
                 <SandpackPreview />
                 <Console />
               </div>
