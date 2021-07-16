@@ -1,5 +1,6 @@
 import '@codesandbox/sandpack-react/dist/index.css';
 
+import { useReactiveVar } from '@apollo/client';
 import {
   CodeEditor,
   SandpackCodeEditor,
@@ -13,6 +14,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
+import { isDraggingVar } from '👨‍💻apollo/cache/preview';
 import {
   LessonQuery,
   RegularStepFragment,
@@ -216,8 +218,8 @@ const Step: React.FC<Props> = ({
                   {...rest}
                 />
                 {/* <SandpackCodeEditor /> */}
+                <Separator />
               </div>
-              {/* <Separator /> */}
               <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav">
                 <SandpackPreview />
                 <Console />

@@ -1,27 +1,43 @@
-// WIP
 import React, { MouseEvent } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 
 const Separator: React.FC<Props> = () => {
   const [xMove, setXMove] = useState(0);
 
   const startDrag = (e: MouseEvent) => {
+    const iframe = document.getElementsByClassName('sp-preview-iframe')[0];
+    // @ts-ignore
+    iframe.style.pointerEvents = 'none';
+
+    const onMouseMove = (e) => {
+      console.log(e);
+    };
+
     const endDrag = (event: MouseEvent<Element, MouseEvent>) => {
-      console.log(xMove - event.pageX);
+      // @ts-ignore
+      iframe.style.pointerEvents = 'auto';
+      document.removeEventListener('mousemove', onMouseMove);
     };
 
     // @ts-ignore
-    window.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('mousemove', onMouseMove);
 
     setXMove(e.pageX);
 
     // @ts-ignore
-    window.addEventListener('mouseup', endDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('mousemove', onMouseMove);
   };
+
+  useEffect(() => {
+    console.log(xMove);
+  }, [xMove]);
 
   return (
     <div
-      className="absolute right-0 top-0 h-full w-2 bg-bg-nav-offset cursor-col-resize"
+      className="hidden md:block absolute right-0 top-0 h-full w-2 bg-bg-nav-offset cursor-col-resize"
       onMouseDown={startDrag}
     />
   );
