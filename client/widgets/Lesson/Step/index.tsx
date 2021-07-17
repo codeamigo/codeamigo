@@ -192,9 +192,6 @@ const Step: React.FC<Props> = ({
       initialPreviewWidth &&
       initialEditorWidth
     ) {
-      console.log('x', x);
-      console.log('initialEditorWidth', initialEditorWidth);
-      console.log('initialPreviewWidth', initialPreviewWidth);
       editorRef.current.style.width = initialEditorWidth - x + 'px';
       previewRef.current.style.width = initialPreviewWidth + x + 'px';
     }

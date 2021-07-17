@@ -4,24 +4,25 @@ import { useState } from 'react';
 
 const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
   const [xMove, setXMove] = useState(0);
-  // const [xStart, setXStart] = useState(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const startDrag = (e: MouseEvent) => {
     let xStart = e.pageX;
-    console.log('starting drag', e.pageX);
     const iframe = document.getElementsByClassName('sp-preview-iframe')[0];
     // @ts-ignore
     iframe.style.pointerEvents = 'none';
+    setIsDragging(true);
 
     const onMouseMove = (e: any) => {
       setXMove(xStart - e.pageX);
     };
 
     const endDrag = (e: MouseEvent) => {
+      xStart = e.pageX;
       // @ts-ignore
       iframe.style.pointerEvents = 'auto';
       document.removeEventListener('mousemove', onMouseMove);
-      xStart = e.pageX;
+      setIsDragging(false);
       onDragEnd();
     };
 
@@ -40,7 +41,9 @@ const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
 
   return (
     <div
-      className="hidden md:block absolute right-0 top-0 h-full w-4 bg-bg-nav cursor-col-resize"
+      className={`hidden md:block absolute right-0 top-0 h-full w-0.5 bg-bg-nav-offset cursor-col-resize transition-all duration-500 opacity-20 hover:opacity-50 ${
+        isDragging ? 'opacity-50' : ''
+      }`}
       onMouseDown={startDrag}
     />
   );
