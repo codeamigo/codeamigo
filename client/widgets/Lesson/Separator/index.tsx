@@ -1,32 +1,57 @@
-// WIP
 import React, { MouseEvent } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Separator: React.FC<Props> = () => {
+const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
   const [xMove, setXMove] = useState(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const startDrag = (e: MouseEvent) => {
-    const endDrag = (event: MouseEvent<Element, MouseEvent>) => {
-      console.log(xMove - event.pageX);
+    let xStart = e.pageX;
+    const iframe = document.getElementsByClassName('sp-preview-iframe')[0];
+    // @ts-ignore
+    iframe.style.pointerEvents = 'none';
+    setIsDragging(true);
+
+    const onMouseMove = (e: any) => {
+      setXMove(xStart - e.pageX);
+    };
+
+    const endDrag = (e: MouseEvent) => {
+      xStart = e.pageX;
+      // @ts-ignore
+      iframe.style.pointerEvents = 'auto';
+      document.removeEventListener('mousemove', onMouseMove);
+      setIsDragging(false);
+      onDragEnd();
     };
 
     // @ts-ignore
-    window.removeEventListener('mouseup', endDrag);
-
-    setXMove(e.pageX);
+    document.removeEventListener('mouseup', endDrag);
+    document.removeEventListener('mousemove', onMouseMove);
 
     // @ts-ignore
-    window.addEventListener('mouseup', endDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('mousemove', onMouseMove);
   };
+
+  useEffect(() => {
+    onChangeX(xMove);
+  }, [xMove]);
 
   return (
     <div
-      className="absolute right-0 top-0 h-full w-2 bg-bg-nav-offset cursor-col-resize"
+      className={`hidden md:block absolute right-0 top-0 h-full w-0.5 bg-bg-nav-offset cursor-col-resize transition-all duration-500 opacity-20 hover:opacity-50 ${
+        isDragging ? 'opacity-50' : ''
+      }`}
       onMouseDown={startDrag}
     />
   );
 };
 
-type Props = {};
+type Props = {
+  onChangeX: (x: number) => void;
+  onDragEnd: () => void;
+};
 
 export default Separator;

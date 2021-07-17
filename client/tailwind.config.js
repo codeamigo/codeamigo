@@ -53,6 +53,7 @@ module.exports = {
       display: ['group-hover'],
       margin: ['first'],
       opacity: ['disabled'],
+      width: ['hover'],
     },
   },
 };
