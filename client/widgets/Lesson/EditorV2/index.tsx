@@ -158,6 +158,15 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
       }
     );
 
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd |
+        monacoRef.current.KeyMod.Shift |
+        monacoRef.current.KeyCode.KEY_P,
+      () => {
+        editorRef.current.getAction('editor.action.quickCommand').run();
+      }
+    );
+
     // editorRef.current.addCommand(
     //   monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
     //   () => {
