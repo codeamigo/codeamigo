@@ -2,12 +2,13 @@ import React, { MouseEvent } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Separator: React.FC<Props> = ({ onChangeX }) => {
+const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
   const [xMove, setXMove] = useState(0);
-  const [xStart, setXStart] = useState(0);
+  // const [xStart, setXStart] = useState(0);
 
   const startDrag = (e: MouseEvent) => {
-    setXStart(e.pageX);
+    let xStart = e.pageX;
+    console.log('starting drag', e.pageX);
     const iframe = document.getElementsByClassName('sp-preview-iframe')[0];
     // @ts-ignore
     iframe.style.pointerEvents = 'none';
@@ -16,10 +17,12 @@ const Separator: React.FC<Props> = ({ onChangeX }) => {
       setXMove(xStart - e.pageX);
     };
 
-    const endDrag = () => {
+    const endDrag = (e: MouseEvent) => {
       // @ts-ignore
       iframe.style.pointerEvents = 'auto';
       document.removeEventListener('mousemove', onMouseMove);
+      xStart = e.pageX;
+      onDragEnd();
     };
 
     // @ts-ignore
@@ -45,6 +48,7 @@ const Separator: React.FC<Props> = ({ onChangeX }) => {
 
 type Props = {
   onChangeX: (x: number) => void;
+  onDragEnd: () => void;
 };
 
 export default Separator;

@@ -192,10 +192,18 @@ const Step: React.FC<Props> = ({
       initialPreviewWidth &&
       initialEditorWidth
     ) {
-      console.log(x);
-      console.log(previewRef.current.offsetWidth);
+      console.log('x', x);
+      console.log('initialEditorWidth', initialEditorWidth);
+      console.log('initialPreviewWidth', initialPreviewWidth);
       editorRef.current.style.width = initialEditorWidth - x + 'px';
       previewRef.current.style.width = initialPreviewWidth + x + 'px';
+    }
+  };
+
+  const onDragEnd = () => {
+    if (previewRef.current && editorRef.current) {
+      setInitialPreviewWidth(previewRef.current.offsetWidth);
+      setInitialEditorWidth(editorRef.current.offsetWidth);
     }
   };
 
@@ -250,7 +258,7 @@ const Step: React.FC<Props> = ({
                   stepId={data.step.id}
                   {...rest}
                 />
-                <Separator onChangeX={updateWidths} />
+                <Separator onChangeX={updateWidths} onDragEnd={onDragEnd} />
               </div>
               <div
                 className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav"
