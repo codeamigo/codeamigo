@@ -58,6 +58,7 @@ const Step: React.FC<Props> = ({
   const [initialEditorWidth, setInitialEditorWidth] = useState<null | number>(
     null
   );
+  const [maxDragWidth, setMaxDragWidth] = useState<null | number>(null);
 
   const data = newData || previousData;
 
@@ -194,6 +195,7 @@ const Step: React.FC<Props> = ({
     ) {
       editorRef.current.style.width = initialEditorWidth - x + 'px';
       previewRef.current.style.width = initialPreviewWidth + x + 'px';
+      setMaxDragWidth(initialEditorWidth + initialPreviewWidth);
     }
   };
 
@@ -255,7 +257,11 @@ const Step: React.FC<Props> = ({
                   stepId={data.step.id}
                   {...rest}
                 />
-                <Separator onChangeX={updateWidths} onDragEnd={onDragEnd} />
+                <Separator
+                  maxDrag={maxDragWidth}
+                  onChangeX={updateWidths}
+                  onDragEnd={onDragEnd}
+                />
               </div>
               <div
                 className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav"

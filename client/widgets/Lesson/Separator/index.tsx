@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
+const Separator: React.FC<Props> = ({ maxDrag, onChangeX, onDragEnd }) => {
   const [xMove, setXMove] = useState(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -50,6 +50,7 @@ const Separator: React.FC<Props> = ({ onChangeX, onDragEnd }) => {
 };
 
 type Props = {
+  maxDrag: number | null;
   onChangeX: (x: number) => void;
   onDragEnd: () => void;
 };

@@ -9,11 +9,7 @@ import {
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import {
-  camalize,
-  getExtension,
-  getModelExtension,
-} from '👨‍💻widgets/Lesson/EditorV2/utils';
+import { camalize, getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import * as THEMES from '../../../styles/monacoThemes';
 const FILE = 'inmemory://model/';
