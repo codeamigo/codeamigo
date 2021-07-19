@@ -7,6 +7,7 @@ import * as themes from 'styles/monacoThemes';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
+import { IconType } from '👨‍💻components/Icon/types';
 import { Theme, useMeQuery } from '👨‍💻generated/graphql';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
@@ -97,7 +98,7 @@ const Console: React.FC<Props> = () => {
           <div className="px-4">
             <Icon
               className="text-text-primary opacity-50 hover:opacity-100 transition-all"
-              name={`${isCollapsed ? 'up' : 'down'}`}
+              name={`${isCollapsed ? 'up' : 'down'}` as IconType}
               onClick={() => setIsCollapsed((isCollapsed) => !isCollapsed)}
             />
           </div>
