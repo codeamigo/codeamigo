@@ -6,6 +6,7 @@ import { DEFAULT_THEME } from 'styles/appThemes';
 import * as themes from 'styles/monacoThemes';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
+import Icon from '👨‍💻components/Icon';
 import { Theme, useMeQuery } from '👨‍💻generated/graphql';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
@@ -30,6 +31,7 @@ const Console: React.FC<Props> = () => {
   const listRef = useRef<HTMLDivElement>(null);
   const [logList, setLogList] = useState<any>([]);
   const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const testFailure = useReactiveVar(testFailureVar);
 
   const { data } = useMeQuery();
@@ -63,29 +65,49 @@ const Console: React.FC<Props> = () => {
 
   return (
     <div
-      className="bg-bg-primary h-full flex flex-col overflow-scroll"
+      className={`bg-bg-primary flex flex-col overflow-scroll ${
+        isCollapsed ? 'h-8' : 'h-full'
+      }`}
       ref={listRef}
       style={{
         backgroundColor:
           activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
       }}
     >
-      <div className="bg-bg-primary border-b border-t border-bg-nav flex sticky top-0 z-10">
-        <div
-          className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-            activeTab === 'console' ? 'bg-bg-nav' : ''
-          }`}
-          onClick={() => setActiveTab('console')}
-        >
-          Console
+      <div className="bg-bg-primary border-b border-t border-bg-nav flex justify-between sticky top-0 z-10">
+        <div className="flex">
+          <div
+            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
+              activeTab === 'console' ? 'bg-bg-nav' : ''
+            }`}
+            onClick={() => setActiveTab('console')}
+          >
+            Console
+          </div>
+          <div
+            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
+              activeTab === 'tests' ? 'bg-bg-nav' : ''
+            }`}
+            onClick={() => setActiveTab('tests')}
+          >
+            Tests
+          </div>
         </div>
-        <div
-          className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-            activeTab === 'tests' ? 'bg-bg-nav' : ''
-          }`}
-          onClick={() => setActiveTab('tests')}
-        >
-          Tests
+        <div className={`flex items-center pr-1`}>
+          <div className="px-4">
+            <Icon
+              className="text-text-primary opacity-50 hover:opacity-100 transition-all"
+              name={`${isCollapsed ? 'up' : 'down'}`}
+              onClick={() => setIsCollapsed((isCollapsed) => !isCollapsed)}
+            />
+          </div>
+          <div className={`px-4 ${activeTab === 'console' ? '' : 'hidden'}`}>
+            <Icon
+              className="text-text-primary opacity-50 hover:opacity-100 transition-all"
+              name="trash"
+              onClick={() => setLogList([])}
+            />
+          </div>
         </div>
       </div>
       <div className={`${activeTab === 'console' ? 'block' : 'hidden'}`}>

@@ -39,7 +39,3 @@ html {
 .sp-layout>:not(:first-child) {
   margin-top: 0px !important;
 }
-
-.sp-stack {
-  height: 50% !important;
-}
