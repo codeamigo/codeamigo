@@ -19,9 +19,9 @@ const Dependencies: React.FC<Props> = () => {
       }
       return acc;
     }, {} as { [key in string]: number }) || {};
-  const sortedDepMap = Object.keys(depMap).sort(
-    (a, b) => depMap[b] - depMap[a]
-  );
+  const sortedDepMap = Object.keys(depMap)
+    .sort((a, b) => depMap[b] - depMap[a])
+    .slice(0, 10);
 
   return (
     <div className="p-2 bg-bg-nav rounded-md">
