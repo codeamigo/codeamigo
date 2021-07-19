@@ -32864,6 +32864,10 @@ html {
   margin-top: 0px !important;
 }
 
+.sp-stack {
+  height: 100%;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
