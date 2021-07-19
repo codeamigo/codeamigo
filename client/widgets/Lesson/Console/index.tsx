@@ -42,7 +42,7 @@ const Console: React.FC<Props> = () => {
           consoleFeed.Decode(msg.data.log),
         ]);
         if (listRef.current) {
-          listRef.current.scrollTop = listRef.current.scrollHeight;
+          listRef.current.scrollTop = listRef.current.scrollHeight + 24;
         }
       }
     };
@@ -64,6 +64,7 @@ const Console: React.FC<Props> = () => {
   return (
     <div
       className="bg-bg-primary h-full flex flex-col overflow-scroll"
+      ref={listRef}
       style={{
         backgroundColor:
           activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
@@ -87,23 +88,18 @@ const Console: React.FC<Props> = () => {
           Tests
         </div>
       </div>
-      <div>
-        <div
-          className={`${activeTab === 'console' ? 'block' : 'hidden'}`}
-          ref={listRef}
-        >
-          <consoleFeed.Console
-            logs={logList}
-            styles={{
-              BASE_FONT_SIZE: '13px',
-              LOG_RESULT_BACKGROUND: 'blue',
-            }}
-            variant={'dark'}
-          />
-        </div>
-        <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
-          <Tests />
-        </div>
+      <div className={`${activeTab === 'console' ? 'block' : 'hidden'}`}>
+        <consoleFeed.Console
+          logs={logList}
+          styles={{
+            BASE_FONT_SIZE: '13px',
+            LOG_RESULT_BACKGROUND: 'blue',
+          }}
+          variant={'dark'}
+        />
+      </div>
+      <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
+        <Tests />
       </div>
     </div>
   );
