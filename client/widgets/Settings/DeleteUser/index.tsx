@@ -7,16 +7,21 @@ import {
   MeDocument,
   MeQuery,
   useDeleteUserMutation,
+  useMeQuery,
 } from '👨‍💻generated/graphql';
 
 const DeleteUser: React.FC<Props> = () => {
   const router = useRouter();
+  const me = useMeQuery();
   const [deleteUser] = useDeleteUserMutation();
 
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2
+          aria-label={`User ID: ${me.data?.me?.id}`}
+          className="underline hint--top text-xl text-text-primary font-bold mb-3"
+        >
           Delete Account
         </h2>
         <Formik
