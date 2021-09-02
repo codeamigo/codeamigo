@@ -82,21 +82,22 @@ html, body {
 
 /* Remove these to get rid of the spinner */
 #nprogress .spinner {
-  display: none;
+  display: block;
   position: fixed;
   z-index: 1031;
-  top: 15px;
-  right: 15px;
+  top: 50%;
+  right: 50%;
+  transform: translate(-50%, -50%);
 }
 
 #nprogress .spinner-icon {
-  width: 18px;
-  height: 18px;
+  width: 42px;
+  height: 42px;
   box-sizing: border-box;
 
   border: solid 2px transparent;
-  border-top-color: var(--bg-nav-offset);
-  border-left-color: var(--bg-nav-offset);
+  border-top-color: var(--bg-nav);
+  border-left-color: var(--bg-nav);
   border-radius: 50%;
 
   -webkit-animation: nprogress-spinner 400ms linear infinite;
