@@ -6,6 +6,8 @@ import 'github-markdown-css/github-markdown.css';
 import { ApolloProvider } from '@apollo/client';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Router } from 'next/router';
+import NProgress from 'nprogress';
 import React from 'react';
 
 import { client } from '👨‍💻utils/withApollo';
@@ -13,6 +15,10 @@ import { client } from '👨‍💻utils/withApollo';
 import Layout from '../layouts';
 import Modals from '../modals';
 import AuthProvider from '../providers/AuthProvider';
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (

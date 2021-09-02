@@ -72,7 +72,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
         />
       ) : // TODO: loading states
       null}
-      <div className="w-full overflow-hidden lg:h-screen">
+      <div className="w-full lg:overflow-hidden md:h-screen">
         <Info lesson={data.lesson} />
         {sessionData.session ? (
           <Step

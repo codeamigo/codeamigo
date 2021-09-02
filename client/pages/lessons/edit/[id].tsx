@@ -42,7 +42,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
         showSteps={showSteps}
         steps={data.lesson.steps}
       />
-      <div className="w-full overflow-hidden lg:h-screen">
+      <div className="w-full lg:overflow-hidden md:h-screen">
         <Info isEditing lesson={data.lesson} />
         <Step
           currentStepId={stepId}

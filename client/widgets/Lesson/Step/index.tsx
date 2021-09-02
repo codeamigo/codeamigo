@@ -212,7 +212,7 @@ const Step: React.FC<Props> = ({
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row lg:h-full-minus">
+      <div className="flex flex-col lg:flex-row md:h-full-minus">
         <Instructions
           nextStep={nextStep}
           showSteps={showSteps}
@@ -249,7 +249,7 @@ const Step: React.FC<Props> = ({
                 </div>
               </div>
               <div
-                className="md:w-2/6 w-4/6 md:h-full h-96 flex z-20"
+                className="md:w-2/6 w-4/6 lg:h-full h-96 flex z-20"
                 ref={editorRef}
               >
                 <EditorV2
