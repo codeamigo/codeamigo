@@ -37,24 +37,22 @@ const LessonListItem: React.FC<Props> = ({
           {lesson.owner.username}
         </h3>
         {progress ? progress : null}
-        {lesson.students?.length ? (
-          <div className="flex justify-between mt-4 text-xs text-text-primary">
-            <div
-              aria-label={`${lesson.students?.length} Students`}
-              className="hint--top hint--no-animate"
-            >
-              <div className="flex">
-                <Icon
-                  className="text-text-primary mr-1 cursor-auto"
-                  name="users"
-                />{' '}
-                <div className="text-text-primary">
-                  {lesson.students?.length}
-                </div>
+        <div className="flex justify-between mt-4 text-xs text-text-primary">
+          <div
+            aria-label={`${lesson.students?.length} Students`}
+            className="hint--top hint--no-animate"
+          >
+            <div className="flex">
+              <Icon
+                className="text-text-primary mr-1 cursor-auto"
+                name="users"
+              />{' '}
+              <div className="text-text-primary">
+                {lesson.students?.length || 0}
               </div>
             </div>
           </div>
-        ) : null}
+        </div>
         <div className="flex justify-between items-center mt-2 text-xs text-text-primary">
           <LanguageBar steps={lesson.steps} />
           <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>

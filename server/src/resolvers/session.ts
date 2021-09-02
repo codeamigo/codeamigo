@@ -52,6 +52,7 @@ export class SessionResolver {
       .leftJoinAndSelect("Session.steps", "steps")
       .leftJoinAndSelect("Session.lesson", "lesson")
       .leftJoinAndSelect("lesson.owner", "owner")
+      .leftJoinAndSelect("lesson.students", "students")
       .leftJoinAndSelect("lesson.steps", "lessonSteps")
       .leftJoinAndSelect("lessonSteps.codeModules", "codeModules")
       .addOrderBy("Session.updatedAt", "DESC")
