@@ -8,27 +8,41 @@ import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/M
 
 import { isValidName } from './validation';
 
+export enum FileSystemType {
+  file = 'file',
+  folder = 'folder',
+}
+
+const FileSystemInitialState = { active: false, type: FileSystemType.file };
+
 const FilesList: React.FC<Props> = (props) => {
   const { isEditing, name, onCreate } = props;
   const { sandpack } = useSandpack();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isAdding, setIsAdding] = useState<{
+    active: boolean;
+    type: keyof typeof FileSystemType;
+  }>(FileSystemInitialState);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isAdding) {
+    if (isAdding.active) {
       setTimeout(() => {
         inputRef.current!.focus();
       }, 0);
     }
-  }, [isAdding]);
+  }, [isAdding.active]);
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
-    const isValid = isValidName(value, Object.keys(sandpack.files));
+    const isValid = isValidName(
+      value,
+      isAdding.type,
+      Object.keys(sandpack.files)
+    );
 
     if (!value) {
-      setIsAdding(false);
+      setIsAdding(FileSystemInitialState);
       return;
     }
 
@@ -41,14 +55,18 @@ const FilesList: React.FC<Props> = (props) => {
       onCreate(value);
     }
 
-    setIsAdding(false);
+    setIsAdding(FileSystemInitialState);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && onCreate) {
       const value = event.currentTarget.value;
 
-      const isValid = isValidName(value, Object.keys(sandpack.files));
+      const isValid = isValidName(
+        value,
+        isAdding.type,
+        Object.keys(sandpack.files)
+      );
 
       if (!isValid.valid) {
         setError(isValid.reason);
@@ -56,7 +74,7 @@ const FilesList: React.FC<Props> = (props) => {
       }
 
       onCreate(value);
-      setIsAdding(false);
+      setIsAdding(FileSystemInitialState);
     }
   };
 
@@ -78,11 +96,22 @@ const FilesList: React.FC<Props> = (props) => {
       <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
         <span className="text-sm font-semibold text-text-primary">{name}</span>
         {onCreate && isEditing && (
-          <Icon
-            className="text-sm text-text-primary hover:text-accent cursor-pointer"
-            name="plus-circled"
-            onClick={() => setIsAdding(true)}
-          />
+          <div className="flex items-center gap-2">
+            <Icon
+              className="text-xs text-text-primary hover:text-accent cursor-pointer"
+              name="folder"
+              onClick={() =>
+                setIsAdding({ active: true, type: FileSystemType.folder })
+              }
+            />
+            <Icon
+              className="text-xs text-text-primary hover:text-accent cursor-pointer"
+              name="list-add"
+              onClick={() =>
+                setIsAdding({ active: true, type: FileSystemType.file })
+              }
+            />
+          </div>
         )}
       </div>
       <div>
@@ -93,23 +122,27 @@ const FilesList: React.FC<Props> = (props) => {
           selectFile={sandpack.openFile}
           {...props}
         />
-        {isAdding && (
-          <div className="px-1 pb-2 relative">
-            <input
-              className="w-full text-xs px-2 py-1"
-              onBlur={handleBlur}
-              onChange={() => setError('')}
-              onKeyDown={handleKeyDown}
-              ref={inputRef}
-              type="text"
-            />
-            {error && (
-              <div className="text-red-600 text-xs absolute -bottom-2.5">
-                {error}
-              </div>
-            )}
-          </div>
-        )}
+        <div className="px-2.5 mt-1 relative">
+          {isAdding.active && (
+            <div className="flex items-center">
+              <Icon
+                className="text-xs mr-1 text-text-primary hover:text-accent cursor-pointer"
+                name={isAdding.type === 'file' ? 'list-add' : 'folder'}
+              />
+              <input
+                className="w-full text-sm px-2 py-1"
+                onBlur={handleBlur}
+                onChange={() => setError('')}
+                onKeyDown={handleKeyDown}
+                ref={inputRef}
+                type="text"
+              />
+            </div>
+          )}
+          {isAdding.active && error && (
+            <div className="text-red-600 mt-1 text-xs w-full">{error}</div>
+          )}
+        </div>
       </div>
     </>
   );
