@@ -103,8 +103,6 @@ export class LessonResolver {
           }).length;
         });
 
-        console.log(lookForDeps);
-
         return lookForDeps;
       }
 
