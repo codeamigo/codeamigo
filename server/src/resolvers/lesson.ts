@@ -10,6 +10,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { Brackets } from "typeorm";
 
 import {
   Lesson,
@@ -39,6 +40,10 @@ class LessonsInput {
   status: LessonStatusTypeEnum;
   @Field({ nullable: true })
   ownerId?: number;
+  @Field({ nullable: true })
+  labels?: string;
+  @Field({ nullable: true })
+  dependencies?: string;
 }
 
 @ObjectType()
@@ -56,15 +61,76 @@ const relations = ["owner", "steps", "students", "steps.dependencies"];
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
-    const { status, ownerId } = options;
+    const { status, ownerId, labels, dependencies } = options;
     const owner = await User.findOne({ id: ownerId });
-    const where = owner ? { owner, status } : { status };
 
-    return Lesson.find({
-      relations,
-      where,
-    });
+    if (owner) {
+      return Lesson.find({
+        relations,
+        where: { owner, status },
+      });
+    } else {
+      let query = Lesson.createQueryBuilder()
+        .where("Lesson.status = :status", { status })
+        .leftJoinAndSelect("Lesson.owner", "owner")
+        .leftJoinAndSelect("Lesson.students", "students");
+
+      if (labels) {
+        query.andWhere("Lesson.label IN (:...labels)", {
+          labels: labels.split("|"),
+        });
+      }
+      if (dependencies) {
+        const queryDeps = dependencies.split("|");
+        query
+          .leftJoinAndSelect("Lesson.steps", "steps")
+          .leftJoinAndSelect("steps.codeModules", "codeModules")
+          .andWhere("codeModules.name = :name", {
+            name: "/package.json",
+          });
+        const lessonWithDeps = await query.getMany();
+        const lookForDeps = lessonWithDeps.filter((value) => {
+          return value.steps.filter((step) => {
+            return step.codeModules.find((codeModule) => {
+              if (codeModule.name === "/package.json") {
+                const value = JSON.parse(codeModule.value!);
+                return Object.keys(value.dependencies).some((value) =>
+                  queryDeps.includes(value)
+                );
+              }
+
+              return false;
+            });
+          }).length;
+        });
+
+        console.log(lookForDeps);
+
+        return lookForDeps;
+      }
+
+      return query.getMany();
+    }
   }
+
+  // Move filtering to BE
+  // const showLesson = (lesson: LessonsQuery['lessons'][0]) => {
+  //   if (queryLevels.length === 0 && queryDeps.length === 0) return true;
+
+  //   return (
+  //     queryLevels.includes(lesson.label || '') ||
+  //     lesson.steps?.some((step) => {
+  //       return step.codeModules?.some((codeModule) => {
+  //         if (codeModule.name === '/package.json') {
+  //           const value = JSON.parse(codeModule.value!);
+  //           return Object.keys(value.dependencies).some((value) =>
+  //             queryDeps.includes(value)
+  //           );
+  //         }
+  //       });
+  //     })
+  //   );
+  // };
 
   @Query(() => Lesson, { nullable: true })
   async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {

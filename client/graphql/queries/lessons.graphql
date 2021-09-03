@@ -1,5 +1,19 @@
-query Lessons($status: String!, $ownerId: Float) {
-  lessons(options: { status: $status, ownerId: $ownerId }) {
-    ...RegularLessonItem
+query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String) {
+  lessons(options: { status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels }) {
+    id
+    createdAt
+    label
+    likes
+    status
+    title
+    thumbnail
+    updatedAt
+    students {
+      id
+    }
+    owner {
+      id
+      username
+    }
   }
 }

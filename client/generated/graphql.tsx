@@ -244,6 +244,8 @@ export type Dependency = {
 export type LessonsInput = {
   status: Scalars['String'];
   ownerId?: Maybe<Scalars['Float']>;
+  labels?: Maybe<Scalars['String']>;
+  dependencies?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -1288,6 +1290,8 @@ export type LessonQuery = (
 export type LessonsQueryVariables = Exact<{
   status: Scalars['String'];
   ownerId?: Maybe<Scalars['Float']>;
+  dependencies?: Maybe<Scalars['String']>;
+  labels?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1295,7 +1299,14 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & RegularLessonItemFragment
+    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt'>
+    & { students?: Maybe<Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id'>
+    )>>, owner: (
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'username'>
+    ) }
   )> }
 );
 
@@ -2937,12 +2948,28 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons($status: String!, $ownerId: Float) {
-  lessons(options: {status: $status, ownerId: $ownerId}) {
-    ...RegularLessonItem
+    query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String) {
+  lessons(
+    options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels}
+  ) {
+    id
+    createdAt
+    label
+    likes
+    status
+    title
+    thumbnail
+    updatedAt
+    students {
+      id
+    }
+    owner {
+      id
+      username
+    }
   }
 }
-    ${RegularLessonItemFragmentDoc}`;
+    `;
 
 /**
  * __useLessonsQuery__
@@ -2958,6 +2985,8 @@ export const LessonsDocument = gql`
  *   variables: {
  *      status: // value for 'status'
  *      ownerId: // value for 'ownerId'
+ *      dependencies: // value for 'dependencies'
+ *      labels: // value for 'labels'
  *   },
  * });
  */
