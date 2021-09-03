@@ -3,6 +3,7 @@ import React from 'react';
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
+import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
 import LanguageBar from '👨‍💻widgets/LanguageBar';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
@@ -54,7 +55,15 @@ const LessonListItem: React.FC<Props> = ({
           </div>
         </div>
         <div className="flex justify-between items-center mt-2 text-xs text-text-primary">
-          <LanguageBar steps={lesson.steps} />
+          <div className="flex capitalize items-center text-text-primary">
+            <div
+              className={`w-2 h-2 mr-1 rounded-full ${
+                // @ts-ignore
+                levelColorMap[lesson.label]
+              }`}
+            ></div>
+            {lesson.label?.toLowerCase()}{' '}
+          </div>
           <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
         </div>
       </div>

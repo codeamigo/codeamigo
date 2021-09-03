@@ -3,13 +3,11 @@ fragment RegularLesson on Lesson {
   description
   label
   status
+  label
   thumbnail
   title
   owner {
     id
     username
-  }
-  steps {
-    ...RegularStep
   }
 }

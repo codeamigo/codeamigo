@@ -643,10 +643,7 @@ export type RegularLessonFragment = (
   & { owner: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
-  ), steps?: Maybe<Array<(
-    { __typename?: 'Step' }
-    & RegularStepFragment
-  )>> }
+  ) }
 );
 
 export type RegularLessonItemFragment = (
@@ -1413,6 +1410,46 @@ export const RegularErrorFragmentDoc = gql`
   message
 }
     `;
+export const RegularLessonFragmentDoc = gql`
+    fragment RegularLesson on Lesson {
+  id
+  description
+  label
+  status
+  label
+  thumbnail
+  title
+  owner {
+    id
+    username
+  }
+}
+    `;
+export const RegularLessonItemFragmentDoc = gql`
+    fragment RegularLessonItem on Lesson {
+  id
+  createdAt
+  label
+  likes
+  status
+  title
+  thumbnail
+  updatedAt
+  students {
+    id
+  }
+  owner {
+    id
+    username
+  }
+  steps {
+    codeModules {
+      name
+      value
+    }
+  }
+}
+    `;
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
   id
@@ -1448,48 +1485,6 @@ export const RegularStepFragmentDoc = gql`
 }
     ${RegularCodeModuleFragmentDoc}
 ${RegularCheckpointFragmentDoc}`;
-export const RegularLessonFragmentDoc = gql`
-    fragment RegularLesson on Lesson {
-  id
-  description
-  label
-  status
-  thumbnail
-  title
-  owner {
-    id
-    username
-  }
-  steps {
-    ...RegularStep
-  }
-}
-    ${RegularStepFragmentDoc}`;
-export const RegularLessonItemFragmentDoc = gql`
-    fragment RegularLessonItem on Lesson {
-  id
-  createdAt
-  label
-  likes
-  status
-  title
-  thumbnail
-  updatedAt
-  students {
-    id
-  }
-  owner {
-    id
-    username
-  }
-  steps {
-    codeModules {
-      name
-      value
-    }
-  }
-}
-    `;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id

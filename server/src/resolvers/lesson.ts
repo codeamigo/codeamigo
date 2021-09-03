@@ -50,14 +50,7 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
-const relations = [
-  "owner",
-  "steps",
-  "students",
-  "steps.dependencies",
-  "steps.codeModules",
-  "steps.checkpoints",
-];
+const relations = ["owner", "steps", "students", "steps.dependencies"];
 
 @Resolver()
 export class LessonResolver {

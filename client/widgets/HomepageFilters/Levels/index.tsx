@@ -2,6 +2,12 @@ import { Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+export const levelColorMap = {
+  ADVANCED: 'bg-red-600',
+  BEGINNER: 'bg-green-600',
+  INTERMEDIATE: 'bg-yellow-300',
+};
+
 const Levels: React.FC<Props> = () => {
   const router = useRouter();
 
@@ -27,11 +33,7 @@ const Levels: React.FC<Props> = () => {
       >
         {() => (
           <Form>
-            {[
-              ['Beginner', 'bg-green-600'],
-              ['Intermediate', 'bg-yellow-300'],
-              ['Advanced', 'bg-red-600'],
-            ].map(([level, color]) => {
+            {Object.keys(levelColorMap).map((level) => {
               return (
                 <label
                   className="flex justify-between text-sm font-light mb-0.5 cursor-pointer"
@@ -45,11 +47,12 @@ const Levels: React.FC<Props> = () => {
                       type="checkbox"
                       value={level.toUpperCase()}
                     />{' '}
-                    <div className="flex items-center text-text-primary ml-1">
+                    <div className="flex capitalize items-center text-text-primary ml-1">
                       <div
-                        className={`w-2 h-2 mr-1 rounded-full ${color}`}
+                        // @ts-ignore
+                        className={`w-2 h-2 mr-1 rounded-full ${levelColorMap[level]}`}
                       ></div>
-                      {level}{' '}
+                      {level.toLowerCase()}{' '}
                     </div>
                   </div>
                 </label>
