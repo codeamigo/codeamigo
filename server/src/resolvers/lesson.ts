@@ -10,7 +10,6 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { Brackets } from "typeorm";
 
 import {
   Lesson,
