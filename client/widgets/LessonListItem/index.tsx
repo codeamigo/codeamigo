@@ -4,7 +4,6 @@ import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
 import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
-import LanguageBar from '👨‍💻widgets/LanguageBar';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
 const LessonListItem: React.FC<Props> = ({
