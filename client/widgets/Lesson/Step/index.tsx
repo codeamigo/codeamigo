@@ -230,7 +230,7 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-10">
+              <div className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r">
                 <div className="h-full">
                   <EditorFiles
                     codeModules={data.step.codeModules}

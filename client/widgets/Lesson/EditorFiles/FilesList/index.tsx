@@ -75,7 +75,7 @@ const FilesList: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset p-1 flex justify-between content-center">
+      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset-faded p-1 flex justify-between content-center">
         <span className="text-sm font-semibold text-text-primary">{name}</span>
         {onCreate && isEditing && (
           <Icon

@@ -2097,8 +2097,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--bg-nav-faded);
+}
+
 .divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
   border-color: var(--bg-nav-offset);
+}
+
+.divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -2720,8 +2728,16 @@ ul li {
   background-color: var(--bg-nav);
 }
 
+.bg-bg-nav-faded {
+  background-color: var(--bg-nav-faded);
+}
+
 .bg-bg-nav-offset {
   background-color: var(--bg-nav-offset);
+}
+
+.bg-bg-nav-offset-faded {
+  background-color: var(--bg-nav-offset-faded);
 }
 
 .bg-bg-primary {
@@ -3162,8 +3178,16 @@ ul li {
   background-color: var(--bg-nav);
 }
 
+.group:hover .group-hover\:bg-bg-nav-faded {
+  background-color: var(--bg-nav-faded);
+}
+
 .group:hover .group-hover\:bg-bg-nav-offset {
   background-color: var(--bg-nav-offset);
+}
+
+.group:hover .group-hover\:bg-bg-nav-offset-faded {
+  background-color: var(--bg-nav-offset-faded);
 }
 
 .group:hover .group-hover\:bg-bg-primary {
@@ -3604,8 +3628,16 @@ ul li {
   background-color: var(--bg-nav);
 }
 
+.focus-within\:bg-bg-nav-faded:focus-within {
+  background-color: var(--bg-nav-faded);
+}
+
 .focus-within\:bg-bg-nav-offset:focus-within {
   background-color: var(--bg-nav-offset);
+}
+
+.focus-within\:bg-bg-nav-offset-faded:focus-within {
+  background-color: var(--bg-nav-offset-faded);
 }
 
 .focus-within\:bg-bg-primary:focus-within {
@@ -4046,8 +4078,16 @@ ul li {
   background-color: var(--bg-nav);
 }
 
+.hover\:bg-bg-nav-faded:hover {
+  background-color: var(--bg-nav-faded);
+}
+
 .hover\:bg-bg-nav-offset:hover {
   background-color: var(--bg-nav-offset);
+}
+
+.hover\:bg-bg-nav-offset-faded:hover {
+  background-color: var(--bg-nav-offset-faded);
 }
 
 .hover\:bg-bg-primary:hover {
@@ -4488,8 +4528,16 @@ ul li {
   background-color: var(--bg-nav);
 }
 
+.focus\:bg-bg-nav-faded:focus {
+  background-color: var(--bg-nav-faded);
+}
+
 .focus\:bg-bg-nav-offset:focus {
   background-color: var(--bg-nav-offset);
+}
+
+.focus\:bg-bg-nav-offset-faded:focus {
+  background-color: var(--bg-nav-offset-faded);
 }
 
 .focus\:bg-bg-primary:focus {
@@ -4970,8 +5018,18 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.from-bg-nav-faded {
+  --tw-gradient-from: var(--bg-nav-faded);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .from-bg-nav-offset {
   --tw-gradient-from: var(--bg-nav-offset);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.from-bg-nav-offset-faded {
+  --tw-gradient-from: var(--bg-nav-offset-faded);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
@@ -5334,8 +5392,16 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.via-bg-nav-faded {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .via-bg-nav-offset {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.via-bg-nav-offset-faded {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
 .via-bg-primary {
@@ -5694,8 +5760,16 @@ ul li {
   --tw-gradient-to: var(--bg-nav);
 }
 
+.to-bg-nav-faded {
+  --tw-gradient-to: var(--bg-nav-faded);
+}
+
 .to-bg-nav-offset {
   --tw-gradient-to: var(--bg-nav-offset);
+}
+
+.to-bg-nav-offset-faded {
+  --tw-gradient-to: var(--bg-nav-offset-faded);
 }
 
 .to-bg-primary {
@@ -6140,8 +6214,18 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.hover\:from-bg-nav-faded:hover {
+  --tw-gradient-from: var(--bg-nav-faded);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .hover\:from-bg-nav-offset:hover {
   --tw-gradient-from: var(--bg-nav-offset);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.hover\:from-bg-nav-offset-faded:hover {
+  --tw-gradient-from: var(--bg-nav-offset-faded);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
@@ -6504,8 +6588,16 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.hover\:via-bg-nav-faded:hover {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .hover\:via-bg-nav-offset:hover {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.hover\:via-bg-nav-offset-faded:hover {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
 .hover\:via-bg-primary:hover {
@@ -6864,8 +6956,16 @@ ul li {
   --tw-gradient-to: var(--bg-nav);
 }
 
+.hover\:to-bg-nav-faded:hover {
+  --tw-gradient-to: var(--bg-nav-faded);
+}
+
 .hover\:to-bg-nav-offset:hover {
   --tw-gradient-to: var(--bg-nav-offset);
+}
+
+.hover\:to-bg-nav-offset-faded:hover {
+  --tw-gradient-to: var(--bg-nav-offset-faded);
 }
 
 .hover\:to-bg-primary:hover {
@@ -7310,8 +7410,18 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.focus\:from-bg-nav-faded:focus {
+  --tw-gradient-from: var(--bg-nav-faded);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .focus\:from-bg-nav-offset:focus {
   --tw-gradient-from: var(--bg-nav-offset);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.focus\:from-bg-nav-offset-faded:focus {
+  --tw-gradient-from: var(--bg-nav-offset-faded);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
@@ -7674,8 +7784,16 @@ ul li {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
+.focus\:via-bg-nav-faded:focus {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
 .focus\:via-bg-nav-offset:focus {
   --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.focus\:via-bg-nav-offset-faded:focus {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
 }
 
 .focus\:via-bg-primary:focus {
@@ -8034,8 +8152,16 @@ ul li {
   --tw-gradient-to: var(--bg-nav);
 }
 
+.focus\:to-bg-nav-faded:focus {
+  --tw-gradient-to: var(--bg-nav-faded);
+}
+
 .focus\:to-bg-nav-offset:focus {
   --tw-gradient-to: var(--bg-nav-offset);
+}
+
+.focus\:to-bg-nav-offset-faded:focus {
+  --tw-gradient-to: var(--bg-nav-offset-faded);
 }
 
 .focus\:to-bg-primary:focus {
@@ -8856,8 +8982,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.border-bg-nav-faded {
+  border-color: var(--bg-nav-faded);
+}
+
 .border-bg-nav-offset {
   border-color: var(--bg-nav-offset);
+}
+
+.border-bg-nav-offset-faded {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .border-bg-primary {
@@ -9298,8 +9432,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.group:hover .group-hover\:border-bg-nav-faded {
+  border-color: var(--bg-nav-faded);
+}
+
 .group:hover .group-hover\:border-bg-nav-offset {
   border-color: var(--bg-nav-offset);
+}
+
+.group:hover .group-hover\:border-bg-nav-offset-faded {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .group:hover .group-hover\:border-bg-primary {
@@ -9740,8 +9882,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.focus-within\:border-bg-nav-faded:focus-within {
+  border-color: var(--bg-nav-faded);
+}
+
 .focus-within\:border-bg-nav-offset:focus-within {
   border-color: var(--bg-nav-offset);
+}
+
+.focus-within\:border-bg-nav-offset-faded:focus-within {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .focus-within\:border-bg-primary:focus-within {
@@ -10182,8 +10332,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.hover\:border-bg-nav-faded:hover {
+  border-color: var(--bg-nav-faded);
+}
+
 .hover\:border-bg-nav-offset:hover {
   border-color: var(--bg-nav-offset);
+}
+
+.hover\:border-bg-nav-offset-faded:hover {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .hover\:border-bg-primary:hover {
@@ -10624,8 +10782,16 @@ ul li {
   border-color: var(--bg-nav);
 }
 
+.focus\:border-bg-nav-faded:focus {
+  border-color: var(--bg-nav-faded);
+}
+
 .focus\:border-bg-nav-offset:focus {
   border-color: var(--bg-nav-offset);
+}
+
+.focus\:border-bg-nav-offset-faded:focus {
+  border-color: var(--bg-nav-offset-faded);
 }
 
 .focus\:border-bg-primary:focus {
@@ -19066,8 +19232,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.placeholder-bg-nav-faded::placeholder {
+  color: var(--bg-nav-faded);
+}
+
 .placeholder-bg-nav-offset::placeholder {
   color: var(--bg-nav-offset);
+}
+
+.placeholder-bg-nav-offset-faded::placeholder {
+  color: var(--bg-nav-offset-faded);
 }
 
 .placeholder-bg-primary::placeholder {
@@ -19508,8 +19682,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.focus\:placeholder-bg-nav-faded:focus::placeholder {
+  color: var(--bg-nav-faded);
+}
+
 .focus\:placeholder-bg-nav-offset:focus::placeholder {
   color: var(--bg-nav-offset);
+}
+
+.focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+  color: var(--bg-nav-offset-faded);
 }
 
 .focus\:placeholder-bg-primary:focus::placeholder {
@@ -23170,8 +23352,16 @@ ul li {
   --tw-ring-offset-color: var(--bg-nav);
 }
 
+.ring-offset-bg-nav-faded {
+  --tw-ring-offset-color: var(--bg-nav-faded);
+}
+
 .ring-offset-bg-nav-offset {
   --tw-ring-offset-color: var(--bg-nav-offset);
+}
+
+.ring-offset-bg-nav-offset-faded {
+  --tw-ring-offset-color: var(--bg-nav-offset-faded);
 }
 
 .ring-offset-bg-primary {
@@ -23530,8 +23720,16 @@ ul li {
   --tw-ring-offset-color: var(--bg-nav);
 }
 
+.focus-within\:ring-offset-bg-nav-faded:focus-within {
+  --tw-ring-offset-color: var(--bg-nav-faded);
+}
+
 .focus-within\:ring-offset-bg-nav-offset:focus-within {
   --tw-ring-offset-color: var(--bg-nav-offset);
+}
+
+.focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+  --tw-ring-offset-color: var(--bg-nav-offset-faded);
 }
 
 .focus-within\:ring-offset-bg-primary:focus-within {
@@ -23890,8 +24088,16 @@ ul li {
   --tw-ring-offset-color: var(--bg-nav);
 }
 
+.focus\:ring-offset-bg-nav-faded:focus {
+  --tw-ring-offset-color: var(--bg-nav-faded);
+}
+
 .focus\:ring-offset-bg-nav-offset:focus {
   --tw-ring-offset-color: var(--bg-nav-offset);
+}
+
+.focus\:ring-offset-bg-nav-offset-faded:focus {
+  --tw-ring-offset-color: var(--bg-nav-offset-faded);
 }
 
 .focus\:ring-offset-bg-primary:focus {
@@ -24392,8 +24598,16 @@ ul li {
   --tw-ring-color: var(--bg-nav);
 }
 
+.ring-bg-nav-faded {
+  --tw-ring-color: var(--bg-nav-faded);
+}
+
 .ring-bg-nav-offset {
   --tw-ring-color: var(--bg-nav-offset);
+}
+
+.ring-bg-nav-offset-faded {
+  --tw-ring-color: var(--bg-nav-offset-faded);
 }
 
 .ring-bg-primary {
@@ -24834,8 +25048,16 @@ ul li {
   --tw-ring-color: var(--bg-nav);
 }
 
+.focus-within\:ring-bg-nav-faded:focus-within {
+  --tw-ring-color: var(--bg-nav-faded);
+}
+
 .focus-within\:ring-bg-nav-offset:focus-within {
   --tw-ring-color: var(--bg-nav-offset);
+}
+
+.focus-within\:ring-bg-nav-offset-faded:focus-within {
+  --tw-ring-color: var(--bg-nav-offset-faded);
 }
 
 .focus-within\:ring-bg-primary:focus-within {
@@ -25276,8 +25498,16 @@ ul li {
   --tw-ring-color: var(--bg-nav);
 }
 
+.focus\:ring-bg-nav-faded:focus {
+  --tw-ring-color: var(--bg-nav-faded);
+}
+
 .focus\:ring-bg-nav-offset:focus {
   --tw-ring-color: var(--bg-nav-offset);
+}
+
+.focus\:ring-bg-nav-offset-faded:focus {
+  --tw-ring-color: var(--bg-nav-offset-faded);
 }
 
 .focus\:ring-bg-primary:focus {
@@ -25942,8 +26172,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.text-bg-nav-faded {
+  color: var(--bg-nav-faded);
+}
+
 .text-bg-nav-offset {
   color: var(--bg-nav-offset);
+}
+
+.text-bg-nav-offset-faded {
+  color: var(--bg-nav-offset-faded);
 }
 
 .text-bg-primary {
@@ -26384,8 +26622,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.group:hover .group-hover\:text-bg-nav-faded {
+  color: var(--bg-nav-faded);
+}
+
 .group:hover .group-hover\:text-bg-nav-offset {
   color: var(--bg-nav-offset);
+}
+
+.group:hover .group-hover\:text-bg-nav-offset-faded {
+  color: var(--bg-nav-offset-faded);
 }
 
 .group:hover .group-hover\:text-bg-primary {
@@ -26826,8 +27072,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.focus-within\:text-bg-nav-faded:focus-within {
+  color: var(--bg-nav-faded);
+}
+
 .focus-within\:text-bg-nav-offset:focus-within {
   color: var(--bg-nav-offset);
+}
+
+.focus-within\:text-bg-nav-offset-faded:focus-within {
+  color: var(--bg-nav-offset-faded);
 }
 
 .focus-within\:text-bg-primary:focus-within {
@@ -27268,8 +27522,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.hover\:text-bg-nav-faded:hover {
+  color: var(--bg-nav-faded);
+}
+
 .hover\:text-bg-nav-offset:hover {
   color: var(--bg-nav-offset);
+}
+
+.hover\:text-bg-nav-offset-faded:hover {
+  color: var(--bg-nav-offset-faded);
 }
 
 .hover\:text-bg-primary:hover {
@@ -27710,8 +27972,16 @@ ul li {
   color: var(--bg-nav);
 }
 
+.focus\:text-bg-nav-faded:focus {
+  color: var(--bg-nav-faded);
+}
+
 .focus\:text-bg-nav-offset:focus {
   color: var(--bg-nav-offset);
+}
+
+.focus\:text-bg-nav-offset-faded:focus {
+  color: var(--bg-nav-offset-faded);
 }
 
 .focus\:text-bg-primary:focus {
@@ -32867,6 +33137,7 @@ html, body {
 
 .sp-layout>:not(:first-child) {
   margin-top: 0px !important;
+  border: 0px !important;
 }
 
 .sp-stack {
@@ -34328,8 +34599,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .sm\:divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-faded);
+  }
+
   .sm\:divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
     border-color: var(--bg-nav-offset);
+  }
+
+  .sm\:divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -34951,8 +35230,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .sm\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .sm\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .sm\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:bg-bg-primary {
@@ -35393,8 +35680,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .group:hover .sm\:group-hover\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .group:hover .sm\:group-hover\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .sm\:group-hover\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .sm\:group-hover\:bg-bg-primary {
@@ -35835,8 +36130,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .sm\:focus-within\:bg-bg-nav-faded:focus-within {
+    background-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus-within\:bg-bg-nav-offset:focus-within {
     background-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus-within\:bg-bg-nav-offset-faded:focus-within {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus-within\:bg-bg-primary:focus-within {
@@ -36277,8 +36580,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .sm\:hover\:bg-bg-nav-faded:hover {
+    background-color: var(--bg-nav-faded);
+  }
+
   .sm\:hover\:bg-bg-nav-offset:hover {
     background-color: var(--bg-nav-offset);
+  }
+
+  .sm\:hover\:bg-bg-nav-offset-faded:hover {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:hover\:bg-bg-primary:hover {
@@ -36719,8 +37030,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .sm\:focus\:bg-bg-nav-faded:focus {
+    background-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:bg-bg-nav-offset:focus {
     background-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:bg-bg-nav-offset-faded:focus {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:bg-bg-primary:focus {
@@ -37201,8 +37520,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:from-bg-nav-faded {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:from-bg-nav-offset {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:from-bg-nav-offset-faded {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -37565,8 +37894,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:via-bg-nav-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:via-bg-nav-offset {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:via-bg-nav-offset-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .sm\:via-bg-primary {
@@ -37925,8 +38262,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .sm\:to-bg-nav-faded {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .sm\:to-bg-nav-offset {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .sm\:to-bg-nav-offset-faded {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .sm\:to-bg-primary {
@@ -38371,8 +38716,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:hover\:from-bg-nav-faded:hover {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:hover\:from-bg-nav-offset:hover {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:hover\:from-bg-nav-offset-faded:hover {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -38735,8 +39090,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:hover\:via-bg-nav-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:hover\:via-bg-nav-offset:hover {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:hover\:via-bg-nav-offset-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .sm\:hover\:via-bg-primary:hover {
@@ -39095,8 +39458,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .sm\:hover\:to-bg-nav-faded:hover {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .sm\:hover\:to-bg-nav-offset:hover {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .sm\:hover\:to-bg-nav-offset-faded:hover {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .sm\:hover\:to-bg-primary:hover {
@@ -39541,8 +39912,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:focus\:from-bg-nav-faded:focus {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:focus\:from-bg-nav-offset:focus {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:focus\:from-bg-nav-offset-faded:focus {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -39905,8 +40286,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .sm\:focus\:via-bg-nav-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .sm\:focus\:via-bg-nav-offset:focus {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .sm\:focus\:via-bg-nav-offset-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .sm\:focus\:via-bg-primary:focus {
@@ -40265,8 +40654,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .sm\:focus\:to-bg-nav-faded:focus {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:to-bg-nav-offset:focus {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:to-bg-nav-offset-faded:focus {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:to-bg-primary:focus {
@@ -41087,8 +41484,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .sm\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .sm\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .sm\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:border-bg-primary {
@@ -41529,8 +41934,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .group:hover .sm\:group-hover\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .group:hover .sm\:group-hover\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .sm\:group-hover\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .sm\:group-hover\:border-bg-primary {
@@ -41971,8 +42384,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .sm\:focus-within\:border-bg-nav-faded:focus-within {
+    border-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus-within\:border-bg-nav-offset:focus-within {
     border-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus-within\:border-bg-nav-offset-faded:focus-within {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus-within\:border-bg-primary:focus-within {
@@ -42413,8 +42834,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .sm\:hover\:border-bg-nav-faded:hover {
+    border-color: var(--bg-nav-faded);
+  }
+
   .sm\:hover\:border-bg-nav-offset:hover {
     border-color: var(--bg-nav-offset);
+  }
+
+  .sm\:hover\:border-bg-nav-offset-faded:hover {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:hover\:border-bg-primary:hover {
@@ -42855,8 +43284,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .sm\:focus\:border-bg-nav-faded:focus {
+    border-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:border-bg-nav-offset:focus {
     border-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:border-bg-nav-offset-faded:focus {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:border-bg-primary:focus {
@@ -51297,8 +51734,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:placeholder-bg-nav-faded::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:placeholder-bg-nav-offset::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:placeholder-bg-nav-offset-faded::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:placeholder-bg-primary::placeholder {
@@ -51739,8 +52184,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:focus\:placeholder-bg-nav-faded:focus::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:placeholder-bg-nav-offset:focus::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:placeholder-bg-primary:focus::placeholder {
@@ -55388,8 +55841,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .sm\:ring-offset-bg-nav-faded {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .sm\:ring-offset-bg-nav-offset {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .sm\:ring-offset-bg-nav-offset-faded {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:ring-offset-bg-primary {
@@ -55748,8 +56209,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .sm\:focus-within\:ring-offset-bg-nav-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus-within\:ring-offset-bg-nav-offset:focus-within {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus-within\:ring-offset-bg-primary:focus-within {
@@ -56108,8 +56577,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .sm\:focus\:ring-offset-bg-nav-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:ring-offset-bg-nav-offset:focus {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:ring-offset-bg-nav-offset-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:ring-offset-bg-primary:focus {
@@ -56610,8 +57087,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .sm\:ring-bg-nav-faded {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .sm\:ring-bg-nav-offset {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .sm\:ring-bg-nav-offset-faded {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:ring-bg-primary {
@@ -57052,8 +57537,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .sm\:focus-within\:ring-bg-nav-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus-within\:ring-bg-nav-offset:focus-within {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus-within\:ring-bg-nav-offset-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus-within\:ring-bg-primary:focus-within {
@@ -57494,8 +57987,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .sm\:focus\:ring-bg-nav-faded:focus {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:ring-bg-nav-offset:focus {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:ring-bg-nav-offset-faded:focus {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:ring-bg-primary:focus {
@@ -58160,8 +58661,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:text-bg-primary {
@@ -58602,8 +59111,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .group:hover .sm\:group-hover\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .group:hover .sm\:group-hover\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .group:hover .sm\:group-hover\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .sm\:group-hover\:text-bg-primary {
@@ -59044,8 +59561,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:focus-within\:text-bg-nav-faded:focus-within {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:focus-within\:text-bg-nav-offset:focus-within {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus-within\:text-bg-nav-offset-faded:focus-within {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus-within\:text-bg-primary:focus-within {
@@ -59486,8 +60011,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:hover\:text-bg-nav-faded:hover {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:hover\:text-bg-nav-offset:hover {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:hover\:text-bg-nav-offset-faded:hover {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:hover\:text-bg-primary:hover {
@@ -59928,8 +60461,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .sm\:focus\:text-bg-nav-faded:focus {
+    color: var(--bg-nav-faded);
+  }
+
   .sm\:focus\:text-bg-nav-offset:focus {
     color: var(--bg-nav-offset);
+  }
+
+  .sm\:focus\:text-bg-nav-offset-faded:focus {
+    color: var(--bg-nav-offset-faded);
   }
 
   .sm\:focus\:text-bg-primary:focus {
@@ -66384,8 +66925,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .md\:divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-faded);
+  }
+
   .md\:divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
     border-color: var(--bg-nav-offset);
+  }
+
+  .md\:divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .md\:divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -67007,8 +67556,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .md\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .md\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .md\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .md\:bg-bg-primary {
@@ -67449,8 +68006,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .group:hover .md\:group-hover\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .group:hover .md\:group-hover\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .md\:group-hover\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .md\:group-hover\:bg-bg-primary {
@@ -67891,8 +68456,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .md\:focus-within\:bg-bg-nav-faded:focus-within {
+    background-color: var(--bg-nav-faded);
+  }
+
   .md\:focus-within\:bg-bg-nav-offset:focus-within {
     background-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus-within\:bg-bg-nav-offset-faded:focus-within {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus-within\:bg-bg-primary:focus-within {
@@ -68333,8 +68906,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .md\:hover\:bg-bg-nav-faded:hover {
+    background-color: var(--bg-nav-faded);
+  }
+
   .md\:hover\:bg-bg-nav-offset:hover {
     background-color: var(--bg-nav-offset);
+  }
+
+  .md\:hover\:bg-bg-nav-offset-faded:hover {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .md\:hover\:bg-bg-primary:hover {
@@ -68775,8 +69356,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .md\:focus\:bg-bg-nav-faded:focus {
+    background-color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:bg-bg-nav-offset:focus {
     background-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:bg-bg-nav-offset-faded:focus {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:bg-bg-primary:focus {
@@ -69257,8 +69846,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:from-bg-nav-faded {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:from-bg-nav-offset {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:from-bg-nav-offset-faded {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -69621,8 +70220,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:via-bg-nav-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:via-bg-nav-offset {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:via-bg-nav-offset-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .md\:via-bg-primary {
@@ -69981,8 +70588,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .md\:to-bg-nav-faded {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .md\:to-bg-nav-offset {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .md\:to-bg-nav-offset-faded {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .md\:to-bg-primary {
@@ -70427,8 +71042,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:hover\:from-bg-nav-faded:hover {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:hover\:from-bg-nav-offset:hover {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:hover\:from-bg-nav-offset-faded:hover {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -70791,8 +71416,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:hover\:via-bg-nav-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:hover\:via-bg-nav-offset:hover {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:hover\:via-bg-nav-offset-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .md\:hover\:via-bg-primary:hover {
@@ -71151,8 +71784,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .md\:hover\:to-bg-nav-faded:hover {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .md\:hover\:to-bg-nav-offset:hover {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .md\:hover\:to-bg-nav-offset-faded:hover {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .md\:hover\:to-bg-primary:hover {
@@ -71597,8 +72238,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:focus\:from-bg-nav-faded:focus {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:focus\:from-bg-nav-offset:focus {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:focus\:from-bg-nav-offset-faded:focus {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -71961,8 +72612,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .md\:focus\:via-bg-nav-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .md\:focus\:via-bg-nav-offset:focus {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .md\:focus\:via-bg-nav-offset-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .md\:focus\:via-bg-primary:focus {
@@ -72321,8 +72980,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .md\:focus\:to-bg-nav-faded:focus {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .md\:focus\:to-bg-nav-offset:focus {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:to-bg-nav-offset-faded:focus {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:to-bg-primary:focus {
@@ -73143,8 +73810,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .md\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .md\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .md\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .md\:border-bg-primary {
@@ -73585,8 +74260,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .group:hover .md\:group-hover\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .group:hover .md\:group-hover\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .md\:group-hover\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .md\:group-hover\:border-bg-primary {
@@ -74027,8 +74710,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .md\:focus-within\:border-bg-nav-faded:focus-within {
+    border-color: var(--bg-nav-faded);
+  }
+
   .md\:focus-within\:border-bg-nav-offset:focus-within {
     border-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus-within\:border-bg-nav-offset-faded:focus-within {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus-within\:border-bg-primary:focus-within {
@@ -74469,8 +75160,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .md\:hover\:border-bg-nav-faded:hover {
+    border-color: var(--bg-nav-faded);
+  }
+
   .md\:hover\:border-bg-nav-offset:hover {
     border-color: var(--bg-nav-offset);
+  }
+
+  .md\:hover\:border-bg-nav-offset-faded:hover {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .md\:hover\:border-bg-primary:hover {
@@ -74911,8 +75610,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .md\:focus\:border-bg-nav-faded:focus {
+    border-color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:border-bg-nav-offset:focus {
     border-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:border-bg-nav-offset-faded:focus {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:border-bg-primary:focus {
@@ -83353,8 +84060,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:placeholder-bg-nav-faded::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:placeholder-bg-nav-offset::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:placeholder-bg-nav-offset-faded::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:placeholder-bg-primary::placeholder {
@@ -83795,8 +84510,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:focus\:placeholder-bg-nav-faded:focus::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:placeholder-bg-nav-offset:focus::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:placeholder-bg-primary:focus::placeholder {
@@ -87444,8 +88167,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .md\:ring-offset-bg-nav-faded {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .md\:ring-offset-bg-nav-offset {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .md\:ring-offset-bg-nav-offset-faded {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .md\:ring-offset-bg-primary {
@@ -87804,8 +88535,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .md\:focus-within\:ring-offset-bg-nav-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .md\:focus-within\:ring-offset-bg-nav-offset:focus-within {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus-within\:ring-offset-bg-primary:focus-within {
@@ -88164,8 +88903,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .md\:focus\:ring-offset-bg-nav-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:ring-offset-bg-nav-offset:focus {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:ring-offset-bg-nav-offset-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:ring-offset-bg-primary:focus {
@@ -88666,8 +89413,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .md\:ring-bg-nav-faded {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .md\:ring-bg-nav-offset {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .md\:ring-bg-nav-offset-faded {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .md\:ring-bg-primary {
@@ -89108,8 +89863,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .md\:focus-within\:ring-bg-nav-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .md\:focus-within\:ring-bg-nav-offset:focus-within {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus-within\:ring-bg-nav-offset-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus-within\:ring-bg-primary:focus-within {
@@ -89550,8 +90313,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .md\:focus\:ring-bg-nav-faded:focus {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:ring-bg-nav-offset:focus {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:ring-bg-nav-offset-faded:focus {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:ring-bg-primary:focus {
@@ -90216,8 +90987,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:text-bg-primary {
@@ -90658,8 +91437,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .group:hover .md\:group-hover\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .group:hover .md\:group-hover\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .group:hover .md\:group-hover\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .md\:group-hover\:text-bg-primary {
@@ -91100,8 +91887,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:focus-within\:text-bg-nav-faded:focus-within {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:focus-within\:text-bg-nav-offset:focus-within {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:focus-within\:text-bg-nav-offset-faded:focus-within {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus-within\:text-bg-primary:focus-within {
@@ -91542,8 +92337,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:hover\:text-bg-nav-faded:hover {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:hover\:text-bg-nav-offset:hover {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:hover\:text-bg-nav-offset-faded:hover {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:hover\:text-bg-primary:hover {
@@ -91984,8 +92787,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .md\:focus\:text-bg-nav-faded:focus {
+    color: var(--bg-nav-faded);
+  }
+
   .md\:focus\:text-bg-nav-offset:focus {
     color: var(--bg-nav-offset);
+  }
+
+  .md\:focus\:text-bg-nav-offset-faded:focus {
+    color: var(--bg-nav-offset-faded);
   }
 
   .md\:focus\:text-bg-primary:focus {
@@ -98440,8 +99251,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .lg\:divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-faded);
+  }
+
   .lg\:divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
     border-color: var(--bg-nav-offset);
+  }
+
+  .lg\:divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -99063,8 +99882,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .lg\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .lg\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .lg\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:bg-bg-primary {
@@ -99505,8 +100332,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .group:hover .lg\:group-hover\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .group:hover .lg\:group-hover\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .lg\:group-hover\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .lg\:group-hover\:bg-bg-primary {
@@ -99947,8 +100782,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .lg\:focus-within\:bg-bg-nav-faded:focus-within {
+    background-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus-within\:bg-bg-nav-offset:focus-within {
     background-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus-within\:bg-bg-nav-offset-faded:focus-within {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus-within\:bg-bg-primary:focus-within {
@@ -100389,8 +101232,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .lg\:hover\:bg-bg-nav-faded:hover {
+    background-color: var(--bg-nav-faded);
+  }
+
   .lg\:hover\:bg-bg-nav-offset:hover {
     background-color: var(--bg-nav-offset);
+  }
+
+  .lg\:hover\:bg-bg-nav-offset-faded:hover {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:hover\:bg-bg-primary:hover {
@@ -100831,8 +101682,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .lg\:focus\:bg-bg-nav-faded:focus {
+    background-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:bg-bg-nav-offset:focus {
     background-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:bg-bg-nav-offset-faded:focus {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:bg-bg-primary:focus {
@@ -101313,8 +102172,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:from-bg-nav-faded {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:from-bg-nav-offset {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:from-bg-nav-offset-faded {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -101677,8 +102546,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:via-bg-nav-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:via-bg-nav-offset {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:via-bg-nav-offset-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .lg\:via-bg-primary {
@@ -102037,8 +102914,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .lg\:to-bg-nav-faded {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .lg\:to-bg-nav-offset {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .lg\:to-bg-nav-offset-faded {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .lg\:to-bg-primary {
@@ -102483,8 +103368,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:hover\:from-bg-nav-faded:hover {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:hover\:from-bg-nav-offset:hover {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:hover\:from-bg-nav-offset-faded:hover {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -102847,8 +103742,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:hover\:via-bg-nav-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:hover\:via-bg-nav-offset:hover {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:hover\:via-bg-nav-offset-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .lg\:hover\:via-bg-primary:hover {
@@ -103207,8 +104110,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .lg\:hover\:to-bg-nav-faded:hover {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .lg\:hover\:to-bg-nav-offset:hover {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .lg\:hover\:to-bg-nav-offset-faded:hover {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .lg\:hover\:to-bg-primary:hover {
@@ -103653,8 +104564,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:focus\:from-bg-nav-faded:focus {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:focus\:from-bg-nav-offset:focus {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:focus\:from-bg-nav-offset-faded:focus {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -104017,8 +104938,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .lg\:focus\:via-bg-nav-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .lg\:focus\:via-bg-nav-offset:focus {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .lg\:focus\:via-bg-nav-offset-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .lg\:focus\:via-bg-primary:focus {
@@ -104377,8 +105306,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .lg\:focus\:to-bg-nav-faded:focus {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:to-bg-nav-offset:focus {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:to-bg-nav-offset-faded:focus {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:to-bg-primary:focus {
@@ -105199,8 +106136,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .lg\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .lg\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .lg\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:border-bg-primary {
@@ -105641,8 +106586,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .group:hover .lg\:group-hover\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .group:hover .lg\:group-hover\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .lg\:group-hover\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .lg\:group-hover\:border-bg-primary {
@@ -106083,8 +107036,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .lg\:focus-within\:border-bg-nav-faded:focus-within {
+    border-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus-within\:border-bg-nav-offset:focus-within {
     border-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus-within\:border-bg-nav-offset-faded:focus-within {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus-within\:border-bg-primary:focus-within {
@@ -106525,8 +107486,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .lg\:hover\:border-bg-nav-faded:hover {
+    border-color: var(--bg-nav-faded);
+  }
+
   .lg\:hover\:border-bg-nav-offset:hover {
     border-color: var(--bg-nav-offset);
+  }
+
+  .lg\:hover\:border-bg-nav-offset-faded:hover {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:hover\:border-bg-primary:hover {
@@ -106967,8 +107936,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .lg\:focus\:border-bg-nav-faded:focus {
+    border-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:border-bg-nav-offset:focus {
     border-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:border-bg-nav-offset-faded:focus {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:border-bg-primary:focus {
@@ -115409,8 +116386,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:placeholder-bg-nav-faded::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:placeholder-bg-nav-offset::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:placeholder-bg-nav-offset-faded::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:placeholder-bg-primary::placeholder {
@@ -115851,8 +116836,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:focus\:placeholder-bg-nav-faded:focus::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:placeholder-bg-nav-offset:focus::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:placeholder-bg-primary:focus::placeholder {
@@ -119500,8 +120493,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .lg\:ring-offset-bg-nav-faded {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .lg\:ring-offset-bg-nav-offset {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .lg\:ring-offset-bg-nav-offset-faded {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:ring-offset-bg-primary {
@@ -119860,8 +120861,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .lg\:focus-within\:ring-offset-bg-nav-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus-within\:ring-offset-bg-nav-offset:focus-within {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus-within\:ring-offset-bg-primary:focus-within {
@@ -120220,8 +121229,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .lg\:focus\:ring-offset-bg-nav-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:ring-offset-bg-nav-offset:focus {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:ring-offset-bg-nav-offset-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:ring-offset-bg-primary:focus {
@@ -120722,8 +121739,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .lg\:ring-bg-nav-faded {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .lg\:ring-bg-nav-offset {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .lg\:ring-bg-nav-offset-faded {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:ring-bg-primary {
@@ -121164,8 +122189,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .lg\:focus-within\:ring-bg-nav-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus-within\:ring-bg-nav-offset:focus-within {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus-within\:ring-bg-nav-offset-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus-within\:ring-bg-primary:focus-within {
@@ -121606,8 +122639,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .lg\:focus\:ring-bg-nav-faded:focus {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:ring-bg-nav-offset:focus {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:ring-bg-nav-offset-faded:focus {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:ring-bg-primary:focus {
@@ -122272,8 +123313,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:text-bg-primary {
@@ -122714,8 +123763,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .group:hover .lg\:group-hover\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .group:hover .lg\:group-hover\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .group:hover .lg\:group-hover\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .lg\:group-hover\:text-bg-primary {
@@ -123156,8 +124213,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:focus-within\:text-bg-nav-faded:focus-within {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:focus-within\:text-bg-nav-offset:focus-within {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus-within\:text-bg-nav-offset-faded:focus-within {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus-within\:text-bg-primary:focus-within {
@@ -123598,8 +124663,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:hover\:text-bg-nav-faded:hover {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:hover\:text-bg-nav-offset:hover {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:hover\:text-bg-nav-offset-faded:hover {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:hover\:text-bg-primary:hover {
@@ -124040,8 +125113,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .lg\:focus\:text-bg-nav-faded:focus {
+    color: var(--bg-nav-faded);
+  }
+
   .lg\:focus\:text-bg-nav-offset:focus {
     color: var(--bg-nav-offset);
+  }
+
+  .lg\:focus\:text-bg-nav-offset-faded:focus {
+    color: var(--bg-nav-offset-faded);
   }
 
   .lg\:focus\:text-bg-primary:focus {
@@ -130496,8 +131577,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .xl\:divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-faded);
+  }
+
   .xl\:divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
     border-color: var(--bg-nav-offset);
+  }
+
+  .xl\:divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -131119,8 +132208,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .xl\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .xl\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .xl\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:bg-bg-primary {
@@ -131561,8 +132658,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .group:hover .xl\:group-hover\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .group:hover .xl\:group-hover\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .xl\:group-hover\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .xl\:group-hover\:bg-bg-primary {
@@ -132003,8 +133108,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .xl\:focus-within\:bg-bg-nav-faded:focus-within {
+    background-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus-within\:bg-bg-nav-offset:focus-within {
     background-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus-within\:bg-bg-nav-offset-faded:focus-within {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus-within\:bg-bg-primary:focus-within {
@@ -132445,8 +133558,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .xl\:hover\:bg-bg-nav-faded:hover {
+    background-color: var(--bg-nav-faded);
+  }
+
   .xl\:hover\:bg-bg-nav-offset:hover {
     background-color: var(--bg-nav-offset);
+  }
+
+  .xl\:hover\:bg-bg-nav-offset-faded:hover {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:hover\:bg-bg-primary:hover {
@@ -132887,8 +134008,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .xl\:focus\:bg-bg-nav-faded:focus {
+    background-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:bg-bg-nav-offset:focus {
     background-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:bg-bg-nav-offset-faded:focus {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:bg-bg-primary:focus {
@@ -133369,8 +134498,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:from-bg-nav-faded {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:from-bg-nav-offset {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:from-bg-nav-offset-faded {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -133733,8 +134872,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:via-bg-nav-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:via-bg-nav-offset {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:via-bg-nav-offset-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .xl\:via-bg-primary {
@@ -134093,8 +135240,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .xl\:to-bg-nav-faded {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .xl\:to-bg-nav-offset {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .xl\:to-bg-nav-offset-faded {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .xl\:to-bg-primary {
@@ -134539,8 +135694,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:hover\:from-bg-nav-faded:hover {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:hover\:from-bg-nav-offset:hover {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:hover\:from-bg-nav-offset-faded:hover {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -134903,8 +136068,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:hover\:via-bg-nav-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:hover\:via-bg-nav-offset:hover {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:hover\:via-bg-nav-offset-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .xl\:hover\:via-bg-primary:hover {
@@ -135263,8 +136436,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .xl\:hover\:to-bg-nav-faded:hover {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .xl\:hover\:to-bg-nav-offset:hover {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .xl\:hover\:to-bg-nav-offset-faded:hover {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .xl\:hover\:to-bg-primary:hover {
@@ -135709,8 +136890,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:focus\:from-bg-nav-faded:focus {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:focus\:from-bg-nav-offset:focus {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:focus\:from-bg-nav-offset-faded:focus {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -136073,8 +137264,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .xl\:focus\:via-bg-nav-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .xl\:focus\:via-bg-nav-offset:focus {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .xl\:focus\:via-bg-nav-offset-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .xl\:focus\:via-bg-primary:focus {
@@ -136433,8 +137632,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .xl\:focus\:to-bg-nav-faded:focus {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:to-bg-nav-offset:focus {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:to-bg-nav-offset-faded:focus {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:to-bg-primary:focus {
@@ -137255,8 +138462,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .xl\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .xl\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .xl\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:border-bg-primary {
@@ -137697,8 +138912,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .group:hover .xl\:group-hover\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .group:hover .xl\:group-hover\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .xl\:group-hover\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .xl\:group-hover\:border-bg-primary {
@@ -138139,8 +139362,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .xl\:focus-within\:border-bg-nav-faded:focus-within {
+    border-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus-within\:border-bg-nav-offset:focus-within {
     border-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus-within\:border-bg-nav-offset-faded:focus-within {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus-within\:border-bg-primary:focus-within {
@@ -138581,8 +139812,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .xl\:hover\:border-bg-nav-faded:hover {
+    border-color: var(--bg-nav-faded);
+  }
+
   .xl\:hover\:border-bg-nav-offset:hover {
     border-color: var(--bg-nav-offset);
+  }
+
+  .xl\:hover\:border-bg-nav-offset-faded:hover {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:hover\:border-bg-primary:hover {
@@ -139023,8 +140262,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .xl\:focus\:border-bg-nav-faded:focus {
+    border-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:border-bg-nav-offset:focus {
     border-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:border-bg-nav-offset-faded:focus {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:border-bg-primary:focus {
@@ -147465,8 +148712,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:placeholder-bg-nav-faded::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:placeholder-bg-nav-offset::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:placeholder-bg-nav-offset-faded::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:placeholder-bg-primary::placeholder {
@@ -147907,8 +149162,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:focus\:placeholder-bg-nav-faded:focus::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:placeholder-bg-nav-offset:focus::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:placeholder-bg-primary:focus::placeholder {
@@ -151556,8 +152819,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .xl\:ring-offset-bg-nav-faded {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .xl\:ring-offset-bg-nav-offset {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .xl\:ring-offset-bg-nav-offset-faded {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:ring-offset-bg-primary {
@@ -151916,8 +153187,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .xl\:focus-within\:ring-offset-bg-nav-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus-within\:ring-offset-bg-nav-offset:focus-within {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus-within\:ring-offset-bg-primary:focus-within {
@@ -152276,8 +153555,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .xl\:focus\:ring-offset-bg-nav-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:ring-offset-bg-nav-offset:focus {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:ring-offset-bg-nav-offset-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:ring-offset-bg-primary:focus {
@@ -152778,8 +154065,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .xl\:ring-bg-nav-faded {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .xl\:ring-bg-nav-offset {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .xl\:ring-bg-nav-offset-faded {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:ring-bg-primary {
@@ -153220,8 +154515,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .xl\:focus-within\:ring-bg-nav-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus-within\:ring-bg-nav-offset:focus-within {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus-within\:ring-bg-nav-offset-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus-within\:ring-bg-primary:focus-within {
@@ -153662,8 +154965,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .xl\:focus\:ring-bg-nav-faded:focus {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:ring-bg-nav-offset:focus {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:ring-bg-nav-offset-faded:focus {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:ring-bg-primary:focus {
@@ -154328,8 +155639,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:text-bg-primary {
@@ -154770,8 +156089,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .group:hover .xl\:group-hover\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .group:hover .xl\:group-hover\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .group:hover .xl\:group-hover\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .xl\:group-hover\:text-bg-primary {
@@ -155212,8 +156539,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:focus-within\:text-bg-nav-faded:focus-within {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:focus-within\:text-bg-nav-offset:focus-within {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus-within\:text-bg-nav-offset-faded:focus-within {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus-within\:text-bg-primary:focus-within {
@@ -155654,8 +156989,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:hover\:text-bg-nav-faded:hover {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:hover\:text-bg-nav-offset:hover {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:hover\:text-bg-nav-offset-faded:hover {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:hover\:text-bg-primary:hover {
@@ -156096,8 +157439,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .xl\:focus\:text-bg-nav-faded:focus {
+    color: var(--bg-nav-faded);
+  }
+
   .xl\:focus\:text-bg-nav-offset:focus {
     color: var(--bg-nav-offset);
+  }
+
+  .xl\:focus\:text-bg-nav-offset-faded:focus {
+    color: var(--bg-nav-offset-faded);
   }
 
   .xl\:focus\:text-bg-primary:focus {
@@ -162552,8 +163903,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .\32xl\:divide-bg-nav-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:divide-bg-nav-offset > :not([hidden]) ~ :not([hidden]) {
     border-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:divide-bg-nav-offset-faded > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:divide-bg-primary > :not([hidden]) ~ :not([hidden]) {
@@ -163175,8 +164534,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .\32xl\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:bg-bg-primary {
@@ -163617,8 +164984,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .group:hover .\32xl\:group-hover\:bg-bg-nav-faded {
+    background-color: var(--bg-nav-faded);
+  }
+
   .group:hover .\32xl\:group-hover\:bg-bg-nav-offset {
     background-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .\32xl\:group-hover\:bg-bg-nav-offset-faded {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .\32xl\:group-hover\:bg-bg-primary {
@@ -164059,8 +165434,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .\32xl\:focus-within\:bg-bg-nav-faded:focus-within {
+    background-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus-within\:bg-bg-nav-offset:focus-within {
     background-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus-within\:bg-bg-nav-offset-faded:focus-within {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus-within\:bg-bg-primary:focus-within {
@@ -164501,8 +165884,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .\32xl\:hover\:bg-bg-nav-faded:hover {
+    background-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:hover\:bg-bg-nav-offset:hover {
     background-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:hover\:bg-bg-nav-offset-faded:hover {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:hover\:bg-bg-primary:hover {
@@ -164943,8 +166334,16 @@ html, body {
     background-color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:bg-bg-nav-faded:focus {
+    background-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:bg-bg-nav-offset:focus {
     background-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:bg-bg-nav-offset-faded:focus {
+    background-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:bg-bg-primary:focus {
@@ -165425,8 +166824,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:from-bg-nav-faded {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:from-bg-nav-offset {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:from-bg-nav-offset-faded {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -165789,8 +167198,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:via-bg-nav-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:via-bg-nav-offset {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:via-bg-nav-offset-faded {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .\32xl\:via-bg-primary {
@@ -166149,8 +167566,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .\32xl\:to-bg-nav-faded {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .\32xl\:to-bg-nav-offset {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .\32xl\:to-bg-nav-offset-faded {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:to-bg-primary {
@@ -166595,8 +168020,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:hover\:from-bg-nav-faded:hover {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:hover\:from-bg-nav-offset:hover {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:hover\:from-bg-nav-offset-faded:hover {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -166959,8 +168394,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:hover\:via-bg-nav-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:hover\:via-bg-nav-offset:hover {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:hover\:via-bg-nav-offset-faded:hover {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .\32xl\:hover\:via-bg-primary:hover {
@@ -167319,8 +168762,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .\32xl\:hover\:to-bg-nav-faded:hover {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .\32xl\:hover\:to-bg-nav-offset:hover {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .\32xl\:hover\:to-bg-nav-offset-faded:hover {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:hover\:to-bg-primary:hover {
@@ -167765,8 +169216,18 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:focus\:from-bg-nav-faded:focus {
+    --tw-gradient-from: var(--bg-nav-faded);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:focus\:from-bg-nav-offset:focus {
     --tw-gradient-from: var(--bg-nav-offset);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:focus\:from-bg-nav-offset-faded:focus {
+    --tw-gradient-from: var(--bg-nav-offset-faded);
     --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
@@ -168129,8 +169590,16 @@ html, body {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
+  .\32xl\:focus\:via-bg-nav-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
   .\32xl\:focus\:via-bg-nav-offset:focus {
     --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+  }
+
+  .\32xl\:focus\:via-bg-nav-offset-faded:focus {
+    --tw-gradient-stops: var(--tw-gradient-from), var(--bg-nav-offset-faded), var(--tw-gradient-to, rgba(255, 255, 255, 0));
   }
 
   .\32xl\:focus\:via-bg-primary:focus {
@@ -168489,8 +169958,16 @@ html, body {
     --tw-gradient-to: var(--bg-nav);
   }
 
+  .\32xl\:focus\:to-bg-nav-faded:focus {
+    --tw-gradient-to: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:to-bg-nav-offset:focus {
     --tw-gradient-to: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:to-bg-nav-offset-faded:focus {
+    --tw-gradient-to: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:to-bg-primary:focus {
@@ -169311,8 +170788,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .\32xl\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:border-bg-primary {
@@ -169753,8 +171238,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .group:hover .\32xl\:group-hover\:border-bg-nav-faded {
+    border-color: var(--bg-nav-faded);
+  }
+
   .group:hover .\32xl\:group-hover\:border-bg-nav-offset {
     border-color: var(--bg-nav-offset);
+  }
+
+  .group:hover .\32xl\:group-hover\:border-bg-nav-offset-faded {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .\32xl\:group-hover\:border-bg-primary {
@@ -170195,8 +171688,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .\32xl\:focus-within\:border-bg-nav-faded:focus-within {
+    border-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus-within\:border-bg-nav-offset:focus-within {
     border-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus-within\:border-bg-nav-offset-faded:focus-within {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus-within\:border-bg-primary:focus-within {
@@ -170637,8 +172138,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .\32xl\:hover\:border-bg-nav-faded:hover {
+    border-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:hover\:border-bg-nav-offset:hover {
     border-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:hover\:border-bg-nav-offset-faded:hover {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:hover\:border-bg-primary:hover {
@@ -171079,8 +172588,16 @@ html, body {
     border-color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:border-bg-nav-faded:focus {
+    border-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:border-bg-nav-offset:focus {
     border-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:border-bg-nav-offset-faded:focus {
+    border-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:border-bg-primary:focus {
@@ -179521,8 +181038,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:placeholder-bg-nav-faded::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:placeholder-bg-nav-offset::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:placeholder-bg-nav-offset-faded::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:placeholder-bg-primary::placeholder {
@@ -179963,8 +181488,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:placeholder-bg-nav-faded:focus::placeholder {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:placeholder-bg-nav-offset:focus::placeholder {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:placeholder-bg-nav-offset-faded:focus::placeholder {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:placeholder-bg-primary:focus::placeholder {
@@ -183612,8 +185145,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .\32xl\:ring-offset-bg-nav-faded {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:ring-offset-bg-nav-offset {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:ring-offset-bg-nav-offset-faded {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:ring-offset-bg-primary {
@@ -183972,8 +185513,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .\32xl\:focus-within\:ring-offset-bg-nav-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus-within\:ring-offset-bg-nav-offset:focus-within {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus-within\:ring-offset-bg-nav-offset-faded:focus-within {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus-within\:ring-offset-bg-primary:focus-within {
@@ -184332,8 +185881,16 @@ html, body {
     --tw-ring-offset-color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:ring-offset-bg-nav-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:ring-offset-bg-nav-offset:focus {
     --tw-ring-offset-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:ring-offset-bg-nav-offset-faded:focus {
+    --tw-ring-offset-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:ring-offset-bg-primary:focus {
@@ -184834,8 +186391,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .\32xl\:ring-bg-nav-faded {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:ring-bg-nav-offset {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:ring-bg-nav-offset-faded {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:ring-bg-primary {
@@ -185276,8 +186841,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .\32xl\:focus-within\:ring-bg-nav-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus-within\:ring-bg-nav-offset:focus-within {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus-within\:ring-bg-nav-offset-faded:focus-within {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus-within\:ring-bg-primary:focus-within {
@@ -185718,8 +187291,16 @@ html, body {
     --tw-ring-color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:ring-bg-nav-faded:focus {
+    --tw-ring-color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:ring-bg-nav-offset:focus {
     --tw-ring-color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:ring-bg-nav-offset-faded:focus {
+    --tw-ring-color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:ring-bg-primary:focus {
@@ -186384,8 +187965,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:text-bg-primary {
@@ -186826,8 +188415,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .group:hover .\32xl\:group-hover\:text-bg-nav-faded {
+    color: var(--bg-nav-faded);
+  }
+
   .group:hover .\32xl\:group-hover\:text-bg-nav-offset {
     color: var(--bg-nav-offset);
+  }
+
+  .group:hover .\32xl\:group-hover\:text-bg-nav-offset-faded {
+    color: var(--bg-nav-offset-faded);
   }
 
   .group:hover .\32xl\:group-hover\:text-bg-primary {
@@ -187268,8 +188865,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:focus-within\:text-bg-nav-faded:focus-within {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus-within\:text-bg-nav-offset:focus-within {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus-within\:text-bg-nav-offset-faded:focus-within {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus-within\:text-bg-primary:focus-within {
@@ -187710,8 +189315,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:hover\:text-bg-nav-faded:hover {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:hover\:text-bg-nav-offset:hover {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:hover\:text-bg-nav-offset-faded:hover {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:hover\:text-bg-primary:hover {
@@ -188152,8 +189765,16 @@ html, body {
     color: var(--bg-nav);
   }
 
+  .\32xl\:focus\:text-bg-nav-faded:focus {
+    color: var(--bg-nav-faded);
+  }
+
   .\32xl\:focus\:text-bg-nav-offset:focus {
     color: var(--bg-nav-offset);
+  }
+
+  .\32xl\:focus\:text-bg-nav-offset-faded:focus {
+    color: var(--bg-nav-offset-faded);
   }
 
   .\32xl\:focus\:text-bg-primary:focus {
