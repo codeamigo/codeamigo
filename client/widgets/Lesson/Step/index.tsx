@@ -230,7 +230,10 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r">
+              <div
+                className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r border-b sm:border-b-0"
+                style={{ minHeight: '20rem' }}
+              >
                 <div className="h-full">
                   <EditorFiles
                     codeModules={data.step.codeModules}
@@ -249,7 +252,7 @@ const Step: React.FC<Props> = ({
                 </div>
               </div>
               <div
-                className="md:w-2/6 w-4/6 lg:h-full h-96 flex z-20"
+                className="md:w-2/6 w-4/6 lg:h-full h-auto flex z-20 sm:border-b-0 border-b border-bg-nav-offset"
                 ref={editorRef}
               >
                 <EditorV2
@@ -264,7 +267,7 @@ const Step: React.FC<Props> = ({
                 />
               </div>
               <div
-                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav"
+                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
                 ref={previewRef}
               >
                 <SandpackPreview />

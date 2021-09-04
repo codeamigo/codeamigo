@@ -75,7 +75,7 @@ const Console: React.FC<Props> = () => {
           activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
       }}
     >
-      <div className="bg-bg-primary border-b border-t border-bg-nav flex justify-between sticky top-0 z-10">
+      <div className="bg-bg-primary border-b border-t border-bg-nav-offset-faded flex justify-between sticky top-0 z-10">
         <div className="flex">
           <div
             className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${

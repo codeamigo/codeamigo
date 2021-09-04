@@ -20,15 +20,15 @@ export const mapTheme = (variables: ThemeType) => {
   return {
     '--accent': variables.accent || '',
     '--bg-nav': variables.bgNav || '',
-    '--bg-nav-faded': fade(variables.bgNav, 0.5) || '',
+    '--bg-nav-faded': fade(variables.bgNav, 0.3) || '',
     '--bg-nav-offset':
       variables.base === 'vs-dark'
         ? lighten(variables.bgNav, 2)
         : darken(variables.bgNav, 2),
     '--bg-nav-offset-faded':
       variables.base === 'vs-dark'
-        ? fade(lighten(variables.bgNav, 2), 0.8)
-        : fade(darken(variables.bgNav, 2), 0.8),
+        ? fade(lighten(variables.bgNav, 2), 0.3)
+        : fade(darken(variables.bgNav, 2), 0.3),
     '--bg-primary': variables.bgPrimary || '',
     '--text-primary': variables.textPrimary || '',
     '--text-secondary': variables.textSecondary || '',
