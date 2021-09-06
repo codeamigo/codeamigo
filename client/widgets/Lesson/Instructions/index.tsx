@@ -94,7 +94,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset-faded overflow-scroll`}
+          } min-h-2/5 md:max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset-faded overflow-scroll`}
           id="markdown-parent"
         >
           {view === 'editor' ? (
