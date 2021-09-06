@@ -109,13 +109,13 @@ const Step: React.FC<Props> = ({
 
   useEffect(() => {
     const setHeightCallback = () => {
-      setFilesHeight(filesRef.current!.offsetHeight);
+      if (filesRef.current) {
+        setFilesHeight(filesRef.current.offsetHeight);
+      }
     };
-    if (filesRef.current) {
-      setHeightCallback();
-      window.addEventListener('resize', setHeightCallback);
-    }
-    return window.removeEventListener('resize', setHeightCallback);
+    setHeightCallback();
+    window.addEventListener('resize', setHeightCallback);
+    return () => window.removeEventListener('resize', setHeightCallback);
   }, [filesRef.current]);
 
   if (!data) return null;
@@ -223,8 +223,6 @@ const Step: React.FC<Props> = ({
 
   if (!cachedFiles) return null;
 
-  console.log(filesHeight);
-
   return (
     <>
       <div className="flex flex-col lg:flex-row md:h-full-minus">
@@ -246,7 +244,7 @@ const Step: React.FC<Props> = ({
           >
             <SandpackLayout>
               <div
-                className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r border-b sm:border-b-0"
+                className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r sm:border-b-0"
                 ref={filesRef}
                 style={{ minHeight: '20rem' }}
               >
@@ -268,7 +266,7 @@ const Step: React.FC<Props> = ({
                 </div>
               </div>
               <div
-                className="md:w-2/6 w-4/6 lg:h-full z-20 sm:border-b-0 border-b border-bg-nav-offset"
+                className="md:w-2/6 w-4/6 lg:h-full h-96 z-20 sm:border-b-0 border-b border-bg-nav-offset"
                 ref={editorRef}
                 style={{ height: filesHeight, maxHeight: filesHeight }}
               >
