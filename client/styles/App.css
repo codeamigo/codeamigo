@@ -33112,7 +33112,16 @@ html, body {
 }
 
 .markdown-body pre {
-  color: var(--text-primary) !important;
+  color: var(--bg-primary) !important;
+}
+
+.markdown-body {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }
 
 .st0 {
