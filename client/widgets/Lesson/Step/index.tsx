@@ -60,7 +60,7 @@ const Step: React.FC<Props> = ({
     null
   );
   const [maxDragWidth, setMaxDragWidth] = useState<null | number>(null);
-  const [filesHeight, setFilesHeight] = useState<null | number>(null);
+  const [filesHeight, setFilesHeight] = useState<undefined | number>(undefined);
 
   const data = newData || previousData;
 
