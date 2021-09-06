@@ -263,7 +263,6 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   return (
     <ControlledEditor
       editorDidMount={editorDidMount}
-      height={rest.maxHeight}
       onChange={(_, value) => {
         handleCodeUpdate(value as string);
       }}
@@ -284,7 +283,6 @@ type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
-  maxHeight?: number;
   stepId?: number;
 };
 

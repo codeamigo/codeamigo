@@ -268,12 +268,12 @@ const Step: React.FC<Props> = ({
                 </div>
               </div>
               <div
-                className="md:w-2/6 w-4/6 lg:h-full h-auto flex z-20 sm:border-b-0 border-b border-bg-nav-offset"
+                className="md:w-2/6 w-4/6 lg:h-full flex z-20 sm:border-b-0 border-b border-bg-nav-offset"
                 ref={editorRef}
+                style={{ maxHeight: filesHeight }}
               >
                 <EditorV2
                   codeModules={data.step.codeModules}
-                  maxHeight={filesHeight}
                   stepId={data.step.id}
                   {...rest}
                 />
