@@ -41,6 +41,7 @@ const Step: React.FC<Props> = ({
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
+  const filesRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation();
   const [setNextStep] = useSetNextStepMutation();
@@ -59,6 +60,7 @@ const Step: React.FC<Props> = ({
     null
   );
   const [maxDragWidth, setMaxDragWidth] = useState<null | number>(null);
+  const [filesHeight, setFilesHeight] = useState<null | number>(null);
 
   const data = newData || previousData;
 
@@ -104,6 +106,17 @@ const Step: React.FC<Props> = ({
       setInitialEditorWidth(editorRef.current.offsetWidth);
     }
   }, [editorRef.current]);
+
+  useEffect(() => {
+    const setHeightCallback = () => {
+      setFilesHeight(filesRef.current!.offsetHeight);
+    };
+    if (filesRef.current) {
+      setHeightCallback();
+      window.addEventListener('resize', setHeightCallback);
+    }
+    return window.removeEventListener('resize', setHeightCallback);
+  }, [filesRef.current]);
 
   if (!data) return null;
   if (!data.step) return null;
@@ -210,6 +223,8 @@ const Step: React.FC<Props> = ({
 
   if (!cachedFiles) return null;
 
+  console.log(filesHeight);
+
   return (
     <>
       <div className="flex flex-col lg:flex-row md:h-full-minus">
@@ -232,6 +247,7 @@ const Step: React.FC<Props> = ({
             <SandpackLayout>
               <div
                 className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r border-b sm:border-b-0"
+                ref={filesRef}
                 style={{ minHeight: '20rem' }}
               >
                 <div className="h-full">
@@ -257,6 +273,7 @@ const Step: React.FC<Props> = ({
               >
                 <EditorV2
                   codeModules={data.step.codeModules}
+                  maxHeight={filesHeight}
                   stepId={data.step.id}
                   {...rest}
                 />
