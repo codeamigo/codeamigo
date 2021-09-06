@@ -21,7 +21,7 @@ const CS_TYPES_FALLBACK_URL =
 
 const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
-  const { code, updateCode } = useActiveCode();
+  const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
@@ -270,6 +270,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
         automaticLayout: true,
         fontSize: '12px',
         fontWeight: 600,
+        lineNumbersMinChars: 3,
         minimap: { enabled: false },
         scrollBeyondLastLine: false,
         wordWrap: 'on',
