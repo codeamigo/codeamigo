@@ -33133,13 +33133,16 @@ html, body {
   .sp-layout {
     flex-wrap: nowrap !important;
   }
+
+  .sp-layout>:not(:first-child) {
+    border: 0px !important;
+  }
 }
 
 .sp-layout>:not(:first-child) {
   margin-top: 0px !important;
-  @media (min-width: 768px) {
-    border: 0px !important;
-  }
+  border-top-width: 0px !important;
+  border-right-width: 0px !important;
 }
 
 .sp-stack {
