@@ -263,6 +263,11 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   return (
     <ControlledEditor
       editorDidMount={editorDidMount}
+      loading={
+        <div className="w-full h-full bg-bg-primary font-bold text-white flex items-center justify-center">
+          Loading...
+        </div>
+      }
       onChange={(_, value) => {
         handleCodeUpdate(value as string);
       }}
