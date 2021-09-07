@@ -106,7 +106,7 @@ const FilesList: React.FC<Props> = (props) => {
             />
             <Icon
               className="text-xs text-text-primary hover:text-accent cursor-pointer"
-              name="list-add"
+              name="file-empty"
               onClick={() =>
                 setIsAdding({ active: true, type: FileSystemType.file })
               }
@@ -127,7 +127,7 @@ const FilesList: React.FC<Props> = (props) => {
             <div className="flex items-center">
               <Icon
                 className="text-xs mr-1 text-text-primary hover:text-accent cursor-pointer"
-                name={isAdding.type === 'file' ? 'list-add' : 'folder'}
+                name={isAdding.type === 'file' ? 'file-empty' : 'folder'}
               />
               <input
                 className="w-full text-sm px-2 py-1"
