@@ -46,8 +46,8 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-96 border-r border-bg-nav-offset">
-      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset">
+    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-96 border-r border-bg-nav-offset-faded">
+      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset-faded">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => !showSteps && setShowSteps(true)}
@@ -67,7 +67,7 @@ const Instructions: React.FC<Props> = (props) => {
       >
         <h3
           className={`w-full flex justify-between items-center bg-bg-nav text-xs ${
-            isEditing ? 'p-1.5 border-b border-bg-nav-offset' : ''
+            isEditing ? 'p-1.5 border-b border-bg-nav-offset-faded' : ''
           }`}
         >
           {isEditing ? (
@@ -94,7 +94,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div
           className={`${
             view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset overflow-scroll`}
+          } min-h-2/5 md:max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset-faded overflow-scroll`}
           id="markdown-parent"
         >
           {view === 'editor' ? (

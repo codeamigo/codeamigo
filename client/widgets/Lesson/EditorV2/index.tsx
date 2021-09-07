@@ -21,7 +21,7 @@ const CS_TYPES_FALLBACK_URL =
 
 const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
-  const { code, updateCode } = useActiveCode();
+  const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
@@ -263,12 +263,19 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   return (
     <ControlledEditor
       editorDidMount={editorDidMount}
+      loading={
+        <div className="w-full h-full bg-bg-primary font-bold text-white flex items-center justify-center">
+          Loading...
+        </div>
+      }
       onChange={(_, value) => {
         handleCodeUpdate(value as string);
       }}
       options={{
         automaticLayout: true,
         fontSize: '12px',
+        fontWeight: 600,
+        lineNumbersMinChars: 3,
         minimap: { enabled: false },
         scrollBeyondLastLine: false,
         wordWrap: 'on',

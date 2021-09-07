@@ -6,6 +6,7 @@ const lighten = (clr: string, val: number) =>
   Color(clr).lighten(val).rgb().string();
 const darken = (clr: string, val: number) =>
   Color(clr).darken(val).rgb().string();
+const fade = (clr: string, val: number) => Color(clr).fade(val).string();
 
 export type MonacoThemeType = typeof monacoTheme;
 export type ThemeType = ReturnType<typeof generateTheme>;
@@ -19,10 +20,15 @@ export const mapTheme = (variables: ThemeType) => {
   return {
     '--accent': variables.accent || '',
     '--bg-nav': variables.bgNav || '',
+    '--bg-nav-faded': fade(variables.bgNav, 0.3) || '',
     '--bg-nav-offset':
       variables.base === 'vs-dark'
         ? lighten(variables.bgNav, 2)
         : darken(variables.bgNav, 2),
+    '--bg-nav-offset-faded':
+      variables.base === 'vs-dark'
+        ? fade(lighten(variables.bgNav, 2), 0.3)
+        : fade(darken(variables.bgNav, 2), 0.3),
     '--bg-primary': variables.bgPrimary || '',
     '--text-primary': variables.textPrimary || '',
     '--text-secondary': variables.textSecondary || '',

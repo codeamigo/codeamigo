@@ -41,6 +41,7 @@ const Step: React.FC<Props> = ({
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
+  const filesRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation();
   const [setNextStep] = useSetNextStepMutation();
@@ -59,6 +60,7 @@ const Step: React.FC<Props> = ({
     null
   );
   const [maxDragWidth, setMaxDragWidth] = useState<null | number>(null);
+  const [filesHeight, setFilesHeight] = useState<undefined | number>(undefined);
 
   const data = newData || previousData;
 
@@ -104,6 +106,17 @@ const Step: React.FC<Props> = ({
       setInitialEditorWidth(editorRef.current.offsetWidth);
     }
   }, [editorRef.current]);
+
+  useEffect(() => {
+    const setHeightCallback = () => {
+      if (filesRef.current) {
+        setFilesHeight(filesRef.current.offsetHeight);
+      }
+    };
+    setHeightCallback();
+    window.addEventListener('resize', setHeightCallback);
+    return () => window.removeEventListener('resize', setHeightCallback);
+  }, [filesRef.current]);
 
   if (!data) return null;
   if (!data.step) return null;
@@ -230,7 +243,11 @@ const Step: React.FC<Props> = ({
             }}
           >
             <SandpackLayout>
-              <div className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-10">
+              <div
+                className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r sm:border-b-0"
+                ref={filesRef}
+                style={{ minHeight: '20rem' }}
+              >
                 <div className="h-full">
                   <EditorFiles
                     codeModules={data.step.codeModules}
@@ -249,8 +266,9 @@ const Step: React.FC<Props> = ({
                 </div>
               </div>
               <div
-                className="md:w-2/6 w-4/6 lg:h-full h-96 flex z-20"
+                className="md:w-2/6 w-4/6 lg:h-full h-96 z-20 sm:border-b-0 border-b border-bg-nav-offset"
                 ref={editorRef}
+                style={{ height: filesHeight, maxHeight: filesHeight }}
               >
                 <EditorV2
                   codeModules={data.step.codeModules}
@@ -264,7 +282,7 @@ const Step: React.FC<Props> = ({
                 />
               </div>
               <div
-                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow border-l border-bg-nav"
+                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
                 ref={previewRef}
               >
                 <SandpackPreview />
