@@ -33103,7 +33103,8 @@ html {
   background-color: var(--bg-primary);
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -33115,13 +33116,13 @@ html, body {
   color: var(--bg-primary) !important;
 }
 
-.markdown-body {
-  overflow-x: auto;
-  white-space: pre-wrap;
-  white-space: -moz-pre-wrap;
-  white-space: -pre-wrap;
-  white-space: -o-pre-wrap;
-  word-wrap: break-word;
+.markdown-body > pre > code {
+  overflow-x: auto !important;
+  white-space: pre-wrap !important;
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap !important;
+  white-space: -o-pre-wrap !important;
+  word-wrap: break-word !important;
 }
 
 .st0 {
@@ -33143,12 +33144,12 @@ html, body {
     flex-wrap: nowrap !important;
   }
 
-  .sp-layout>:not(:first-child) {
+  .sp-layout > :not(:first-child) {
     border: 0px !important;
   }
 }
 
-.sp-layout>:not(:first-child) {
+.sp-layout > :not(:first-child) {
   margin-top: 0px !important;
   border-top-width: 0px !important;
   border-right-width: 0px !important;
@@ -33183,7 +33184,7 @@ html, body {
   width: 100px;
   height: 100%;
   box-shadow: 0 0 10px var(--bg-nav), 0 0 5px var(--bg-nav);
-  opacity: 1.0;
+  opacity: 1;
   transform: rotate(3deg) translate(0px, -4px);
 }
 
@@ -33221,18 +33222,22 @@ html, body {
 }
 
 @-webkit-keyframes nprogress-spinner {
-  0%   { -webkit-transform: rotate(0deg);
+  0% {
+    -webkit-transform: rotate(0deg);
   }
 
-  100% { -webkit-transform: rotate(360deg);
+  100% {
+    -webkit-transform: rotate(360deg);
   }
 }
 
 @keyframes nprogress-spinner {
-  0%   { transform: rotate(0deg);
+  0% {
+    transform: rotate(0deg);
   }
 
-  100% { transform: rotate(360deg);
+  100% {
+    transform: rotate(360deg);
   }
 }
 
