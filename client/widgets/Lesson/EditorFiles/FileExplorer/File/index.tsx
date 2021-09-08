@@ -43,31 +43,47 @@ export class File extends React.PureComponent<Props & OwnProps> {
       >
         <div className="flex items-center overflow-hidden whitespace-nowrap">
           <img className="w-3 mr-1" src={this.getImageSrc(fileName)} />
-          {fileName}
+          <div className="overflow-ellipsis">{fileName}</div>
         </div>
         <div className="flex items-center pr-2">
-          {this.props.isEditing && this.props.onUpdateCodeModuleEntryFile && (
-            // update entry file
-            <Icon
-              className={`empty-star hidden group-hover:block text-xs ml-1`}
-              name={
-                `${this.isEntry(fileName) ? 'star' : 'star-empty'}` as IconType
-              }
-              onClick={() =>
-                this.props.onUpdateCodeModuleEntryFile &&
-                this.props.onUpdateCodeModuleEntryFile({
-                  variables: {
-                    newId: this.props.codeModules?.find(({ name }) =>
-                      name?.includes(fileName!)
-                    )?.id,
-                    oldId: this.props.codeModules?.find(
-                      ({ isEntry }) => !!isEntry
-                    )?.id,
-                  },
-                })
-              }
-            />
+          {this.props.isEditing && this.props.isDirectory && (
+            <div className="flex items-center">
+              <Icon
+                className="hidden group-hover:block text-xs ml-1"
+                name={'folder'}
+              />
+              <Icon
+                className="hidden group-hover:block text-xs ml-1"
+                name={'file-empty'}
+              />
+            </div>
           )}
+          {this.props.isEditing &&
+            this.props.onUpdateCodeModuleEntryFile &&
+            !this.props.isDirectory && (
+              // update entry file
+              <Icon
+                className={`empty-star hidden group-hover:block text-xs ml-1`}
+                name={
+                  `${
+                    this.isEntry(fileName) ? 'star' : 'star-empty'
+                  }` as IconType
+                }
+                onClick={() =>
+                  this.props.onUpdateCodeModuleEntryFile &&
+                  this.props.onUpdateCodeModuleEntryFile({
+                    variables: {
+                      newId: this.props.codeModules?.find(({ name }) =>
+                        name?.includes(fileName!)
+                      )?.id,
+                      oldId: this.props.codeModules?.find(
+                        ({ isEntry }) => !!isEntry
+                      )?.id,
+                    },
+                  })
+                }
+              />
+            )}
           {this.props.isEditing &&
             fileName &&
             !fileName.includes('spec') &&
@@ -83,7 +99,9 @@ export class File extends React.PureComponent<Props & OwnProps> {
               />
             )}
           {this.props.active && (
-            <StatusIndicator isPreviewing={this.props.isPreviewing} />
+            <div className="ml-1 flex items-center">
+              <StatusIndicator isPreviewing={this.props.isPreviewing} />
+            </div>
           )}
         </div>
       </button>
