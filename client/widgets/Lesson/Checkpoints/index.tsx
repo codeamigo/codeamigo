@@ -232,7 +232,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                 {isCurrentCheckpoint(checkpoint.id) && (
                   <div
                     className={`${
-                      isEditing ? 'h-24' : ''
+                      isEditing ? 'h-52' : ''
                     } min-h-24 overflow-scroll`}
                   >
                     {view === 'editor' ? (
