@@ -230,7 +230,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                   )}
                 </h3>
                 {isCurrentCheckpoint(checkpoint.id) && (
-                  <div className={`h-60 overflow-scroll`}>
+                  <div>
                     {view === 'editor' ? (
                       <textarea
                         className="h-full w-full bg-bg-primary text-text-primary border-none"
