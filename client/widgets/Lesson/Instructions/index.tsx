@@ -91,12 +91,7 @@ const Instructions: React.FC<Props> = (props) => {
             </>
           ) : null}
         </h3>
-        <div
-          className={`${
-            view === 'editor' ? 'lg:h-80' : ''
-          } min-h-2/5 md:max-h-3/5 lg:flex lg:flex-col border-b border-bg-nav-offset-faded overflow-scroll`}
-          id="markdown-parent"
-        >
+        <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
           {view === 'editor' ? (
             <textarea
               className="h-full bg-bg-primary text-text-primary border-none"
@@ -110,7 +105,7 @@ const Instructions: React.FC<Props> = (props) => {
           ) : (
             <ReactMarkdown
               children={markdown || ''}
-              className="markdown-body px-6 py-4"
+              className="markdown-body h-full px-6 py-4"
               plugins={[gfm]}
             />
           )}
