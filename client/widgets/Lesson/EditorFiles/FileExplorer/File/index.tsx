@@ -57,7 +57,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
           <img className="w-3 mr-1" src={this.getImageSrc(fileName)} />
           <div className="overflow-ellipsis">{fileName}</div>
         </div>
-        <div className="flex items-center pr-2">
+        <div className="flex items-center pr-1">
           {this.props.isEditing && this.props.isDirectory && (
             <div className="flex items-center">
               <Icon

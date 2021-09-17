@@ -8,6 +8,7 @@ import { File } from '../File';
 export class ModuleList extends React.PureComponent<Props & OwnProps> {
   render(): JSX.Element {
     const { activePath, depth = 0, files, prefixedPath } = this.props;
+    const sortAbc = (a: string, b: string) => (a < b ? -1 : 1);
 
     const fileListWithoutPrefix = Object.keys(files)
       .filter((file) => file.startsWith(prefixedPath))
@@ -16,12 +17,14 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
     const directoriesToShow = new Set(
       fileListWithoutPrefix
         .filter((file) => file.includes('/'))
+        .sort(sortAbc)
         .map((file) => `${prefixedPath}${file.split('/')[0]}/`)
     );
 
     const filesToShow = fileListWithoutPrefix
       .filter(Boolean)
       .filter((file) => !file.includes('/'))
+      .sort(sortAbc)
       .map((file) => ({ path: `${prefixedPath}${file}` }));
 
     return (
