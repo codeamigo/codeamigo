@@ -19,9 +19,11 @@ export class File extends React.PureComponent<Props & OwnProps> {
   };
 
   getImageSrc = (path?: string) => {
-    const defaultImg =
-      'https://codesandbox.io/static/media/folderOpen.6913563c.svg';
-    if (this.props.isDirectory || !path) return defaultImg;
+    if (this.props.isDirectory || !path) {
+      return this.props.isDirectoryOpen
+        ? 'https://codesandbox.io/static/media/folderOpen.6913563c.svg'
+        : 'https://codesandbox.io/static/media/folder.31ca7ee0.svg';
+    }
     const ext = getExtension(path);
 
     const base =
@@ -130,6 +132,7 @@ export interface Props {
   addFileState: FileSystemStateType;
   depth: number;
   isDirectory: boolean;
+  isDirectoryOpen?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   path: string;
   selectFile?: (path: string) => void;

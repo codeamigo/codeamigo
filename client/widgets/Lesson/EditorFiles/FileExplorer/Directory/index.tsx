@@ -47,6 +47,7 @@ export class Directory extends React.Component<Props & OwnProps, State> {
             {...this.props}
             depth={this.props.depth || 0}
             isDirectory
+            isDirectoryOpen={this.state.open}
             onClick={() => this.toggleOpen()}
             path={prefixedPath}
             selectFile={undefined}
