@@ -8,6 +8,50 @@ import InputField from '👨‍💻components/Form/InputField';
 import { useCreateLessonMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
+const templates: {
+  id: string;
+  imageSlug: string;
+  name: string;
+  value: string;
+}[] = [
+  {
+    id: 'react-template',
+    imageSlug: 'react',
+    name: 'React TypeScript',
+    value: 'react',
+  },
+  {
+    id: 'angular-template',
+    imageSlug: 'angular',
+    name: 'Angular',
+    value: 'angular',
+  },
+  {
+    id: 'vue-template',
+    imageSlug: 'vue',
+    name: 'Vue 3.0',
+    value: 'vue',
+  },
+  {
+    id: 'html-template',
+    imageSlug: 'html-5',
+    name: 'HTML/CSS',
+    value: 'html',
+  },
+  {
+    id: 'typescript-template',
+    imageSlug: 'typescript-icon',
+    name: 'Vanilla TypeScript',
+    value: 'typescript',
+  },
+  {
+    id: 'javascript-template',
+    imageSlug: 'javascript',
+    name: 'Vanilla JavaScript',
+    value: 'javascript',
+  },
+];
+
 const CreateLesson: React.FC<Props> = () => {
   const router = useRouter();
   const [createLesson] = useCreateLessonMutation();
@@ -54,144 +98,35 @@ const CreateLesson: React.FC<Props> = () => {
                     Templates
                   </label>
                   <div className="grid grid-cols-3 gap-3">
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'react' ? 'shadow-md' : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="react-template"
-                    >
-                      <Field
-                        id="react-template"
-                        name="template"
-                        type="radio"
-                        value="react"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          React TypeScript
-                        </div>
-                      </div>
-                    </label>
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'angular'
-                          ? 'shadow-md'
-                          : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="angular-template"
-                    >
-                      <Field
-                        id="angular-template"
-                        name="template"
-                        type="radio"
-                        value="angular"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          Angular
-                        </div>
-                      </div>
-                    </label>
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'vue' ? 'shadow-md' : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="vue-template"
-                    >
-                      <Field
-                        id="vue-template"
-                        name="template"
-                        type="radio"
-                        value="vue"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          Vue 3.0
-                        </div>
-                      </div>
-                    </label>
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'html' ? 'shadow-md' : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="html-template"
-                    >
-                      <Field
-                        id="html-template"
-                        name="template"
-                        type="radio"
-                        value="html"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          HTML/CSS
-                        </div>
-                      </div>
-                    </label>
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'typescript'
-                          ? 'shadow-md'
-                          : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="typescript-template"
-                    >
-                      <Field
-                        id="typescript-template"
-                        name="template"
-                        type="radio"
-                        value="typescript"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          Vanilla TypeScript
-                        </div>
-                      </div>
-                    </label>
-                    <label
-                      className={`w-full flex ${
-                        values.template === 'javascript'
-                          ? 'shadow-md'
-                          : 'shadow-sm'
-                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
-                      htmlFor="javascript-template"
-                    >
-                      <Field
-                        id="javascript-template"
-                        name="template"
-                        type="radio"
-                        value="javascript"
-                      />{' '}
-                      <div className="flex flex-col items-start ml-2">
-                        <img
-                          className="h-6 mt-1"
-                          src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg"
-                        />
-                        <div className="text-sm text-text-primary font-semibold mt-0.5">
-                          Vanilla JavaScript
-                        </div>
-                      </div>
-                    </label>
+                    {templates.map((template) => {
+                      return (
+                        <label
+                          className={`w-full flex ${
+                            values.template === template.value
+                              ? 'shadow-md'
+                              : 'shadow-sm'
+                          } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
+                          htmlFor={template.id}
+                          key={template.id}
+                        >
+                          <Field
+                            id={template.id}
+                            name="template"
+                            type="radio"
+                            value={template.value}
+                          />{' '}
+                          <div className="flex flex-col items-start ml-2">
+                            <img
+                              className="h-6 mt-1"
+                              src={`https://raw.githubusercontent.com/gilbarbara/logos/master/logos/${template.imageSlug}.svg`}
+                            />
+                            <div className="text-sm text-text-primary font-semibold mt-0.5">
+                              {template.name}
+                            </div>
+                          </div>
+                        </label>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
