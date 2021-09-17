@@ -67,7 +67,9 @@ const UserMenu: React.FC<Props> = () => {
                       {({ active }) => (
                         <button
                           className={`w-full inline-block text-left px-4 py-2 text-sm ${
-                            active ? 'bg-accent text-bg-primary' : ''
+                            active
+                              ? 'bg-accent text-bg-primary'
+                              : 'text-text-primary'
                           }`}
                           onClick={() => router.push('/me')}
                         >
@@ -79,7 +81,9 @@ const UserMenu: React.FC<Props> = () => {
                       {({ active }) => (
                         <button
                           className={`w-full inline-block text-left px-4 py-2 text-sm ${
-                            active ? 'bg-accent text-bg-primary' : ''
+                            active
+                              ? 'bg-accent text-bg-primary'
+                              : 'text-text-primary'
                           }`}
                           onClick={() => {
                             router.push('/');
