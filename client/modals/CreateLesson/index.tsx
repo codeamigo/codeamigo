@@ -27,10 +27,10 @@ const CreateLesson: React.FC<Props> = () => {
         }
       }}
     >
-      {({ isSubmitting }) => {
+      {({ isSubmitting, values }) => {
         return (
           <Form>
-            <div className="max-w-lg mx-auto p-6 lg:px-8">
+            <div className="max-w-2xl mx-auto p-6 lg:px-8">
               <h1 className="text-xl font-semibold flex mb-4 text-text-primary">
                 New Lesson
               </h1>
@@ -53,9 +53,11 @@ const CreateLesson: React.FC<Props> = () => {
                   <label className="block text-sm font-medium text-text-primary">
                     Templates
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'react' ? 'shadow-md' : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="react-template"
                     >
                       <Field
@@ -69,13 +71,17 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           React TypeScript
                         </div>
                       </div>
                     </label>
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'angular'
+                          ? 'shadow-md'
+                          : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="angular-template"
                     >
                       <Field
@@ -89,13 +95,15 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Angular_full_color_logo.svg/1200px-Angular_full_color_logo.svg.png"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           Angular
                         </div>
                       </div>
                     </label>
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'vue' ? 'shadow-md' : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="vue-template"
                     >
                       <Field
@@ -109,13 +117,15 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           Vue 3.0
                         </div>
                       </div>
                     </label>
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'html' ? 'shadow-md' : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="html-template"
                     >
                       <Field
@@ -129,13 +139,17 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           HTML/CSS
                         </div>
                       </div>
                     </label>
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'typescript'
+                          ? 'shadow-md'
+                          : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="typescript-template"
                     >
                       <Field
@@ -149,13 +163,17 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           Vanilla TypeScript
                         </div>
                       </div>
                     </label>
                     <label
-                      className="w-full flex items-center p-2 border rounded-md cursor-pointer"
+                      className={`w-full flex ${
+                        values.template === 'javascript'
+                          ? 'shadow-md'
+                          : 'shadow-sm'
+                      } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
                       htmlFor="javascript-template"
                     >
                       <Field
@@ -169,7 +187,7 @@ const CreateLesson: React.FC<Props> = () => {
                           className="h-6 mt-1"
                           src="https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg"
                         />
-                        <div className="text-sm text-text-primary font-semibold">
+                        <div className="text-sm text-text-primary font-semibold mt-0.5">
                           Vanilla JavaScript
                         </div>
                       </div>

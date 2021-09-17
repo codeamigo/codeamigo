@@ -48,7 +48,7 @@ const ChangePassword: React.FC<Props> = () => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="max-w-lg mx-auto p-6 lg:px-8">
+        <Form className="max-w-lg w-96 mx-auto p-6 lg:px-4">
           <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
             Change Password
           </h1>

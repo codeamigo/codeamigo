@@ -65,7 +65,7 @@ const Login: React.FC = () => {
     >
       {({ isSubmitting, values }) => (
         <Form>
-          <div className="max-w-lg mx-auto p-6 lg:px-8">
+          <div className="max-w-lg w-96 mx-auto p-6 lg:px-4">
             <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
               Login
             </h1>

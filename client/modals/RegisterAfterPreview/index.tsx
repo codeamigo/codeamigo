@@ -5,7 +5,7 @@ import Button from '👨‍💻components/Button';
 
 const RegisterAfterPreview: React.FC<Props> = () => {
   return (
-    <div className="max-w-lg mx-auto p-6 lg:px-8">
+    <div className="max-w-lg w-96 mx-auto p-6 lg:px-4">
       <div className="text-3xl">🎉</div>
       <div className="text-xl text-text-primary font-semibold">Nice work!</div>
       <div className="text-text-primary">
