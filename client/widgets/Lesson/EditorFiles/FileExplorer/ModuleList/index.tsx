@@ -1,7 +1,7 @@
 import type { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
 import * as React from 'react';
 
-import { Props as OwnProps } from '../../FilesList';
+import { FileSystemStateType, Props as OwnProps } from '../../FilesList';
 import { Directory } from '../Directory';
 import { File } from '../File';
 
@@ -20,6 +20,7 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
     );
 
     const filesToShow = fileListWithoutPrefix
+      .filter(Boolean)
       .filter((file) => !file.includes('/'))
       .map((file) => ({ path: `${prefixedPath}${file}` }));
 
@@ -49,10 +50,17 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
   }
 }
 
-type Props = {
+export type Props = {
   activePath: string;
+  addFileState: FileSystemStateType;
   depth?: number;
+  error?: string;
   files: SandpackBundlerFiles;
+  handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  inputRef: React.RefObject<HTMLInputElement>;
   prefixedPath: string;
   selectFile: (path: string) => void;
+  setAddFileState: React.Dispatch<React.SetStateAction<FileSystemStateType>>;
+  setError: React.Dispatch<React.SetStateAction<string>>;
 };

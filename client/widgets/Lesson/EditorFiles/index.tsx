@@ -26,7 +26,7 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
 
     await createCodeModule({
       refetchQueries: ['Step'],
-      variables: { name: `/${file}`, stepId: rest.stepId, value },
+      variables: { name: `${file}`, stepId: rest.stepId, value },
     });
   };
 

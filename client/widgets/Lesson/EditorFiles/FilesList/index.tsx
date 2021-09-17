@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { RegularCodeModuleFragment } from '👨‍💻generated/graphql';
+import AddFile from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/AddFile';
 import { ModuleList } from '👨‍💻widgets/Lesson/EditorFiles/FileExplorer/ModuleList';
 
 import { isValidName } from './validation';
@@ -13,36 +14,51 @@ export enum FileSystemType {
   folder = 'folder',
 }
 
-const FileSystemInitialState = { active: false, type: FileSystemType.file };
+export type FileSystemStateType = {
+  active: boolean;
+  path: string;
+  type: keyof typeof FileSystemType;
+};
+
+const FileSystemInitialState = {
+  active: false,
+  path: '/',
+  type: FileSystemType.file,
+};
 
 const FilesList: React.FC<Props> = (props) => {
   const { isEditing, name, onCreate } = props;
   const { sandpack } = useSandpack();
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isAdding, setIsAdding] = useState<{
-    active: boolean;
-    type: keyof typeof FileSystemType;
-  }>(FileSystemInitialState);
+  const [addFileState, setAddFileState] = useState<FileSystemStateType>(
+    FileSystemInitialState
+  );
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isAdding.active) {
+    if (addFileState.active) {
       setTimeout(() => {
         inputRef.current!.focus();
       }, 0);
     }
-  }, [isAdding.active]);
+  }, [addFileState.active]);
+
+  const handleCreate = (value: string) => {
+    onCreate!(
+      `${addFileState.path}${value}${addFileState.type === 'folder' ? '/' : ''}`
+    );
+  };
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
     const isValid = isValidName(
       value,
-      isAdding.type,
+      addFileState.type,
       Object.keys(sandpack.files)
     );
 
     if (!value) {
-      setIsAdding(FileSystemInitialState);
+      setAddFileState(FileSystemInitialState);
       return;
     }
 
@@ -52,10 +68,10 @@ const FilesList: React.FC<Props> = (props) => {
     }
 
     if (value && onCreate) {
-      onCreate(value);
+      handleCreate(value);
     }
 
-    setIsAdding(FileSystemInitialState);
+    setAddFileState(FileSystemInitialState);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -64,7 +80,7 @@ const FilesList: React.FC<Props> = (props) => {
 
       const isValid = isValidName(
         value,
-        isAdding.type,
+        addFileState.type,
         Object.keys(sandpack.files)
       );
 
@@ -73,8 +89,8 @@ const FilesList: React.FC<Props> = (props) => {
         return;
       }
 
-      onCreate(value);
-      setIsAdding(FileSystemInitialState);
+      handleCreate(value);
+      setAddFileState(FileSystemInitialState);
     }
   };
 
@@ -101,48 +117,52 @@ const FilesList: React.FC<Props> = (props) => {
               className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="folder"
               onClick={() =>
-                setIsAdding({ active: true, type: FileSystemType.folder })
+                setAddFileState({
+                  active: true,
+                  path: '/',
+                  type: FileSystemType.folder,
+                })
               }
             />
             <Icon
               className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="file-empty"
               onClick={() =>
-                setIsAdding({ active: true, type: FileSystemType.file })
+                setAddFileState({
+                  active: true,
+                  path: '/',
+                  type: FileSystemType.file,
+                })
               }
             />
           </div>
         )}
       </div>
       <div>
+        {addFileState.active && addFileState.path === '/' && (
+          <AddFile
+            addFileState={addFileState}
+            error={error}
+            handleBlur={handleBlur}
+            handleKeyDown={handleKeyDown}
+            inputRef={inputRef}
+            setError={setError}
+          />
+        )}
         <ModuleList
           activePath={sandpack.activePath}
+          addFileState={addFileState}
+          error={error}
           files={finalFiles}
+          handleBlur={handleBlur}
+          handleKeyDown={handleKeyDown}
+          inputRef={inputRef}
           prefixedPath="/"
           selectFile={sandpack.openFile}
+          setAddFileState={setAddFileState}
+          setError={setError}
           {...props}
         />
-        <div className="px-2.5 mt-1 relative">
-          {isAdding.active && (
-            <div className="flex items-center">
-              <Icon
-                className="text-xs mr-1 text-text-primary hover:text-accent cursor-pointer"
-                name={isAdding.type === 'file' ? 'file-empty' : 'folder'}
-              />
-              <input
-                className="w-full text-sm px-2 py-1"
-                onBlur={handleBlur}
-                onChange={() => setError('')}
-                onKeyDown={handleKeyDown}
-                ref={inputRef}
-                type="text"
-              />
-            </div>
-          )}
-          {isAdding.active && error && (
-            <div className="text-red-600 mt-1 text-xs w-full">{error}</div>
-          )}
-        </div>
       </div>
     </>
   );

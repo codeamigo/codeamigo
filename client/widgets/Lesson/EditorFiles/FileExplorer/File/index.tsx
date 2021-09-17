@@ -5,7 +5,11 @@ import { IconType } from '👨‍💻components/Icon/types';
 import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 
-import { Props as OwnProps } from '../../FilesList';
+import {
+  FileSystemStateType,
+  FileSystemType,
+  Props as OwnProps,
+} from '../../FilesList';
 
 export class File extends React.PureComponent<Props & OwnProps> {
   selectFile = (): void => {
@@ -30,6 +34,12 @@ export class File extends React.PureComponent<Props & OwnProps> {
     this.props.codeModules?.find(({ name }) => name!.indexOf(file) > -1)
       ?.isEntry;
 
+  addFileType = (e: MouseEvent, type: keyof typeof FileSystemType) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.props.setAddFileState({ active: true, path: this.props.path, type });
+  };
+
   render(): React.ReactElement {
     const fileName = this.props.path.split('/').filter(Boolean).pop();
 
@@ -49,12 +59,16 @@ export class File extends React.PureComponent<Props & OwnProps> {
           {this.props.isEditing && this.props.isDirectory && (
             <div className="flex items-center">
               <Icon
-                className="hidden group-hover:block text-xs ml-1"
+                className="hidden group-hover:block hover:text-accent text-xs ml-1"
                 name={'folder'}
+                onClick={(e) =>
+                  this.addFileType(e as any, FileSystemType.folder)
+                }
               />
               <Icon
-                className="hidden group-hover:block text-xs ml-1"
+                className="hidden group-hover:block hover:text-accent text-xs ml-1"
                 name={'file-empty'}
+                onClick={(e) => this.addFileType(e as any, FileSystemType.file)}
               />
             </div>
           )}
@@ -63,7 +77,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
             !this.props.isDirectory && (
               // update entry file
               <Icon
-                className={`empty-star hidden group-hover:block text-xs ml-1`}
+                className={`empty-star hidden group-hover:block hover:text-accent text-xs ml-1`}
                 name={
                   `${
                     this.isEntry(fileName) ? 'star' : 'star-empty'
@@ -111,9 +125,11 @@ export class File extends React.PureComponent<Props & OwnProps> {
 
 export interface Props {
   active?: boolean;
+  addFileState: FileSystemStateType;
   depth: number;
   isDirectory: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   path: string;
   selectFile?: (path: string) => void;
+  setAddFileState: React.Dispatch<React.SetStateAction<FileSystemStateType>>;
 }
