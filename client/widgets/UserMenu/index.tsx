@@ -66,7 +66,7 @@ const UserMenu: React.FC<Props> = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`w-full inline-block text-left px-4 py-2 text-sm hover:bg-accent hover:text-bg-primary ${
+                          className={`w-full inline-block text-left px-4 py-2 text-sm ${
                             active ? 'bg-accent text-bg-primary' : ''
                           }`}
                           onClick={() => router.push('/me')}
@@ -78,7 +78,7 @@ const UserMenu: React.FC<Props> = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`w-full inline-block text-left px-4 py-2 text-sm hover:bg-accent hover:text-bg-primary ${
+                          className={`w-full inline-block text-left px-4 py-2 text-sm ${
                             active ? 'bg-accent text-bg-primary' : ''
                           }`}
                           onClick={() => {
