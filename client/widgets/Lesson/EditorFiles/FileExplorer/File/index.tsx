@@ -110,7 +110,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
                 }
                 name="cancel-circled"
                 onClick={() =>
-                  this.props.onDelete(fileName!, this.props.isDirectory)
+                  this.props.onDelete(this.props.path, this.props.isDirectory)
                 }
               />
             )}
