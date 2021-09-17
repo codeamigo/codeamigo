@@ -16,7 +16,7 @@ const AddFile: React.FC<Props> = (props) => {
 
   return (
     <div
-      className="mt-1 relative"
+      className="mt-1 pr-4 relative"
       style={{ paddingLeft: 8 * (depth + 1) + 'px' }}
     >
       <div className="flex items-center">

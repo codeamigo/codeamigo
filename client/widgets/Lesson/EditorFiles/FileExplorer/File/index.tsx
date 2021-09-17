@@ -45,7 +45,9 @@ export class File extends React.PureComponent<Props & OwnProps> {
 
     return (
       <button
-        className="w-full bg-bg-primary text-text-primary flex justify-between items-center focus:outline-none group h-5"
+        className={`w-full py-0.5 ${
+          this.props.active ? 'bg-bg-nav-offset' : 'bg-bg-primary'
+        } hover:bg-bg-nav-offset text-text-primary flex justify-between items-center focus:outline-none group`}
         data-active={this.props.active}
         onClick={this.props.selectFile ? this.selectFile : this.props.onClick}
         style={{ paddingLeft: 8 * this.props.depth + 'px' }}
@@ -104,7 +106,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
             !this.isEntry(fileName) && (
               <Icon
                 className={
-                  'text-text-primary text-xs ml-1 hidden group-hover:block'
+                  'text-text-primary text-xs ml-1 hidden group-hover:block hover:text-accent'
                 }
                 name="cancel-circled"
                 onClick={() =>
