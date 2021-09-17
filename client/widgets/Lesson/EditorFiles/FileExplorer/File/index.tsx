@@ -48,8 +48,10 @@ export class File extends React.PureComponent<Props & OwnProps> {
     return (
       <button
         className={`w-full py-0.5 ${
-          this.props.active ? 'bg-bg-nav-offset' : 'bg-bg-primary'
-        } hover:bg-bg-nav-offset text-text-primary flex justify-between items-center focus:outline-none group`}
+          this.props.active
+            ? 'bg-bg-nav-offset text-white'
+            : 'bg-bg-primary text-text-primary'
+        } hover:bg-bg-nav-offset hover:text-white flex justify-between items-center focus:outline-none group`}
         data-active={this.props.active}
         onClick={this.props.selectFile ? this.selectFile : this.props.onClick}
         style={{ paddingLeft: 8 * this.props.depth + 'px' }}
