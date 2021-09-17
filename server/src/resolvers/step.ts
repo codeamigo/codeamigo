@@ -157,6 +157,7 @@ export class StepResolver {
     const step = await Step.create({
       codeModules,
       instructions: DEFAULT_MD,
+      isExecutableByBrowser: template.isExecutableByBrowser,
       name: options.name,
     }).save();
 

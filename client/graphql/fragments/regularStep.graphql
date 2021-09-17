@@ -4,6 +4,7 @@ fragment RegularStep on Step {
   currentCheckpointId
   instructions
   isCompleted
+  isExecutableByBrowser
   name
   codeModules {
     ...RegularCodeModule

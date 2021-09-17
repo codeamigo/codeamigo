@@ -281,13 +281,17 @@ const Step: React.FC<Props> = ({
                   onDragEnd={onDragEnd}
                 />
               </div>
-              <div
-                className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
-                ref={previewRef}
-              >
-                <SandpackPreview />
-                <Console />
-              </div>
+              {data.step.isExecutableByBrowser ? (
+                <div
+                  className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
+                  ref={previewRef}
+                >
+                  <SandpackPreview />
+                  <Console />
+                </div>
+              ) : (
+                <div>riju time</div>
+              )}
             </SandpackLayout>
           </SandpackProvider>
         </div>
