@@ -135,6 +135,7 @@ export class StepResolver {
       template = {
         codeModules: prevStep.codeModules,
         dependencies: prevStep.dependencies,
+        isExecutableByBrowser: prevStep.isExecutableByBrowser,
       };
     } else {
       template = getTemplate(options.template);

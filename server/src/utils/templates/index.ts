@@ -1,6 +1,7 @@
 export interface ITemplate {
   codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies?: { package: string; version: string }[];
+  isExecutableByBrowser: boolean;
 }
 
 export type TemplatesType =
@@ -9,7 +10,8 @@ export type TemplatesType =
   | "vue"
   | "typescript"
   | "javascript"
-  | "html";
+  | "html"
+  | "ruby";
 
 const css = `html, body {
   background-color: white;
@@ -29,6 +31,7 @@ const tsTemplate: ITemplate = {
     { isEntry: true, name: "app.ts", value: "// app.ts" },
   ],
   dependencies: [],
+  isExecutableByBrowser: true,
 };
 
 const jsTemplate: ITemplate = {
@@ -45,6 +48,7 @@ const jsTemplate: ITemplate = {
     { isEntry: true, name: "app.js", value: "// app.js" },
   ],
   dependencies: [],
+  isExecutableByBrowser: true,
 };
 
 const htmlTemplate: ITemplate = {
@@ -103,6 +107,7 @@ const htmlTemplate: ITemplate = {
     },
   ],
   dependencies: [],
+  isExecutableByBrowser: true,
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -139,6 +144,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
 }`,
     },
   ],
+  isExecutableByBrowser: true,
 };
 
 const angularTemplate: ITemplate = {
@@ -436,6 +442,7 @@ export const environment = {
 `,
     },
   ],
+  isExecutableByBrowser: true,
 };
 
 const vueTemplate: ITemplate = {
@@ -657,10 +664,24 @@ color: #42b983;
 }`,
     },
   ],
+  isExecutableByBrowser: true,
+};
+
+const rubyTemplate: ITemplate = {
+  codeModules: [
+    {
+      name: "index.rb",
+      value: 'puts "Hello, world!"',
+    },
+  ],
+  isExecutableByBrowser: false,
 };
 
 export const getTemplate = (template?: TemplatesType) => {
   switch (template) {
+    case "html":
+    case undefined:
+      return htmlTemplate;
     case "angular":
       return angularTemplate;
     case "react":
@@ -671,8 +692,7 @@ export const getTemplate = (template?: TemplatesType) => {
       return tsTemplate;
     case "javascript":
       return jsTemplate;
-    default:
-    case "html":
-      return htmlTemplate;
+    case "ruby":
+      return rubyTemplate;
   }
 };

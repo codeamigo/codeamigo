@@ -10,45 +10,65 @@ import { toErrorMap } from '👨‍💻utils/index';
 
 const templates: {
   id: string;
-  imageSlug: string;
+  imageUrl: string;
   name: string;
   value: string;
 }[] = [
   {
     id: 'react-template',
-    imageSlug: 'react',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg`,
     name: 'React TypeScript',
     value: 'react',
   },
   {
     id: 'angular-template',
-    imageSlug: 'angular',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/angular.svg`,
     name: 'Angular',
     value: 'angular',
   },
   {
     id: 'vue-template',
-    imageSlug: 'vue',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg`,
     name: 'Vue 3.0',
     value: 'vue',
   },
   {
     id: 'html-template',
-    imageSlug: 'html-5',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg`,
     name: 'HTML/CSS',
     value: 'html',
   },
   {
     id: 'typescript-template',
-    imageSlug: 'typescript-icon',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg`,
     name: 'Vanilla TypeScript',
     value: 'typescript',
   },
   {
     id: 'javascript-template',
-    imageSlug: 'javascript',
+    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg`,
     name: 'Vanilla JavaScript',
     value: 'javascript',
+  },
+  {
+    id: 'elixir-template',
+    imageUrl: 'https://avatars.githubusercontent.com/u/1481354?s=200&v=4',
+    name: 'Elixir',
+    value: 'elixir',
+  },
+  {
+    id: 'ruby-template',
+    imageUrl:
+      'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/ruby.svg',
+    name: 'Ruby',
+    value: 'ruby',
+  },
+  {
+    id: 'rust-template',
+    imageUrl:
+      'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/rust.svg',
+    name: 'Rust',
+    value: 'rust',
   },
 ];
 
@@ -116,10 +136,7 @@ const CreateLesson: React.FC<Props> = () => {
                             value={template.value}
                           />{' '}
                           <div className="flex flex-col items-start ml-2">
-                            <img
-                              className="h-6 mt-1"
-                              src={`https://raw.githubusercontent.com/gilbarbara/logos/master/logos/${template.imageSlug}.svg`}
-                            />
+                            <img className="h-6 mt-1" src={template.imageUrl} />
                             <div className="text-sm text-text-primary font-semibold mt-0.5">
                               {template.name}
                             </div>

@@ -47,6 +47,10 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   isCompleted?: boolean;
 
+  @Field(() => Boolean, { defaultValue: true })
+  @Column({ default: true })
+  isExecutableByBrowser: boolean;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: "CASCADE",
   })
