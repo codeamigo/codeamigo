@@ -6,6 +6,7 @@ import { FileSystemStateType } from '👨‍💻widgets/Lesson/EditorFiles/Files
 const AddFile: React.FC<Props> = (props) => {
   const {
     addFileState,
+    depth = 0,
     error,
     handleBlur,
     handleKeyDown,
@@ -14,7 +15,10 @@ const AddFile: React.FC<Props> = (props) => {
   } = props;
 
   return (
-    <div className="px-2.5 mt-1 relative">
+    <div
+      className="mt-1 relative"
+      style={{ paddingLeft: 8 * (depth + 1) + 'px' }}
+    >
       <div className="flex items-center">
         <Icon
           className="text-xs mr-1 text-text-primary hover:text-accent cursor-pointer"
@@ -38,6 +42,7 @@ const AddFile: React.FC<Props> = (props) => {
 
 type Props = {
   addFileState: FileSystemStateType;
+  depth?: number;
   error?: string;
   handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
