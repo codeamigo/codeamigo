@@ -281,7 +281,7 @@ const Step: React.FC<Props> = ({
                   onDragEnd={onDragEnd}
                 />
               </div>
-              {data.step.isExecutableByBrowser ? (
+              {data.step.executionType === 'sandpack' ? (
                 <div
                   className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
                   ref={previewRef}

@@ -1,7 +1,9 @@
+import { StepExecutionTypeEnum } from "../../entities/Step";
+
 export interface ITemplate {
   codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies?: { package: string; version: string }[];
-  isExecutableByBrowser: boolean;
+  executionType: keyof typeof StepExecutionTypeEnum;
 }
 
 export type TemplatesType =
@@ -31,7 +33,7 @@ const tsTemplate: ITemplate = {
     { isEntry: true, name: "app.ts", value: "// app.ts" },
   ],
   dependencies: [],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const jsTemplate: ITemplate = {
@@ -48,7 +50,7 @@ const jsTemplate: ITemplate = {
     { isEntry: true, name: "app.js", value: "// app.js" },
   ],
   dependencies: [],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const htmlTemplate: ITemplate = {
@@ -107,7 +109,7 @@ const htmlTemplate: ITemplate = {
     },
   ],
   dependencies: [],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -144,7 +146,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
 }`,
     },
   ],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const angularTemplate: ITemplate = {
@@ -442,7 +444,7 @@ export const environment = {
 `,
     },
   ],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const vueTemplate: ITemplate = {
@@ -664,7 +666,7 @@ color: #42b983;
 }`,
     },
   ],
-  isExecutableByBrowser: true,
+  executionType: StepExecutionTypeEnum.sandpack,
 };
 
 const rubyTemplate: ITemplate = {
@@ -674,7 +676,7 @@ const rubyTemplate: ITemplate = {
       value: 'puts "Hello, world!"',
     },
   ],
-  isExecutableByBrowser: false,
+  executionType: StepExecutionTypeEnum.riju,
 };
 
 export const getTemplate = (template?: TemplatesType) => {

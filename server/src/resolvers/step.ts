@@ -135,7 +135,7 @@ export class StepResolver {
       template = {
         codeModules: prevStep.codeModules,
         dependencies: prevStep.dependencies,
-        isExecutableByBrowser: prevStep.isExecutableByBrowser,
+        executionType: prevStep.executionType,
       };
     } else {
       template = getTemplate(options.template);
@@ -156,8 +156,8 @@ export class StepResolver {
 
     const step = await Step.create({
       codeModules,
+      executionType: template.executionType,
       instructions: DEFAULT_MD,
-      isExecutableByBrowser: template.isExecutableByBrowser,
       name: options.name,
     }).save();
 

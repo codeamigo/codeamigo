@@ -2,9 +2,9 @@ fragment RegularStep on Step {
   id
   createdAt
   currentCheckpointId
+  executionType
   instructions
   isCompleted
-  isExecutableByBrowser
   name
   codeModules {
     ...RegularCodeModule
