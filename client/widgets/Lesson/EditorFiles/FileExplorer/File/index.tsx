@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
-import { getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
+import { getExtension } from '👨‍💻widgets/Lesson/Sandpack/SandpackEditor/utils';
 
 import {
   FileSystemStateType,
@@ -12,7 +12,7 @@ import {
 } from '../../FilesList';
 
 export class File extends React.PureComponent<Props & OwnProps> {
-  selectFile = (): void => {
+  selectFile = () => {
     if (this.props.selectFile) {
       this.props.selectFile(this.props.path);
     }

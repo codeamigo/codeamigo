@@ -7,16 +7,9 @@ import {
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
 
-import { FilesType } from '../EditorV2/types';
 import FilesList from './FilesList';
 
-export type AlgoliaSearchResultType = {
-  name: string;
-  tags: { latest: string; next: string };
-  version: string;
-};
-
-const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
+const EditorFiles: React.FC<Props> = (props) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
@@ -26,7 +19,7 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
 
     await createCodeModule({
       refetchQueries: ['Step'],
-      variables: { name: `${file}`, stepId: rest.stepId, value },
+      variables: { name: `${file}`, stepId: props.stepId, value },
     });
   };
 
@@ -39,7 +32,7 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
 
     if (!confirm) return;
 
-    const modules = rest.codeModules?.filter(
+    const modules = props.codeModules?.filter(
       (module) => module.name!.indexOf(file) > -1
     );
 
@@ -57,7 +50,7 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
     });
   };
 
-  if (!files) return null;
+  if (!props.files) return null;
 
   return (
     <>
@@ -66,19 +59,21 @@ const EditorFiles: React.FC<Props> = ({ files, ...rest }) => {
         onCreate={createFile}
         onDelete={deleteFile}
         onUpdateCodeModuleEntryFile={updateCodeModuleEntryFile}
-        {...rest}
+        {...props}
       />
-      {rest.isEditing && (
-        <FilesList name={'Tests'} onDelete={deleteFile} {...rest} />
+      {props.isEditing && (
+        <FilesList name={'Tests'} onDelete={deleteFile} {...props} />
       )}
     </>
   );
 };
 
 type Props = {
+  activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
-  files: FilesType;
+  files: { [key in string]: { code: string } };
   isEditing?: boolean;
+  selectFile?: (path: string) => void;
   stepId: number;
 };
 

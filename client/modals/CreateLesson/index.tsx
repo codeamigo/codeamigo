@@ -125,7 +125,7 @@ const CreateLesson: React.FC<Props> = () => {
                             values.template === template.value
                               ? 'shadow-md'
                               : 'shadow-sm'
-                          } hover:shadow-md transition-shadow duration-300 items-center p-2 border rounded-md cursor-pointer`}
+                          } hover:shadow-md transition-shadow duration-300 items-center bg-bg-nav-faded p-2 rounded-md cursor-pointer`}
                           htmlFor={template.id}
                           key={template.id}
                         >

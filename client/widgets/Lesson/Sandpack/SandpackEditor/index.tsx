@@ -9,9 +9,12 @@ import {
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import { camalize, getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
+import {
+  camalize,
+  getExtension,
+} from '👨‍💻widgets/Lesson/Sandpack/SandpackEditor/utils';
 
-import * as THEMES from '../../../styles/monacoThemes';
+import * as THEMES from '../../../../styles/monacoThemes';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =
@@ -19,7 +22,7 @@ const CS_TYPES_URL =
 const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
-const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
+const SandpackEditor: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
   const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
@@ -292,4 +295,4 @@ type Props = {
   stepId?: number;
 };
 
-export default EditorV2;
+export default SandpackEditor;

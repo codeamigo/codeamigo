@@ -63,7 +63,7 @@ export type Props = {
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   prefixedPath: string;
-  selectFile: (path: string) => void;
+  selectFile?: (path: string) => void;
   setAddFileState: React.Dispatch<React.SetStateAction<FileSystemStateType>>;
   setError: React.Dispatch<React.SetStateAction<string>>;
 };
