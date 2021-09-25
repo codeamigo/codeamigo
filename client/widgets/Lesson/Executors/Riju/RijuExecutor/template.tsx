@@ -1,19 +1,35 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 
 import Button from '👨‍💻components/Button';
 import CTA from '👨‍💻widgets/CTA';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
+import SandpackEditor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor';
+import Separator from '👨‍💻widgets/Lesson/Separator';
 
 import { Props as OwnProps } from '.';
 
 const RijuTemplate: React.FC<Props> = (props) => {
-  const { files, filesRef, loading, nextStep, step } = props;
-  const rijuRef = useRef<HTMLIFrameElement>(null);
+  const {
+    editorRef,
+    files,
+    filesHeight,
+    filesRef,
+    loading,
+    maxDragWidth,
+    nextStep,
+    onDragEnd,
+    previewRef,
+    step,
+    updateWidths,
+  } = props;
+  const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
+  const [activePath, setActivePath] = useState<string | null>(null);
 
   const postCodeToRiju = () => {
-    rijuRef.current?.contentWindow?.postMessage(
+    // @ts-ignore
+    previewRef.current?.contentWindow?.postMessage(
       {
-        code: 'puts "hello world"\n',
+        code: entryFile?.value,
         event: 'runCode',
       },
       '*'
@@ -30,24 +46,46 @@ const RijuTemplate: React.FC<Props> = (props) => {
         >
           <div className="h-full">
             <EditorFiles
-              activePath={''}
+              activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
               stepId={step.id}
               {...props}
               files={files!}
-              selectFile={() => {
-                console.log('TODO');
-              }}
+              selectFile={setActivePath}
             />
           </div>
           <div className="p-2">
-            <Button onClick={postCodeToRiju}>TODO</Button>
+            <Button
+              className="h-14 justify-center w-full text-lg"
+              onClick={postCodeToRiju}
+            >
+              Run
+            </Button>
             {/* <CTA {...props} loading={loading} nextStep={nextStep} step={step} /> */}
           </div>
         </div>
+        <div
+          className="md:w-2/6 w-4/6 lg:h-full h-96 z-20 sm:border-b-0 border-b border-bg-nav-offset"
+          ref={editorRef}
+          style={{ height: filesHeight, maxHeight: filesHeight }}
+        >
+          <SandpackEditor
+            activePath={activePath || (entryFile?.name as string)}
+            codeModules={step.codeModules}
+            setupTypes={false}
+            stepId={step.id}
+            {...props}
+          />
+          <Separator
+            iframeName="riju-frame"
+            maxDrag={maxDragWidth}
+            onChangeX={updateWidths}
+            onDragEnd={onDragEnd}
+          />
+        </div>
         <iframe
-          className="w-full h-full"
-          ref={rijuRef}
+          className="md:w-3/6 md:h-full w-full flex flex-col flex-grow riju-frame"
+          ref={previewRef}
           src="https://riju.codeamigo.xyz/ruby"
         />
       </div>

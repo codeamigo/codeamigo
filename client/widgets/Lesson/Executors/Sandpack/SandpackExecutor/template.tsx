@@ -1,6 +1,7 @@
 import {
   SandpackLayout,
   SandpackPreview,
+  useActiveCode,
   useSandpack,
 } from '@codesandbox/sandpack-react';
 import React from 'react';
@@ -27,7 +28,8 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
-  const { sandpack } = useSandpack();
+  const { updateCode } = useActiveCode();
+  const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
 
   return (
@@ -57,11 +59,16 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >
         <SandpackEditor
+          activePath={activePath}
           codeModules={step.codeModules}
+          refreshPreview={() => dispatch({ type: 'refresh' })}
+          setupTypes
           stepId={step.id}
+          updateCode={updateCode}
           {...props}
         />
         <Separator
+          iframeName="sp-preview-iframe"
           maxDrag={maxDragWidth}
           onChangeX={updateWidths}
           onDragEnd={onDragEnd}

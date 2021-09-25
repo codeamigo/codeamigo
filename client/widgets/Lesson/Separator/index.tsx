@@ -2,13 +2,19 @@ import React, { MouseEvent } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
-const Separator: React.FC<Props> = ({ maxDrag, onChangeX, onDragEnd }) => {
+const Separator: React.FC<Props> = ({
+  iframeName,
+  maxDrag,
+  onChangeX,
+  onDragEnd,
+}) => {
   const [xMove, setXMove] = useState(0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const startDrag = (e: MouseEvent) => {
     let xStart = e.pageX;
-    const iframe = document.getElementsByClassName('sp-preview-iframe')[0];
+    const iframe = document.getElementsByClassName(iframeName)[0];
+    console.log(iframe);
     // @ts-ignore
     iframe.style.pointerEvents = 'none';
     setIsDragging(true);
@@ -20,7 +26,7 @@ const Separator: React.FC<Props> = ({ maxDrag, onChangeX, onDragEnd }) => {
     const endDrag = (e: MouseEvent) => {
       xStart = e.pageX;
       // @ts-ignore
-      iframe.style.pointerEvents = 'auto';
+      iframe.style.pointerEvents = 'none';
       document.removeEventListener('mousemove', onMouseMove);
       setIsDragging(false);
       onDragEnd();
@@ -50,6 +56,7 @@ const Separator: React.FC<Props> = ({ maxDrag, onChangeX, onDragEnd }) => {
 };
 
 type Props = {
+  iframeName: string;
   maxDrag: number | null;
   onChangeX: (x: number) => void;
   onDragEnd: () => void;

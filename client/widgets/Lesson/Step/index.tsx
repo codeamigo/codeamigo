@@ -19,7 +19,7 @@ import Instructions from '👨‍💻widgets/Lesson/Instructions';
 
 const Step: React.FC<Props> = (props) => {
   const { currentStepId: id, session, setCurrentStepId, showSteps } = props;
-  const previewRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const filesRef = useRef<HTMLDivElement>(null);
   const router = useRouter();

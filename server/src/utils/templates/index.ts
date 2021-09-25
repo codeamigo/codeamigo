@@ -672,7 +672,8 @@ color: #42b983;
 const rubyTemplate: ITemplate = {
   codeModules: [
     {
-      name: "/index.rb",
+      isEntry: true,
+      name: "/main.rb",
       value: 'puts "Hello, world!"',
     },
   ],

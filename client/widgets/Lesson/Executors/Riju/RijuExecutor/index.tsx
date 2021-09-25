@@ -19,7 +19,7 @@ export type Props = OwnProps & {
   maxDragWidth: number | null;
   nextStep: () => void;
   onDragEnd: () => void;
-  previewRef: React.RefObject<HTMLDivElement>;
+  previewRef: React.RefObject<HTMLIFrameElement>;
   step: RegularStepFragment;
   updateWidths: (x: number) => void;
 };

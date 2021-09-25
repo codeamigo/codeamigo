@@ -1,4 +1,3 @@
-import { useActiveCode, useSandpack } from '@codesandbox/sandpack-react';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
@@ -9,12 +8,9 @@ import {
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import {
-  camalize,
-  getExtension,
-} from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor/utils';
 
 import * as THEMES from '../../../../../styles/monacoThemes';
+import { camalize, getExtension } from './utils';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =
@@ -22,64 +18,63 @@ const CS_TYPES_URL =
 const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
-const SandpackEditor: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
+const SandpackEditor: React.FC<Props> = ({
+  activePath,
+  codeModules,
+  refreshPreview,
+  stepId,
+  updateCode,
+  ...rest
+}) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
-  const { updateCode } = useActiveCode();
-  const { dispatch, sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
-  const pathRef = useRef(sandpack.activePath);
+  const pathRef = useRef(activePath);
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
   useEffect(() => {
-    pathRef.current = sandpack.activePath;
-  }, [sandpack.activePath]);
+    pathRef.current = activePath;
+  }, [activePath]);
 
   useEffect(() => {
     if (!monacoRef.current) return;
-    if (!sandpack.activePath) return;
-    const model = monacoRef.current.editor.getModel(
-      `${URN}${sandpack.activePath}`
-    );
+    if (!activePath) return;
+    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
     editorRef.current.setModel(model);
-  }, [sandpack.activePath, monacoRef.current, editorRef.current]);
+  }, [activePath, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
   useEffect(() => {
-    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+    console.log(monacoRef.current);
+    if (monacoRef.current && editorRef.current && activePath) {
       monacoRef.current.editor
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
     }
-  }, [stepId, monacoRef.current, editorRef.current, sandpack.activePath]);
+  }, [stepId, monacoRef.current, editorRef.current, activePath]);
 
   // When file added add to models
   useEffect(() => {
-    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+    if (monacoRef.current && editorRef.current && activePath) {
       setupModels();
     }
-  }, [
-    codeModules?.length,
-    monacoRef.current,
-    editorRef.current,
-    sandpack.activePath,
-  ]);
+  }, [codeModules?.length, monacoRef.current, editorRef.current, activePath]);
 
   useEffect(() => {
-    if (monacoRef.current) {
+    if (monacoRef.current && rest.setupTypes) {
       setupTypes();
     }
     // TODO: fix check
   }, [codeModules?.length, monacoRef.current]);
 
   useEffect(() => {
-    dispatch({ type: 'refresh' });
+    refreshPreview && refreshPreview();
   }, [stepId]);
 
   const handleCodeUpdate = (newCode: string) => {
-    updateCode(newCode);
+    updateCode && updateCode(newCode);
     // Wait for pathRef to update
     setTimeout(() => {
       const currentModule = codeModules?.find(
@@ -187,9 +182,7 @@ const SandpackEditor: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
       );
     });
 
-    const model = monacoRef.current.editor.getModel(
-      `${URN}${sandpack.activePath}`
-    );
+    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
     editorRef.current.setModel(model);
   };
 
@@ -252,6 +245,7 @@ const SandpackEditor: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
     setupCompilerOptions();
     setupDiagnosticsOptions();
     setupThemes();
+    setupModels();
   };
 
   const editorDidMount = async (_: any, editor: any) => {
@@ -289,10 +283,14 @@ const SandpackEditor: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
 };
 
 type Props = {
+  activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
+  refreshPreview?: () => void;
+  setupTypes: boolean;
   stepId?: number;
+  updateCode?: (newCode: string) => void;
 };
 
 export default SandpackEditor;
