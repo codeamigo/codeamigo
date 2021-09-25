@@ -5,7 +5,7 @@ import Icon from '👨‍💻components/Icon';
 const RunButton: React.FC<Props> = ({ run }) => {
   return (
     <div
-      className="rounded-full flex items-center justify-center bg-bg-nav h-12 w-12 border-2 border-bg-nav-offset-faded cursor-pointer"
+      className="rounded-full flex items-center justify-center bg-bg-nav h-12 w-12 box-content border-4 border-bg-nav-offset cursor-pointer"
       onClick={run}
       role="button"
     >
