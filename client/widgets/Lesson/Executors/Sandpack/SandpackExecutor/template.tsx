@@ -8,7 +8,7 @@ import React from 'react';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
-import SandpackEditor from '👨‍💻widgets/Lesson/Sandpack/SandpackEditor';
+import SandpackEditor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
 import { Props as OwnProps } from '.';
@@ -27,7 +27,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
-  const { dispatch, sandpack } = useSandpack();
+  const { sandpack } = useSandpack();
   const { activePath } = sandpack;
 
   return (

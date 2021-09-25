@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
+import { getExtension } from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor/utils';
 import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
-import { getExtension } from '👨‍💻widgets/Lesson/Sandpack/SandpackEditor/utils';
 
 import {
   FileSystemStateType,

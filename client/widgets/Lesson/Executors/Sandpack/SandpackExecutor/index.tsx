@@ -1,14 +1,12 @@
+import '@codesandbox/sandpack-react/dist/index.css';
+
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import React, { useEffect, useState } from 'react';
 
 import { RegularStepFragment } from '👨‍💻generated/graphql';
-import SandpackTemplate from '👨‍💻widgets/Lesson/Sandpack/SandpackExecutor/template';
+import SandpackTemplate from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor/template';
+import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
 import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';
-
-const modToFile = (acc: { [key in string]: { code: string } }, curr: any) => ({
-  ...acc,
-  [curr.name as string]: { code: curr.value },
-});
 
 const SandpackExecutor: React.FC<Props> = (props) => {
   const { step } = props;

@@ -17,6 +17,8 @@ export const getExtension = (file: string) => {
       return 'javascript';
     case 'vue':
       return 'vue';
+    case 'rb':
+      return 'ruby';
     default:
       return ext;
   }
@@ -40,6 +42,8 @@ export const getModelExtension = (file: string) => {
     case 'js':
     case 'jsx':
       return 'javascript';
+    case 'rb':
+      return 'ruby';
     default:
       return ext;
   }

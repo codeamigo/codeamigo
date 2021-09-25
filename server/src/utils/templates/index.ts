@@ -22,7 +22,7 @@ const css = `html, body {
 const tsTemplate: ITemplate = {
   codeModules: [
     {
-      name: "index.html",
+      name: "/index.html",
       value: `<html>
 <body>
 </body>
@@ -39,7 +39,7 @@ const tsTemplate: ITemplate = {
 const jsTemplate: ITemplate = {
   codeModules: [
     {
-      name: "index.html",
+      name: "/index.html",
       value: `<html>
 <body>
 </body>
@@ -47,7 +47,7 @@ const jsTemplate: ITemplate = {
 <script src='./app.js'></script>
 </html>`,
     },
-    { isEntry: true, name: "app.js", value: "// app.js" },
+    { isEntry: true, name: "/app.js", value: "// app.js" },
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
@@ -672,7 +672,7 @@ color: #42b983;
 const rubyTemplate: ITemplate = {
   codeModules: [
     {
-      name: "index.rb",
+      name: "/index.rb",
       value: 'puts "Hello, world!"',
     },
   ],

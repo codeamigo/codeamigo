@@ -12,9 +12,9 @@ import {
 import {
   camalize,
   getExtension,
-} from '👨‍💻widgets/Lesson/Sandpack/SandpackEditor/utils';
+} from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor/utils';
 
-import * as THEMES from '../../../../styles/monacoThemes';
+import * as THEMES from '../../../../../styles/monacoThemes';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =

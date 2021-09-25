@@ -1,10 +1,3 @@
-import '@codesandbox/sandpack-react/dist/index.css';
-
-import {
-  SandpackLayout,
-  SandpackPreview,
-  SandpackProvider,
-} from '@codesandbox/sandpack-react';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { useState } from 'react';
@@ -20,8 +13,9 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
+import RijuExecutor from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor';
+import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
-import SandpackExecutor from '👨‍💻widgets/Lesson/Sandpack/SandpackExecutor';
 
 const Step: React.FC<Props> = (props) => {
   const { currentStepId: id, session, setCurrentStepId, showSteps } = props;
@@ -198,9 +192,18 @@ const Step: React.FC<Props> = (props) => {
               {...props}
             />
           ) : (
-            <iframe
-              className="w-full h-full"
-              src="https://riju.codeamigo.xyz/ruby"
+            <RijuExecutor
+              editorRef={editorRef}
+              filesHeight={filesHeight}
+              filesRef={filesRef}
+              loading={loading}
+              maxDragWidth={maxDragWidth}
+              nextStep={nextStep}
+              onDragEnd={onDragEnd}
+              previewRef={previewRef}
+              step={data.step}
+              updateWidths={updateWidths}
+              {...props}
             />
           )}
         </div>
