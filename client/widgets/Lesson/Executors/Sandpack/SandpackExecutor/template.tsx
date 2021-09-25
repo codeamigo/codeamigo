@@ -50,7 +50,15 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           />
         </div>
         <div className="p-2">
-          <CTA {...props} loading={loading} nextStep={nextStep} step={step} />
+          <CTA
+            {...props}
+            bundlerState={sandpack.bundlerState}
+            // @ts-ignore
+            handleRunTests={() => dispatch({ type: 'run-all-tests' })}
+            loading={loading}
+            nextStep={nextStep}
+            step={step}
+          />
         </div>
       </div>
       <div
@@ -62,6 +70,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           activePath={activePath}
           codeModules={step.codeModules}
           refreshPreview={() => dispatch({ type: 'refresh' })}
+          runCode={() => dispatch({ type: 'start' })}
           setupTypes
           stepId={step.id}
           updateCode={updateCode}

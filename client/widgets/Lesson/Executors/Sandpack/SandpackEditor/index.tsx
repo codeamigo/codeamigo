@@ -22,6 +22,7 @@ const SandpackEditor: React.FC<Props> = ({
   activePath,
   codeModules,
   refreshPreview,
+  runCode,
   stepId,
   updateCode,
   ...rest
@@ -161,12 +162,12 @@ const SandpackEditor: React.FC<Props> = ({
       }
     );
 
-    // editorRef.current.addCommand(
-    //   monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
-    //   () => {
-    //     submitRef.current.click();
-    //   }
-    // );
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
+      () => {
+        runCode();
+      }
+    );
   };
 
   const setupModels = () => {
@@ -288,6 +289,7 @@ type Props = {
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
   refreshPreview?: () => void;
+  runCode: () => void;
   setupTypes: boolean;
   stepId?: number;
   updateCode?: (newCode: string) => void;

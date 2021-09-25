@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Button from '👨‍💻components/Button';
 import CTA from '👨‍💻widgets/CTA';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
+import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
 import SandpackEditor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
@@ -55,13 +56,15 @@ const RijuTemplate: React.FC<Props> = (props) => {
             />
           </div>
           <div className="p-2">
-            <Button
-              className="h-14 justify-center w-full text-lg"
-              onClick={postCodeToRiju}
-            >
-              Run
-            </Button>
-            {/* <CTA {...props} loading={loading} nextStep={nextStep} step={step} /> */}
+            <CTA
+              {...props}
+              // needed for sandpack
+              bundlerState
+              handleRunTests={() => null}
+              loading={loading}
+              nextStep={nextStep}
+              step={step}
+            />
           </div>
         </div>
         <div
@@ -72,10 +75,14 @@ const RijuTemplate: React.FC<Props> = (props) => {
           <SandpackEditor
             activePath={activePath || (entryFile?.name as string)}
             codeModules={step.codeModules}
+            runCode={postCodeToRiju}
             setupTypes={false}
             stepId={step.id}
             {...props}
           />
+          <div className="absolute bottom-2 right-2 md:top-1/2 md:-right-6 md:-mt-6 z-30">
+            <RunButton run={postCodeToRiju} />
+          </div>
           <Separator
             iframeName="riju-frame"
             maxDrag={maxDragWidth}

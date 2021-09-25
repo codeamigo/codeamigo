@@ -1,5 +1,4 @@
 import { useReactiveVar } from '@apollo/client';
-import { useSandpack } from '@codesandbox/sandpack-react';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef } from 'react';
 
@@ -22,6 +21,8 @@ import {
 } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
 const CTA: React.FC<Props> = ({
+  bundlerState,
+  handleRunTests,
   isEditing,
   isPreviewing,
   lesson,
@@ -30,15 +31,12 @@ const CTA: React.FC<Props> = ({
   step,
 }) => {
   const router = useRouter();
-  const sandpack = useSandpack();
   const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
   const isTesting = useReactiveVar(isTestingVar);
 
   const testsRef = useRef<TestDataType[]>([]);
-  const { dispatch } = sandpack;
-  const { bundlerState } = sandpack.sandpack;
 
   const handlePassCheckpoint = async (
     message: MessageEvent<CodeSandboxTestMsgType>
@@ -147,8 +145,7 @@ const CTA: React.FC<Props> = ({
     isTestingVar(true);
     testFailureVar(false);
     testsRef.current = [];
-    // @ts-ignore
-    dispatch({ type: 'run-all-tests' });
+    handleRunTests();
 
     setTimeout(() => {
       isTestingVar(false);
@@ -198,6 +195,8 @@ const CTA: React.FC<Props> = ({
 };
 
 type Props = {
+  bundlerState: any;
+  handleRunTests: () => void;
   isEditing?: boolean;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
