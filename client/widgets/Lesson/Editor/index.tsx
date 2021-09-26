@@ -10,7 +10,7 @@ import {
 } from '👨‍💻generated/graphql';
 
 import * as THEMES from '../../../styles/monacoThemes';
-import { camalize, getExtension } from './utils';
+import { camalize, getLanguage } from './utils';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =
@@ -175,7 +175,7 @@ const Editor: React.FC<Props> = ({
 
       monacoRef.current.editor.createModel(
         mod.value,
-        getExtension(mod.name || ''),
+        getLanguage(mod.name || ''),
         `${URN}${mod.name}`
       );
     });

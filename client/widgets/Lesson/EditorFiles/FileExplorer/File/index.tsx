@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
-import { getExtension } from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor/utils';
+import { getLanguage } from '👨‍💻widgets/Lesson/Editor/utils';
 import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 
 import {
@@ -24,11 +24,11 @@ export class File extends React.PureComponent<Props & OwnProps> {
         ? 'https://codesandbox.io/static/media/folderOpen.6913563c.svg'
         : 'https://codesandbox.io/static/media/folder.31ca7ee0.svg';
     }
-    const ext = getExtension(path);
+    const lang = getLanguage(path);
 
     const base =
       'https://cdn.jsdelivr.net/gh/PKief/vscode-material-icon-theme@master/icons';
-    return `${base}/${ext}.svg`;
+    return `${base}/${lang}.svg`;
   };
 
   isEntry = (file?: string) =>

@@ -3,6 +3,7 @@ fragment RegularStep on Step {
   createdAt
   currentCheckpointId
   executionType
+  lang
   instructions
   isCompleted
   name

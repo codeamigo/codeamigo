@@ -93,7 +93,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
         <iframe
           className="md:w-3/6 bg-bg-primary md:h-full w-full flex flex-col flex-grow riju-frame"
           ref={previewRef}
-          src="https://riju.codeamigo.xyz/ruby"
+          src={`https://riju.codeamigo.xyz/${step.lang}`}
         />
       </div>
     </div>

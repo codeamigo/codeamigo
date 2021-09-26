@@ -1,4 +1,4 @@
-export const getExtension = (file: string) => {
+export const getLanguage = (file: string) => {
   const ext = file.split('.')[file.split('.').length - 1];
 
   switch (ext) {
@@ -19,6 +19,12 @@ export const getExtension = (file: string) => {
       return 'vue';
     case 'rb':
       return 'ruby';
+    case 'rs':
+      return 'rust';
+    case 'c':
+      return 'c';
+    case 'exs':
+      return 'elixir';
     default:
       return ext;
   }
@@ -44,6 +50,12 @@ export const getModelExtension = (file: string) => {
       return 'javascript';
     case 'rb':
       return 'ruby';
+    case 'rs':
+      return 'rust';
+    case 'c':
+      return 'c';
+    case 'exs':
+      return 'elixir';
     default:
       return ext;
   }

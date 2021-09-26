@@ -4,6 +4,7 @@ export interface ITemplate {
   codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies?: { package: string; version: string }[];
   executionType: keyof typeof StepExecutionTypeEnum;
+  lang: string;
 }
 
 export type TemplatesType =
@@ -13,7 +14,10 @@ export type TemplatesType =
   | "typescript"
   | "javascript"
   | "html"
-  | "ruby";
+  | "c"
+  | "rust"
+  | "ruby"
+  | "elixir";
 
 const css = `html, body {
   background-color: white;
@@ -34,6 +38,7 @@ const tsTemplate: ITemplate = {
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const jsTemplate: ITemplate = {
@@ -51,6 +56,7 @@ const jsTemplate: ITemplate = {
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const htmlTemplate: ITemplate = {
@@ -110,6 +116,7 @@ const htmlTemplate: ITemplate = {
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -147,6 +154,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const angularTemplate: ITemplate = {
@@ -445,6 +453,7 @@ export const environment = {
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const vueTemplate: ITemplate = {
@@ -667,6 +676,7 @@ color: #42b983;
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
+  lang: "javascript",
 };
 
 const rubyTemplate: ITemplate = {
@@ -678,6 +688,52 @@ const rubyTemplate: ITemplate = {
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
+  lang: "ruby",
+};
+
+const elixirTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.exs",
+      value: 'IO.puts("Hello, world!")',
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "elixir",
+};
+
+const cTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.c",
+      value: `#include <stdio.h>
+
+int main() {
+  printf("Hello, world!\n");
+  return 0;
+}
+`,
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "c",
+};
+
+const rustTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.rs",
+      value: `fn main() {
+  println!("Hello, world!");
+}
+`,
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "rust",
 };
 
 export const getTemplate = (template?: TemplatesType) => {
@@ -697,5 +753,11 @@ export const getTemplate = (template?: TemplatesType) => {
       return jsTemplate;
     case "ruby":
       return rubyTemplate;
+    case "rust":
+      return rustTemplate;
+    case "elixir":
+      return elixirTemplate;
+    case "c":
+      return cTemplate;
   }
 };

@@ -112,6 +112,7 @@ export type Step = {
   currentCheckpointId?: Maybe<Scalars['Float']>;
   isCompleted?: Maybe<Scalars['Boolean']>;
   executionType?: Maybe<StepExecutionTypeEnum>;
+  lang?: Maybe<Scalars['String']>;
   lesson: Lesson;
   session: Session;
   codeModules?: Maybe<Array<CodeModule>>;
@@ -674,7 +675,7 @@ export type RegularLessonItemFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'executionType' | 'instructions' | 'isCompleted' | 'name'>
+  & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'executionType' | 'lang' | 'instructions' | 'isCompleted' | 'name'>
   & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
@@ -1491,6 +1492,7 @@ export const RegularStepFragmentDoc = gql`
   createdAt
   currentCheckpointId
   executionType
+  lang
   instructions
   isCompleted
   name

@@ -136,6 +136,7 @@ export class StepResolver {
         codeModules: prevStep.codeModules,
         dependencies: prevStep.dependencies,
         executionType: prevStep.executionType,
+        lang: prevStep.lang,
       };
     } else {
       template = getTemplate(options.template);
@@ -158,6 +159,7 @@ export class StepResolver {
       codeModules,
       executionType: template.executionType,
       instructions: DEFAULT_MD,
+      lang: template.lang,
       name: options.name,
     }).save();
 
