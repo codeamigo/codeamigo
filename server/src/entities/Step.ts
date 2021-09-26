@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -16,6 +16,14 @@ import { Dependency } from "./Dependency";
 import { Lesson } from "./Lesson";
 import { Session } from "./Session";
 
+export enum StepExecutionTypeEnum {
+  riju = "riju",
+  sandpack = "sandpack",
+}
+
+registerEnumType(StepExecutionTypeEnum, {
+  name: "StepExecutionTypeEnum",
+});
 @ObjectType()
 @Entity()
 export class Step extends BaseEntity {
@@ -46,6 +54,18 @@ export class Step extends BaseEntity {
   @Field(() => Boolean, { defaultValue: false, nullable: true })
   @Column({ nullable: true })
   isCompleted?: boolean;
+
+  @Field(() => StepExecutionTypeEnum, {
+    defaultValue: StepExecutionTypeEnum.sandpack,
+  })
+  @Column({ default: StepExecutionTypeEnum.sandpack, type: "text" })
+  executionType: keyof typeof StepExecutionTypeEnum;
+
+  @Field(() => String, {
+    defaultValue: "javascript",
+  })
+  @Column({ default: "javascript" })
+  lang: string;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: "CASCADE",

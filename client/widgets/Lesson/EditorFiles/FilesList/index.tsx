@@ -27,8 +27,7 @@ const FileSystemInitialState = {
 };
 
 const FilesList: React.FC<Props> = (props) => {
-  const { isEditing, name, onCreate } = props;
-  const { sandpack } = useSandpack();
+  const { files, isEditing, name, onCreate } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const [addFileState, setAddFileState] = useState<FileSystemStateType>(
     FileSystemInitialState
@@ -51,11 +50,7 @@ const FilesList: React.FC<Props> = (props) => {
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const value = event.currentTarget.value;
-    const isValid = isValidName(
-      value,
-      addFileState.type,
-      Object.keys(sandpack.files)
-    );
+    const isValid = isValidName(value, addFileState.type, Object.keys(files));
 
     if (!value) {
       setAddFileState(FileSystemInitialState);
@@ -78,11 +73,7 @@ const FilesList: React.FC<Props> = (props) => {
     if (event.key === 'Enter' && onCreate) {
       const value = event.currentTarget.value;
 
-      const isValid = isValidName(
-        value,
-        addFileState.type,
-        Object.keys(sandpack.files)
-      );
+      const isValid = isValidName(value, addFileState.type, Object.keys(files));
 
       if (!isValid.valid) {
         setError(isValid.reason);
@@ -94,7 +85,7 @@ const FilesList: React.FC<Props> = (props) => {
     }
   };
 
-  const finalFiles = Object.keys(sandpack.files)
+  const finalFiles = Object.keys(files)
     .filter((val) =>
       name === 'Tests' ? val.includes('spec') : !val.includes('spec')
     )
@@ -102,7 +93,7 @@ const FilesList: React.FC<Props> = (props) => {
       return {
         ...acc,
         [curr]: {
-          ...sandpack.files[curr],
+          ...files[curr],
         },
       };
     }, {} as SandpackBundlerFiles);
@@ -150,18 +141,16 @@ const FilesList: React.FC<Props> = (props) => {
           />
         )}
         <ModuleList
-          activePath={sandpack.activePath}
           addFileState={addFileState}
           error={error}
-          files={finalFiles}
           handleBlur={handleBlur}
           handleKeyDown={handleKeyDown}
           inputRef={inputRef}
           prefixedPath="/"
-          selectFile={sandpack.openFile}
           setAddFileState={setAddFileState}
           setError={setError}
           {...props}
+          files={finalFiles}
         />
       </div>
     </>
@@ -169,8 +158,10 @@ const FilesList: React.FC<Props> = (props) => {
 };
 
 export type Props = {
+  activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;
+  files: { [key in string]: { code: string } };
   isEditing?: boolean;
   isPreviewing?: boolean;
   name: 'Tests' | 'Files';
@@ -179,6 +170,7 @@ export type Props = {
   onUpdateCodeModuleEntryFile?: (variables: {
     variables: { newId: any; oldId: any };
   }) => void;
+  selectFile?: (path: string) => void;
   stepId: number;
 };
 

@@ -135,6 +135,8 @@ export class StepResolver {
       template = {
         codeModules: prevStep.codeModules,
         dependencies: prevStep.dependencies,
+        executionType: prevStep.executionType,
+        lang: prevStep.lang,
       };
     } else {
       template = getTemplate(options.template);
@@ -155,7 +157,9 @@ export class StepResolver {
 
     const step = await Step.create({
       codeModules,
+      executionType: template.executionType,
       instructions: DEFAULT_MD,
+      lang: template.lang,
       name: options.name,
     }).save();
 

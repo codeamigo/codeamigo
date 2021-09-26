@@ -1,4 +1,3 @@
-import { useActiveCode, useSandpack } from '@codesandbox/sandpack-react';
 import { ControlledEditor, monaco } from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
@@ -9,9 +8,9 @@ import {
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
-import { camalize, getExtension } from '👨‍💻widgets/Lesson/EditorV2/utils';
 
 import * as THEMES from '../../../styles/monacoThemes';
+import { camalize, getLanguage } from './utils';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =
@@ -19,64 +18,63 @@ const CS_TYPES_URL =
 const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
-const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
+const Editor: React.FC<Props> = ({
+  activePath,
+  codeModules,
+  refreshPreview,
+  runCode,
+  stepId,
+  updateCode,
+  ...rest
+}) => {
   const [updateCodeModule] = useUpdateCodeModuleMutation();
-  const { updateCode } = useActiveCode();
-  const { dispatch, sandpack } = useSandpack();
   const { data: meData } = useMeQuery();
 
-  const pathRef = useRef(sandpack.activePath);
+  const pathRef = useRef(activePath);
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
   useEffect(() => {
-    pathRef.current = sandpack.activePath;
-  }, [sandpack.activePath]);
+    pathRef.current = activePath;
+  }, [activePath]);
 
   useEffect(() => {
     if (!monacoRef.current) return;
-    if (!sandpack.activePath) return;
-    const model = monacoRef.current.editor.getModel(
-      `${URN}${sandpack.activePath}`
-    );
+    if (!activePath) return;
+    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
     editorRef.current.setModel(model);
-  }, [sandpack.activePath, monacoRef.current, editorRef.current]);
+  }, [activePath, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
   useEffect(() => {
-    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+    if (monacoRef.current) {
       monacoRef.current.editor
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
     }
-  }, [stepId, monacoRef.current, editorRef.current, sandpack.activePath]);
+  }, [stepId]);
 
   // When file added add to models
   useEffect(() => {
-    if (monacoRef.current && editorRef.current && sandpack.activePath) {
+    if (monacoRef.current && editorRef.current && activePath) {
       setupModels();
     }
-  }, [
-    codeModules?.length,
-    monacoRef.current,
-    editorRef.current,
-    sandpack.activePath,
-  ]);
+  }, [codeModules?.length, monacoRef.current, editorRef.current, activePath]);
 
   useEffect(() => {
-    if (monacoRef.current) {
+    if (monacoRef.current && rest.isTyped) {
       setupTypes();
     }
     // TODO: fix check
   }, [codeModules?.length, monacoRef.current]);
 
   useEffect(() => {
-    dispatch({ type: 'refresh' });
+    refreshPreview && refreshPreview();
   }, [stepId]);
 
   const handleCodeUpdate = (newCode: string) => {
-    updateCode(newCode);
+    updateCode && updateCode(newCode);
     // Wait for pathRef to update
     setTimeout(() => {
       const currentModule = codeModules?.find(
@@ -163,12 +161,10 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
       }
     );
 
-    // editorRef.current.addCommand(
-    //   monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
-    //   () => {
-    //     submitRef.current.click();
-    //   }
-    // );
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
+      runCode
+    );
   };
 
   const setupModels = () => {
@@ -179,14 +175,12 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
 
       monacoRef.current.editor.createModel(
         mod.value,
-        getExtension(mod.name || ''),
+        getLanguage(mod.name || ''),
         `${URN}${mod.name}`
       );
     });
 
-    const model = monacoRef.current.editor.getModel(
-      `${URN}${sandpack.activePath}`
-    );
+    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
     editorRef.current.setModel(model);
   };
 
@@ -249,6 +243,7 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
     setupCompilerOptions();
     setupDiagnosticsOptions();
     setupThemes();
+    setupModels();
   };
 
   const editorDidMount = async (_: any, editor: any) => {
@@ -286,10 +281,15 @@ const EditorV2: React.FC<Props> = ({ codeModules, stepId, ...rest }) => {
 };
 
 type Props = {
+  activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   isPreviewing?: boolean;
+  isTyped?: boolean;
   lesson: LessonQuery['lesson'];
+  refreshPreview?: () => void;
+  runCode: () => void;
   stepId?: number;
+  updateCode?: (newCode: string) => void;
 };
 
-export default EditorV2;
+export default Editor;

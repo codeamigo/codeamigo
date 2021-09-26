@@ -6,6 +6,9 @@ import { useProfileColorSchemeQuery } from '👨‍💻generated/graphql';
 const ProfileLogo: React.FC<Props> = ({ userId }) => {
   const { data } = useProfileColorSchemeQuery({
     fetchPolicy: 'cache-and-network',
+    variables: {
+      id: userId,
+    },
   });
 
   if (!data?.profileColorScheme) return <Logo className="animate-pulse" />;

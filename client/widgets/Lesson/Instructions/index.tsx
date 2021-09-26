@@ -62,7 +62,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="w-full lg:h-full flex flex-col overflow-scroll flex-1"
+        className="w-full lg:h-full flex flex-col overflow-scroll flex-1 md:border-b-0 border-b border-bg-nav-offset-faded"
         id="instructions"
       >
         <h3
@@ -94,7 +94,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
           {view === 'editor' ? (
             <textarea
-              className="h-full bg-bg-primary text-text-primary border-none"
+              className="md:h-full w-full bg-bg-primary h-40 text-text-primary border-none"
               defaultValue={markdown || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setMarkdown(e.currentTarget.value);

@@ -111,12 +111,19 @@ export type Step = {
   instructions?: Maybe<Scalars['String']>;
   currentCheckpointId?: Maybe<Scalars['Float']>;
   isCompleted?: Maybe<Scalars['Boolean']>;
+  executionType?: Maybe<StepExecutionTypeEnum>;
+  lang?: Maybe<Scalars['String']>;
   lesson: Lesson;
   session: Session;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
   dependencies?: Maybe<Array<Dependency>>;
 };
+
+export enum StepExecutionTypeEnum {
+  Riju = 'riju',
+  Sandpack = 'sandpack'
+}
 
 export type Lesson = {
   __typename?: 'Lesson';
@@ -668,7 +675,7 @@ export type RegularLessonItemFragment = (
 
 export type RegularStepFragment = (
   { __typename?: 'Step' }
-  & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'instructions' | 'isCompleted' | 'name'>
+  & Pick<Step, 'id' | 'createdAt' | 'currentCheckpointId' | 'executionType' | 'lang' | 'instructions' | 'isCompleted' | 'name'>
   & { codeModules?: Maybe<Array<(
     { __typename?: 'CodeModule' }
     & RegularCodeModuleFragment
@@ -1484,6 +1491,8 @@ export const RegularStepFragmentDoc = gql`
   id
   createdAt
   currentCheckpointId
+  executionType
+  lang
   instructions
   isCompleted
   name

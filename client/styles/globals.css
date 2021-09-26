@@ -63,6 +63,10 @@ body {
   height: 100%;
 }
 
+.decorationsOverviewRuler {
+  display: none;
+}
+
 /* Make clicks pass-through */
 #nprogress {
   pointer-events: none;
