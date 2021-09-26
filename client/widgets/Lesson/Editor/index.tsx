@@ -47,14 +47,13 @@ const Editor: React.FC<Props> = ({
 
   // When step changes reinit models
   useEffect(() => {
-    console.log(monacoRef.current);
-    if (monacoRef.current && editorRef.current && activePath) {
+    if (monacoRef.current) {
       monacoRef.current.editor
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
     }
-  }, [stepId, monacoRef.current, editorRef.current, activePath]);
+  }, [stepId]);
 
   // When file added add to models
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import CTA from '👨‍💻widgets/CTA';
 import Editor from '👨‍💻widgets/Lesson/Editor';
