@@ -1,4 +1,4 @@
-import { RegularCodeModuleFragment } from '../../../../../generated/graphql';
+import { RegularCodeModuleFragment } from '../../../generated/graphql';
 
 export type ModulesType = RegularCodeModuleFragment[];
 
