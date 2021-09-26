@@ -170,11 +170,16 @@ const CTA: React.FC<Props> = ({
   const isStepComplete = !step.checkpoints?.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
-  const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
+  const text =
+    isEditing && step.executionType === 'sandpack'
+      ? 'Add Checkpoint'
+      : isTested
+      ? 'Next'
+      : 'Test';
   const spinner = isTesting || !bundlerState || loading;
   const f = isPreviewing
     ? promptRegistration
-    : isEditing
+    : isEditing && step.executionType === 'sandpack'
     ? createCheckpoint
     : isTested
     ? isStepComplete

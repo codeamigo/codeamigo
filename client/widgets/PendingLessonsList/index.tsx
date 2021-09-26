@@ -54,21 +54,29 @@ const PendingLessonsList: React.FC<Props> = () => {
                       leaveTo="transform opacity-0 scale-95"
                       show={open}
                     >
-                      <div
-                        aria-labelledby="session-menu"
+                      <Menu.Items
+                        aria-labelledby="user-menu"
                         aria-orientation="vertical"
                         className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
                         role="menu"
                       >
-                        <button
-                          className="w-full inline-block text-left px-4 py-2 text-sm text-text-primary hover:bg-accent hover:text-bg-primary"
-                          onClick={(e) => approveLesson(e, lesson.id)}
-                          role="menuitem"
-                        >
-                          <span className="mr-2">✅</span>
-                          <span>Approve Lesson</span>
-                        </button>
-                      </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                                active
+                                  ? 'bg-accent text-bg-primary'
+                                  : 'text-text-primary'
+                              }`}
+                              onClick={(e) => approveLesson(e, lesson.id)}
+                              role="menuitem"
+                            >
+                              <span className="mr-2">✅</span>
+                              <span>Approve Lesson</span>
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
                     </Transition>
                   </>
                 )}

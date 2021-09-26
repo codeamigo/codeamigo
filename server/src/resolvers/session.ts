@@ -148,7 +148,9 @@ export class SessionResolver {
             codeModules,
             createdAt,
             dependencies,
+            executionType: step?.executionType,
             instructions: step?.instructions || "",
+            lang: step?.lang,
             name: step?.name || "",
           }).save();
         })
