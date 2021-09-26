@@ -1,3 +1,4 @@
+import moment from 'moment';
 import router from 'next/router';
 import React from 'react';
 
@@ -70,7 +71,7 @@ const LessonListItem: React.FC<Props> = ({
             ></div>
             {lesson.label?.toLowerCase()}{' '}
           </div>
-          <div>{new Date(parseInt(lesson.createdAt)).toDateString()}</div>
+          <div>{moment(new Date(parseInt(lesson.createdAt))).fromNow()}</div>
         </div>
       </div>
     </div>

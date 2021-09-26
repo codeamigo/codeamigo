@@ -8,7 +8,7 @@ import InputField from '👨‍💻components/Form/InputField';
 import { useCreateLessonMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
-const templates: {
+export const templates: {
   id: string;
   imageUrl: string;
   name: string;
@@ -51,10 +51,31 @@ const templates: {
     value: 'javascript',
   },
   {
+    id: 'c-template',
+    imageUrl:
+      'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/c.svg',
+    name: 'C',
+    value: 'c',
+  },
+  {
     id: 'elixir-template',
     imageUrl: 'https://avatars.githubusercontent.com/u/1481354?s=200&v=4',
     name: 'Elixir',
     value: 'elixir',
+  },
+  {
+    id: 'java-template',
+    imageUrl:
+      'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/java.svg',
+    name: 'Java',
+    value: 'java',
+  },
+  {
+    id: 'python-template',
+    imageUrl:
+      'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/python.svg',
+    name: 'Python',
+    value: 'python',
   },
   {
     id: 'ruby-template',

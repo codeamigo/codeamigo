@@ -9,15 +9,19 @@ export interface ITemplate {
 
 export type TemplatesType =
   | "angular"
-  | "react"
-  | "vue"
-  | "typescript"
-  | "javascript"
-  | "html"
   | "c"
-  | "rust"
+  | "elixir"
+  | "go"
+  | "html"
+  | "java"
+  | "javascript"
+  | "python"
+  | "react"
   | "ruby"
-  | "elixir";
+  | "rust"
+  | "swift"
+  | "typescript"
+  | "vue";
 
 const css = `html, body {
   background-color: white;
@@ -679,30 +683,6 @@ color: #42b983;
   lang: "javascript",
 };
 
-const rubyTemplate: ITemplate = {
-  codeModules: [
-    {
-      isEntry: true,
-      name: "/main.rb",
-      value: 'puts "Hello, world!"',
-    },
-  ],
-  executionType: StepExecutionTypeEnum.riju,
-  lang: "ruby",
-};
-
-const elixirTemplate: ITemplate = {
-  codeModules: [
-    {
-      isEntry: true,
-      name: "/main.exs",
-      value: 'IO.puts("Hello, world!")',
-    },
-  ],
-  executionType: StepExecutionTypeEnum.riju,
-  lang: "elixir",
-};
-
 const cTemplate: ITemplate = {
   codeModules: [
     {
@@ -721,6 +701,79 @@ int main() {
   lang: "c",
 };
 
+const elixirTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.exs",
+      value: 'IO.puts("Hello, world!")',
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "elixir",
+};
+
+const goTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.go",
+      value: `package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("Hello, world!")
+}
+`,
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "go",
+};
+
+const javaTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.java",
+      value: `public class Main {
+  public static void main(String[] args) {
+    System.out.println("Hello, world!");
+  }
+}
+    
+`,
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "java",
+};
+
+const pythonTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.py",
+      value: 'print("Hello, world!")',
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "python",
+};
+
+const rubyTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.rb",
+      value: 'puts "Hello, world!"',
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "ruby",
+};
+
 const rustTemplate: ITemplate = {
   codeModules: [
     {
@@ -736,6 +789,18 @@ const rustTemplate: ITemplate = {
   lang: "rust",
 };
 
+const swiftTemplate: ITemplate = {
+  codeModules: [
+    {
+      isEntry: true,
+      name: "/main.swift",
+      value: `print("Hello, world!")`,
+    },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "swift",
+};
+
 export const getTemplate = (template?: TemplatesType) => {
   switch (template) {
     case "html":
@@ -743,21 +808,29 @@ export const getTemplate = (template?: TemplatesType) => {
       return htmlTemplate;
     case "angular":
       return angularTemplate;
-    case "react":
-      return reactTsxTemplate;
-    case "vue":
-      return vueTemplate;
-    case "typescript":
-      return tsTemplate;
+    case "c":
+      return cTemplate;
+    case "elixir":
+      return elixirTemplate;
+    case "go":
+      return goTemplate;
+    case "java":
+      return javaTemplate;
     case "javascript":
       return jsTemplate;
+    case "python":
+      return pythonTemplate;
+    case "react":
+      return reactTsxTemplate;
     case "ruby":
       return rubyTemplate;
     case "rust":
       return rustTemplate;
-    case "elixir":
-      return elixirTemplate;
-    case "c":
-      return cTemplate;
+    case "swift":
+      return swiftTemplate;
+    case "typescript":
+      return tsTemplate;
+    case "vue":
+      return vueTemplate;
   }
 };
