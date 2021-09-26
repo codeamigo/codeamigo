@@ -9,7 +9,7 @@ import {
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 
-import * as THEMES from '../../../../../styles/monacoThemes';
+import * as THEMES from '../../../styles/monacoThemes';
 import { camalize, getExtension } from './utils';
 const FILE = 'inmemory://model/';
 const URN = 'urn:';
@@ -18,7 +18,7 @@ const CS_TYPES_URL =
 const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
-const SandpackEditor: React.FC<Props> = ({
+const Editor: React.FC<Props> = ({
   activePath,
   codeModules,
   refreshPreview,
@@ -64,7 +64,7 @@ const SandpackEditor: React.FC<Props> = ({
   }, [codeModules?.length, monacoRef.current, editorRef.current, activePath]);
 
   useEffect(() => {
-    if (monacoRef.current && rest.setupTypes) {
+    if (monacoRef.current && rest.isTyped) {
       setupTypes();
     }
     // TODO: fix check
@@ -164,9 +164,7 @@ const SandpackEditor: React.FC<Props> = ({
 
     editorRef.current.addCommand(
       monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
-      () => {
-        runCode();
-      }
+      runCode
     );
   };
 
@@ -287,12 +285,12 @@ type Props = {
   activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   isPreviewing?: boolean;
+  isTyped?: boolean;
   lesson: LessonQuery['lesson'];
   refreshPreview?: () => void;
   runCode: () => void;
-  setupTypes: boolean;
   stepId?: number;
   updateCode?: (newCode: string) => void;
 };
 
-export default SandpackEditor;
+export default Editor;

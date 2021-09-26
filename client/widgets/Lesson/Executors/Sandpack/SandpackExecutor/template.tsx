@@ -8,8 +8,8 @@ import React from 'react';
 
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
+import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
-import SandpackEditor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
 import { Props as OwnProps } from '.';
@@ -66,12 +66,12 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={editorRef}
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >
-        <SandpackEditor
+        <Editor
           activePath={activePath}
           codeModules={step.codeModules}
+          isTyped
           refreshPreview={() => dispatch({ type: 'refresh' })}
           runCode={() => dispatch({ type: 'start' })}
-          setupTypes
           stepId={step.id}
           updateCode={updateCode}
           {...props}

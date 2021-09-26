@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
-import Button from '👨‍💻components/Button';
 import CTA from '👨‍💻widgets/CTA';
+import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
-import SandpackEditor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackEditor';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 
 import { Props as OwnProps } from '.';
@@ -23,14 +22,16 @@ const RijuTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
+  const entryFileValueRef = useRef<string | undefined>();
   const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
   const [activePath, setActivePath] = useState<string | null>(null);
+  entryFileValueRef.current = entryFile?.value as string;
 
   const postCodeToRiju = () => {
     // @ts-ignore
     previewRef.current?.contentWindow?.postMessage(
       {
-        code: entryFile?.value,
+        code: entryFileValueRef.current,
         event: 'runCode',
       },
       '*'
@@ -72,11 +73,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
-          <SandpackEditor
+          <Editor
             activePath={activePath || (entryFile?.name as string)}
             codeModules={step.codeModules}
             runCode={postCodeToRiju}
-            setupTypes={false}
             stepId={step.id}
             {...props}
           />
@@ -91,7 +91,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           />
         </div>
         <iframe
-          className="md:w-3/6 md:h-full w-full flex flex-col flex-grow riju-frame"
+          className="md:w-3/6 bg-bg-primary md:h-full w-full flex flex-col flex-grow riju-frame"
           ref={previewRef}
           src="https://riju.codeamigo.xyz/ruby"
         />
