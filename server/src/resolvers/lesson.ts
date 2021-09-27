@@ -65,6 +65,7 @@ export class LessonResolver {
 
     if (owner) {
       return Lesson.find({
+        order: { updatedAt: "DESC" },
         relations,
         where: { owner, status },
       });
@@ -72,7 +73,9 @@ export class LessonResolver {
       let query = Lesson.createQueryBuilder()
         .where("Lesson.status = :status", { status })
         .leftJoinAndSelect("Lesson.owner", "owner")
-        .leftJoinAndSelect("Lesson.students", "students");
+        .leftJoinAndSelect("Lesson.students", "students")
+        .orderBy("students", "DESC")
+        .addOrderBy(`Lesson.createdAt`, "DESC");
 
       if (labels) {
         query.andWhere("Lesson.label IN (:...labels)", {
@@ -109,25 +112,6 @@ export class LessonResolver {
       return query.getMany();
     }
   }
-
-  // Move filtering to BE
-  // const showLesson = (lesson: LessonsQuery['lessons'][0]) => {
-  //   if (queryLevels.length === 0 && queryDeps.length === 0) return true;
-
-  //   return (
-  //     queryLevels.includes(lesson.label || '') ||
-  //     lesson.steps?.some((step) => {
-  //       return step.codeModules?.some((codeModule) => {
-  //         if (codeModule.name === '/package.json') {
-  //           const value = JSON.parse(codeModule.value!);
-  //           return Object.keys(value.dependencies).some((value) =>
-  //             queryDeps.includes(value)
-  //           );
-  //         }
-  //       });
-  //     })
-  //   );
-  // };
 
   @Query(() => Lesson, { nullable: true })
   async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
