@@ -25,6 +25,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
     <ApolloProvider client={client}>
       <Head>
         <title>Codeamigo</title>
+        <meta
+          content="Codeamigo is where students and teachers come together to create and
+            learn through interactive coding tutorials."
+          name="description"
+        />
         <script
           async
           data-domain="codeamigo.dev"
