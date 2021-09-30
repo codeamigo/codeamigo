@@ -58,8 +58,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
 
   const stepId = currentStepId || sessionData.session.currentStep;
 
-  console.log(sessionData.session.steps);
-
   return (
     <div className="flex">
       {sessionData ? (

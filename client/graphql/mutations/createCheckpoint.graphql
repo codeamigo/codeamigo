@@ -1,5 +1,11 @@
-mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
-  createCheckpoint(options: { checkpointId: $checkpointId, stepId: $stepId }) {
+mutation CreateCheckpoint(
+  $checkpointId: Float!
+  $stepId: Float!
+  $type: CheckpointTypeEnum!
+) {
+  createCheckpoint(
+    options: { checkpointId: $checkpointId, stepId: $stepId, type: $type }
+  ) {
     ...RegularCheckpoint
   }
 }

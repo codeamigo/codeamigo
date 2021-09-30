@@ -87,9 +87,16 @@ export type Checkpoint = {
   description: Scalars['String'];
   isCompleted: Scalars['Boolean'];
   isTested: Scalars['Boolean'];
-  test: Scalars['String'];
-  moduleId: Scalars['Float'];
+  type?: Maybe<CheckpointTypeEnum>;
+  test?: Maybe<Scalars['String']>;
+  moduleId?: Maybe<Scalars['Float']>;
 };
+
+export enum CheckpointTypeEnum {
+  Spec = 'spec',
+  Output = 'output',
+  Match = 'match'
+}
 
 export type CodeModule = {
   __typename?: 'CodeModule';
@@ -512,6 +519,7 @@ export type MutationSetNextStepArgs = {
 export type CreateCheckpointInput = {
   checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
+  type: CheckpointTypeEnum;
 };
 
 export type UpdateCheckpointInput = {
@@ -752,6 +760,7 @@ export type ChangePasswordFromPasswordMutation = (
 export type CreateCheckpointMutationVariables = Exact<{
   checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
+  type: CheckpointTypeEnum;
 }>;
 
 
@@ -1633,8 +1642,10 @@ export type ChangePasswordFromPasswordMutationHookResult = ReturnType<typeof use
 export type ChangePasswordFromPasswordMutationResult = Apollo.MutationResult<ChangePasswordFromPasswordMutation>;
 export type ChangePasswordFromPasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordFromPasswordMutation, ChangePasswordFromPasswordMutationVariables>;
 export const CreateCheckpointDocument = gql`
-    mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
-  createCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
+    mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!, $type: CheckpointTypeEnum!) {
+  createCheckpoint(
+    options: {checkpointId: $checkpointId, stepId: $stepId, type: $type}
+  ) {
     ...RegularCheckpoint
   }
 }
@@ -1656,6 +1667,7 @@ export type CreateCheckpointMutationFn = Apollo.MutationFunction<CreateCheckpoin
  *   variables: {
  *      checkpointId: // value for 'checkpointId'
  *      stepId: // value for 'stepId'
+ *      type: // value for 'type'
  *   },
  * });
  */

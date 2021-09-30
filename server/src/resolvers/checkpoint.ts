@@ -9,7 +9,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { Checkpoint } from "../entities/Checkpoint";
+import { Checkpoint, CheckpointTypeEnum } from "../entities/Checkpoint";
 import { CodeModule } from "../entities/CodeModule";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
@@ -27,6 +27,8 @@ class CreateCheckpointInput {
   checkpointId: number;
   @Field()
   stepId: number;
+  @Field(() => CheckpointTypeEnum)
+  type: keyof typeof CheckpointTypeEnum;
 }
 
 @InputType()

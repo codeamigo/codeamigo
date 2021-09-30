@@ -5,8 +5,10 @@ import React, { useEffect, useRef } from 'react';
 import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
+  CheckpointTypeEnum,
   LessonQuery,
   RegularStepFragment,
   StepDocument,
@@ -103,7 +105,11 @@ const CTA: React.FC<Props> = ({
 
     await createCheckpointM({
       refetchQueries: ['Checkpoints', 'Step'],
-      variables: { checkpointId: len + 1, stepId: step.id },
+      variables: {
+        checkpointId: len + 1,
+        stepId: step.id,
+        type: CheckpointTypeEnum.Spec,
+      },
     });
   };
 
@@ -170,16 +176,11 @@ const CTA: React.FC<Props> = ({
   const isStepComplete = !step.checkpoints?.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
-  const text =
-    isEditing && step.executionType === 'sandpack'
-      ? 'Add Checkpoint'
-      : isTested
-      ? 'Next'
-      : 'Test';
+  const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
   const spinner = isTesting || !bundlerState || loading;
   const f = isPreviewing
     ? promptRegistration
-    : isEditing && step.executionType === 'sandpack'
+    : isEditing
     ? createCheckpoint
     : isTested
     ? isStepComplete
@@ -187,7 +188,44 @@ const CTA: React.FC<Props> = ({
       : completeCheckpoint
     : runTests;
 
-  return (
+  return isEditing ? (
+    <div className="relative group pt-2">
+      <Button className="h-14 justify-center w-full text-lg">
+        Add Checkpoint
+      </Button>
+      <div className="opacity-0 invisible mb-1 group-hover:mb-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 bottom-full bg-bg-nav text-text-primary p-4 rounded-lg md:w-72 md:transform">
+        <div className="flex items-baseline justify-start mb-4">
+          <div>
+            <Icon className="text-text-primary" name="regexicon" />
+          </div>
+          <div className="text-text-primary ml-3">
+            <h3 className="font-bold text-lg">Match</h3>
+            <div>
+              Create a regular expression to match against the user's code.
+            </div>
+          </div>
+        </div>
+        <div className="flex items-baseline justify-start mb-4">
+          <div>
+            <Icon className="text-text-primary" name="terminal" />
+          </div>
+          <div className="text-text-primary ml-3">
+            <h3 className="font-bold text-lg">Output</h3>
+            <div>Check that the user's output is equal to what you expect.</div>
+          </div>
+        </div>
+        <div className="flex items-baseline justify-start">
+          <div>
+            <Icon className="text-text-primary" name="jest" />
+          </div>
+          <div className="text-text-primary ml-3">
+            <h3 className="font-bold text-lg">Jest</h3>
+            <div>Write a unit test using the Jest framework.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : (
     <Button
       className="h-14 justify-center w-full text-lg"
       disabled={spinner}
