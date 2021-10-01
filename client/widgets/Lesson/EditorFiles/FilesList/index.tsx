@@ -1,5 +1,4 @@
 import { SandpackBundlerFiles } from '@codesandbox/sandpack-client';
-import { useSandpack } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Icon from '👨‍💻components/Icon';

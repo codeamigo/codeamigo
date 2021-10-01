@@ -194,7 +194,7 @@ const CTA: React.FC<Props> = ({
       <Button className="h-14 justify-center w-full text-lg">
         Add Checkpoint
       </Button>
-      <CheckpointWizard />
+      <CheckpointWizard step={step} />
     </div>
   ) : (
     <Button
