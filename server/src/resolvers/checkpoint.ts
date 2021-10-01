@@ -9,7 +9,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 
-import { Checkpoint, CheckpointTypeEnum } from "../entities/Checkpoint";
+import { Checkpoint } from "../entities/Checkpoint";
 import { CodeModule } from "../entities/CodeModule";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
@@ -22,13 +22,29 @@ const DEFAULT_TEST = `describe('My Test', () => {
 `;
 
 @InputType()
-class CreateCheckpointInput {
+class CreateSpecCheckpointInput {
   @Field()
   checkpointId: number;
   @Field()
   stepId: number;
-  @Field(() => CheckpointTypeEnum)
-  type: keyof typeof CheckpointTypeEnum;
+}
+
+@InputType()
+class CreateMatchCheckpointInput {
+  @Field()
+  matchRegex: string;
+  @Field()
+  fileToMatchRegex: number;
+  @Field()
+  stepId: number;
+}
+
+@InputType()
+class CreateOutputCheckpointInput {
+  @Field()
+  output: string;
+  @Field()
+  stepId: number;
 }
 
 @InputType()
@@ -61,8 +77,8 @@ export class CheckpointResolver {
 
   @Mutation(() => Checkpoint, { nullable: true })
   @UseMiddleware(isAuth)
-  async createCheckpoint(
-    @Arg("options") options: CreateCheckpointInput
+  async createSpecCheckpoint(
+    @Arg("options") options: CreateSpecCheckpointInput
   ): Promise<Checkpoint | null> {
     let step = await Step.findOne(
       { id: options.stepId },
@@ -87,6 +103,50 @@ export class CheckpointResolver {
       moduleId: newModule.id,
       step,
       test: name,
+      type: "spec",
+    }).save();
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async createMatchCheckpoint(
+    @Arg("options") options: CreateMatchCheckpointInput
+  ): Promise<Checkpoint | null> {
+    let step = await Step.findOne(
+      { id: options.stepId },
+      { relations: ["codeModules", "dependencies"] }
+    );
+
+    if (!step) {
+      return null;
+    }
+
+    return Checkpoint.create({
+      fileToMatchRegex: options.fileToMatchRegex,
+      matchRegex: options.matchRegex,
+      step,
+      type: "match",
+    }).save();
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async createOutputCheckpoint(
+    @Arg("options") options: CreateOutputCheckpointInput
+  ): Promise<Checkpoint | null> {
+    let step = await Step.findOne(
+      { id: options.stepId },
+      { relations: ["codeModules", "dependencies"] }
+    );
+
+    if (!step) {
+      return null;
+    }
+
+    return Checkpoint.create({
+      output: options.output,
+      step,
+      type: "output",
     }).save();
   }
 

@@ -43,7 +43,7 @@ const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
       <motion.div
         animate={{ display: wizardStep === 'jest' ? 'block' : 'none' }}
       >
-        <Jest setWizardStep={setWizardStep} />
+        <Jest setWizardStep={setWizardStep} step={step} />
       </motion.div>
     </div>
   );

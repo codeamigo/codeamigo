@@ -47,7 +47,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                   })}
               </Field>
               <div className="mt-3 mb-1">
-                Enter a regular expression to search
+                Enter a regular expression to match
               </div>
               <InputField
                 className="text-black"

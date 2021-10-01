@@ -7,13 +7,11 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
-  CheckpointTypeEnum,
   LessonQuery,
   RegularStepFragment,
   StepDocument,
   StepQuery,
   useCompleteCheckpointMutation,
-  useCreateCheckpointMutation,
   usePassCheckpointMutation,
 } from '👨‍💻generated/graphql';
 import CheckpointWizard from '👨‍💻widgets/CTA/CheckpointWizard';
@@ -34,7 +32,6 @@ const CTA: React.FC<Props> = ({
   step,
 }) => {
   const router = useRouter();
-  const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
   const isTesting = useReactiveVar(isTestingVar);
@@ -100,19 +97,6 @@ const CTA: React.FC<Props> = ({
 
     return () => window.removeEventListener('message', handlePassCheckpoint);
   }, [step.currentCheckpointId]);
-
-  const createCheckpoint = async () => {
-    const len = step.checkpoints?.length || 0;
-
-    await createCheckpointM({
-      refetchQueries: ['Checkpoints', 'Step'],
-      variables: {
-        checkpointId: len + 1,
-        stepId: step.id,
-        type: CheckpointTypeEnum.Spec,
-      },
-    });
-  };
 
   const completeCheckpoint = async () => {
     // don't complete checkpoint if editting
@@ -181,8 +165,6 @@ const CTA: React.FC<Props> = ({
   const spinner = isTesting || !bundlerState || loading;
   const f = isPreviewing
     ? promptRegistration
-    : isEditing
-    ? createCheckpoint
     : isTested
     ? isStepComplete
       ? nextStep

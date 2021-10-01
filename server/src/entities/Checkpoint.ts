@@ -53,14 +53,27 @@ export class Checkpoint extends BaseEntity {
   @Column({ default: CheckpointTypeEnum.spec, type: "text" })
   type: keyof typeof CheckpointTypeEnum;
 
+  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: "CASCADE" })
+  step: Step;
+
+  // match
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  matchRegex: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  fileToMatchRegex: number;
+
+  // output
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  output: string;
+
+  // spec
   @Field({ nullable: true })
   @Column({ nullable: true })
   test: string;
-
   @Field({ nullable: true })
   @Column({ nullable: true })
   moduleId: number;
-
-  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: "CASCADE" })
-  step: Step;
 }
