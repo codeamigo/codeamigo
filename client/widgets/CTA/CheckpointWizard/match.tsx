@@ -1,20 +1,20 @@
 import { Field, Form, Formik } from 'formik';
-import React, { useRef } from 'react';
+import React from 'react';
 
 import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import Icon from '👨‍💻components/Icon';
 import { RegularStepFragment } from '👨‍💻generated/graphql';
 
-const Match: React.FC<Props> = ({ setWizardStep, step }) => {
-  const formRef = useRef<HTMLFormElement>(null);
-  const files = step?.codeModules?.map(({ name }) => name);
+const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
+  const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
+    selectFile && selectFile(ev.target.value);
+  };
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
+  const handleRegexChange: React.ChangeEventHandler<HTMLInputElement> = (
+    ev
+  ) => {
     window.postMessage({ search: ev.target.value });
-    setTimeout(() => {
-      formRef?.current?.getElementsByTagName('input')[0].focus();
-    }, 1);
   };
 
   return (
@@ -37,7 +37,7 @@ const Match: React.FC<Props> = ({ setWizardStep, step }) => {
       >
         {({ values }) => (
           <>
-            <Form ref={formRef}>
+            <Form>
               <div className="mt-2 mb-1">
                 In which file should the regex be checked?
               </div>
@@ -45,10 +45,13 @@ const Match: React.FC<Props> = ({ setWizardStep, step }) => {
                 as="select"
                 className="text-black rounded-lg text-sm w-full"
                 name="color"
+                onChangeCapture={handleFileChange}
               >
-                {step?.codeModules?.map(({ id, name }) => {
-                  return <option value={id}>{name}</option>;
-                })}
+                {step?.codeModules
+                  ?.filter(({ name }) => name && name[name.length - 1] !== '/')
+                  .map(({ id, name }) => {
+                    return <option value={name!}>{name?.substr(1)}</option>;
+                  })}
               </Field>
               <div className="mt-3 mb-1">
                 Enter a regular expression below to match your student's desired
@@ -58,7 +61,7 @@ const Match: React.FC<Props> = ({ setWizardStep, step }) => {
                 className="text-black"
                 label=""
                 name="regex"
-                onChangeCapture={handleChange}
+                onChangeCapture={handleRegexChange}
                 type="text"
               />
               <div className="text-xs mt-1">Regex: /{values.regex}/g</div>
@@ -74,6 +77,7 @@ const Match: React.FC<Props> = ({ setWizardStep, step }) => {
 };
 
 type Props = {
+  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   setWizardStep: React.Dispatch<
     React.SetStateAction<'jest' | 'match' | 'output' | 'select'>
   >;

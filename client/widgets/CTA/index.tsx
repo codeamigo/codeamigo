@@ -5,7 +5,6 @@ import React, { useEffect, useRef } from 'react';
 import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
-import Icon from '👨‍💻components/Icon';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
   CheckpointTypeEnum,
@@ -31,6 +30,7 @@ const CTA: React.FC<Props> = ({
   lesson,
   loading,
   nextStep,
+  selectFile,
   step,
 }) => {
   const router = useRouter();
@@ -194,7 +194,7 @@ const CTA: React.FC<Props> = ({
       <Button className="h-14 justify-center w-full text-lg">
         Add Checkpoint
       </Button>
-      <CheckpointWizard step={step} />
+      <CheckpointWizard selectFile={selectFile} step={step} />
     </div>
   ) : (
     <Button
@@ -216,6 +216,7 @@ type Props = {
   lesson: LessonQuery['lesson'];
   loading: boolean;
   nextStep: () => void;
+  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

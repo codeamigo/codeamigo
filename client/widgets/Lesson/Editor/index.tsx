@@ -66,13 +66,17 @@ const Editor: React.FC<Props> = ({
   useEffect(() => {
     const handleSearch = (ev: MessageEvent<any>) => {
       if (!ev.data.search) return;
-      if (editorRef.current) {
-        const match = editorRef.current
-          .getModel()
-          .findMatches(ev.data.search)[0];
-        const range = match?.range;
-        editorRef.current.setSelection(range);
-        editorRef.current.getAction('actions.findWithSelection').run();
+      try {
+        if (editorRef.current) {
+          const match = editorRef.current
+            .getModel()
+            .findMatches(ev.data.search)[0];
+          const range = match?.range;
+          editorRef.current.setSelection(range);
+          editorRef.current.getAction('actions.findWithSelection').run();
+        }
+      } catch (e) {
+        console.log(`Error searching: ${e}`);
       }
     };
 

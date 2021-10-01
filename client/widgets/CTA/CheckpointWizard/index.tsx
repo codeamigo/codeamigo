@@ -14,7 +14,7 @@ enum CheckpointWizardStepEnum {
   select = 'select',
 }
 
-const CheckpointWizard: React.FC<Props> = ({ step }) => {
+const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
   const [wizardStep, setWizardStep] = useState<
     keyof typeof CheckpointWizardStepEnum
   >('select');
@@ -29,7 +29,11 @@ const CheckpointWizard: React.FC<Props> = ({ step }) => {
       <motion.div
         animate={{ display: wizardStep === 'match' ? 'block' : 'none' }}
       >
-        <Match setWizardStep={setWizardStep} step={step} />
+        <Match
+          selectFile={selectFile}
+          setWizardStep={setWizardStep}
+          step={step}
+        />
       </motion.div>
       <motion.div
         animate={{ display: wizardStep === 'output' ? 'block' : 'none' }}
@@ -46,6 +50,7 @@ const CheckpointWizard: React.FC<Props> = ({ step }) => {
 };
 
 type Props = {
+  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

@@ -64,6 +64,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
               handleRunTests={() => null}
               loading={loading}
               nextStep={nextStep}
+              selectFile={setActivePath}
               step={step}
             />
           </div>
