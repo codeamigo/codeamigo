@@ -666,7 +666,7 @@ export type Modal = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'isCompleted' | 'isTested' | 'test'>
+  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'isCompleted' | 'matchRegex' | 'output' | 'isTested' | 'test' | 'type'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -1544,8 +1544,11 @@ export const RegularCheckpointFragmentDoc = gql`
   createdAt
   description
   isCompleted
+  matchRegex
+  output
   isTested
   test
+  type
 }
     `;
 export const RegularStepFragmentDoc = gql`

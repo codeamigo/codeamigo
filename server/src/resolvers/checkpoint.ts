@@ -224,7 +224,9 @@ export class CheckpointResolver {
     }
 
     await Checkpoint.delete(id);
-    await CodeModule.delete(checkpoint.moduleId);
+    if (checkpoint.moduleId) {
+      await CodeModule.delete(checkpoint.moduleId);
+    }
     return true;
   }
 }

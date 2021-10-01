@@ -1,6 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import debounce from 'debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
@@ -20,6 +20,7 @@ import {
 } from '👨‍💻generated/graphql';
 
 const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { data, loading } = useCheckpointsQuery({
     variables: { stepId: step.id },
   });
@@ -111,6 +112,16 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
     [activeCheckpoint]
   );
 
+  useEffect(() => {
+    if (isEditing) {
+      toggleView('editor');
+      setActiveCheckpoint(data?.checkpoints[data.checkpoints.length - 1]);
+      setTimeout(() => {
+        textareaRef.current?.focus();
+      }, 1);
+    }
+  }, [data?.checkpoints.length]);
+
   if (loading) return null;
   if (!data?.checkpoints) return null;
 
@@ -176,6 +187,16 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                           : 'right-dir'
                       }
                     />
+                    <Icon
+                      className="text-text-primary mr-2"
+                      name={
+                        checkpoint.type === 'output'
+                          ? 'terminal'
+                          : checkpoint.type === 'match'
+                          ? 'regexicon'
+                          : 'jest'
+                      }
+                    />
                     <span className="text-text-primary">
                       Checkpoint {i + 1}{' '}
                     </span>
@@ -229,17 +250,25 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                     </div>
                   )}
                 </h3>
+                {isCurrentCheckpoint(checkpoint.id) ? (
+                  <div className="p-3 pt-0 bg-bg-nav">
+                    <span className="bg-accent-faded py-0.5 px-1 rounded-md text-sm text-white border-accent border">
+                      here
+                    </span>
+                  </div>
+                ) : null}
                 {isCurrentCheckpoint(checkpoint.id) && (
                   <div>
                     {view === 'editor' ? (
                       <textarea
-                        className="h-full w-full bg-bg-primary text-text-primary border-none"
+                        className="w-full h-52 block bg-bg-primary text-text-primary border-none"
                         defaultValue={checkpoint.description || ''}
                         onChange={(
                           e: React.ChangeEvent<HTMLTextAreaElement>
                         ) => {
                           updateCheckpoint(e.currentTarget.value);
                         }}
+                        ref={textareaRef}
                         style={{ resize: 'none' }}
                       />
                     ) : (

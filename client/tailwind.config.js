@@ -16,6 +16,7 @@ module.exports = {
       },
       colors: {
         accent: 'var(--accent)',
+        'accent-faded': 'var(--accent-faded)',
         'bg-nav': 'var(--bg-nav)',
         'bg-nav-faded': 'var(--bg-nav-faded)',
         'bg-nav-offset': 'var(--bg-nav-offset)',

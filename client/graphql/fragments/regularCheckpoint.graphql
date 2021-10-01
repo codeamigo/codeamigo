@@ -3,6 +3,9 @@ fragment RegularCheckpoint on Checkpoint {
   createdAt
   description
   isCompleted
+  matchRegex
+  output
   isTested
   test
+  type
 }

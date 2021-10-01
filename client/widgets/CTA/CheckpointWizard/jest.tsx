@@ -31,7 +31,7 @@ const Jest: React.FC<Props> = ({ setWizardStep, step }) => {
         Create a checkpoint.spec.ts file. Only available for languages that
         support in-browser execution (HTML/CSS/JS).
       </div>
-      <div className="flex justify-between items-center mt-2">
+      <div className="flex items-center mt-2">
         <Icon
           className="text-md mr-4"
           name="left-bold"

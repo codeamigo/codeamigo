@@ -4,9 +4,34 @@ import React from 'react';
 import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import Icon from '👨‍💻components/Icon';
-import { RegularStepFragment } from '👨‍💻generated/graphql';
+import {
+  RegularStepFragment,
+  useCreateMatchCheckpointMutation,
+} from '👨‍💻generated/graphql';
 
 const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
+  const [createMatchCheckpointM] = useCreateMatchCheckpointMutation();
+  const createMatchCheckpoint = async (values: {
+    file: string;
+    regex: string;
+  }) => {
+    const fileId = step.codeModules?.find(({ name }) => values.file === name)
+      ?.id;
+
+    if (!fileId) return;
+
+    await createMatchCheckpointM({
+      refetchQueries: ['Checkpoints', 'Step'],
+      variables: {
+        fileToMatchRegex: fileId,
+        matchRegex: values.regex,
+        stepId: step.id,
+      },
+    });
+
+    setWizardStep('select');
+  };
+
   const handleFileChange: React.ChangeEventHandler<HTMLInputElement> = (ev) => {
     selectFile && selectFile(ev.target.value);
   };
@@ -25,12 +50,13 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
       </div>
       <Formik
         initialValues={{
-          file: step.codeModules?.find(({ isEntry }) => !!isEntry)?.name,
+          file: step.codeModules?.find(({ isEntry }) => !!isEntry)
+            ?.name as string,
           regex: '',
         }}
-        onSubmit={() => console.log('todo')}
+        onSubmit={createMatchCheckpoint}
       >
-        {({ values }) => (
+        {({ isSubmitting, values }) => (
           <>
             <Form>
               <div className="mt-2 mb-1">Select a file</div>
@@ -42,9 +68,10 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
               >
                 {step?.codeModules
                   ?.filter(({ name }) => name && name[name.length - 1] !== '/')
-                  .map(({ id, name }) => {
-                    return <option value={name!}>{name?.substr(1)}</option>;
-                  })}
+                  ?.filter(({ name }) => name && !name.includes('spec'))
+                  .map(({ name }) => (
+                    <option value={name!}>{name?.substr(1)}</option>
+                  ))}
               </Field>
               <div className="mt-3 mb-1">
                 Enter a regular expression to match
@@ -57,14 +84,16 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                 type="text"
               />
               <div className="text-xs mt-1">Regex: /{values.regex}/g</div>
-              <div className="flex justify-between items-center mt-2">
+              <div className="flex items-center mt-2">
                 <Icon
                   className="text-md mr-4"
                   name="left-bold"
                   onClick={() => setWizardStep('select')}
                   role="button"
                 />
-                <Button type="submit">Submit</Button>
+                <Button disabled={isSubmitting} type="submit">
+                  Submit
+                </Button>
               </div>
             </Form>
           </>
