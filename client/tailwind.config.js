@@ -1,7 +1,7 @@
 module.exports = {
   // or 'media' or 'class'
   darkMode: false,
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
   purge: [
     './components/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -47,6 +47,7 @@ module.exports = {
         height: 'height',
       },
     },
+    namedGroups: ['inner-1'],
   },
   variants: {
     extend: {

@@ -17,6 +17,7 @@ import {
   useCreateCheckpointMutation,
   usePassCheckpointMutation,
 } from '👨‍💻generated/graphql';
+import CheckpointWizard from '👨‍💻widgets/CTA/CheckpointWizard';
 import {
   CodeSandboxTestMsgType,
   TestDataType,
@@ -193,37 +194,7 @@ const CTA: React.FC<Props> = ({
       <Button className="h-14 justify-center w-full text-lg">
         Add Checkpoint
       </Button>
-      <div className="opacity-0 invisible mb-1 group-hover:mb-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 absolute left-0 bottom-full bg-bg-nav text-text-primary p-4 rounded-lg md:w-72 md:transform">
-        <div className="flex items-baseline justify-start mb-4">
-          <div>
-            <Icon className="text-text-primary" name="regexicon" />
-          </div>
-          <div className="text-text-primary ml-3">
-            <h3 className="font-bold text-lg">Match</h3>
-            <div>
-              Create a regular expression to match against the user's code.
-            </div>
-          </div>
-        </div>
-        <div className="flex items-baseline justify-start mb-4">
-          <div>
-            <Icon className="text-text-primary" name="terminal" />
-          </div>
-          <div className="text-text-primary ml-3">
-            <h3 className="font-bold text-lg">Output</h3>
-            <div>Check that the user's output is equal to what you expect.</div>
-          </div>
-        </div>
-        <div className="flex items-baseline justify-start">
-          <div>
-            <Icon className="text-text-primary" name="jest" />
-          </div>
-          <div className="text-text-primary ml-3">
-            <h3 className="font-bold text-lg">Jest</h3>
-            <div>Write a unit test using the Jest framework.</div>
-          </div>
-        </div>
-      </div>
+      <CheckpointWizard />
     </div>
   ) : (
     <Button
