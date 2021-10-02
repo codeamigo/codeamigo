@@ -62,7 +62,7 @@ export class Checkpoint extends BaseEntity {
   matchRegex: string;
   @Field({ nullable: true })
   @Column({ nullable: true })
-  fileToMatchRegex: number;
+  fileToMatchRegex: string;
 
   // output
   @Field({ nullable: true })

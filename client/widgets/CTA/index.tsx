@@ -8,6 +8,7 @@ import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
   LessonQuery,
+  RegularCheckpointFragment,
   RegularStepFragment,
   StepDocument,
   StepQuery,
@@ -136,8 +137,12 @@ const CTA: React.FC<Props> = ({
     isTestingVar(true);
     testFailureVar(false);
     testsRef.current = [];
-    handleRunTests();
+    const checkpointToTest = step.checkpoints?.find(
+      ({ id }) => id === step.currentCheckpointId
+    );
+    handleRunTests(checkpointToTest);
 
+    // reinitialize CTA if something goes wrong during test run
     setTimeout(() => {
       isTestingVar(false);
     }, 3000);
@@ -192,7 +197,7 @@ const CTA: React.FC<Props> = ({
 
 type Props = {
   bundlerState: any;
-  handleRunTests: () => void;
+  handleRunTests: (checkpoint?: RegularCheckpointFragment) => void;
   isEditing?: boolean;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];

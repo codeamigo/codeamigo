@@ -67,7 +67,7 @@ const Console: React.FC<Props> = () => {
   return (
     <div
       className={`bg-bg-primary flex flex-col overflow-scroll ${
-        isCollapsed ? 'h-8' : 'h-full'
+        isCollapsed ? 'h-8' : 'h-1/2'
       }`}
       ref={listRef}
       style={{

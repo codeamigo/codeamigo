@@ -34,7 +34,7 @@ class CreateMatchCheckpointInput {
   @Field()
   matchRegex: string;
   @Field()
-  fileToMatchRegex: number;
+  fileToMatchRegex: string;
   @Field()
   stepId: number;
 }

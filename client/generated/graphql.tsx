@@ -89,7 +89,7 @@ export type Checkpoint = {
   isTested: Scalars['Boolean'];
   type?: Maybe<CheckpointTypeEnum>;
   matchRegex?: Maybe<Scalars['String']>;
-  fileToMatchRegex?: Maybe<Scalars['Float']>;
+  fileToMatchRegex?: Maybe<Scalars['String']>;
   output?: Maybe<Scalars['String']>;
   test?: Maybe<Scalars['String']>;
   moduleId?: Maybe<Scalars['Float']>;
@@ -538,7 +538,7 @@ export type CreateSpecCheckpointInput = {
 
 export type CreateMatchCheckpointInput = {
   matchRegex: Scalars['String'];
-  fileToMatchRegex: Scalars['Float'];
+  fileToMatchRegex: Scalars['String'];
   stepId: Scalars['Float'];
 };
 
@@ -666,7 +666,7 @@ export type Modal = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'isCompleted' | 'matchRegex' | 'output' | 'isTested' | 'test' | 'type'>
+  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'fileToMatchRegex' | 'matchRegex' | 'output' | 'isCompleted' | 'isTested' | 'test' | 'type'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -798,7 +798,7 @@ export type CreateSpecCheckpointMutation = (
 
 export type CreateMatchCheckpointMutationVariables = Exact<{
   matchRegex: Scalars['String'];
-  fileToMatchRegex: Scalars['Float'];
+  fileToMatchRegex: Scalars['String'];
   stepId: Scalars['Float'];
 }>;
 
@@ -1543,9 +1543,10 @@ export const RegularCheckpointFragmentDoc = gql`
   id
   createdAt
   description
-  isCompleted
+  fileToMatchRegex
   matchRegex
   output
+  isCompleted
   isTested
   test
   type
@@ -1731,7 +1732,7 @@ export type CreateSpecCheckpointMutationHookResult = ReturnType<typeof useCreate
 export type CreateSpecCheckpointMutationResult = Apollo.MutationResult<CreateSpecCheckpointMutation>;
 export type CreateSpecCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateSpecCheckpointMutation, CreateSpecCheckpointMutationVariables>;
 export const CreateMatchCheckpointDocument = gql`
-    mutation CreateMatchCheckpoint($matchRegex: String!, $fileToMatchRegex: Float!, $stepId: Float!) {
+    mutation CreateMatchCheckpoint($matchRegex: String!, $fileToMatchRegex: String!, $stepId: Float!) {
   createMatchCheckpoint(
     options: {matchRegex: $matchRegex, fileToMatchRegex: $fileToMatchRegex, stepId: $stepId}
   ) {

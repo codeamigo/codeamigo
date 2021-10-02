@@ -1,10 +1,6 @@
 import '@codesandbox/sandpack-react/dist/index.css';
 
-import {
-  SandpackProvider,
-  useActiveCode,
-  useSandpack,
-} from '@codesandbox/sandpack-react';
+import { SandpackProvider } from '@codesandbox/sandpack-react';
 import React, { useEffect, useState } from 'react';
 
 import { RegularStepFragment } from '👨‍💻generated/graphql';

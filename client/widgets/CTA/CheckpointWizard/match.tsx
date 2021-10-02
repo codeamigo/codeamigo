@@ -15,15 +15,10 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
     file: string;
     regex: string;
   }) => {
-    const fileId = step.codeModules?.find(({ name }) => values.file === name)
-      ?.id;
-
-    if (!fileId) return;
-
     await createMatchCheckpointM({
       refetchQueries: ['Checkpoints', 'Step'],
       variables: {
-        fileToMatchRegex: fileId,
+        fileToMatchRegex: values.file,
         matchRegex: values.regex,
         stepId: step.id,
       },

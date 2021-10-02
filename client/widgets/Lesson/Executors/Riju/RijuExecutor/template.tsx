@@ -1,6 +1,12 @@
 import React, { useRef, useState } from 'react';
 
+import {
+  CheckpointTypeEnum,
+  RegularCheckpointFragment,
+} from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
+import Console from '👨‍💻widgets/Lesson/Console';
+import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/types';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
@@ -38,6 +44,48 @@ const RijuTemplate: React.FC<Props> = (props) => {
     );
   };
 
+  const handleRunTests = (checkpoint?: RegularCheckpointFragment) => {
+    if (!checkpoint) return;
+
+    switch (checkpoint.type) {
+      case CheckpointTypeEnum.Output:
+        // @ts-ignore
+        previewRef.current?.contentWindow?.postMessage(
+          {
+            code: entryFileValueRef.current,
+            event: 'testCode',
+            expectedOutput: checkpoint.output,
+          },
+          '*'
+        );
+        break;
+      case CheckpointTypeEnum.Match:
+        const file = step.codeModules?.find(
+          ({ name }) => checkpoint.fileToMatchRegex === name
+        );
+        const match = file?.value?.match(
+          new RegExp(checkpoint.matchRegex!, 'g')
+        );
+
+        window.postMessage({
+          $id: 0,
+          codesandbox: true,
+          event: 'test_end',
+          test: {
+            blocks: ['File', file?.name],
+            duration: 1,
+            errors: [],
+            name: 'Expect code to include a certain string.',
+            path: '',
+            status: match ? 'pass' : 'fail',
+          },
+          type: 'test',
+        } as CodeSandboxTestMsgType);
+
+        console.log(match);
+    }
+  };
+
   return (
     <div className="sp-wrapper">
       <div className="sp-layout">
@@ -59,9 +107,9 @@ const RijuTemplate: React.FC<Props> = (props) => {
           <div className="p-2">
             <CTA
               {...props}
-              // needed for sandpack
+              // bundlerState true needed for sandpack
               bundlerState
-              handleRunTests={() => null}
+              handleRunTests={handleRunTests}
               loading={loading}
               nextStep={nextStep}
               selectFile={setActivePath}
@@ -91,11 +139,14 @@ const RijuTemplate: React.FC<Props> = (props) => {
             onDragEnd={onDragEnd}
           />
         </div>
-        <iframe
-          className="md:w-3/6 bg-bg-primary md:h-full w-full flex flex-col flex-grow riju-frame"
-          ref={previewRef}
-          src={`https://riju.codeamigo.xyz/${step.lang}`}
-        />
+        <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow">
+          <iframe
+            className="bg-bg-primary riju-frame h-full"
+            ref={previewRef}
+            src={`https://riju.codeamigo.xyz/${step.lang}`}
+          />
+          <Console />
+        </div>
       </div>
     </div>
   );

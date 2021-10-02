@@ -6,6 +6,10 @@ import {
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
+import {
+  CheckpointTypeEnum,
+  RegularCheckpointFragment,
+} from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -32,6 +36,26 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
 
+  const handleRunTests = (checkpoint?: RegularCheckpointFragment) => {
+    if (!checkpoint) return;
+
+    switch (checkpoint.type) {
+      case CheckpointTypeEnum.Spec:
+        // @ts-ignore
+        dispatch({ type: 'run-all-tests' });
+        break;
+      case CheckpointTypeEnum.Match:
+        const file = step.codeModules?.find(
+          ({ name }) => checkpoint.fileToMatchRegex === name
+        );
+        const match = file?.value?.match(
+          new RegExp(checkpoint.matchRegex!, 'g')
+        );
+
+        console.log(match);
+    }
+  };
+
   return (
     <SandpackLayout>
       <div
@@ -53,8 +77,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           <CTA
             {...props}
             bundlerState={sandpack.bundlerState}
-            // @ts-ignore
-            handleRunTests={() => dispatch({ type: 'run-all-tests' })}
+            handleRunTests={handleRunTests}
             loading={loading}
             nextStep={nextStep}
             step={step}

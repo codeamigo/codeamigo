@@ -2,9 +2,10 @@ fragment RegularCheckpoint on Checkpoint {
   id
   createdAt
   description
-  isCompleted
+  fileToMatchRegex
   matchRegex
   output
+  isCompleted
   isTested
   test
   type
