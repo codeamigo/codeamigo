@@ -56,7 +56,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
         }}
         onSubmit={createMatchCheckpoint}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, isValid, values }) => (
           <>
             <Form>
               <div className="mt-2 mb-1">Select a file</div>
@@ -81,6 +81,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                 label=""
                 name="regex"
                 onChangeCapture={handleRegexChange}
+                required
                 type="text"
               />
               <div className="text-xs mt-1">Regex: /{values.regex}/g</div>
@@ -91,7 +92,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                   onClick={() => setWizardStep('select')}
                   role="button"
                 />
-                <Button disabled={isSubmitting} type="submit">
+                <Button disabled={!isValid || isSubmitting} type="submit">
                   Submit
                 </Button>
               </div>

@@ -39,13 +39,14 @@ const Output: React.FC<Props> = ({ setWizardStep, step }) => {
         }}
         onSubmit={createOutputCheckpoint}
       >
-        {({ isSubmitting, values }) => (
+        {({ isSubmitting, isValid }) => (
           <Form>
             <div className="mt-3 mb-1">Program output</div>
             <InputField
               className="text-black"
               label=""
               name="output"
+              required
               type="text"
             />
             <div className="flex items-center mt-3">
@@ -55,7 +56,7 @@ const Output: React.FC<Props> = ({ setWizardStep, step }) => {
                 onClick={() => setWizardStep('select')}
                 role="button"
               />
-              <Button disabled={isSubmitting} type="submit">
+              <Button disabled={!isValid || isSubmitting} type="submit">
                 Submit
               </Button>
             </div>

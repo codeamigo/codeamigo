@@ -252,8 +252,12 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                 </h3>
                 {isCurrentCheckpoint(checkpoint.id) ? (
                   <div className="p-3 pt-0 bg-bg-nav">
-                    <span className="bg-accent-faded py-0.5 px-1 rounded-md text-sm text-white border-accent border">
-                      here
+                    <span className="bg-accent-faded py-0.5 px-1 rounded-md text-xs text-white font-semibold border-accent border">
+                      {checkpoint.type === 'spec'
+                        ? null
+                        : checkpoint.type === 'output'
+                        ? `Expected output: ${checkpoint.output}`
+                        : `Regex: /${checkpoint.matchRegex}/g`}
                     </span>
                   </div>
                 ) : null}
