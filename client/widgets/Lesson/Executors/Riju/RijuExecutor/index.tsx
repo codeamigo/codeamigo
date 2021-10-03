@@ -1,9 +1,6 @@
 import React from 'react';
 
-import {
-  RegularCheckpointFragment,
-  RegularStepFragment,
-} from '👨‍💻generated/graphql';
+import { RegularStepFragment } from '👨‍💻generated/graphql';
 import RijuTemplate from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/template';
 import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
 import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';

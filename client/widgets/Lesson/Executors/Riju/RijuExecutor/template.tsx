@@ -35,13 +35,15 @@ const RijuTemplate: React.FC<Props> = (props) => {
 
   const postCodeToRiju = () => {
     // @ts-ignore
-    previewRef.current?.contentWindow?.postMessage(
-      {
-        code: entryFileValueRef.current,
-        event: 'runCode',
-      },
-      '*'
-    );
+    previewRef.current
+      ?.getElementsByTagName('iframe')[0]
+      .contentWindow?.postMessage(
+        {
+          code: entryFileValueRef.current,
+          event: 'runCode',
+        },
+        '*'
+      );
   };
 
   const handleRunTests = (checkpoint?: RegularCheckpointFragment) => {
@@ -59,6 +61,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           '*'
         );
         break;
+      // DRY!!
       case CheckpointTypeEnum.Match:
         const file = step.codeModules?.find(
           ({ name }) => checkpoint.fileToMatchRegex === name
@@ -68,6 +71,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
         );
 
         window.postMessage({
+          event: 'total_test_start',
+          type: 'test',
+        });
+
+        window.postMessage({
           $id: 0,
           codesandbox: true,
           event: 'test_end',
@@ -75,14 +83,17 @@ const RijuTemplate: React.FC<Props> = (props) => {
             blocks: ['File', file?.name],
             duration: 1,
             errors: [],
-            name: 'Expect code to include a certain string.',
+            name: `should include ${checkpoint.matchRegex}.`,
             path: '',
             status: match ? 'pass' : 'fail',
           },
           type: 'test',
         } as CodeSandboxTestMsgType);
 
-        console.log(match);
+        window.postMessage({
+          event: 'total_test_end',
+          type: 'test',
+        });
     }
   };
 
@@ -139,10 +150,12 @@ const RijuTemplate: React.FC<Props> = (props) => {
             onDragEnd={onDragEnd}
           />
         </div>
-        <div className="md:w-3/6 md:h-full w-full flex flex-col flex-grow">
+        <div
+          className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
+          ref={previewRef}
+        >
           <iframe
             className="bg-bg-primary riju-frame h-full"
-            ref={previewRef}
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
           <Console />
