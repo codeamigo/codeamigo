@@ -28,10 +28,12 @@ type SandpackLogMessageType = {
   type: 'console';
 };
 
-const Console: React.FC<Props> = () => {
+const Console: React.FC<Props> = (props) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [logList, setLogList] = useState<any>([]);
-  const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
+  const [activeTab, setActiveTab] = useState<'console' | 'tests'>(
+    props.tabs[0]
+  );
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const testFailure = useReactiveVar(testFailureVar);
 
@@ -77,22 +79,18 @@ const Console: React.FC<Props> = () => {
     >
       <div className="bg-bg-primary border-b border-t border-bg-nav-offset-faded flex justify-between sticky top-0 z-10">
         <div className="flex">
-          <div
-            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-              activeTab === 'console' ? 'bg-bg-nav' : ''
-            }`}
-            onClick={() => setActiveTab('console')}
-          >
-            Console
-          </div>
-          <div
-            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-              activeTab === 'tests' ? 'bg-bg-nav' : ''
-            }`}
-            onClick={() => setActiveTab('tests')}
-          >
-            Tests
-          </div>
+          {props.tabs.map((tab) => {
+            return (
+              <div
+                className={`px-4 py-2 text-text-primary text-xs cursor-pointer capitalize ${
+                  activeTab === tab ? 'bg-bg-nav' : ''
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </div>
+            );
+          })}
         </div>
         <div className={`flex items-center pr-1`}>
           <div className="px-4">
@@ -128,6 +126,8 @@ const Console: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+type Props = {
+  tabs: ('console' | 'tests')[];
+};
 
 export default Console;

@@ -158,7 +158,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             className="bg-bg-primary riju-frame h-full"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
-          <Console />
+          <Console tabs={['tests']} />
         </div>
       </div>
     </div>

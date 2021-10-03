@@ -111,7 +111,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={previewRef}
       >
         <SandpackPreview />
-        <Console />
+        <Console tabs={['console', 'tests']} />
       </div>
     </SandpackLayout>
   );
