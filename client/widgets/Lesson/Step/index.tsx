@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
   LessonQuery,
+  RegularCheckpointFragment,
   RegularStepFragment,
   SessionDocument,
   SessionQuery,
@@ -13,6 +14,7 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
+import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/types';
 import RijuExecutor from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor';
 import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
@@ -165,6 +167,38 @@ const Step: React.FC<Props> = (props) => {
     }
   };
 
+  const onRunMatchTest = (checkpoint: RegularCheckpointFragment) => {
+    const file = data.step?.codeModules?.find(
+      ({ name }) => checkpoint.fileToMatchRegex === name
+    );
+    const match = file?.value?.match(new RegExp(checkpoint.matchRegex!, 'g'));
+
+    window.postMessage({
+      event: 'total_test_start',
+      type: 'test',
+    });
+
+    window.postMessage({
+      $id: 0,
+      codesandbox: true,
+      event: 'test_end',
+      test: {
+        blocks: ['File', file?.name],
+        duration: 1,
+        errors: [],
+        name: `should include ${checkpoint.matchRegex}.`,
+        path: '',
+        status: match ? 'pass' : 'fail',
+      },
+      type: 'test',
+    } as CodeSandboxTestMsgType);
+
+    window.postMessage({
+      event: 'total_test_end',
+      type: 'test',
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col lg:flex-row md:h-full-minus">
@@ -186,6 +220,7 @@ const Step: React.FC<Props> = (props) => {
               maxDragWidth={maxDragWidth}
               nextStep={nextStep}
               onDragEnd={onDragEnd}
+              onRunMatchTest={onRunMatchTest}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}
@@ -200,6 +235,7 @@ const Step: React.FC<Props> = (props) => {
               maxDragWidth={maxDragWidth}
               nextStep={nextStep}
               onDragEnd={onDragEnd}
+              onRunMatchTest={onRunMatchTest}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}

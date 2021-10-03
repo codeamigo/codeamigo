@@ -3,7 +3,10 @@ import '@codesandbox/sandpack-react/dist/index.css';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import React, { useEffect, useState } from 'react';
 
-import { RegularStepFragment } from '👨‍💻generated/graphql';
+import {
+  RegularCheckpointFragment,
+  RegularStepFragment,
+} from '👨‍💻generated/graphql';
 import SandpackTemplate from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor/template';
 import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
 import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';
@@ -66,6 +69,7 @@ export type Props = OwnProps & {
   maxDragWidth: number | null;
   nextStep: () => void;
   onDragEnd: () => void;
+  onRunMatchTest: (checkpoint: RegularCheckpointFragment) => void;
   previewRef: React.RefObject<HTMLDivElement>;
   step: RegularStepFragment;
   updateWidths: (x: number) => void;

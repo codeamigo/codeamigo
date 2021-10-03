@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { RegularStepFragment } from '👨‍💻generated/graphql';
+import {
+  RegularCheckpointFragment,
+  RegularStepFragment,
+} from '👨‍💻generated/graphql';
 import RijuTemplate from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/template';
 import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
 import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';
@@ -19,6 +22,7 @@ export type Props = OwnProps & {
   maxDragWidth: number | null;
   nextStep: () => void;
   onDragEnd: () => void;
+  onRunMatchTest: (checkpoint: RegularCheckpointFragment) => void;
   previewRef: React.RefObject<HTMLIFrameElement>;
   step: RegularStepFragment;
   updateWidths: (x: number) => void;

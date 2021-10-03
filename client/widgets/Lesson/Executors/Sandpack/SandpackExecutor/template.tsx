@@ -28,6 +28,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     maxDragWidth,
     nextStep,
     onDragEnd,
+    onRunMatchTest,
     previewRef,
     step,
     updateWidths,
@@ -45,14 +46,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         dispatch({ type: 'run-all-tests' });
         break;
       case CheckpointTypeEnum.Match:
-        const file = step.codeModules?.find(
-          ({ name }) => checkpoint.fileToMatchRegex === name
-        );
-        const match = file?.value?.match(
-          new RegExp(checkpoint.matchRegex!, 'g')
-        );
-
-        console.log(match);
+        onRunMatchTest(checkpoint);
     }
   };
 
@@ -111,7 +105,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={previewRef}
       >
         <SandpackPreview />
-        <Console tabs={['console', 'tests']} />
+        <Console runTests={handleRunTests} tabs={['console', 'tests']} />
       </div>
     </SandpackLayout>
   );

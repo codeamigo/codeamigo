@@ -24,6 +24,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     maxDragWidth,
     nextStep,
     onDragEnd,
+    onRunMatchTest,
     previewRef,
     step,
     updateWidths,
@@ -63,37 +64,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
         break;
       // DRY!!
       case CheckpointTypeEnum.Match:
-        const file = step.codeModules?.find(
-          ({ name }) => checkpoint.fileToMatchRegex === name
-        );
-        const match = file?.value?.match(
-          new RegExp(checkpoint.matchRegex!, 'g')
-        );
-
-        window.postMessage({
-          event: 'total_test_start',
-          type: 'test',
-        });
-
-        window.postMessage({
-          $id: 0,
-          codesandbox: true,
-          event: 'test_end',
-          test: {
-            blocks: ['File', file?.name],
-            duration: 1,
-            errors: [],
-            name: `should include ${checkpoint.matchRegex}.`,
-            path: '',
-            status: match ? 'pass' : 'fail',
-          },
-          type: 'test',
-        } as CodeSandboxTestMsgType);
-
-        window.postMessage({
-          event: 'total_test_end',
-          type: 'test',
-        });
+        onRunMatchTest(checkpoint);
     }
   };
 
@@ -158,7 +129,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             className="bg-bg-primary riju-frame h-full"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
-          <Console tabs={['tests']} />
+          <Console runTests={handleRunTests} tabs={['tests']} />
         </div>
       </div>
     </div>

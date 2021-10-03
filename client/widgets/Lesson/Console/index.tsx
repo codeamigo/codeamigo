@@ -63,9 +63,6 @@ const Console: React.FC<Props> = (props) => {
     }
   }, [testFailure]);
 
-  // @ts-ignore
-  const { base } = themes[data?.me?.theme || DEFAULT_THEME];
-
   return (
     <div
       className={`bg-bg-primary flex flex-col overflow-scroll ${
@@ -120,13 +117,14 @@ const Console: React.FC<Props> = (props) => {
         />
       </div>
       <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
-        <Tests />
+        <Tests runTests={props.runTests} />
       </div>
     </div>
   );
 };
 
 type Props = {
+  runTests: () => void;
   tabs: ('console' | 'tests')[];
 };
 

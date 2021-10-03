@@ -29,11 +29,9 @@ const PublishedLessonsList: React.FC<Props> = () => {
     }
   };
 
-  if (!meData?.me) return null;
-
   const { data, loading } = useLessonsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: { ownerId: meData.me.id, status: 'PUBLISHED' },
+    variables: { ownerId: meData?.me?.id, status: 'PUBLISHED' },
   });
 
   if (loading && !data?.lessons) return null;

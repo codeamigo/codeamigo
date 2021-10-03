@@ -17,11 +17,9 @@ const PendingApprovalLessonsList: React.FC<Props> = () => {
   const [updateLessonStatusM] = useUpdateLessonStatusMutation();
   const router = useRouter();
 
-  if (!meData?.me) return null;
-
   const { data, loading } = useLessonsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: { ownerId: meData.me.id, status: 'PENDING_PUBLISH' },
+    variables: { ownerId: meData?.me?.id, status: 'PENDING_PUBLISH' },
   });
 
   if (loading && !data?.lessons) return null;
