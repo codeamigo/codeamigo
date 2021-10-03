@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
+import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
   LessonQuery,
@@ -167,6 +168,16 @@ const Step: React.FC<Props> = (props) => {
     }
   };
 
+  const onTestStart = () => {
+    isTestingVar(true);
+    testFailureVar(false);
+
+    // reinitialize CTA if something goes wrong during test run
+    setTimeout(() => {
+      isTestingVar(false);
+    }, 3000);
+  };
+
   const onRunMatchTest = (checkpoint: RegularCheckpointFragment) => {
     const file = data.step?.codeModules?.find(
       ({ name }) => checkpoint.fileToMatchRegex === name
@@ -221,6 +232,7 @@ const Step: React.FC<Props> = (props) => {
               nextStep={nextStep}
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
+              onTestStart={onTestStart}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}
@@ -236,6 +248,7 @@ const Step: React.FC<Props> = (props) => {
               nextStep={nextStep}
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
+              onTestStart={onTestStart}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}

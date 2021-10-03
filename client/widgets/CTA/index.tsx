@@ -134,18 +134,8 @@ const CTA: React.FC<Props> = ({
   };
 
   const runTests = () => {
-    isTestingVar(true);
-    testFailureVar(false);
     testsRef.current = [];
-    const checkpointToTest = step.checkpoints?.find(
-      ({ id }) => id === step.currentCheckpointId
-    );
-    handleRunTests(checkpointToTest);
-
-    // reinitialize CTA if something goes wrong during test run
-    setTimeout(() => {
-      isTestingVar(false);
-    }, 3000);
+    handleRunTests();
   };
 
   const promptRegistration = () => {
@@ -197,7 +187,7 @@ const CTA: React.FC<Props> = ({
 
 type Props = {
   bundlerState: any;
-  handleRunTests: (checkpoint?: RegularCheckpointFragment) => void;
+  handleRunTests: () => void;
   isEditing?: boolean;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];

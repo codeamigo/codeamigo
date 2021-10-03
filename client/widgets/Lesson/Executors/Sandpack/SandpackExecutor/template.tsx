@@ -29,6 +29,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     nextStep,
     onDragEnd,
     onRunMatchTest,
+    onTestStart,
     previewRef,
     step,
     updateWidths,
@@ -37,7 +38,11 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
 
-  const handleRunTests = (checkpoint?: RegularCheckpointFragment) => {
+  const handleRunTests = () => {
+    onTestStart();
+    const checkpoint = step.checkpoints?.find(
+      ({ id }) => id === step.currentCheckpointId
+    );
     if (!checkpoint) return;
 
     switch (checkpoint.type) {

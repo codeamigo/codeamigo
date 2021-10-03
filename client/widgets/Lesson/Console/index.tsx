@@ -2,13 +2,10 @@ import { useReactiveVar } from '@apollo/client';
 import { Console as ConsoleFeed, Decode } from 'console-feed';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
-import { DEFAULT_THEME } from 'styles/appThemes';
-import * as themes from 'styles/monacoThemes';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
-import { Theme, useMeQuery } from '👨‍💻generated/graphql';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
 let consoleFeed: { Console: typeof ConsoleFeed; Decode: typeof Decode };
@@ -36,8 +33,6 @@ const Console: React.FC<Props> = (props) => {
   );
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const testFailure = useReactiveVar(testFailureVar);
-
-  const { data } = useMeQuery();
 
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {

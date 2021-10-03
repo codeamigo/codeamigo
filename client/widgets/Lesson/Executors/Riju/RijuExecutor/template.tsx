@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 
+import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import {
   CheckpointTypeEnum,
   RegularCheckpointFragment,
 } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
-import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/types';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
@@ -25,6 +25,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     nextStep,
     onDragEnd,
     onRunMatchTest,
+    onTestStart,
     previewRef,
     step,
     updateWidths,
@@ -47,7 +48,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
       );
   };
 
-  const handleRunTests = (checkpoint?: RegularCheckpointFragment) => {
+  const handleRunTests = () => {
+    onTestStart();
+    const checkpoint = step.checkpoints?.find(
+      ({ id }) => id === step.currentCheckpointId
+    );
     if (!checkpoint) return;
 
     switch (checkpoint.type) {
@@ -62,7 +67,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
           '*'
         );
         break;
-      // DRY!!
       case CheckpointTypeEnum.Match:
         onRunMatchTest(checkpoint);
     }
