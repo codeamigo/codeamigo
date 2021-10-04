@@ -1,10 +1,6 @@
 import React, { useRef, useState } from 'react';
 
-import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
-import {
-  CheckpointTypeEnum,
-  RegularCheckpointFragment,
-} from '👨‍💻generated/graphql';
+import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -58,14 +54,16 @@ const RijuTemplate: React.FC<Props> = (props) => {
     switch (checkpoint.type) {
       case CheckpointTypeEnum.Output:
         // @ts-ignore
-        previewRef.current?.contentWindow?.postMessage(
-          {
-            code: entryFileValueRef.current,
-            event: 'testCode',
-            expectedOutput: checkpoint.output,
-          },
-          '*'
-        );
+        previewRef.current
+          ?.getElementsByTagName('iframe')[0]
+          .contentWindow?.postMessage(
+            {
+              code: entryFileValueRef.current,
+              event: 'testCode',
+              expectedOutput: checkpoint.output,
+            },
+            '*'
+          );
         break;
       case CheckpointTypeEnum.Match:
         onRunMatchTest(checkpoint);
