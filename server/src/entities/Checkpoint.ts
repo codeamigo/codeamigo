@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -11,6 +11,15 @@ import {
 
 import { Step } from "./Step";
 
+export enum CheckpointTypeEnum {
+  spec = "spec",
+  output = "output",
+  match = "match",
+}
+
+registerEnumType(CheckpointTypeEnum, {
+  name: "CheckpointTypeEnum",
+});
 @ObjectType()
 @Entity()
 export class Checkpoint extends BaseEntity {
@@ -38,14 +47,33 @@ export class Checkpoint extends BaseEntity {
   @Column({ default: false })
   isTested!: boolean;
 
-  @Field()
-  @Column()
-  test!: string;
-
-  @Field()
-  @Column()
-  moduleId!: number;
+  @Field(() => CheckpointTypeEnum, {
+    defaultValue: CheckpointTypeEnum.spec,
+  })
+  @Column({ default: CheckpointTypeEnum.spec, type: "text" })
+  type: keyof typeof CheckpointTypeEnum;
 
   @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: "CASCADE" })
   step: Step;
+
+  // match
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  matchRegex: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  fileToMatchRegex: string;
+
+  // output
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  output: string;
+
+  // spec
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  test: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  moduleId: number;
 }

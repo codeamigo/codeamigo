@@ -12,9 +12,9 @@ import {
   StepDocument,
   StepQuery,
   useCompleteCheckpointMutation,
-  useCreateCheckpointMutation,
   usePassCheckpointMutation,
 } from '👨‍💻generated/graphql';
+import CheckpointWizard from '👨‍💻widgets/CTA/CheckpointWizard';
 import {
   CodeSandboxTestMsgType,
   TestDataType,
@@ -28,10 +28,10 @@ const CTA: React.FC<Props> = ({
   lesson,
   loading,
   nextStep,
+  selectFile,
   step,
 }) => {
   const router = useRouter();
-  const [createCheckpointM] = useCreateCheckpointMutation();
   const [completeCheckpointM] = useCompleteCheckpointMutation();
   const [passCheckpoint] = usePassCheckpointMutation();
   const isTesting = useReactiveVar(isTestingVar);
@@ -93,19 +93,11 @@ const CTA: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    window.addEventListener('message', handlePassCheckpoint);
+    window.addEventListener('message', handlePassCheckpoint, true);
 
-    return () => window.removeEventListener('message', handlePassCheckpoint);
+    return () =>
+      window.removeEventListener('message', handlePassCheckpoint, true);
   }, [step.currentCheckpointId]);
-
-  const createCheckpoint = async () => {
-    const len = step.checkpoints?.length || 0;
-
-    await createCheckpointM({
-      refetchQueries: ['Checkpoints', 'Step'],
-      variables: { checkpointId: len + 1, stepId: step.id },
-    });
-  };
 
   const completeCheckpoint = async () => {
     // don't complete checkpoint if editting
@@ -142,14 +134,8 @@ const CTA: React.FC<Props> = ({
   };
 
   const runTests = () => {
-    isTestingVar(true);
-    testFailureVar(false);
     testsRef.current = [];
     handleRunTests();
-
-    setTimeout(() => {
-      isTestingVar(false);
-    }, 3000);
   };
 
   const promptRegistration = () => {
@@ -170,28 +156,28 @@ const CTA: React.FC<Props> = ({
   const isStepComplete = !step.checkpoints?.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
-  const text =
-    isEditing && step.executionType === 'sandpack'
-      ? 'Add Checkpoint'
-      : isTested
-      ? 'Next'
-      : 'Test';
+  const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
   const spinner = isTesting || !bundlerState || loading;
-  const f = isPreviewing
+  const fn = isPreviewing
     ? promptRegistration
-    : isEditing && step.executionType === 'sandpack'
-    ? createCheckpoint
     : isTested
     ? isStepComplete
       ? nextStep
       : completeCheckpoint
     : runTests;
 
-  return (
+  return isEditing ? (
+    <div className="relative group pt-2">
+      <Button className="h-14 justify-center w-full text-lg">
+        Add Checkpoint
+      </Button>
+      <CheckpointWizard selectFile={selectFile} step={step} />
+    </div>
+  ) : (
     <Button
       className="h-14 justify-center w-full text-lg"
       disabled={spinner}
-      onClick={f}
+      onClick={fn}
       type="button"
     >
       {spinner ? <Spinner /> : text}
@@ -207,6 +193,7 @@ type Props = {
   lesson: LessonQuery['lesson'];
   loading: boolean;
   nextStep: () => void;
+  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

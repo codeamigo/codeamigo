@@ -62,6 +62,27 @@ const Editor: React.FC<Props> = ({
     }
   }, [codeModules?.length, monacoRef.current, editorRef.current, activePath]);
 
+  // When regex is searched
+  useEffect(() => {
+    const handleSearch = (ev: MessageEvent<any>) => {
+      if (!ev.data.search) return;
+      try {
+        if (editorRef.current) {
+          const match = editorRef.current
+            .getModel()
+            .findMatches(ev.data.search)[0];
+          const range = match?.range;
+          editorRef.current.setSelection(range);
+          editorRef.current.getAction('actions.findWithSelection').run();
+        }
+      } catch (e) {
+        console.log(`Error searching: ${e}`);
+      }
+    };
+
+    window.addEventListener('message', handleSearch);
+  }, []);
+
   useEffect(() => {
     if (monacoRef.current && rest.isTyped) {
       setupTypes();

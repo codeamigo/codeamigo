@@ -6,6 +6,10 @@ import {
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
+import {
+  CheckpointTypeEnum,
+  RegularCheckpointFragment,
+} from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -24,6 +28,8 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     maxDragWidth,
     nextStep,
     onDragEnd,
+    onRunMatchTest,
+    onTestStart,
     previewRef,
     step,
     updateWidths,
@@ -31,6 +37,23 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
+
+  const handleRunTests = () => {
+    onTestStart();
+    const checkpoint = step.checkpoints?.find(
+      ({ id }) => id === step.currentCheckpointId
+    );
+    if (!checkpoint) return;
+
+    switch (checkpoint.type) {
+      case CheckpointTypeEnum.Spec:
+        // @ts-ignore
+        dispatch({ type: 'run-all-tests' });
+        break;
+      case CheckpointTypeEnum.Match:
+        onRunMatchTest(checkpoint);
+    }
+  };
 
   return (
     <SandpackLayout>
@@ -53,8 +76,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           <CTA
             {...props}
             bundlerState={sandpack.bundlerState}
-            // @ts-ignore
-            handleRunTests={() => dispatch({ type: 'run-all-tests' })}
+            handleRunTests={handleRunTests}
             loading={loading}
             nextStep={nextStep}
             step={step}
@@ -88,7 +110,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={previewRef}
       >
         <SandpackPreview />
-        <Console />
+        <Console runTests={handleRunTests} tabs={['console', 'tests']} />
       </div>
     </SandpackLayout>
   );

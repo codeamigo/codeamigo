@@ -25,6 +25,7 @@
     "console-feed": "^3.2.2",
     "debounce": "^1.2.0",
     "formik": "^2.2.5",
+    "framer-motion": "4.1.17",
     "github-markdown-css": "^4.0.0",
     "graphql": "^15.4.0",
     "moment": "^2.29.1",
@@ -42,6 +43,7 @@
     "remark-gfm": "^1.0.0",
     "sass": "^1.30.0",
     "tailwindcss": "2.0.2",
+    "tailwindcss-named-groups": "0.0.5",
     "use-onclickoutside": "0.3.1"
   },
   "devDependencies": {

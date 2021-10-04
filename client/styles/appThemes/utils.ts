@@ -19,6 +19,7 @@ export interface IThemes {
 export const mapTheme = (variables: ThemeType) => {
   return {
     '--accent': variables.accent || '',
+    '--accent-faded': fade(variables.accent, 0.3) || '',
     '--bg-nav': variables.bgNav || '',
     '--bg-nav-faded': fade(variables.bgNav, 0.3) || '',
     '--bg-nav-offset':

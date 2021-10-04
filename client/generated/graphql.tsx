@@ -87,9 +87,19 @@ export type Checkpoint = {
   description: Scalars['String'];
   isCompleted: Scalars['Boolean'];
   isTested: Scalars['Boolean'];
-  test: Scalars['String'];
-  moduleId: Scalars['Float'];
+  type?: Maybe<CheckpointTypeEnum>;
+  matchRegex?: Maybe<Scalars['String']>;
+  fileToMatchRegex?: Maybe<Scalars['String']>;
+  output?: Maybe<Scalars['String']>;
+  test?: Maybe<Scalars['String']>;
+  moduleId?: Maybe<Scalars['Float']>;
 };
+
+export enum CheckpointTypeEnum {
+  Spec = 'spec',
+  Output = 'output',
+  Match = 'match'
+}
 
 export type CodeModule = {
   __typename?: 'CodeModule';
@@ -257,7 +267,9 @@ export type LessonsInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createCheckpoint?: Maybe<Checkpoint>;
+  createSpecCheckpoint?: Maybe<Checkpoint>;
+  createMatchCheckpoint?: Maybe<Checkpoint>;
+  createOutputCheckpoint?: Maybe<Checkpoint>;
   updateCheckpoint?: Maybe<Checkpoint>;
   completeCheckpoint?: Maybe<Checkpoint>;
   passCheckpoint?: Maybe<Checkpoint>;
@@ -302,8 +314,18 @@ export type Mutation = {
 };
 
 
-export type MutationCreateCheckpointArgs = {
-  options: CreateCheckpointInput;
+export type MutationCreateSpecCheckpointArgs = {
+  options: CreateSpecCheckpointInput;
+};
+
+
+export type MutationCreateMatchCheckpointArgs = {
+  options: CreateMatchCheckpointInput;
+};
+
+
+export type MutationCreateOutputCheckpointArgs = {
+  options: CreateOutputCheckpointInput;
 };
 
 
@@ -509,8 +531,19 @@ export type MutationSetNextStepArgs = {
   options: NextStepInput;
 };
 
-export type CreateCheckpointInput = {
+export type CreateSpecCheckpointInput = {
   checkpointId: Scalars['Float'];
+  stepId: Scalars['Float'];
+};
+
+export type CreateMatchCheckpointInput = {
+  matchRegex: Scalars['String'];
+  fileToMatchRegex: Scalars['String'];
+  stepId: Scalars['Float'];
+};
+
+export type CreateOutputCheckpointInput = {
+  output: Scalars['String'];
   stepId: Scalars['Float'];
 };
 
@@ -633,7 +666,7 @@ export type Modal = {
 
 export type RegularCheckpointFragment = (
   { __typename?: 'Checkpoint' }
-  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'isCompleted' | 'isTested' | 'test'>
+  & Pick<Checkpoint, 'id' | 'createdAt' | 'description' | 'fileToMatchRegex' | 'matchRegex' | 'output' | 'isCompleted' | 'isTested' | 'test' | 'type'>
 );
 
 export type RegularCodeModuleFragment = (
@@ -749,15 +782,44 @@ export type ChangePasswordFromPasswordMutation = (
   ) }
 );
 
-export type CreateCheckpointMutationVariables = Exact<{
+export type CreateSpecCheckpointMutationVariables = Exact<{
   checkpointId: Scalars['Float'];
   stepId: Scalars['Float'];
 }>;
 
 
-export type CreateCheckpointMutation = (
+export type CreateSpecCheckpointMutation = (
   { __typename?: 'Mutation' }
-  & { createCheckpoint?: Maybe<(
+  & { createSpecCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )> }
+);
+
+export type CreateMatchCheckpointMutationVariables = Exact<{
+  matchRegex: Scalars['String'];
+  fileToMatchRegex: Scalars['String'];
+  stepId: Scalars['Float'];
+}>;
+
+
+export type CreateMatchCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { createMatchCheckpoint?: Maybe<(
+    { __typename?: 'Checkpoint' }
+    & RegularCheckpointFragment
+  )> }
+);
+
+export type CreateOutputCheckpointMutationVariables = Exact<{
+  output: Scalars['String'];
+  stepId: Scalars['Float'];
+}>;
+
+
+export type CreateOutputCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { createOutputCheckpoint?: Maybe<(
     { __typename?: 'Checkpoint' }
     & RegularCheckpointFragment
   )> }
@@ -1481,9 +1543,13 @@ export const RegularCheckpointFragmentDoc = gql`
   id
   createdAt
   description
+  fileToMatchRegex
+  matchRegex
+  output
   isCompleted
   isTested
   test
+  type
 }
     `;
 export const RegularStepFragmentDoc = gql`
@@ -1632,39 +1698,108 @@ export function useChangePasswordFromPasswordMutation(baseOptions?: Apollo.Mutat
 export type ChangePasswordFromPasswordMutationHookResult = ReturnType<typeof useChangePasswordFromPasswordMutation>;
 export type ChangePasswordFromPasswordMutationResult = Apollo.MutationResult<ChangePasswordFromPasswordMutation>;
 export type ChangePasswordFromPasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordFromPasswordMutation, ChangePasswordFromPasswordMutationVariables>;
-export const CreateCheckpointDocument = gql`
-    mutation CreateCheckpoint($checkpointId: Float!, $stepId: Float!) {
-  createCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
+export const CreateSpecCheckpointDocument = gql`
+    mutation CreateSpecCheckpoint($checkpointId: Float!, $stepId: Float!) {
+  createSpecCheckpoint(options: {checkpointId: $checkpointId, stepId: $stepId}) {
     ...RegularCheckpoint
   }
 }
     ${RegularCheckpointFragmentDoc}`;
-export type CreateCheckpointMutationFn = Apollo.MutationFunction<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
+export type CreateSpecCheckpointMutationFn = Apollo.MutationFunction<CreateSpecCheckpointMutation, CreateSpecCheckpointMutationVariables>;
 
 /**
- * __useCreateCheckpointMutation__
+ * __useCreateSpecCheckpointMutation__
  *
- * To run a mutation, you first call `useCreateCheckpointMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCheckpointMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateSpecCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateSpecCheckpointMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createCheckpointMutation, { data, loading, error }] = useCreateCheckpointMutation({
+ * const [createSpecCheckpointMutation, { data, loading, error }] = useCreateSpecCheckpointMutation({
  *   variables: {
  *      checkpointId: // value for 'checkpointId'
  *      stepId: // value for 'stepId'
  *   },
  * });
  */
-export function useCreateCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>) {
-        return Apollo.useMutation<CreateCheckpointMutation, CreateCheckpointMutationVariables>(CreateCheckpointDocument, baseOptions);
+export function useCreateSpecCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateSpecCheckpointMutation, CreateSpecCheckpointMutationVariables>) {
+        return Apollo.useMutation<CreateSpecCheckpointMutation, CreateSpecCheckpointMutationVariables>(CreateSpecCheckpointDocument, baseOptions);
       }
-export type CreateCheckpointMutationHookResult = ReturnType<typeof useCreateCheckpointMutation>;
-export type CreateCheckpointMutationResult = Apollo.MutationResult<CreateCheckpointMutation>;
-export type CreateCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateCheckpointMutation, CreateCheckpointMutationVariables>;
+export type CreateSpecCheckpointMutationHookResult = ReturnType<typeof useCreateSpecCheckpointMutation>;
+export type CreateSpecCheckpointMutationResult = Apollo.MutationResult<CreateSpecCheckpointMutation>;
+export type CreateSpecCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateSpecCheckpointMutation, CreateSpecCheckpointMutationVariables>;
+export const CreateMatchCheckpointDocument = gql`
+    mutation CreateMatchCheckpoint($matchRegex: String!, $fileToMatchRegex: String!, $stepId: Float!) {
+  createMatchCheckpoint(
+    options: {matchRegex: $matchRegex, fileToMatchRegex: $fileToMatchRegex, stepId: $stepId}
+  ) {
+    ...RegularCheckpoint
+  }
+}
+    ${RegularCheckpointFragmentDoc}`;
+export type CreateMatchCheckpointMutationFn = Apollo.MutationFunction<CreateMatchCheckpointMutation, CreateMatchCheckpointMutationVariables>;
+
+/**
+ * __useCreateMatchCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCreateMatchCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMatchCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMatchCheckpointMutation, { data, loading, error }] = useCreateMatchCheckpointMutation({
+ *   variables: {
+ *      matchRegex: // value for 'matchRegex'
+ *      fileToMatchRegex: // value for 'fileToMatchRegex'
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useCreateMatchCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateMatchCheckpointMutation, CreateMatchCheckpointMutationVariables>) {
+        return Apollo.useMutation<CreateMatchCheckpointMutation, CreateMatchCheckpointMutationVariables>(CreateMatchCheckpointDocument, baseOptions);
+      }
+export type CreateMatchCheckpointMutationHookResult = ReturnType<typeof useCreateMatchCheckpointMutation>;
+export type CreateMatchCheckpointMutationResult = Apollo.MutationResult<CreateMatchCheckpointMutation>;
+export type CreateMatchCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateMatchCheckpointMutation, CreateMatchCheckpointMutationVariables>;
+export const CreateOutputCheckpointDocument = gql`
+    mutation CreateOutputCheckpoint($output: String!, $stepId: Float!) {
+  createOutputCheckpoint(options: {output: $output, stepId: $stepId}) {
+    ...RegularCheckpoint
+  }
+}
+    ${RegularCheckpointFragmentDoc}`;
+export type CreateOutputCheckpointMutationFn = Apollo.MutationFunction<CreateOutputCheckpointMutation, CreateOutputCheckpointMutationVariables>;
+
+/**
+ * __useCreateOutputCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCreateOutputCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOutputCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOutputCheckpointMutation, { data, loading, error }] = useCreateOutputCheckpointMutation({
+ *   variables: {
+ *      output: // value for 'output'
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useCreateOutputCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CreateOutputCheckpointMutation, CreateOutputCheckpointMutationVariables>) {
+        return Apollo.useMutation<CreateOutputCheckpointMutation, CreateOutputCheckpointMutationVariables>(CreateOutputCheckpointDocument, baseOptions);
+      }
+export type CreateOutputCheckpointMutationHookResult = ReturnType<typeof useCreateOutputCheckpointMutation>;
+export type CreateOutputCheckpointMutationResult = Apollo.MutationResult<CreateOutputCheckpointMutation>;
+export type CreateOutputCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateOutputCheckpointMutation, CreateOutputCheckpointMutationVariables>;
 export const CreateCodeModuleDocument = gql`
     mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
   createCodeModule(stepId: $stepId, options: {name: $name, value: $value}) {

@@ -22,9 +22,27 @@ const DEFAULT_TEST = `describe('My Test', () => {
 `;
 
 @InputType()
-class CreateCheckpointInput {
+class CreateSpecCheckpointInput {
   @Field()
   checkpointId: number;
+  @Field()
+  stepId: number;
+}
+
+@InputType()
+class CreateMatchCheckpointInput {
+  @Field()
+  matchRegex: string;
+  @Field()
+  fileToMatchRegex: string;
+  @Field()
+  stepId: number;
+}
+
+@InputType()
+class CreateOutputCheckpointInput {
+  @Field()
+  output: string;
   @Field()
   stepId: number;
 }
@@ -59,8 +77,8 @@ export class CheckpointResolver {
 
   @Mutation(() => Checkpoint, { nullable: true })
   @UseMiddleware(isAuth)
-  async createCheckpoint(
-    @Arg("options") options: CreateCheckpointInput
+  async createSpecCheckpoint(
+    @Arg("options") options: CreateSpecCheckpointInput
   ): Promise<Checkpoint | null> {
     let step = await Step.findOne(
       { id: options.stepId },
@@ -85,6 +103,50 @@ export class CheckpointResolver {
       moduleId: newModule.id,
       step,
       test: name,
+      type: "spec",
+    }).save();
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async createMatchCheckpoint(
+    @Arg("options") options: CreateMatchCheckpointInput
+  ): Promise<Checkpoint | null> {
+    let step = await Step.findOne(
+      { id: options.stepId },
+      { relations: ["codeModules", "dependencies"] }
+    );
+
+    if (!step) {
+      return null;
+    }
+
+    return Checkpoint.create({
+      fileToMatchRegex: options.fileToMatchRegex,
+      matchRegex: options.matchRegex,
+      step,
+      type: "match",
+    }).save();
+  }
+
+  @Mutation(() => Checkpoint, { nullable: true })
+  @UseMiddleware(isAuth)
+  async createOutputCheckpoint(
+    @Arg("options") options: CreateOutputCheckpointInput
+  ): Promise<Checkpoint | null> {
+    let step = await Step.findOne(
+      { id: options.stepId },
+      { relations: ["codeModules", "dependencies"] }
+    );
+
+    if (!step) {
+      return null;
+    }
+
+    return Checkpoint.create({
+      output: options.output,
+      step,
+      type: "output",
     }).save();
   }
 
@@ -162,7 +224,9 @@ export class CheckpointResolver {
     }
 
     await Checkpoint.delete(id);
-    await CodeModule.delete(checkpoint.moduleId);
+    if (checkpoint.moduleId) {
+      await CodeModule.delete(checkpoint.moduleId);
+    }
     return true;
   }
 }

@@ -77,8 +77,12 @@ export class SessionResolver {
       )
       .leftJoinAndSelect("Session.lesson", "lesson")
       .leftJoinAndSelect("Session.steps", "steps")
+      .leftJoinAndSelect("steps.codeModules", "codeModules")
+      .leftJoinAndSelect("steps.checkpoints", "checkpoints")
       .addOrderBy("steps.createdAt", "ASC")
       .getOne();
+
+    console.log(session);
 
     return session;
   }

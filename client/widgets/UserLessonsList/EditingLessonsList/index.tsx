@@ -14,12 +14,9 @@ import LessonListItem from '👨‍💻widgets/LessonListItem';
 
 const EditingLessonsList: React.FC<Props> = () => {
   const { data: meData } = useMeQuery();
-
-  if (!meData?.me) return null;
-
   const { data, loading } = useLessonsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: { ownerId: meData.me.id, status: 'EDITTING' },
+    variables: { ownerId: meData?.me?.id, status: 'EDITTING' },
   });
 
   const [deleteLessonM] = useDeleteLessonMutation();

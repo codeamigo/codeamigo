@@ -11,8 +11,7 @@ import {
   TestDataType,
 } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
-const Tests: React.FC<Props> = () => {
-  const { dispatch } = useSandpack();
+const Tests: React.FC<Props> = ({ runTests }) => {
   const [suites, setSuites] = useState<TestDataType[]>();
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const isTesting = useReactiveVar(isTestingVar);
@@ -46,11 +45,10 @@ const Tests: React.FC<Props> = () => {
     return () => window.removeEventListener('message', handleTestResults);
   }, []);
 
-  const runTests = () => {
+  const handleRunTests = () => {
     isTestingVar(true);
     if (isRunning || isTesting) return;
-    // @ts-ignore
-    dispatch({ type: 'run-all-tests' });
+    runTests();
   };
 
   return (
@@ -62,7 +60,7 @@ const Tests: React.FC<Props> = () => {
           </div>
           <div
             className="flex px-4 py-3 text-md font-medium cursor-pointer items-center"
-            onClick={() => runTests()}
+            onClick={() => handleRunTests()}
             role="button"
           >
             <Icon
@@ -100,6 +98,8 @@ const Tests: React.FC<Props> = () => {
   );
 };
 
-type Props = {};
+type Props = {
+  runTests: () => void;
+};
 
 export default Tests;

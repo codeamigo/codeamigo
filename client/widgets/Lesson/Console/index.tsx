@@ -2,13 +2,10 @@ import { useReactiveVar } from '@apollo/client';
 import { Console as ConsoleFeed, Decode } from 'console-feed';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
-import { DEFAULT_THEME } from 'styles/appThemes';
-import * as themes from 'styles/monacoThemes';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
-import { Theme, useMeQuery } from '👨‍💻generated/graphql';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
 
 let consoleFeed: { Console: typeof ConsoleFeed; Decode: typeof Decode };
@@ -28,14 +25,14 @@ type SandpackLogMessageType = {
   type: 'console';
 };
 
-const Console: React.FC<Props> = () => {
+const Console: React.FC<Props> = (props) => {
   const listRef = useRef<HTMLDivElement>(null);
   const [logList, setLogList] = useState<any>([]);
-  const [activeTab, setActiveTab] = useState<'console' | 'tests'>('console');
+  const [activeTab, setActiveTab] = useState<'console' | 'tests'>(
+    props.tabs[0]
+  );
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const testFailure = useReactiveVar(testFailureVar);
-
-  const { data } = useMeQuery();
 
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
@@ -61,13 +58,10 @@ const Console: React.FC<Props> = () => {
     }
   }, [testFailure]);
 
-  // @ts-ignore
-  const { base } = themes[data?.me?.theme || DEFAULT_THEME];
-
   return (
     <div
       className={`bg-bg-primary flex flex-col overflow-scroll ${
-        isCollapsed ? 'h-8' : 'h-full'
+        isCollapsed ? 'h-8' : 'h-1/2'
       }`}
       ref={listRef}
       style={{
@@ -77,22 +71,18 @@ const Console: React.FC<Props> = () => {
     >
       <div className="bg-bg-primary border-b border-t border-bg-nav-offset-faded flex justify-between sticky top-0 z-10">
         <div className="flex">
-          <div
-            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-              activeTab === 'console' ? 'bg-bg-nav' : ''
-            }`}
-            onClick={() => setActiveTab('console')}
-          >
-            Console
-          </div>
-          <div
-            className={`px-4 py-2 text-text-primary text-xs cursor-pointer ${
-              activeTab === 'tests' ? 'bg-bg-nav' : ''
-            }`}
-            onClick={() => setActiveTab('tests')}
-          >
-            Tests
-          </div>
+          {props.tabs.map((tab) => {
+            return (
+              <div
+                className={`px-4 py-2 text-text-primary text-xs cursor-pointer capitalize ${
+                  activeTab === tab ? 'bg-bg-nav' : ''
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </div>
+            );
+          })}
         </div>
         <div className={`flex items-center pr-1`}>
           <div className="px-4">
@@ -122,12 +112,15 @@ const Console: React.FC<Props> = () => {
         />
       </div>
       <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
-        <Tests />
+        <Tests runTests={props.runTests} />
       </div>
     </div>
   );
 };
 
-type Props = {};
+type Props = {
+  runTests: () => void;
+  tabs: ('console' | 'tests')[];
+};
 
 export default Console;

@@ -1,7 +1,7 @@
 module.exports = {
   // or 'media' or 'class'
   darkMode: false,
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
   purge: [
     './components/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -16,6 +16,7 @@ module.exports = {
       },
       colors: {
         accent: 'var(--accent)',
+        'accent-faded': 'var(--accent-faded)',
         'bg-nav': 'var(--bg-nav)',
         'bg-nav-faded': 'var(--bg-nav-faded)',
         'bg-nav-offset': 'var(--bg-nav-offset)',
@@ -47,14 +48,16 @@ module.exports = {
         height: 'height',
       },
     },
+    namedGroups: ['inner-1'],
   },
   variants: {
     extend: {
       borderWidth: ['first'],
       cursor: ['disabled'],
       display: ['group-hover'],
-      margin: ['first'],
+      margin: ['first', 'group-hover'],
       opacity: ['disabled'],
+      visibility: ['group-hover'],
       width: ['hover'],
     },
   },
