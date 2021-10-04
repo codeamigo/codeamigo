@@ -74,8 +74,7 @@ export class LessonResolver {
         .where("Lesson.status = :status", { status })
         .leftJoinAndSelect("Lesson.owner", "owner")
         .leftJoinAndSelect("Lesson.students", "students")
-        .orderBy("students", "DESC")
-        .addOrderBy(`Lesson.createdAt`, "DESC");
+        .orderBy("students", "DESC");
 
       if (labels) {
         query.andWhere("Lesson.label IN (:...labels)", {
