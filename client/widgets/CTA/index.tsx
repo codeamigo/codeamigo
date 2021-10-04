@@ -94,9 +94,10 @@ const CTA: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    window.addEventListener('message', handlePassCheckpoint);
+    window.addEventListener('message', handlePassCheckpoint, true);
 
-    return () => window.removeEventListener('message', handlePassCheckpoint);
+    return () =>
+      window.removeEventListener('message', handlePassCheckpoint, true);
   }, [step.currentCheckpointId]);
 
   const completeCheckpoint = async () => {
@@ -158,7 +159,7 @@ const CTA: React.FC<Props> = ({
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
   const spinner = isTesting || !bundlerState || loading;
-  const f = isPreviewing
+  const fn = isPreviewing
     ? promptRegistration
     : isTested
     ? isStepComplete
@@ -177,7 +178,7 @@ const CTA: React.FC<Props> = ({
     <Button
       className="h-14 justify-center w-full text-lg"
       disabled={spinner}
-      onClick={f}
+      onClick={fn}
       type="button"
     >
       {spinner ? <Spinner /> : text}
