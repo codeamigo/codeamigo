@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
@@ -60,6 +61,9 @@ const Lesson: NextPage<{ id: string }> = (props) => {
 
   return (
     <div className="flex">
+      <Head>
+        <title>Codeamigo - {data.lesson.title}</title>
+      </Head>
       {sessionData ? (
         <Steps
           activeSessionStepId={sessionData.session.currentStep}

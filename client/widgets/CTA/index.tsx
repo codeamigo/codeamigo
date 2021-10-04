@@ -8,7 +8,6 @@ import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
   LessonQuery,
-  RegularCheckpointFragment,
   RegularStepFragment,
   StepDocument,
   StepQuery,
