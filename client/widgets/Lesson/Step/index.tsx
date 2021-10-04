@@ -184,30 +184,39 @@ const Step: React.FC<Props> = (props) => {
     );
     const match = file?.value?.match(new RegExp(checkpoint.matchRegex!, 'g'));
 
-    window.postMessage({
-      event: 'total_test_start',
-      type: 'test',
-    });
-
-    window.postMessage({
-      $id: 0,
-      codesandbox: true,
-      event: 'test_end',
-      test: {
-        blocks: ['File', file?.name],
-        duration: 1,
-        errors: [],
-        name: `should include ${checkpoint.matchRegex}.`,
-        path: '',
-        status: match ? 'pass' : 'fail',
+    window.postMessage(
+      {
+        event: 'total_test_start',
+        type: 'test',
       },
-      type: 'test',
-    } as CodeSandboxTestMsgType);
+      '*'
+    );
 
-    window.postMessage({
-      event: 'total_test_end',
-      type: 'test',
-    });
+    window.postMessage(
+      {
+        $id: 0,
+        codesandbox: true,
+        event: 'test_end',
+        test: {
+          blocks: ['File', file?.name],
+          duration: 1,
+          errors: [],
+          name: `should include ${checkpoint.matchRegex}.`,
+          path: '',
+          status: match ? 'pass' : 'fail',
+        },
+        type: 'test',
+      } as CodeSandboxTestMsgType,
+      '*'
+    );
+
+    window.postMessage(
+      {
+        event: 'total_test_end',
+        type: 'test',
+      },
+      '*'
+    );
   };
 
   return (
