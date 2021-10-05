@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
-import { RegularStepFragment } from '👨‍💻generated/graphql';
+import {
+  RegularStepFragment,
+  StepExecutionTypeEnum,
+} from '👨‍💻generated/graphql';
 import Jest from '👨‍💻widgets/CTA/CheckpointWizard/jest';
 import Match from '👨‍💻widgets/CTA/CheckpointWizard/match';
 import Output from '👨‍💻widgets/CTA/CheckpointWizard/output';
@@ -24,7 +27,7 @@ const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
       <motion.div
         animate={{ display: wizardStep === 'select' ? 'block' : 'none' }}
       >
-        <Select setWizardStep={setWizardStep} />
+        <Select setWizardStep={setWizardStep} step={step} />
       </motion.div>
       <motion.div
         animate={{ display: wizardStep === 'match' ? 'block' : 'none' }}

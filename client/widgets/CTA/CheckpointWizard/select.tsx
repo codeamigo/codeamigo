@@ -1,8 +1,12 @@
 import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
+import {
+  RegularStepFragment,
+  StepExecutionTypeEnum,
+} from '👨‍💻generated/graphql';
 
-const Select: React.FC<Props> = ({ setWizardStep }) => {
+const Select: React.FC<Props> = ({ setWizardStep, step }) => {
   return (
     <>
       <div
@@ -27,7 +31,11 @@ const Select: React.FC<Props> = ({ setWizardStep }) => {
         </div>
       </div>
       <div
-        className="flex items-baseline justify-start cursor-pointer group-inner-1 mb-4"
+        className={`flex items-baseline justify-start group-inner-1 ${
+          step.executionType === StepExecutionTypeEnum.Sandpack
+            ? 'hidden'
+            : 'block'
+        }`}
         onClick={() => setWizardStep('output')}
         role="button"
       >
@@ -46,7 +54,10 @@ const Select: React.FC<Props> = ({ setWizardStep }) => {
         </div>
       </div>
       <div
-        className="flex items-baseline justify-start cursor-pointer group-inner-1"
+        aria-label="no"
+        className={`flex items-baseline justify-start group-inner-1 ${
+          step.executionType === StepExecutionTypeEnum.Riju ? 'hidden' : 'block'
+        }`}
         onClick={() => setWizardStep('jest')}
         role="button"
       >
@@ -72,6 +83,7 @@ type Props = {
   setWizardStep: React.Dispatch<
     React.SetStateAction<'jest' | 'match' | 'output' | 'select'>
   >;
+  step: RegularStepFragment;
 };
 
 export default Select;
