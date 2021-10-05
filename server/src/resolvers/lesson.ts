@@ -73,8 +73,7 @@ export class LessonResolver {
       let query = Lesson.createQueryBuilder()
         .where("Lesson.status = :status", { status })
         .leftJoinAndSelect("Lesson.owner", "owner")
-        .leftJoinAndSelect("Lesson.students", "students")
-        .orderBy("students", "DESC");
+        .leftJoinAndSelect("Lesson.students", "students");
 
       if (labels) {
         query.andWhere("Lesson.label IN (:...labels)", {
@@ -108,7 +107,9 @@ export class LessonResolver {
         return lookForDeps;
       }
 
-      return query.getMany();
+      return (await query.getMany()).sort((a, b) =>
+        a.students.length < b.students.length ? 1 : -1
+      );
     }
   }
 
