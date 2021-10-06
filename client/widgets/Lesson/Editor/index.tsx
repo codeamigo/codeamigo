@@ -202,7 +202,7 @@ const Editor: React.FC<Props> = ({
     });
 
     const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
-    model.updateOptions({ tabSize: 2 });
+    model?.updateOptions({ tabSize: 2 });
     editorRef.current.setModel(model);
   };
 
