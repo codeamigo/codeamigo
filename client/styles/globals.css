@@ -19,7 +19,7 @@ body {
 }
 
 .markdown-body pre {
-  color: var(--bg-primary) !important;
+  color: black !important;
 }
 
 .markdown-body > pre > code {
