@@ -31,7 +31,7 @@ const LessonListItem: React.FC<Props> = ({
       >
         <div className="flex justify-between items-center">
           <a
-            className="text-md text-text-primary underline font-bold hover:underline"
+            className="text-md text-text-primary underline font-bold overflow-ellipsis whitespace-nowrap hover:underline"
             href={href}
           >
             {lesson.title}

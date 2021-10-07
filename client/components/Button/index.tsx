@@ -4,7 +4,7 @@ const Button: React.FC<Props> = ({ children, ...rest }, ref) => {
   return (
     <button
       {...rest}
-      className={`flex items-center font-semibold text-sm text-bg-primary rounded-md p-2 cursor-pointer focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
+      className={`flex items-center font-semibold text-sm text-bg-primary rounded-md p-2 cursor-pointer whitespace-nowrap focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
         rest.className?.includes('bg-') ? '' : 'bg-accent'
       } ${rest.className}`}
       ref={rest.forwardedRef}

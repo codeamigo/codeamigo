@@ -19,12 +19,12 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
   return (
     <div className="relative">
       <div
-        className="w-full py-1 px-4 flex items-center bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
+        className="w-full py-1 px-4 flex items-center justify-between bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
-        <div className="w-1/4 flex items-center">
+        <div className="sm:w-1/4 flex items-center">
           <Icon
-            className="text-text-primary text-lg cursor-pointer text-md mr-4"
+            className="text-text-primary text-lg cursor-pointer text-md sm:mr-4"
             name="home"
             onClick={() => router.push('/')}
           />

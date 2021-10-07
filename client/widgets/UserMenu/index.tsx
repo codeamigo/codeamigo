@@ -104,7 +104,7 @@ const UserMenu: React.FC<Props> = () => {
       ) : (
         <>
           <button
-            className="transition duration-150 text-text-primary px-3 py-1.5 rounded-md text-sm font-medium"
+            className="transition duration-150 text-text-primary pl-3 sm:px-3 py-1.5 rounded-md text-sm font-medium sm:text-center text-right"
             onClick={() =>
               modalVar({
                 callback: () => null,
@@ -117,7 +117,7 @@ const UserMenu: React.FC<Props> = () => {
           </button>
 
           <button
-            className="border-2 border-bg-nav-offset transition duration-150 text-text-primary px-3 py-1.5 rounded-md text-sm font-medium"
+            className="border-2 border-bg-nav-offset transition duration-150 text-text-primary hidden sm:block sm:px-3 px-1 sm:py-1.5 py-1 rounded-md whitespace-nowrap text-sm font-medium"
             onClick={() =>
               modalVar({
                 callback: () => null,
