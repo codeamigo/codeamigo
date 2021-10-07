@@ -30,6 +30,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
             learn through interactive coding tutorials."
           name="description"
         />
+        <meta
+          content="Byte-sized interactive coding tutorials"
+          property="og:description"
+        ></meta>
         <script
           async
           data-domain="codeamigo.dev"
