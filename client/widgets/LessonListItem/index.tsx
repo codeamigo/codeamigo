@@ -29,7 +29,7 @@ const LessonListItem: React.FC<Props> = ({
         className="p-3 bg-bg-nav rounded-br-lg rounded-bl-lg"
         key={lesson.id}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center overflow-x-hidden">
           <a
             className="text-md text-text-primary underline font-bold overflow-ellipsis whitespace-nowrap hover:underline"
             href={href}
