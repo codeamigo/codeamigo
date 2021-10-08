@@ -51,7 +51,6 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           content={'https://docs.codeamigo.dev/img/logo.png'}
           name="twitter:image"
         ></meta>
-        <meta content="summary_large_image" name="twitter:card"></meta>
         <script
           async
           data-domain="codeamigo.dev"

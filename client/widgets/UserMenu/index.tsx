@@ -30,7 +30,7 @@ const UserMenu: React.FC<Props> = () => {
   if (loading) return null;
 
   return (
-    <div className="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0">
+    <div className="inset-y-0 right-0 flex items-center sm:static sm:inset-auto ml-1 sm:ml-4 pr-0">
       {data?.me?.isAuthenticated ? (
         <div className="relative">
           <Menu>
@@ -44,7 +44,7 @@ const UserMenu: React.FC<Props> = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="text-text-primary text-lg h-8 w-8 rounded-full"
+                    className="text-text-primary -mr-1 sm:mr-0 text-lg h-8 w-8 rounded-full"
                     name="user"
                   />
                 </Menu.Button>

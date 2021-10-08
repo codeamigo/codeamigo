@@ -19,20 +19,22 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
   return (
     <div className="relative">
       <div
-        className="w-full py-1 px-4 flex items-center justify-between bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
+        className="w-full py-1 px-3 sm:px-4 flex items-center justify-between bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
-        <div className="sm:w-1/4 flex items-center">
-          <Icon
-            className="text-text-primary text-lg cursor-pointer text-md sm:mr-4"
-            name="home"
-            onClick={() => router.push('/')}
-          />
+        <div className="flex items-center overflow-x-hidden overflow-ellipsis">
+          <div>
+            <Icon
+              className="text-text-primary text-lg cursor-pointer text-md mr-2 sm:mr-4"
+              name="home"
+              onClick={() => router.push('/')}
+            />
+          </div>
+          <div className="md:text-lg font-bold min-w-0 md:absolute md:transform md:-translate-x-1/2 md:left-1/2">
+            {isEditing ? <Form {...rest} /> : <View {...rest} />}
+          </div>
         </div>
-        <div className="w-1/2">
-          {isEditing ? <Form {...rest} /> : <View {...rest} />}
-        </div>
-        <div className="w-1/4 flex justify-end items-center">
+        <div className="flex justify-end items-center pl-2 md:w-1/4">
           <div className="flex items-center">
             {isEditing && rest.lesson ? (
               <LessonOptions
