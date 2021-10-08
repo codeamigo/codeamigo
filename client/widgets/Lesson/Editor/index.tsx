@@ -65,12 +65,18 @@ const Editor: React.FC<Props> = ({
   // When regex is searched
   useEffect(() => {
     const handleSearch = (ev: MessageEvent<any>) => {
-      if (!ev.data.search) return;
+      if (!ev.data.regex) return;
       try {
         if (editorRef.current) {
+          const controller = editorRef.current.getContribution(
+            'editor.contrib.findController'
+          );
+          if (!controller.getState()._isRegex) {
+            controller.toggleRegex();
+          }
           const match = editorRef.current
             .getModel()
-            .findMatches(ev.data.search)[0];
+            .findMatches(ev.data.regex)[0];
           const range = match?.range;
           editorRef.current.setSelection(range);
           editorRef.current.getAction('actions.findWithSelection').run();
