@@ -30,7 +30,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
               onClick={() => router.push('/')}
             />
           </div>
-          <div className="md:text-lg font-bold min-w-0 md:absolute md:transform md:-translate-x-1/2 md:left-1/2">
+          <div className="md:text-lg font-bold min-w-0 md:w-full md:absolute md:transform md:-translate-x-1/2 md:left-1/2">
             {isEditing ? <Form {...rest} /> : <View {...rest} />}
           </div>
         </div>
