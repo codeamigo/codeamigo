@@ -15,7 +15,7 @@ const LessonListItem: React.FC<Props> = ({
   progress,
 }) => {
   return (
-    <div className="rounded-lg border-bg-nav-offset border-2">
+    <div className="flex flex-col rounded-lg border-bg-nav-offset border-2">
       <div
         className="p-2 border-b-2 border-bg-nav-offset cursor-pointer"
         onClick={() => router.push(href)}
@@ -26,24 +26,26 @@ const LessonListItem: React.FC<Props> = ({
         />
       </div>
       <div
-        className="p-3 bg-bg-nav rounded-br-lg rounded-bl-lg"
+        className="p-3 bg-bg-nav rounded-br-lg rounded-bl-lg flex flex-1 flex-col justify-between"
         key={lesson.id}
       >
-        <div className="flex justify-between items-center">
-          <a
-            className="text-md text-text-primary underline font-bold overflow-ellipsis hover:underline"
-            href={href}
-          >
-            {lesson.title}
-          </a>
-          {options ? options : null}
+        <div>
+          <div className="flex justify-between items-center">
+            <a
+              className="text-md text-text-primary underline font-bold overflow-ellipsis hover:underline"
+              href={href}
+            >
+              {lesson.title}
+            </a>
+            {options ? options : null}
+          </div>
+          <h3 className="text-xs text-text-primary font-semibold flex items-center">
+            <div className="h-8 w-8 p-1 mr-1 bg-bg-nav border border-bg-nav-offset rounded-full">
+              <ProfileLogo userId={lesson.owner.id} />
+            </div>{' '}
+            {lesson.owner.username}
+          </h3>
         </div>
-        <h3 className="text-xs text-text-primary font-semibold flex items-center">
-          <div className="h-8 w-8 p-1 mr-1 bg-bg-nav border border-bg-nav-offset rounded-full">
-            <ProfileLogo userId={lesson.owner.id} />
-          </div>{' '}
-          {lesson.owner.username}
-        </h3>
         {progress ? progress : null}
         <div className="flex justify-between mt-4 text-xs font-bold text-text-primary">
           <div
