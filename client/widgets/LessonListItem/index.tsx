@@ -46,34 +46,36 @@ const LessonListItem: React.FC<Props> = ({
             {lesson.owner.username}
           </h3>
         </div>
-        {progress ? progress : null}
-        <div className="flex justify-between mt-4 text-xs font-bold text-text-primary">
-          <div
-            aria-label={`${lesson.students?.length} Students`}
-            className="hint--top hint--no-animate"
-          >
-            <div className="flex">
-              <Icon
-                className="text-text-primary mr-1 cursor-auto"
-                name="users"
-              />{' '}
-              <div className="text-text-primary">
-                {lesson.students?.length || 0}
+        <div>
+          {progress ? progress : null}
+          <div className="flex justify-between mt-4 text-xs font-bold text-text-primary">
+            <div
+              aria-label={`${lesson.students?.length} Students`}
+              className="hint--top hint--no-animate"
+            >
+              <div className="flex">
+                <Icon
+                  className="text-text-primary mr-1 cursor-auto"
+                  name="users"
+                />{' '}
+                <div className="text-text-primary">
+                  {lesson.students?.length || 0}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="flex justify-between items-center mt-2 text-xs font-bold text-text-primary">
-          <div className="flex capitalize items-center text-text-primary">
-            <div
-              className={`w-2 h-2 mr-1 rounded-full ${
-                // @ts-ignore
-                levelColorMap[lesson.label]
-              }`}
-            ></div>
-            {lesson.label?.toLowerCase()}{' '}
+          <div className="flex justify-between items-center mt-2 text-xs font-bold text-text-primary">
+            <div className="flex capitalize items-center text-text-primary">
+              <div
+                className={`w-2 h-2 mr-1 rounded-full ${
+                  // @ts-ignore
+                  levelColorMap[lesson.label]
+                }`}
+              ></div>
+              {lesson.label?.toLowerCase()}{' '}
+            </div>
+            <div>{moment(new Date(parseInt(lesson.createdAt))).fromNow()}</div>
           </div>
-          <div>{moment(new Date(parseInt(lesson.createdAt))).fromNow()}</div>
         </div>
       </div>
     </div>
