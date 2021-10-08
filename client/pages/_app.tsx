@@ -26,14 +26,32 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <Head>
         <title>Codeamigo</title>
         <meta
-          content="Codeamigo is where students and teachers come together to create and
-            learn through interactive coding tutorials."
+          content="Byte-sized interactive coding tutorials"
           name="description"
         />
         <meta
           content="Byte-sized interactive coding tutorials"
           property="og:description"
         ></meta>
+        <meta content={`https://codeamigo.dev`} property="og:url"></meta>
+        <meta
+          content={'https://docs.codeamigo.dev/img/logo.png'}
+          property="og:image"
+        ></meta>
+        <meta content={`Codeamigo`} property="og:title"></meta>
+        <meta
+          content={`Codeamigo - Learn by doing`}
+          name="twitter:title"
+        ></meta>
+        <meta
+          content="Byte-sized interactive coding tutorials"
+          name="twitter:description"
+        ></meta>
+        <meta
+          content={'https://docs.codeamigo.dev/img/logo.png'}
+          name="twitter:image"
+        ></meta>
+        <meta content="summary_large_image" name="twitter:card"></meta>
         <script
           async
           data-domain="codeamigo.dev"

@@ -63,35 +63,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     <div className="flex">
       <Head>
         <title>Codeamigo - {data.lesson.title}</title>
-        <meta
-          content={`https://codeamigo.dev/lesson/${data.lesson.id}`}
-          property="og:url"
-        ></meta>
-        <meta
-          content={
-            data.lesson.thumbnail || 'https://docs.codeamigo.dev/img/logo.png'
-          }
-          property="og:image"
-        ></meta>
-        <meta
-          content={`Codeamigo - ${data.lesson.title}`}
-          property="og:title"
-        ></meta>
-        <meta
-          content={`Codeamigo - ${data.lesson.title}`}
-          name="twitter:title"
-        ></meta>
-        <meta
-          content="Byte-sized interactive coding tutorials"
-          name="twitter:description"
-        ></meta>
-        <meta
-          content={
-            data.lesson.thumbnail || 'https://docs.codeamigo.dev/img/logo.png'
-          }
-          name="twitter:image"
-        ></meta>
-        <meta content="summary_large_image" name="twitter:card"></meta>
       </Head>
       {sessionData ? (
         <Steps
