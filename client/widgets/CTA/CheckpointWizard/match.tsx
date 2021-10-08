@@ -50,6 +50,17 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
           regex: '',
         }}
         onSubmit={createMatchCheckpoint}
+        validate={(values) => {
+          const errors = {};
+          try {
+            new RegExp(`/${values.regex}/`).test;
+          } catch (e) {
+            // @ts-ignore
+            errors.regex = 'Invalid regex';
+          }
+
+          return errors;
+        }}
       >
         {({ isSubmitting, isValid, values }) => (
           <>
