@@ -22,7 +22,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
         className="w-full py-1 px-3 sm:px-4 flex items-center justify-between bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
-        <div className="flex items-center overflow-x-hidden overflow-ellipsis">
+        <div className="flex items-center w-full overflow-x-hidden overflow-ellipsis">
           <div>
             <Icon
               className="text-text-primary text-lg cursor-pointer text-md mr-2 sm:mr-4"
@@ -30,7 +30,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
               onClick={() => router.push('/')}
             />
           </div>
-          <div className="md:text-lg font-bold min-w-0 md:w-full md:absolute md:transform md:-translate-x-1/2 md:left-1/2">
+          <div className="md:text-lg w-full font-bold min-w-0 md:w-1/2 md:absolute md:transform md:-translate-x-1/2 md:left-1/2 text-center">
             {isEditing ? <Form {...rest} /> : <View {...rest} />}
           </div>
         </div>

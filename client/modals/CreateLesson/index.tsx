@@ -123,14 +123,14 @@ const CreateLesson: React.FC<Props> = () => {
                 <div className="w-1/2">
                   <InputField
                     label="Title"
-                    maxLength={35}
+                    maxLength={90}
                     name="title"
                     type="text"
                   />
                 </div>
                 <InputField
                   label="Description"
-                  maxLength={90}
+                  maxLength={120}
                   name="description"
                   type="text"
                 />
