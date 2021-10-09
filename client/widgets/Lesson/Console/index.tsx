@@ -58,6 +58,10 @@ const Console: React.FC<Props> = (props) => {
     }
   }, [testFailure]);
 
+  useEffect(() => {
+    setLogList([]);
+  }, [props.stepId]);
+
   return (
     <div
       className={`bg-bg-primary flex flex-col overflow-scroll ${
@@ -120,6 +124,7 @@ const Console: React.FC<Props> = (props) => {
 
 type Props = {
   runTests: () => void;
+  stepId: number;
   tabs: ('console' | 'tests')[];
 };
 

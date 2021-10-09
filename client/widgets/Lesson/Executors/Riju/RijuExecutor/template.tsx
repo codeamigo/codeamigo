@@ -131,7 +131,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
             className="bg-bg-primary riju-frame h-full"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
-          <Console runTests={handleRunTests} tabs={['tests']} />
+          <Console
+            runTests={handleRunTests}
+            stepId={step.id}
+            tabs={['tests']}
+          />
         </div>
       </div>
     </div>
