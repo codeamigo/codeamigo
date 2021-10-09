@@ -158,7 +158,7 @@ export class StepResolver {
     const step = await Step.create({
       codeModules,
       executionType: template.executionType,
-      instructions: DEFAULT_MD,
+      instructions: DEFAULT_MD.replace("Step #", options.name),
       lang: template.lang,
       name: options.name,
     }).save();

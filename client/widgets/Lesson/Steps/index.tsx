@@ -87,6 +87,9 @@ const Steps: React.FC<Props> = ({
 
     setCurrentStepId(step.data?.createStep?.id);
     setIsAdding(false);
+    setTimeout(() => {
+      setShowSteps(false);
+    }, 500);
   };
 
   const updateStep = async (id: number, name: string) => {
@@ -194,6 +197,7 @@ const Steps: React.FC<Props> = ({
                       className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
                       defaultValue={step.name || ''}
                       onBlur={(e) => handleUpdateBlur(e, step.id)}
+                      onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
                       ref={updateRef}
                       type="text"
@@ -214,8 +218,8 @@ const Steps: React.FC<Props> = ({
                       onClick={(
                         e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
                       ) => {
-                        e.stopPropagation();
                         setIsAdding(false);
+                        e.stopPropagation();
                       }}
                     >
                       Cancel

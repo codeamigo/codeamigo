@@ -35,7 +35,7 @@ const Instructions: React.FC<Props> = (props) => {
     setMarkdown(step.instructions);
     setTimeout(() => {
       toggleView(isEditing ? 'editor' : 'preview');
-    }, 10);
+    }, 1);
     // hack to scroll back to top of div
     if (document) {
       document?.getElementById('markdown-parent')?.scrollTo({ top: 0 });
@@ -47,7 +47,7 @@ const Instructions: React.FC<Props> = (props) => {
 
   return (
     <div className="sm:flex lg:overflow-hidden sm:flex-col-reverse w-full lg:w-96 lg:h-full border-r border-bg-nav-offset-faded">
-      <div className="flex justify-between items-center px-3 w-full h-16 bg-bg-nav sm:border-t border-bg-nav-offset-faded">
+      <div className="flex justify-between items-center px-3 w-full h-16 sm:border-t bg-bg-nav border-bg-nav-offset-faded">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => !showSteps && setShowSteps(true)}
@@ -94,7 +94,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
           {view === 'editor' ? (
             <textarea
-              className="w-full h-40 md:h-full text-text-primary bg-bg-primary border-none"
+              className="w-full h-40 md:h-full border-none text-text-primary bg-bg-primary"
               defaultValue={markdown || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setMarkdown(e.currentTarget.value);
