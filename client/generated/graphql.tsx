@@ -123,6 +123,7 @@ export type Step = {
   isCompleted?: Maybe<Scalars['Boolean']>;
   executionType?: Maybe<StepExecutionTypeEnum>;
   lang?: Maybe<Scalars['String']>;
+  originalStepId?: Maybe<Scalars['Float']>;
   lesson: Lesson;
   session: Session;
   codeModules?: Maybe<Array<CodeModule>>;
@@ -243,6 +244,7 @@ export type Session = {
   updatedAt: Scalars['String'];
   currentStep: Scalars['Float'];
   lessonId: Scalars['Float'];
+  requiresUpdate?: Maybe<Scalars['Boolean']>;
   student: User;
   lesson: Lesson;
   steps?: Maybe<Array<Step>>;
@@ -309,6 +311,7 @@ export type Mutation = {
   updateLessonThumbnail?: Maybe<Lesson>;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
+  updateSession?: Maybe<Session>;
   deleteSession: Scalars['Boolean'];
   setNextStep?: Maybe<Session>;
 };
@@ -522,6 +525,11 @@ export type MutationCreateSessionArgs = {
 };
 
 
+export type MutationUpdateSessionArgs = {
+  options: UpdateSessionInput;
+};
+
+
 export type MutationDeleteSessionArgs = {
   id: Scalars['Float'];
 };
@@ -651,6 +659,11 @@ export type LessonInput = {
 
 export type SessionInput = {
   lessonId: Scalars['Float'];
+};
+
+export type UpdateSessionInput = {
+  lessonId: Scalars['Float'];
+  sessionId: Scalars['Float'];
 };
 
 export type NextStepInput = {
@@ -1213,6 +1226,20 @@ export type SetNextStepMutation = (
   )> }
 );
 
+export type UpdateSessionMutationVariables = Exact<{
+  lessonId: Scalars['Float'];
+  sessionId: Scalars['Float'];
+}>;
+
+
+export type UpdateSessionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateSession?: Maybe<(
+    { __typename?: 'Session' }
+    & Pick<Session, 'id'>
+  )> }
+);
+
 export type UpdateStepInstructionsMutationVariables = Exact<{
   id: Scalars['Float'];
   instructions: Scalars['String'];
@@ -1420,7 +1447,7 @@ export type SessionQuery = (
   { __typename?: 'Query' }
   & { session?: Maybe<(
     { __typename?: 'Session' }
-    & Pick<Session, 'id' | 'currentStep'>
+    & Pick<Session, 'id' | 'currentStep' | 'requiresUpdate'>
     & { lesson: (
       { __typename?: 'Lesson' }
       & Pick<Lesson, 'title' | 'id'>
@@ -2746,6 +2773,39 @@ export function useSetNextStepMutation(baseOptions?: Apollo.MutationHookOptions<
 export type SetNextStepMutationHookResult = ReturnType<typeof useSetNextStepMutation>;
 export type SetNextStepMutationResult = Apollo.MutationResult<SetNextStepMutation>;
 export type SetNextStepMutationOptions = Apollo.BaseMutationOptions<SetNextStepMutation, SetNextStepMutationVariables>;
+export const UpdateSessionDocument = gql`
+    mutation UpdateSession($lessonId: Float!, $sessionId: Float!) {
+  updateSession(options: {lessonId: $lessonId, sessionId: $sessionId}) {
+    id
+  }
+}
+    `;
+export type UpdateSessionMutationFn = Apollo.MutationFunction<UpdateSessionMutation, UpdateSessionMutationVariables>;
+
+/**
+ * __useUpdateSessionMutation__
+ *
+ * To run a mutation, you first call `useUpdateSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSessionMutation, { data, loading, error }] = useUpdateSessionMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *      sessionId: // value for 'sessionId'
+ *   },
+ * });
+ */
+export function useUpdateSessionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSessionMutation, UpdateSessionMutationVariables>) {
+        return Apollo.useMutation<UpdateSessionMutation, UpdateSessionMutationVariables>(UpdateSessionDocument, baseOptions);
+      }
+export type UpdateSessionMutationHookResult = ReturnType<typeof useUpdateSessionMutation>;
+export type UpdateSessionMutationResult = Apollo.MutationResult<UpdateSessionMutation>;
+export type UpdateSessionMutationOptions = Apollo.BaseMutationOptions<UpdateSessionMutation, UpdateSessionMutationVariables>;
 export const UpdateStepInstructionsDocument = gql`
     mutation UpdateStepInstructions($id: Float!, $instructions: String!) {
   updateStepInstructions(options: {id: $id, instructions: $instructions}) {
@@ -3244,6 +3304,7 @@ export const SessionDocument = gql`
   session(lessonId: $lessonId) {
     id
     currentStep
+    requiresUpdate
     lesson {
       title
       id

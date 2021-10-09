@@ -2,6 +2,7 @@ query Session($lessonId: Int!) {
   session(lessonId: $lessonId) {
     id
     currentStep
+    requiresUpdate
     lesson {
       title
       id
