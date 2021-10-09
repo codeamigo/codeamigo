@@ -37,6 +37,7 @@ const Console: React.FC<Props> = (props) => {
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
       if (msg.data.type === 'console') {
+        console.log(msg);
         setLogList((currentList: any) => [
           ...currentList,
           consoleFeed.Decode(msg.data.log),
@@ -73,7 +74,7 @@ const Console: React.FC<Props> = (props) => {
           activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
       }}
     >
-      <div className="flex sticky top-0 z-10 justify-between bg-bg-primary border-t border-b border-bg-nav-offset-faded">
+      <div className="flex sticky top-0 z-10 justify-between border-t border-b bg-bg-primary border-bg-nav-offset-faded">
         <div className="flex">
           {props.tabs.map((tab) => {
             return (
@@ -91,14 +92,14 @@ const Console: React.FC<Props> = (props) => {
         <div className={`flex items-center pr-1`}>
           <div className="px-4">
             <Icon
-              className="text-text-primary opacity-50 hover:opacity-100 transition-all"
+              className="opacity-50 hover:opacity-100 transition-all text-text-primary"
               name={`${isCollapsed ? 'up' : 'down'}` as IconType}
               onClick={() => setIsCollapsed((isCollapsed) => !isCollapsed)}
             />
           </div>
           <div className={`px-4 ${activeTab === 'console' ? '' : 'hidden'}`}>
             <Icon
-              className="text-text-primary opacity-50 hover:opacity-100 transition-all"
+              className="opacity-50 hover:opacity-100 transition-all text-text-primary"
               name="trash"
               onClick={() => setLogList([])}
             />

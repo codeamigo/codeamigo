@@ -174,8 +174,10 @@ const Steps: React.FC<Props> = ({
                     ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
                     : 'cursor-not-allowed opacity-50'
                 } ${
-                  currentStepId === step.id ? 'text-accent' : ''
-                } text-text-primary list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
+                  currentStepId === step.id
+                    ? 'text-accent'
+                    : 'text-text-primary'
+                } list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
                 key={step.id}
                 onClick={() => {
                   if (canGoToStep(step)) {
@@ -198,7 +200,7 @@ const Steps: React.FC<Props> = ({
                     />
                   ) : (
                     <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
-                      {step.isCompleted ? '✅' : ''} {step.name || ''}
+                      {i + 1}. {step.isCompleted ? '✅' : ''} {step.name || ''}
                     </span>
                   )}
                 </div>
