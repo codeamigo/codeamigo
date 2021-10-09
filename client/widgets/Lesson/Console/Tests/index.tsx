@@ -11,7 +11,7 @@ import {
   TestDataType,
 } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
-const Tests: React.FC<Props> = ({ runTests }) => {
+const Tests: React.FC<Props> = ({ runTests, stepId }) => {
   const [suites, setSuites] = useState<TestDataType[]>();
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const isTesting = useReactiveVar(isTestingVar);
@@ -44,6 +44,10 @@ const Tests: React.FC<Props> = ({ runTests }) => {
 
     return () => window.removeEventListener('message', handleTestResults);
   }, []);
+
+  useEffect(() => {
+    setSuites([]);
+  }, [stepId]);
 
   const handleRunTests = () => {
     isTestingVar(true);
@@ -100,6 +104,7 @@ const Tests: React.FC<Props> = ({ runTests }) => {
 
 type Props = {
   runTests: () => void;
+  stepId: number;
 };
 
 export default Tests;

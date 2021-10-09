@@ -116,7 +116,7 @@ const Console: React.FC<Props> = (props) => {
         />
       </div>
       <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
-        <Tests runTests={props.runTests} />
+        <Tests runTests={props.runTests} stepId={props.stepId} />
       </div>
     </div>
   );
