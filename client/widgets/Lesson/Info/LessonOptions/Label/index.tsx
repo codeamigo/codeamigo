@@ -50,11 +50,11 @@ const Label: React.FC<Props> = ({ lesson }) => {
   return (
     <div ref={wrapperRef}>
       <div
-        className="flex items-center text-text-primary text-sm cursor-pointer"
+        className="flex items-center text-sm cursor-pointer text-text-primary"
         onClick={() => setShowOptions(!showOptions)}
         role="button"
       >
-        Label <Icon className="text-text-primary ml-1" name="down-dir" />
+        Label <Icon className="ml-1 text-text-primary" name="down-dir" />
       </div>
       <div className="relative z-10">
         <Menu>
@@ -78,16 +78,16 @@ const Label: React.FC<Props> = ({ lesson }) => {
                 <div
                   aria-labelledby="session-menu"
                   aria-orientation="vertical"
-                  className="origin-top-left bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                  className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-left bg-bg-primary"
                   role="menu"
                 >
                   <Button
-                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    className="justify-between py-1 w-full text-text-primary bg-bg-primary"
                     onClick={() => updateLabel(LessonLabel.Beginner)}
                     role="menuitem"
                   >
-                    <div className="w-full flex items-center">
-                      <div className="w-3 h-3 mr-2 rounded-full bg-green-600"></div>
+                    <div className="flex items-center w-full">
+                      <div className="mr-2 w-3 h-3 bg-green-600 rounded-full"></div>
                       <span>Beginner</span>
                     </div>
                     {lesson.label === LessonLabel.Beginner ? (
@@ -95,12 +95,12 @@ const Label: React.FC<Props> = ({ lesson }) => {
                     ) : null}
                   </Button>
                   <Button
-                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    className="justify-between py-1 w-full text-text-primary bg-bg-primary"
                     onClick={() => updateLabel(LessonLabel.Intermediate)}
                     role="menuitem"
                   >
-                    <div className="w-full flex items-center">
-                      <div className="w-3 h-3 mr-2 rounded-full bg-yellow-300"></div>
+                    <div className="flex items-center w-full">
+                      <div className="mr-2 w-3 h-3 bg-yellow-300 rounded-full"></div>
                       <span>Intermediate</span>
                     </div>
                     {lesson.label === LessonLabel.Intermediate ? (
@@ -108,12 +108,12 @@ const Label: React.FC<Props> = ({ lesson }) => {
                     ) : null}
                   </Button>
                   <Button
-                    className="w-full flex-between py-1 bg-bg-primary text-text-primary"
+                    className="justify-between py-1 w-full text-text-primary bg-bg-primary"
                     onClick={() => updateLabel(LessonLabel.Advanced)}
                     role="menuitem"
                   >
-                    <div className="w-full flex items-center">
-                      <div className="w-3 h-3 mr-2 rounded-full bg-red-600"></div>
+                    <div className="flex items-center w-full">
+                      <div className="mr-2 w-3 h-3 bg-red-600 rounded-full"></div>
                       <span>Advanced</span>
                     </div>
                     {lesson.label === LessonLabel.Advanced ? (

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
+import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import {
   useChangePasswordFromTokenMutation,
@@ -48,11 +49,11 @@ const ChangePassword: React.FC<Props> = () => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="max-w-lg w-96 mx-auto p-6 lg:px-4">
-          <h1 className="text-2xl text-text-primary font-semibold justify-center flex mb-4">
+        <Form className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
+          <h1 className="flex justify-center mb-4 text-2xl font-semibold text-text-primary">
             Change Password
           </h1>
-          <div className="px-4 sm:p-6">
+          <div className="sm:p-6 px-4">
             <div className="grid gap-3">
               <InputField
                 label="New Password"
@@ -62,13 +63,9 @@ const ChangePassword: React.FC<Props> = () => {
             </div>
           </div>
           <div className="px-4 sm:px-6">
-            <button
-              className="w-full justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-              disabled={isSubmitting}
-              type="submit"
-            >
+            <Button disabled={isSubmitting} type="submit">
               Submit
-            </button>
+            </Button>
           </div>
         </Form>
       )}

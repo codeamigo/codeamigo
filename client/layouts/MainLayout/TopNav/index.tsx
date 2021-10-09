@@ -16,20 +16,20 @@ const TopNav: React.FC<Props> = () => {
 
   return (
     <nav className="bg-bg-nav border-b border-bg-nav-offset-faded">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="relative flex items-center justify-between h-16">
+      <div className="px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl">
+        <div className="flex relative justify-between items-center h-16">
           <div className="flex items-center">
-            <div className="inset-y-0 left-0 flex items-center sm:hidden">
+            <div className="flex sm:hidden inset-y-0 left-0 items-center">
               {/* <!-- Mobile menu button--> */}
               <button
                 aria-expanded="false"
-                className="inline-flex items-center justify-center p-2 rounded-md text-text-primary focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+                className="inline-flex justify-center items-center p-2 text-text-primary rounded-md focus:ring-2 focus:ring-inset focus:ring-white focus:outline-none"
               >
                 <span className="sr-only">Open main menu</span>
                 {isMobileMenuOpen ? (
                   <svg
                     aria-hidden="true"
-                    className="h-6 w-6"
+                    className="w-6 h-6"
                     fill="none"
                     onClick={() => setMobileMenuOpen(false)}
                     stroke="currentColor"
@@ -46,7 +46,7 @@ const TopNav: React.FC<Props> = () => {
                 ) : (
                   <svg
                     aria-hidden="true"
-                    className="block h-6 w-6"
+                    className="block w-6 h-6"
                     fill="none"
                     onClick={() => setMobileMenuOpen(true)}
                     stroke="currentColor"
@@ -69,8 +69,8 @@ const TopNav: React.FC<Props> = () => {
                   className={`flex items-center font-bold text-xl text-text-primary focus:outline-none`}
                   onClick={() => router.push('/')}
                 >
-                  <Logo className="sm:w-12 w-8 mr-1 sm:mr-1.5 sm:text-lg text-xs" />
-                  <span className="sm:text-lg text-base">Codeamigo</span>
+                  <Logo className="mr-1 sm:mr-1.5 w-8 sm:w-12 text-xs sm:text-lg" />
+                  <span className="text-base sm:text-lg">Codeamigo</span>
                 </button>
               </div>
             </div>

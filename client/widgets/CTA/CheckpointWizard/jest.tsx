@@ -24,7 +24,7 @@ const Jest: React.FC<Props> = ({ setWizardStep, step }) => {
   return (
     <div className="text-text-primary">
       <div className="flex">
-        <Icon className="text-lg block mr-2" name="jest" />
+        <Icon className="block mr-2 text-lg" name="jest" />
         <h3 className="text-lg font-bold">Jest</h3>
       </div>
       <div className="mt-2 mb-4">
@@ -33,7 +33,7 @@ const Jest: React.FC<Props> = ({ setWizardStep, step }) => {
       </div>
       <div className="flex items-center mt-2">
         <Icon
-          className="text-md mr-4"
+          className="mr-4 text-base"
           name="left-bold"
           onClick={() => setWizardStep('select')}
           role="button"

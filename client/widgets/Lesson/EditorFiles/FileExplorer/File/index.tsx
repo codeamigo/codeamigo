@@ -57,22 +57,22 @@ export class File extends React.PureComponent<Props & OwnProps> {
         style={{ paddingLeft: 8 * this.props.depth + 'px' }}
         type="button"
       >
-        <div className="flex items-center overflow-hidden whitespace-nowrap">
-          <img className="w-3 mr-1" src={this.getImageSrc(fileName)} />
+        <div className="flex overflow-hidden items-center whitespace-nowrap">
+          <img className="mr-1 w-3" src={this.getImageSrc(fileName)} />
           <div className="overflow-ellipsis">{fileName}</div>
         </div>
         <div className="flex items-center pr-1">
           {this.props.isEditing && this.props.isDirectory && (
             <div className="flex items-center">
               <Icon
-                className="hidden group-hover:block hover:text-accent text-xs ml-1"
+                className="hidden group-hover:block ml-1 text-xs hover:text-accent"
                 name={'folder'}
                 onClick={(e) =>
                   this.addFileType(e as any, FileSystemType.folder)
                 }
               />
               <Icon
-                className="hidden group-hover:block hover:text-accent text-xs ml-1"
+                className="hidden group-hover:block ml-1 text-xs hover:text-accent"
                 name={'file-empty'}
                 onClick={(e) => this.addFileType(e as any, FileSystemType.file)}
               />
@@ -110,7 +110,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
             !this.isEntry(fileName) && (
               <Icon
                 className={
-                  'text-text-primary text-xs ml-1 hidden group-hover:block hover:text-accent'
+                  'hidden group-hover:block ml-1 text-xs text-text-primary hover:text-accent'
                 }
                 name="cancel-circled"
                 onClick={() =>
@@ -119,7 +119,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
               />
             )}
           {this.props.active && (
-            <div className="ml-1 flex items-center">
+            <div className="flex items-center ml-1">
               <StatusIndicator isPreviewing={this.props.isPreviewing} />
             </div>
           )}

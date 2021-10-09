@@ -25,7 +25,7 @@ const Dependencies: React.FC<Props> = () => {
 
   return (
     <div className="p-2 bg-bg-nav rounded-md">
-      <h4 className="font-semibold mb-2 text-text-primary">Dependencies</h4>
+      <h4 className="mb-2 font-semibold text-text-primary">Dependencies</h4>
       <Formik
         initialValues={{
           checked: queryDeps ? queryDeps.split('|') : [],
@@ -46,7 +46,7 @@ const Dependencies: React.FC<Props> = () => {
             {sortedDepMap.map((pkg, i) => {
               return (
                 <label
-                  className="flex justify-between text-sm font-light mb-0.5 cursor-pointer"
+                  className="flex justify-between mb-0.5 text-sm font-light cursor-pointer"
                   htmlFor={pkg}
                   key={i}
                 >
@@ -57,7 +57,7 @@ const Dependencies: React.FC<Props> = () => {
                       type="checkbox"
                       value={pkg}
                     />{' '}
-                    <div className="text-text-primary inline-block">{pkg}</div>
+                    <div className="inline-block text-text-primary">{pkg}</div>
                   </div>
                   <div
                     className={`text-xs text-text-primary font-semibold px-2 py-0.5 rounded-md ${

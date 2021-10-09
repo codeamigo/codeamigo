@@ -67,11 +67,11 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
   return (
     <div ref={wrapperRef}>
       <div
-        className="flex items-center text-text-primary text-sm cursor-pointer"
+        className="flex items-center text-sm text-text-primary cursor-pointer"
         onClick={() => setShowOptions(!showOptions)}
         role="button"
       >
-        Thumbnail <Icon className="text-text-primary ml-1" name="down-dir" />
+        Thumbnail <Icon className="ml-1 text-text-primary" name="down-dir" />
       </div>
       <div className="relative z-10">
         <Menu>
@@ -95,17 +95,17 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
                 <div
                   aria-labelledby="session-menu"
                   aria-orientation="vertical"
-                  className="origin-top-left bg-bg-primary absolute right-0 mt-2 rounded-md shadow-lg ring-1 ring-black ring-opacity-5"
+                  className="absolute right-0 mt-2 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-left"
                   role="menu"
                 >
                   <div className="p-3">
                     {url ? (
                       <div
-                        className="relative w-56 h-36 bg-center bg-cover bg-no-repeat"
+                        className="relative w-56 h-36 bg-center bg-no-repeat bg-cover"
                         style={{ backgroundImage: `url(${url})` }}
                       >
                         <div
-                          className="absolute -top-2 -right-2 h-4 w-4 rounded-full bg-accent"
+                          className="absolute -top-2 -right-2 w-4 h-4 bg-accent rounded-full"
                           onClick={() => {
                             const yes = window.confirm(
                               'Are you sure you want to delete this thumbnail?'
@@ -137,10 +137,10 @@ const Thumbnail: React.FC<Props> = ({ lesson }) => {
                         <input {...getInputProps()} />
                         <div>
                           <Icon
-                            className="text-text-primary text-2xl"
+                            className="text-2xl text-text-primary"
                             name="upload-cloud"
                           />
-                          <div className="mt-1 mb-2 text-text-primary text-xs text-center">
+                          <div className="mt-1 mb-2 text-xs text-center text-text-primary">
                             or
                           </div>
                           <Button className="whitespace-nowrap">

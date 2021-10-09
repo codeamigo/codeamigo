@@ -46,23 +46,23 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex sm:flex-col-reverse w-full lg:h-full lg:overflow-hidden lg:w-96 border-r border-bg-nav-offset-faded">
-      <div className="h-16 flex px-3 items-center justify-between w-full bg-bg-nav sm:border-t border-bg-nav-offset-faded">
+    <div className="sm:flex lg:overflow-hidden sm:flex-col-reverse w-full lg:w-96 lg:h-full border-r border-bg-nav-offset-faded">
+      <div className="flex justify-between items-center px-3 w-full h-16 bg-bg-nav sm:border-t border-bg-nav-offset-faded">
         <div
           className="flex items-center cursor-pointer"
           onClick={() => !showSteps && setShowSteps(true)}
         >
           <Icon
-            className="text-text-primary text-2xl w-4"
+            className="w-4 text-2xl text-text-primary"
             name={showSteps ? 'cancel-squared' : 'list'}
           />
-          <div className="text-text-primary text-sm font-semibold ml-3">
+          <div className="ml-3 text-sm font-semibold text-text-primary">
             Step: {currentStepNum}/{totalSteps}
           </div>
         </div>
       </div>
       <div
-        className="w-full lg:h-full flex flex-col overflow-scroll flex-1 md:border-b-0 border-b border-bg-nav-offset-faded"
+        className="flex overflow-scroll flex-col flex-1 w-full lg:h-full border-b md:border-b-0 border-bg-nav-offset-faded"
         id="instructions"
       >
         <h3
@@ -94,7 +94,7 @@ const Instructions: React.FC<Props> = (props) => {
         <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
           {view === 'editor' ? (
             <textarea
-              className="md:h-full w-full bg-bg-primary h-40 text-text-primary border-none"
+              className="w-full h-40 md:h-full text-text-primary bg-bg-primary border-none"
               defaultValue={markdown || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setMarkdown(e.currentTarget.value);
@@ -105,12 +105,12 @@ const Instructions: React.FC<Props> = (props) => {
           ) : (
             <ReactMarkdown
               children={markdown || ''}
-              className="markdown-body h-full px-6 py-4"
+              className="py-4 px-6 h-full markdown-body"
               plugins={[gfm]}
             />
           )}
         </div>
-        <div className="flex flex-col flex-1 relative">
+        <div className="flex relative flex-col flex-1">
           <Checkpoints {...props} />
         </div>
       </div>

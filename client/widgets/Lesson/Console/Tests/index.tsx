@@ -59,11 +59,11 @@ const Tests: React.FC<Props> = ({ runTests, stepId }) => {
     <div>
       <div className="text-text-primary">
         <div className="flex justify-between items-center border-b-2">
-          <div className="px-4 py-3 text-xl font-semibold sticky top-0 text-text-primary">
+          <div className="sticky top-0 py-3 px-4 text-xl font-semibold text-text-primary">
             Test Summary
           </div>
           <div
-            className="flex px-4 py-3 text-md font-medium cursor-pointer items-center"
+            className="flex items-center py-3 px-4 font-medium cursor-pointer"
             onClick={() => handleRunTests()}
             role="button"
           >
@@ -89,7 +89,7 @@ const Tests: React.FC<Props> = ({ runTests, stepId }) => {
             {suite.errors.map((val) =>
               val.message.split('//').map((value, i) => {
                 return (
-                  <div className="text-text-primary text-md mb-1" key={i}>
+                  <div className="mb-1 text-text-primary" key={i}>
                     {value}
                   </div>
                 );

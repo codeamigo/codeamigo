@@ -20,7 +20,7 @@ const DeleteUser: React.FC<Props> = () => {
       <div className="md:w-1/4">
         <h2
           aria-label={`User ID: ${me.data?.me?.id}`}
-          className="underline hint--top text-xl text-text-primary font-bold mb-3"
+          className="mb-3 text-xl font-bold text-text-primary underline hint--top"
         >
           Delete Account
         </h2>
@@ -61,7 +61,7 @@ const DeleteUser: React.FC<Props> = () => {
           {({ isSubmitting }) => (
             <Form className="flex flex-col gap-3">
               <Button
-                className="bg-red-600 text-white justify-center"
+                className="justify-center text-white bg-red-600"
                 disabled={isSubmitting}
                 type="submit"
               >

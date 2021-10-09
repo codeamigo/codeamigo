@@ -16,16 +16,16 @@ const AddFile: React.FC<Props> = (props) => {
 
   return (
     <div
-      className="mt-1 pr-4 relative"
+      className="relative pr-4 mt-1"
       style={{ paddingLeft: 8 * (depth + 1) + 'px' }}
     >
       <div className="flex items-center">
         <Icon
-          className="text-xs mr-1 text-text-primary hover:text-accent cursor-pointer"
+          className="mr-1 text-xs text-text-primary hover:text-accent cursor-pointer"
           name={addFileState.type === 'file' ? 'file-empty' : 'folder'}
         />
         <input
-          className="w-full text-sm px-2 py-1"
+          className="py-1 px-2 w-full text-sm"
           onBlur={handleBlur}
           onChange={() => setError('')}
           onKeyDown={handleKeyDown}
@@ -34,7 +34,7 @@ const AddFile: React.FC<Props> = (props) => {
         />
       </div>
       {addFileState.active && error && (
-        <div className="text-red-600 mt-1 text-xs w-full">{error}</div>
+        <div className="mt-1 w-full text-xs text-red-600">{error}</div>
       )}
     </div>
   );

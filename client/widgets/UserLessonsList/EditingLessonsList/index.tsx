@@ -53,10 +53,10 @@ const EditingLessonsList: React.FC<Props> = () => {
 
   return (
     <div>
-      <h2 className="border-b-2 text-xl text-text-primary font-bold mb-4">
+      <h2 className="mb-4 text-xl font-bold text-text-primary border-b-2">
         📝 Editing
       </h2>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {data?.lessons.length ? (
           data?.lessons?.map((lesson) => {
             return (
@@ -88,7 +88,7 @@ const EditingLessonsList: React.FC<Props> = () => {
                             <Menu.Items
                               aria-labelledby="session-menu"
                               aria-orientation="vertical"
-                              className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                              className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
                               role="menu"
                             >
                               <Menu.Item>
@@ -150,7 +150,7 @@ const EditingLessonsList: React.FC<Props> = () => {
           })
         ) : (
           <div
-            className="flex flex-col justify-center items-center h-32 w-32 bg-gray-100 text-gray-600 rounded-md cursor-pointer hover:text-blue-600 transform hover:scale-105 transition-all duration-300"
+            className="flex flex-col justify-center items-center w-32 h-32 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-md transition-all duration-300 transform hover:scale-105 cursor-pointer"
             onClick={() =>
               modalVar({ callback: () => null, name: 'createLesson' })
             }

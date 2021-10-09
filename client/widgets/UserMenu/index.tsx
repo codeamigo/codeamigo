@@ -30,7 +30,7 @@ const UserMenu: React.FC<Props> = () => {
   if (loading) return null;
 
   return (
-    <div className="inset-y-0 right-0 flex items-center sm:static sm:inset-auto ml-1 sm:ml-4 pr-0">
+    <div className="flex sm:static sm:inset-auto inset-y-0 right-0 items-center pr-0 ml-1 sm:ml-4">
       {data?.me?.isAuthenticated ? (
         <div className="relative">
           <Menu>
@@ -44,7 +44,7 @@ const UserMenu: React.FC<Props> = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="text-text-primary -mr-1 sm:mr-0 text-lg h-8 w-8 rounded-full"
+                    className="-mr-1 sm:mr-0 w-8 h-8 text-lg text-text-primary rounded-full"
                     name="user"
                   />
                 </Menu.Button>
@@ -60,7 +60,7 @@ const UserMenu: React.FC<Props> = () => {
                   <Menu.Items
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                    className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
                     role="menu"
                   >
                     <Menu.Item>
@@ -104,7 +104,7 @@ const UserMenu: React.FC<Props> = () => {
       ) : (
         <>
           <button
-            className="transition duration-150 text-text-primary pl-3 sm:px-3 py-1.5 rounded-md text-sm font-medium sm:text-center text-right"
+            className="py-1.5 sm:px-3 pl-3 text-sm font-medium text-right sm:text-center text-text-primary rounded-md transition duration-150"
             onClick={() =>
               modalVar({
                 callback: () => null,
@@ -117,7 +117,7 @@ const UserMenu: React.FC<Props> = () => {
           </button>
 
           <button
-            className="border-2 border-bg-nav-offset transition duration-150 text-text-primary hidden sm:block sm:px-3 px-1 sm:py-1.5 py-1 rounded-md whitespace-nowrap text-sm font-medium"
+            className="hidden sm:block py-1 sm:py-1.5 px-1 sm:px-3 text-sm font-medium text-text-primary whitespace-nowrap rounded-md border-2 border-bg-nav-offset transition duration-150"
             onClick={() =>
               modalVar({
                 callback: () => null,

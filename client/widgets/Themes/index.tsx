@@ -18,7 +18,7 @@ const Themes: React.FC<Props> = () => {
   return (
     <div>
       <div>
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Choose Theme
         </h2>
         <Formik initialValues={{ theme: data.me.theme }} onSubmit={() => {}}>
@@ -28,7 +28,7 @@ const Themes: React.FC<Props> = () => {
 
               return (
                 <label
-                  className="w-full px-2 py-3 border rounded-md cursor-pointer"
+                  className="py-3 px-2 w-full rounded-md border cursor-pointer"
                   htmlFor={`${theme}-template`}
                   onClick={() => updateUserTheme({ variables: { theme } })}
                   style={{
@@ -54,11 +54,11 @@ const Themes: React.FC<Props> = () => {
                     </div>
                   </div>
                   <div
-                    className="h-3 w-20 rounded-full mt-3"
+                    className="mt-3 w-20 h-3 rounded-full"
                     style={{ background: mTheme['--bg-nav'] }}
                   ></div>
                   <div
-                    className="h-3 w-28 rounded-full mt-3"
+                    className="mt-3 w-28 h-3 rounded-full"
                     style={{ background: mTheme['--accent'] }}
                   ></div>
                 </label>

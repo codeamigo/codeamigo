@@ -10,18 +10,18 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
   return (
     <>
       <div
-        className="flex items-baseline justify-start cursor-pointer group-inner-1 mb-4"
+        className="flex justify-start items-baseline mb-4 cursor-pointer group-inner-1"
         onClick={() => setWizardStep('match')}
         role="button"
       >
         <div>
-          <Icon className="text-text-primary text-lg" name="regexicon" />
+          <Icon className="text-lg text-text-primary" name="regexicon" />
         </div>
-        <div className="text-text-primary ml-3">
+        <div className="ml-3 text-text-primary">
           <div className="flex items-center">
-            <h3 className="font-bold text-lg">Match</h3>
+            <h3 className="text-lg font-bold">Match</h3>
             <Icon
-              className="text-lg ml-2 opacity-0 group-inner-1-hover:opacity-100 transition-all duration-200"
+              className="ml-2 text-lg opacity-0 group-inner-1-hover:opacity-100 transition-all duration-200"
               name="right-bold"
             />
           </div>
@@ -40,13 +40,13 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
         role="button"
       >
         <div>
-          <Icon className="text-text-primary text-lg" name="terminal" />
+          <Icon className="text-lg text-text-primary" name="terminal" />
         </div>
-        <div className="text-text-primary ml-3">
+        <div className="ml-3 text-text-primary">
           <div className="flex items-center">
-            <h3 className="font-bold text-lg">Output</h3>
+            <h3 className="text-lg font-bold">Output</h3>
             <Icon
-              className="text-lg ml-2 opacity-0 group-inner-1-hover:opacity-100 transition-all duration-100"
+              className="ml-2 text-lg opacity-0 group-inner-1-hover:opacity-100 transition-all duration-100"
               name="right-bold"
             />
           </div>
@@ -62,13 +62,13 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
         role="button"
       >
         <div>
-          <Icon className="text-text-primary text-lg" name="jest" />
+          <Icon className="text-lg text-text-primary" name="jest" />
         </div>
-        <div className="text-text-primary ml-3">
+        <div className="ml-3 text-text-primary">
           <div className="flex items-center">
-            <h3 className="font-bold text-lg">Jest</h3>
+            <h3 className="text-lg font-bold">Jest</h3>
             <Icon
-              className="text-lg ml-2 opacity-0 group-inner-1-hover:opacity-100 transition-all duration-200"
+              className="ml-2 text-lg opacity-0 group-inner-1-hover:opacity-100 transition-all duration-200"
               name="right-bold"
             />
           </div>

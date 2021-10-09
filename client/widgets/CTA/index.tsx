@@ -167,15 +167,15 @@ const CTA: React.FC<Props> = ({
     : runTests;
 
   return isEditing ? (
-    <div className="relative group pt-2">
-      <Button className="h-14 justify-center w-full text-lg">
+    <div className="group relative pt-2">
+      <Button className="justify-center w-full h-14 text-lg">
         Add Checkpoint
       </Button>
       <CheckpointWizard selectFile={selectFile} step={step} />
     </div>
   ) : (
     <Button
-      className="h-14 justify-center w-full text-lg"
+      className="justify-center w-full h-14 text-lg"
       disabled={spinner}
       onClick={fn}
       type="button"

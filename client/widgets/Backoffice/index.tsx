@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
+import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
 import { useMeQuery, useUpdateUserRoleMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
@@ -22,7 +23,7 @@ const Backoffice: React.FC<Props> = () => {
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
           Create Admin
         </h2>
         <Formik
@@ -48,25 +49,21 @@ const Backoffice: React.FC<Props> = () => {
           {({ isSubmitting }) => (
             <Form>
               <InputField label="User ID" name="id" type="number" />
-              <button
-                className="mt-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-primary bg-accent focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-                disabled={isSubmitting}
-                type="submit"
-              >
+              <Button disabled={isSubmitting} type="submit">
                 Submit
-              </button>
+              </Button>
             </Form>
           )}
         </Formik>
       </div>
       <div className="mt-8">
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
           Publish Pending Lessons
         </h2>
         <PendingLessonsList />
       </div>
       <div className="mt-8">
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
           Students (beta testers)
         </h2>
         <StudentList />

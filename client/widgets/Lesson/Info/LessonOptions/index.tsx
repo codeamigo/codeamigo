@@ -44,7 +44,7 @@ const LessonOptions: React.FC<Props> = ({
   return (
     <div className="flex items-center">
       <Icon
-        className="text-text-primary mr-2"
+        className="mr-2 text-text-primary"
         name="list-add"
         onClick={() => setShowOptions(!showOptions)}
       />
@@ -74,7 +74,7 @@ const LessonOptions: React.FC<Props> = ({
 
 export const Options: React.FC<OptionsProps> = (props) => {
   return (
-    <div className="flex justify-end w-full gap-6 py-2 pr-16 px-4 bg-bg-primary border-b border-bg-nav-offset absolute z-20 shadow-lg">
+    <div className="flex absolute z-20 gap-6 justify-end py-2 px-4 pr-16 w-full bg-bg-primary border-b border-bg-nav-offset shadow-lg">
       <Thumbnail {...props} />
       <Label {...props} />
     </div>

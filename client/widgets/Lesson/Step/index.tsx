@@ -221,6 +221,7 @@ const Step: React.FC<Props> = (props) => {
 
   return (
     <>
+      {/* eslint-disable-next-line */}
       <div className="flex flex-col lg:flex-row md:h-full-minus">
         <Instructions
           nextStep={nextStep}

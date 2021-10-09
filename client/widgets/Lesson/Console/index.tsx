@@ -73,7 +73,7 @@ const Console: React.FC<Props> = (props) => {
           activeTab === 'tests' ? 'var(--bg-primary)' : '#242424',
       }}
     >
-      <div className="bg-bg-primary border-b border-t border-bg-nav-offset-faded flex justify-between sticky top-0 z-10">
+      <div className="flex sticky top-0 z-10 justify-between bg-bg-primary border-t border-b border-bg-nav-offset-faded">
         <div className="flex">
           {props.tabs.map((tab) => {
             return (

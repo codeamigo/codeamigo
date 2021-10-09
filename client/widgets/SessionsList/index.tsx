@@ -18,17 +18,17 @@ const SessionsList: React.FC<Props> = () => {
 
   return (
     <div>
-      <h2 className="border-b-2 text-xl text-text-primary font-bold mb-4">
+      <h2 className="mb-4 text-xl font-bold text-text-primary border-b-2">
         🤓 Recent Activity
       </h2>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {data?.sessions.length ? (
           data?.sessions.map((session) => {
             return <SessionItem key={session.id} session={session} />;
           })
         ) : (
           <div
-            className="flex flex-col justify-center items-center h-32 w-32 bg-gray-100 text-gray-600 rounded-md cursor-pointer hover:text-blue-600 transform hover:scale-105 transition-all duration-300"
+            className="flex flex-col justify-center items-center w-32 h-32 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-md transition-all duration-300 transform hover:scale-105 cursor-pointer"
             onClick={() => router.push('/')}
           >
             <Icon className="text-xl" name="plus-squared" />

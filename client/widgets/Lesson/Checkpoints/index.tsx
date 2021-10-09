@@ -188,7 +188,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                       }
                     />
                     <Icon
-                      className="text-text-primary mr-2"
+                      className="mr-2 text-text-primary"
                       name={
                         checkpoint.type === 'output'
                           ? 'terminal'
@@ -214,7 +214,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                   {isEditing && isCurrentCheckpoint(checkpoint.id) && (
                     <div className="flex">
                       <Icon
-                        className="text-text-primary text-lg leading-none"
+                        className="text-lg leading-none text-text-primary"
                         name={
                           view === 'editor' &&
                           isCurrentCheckpoint(checkpoint.id)
@@ -232,7 +232,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                       />
                       {i === checkpoints.length - 1 ? (
                         <button
-                          className="inline-flex justify-center py-0.5 px-1 ml-2 border border-transparent shadow-xs text-xs font-medium rounded-md text-text-primary bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-red-500 disabled:opacity-50"
+                          className="inline-flex justify-center py-0.5 px-1 ml-2 text-xs font-medium bg-red-600 hover:bg-red-700 rounded-md border border-transparent focus:ring-1 focus:ring-red-500 focus:ring-offset-1 shadow-sm disabled:opacity-50 focus:outline-none text-text-primary"
                           onClick={(e) => {
                             e.stopPropagation();
                             const yes = window.confirm(
@@ -254,7 +254,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                 checkpoint.type !== 'spec' &&
                 isEditing ? (
                   <div className="p-3 pt-0 bg-bg-nav">
-                    <span className="bg-accent-faded py-0.5 px-1 rounded-md text-xs text-white font-semibold border-accent border">
+                    <span className="py-0.5 px-1 text-xs font-semibold text-white rounded-md border bg-accent-faded border-accent">
                       {checkpoint.type === 'output'
                         ? `Expected output: ${checkpoint.output}`
                         : `Regex: /${checkpoint.matchRegex}/g`}
@@ -265,7 +265,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                   <div>
                     {view === 'editor' ? (
                       <textarea
-                        className="w-full h-52 block bg-bg-primary text-text-primary border-none"
+                        className="block w-full h-52 border-none text-text-primary bg-bg-primary"
                         defaultValue={checkpoint.description || ''}
                         onChange={(
                           e: React.ChangeEvent<HTMLTextAreaElement>
@@ -278,7 +278,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                     ) : (
                       <ReactMarkdown
                         children={checkpoint.description || ''}
-                        className="markdown-body px-6 py-4"
+                        className="py-4 px-6 markdown-body"
                         key={checkpoint.description}
                         plugins={[gfm]}
                       />

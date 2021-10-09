@@ -17,7 +17,7 @@ const Form: React.FC<Props> = ({ lesson }) => {
 
   return (
     <input
-      className="w-full border-0 focus:ring-0 p-0 bg-transparent text-text-primary md:text-center"
+      className="p-0 w-full md:text-center text-text-primary bg-transparent border-0 focus:ring-0"
       defaultValue={lesson?.title || ''}
       maxLength={90}
       name="title"

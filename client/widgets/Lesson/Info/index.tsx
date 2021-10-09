@@ -19,18 +19,18 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
   return (
     <div className="relative">
       <div
-        className="w-full py-1 px-3 sm:px-4 flex items-center justify-between bg-bg-nav border-b border-bg-nav-offset-faded relative z-30"
+        className="flex relative z-30 justify-between items-center py-1 px-3 sm:px-4 w-full border-b bg-bg-nav border-bg-nav-offset-faded"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
-        <div className="flex items-center w-full overflow-x-hidden overflow-ellipsis">
+        <div className="flex overflow-x-hidden items-center w-full overflow-ellipsis">
           <div>
             <Icon
-              className="text-text-primary text-lg cursor-pointer text-md mr-2 sm:mr-4"
+              className="mr-2 sm:mr-4 text-lg cursor-pointer text-text-primary"
               name="home"
               onClick={() => router.push('/')}
             />
           </div>
-          <div className="md:text-lg w-full font-bold min-w-0 md:w-1/2 md:absolute md:transform md:-translate-x-1/2 md:left-1/2 text-center">
+          <div className="md:absolute md:left-1/2 w-full md:w-1/2 min-w-0 md:text-lg font-bold text-center md:transform md:-translate-x-1/2">
             {isEditing ? <Form {...rest} /> : <View {...rest} />}
           </div>
         </div>
@@ -47,7 +47,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
                 href="https://github.com/codeamigo/questions/issues"
                 target="_blank"
               >
-                <Icon className="text-text-primary text-lg" name="lifebuoy" />
+                <Icon className="text-lg text-text-primary" name="lifebuoy" />
               </a>
             )}
           </div>

@@ -52,7 +52,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
                   <Menu.Items
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="origin-top-right bg-bg-primary absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5"
+                    className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
                     role="menu"
                   >
                     <Menu.Item>
@@ -81,10 +81,10 @@ const SessionItem: React.FC<Props> = ({ session }) => {
         <div className="mt-4 text-xs">
           <div
             aria-label={`Completed: ${percentComplete}%`}
-            className="relative bg-gray-200 w-full h-2 rounded-md hint--top hint--no-animate"
+            className="relative w-full h-2 bg-gray-200 rounded-md hint--top hint--no-animate"
           >
             <div
-              className="absolute bg-green-500 h-full rounded-md"
+              className="absolute h-full bg-green-500 rounded-md"
               style={{ width: `${percentComplete}%` }}
             />
           </div>

@@ -13,7 +13,7 @@ const ChangePassword: React.FC<Props> = () => {
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="underline text-xl text-text-primary font-bold mb-3">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Change Password
         </h2>
         <Formik

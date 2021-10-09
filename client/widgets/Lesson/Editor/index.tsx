@@ -287,7 +287,7 @@ const Editor: React.FC<Props> = ({
     <ControlledEditor
       editorDidMount={editorDidMount}
       loading={
-        <div className="w-full h-full bg-bg-primary font-bold text-white flex items-center justify-center">
+        <div className="flex justify-center items-center w-full h-full font-bold text-white bg-bg-primary">
           Loading...
         </div>
       }

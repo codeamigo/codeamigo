@@ -74,7 +74,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     <div className="sp-wrapper">
       <div className="sp-layout">
         <div
-          className="md:w-48 w-2/6 flex flex-col justify-between bg-bg-primary z-50 border-bg-nav-offset-faded border-r sm:border-b-0"
+          className="flex z-50 flex-col justify-between w-2/6 md:w-48 border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
@@ -102,7 +102,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="md:w-2/6 w-4/6 lg:h-full h-96 z-20 sm:border-b-0 border-b border-bg-nav-offset"
+          className="z-20 w-4/6 md:w-2/6 h-96 lg:h-full border-b sm:border-b-0 border-bg-nav-offset"
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
@@ -113,7 +113,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             stepId={step.id}
             {...props}
           />
-          <div className="absolute bottom-2 right-2 md:top-1/2 md:-right-6 md:-mt-6 z-30">
+          <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
             <RunButton run={postCodeToRiju} />
           </div>
           <Separator
@@ -124,11 +124,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
           />
         </div>
         <div
-          className="md:w-3/6 md:h-full w-full flex flex-col flex-grow"
+          className="flex flex-col flex-grow w-full md:w-3/6 md:h-full"
           ref={previewRef}
         >
-          <iframe
-            className="bg-bg-primary riju-frame h-full"
+          {/* eslint-disable-next-line */}
+          <iframe className="h-full bg-bg-primary riju-frame"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
           <Console

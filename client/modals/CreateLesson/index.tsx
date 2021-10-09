@@ -115,8 +115,8 @@ const CreateLesson: React.FC<Props> = () => {
       {({ isSubmitting, values }) => {
         return (
           <Form>
-            <div className="max-w-2xl mx-auto p-6 lg:px-8">
-              <h1 className="text-xl font-semibold flex mb-4 text-text-primary">
+            <div className="p-6 lg:px-8 mx-auto max-w-2xl">
+              <h1 className="flex mb-4 text-xl font-semibold text-text-primary">
                 New Lesson
               </h1>
               <div className="flex flex-col gap-4">
@@ -157,8 +157,8 @@ const CreateLesson: React.FC<Props> = () => {
                             value={template.value}
                           />{' '}
                           <div className="flex flex-col items-start ml-2">
-                            <img className="h-6 mt-1" src={template.imageUrl} />
-                            <div className="text-sm text-text-primary font-semibold mt-0.5">
+                            <img className="mt-1 h-6" src={template.imageUrl} />
+                            <div className="mt-0.5 text-sm font-semibold text-text-primary">
                               {template.name}
                             </div>
                           </div>

@@ -5,13 +5,13 @@ import Button from '👨‍💻components/Button';
 
 const LessonFinished: React.FC<Props> = () => {
   return (
-    <div className="max-w-lg w-96 mx-auto p-6 lg:px-4">
+    <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
       <div className="text-3xl">🎉</div>
-      <div className="text-xl text-text-primary font-semibold">
+      <div className="text-xl font-semibold text-text-primary">
         You've Finished {modalVar().data.lessonTitle}!!!
       </div>
       <Button
-        className="h-12 text-lg ml-auto mt-5"
+        className="mt-5 ml-auto h-12 text-lg"
         onClick={() => {
           modalVar().callback();
           modalVar(InitialModalState);

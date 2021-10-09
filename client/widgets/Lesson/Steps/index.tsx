@@ -152,7 +152,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="w-full overflow-auto absolute top-11 border-r border-bg-nav-offset left-0 bg-bg-primary bg-opacity-5 py-2 px-4 z-10 lg:w-1/5 shadow-2xl"
+      className="overflow-auto absolute top-11 left-0 z-10 py-2 px-4 w-full lg:w-1/5 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -186,10 +186,10 @@ const Steps: React.FC<Props> = ({
                   if (!isEditing) return;
                 }}
               >
-                <div className="flex w-full overflow-hidden whitespace-nowrap">
+                <div className="flex overflow-hidden w-full whitespace-nowrap">
                   {isUpdating === step.id ? (
                     <input
-                      className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
+                      className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
                       defaultValue={step.name || ''}
                       onBlur={(e) => handleUpdateBlur(e, step.id)}
                       onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
@@ -204,11 +204,11 @@ const Steps: React.FC<Props> = ({
                 </div>
                 {isEditing && isUpdating === step.id && (
                   <div className="flex">
-                    <Button className="ml-1 py-0" type="submit">
+                    <Button className="py-0 ml-1" type="submit">
                       Submit
                     </Button>
                     <a
-                      className="ml-2 text-text-primary text-sm"
+                      className="ml-2 text-sm text-text-primary"
                       onClick={(
                         e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
                       ) => {
@@ -223,7 +223,7 @@ const Steps: React.FC<Props> = ({
                 {isEditing && !isUpdating && (
                   <div className="flex">
                     <Icon
-                      className="text-text-primary hidden mr-2"
+                      className="hidden mr-2 text-text-primary"
                       name="pencil"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -234,7 +234,7 @@ const Steps: React.FC<Props> = ({
                       }}
                     />
                     <Icon
-                      className="text-text-secondary hidden"
+                      className="hidden text-text-secondary"
                       name="minus-circled"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -254,19 +254,19 @@ const Steps: React.FC<Props> = ({
           })}
         </ol>
         {isAdding && (
-          <div className="w-full flex py-2 items-center">
+          <div className="flex items-center py-2 w-full">
             <input
-              className="w-full text-md text-text-primary px-0 py-0 border-none border-blue-50 bg-transparent focus:ring-0"
+              className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               ref={inputRef}
               type="text"
             />
-            <Button className="ml-1 py-0" type="submit">
+            <Button className="py-0 ml-1" type="submit">
               Submit
             </Button>
             <a
-              className="ml-2 text-text-primary text-sm cursor-pointer"
+              className="ml-2 text-sm cursor-pointer text-text-primary"
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
                 setIsAdding(false);

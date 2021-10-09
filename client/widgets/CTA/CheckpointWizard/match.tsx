@@ -40,7 +40,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
   return (
     <div className="text-text-primary">
       <div className="flex">
-        <Icon className="text-lg block mr-2" name="regexicon" />
+        <Icon className="block mr-2 text-lg" name="regexicon" />
         <h3 className="text-lg font-bold">Match</h3>
       </div>
       <Formik
@@ -68,7 +68,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
               <div className="mt-2 mb-1">Select a file</div>
               <Field
                 as="select"
-                className="text-black rounded-lg text-sm w-full"
+                className="w-full text-sm text-black rounded-lg"
                 name="file"
                 onChangeCapture={handleFileChange}
               >
@@ -90,10 +90,10 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                 required
                 type="text"
               />
-              <div className="text-xs mt-1">Regex: /{values.regex}/g</div>
+              <div className="mt-1 text-xs">Regex: /{values.regex}/g</div>
               <div className="flex items-center mt-2">
                 <Icon
-                  className="text-md mr-4"
+                  className="mr-4 text-base"
                   name="left-bold"
                   onClick={() => setWizardStep('select')}
                   role="button"

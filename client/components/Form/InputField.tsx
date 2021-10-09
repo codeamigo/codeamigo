@@ -17,7 +17,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
       <Field
         {...props}
         {...field}
-        className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+        className="block mt-1 w-full sm:text-sm rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"
         id={field.name}
         name={field.name}
         type={props.type}

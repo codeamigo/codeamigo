@@ -4,7 +4,7 @@ import { LessonQuery } from '👨‍💻generated/graphql';
 
 const InfoForm: React.FC<Props> = ({ lesson }) => {
   return (
-    <div className="w-full text-center border-0 focus:ring-0 p-0 bg-transparent overflow-x-hidden text-text-primary overflow-ellipsis whitespace-nowrap">
+    <div className="overflow-x-hidden p-0 w-full text-center text-text-primary overflow-ellipsis whitespace-nowrap bg-transparent border-0 focus:ring-0">
       {lesson?.title}
     </div>
   );

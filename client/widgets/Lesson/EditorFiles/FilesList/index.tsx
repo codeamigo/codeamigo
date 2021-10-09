@@ -99,10 +99,10 @@ const FilesList: React.FC<Props> = (props) => {
 
   return (
     <>
-      <div className="border-b border-t mt-4 first:border-t-0 first:mt-0 border-bg-nav-offset-faded p-1 flex justify-between content-center">
+      <div className="flex justify-between content-center p-1 mt-4 first:mt-0 border-t first:border-t-0 border-b border-bg-nav-offset-faded">
         <span className="text-sm font-semibold text-text-primary">{name}</span>
         {onCreate && isEditing && (
-          <div className="flex items-center gap-2">
+          <div className="flex gap-2 items-center">
             <Icon
               className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="folder"

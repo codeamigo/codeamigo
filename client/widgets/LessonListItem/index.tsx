@@ -15,32 +15,32 @@ const LessonListItem: React.FC<Props> = ({
   progress,
 }) => {
   return (
-    <div className="flex flex-col rounded-lg border-bg-nav-offset border-2">
+    <div className="flex flex-col rounded-lg border-2 border-bg-nav-offset">
       <div
-        className="p-2 border-b-2 border-bg-nav-offset cursor-pointer"
+        className="p-2 border-b-2 cursor-pointer border-bg-nav-offset"
         onClick={() => router.push(href)}
       >
         <div
-          className="h-48 overflow-hidden bg-center bg-cover bg-no-repeat"
+          className="overflow-hidden h-48 bg-center bg-no-repeat bg-cover"
           style={{ backgroundImage: `url(${lesson.thumbnail || codeamigoPng}` }}
         />
       </div>
       <div
-        className="p-3 bg-bg-nav rounded-br-lg rounded-bl-lg flex flex-1 flex-col justify-between"
+        className="flex flex-col flex-1 justify-between p-3 rounded-br-lg rounded-bl-lg bg-bg-nav"
         key={lesson.id}
       >
         <div>
           <div className="flex justify-between items-center">
             <a
-              className="text-md text-text-primary underline font-bold overflow-ellipsis hover:underline"
+              className="font-bold underline hover:underline overflow-ellipsis text-text-primary"
               href={href}
             >
               {lesson.title}
             </a>
             {options ? options : null}
           </div>
-          <h3 className="text-xs text-text-primary font-semibold flex items-center">
-            <div className="h-8 w-8 p-1 mr-1 bg-bg-nav border border-bg-nav-offset rounded-full">
+          <h3 className="flex items-center text-xs font-semibold text-text-primary">
+            <div className="p-1 mr-1 w-8 h-8 rounded-full border bg-bg-nav border-bg-nav-offset">
               <ProfileLogo userId={lesson.owner.id} />
             </div>{' '}
             {lesson.owner.username}
@@ -55,7 +55,7 @@ const LessonListItem: React.FC<Props> = ({
             >
               <div className="flex">
                 <Icon
-                  className="text-text-primary mr-1 cursor-auto"
+                  className="mr-1 cursor-auto text-text-primary"
                   name="users"
                 />{' '}
                 <div className="text-text-primary">
@@ -65,7 +65,7 @@ const LessonListItem: React.FC<Props> = ({
             </div>
           </div>
           <div className="flex justify-between items-center mt-2 text-xs font-bold text-text-primary">
-            <div className="flex capitalize items-center text-text-primary">
+            <div className="flex items-center capitalize text-text-primary">
               <div
                 className={`w-2 h-2 mr-1 rounded-full ${
                   // @ts-ignore

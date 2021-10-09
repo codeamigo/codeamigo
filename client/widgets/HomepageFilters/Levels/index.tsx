@@ -15,7 +15,7 @@ const Levels: React.FC<Props> = () => {
 
   return (
     <div className="p-2 mt-2 bg-bg-nav rounded-md">
-      <h4 className="font-semibold mb-2 text-text-primary">Levels</h4>
+      <h4 className="mb-2 font-semibold text-text-primary">Levels</h4>
       <Formik
         initialValues={{
           checked: queryLevels ? queryLevels.split('|') : [],
@@ -36,7 +36,7 @@ const Levels: React.FC<Props> = () => {
             {Object.keys(levelColorMap).map((level) => {
               return (
                 <label
-                  className="flex justify-between text-sm font-light mb-0.5 cursor-pointer"
+                  className="flex justify-between mb-0.5 text-sm font-light cursor-pointer"
                   htmlFor={level}
                   key={level}
                 >
@@ -47,7 +47,7 @@ const Levels: React.FC<Props> = () => {
                       type="checkbox"
                       value={level.toUpperCase()}
                     />{' '}
-                    <div className="flex capitalize items-center text-text-primary ml-1">
+                    <div className="flex items-center ml-1 text-text-primary capitalize">
                       <div
                         // @ts-ignore
                         className={`w-2 h-2 mr-1 rounded-full ${levelColorMap[level]}`}

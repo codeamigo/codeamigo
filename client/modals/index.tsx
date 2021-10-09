@@ -32,8 +32,8 @@ const Modals: React.FC<Props> = () => {
   const isOpen = !!data?.modal?.name;
 
   return isOpen ? (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div className="overflow-y-auto fixed inset-0 z-10">
+      <div className="flex sm:block justify-center items-end sm:p-0 px-4 pt-4 pb-20 min-h-screen text-center">
         {/* Background overlay, show/hide based on modal state.
   
         Entering: "ease-out duration-300"
@@ -53,7 +53,7 @@ const Modals: React.FC<Props> = () => {
         >
           <div
             aria-hidden="true"
-            className="fixed inset-0 transition-opacity bg-bg-nav opacity-50"
+            className="fixed inset-0 bg-bg-nav opacity-50 transition-opacity"
             onClick={() => modalVar(InitialModalState)}
           >
             <div className="absolute inset-0 opacity-75"></div>
@@ -63,7 +63,7 @@ const Modals: React.FC<Props> = () => {
         {/* This element is to trick the browser into centering the modal contents. */}
         <span
           aria-hidden="true"
-          className="hidden sm:inline-block sm:align-middle sm:h-screen"
+          className="hidden sm:inline-block sm:h-screen sm:align-middle"
         >
           &#8203;
         </span>
@@ -78,15 +78,15 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="bg-bg-primary inline-block align-bottom rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle"
+          className="inline-block sm:my-8 text-left align-bottom sm:align-middle bg-bg-primary rounded-lg shadow-xl transition-all transform"
           role="dialog"
         >
           <div
-            className="absolute -top-3 -right-3 flex items-center justify-center bg-bg-primary w-10 h-10 rounded-full"
+            className="flex absolute -top-3 -right-3 justify-center items-center w-10 h-10 bg-bg-primary rounded-full"
             onClick={() => modalVar(InitialModalState)}
           >
             <Icon
-              className="text-text-primary text-3xl"
+              className="text-3xl text-text-primary"
               name="cancel-circled"
             />
           </div>

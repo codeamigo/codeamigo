@@ -17,14 +17,14 @@ const TestsPassed: React.FC<Props> = () => {
     encouragementMessages[randomN(encouragementMessages.length)];
 
   return (
-    <div className="max-w-lg w-96 mx-auto p-6 lg:px-4">
+    <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
       <div className="text-3xl">{emoji}</div>
-      <div className="text-xl text-text-primary font-semibold">
+      <div className="text-xl font-semibold text-text-primary">
         {encouragementTitle}
       </div>
-      <div className="text-text-primary my-4">{encouragementMessage}</div>
+      <div className="my-4 text-text-primary">{encouragementMessage}</div>
       <Button
-        className="h-12 text-lg ml-auto mt-5"
+        className="mt-5 ml-auto h-12 text-lg"
         onClick={() => {
           modalVar().callback();
           modalVar(InitialModalState);

@@ -34,11 +34,11 @@ const Me = () => {
   // if (error) return <div>{error.toString()}</div>;
 
   return (
-    <div className="flex flex-col sm:space-x-8 sm:flex-row">
-      <div className="sm:w-1/4 w-full mb-4">
+    <div className="flex flex-col sm:flex-row sm:space-x-8">
+      <div className="mb-4 w-full sm:w-1/4">
         <EditProfilePic />
         <div className="sticky top-3">
-          <h2 className="text-text-primary font-semibold mb-2">
+          <h2 className="mb-2 font-semibold text-text-primary">
             User: {data?.me?.username}
           </h2>
           <button
@@ -85,7 +85,7 @@ const Me = () => {
           )}
         </div>
       </div>
-      <div className="sm:w-3/4 w-full">
+      <div className="w-full sm:w-3/4">
         {tab === 'activity' && <SessionsList />}
         {tab === 'lessons' && <UserLessonsList />}
         {tab === 'themes' && <Themes />}
