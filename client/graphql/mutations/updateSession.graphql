@@ -3,3 +3,9 @@ mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
     id
   }
 }
+
+mutation UpdateSession($lessonId: Float!, $sessionId: Float!) {
+  updateSession(options: { lessonId: $lessonId , sessionId: $sessionId}) {
+    id
+  }
+}

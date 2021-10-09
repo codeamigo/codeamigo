@@ -27,6 +27,14 @@ class SessionInput {
 }
 
 @InputType()
+class UpdateSessionInput {
+  @Field()
+  lessonId!: number;
+  @Field()
+  sessionId!: number;
+}
+
+@InputType()
 class NextStepInput {
   @Field()
   sessionId!: number;
@@ -82,10 +90,38 @@ export class SessionResolver {
       .addOrderBy("steps.createdAt", "ASC")
       .getOne();
 
-    console.log(session);
-
     return session;
   }
+
+  stepComponentsFactory = async (step: Step) => {
+    const checkpoints = await Promise.all(
+      step!.checkpoints.map(async (checkpoint) => {
+        const { id, ...rest } = checkpoint;
+
+        return await Checkpoint.create({ ...rest }).save();
+      })
+    );
+
+    const codeModules = await Promise.all(
+      step!.codeModules.map(async (codeModule) => {
+        const { id, ...rest } = codeModule;
+
+        return await CodeModule.create({
+          ...rest,
+        }).save();
+      })
+    );
+
+    const dependencies = await Promise.all(
+      step!.dependencies.map(async (dependency) => {
+        const { id, ...rest } = dependency;
+
+        return await Dependency.create({ ...rest }).save();
+      })
+    );
+
+    return { checkpoints, codeModules, dependencies };
+  };
 
   @Mutation(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
@@ -121,31 +157,11 @@ export class SessionResolver {
 
           const { createdAt } = step!;
 
-          const codeModules = await Promise.all(
-            step!.codeModules.map(async (codeModule) => {
-              const { id, ...rest } = codeModule;
-
-              return await CodeModule.create({
-                ...rest,
-              }).save();
-            })
-          );
-
-          const checkpoints = await Promise.all(
-            step!.checkpoints.map(async (checkpoint) => {
-              const { id, ...rest } = checkpoint;
-
-              return await Checkpoint.create({ ...rest }).save();
-            })
-          );
-
-          const dependencies = await Promise.all(
-            step!.dependencies.map(async (dependency) => {
-              const { id, ...rest } = dependency;
-
-              return await Dependency.create({ ...rest }).save();
-            })
-          );
+          const {
+            checkpoints,
+            codeModules,
+            dependencies,
+          } = await this.stepComponentsFactory(step!);
 
           return await Step.create({
             checkpoints,
@@ -156,6 +172,7 @@ export class SessionResolver {
             instructions: step?.instructions || "",
             lang: step?.lang,
             name: step?.name || "",
+            originalStepId: step?.id,
           }).save();
         })
       );
@@ -175,6 +192,81 @@ export class SessionResolver {
       await lesson.save();
 
       return session;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
+  @Mutation(() => Session, { nullable: true })
+  @UseMiddleware(isAuth)
+  async updateSession(
+    @Arg("options") options: UpdateSessionInput,
+    @Ctx() { req }: MyContext
+  ): Promise<Session | null> {
+    try {
+      const student = await User.findOne({ id: req.session.userId });
+      const session = await Session.findOne({
+        relations: ["steps"],
+        where: { id: options.sessionId, student },
+      });
+      const lesson = await Lesson.findOne(
+        {
+          id: options.lessonId,
+        },
+        { relations: ["steps"] }
+      );
+
+      if (!lesson) {
+        return null;
+      }
+
+      if (!session) {
+        return null;
+      }
+
+      const steps = await Promise.all(
+        lesson.steps.map(async ({ id }) => {
+          const sessionStep = await session.steps.find(
+            ({ originalStepId }) => originalStepId === id
+          );
+
+          if (sessionStep?.isCompleted) return sessionStep;
+          else sessionStep?.remove();
+
+          const updatedStep = await Step.findOne(id, {
+            relations: ["codeModules", "checkpoints", "dependencies"],
+          });
+
+          const { createdAt } = updatedStep!;
+
+          const {
+            checkpoints,
+            codeModules,
+            dependencies,
+          } = await this.stepComponentsFactory(updatedStep!);
+
+          return await Step.create({
+            checkpoints,
+            codeModules,
+            createdAt,
+            dependencies,
+            executionType: updatedStep?.executionType,
+            instructions: updatedStep?.instructions || "",
+            lang: updatedStep?.lang,
+            name: updatedStep?.name || "",
+            originalStepId: updatedStep?.id,
+          }).save();
+        })
+      );
+
+      const currentStep = steps
+        .filter(({ isCompleted }) => !isCompleted)
+        .sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1))[0].id;
+
+      Object.assign(session, { currentStep, requiresUpdate: false, steps });
+
+      return session.save();
     } catch (e) {
       console.log(e);
       return null;

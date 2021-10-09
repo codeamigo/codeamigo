@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
   useLessonQuery,
   useMeQuery,
@@ -25,6 +26,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   const { data: sessionData, loading: sessionLoading } = useSessionQuery({
     variables: { lessonId: id },
   });
+  console.log(sessionData);
 
   useEffect(() => {
     if (meLoading) return;
@@ -55,7 +57,20 @@ const Lesson: NextPage<{ id: string }> = (props) => {
     }
     return null;
   }
+
   if (!sessionData.session.steps) return null;
+
+  if (sessionData.session.requiresUpdate) {
+    modalVar({
+      callback: () => null,
+      data: {
+        lessonId: sessionData.session.lesson.id,
+        lessonTitle: sessionData.session.lesson.title,
+        sessionId: sessionData.session.id,
+      },
+      name: 'updateSession',
+    });
+  }
 
   const stepId = currentStepId || sessionData.session.currentStep;
 

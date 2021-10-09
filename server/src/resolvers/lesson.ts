@@ -16,6 +16,7 @@ import {
   LessonLabelEnum,
   LessonStatusTypeEnum,
 } from "../entities/Lesson";
+import { Session } from "../entities/Session";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
@@ -242,6 +243,23 @@ export class LessonResolver {
       if (!lesson.label) {
         return [{ field: "label", message: "A label is required." }];
       }
+    }
+
+    if (status === LessonStatusTypeEnum.PUBLISHED) {
+      const sessions = await Session.createQueryBuilder()
+        .where("Session.lessonId = :lessonId", {
+          lessonId: lesson.id,
+        })
+        .leftJoinAndSelect("Session.steps", "steps")
+        .getMany();
+
+      sessions.forEach((session) => {
+        const requiresUpdate = session.steps.some(
+          ({ isCompleted }) => !isCompleted
+        );
+        session.requiresUpdate = requiresUpdate;
+        session.save();
+      });
     }
 
     Object.assign(lesson, { status });

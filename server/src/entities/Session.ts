@@ -37,6 +37,13 @@ export class Session extends BaseEntity {
   @Column()
   lessonId!: number;
 
+  @Field(() => Boolean, {
+    defaultValue: null,
+    nullable: true,
+  })
+  @Column({ nullable: true })
+  requiresUpdate: boolean;
+
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.classes)
   student: User;

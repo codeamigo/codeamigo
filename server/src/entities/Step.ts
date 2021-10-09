@@ -67,6 +67,13 @@ export class Step extends BaseEntity {
   @Column({ default: "javascript" })
   lang: string;
 
+  @Field(() => Number, {
+    defaultValue: null,
+    nullable: true,
+  })
+  @Column({ nullable: true })
+  originalStepId: number;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: "CASCADE",
   })
