@@ -253,7 +253,6 @@ export class LessonResolver {
         .leftJoinAndSelect("Session.steps", "steps")
         .getMany();
 
-      // this may cause problems in the future...
       sessions.forEach((session) => {
         const requiresUpdate = session.steps.some(
           ({ isCompleted }) => !isCompleted

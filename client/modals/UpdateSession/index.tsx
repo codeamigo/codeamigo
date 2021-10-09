@@ -1,12 +1,24 @@
 import React from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
+import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { useUpdateSessionMutation } from '👨‍💻generated/graphql';
 
 const UpdateSession: React.FC<Props> = () => {
   const { lessonId, sessionId } = modalVar().data;
-  const [updateSession] = useUpdateSessionMutation();
+  const [updateSessionM, { loading }] = useUpdateSessionMutation();
+
+  const updateSession = async () => {
+    await updateSessionM({
+      variables: {
+        lessonId,
+        sessionId,
+      },
+    });
+
+    modalVar(InitialModalState);
+    window.location.reload();
+  };
 
   return (
     <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
@@ -19,17 +31,7 @@ const UpdateSession: React.FC<Props> = () => {
         updating. Your progress will not be affected.
       </div>
       <div className="flex items-center">
-        <Button
-          className="mt-5"
-          onClick={() =>
-            updateSession({
-              variables: {
-                lessonId,
-                sessionId,
-              },
-            })
-          }
-        >
+        <Button className="mt-5" disabled={loading} onClick={updateSession}>
           Update
         </Button>
       </div>
