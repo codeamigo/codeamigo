@@ -93,6 +93,36 @@ export class SessionResolver {
     return session;
   }
 
+  stepComponentsFactory = async (step: Step) => {
+    const checkpoints = await Promise.all(
+      step!.checkpoints.map(async (checkpoint) => {
+        const { id, ...rest } = checkpoint;
+
+        return await Checkpoint.create({ ...rest }).save();
+      })
+    );
+
+    const codeModules = await Promise.all(
+      step!.codeModules.map(async (codeModule) => {
+        const { id, ...rest } = codeModule;
+
+        return await CodeModule.create({
+          ...rest,
+        }).save();
+      })
+    );
+
+    const dependencies = await Promise.all(
+      step!.dependencies.map(async (dependency) => {
+        const { id, ...rest } = dependency;
+
+        return await Dependency.create({ ...rest }).save();
+      })
+    );
+
+    return { checkpoints, codeModules, dependencies };
+  };
+
   @Mutation(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
   async createSession(
@@ -127,31 +157,11 @@ export class SessionResolver {
 
           const { createdAt } = step!;
 
-          const codeModules = await Promise.all(
-            step!.codeModules.map(async (codeModule) => {
-              const { id, ...rest } = codeModule;
-
-              return await CodeModule.create({
-                ...rest,
-              }).save();
-            })
-          );
-
-          const checkpoints = await Promise.all(
-            step!.checkpoints.map(async (checkpoint) => {
-              const { id, ...rest } = checkpoint;
-
-              return await Checkpoint.create({ ...rest }).save();
-            })
-          );
-
-          const dependencies = await Promise.all(
-            step!.dependencies.map(async (dependency) => {
-              const { id, ...rest } = dependency;
-
-              return await Dependency.create({ ...rest }).save();
-            })
-          );
+          const {
+            checkpoints,
+            codeModules,
+            dependencies,
+          } = await this.stepComponentsFactory(step!);
 
           return await Step.create({
             checkpoints,
@@ -230,31 +240,11 @@ export class SessionResolver {
 
           const { createdAt } = updatedStep!;
 
-          const codeModules = await Promise.all(
-            updatedStep!.codeModules.map(async (codeModule) => {
-              const { id, ...rest } = codeModule;
-
-              return await CodeModule.create({
-                ...rest,
-              }).save();
-            })
-          );
-
-          const checkpoints = await Promise.all(
-            updatedStep!.checkpoints.map(async (checkpoint) => {
-              const { id, ...rest } = checkpoint;
-
-              return await Checkpoint.create({ ...rest }).save();
-            })
-          );
-
-          const dependencies = await Promise.all(
-            updatedStep!.dependencies.map(async (dependency) => {
-              const { id, ...rest } = dependency;
-
-              return await Dependency.create({ ...rest }).save();
-            })
-          );
+          const {
+            checkpoints,
+            codeModules,
+            dependencies,
+          } = await this.stepComponentsFactory(updatedStep!);
 
           return await Step.create({
             checkpoints,
