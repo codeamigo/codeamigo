@@ -63,6 +63,12 @@ const jsTemplate: ITemplate = {
 </html>`,
     },
     { isEntry: true, name: "/app.js", value: "// app.js" },
+    {
+      name: "/package.json",
+      value: `{
+  "main": "./app.js"
+}`,
+    },
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
