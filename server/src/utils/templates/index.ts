@@ -51,30 +51,6 @@ const tsTemplate: ITemplate = {
   lang: "javascript",
 };
 
-const jsTemplate: ITemplate = {
-  codeModules: [
-    {
-      name: "/index.html",
-      value: `<html>
-<body>
-</body>
-
-<script src='./app.js'></script>
-</html>`,
-    },
-    { isEntry: true, name: "/app.js", value: "// app.js" },
-    {
-      name: "/package.json",
-      value: `{
-  "main": "./app.js"
-}`,
-    },
-  ],
-  dependencies: [],
-  executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
-};
-
 const htmlTemplate: ITemplate = {
   codeModules: [
     {
@@ -723,6 +699,14 @@ const elixirTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "elixir",
+};
+
+const jsTemplate: ITemplate = {
+  codeModules: [
+    { isEntry: true, name: "/main.js", value: "console.log('Hello, world!');" },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "javascript",
 };
 
 const goTemplate: ITemplate = {
