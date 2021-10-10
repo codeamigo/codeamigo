@@ -55,8 +55,6 @@ const Tests: React.FC<Props> = ({ runTests, stepId }) => {
     runTests();
   };
 
-  console.log(suites);
-
   return (
     <div>
       <div className="text-text-primary">

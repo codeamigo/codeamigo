@@ -54,7 +54,8 @@ const CTA: React.FC<Props> = ({
         break;
       case 'total_test_end':
         isTestingVar(false);
-        if (testsRef.current.some(({ status }) => status === 'fail')) {
+        testFailureVar(false);
+        if (testsRef.current[testsRef.current.length - 1]?.status === 'fail') {
           testFailureVar(true);
           return;
         } else {

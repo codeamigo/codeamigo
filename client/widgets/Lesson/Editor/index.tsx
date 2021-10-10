@@ -74,6 +74,7 @@ const Editor: React.FC<Props> = ({
           if (!controller.getState()._isRegex) {
             controller.toggleRegex();
           }
+          console.log(ev.data.regex);
           const match = editorRef.current
             .getModel()
             .findMatches(ev.data.regex)[0];
@@ -82,6 +83,7 @@ const Editor: React.FC<Props> = ({
           editorRef.current.getAction('actions.findWithSelection').run();
         }
       } catch (e) {
+        console.log(e);
         console.log(`Error searching: ${e}`);
       }
     };
