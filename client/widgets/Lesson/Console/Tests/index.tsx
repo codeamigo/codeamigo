@@ -55,6 +55,8 @@ const Tests: React.FC<Props> = ({ runTests, stepId }) => {
     runTests();
   };
 
+  console.log(suites);
+
   return (
     <div>
       <div className="text-text-primary">
@@ -86,14 +88,16 @@ const Tests: React.FC<Props> = ({ runTests, stepId }) => {
               {suite.status === 'pass' ? <>✅</> : null}{' '}
               {suite.blocks.join(' > ')} {'> ' + suite.name}
             </div>
-            {suite.errors.map((val) =>
-              val.message.split('//').map((value, i) => {
-                return (
-                  <div className="mb-1 text-text-primary" key={i}>
-                    {value}
-                  </div>
-                );
-              })
+            {suite.errors.map(
+              (val) =>
+                val.message &&
+                val.message.split('//').map((value, i) => {
+                  return (
+                    <div className="mb-1 text-text-primary" key={i}>
+                      {value}
+                    </div>
+                  );
+                })
             )}
           </div>
         ))}

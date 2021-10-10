@@ -59,7 +59,7 @@ export type TestDataType = {
 };
 
 type TestErrorType = {
-  matcherResult: true;
+  matcherResult: boolean;
   message: string;
   name: string;
   stack: string;
