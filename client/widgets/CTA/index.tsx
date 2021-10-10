@@ -54,11 +54,11 @@ const CTA: React.FC<Props> = ({
         break;
       case 'total_test_end':
         isTestingVar(false);
-        testFailureVar(false);
         if (testsRef.current[testsRef.current.length - 1]?.status === 'fail') {
           testFailureVar(true);
           return;
         } else {
+          testFailureVar(false);
           //  prompt register if previewing
           if (isPreviewing) {
             modalVar({
