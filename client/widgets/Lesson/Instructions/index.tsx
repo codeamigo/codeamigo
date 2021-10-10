@@ -91,10 +91,7 @@ const Instructions: React.FC<Props> = (props) => {
             </>
           ) : null}
         </h3>
-        <div
-          className={`lg:flex lg:flex-col min-h-full h-full`}
-          id="markdown-parent"
-        >
+        <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
           {view === 'editor' ? (
             <textarea
               className="w-full h-40 md:h-full border-none text-text-primary bg-bg-primary"
