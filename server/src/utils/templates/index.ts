@@ -38,7 +38,13 @@ const tsTemplate: ITemplate = {
 <script src='./app.ts'></script>
 </html>`,
     },
-    { isEntry: true, name: "app.ts", value: "// app.ts" },
+    { isEntry: true, name: "/app.ts", value: "// app.ts" },
+    {
+      name: "/package.json",
+      value: `{
+  "main": "./app.ts"
+}`,
+    },
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
