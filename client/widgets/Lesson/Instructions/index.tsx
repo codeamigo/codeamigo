@@ -9,12 +9,14 @@ import {
   RegularStepFragment,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
+import StatusIndicatorV2 from '👨‍💻widgets/Lesson/Info/StatusIndicatorV2';
 
 import Checkpoints from '../Checkpoints';
 
 const Instructions: React.FC<Props> = (props) => {
   const { isEditing, setShowSteps, showSteps, step } = props;
   const [markdown, setMarkdown] = useState(step?.instructions);
+  const [showStatusIndicator, setShowStatusIndicator] = useState(false);
   const [view, toggleView] = useState<'editor' | 'preview'>(
     isEditing ? 'editor' : 'preview'
   );
@@ -91,15 +93,20 @@ const Instructions: React.FC<Props> = (props) => {
             </>
           ) : null}
         </h3>
-        <div className={`lg:flex lg:flex-col h-full`} id="markdown-parent">
+        <div
+          className={`lg:flex lg:flex-col h-full relative`}
+          id="markdown-parent"
+        >
           {view === 'editor' ? (
             <textarea
               className="w-full h-40 md:h-full border-none text-text-primary bg-bg-primary"
               defaultValue={markdown || ''}
+              onBlur={() => setShowStatusIndicator(false)}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 setMarkdown(e.currentTarget.value);
                 updateStep(step.id, e.currentTarget.value);
               }}
+              onFocus={() => setShowStatusIndicator(true)}
               style={{ resize: 'none' }}
             ></textarea>
           ) : (
@@ -109,6 +116,10 @@ const Instructions: React.FC<Props> = (props) => {
               plugins={[gfm]}
             />
           )}
+          <StatusIndicatorV2
+            isActive={showStatusIndicator}
+            isPreviewing={props.isPreviewing}
+          />
         </div>
         <div className="flex relative flex-col flex-1">
           <Checkpoints {...props} />

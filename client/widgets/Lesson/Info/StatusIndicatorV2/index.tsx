@@ -28,7 +28,8 @@ const StatusIndicatorV2: React.FC<Props> = ({ isActive, isPreviewing }) => {
             animate={{ bottom: '0.5em' }}
             className="absolute right-2"
             exit={{ bottom: '-2em' }}
-            initial={{ bottom: '-1em' }}
+            initial={{ bottom: '-2em' }}
+            transition={{ duration: 1 }}
           >
             {isPreviewing ? null : status.connected ? (
               ping && isActive ? (
