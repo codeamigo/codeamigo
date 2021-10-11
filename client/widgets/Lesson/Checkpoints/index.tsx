@@ -18,6 +18,7 @@ import {
   useUpdateCheckpointMutation,
   useUpdateStepCheckpointMutation,
 } from '👨‍💻generated/graphql';
+import StatusIndicatorV2 from '👨‍💻widgets/Lesson/Info/StatusIndicatorV2';
 
 const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,6 +34,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
   const [activeCheckpoint, setActiveCheckpoint] = useState<
     RegularCheckpointFragment | undefined
   >(undefined);
+  const [showStatusIndicator, setShowStatusIndicator] = useState(false);
   const testFailure = useReactiveVar(testFailureVar);
 
   // When user COMPLETES a checkpoint
@@ -267,11 +269,13 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                       <textarea
                         className="block w-full h-52 border-none text-text-primary bg-bg-primary"
                         defaultValue={checkpoint.description || ''}
+                        onBlur={() => setShowStatusIndicator(false)}
                         onChange={(
                           e: React.ChangeEvent<HTMLTextAreaElement>
                         ) => {
                           updateCheckpoint(e.currentTarget.value);
                         }}
+                        onFocus={() => setShowStatusIndicator(true)}
                         ref={textareaRef}
                         style={{ resize: 'none' }}
                       />
@@ -282,6 +286,9 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                         key={checkpoint.description}
                         plugins={[gfm]}
                       />
+                    )}
+                    {showStatusIndicator && (
+                      <StatusIndicatorV2 isActive={showStatusIndicator} />
                     )}
                   </div>
                 )}
