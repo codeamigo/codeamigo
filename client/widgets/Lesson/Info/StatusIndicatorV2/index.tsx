@@ -25,11 +25,10 @@ const StatusIndicatorV2: React.FC<Props> = ({ isActive, isPreviewing }) => {
       <AnimatePresence>
         {ping && isActive && (
           <motion.div
-            animate={{ bottom: '0.5em' }}
+            animate={{ bottom: '1em' }}
             className="absolute right-2"
             exit={{ bottom: '-2em' }}
             initial={{ bottom: '-2em' }}
-            transition={{ duration: 1 }}
           >
             {isPreviewing ? null : status.connected ? (
               ping && isActive ? (
