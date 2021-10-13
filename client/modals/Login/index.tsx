@@ -1,6 +1,7 @@
 import * as githubPng from 'assets/github.png';
 import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
 import React, { useEffect } from 'react';
@@ -74,14 +75,18 @@ const Login: React.FC = () => {
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
-                <img className="h-7" src={googlePng} />
+                <div className="h-7">
+                  <Image src={googlePng} />
+                </div>
               </button>
               <button
                 className="bg-bg-nav-offset"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 type="button"
               >
-                <img className="h-7" src={githubPng} />
+                <div className="h-7">
+                  <Image src={githubPng} />
+                </div>
               </button>
             </div>
             <div className="sm:p-6 px-4">
@@ -102,7 +107,7 @@ const Login: React.FC = () => {
                     type="password"
                   />
                   <div
-                    className="absolute top-0.5 right-0 text-xs text-text-primary underline cursor-pointer"
+                    className="absolute top-0.5 right-0 text-xs underline cursor-pointer text-text-primary"
                     onClick={() =>
                       forgotPassword({
                         variables: { usernameOrEmail: values.usernameOrEmail },
@@ -126,7 +131,7 @@ const Login: React.FC = () => {
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
+                className="justify-center w-full text-sm font-medium rounded-md focus:outline-none text-accent"
                 disabled={isSubmitting || loading}
                 onClick={() =>
                   modalVar({ callback: () => null, name: 'register' })

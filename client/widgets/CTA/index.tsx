@@ -48,6 +48,13 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
+    const lastCheckpointForStep =
+      step.checkpoints &&
+      step.checkpoints.findIndex(
+        ({ id }) => id === step.currentCheckpointId
+      ) ===
+        step.checkpoints.length - 1;
+
     switch (message.data.event) {
       case 'test_end':
         testsRef.current = [...testsRef.current, message.data.test];
@@ -59,15 +66,20 @@ const CTA: React.FC<Props> = ({
           return;
         } else {
           testFailureVar(false);
-          //  prompt register if previewing
+          // prompt register if previewing
+          // note: Oct 12, 2021
+          // lol well the people hate this
+          // maybe add it back once you have some traction
+          // or get signups some other way
           if (isPreviewing) {
-            modalVar({
-              callback: () =>
-                lesson?.id
-                  ? router.push(`/lessons/start/${lesson.id}`)
-                  : router.push('/'),
-              name: 'registerAfterPreview',
-            });
+            // modalVar({
+            //   callback: () =>
+            //     lesson?.id
+            //       ? router.push(`/lessons/start/${lesson.id}`)
+            //       : router.push('/'),
+            //   name: 'registerAfterPreview',
+            // });
+            lastCheckpointForStep ? nextStep() : completeCheckpoint();
             return;
           }
 
@@ -76,13 +88,6 @@ const CTA: React.FC<Props> = ({
           await passCheckpoint({
             variables: { id: step.currentCheckpointId },
           });
-
-          const lastCheckpointForStep =
-            step.checkpoints &&
-            step.checkpoints.findIndex(
-              ({ id }) => id === step.currentCheckpointId
-            ) ===
-              step.checkpoints.length - 1;
 
           modalVar({
             callback: () =>
@@ -139,16 +144,16 @@ const CTA: React.FC<Props> = ({
     handleRunTests();
   };
 
-  const promptRegistration = () => {
-    //  prompt register if previewing
-    modalVar({
-      callback: () =>
-        lesson?.id
-          ? router.push(`/lessons/start/${lesson.id}`)
-          : router.push('/'),
-      name: 'registerAfterPreview',
-    });
-  };
+  // const promptRegistration = () => {
+  //   //  prompt register if previewing
+  //   modalVar({
+  //     callback: () =>
+  //       lesson?.id
+  //         ? router.push(`/lessons/start/${lesson.id}`)
+  //         : router.push('/'),
+  //     name: 'registerAfterPreview',
+  //   });
+  // };
 
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
@@ -159,9 +164,7 @@ const CTA: React.FC<Props> = ({
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
   const spinner = isTesting || !bundlerState || loading;
-  const fn = isPreviewing
-    ? promptRegistration
-    : isTested
+  const fn = isTested
     ? isStepComplete
       ? nextStep
       : completeCheckpoint

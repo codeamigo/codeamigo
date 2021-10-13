@@ -1,5 +1,6 @@
 import { ApolloClient, ApolloLink, from, HttpLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist';
 import { withApollo as createWithApollo } from 'next-apollo';
 
 import cache, { statusVar } from '👨‍💻apollo/cache';
@@ -33,6 +34,13 @@ const activityLink = new ApolloLink((operation, forward) => {
 
   return forward(operation);
 });
+
+if (typeof window !== 'undefined') {
+  await persistCache({
+    cache,
+    storage: new LocalStorageWrapper(window.localStorage),
+  });
+}
 
 export const client = new ApolloClient({
   cache,
