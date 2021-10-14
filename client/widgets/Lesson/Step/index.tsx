@@ -151,6 +151,13 @@ const Step: React.FC<Props> = (props) => {
       return;
     }
 
+    if (!next) {
+      modalVar({
+        callback: () => router.push('/'),
+        name: 'registerAfterPreview',
+      });
+    }
+
     next && setCurrentStepId(next.id);
   };
 

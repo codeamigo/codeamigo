@@ -44,14 +44,14 @@ const Register: React.FC = () => {
             </h1>
             <div className="flex gap-6 justify-center">
               <button
-                className="w-7 h-7"
+                className="w-8 h-8"
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
                 <Image src={googlePng} />
               </button>
               <button
-                className="block w-7 h-7 rounded-full bg-bg-nav-offset"
+                className="block w-8 h-8 rounded-full bg-bg-nav-offset"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 style={{ padding: '2px' }}
                 type="button"

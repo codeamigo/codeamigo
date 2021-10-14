@@ -154,17 +154,6 @@ const CTA: React.FC<Props> = ({
     handleRunTests();
   };
 
-  // const promptRegistration = () => {
-  //   //  prompt register if previewing
-  //   modalVar({
-  //     callback: () =>
-  //       lesson?.id
-  //         ? router.push(`/lessons/start/${lesson.id}`)
-  //         : router.push('/'),
-  //     name: 'registerAfterPreview',
-  //   });
-  // };
-
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
