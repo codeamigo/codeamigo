@@ -21,13 +21,16 @@ const CS_TYPES_FALLBACK_URL =
 const Editor: React.FC<Props> = ({
   activePath,
   codeModules,
+  isPreviewing,
   refreshPreview,
   runCode,
   stepId,
   updateCode,
   ...rest
 }) => {
-  const [updateCodeModule] = useUpdateCodeModuleMutation();
+  const [updateCodeModule] = useUpdateCodeModuleMutation({
+    errorPolicy: isPreviewing ? 'ignore' : 'all',
+  });
   const { data: meData } = useMeQuery();
 
   const pathRef = useRef(activePath);
@@ -115,7 +118,7 @@ const Editor: React.FC<Props> = ({
       updateCodeModule({
         variables: {
           id: currentModule.id,
-          lessonId: rest.isPreviewing ? rest?.lesson?.id : null,
+          lessonId: null,
           name: pathRef.current,
           value: newCode,
         },

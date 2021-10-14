@@ -8,11 +8,13 @@ import {
   Mutation,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 
 import { CodeModule } from "../entities/CodeModule";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
+import { isAuth } from "../middleware/isAuth";
 
 @InputType()
 class CodeModuleInput {
@@ -83,6 +85,7 @@ export class CodeModuleResolver {
   }
 
   @Mutation(() => CodeModule, { nullable: true })
+  @UseMiddleware(isAuth)
   async createCodeModule(
     @Arg("stepId") stepId: number,
     @Arg("options") options: CodeModuleInput
@@ -100,6 +103,7 @@ export class CodeModuleResolver {
   }
 
   @Mutation(() => CodeModule, { nullable: true })
+  @UseMiddleware(isAuth)
   async updateCodeModule(
     @Arg("id") id: number,
     @Arg("options") options: CodeModuleInput,

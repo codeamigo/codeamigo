@@ -6,10 +6,7 @@ import {
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
-import {
-  CheckpointTypeEnum,
-  RegularCheckpointFragment,
-} from '👨‍💻generated/graphql';
+import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -58,7 +55,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-50 flex-col justify-between w-2/6 md:w-48 bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
+        className="flex z-50 flex-col justify-between w-2/6 md:w-48 border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >

@@ -7,7 +7,6 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
-  LessonQuery,
   RegularStepFragment,
   StepDocument,
   StepQuery,
@@ -24,8 +23,6 @@ const CTA: React.FC<Props> = ({
   bundlerState,
   handleRunTests,
   isEditing,
-  isPreviewing,
-  lesson,
   loading,
   nextStep,
   selectFile,
@@ -66,26 +63,32 @@ const CTA: React.FC<Props> = ({
           return;
         } else {
           testFailureVar(false);
-          // prompt register if previewing
-          // note: Oct 12, 2021
-          // lol well the people hate this
-          // maybe add it back once you have some traction
-          // or get signups some other way
-          if (isPreviewing) {
-            // modalVar({
-            //   callback: () =>
-            //     lesson?.id
-            //       ? router.push(`/lessons/start/${lesson.id}`)
-            //       : router.push('/'),
-            //   name: 'registerAfterPreview',
-            // });
-            lastCheckpointForStep ? nextStep() : completeCheckpoint();
-            return;
-          }
-
           if (!step.currentCheckpointId) return;
 
+          const q = {
+            query: StepDocument,
+            variables: { id: step.id },
+          };
           await passCheckpoint({
+            update: (store) => {
+              const stepData = store.readQuery<StepQuery>(q);
+              if (!stepData?.step) return;
+
+              store.writeQuery<StepQuery>({
+                ...q,
+                data: {
+                  step: {
+                    ...stepData.step,
+                    checkpoints: stepData?.step?.checkpoints?.map(
+                      (checkpoint) =>
+                        checkpoint.id === stepData?.step?.currentCheckpointId
+                          ? { ...checkpoint, isTested: true }
+                          : checkpoint
+                    ),
+                  },
+                },
+              });
+            },
             variables: { id: step.currentCheckpointId },
           });
 
@@ -129,6 +132,11 @@ const CTA: React.FC<Props> = ({
           data: {
             step: {
               ...stepData.step,
+              checkpoints: stepData?.step?.checkpoints?.map((checkpoint) =>
+                checkpoint.id === stepData?.step?.currentCheckpointId
+                  ? { ...checkpoint, isCompleted: true }
+                  : checkpoint
+              ),
               currentCheckpointId:
                 nextCheckpointId || stepData.step.currentCheckpointId,
             },
@@ -194,7 +202,6 @@ type Props = {
   handleRunTests: () => void;
   isEditing?: boolean;
   isPreviewing?: boolean;
-  lesson: LessonQuery['lesson'];
   loading: boolean;
   nextStep: () => void;
   selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
