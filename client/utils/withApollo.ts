@@ -35,13 +35,6 @@ const activityLink = new ApolloLink((operation, forward) => {
   return forward(operation);
 });
 
-if (typeof window !== 'undefined') {
-  await persistCache({
-    cache,
-    storage: new LocalStorageWrapper(window.localStorage),
-  });
-}
-
 export const client = new ApolloClient({
   cache,
   link: from([errorLink, activityLink, httpLink]),

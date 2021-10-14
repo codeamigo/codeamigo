@@ -1,6 +1,7 @@
 import * as githubPng from 'assets/github.png';
 import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
 import React from 'react';
@@ -43,17 +44,19 @@ const Register: React.FC = () => {
             </h1>
             <div className="flex gap-6 justify-center">
               <button
+                className="w-7 h-7"
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
-                <img className="h-7" src={googlePng} />
+                <Image src={googlePng} />
               </button>
               <button
-                className="bg-bg-nav-offset"
+                className="block w-7 h-7 rounded-full bg-bg-nav-offset"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
+                style={{ padding: '2px' }}
                 type="button"
               >
-                <img className="h-7" src={githubPng} />
+                <Image src={githubPng} />
               </button>
             </div>
             <div className="sm:p-6 px-4">
@@ -92,7 +95,7 @@ const Register: React.FC = () => {
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
+                className="justify-center w-full text-sm font-medium rounded-md focus:outline-none text-accent"
                 onClick={() =>
                   modalVar({
                     callback: modalVar().callback,

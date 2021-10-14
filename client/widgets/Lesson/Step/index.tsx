@@ -21,12 +21,18 @@ import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/Sandp
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 
 const Step: React.FC<Props> = (props) => {
-  const { currentStepId: id, session, setCurrentStepId, showSteps } = props;
+  const {
+    currentStepId: id,
+    lesson,
+    session,
+    setCurrentStepId,
+    showSteps,
+  } = props;
   const previewRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const filesRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const [completeStep] = useCompleteStepMutation();
+  const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
   const [setNextStep] = useSetNextStepMutation();
 
   const { data: newData, loading, previousData } = useStepQuery({
@@ -71,11 +77,13 @@ const Step: React.FC<Props> = (props) => {
   if (!data.step) return null;
 
   const nextStep = () => {
-    if (!session?.steps) return;
+    if (!session?.steps && !lesson?.steps) return;
     if (!setCurrentStepId) return;
     if (!data.step) return;
 
-    const next = session.steps.find(
+    const steps = session?.steps || lesson!.steps!;
+
+    const next = steps.find(
       (nextStep) =>
         data.step?.createdAt && nextStep.createdAt > data.step.createdAt
     );
@@ -85,7 +93,7 @@ const Step: React.FC<Props> = (props) => {
       variables: { lessonId: session?.lesson.id },
     };
 
-    if (next) {
+    if (next && session) {
       setNextStep({
         update: (store) => {
           const sessionData = store.readQuery<SessionQuery>(q);
@@ -131,7 +139,7 @@ const Step: React.FC<Props> = (props) => {
       variables: { id: data.step.id },
     });
 
-    if (!next) {
+    if (!next && session) {
       modalVar({
         callback: () => router.push('/'),
         data: {

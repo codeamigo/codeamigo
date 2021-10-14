@@ -18,6 +18,7 @@ const Steps: React.FC<Props> = ({
   activeSessionStepId,
   currentStepId,
   isEditing,
+  isPreviewing,
   lessonId,
   setCurrentStepId,
   setShowSteps,
@@ -151,7 +152,10 @@ const Steps: React.FC<Props> = ({
   };
 
   const canGoToStep = (step: RegularStepFragment) =>
-    isEditing || step.isCompleted || step.id === activeSessionStepId;
+    isEditing ||
+    isPreviewing ||
+    step.isCompleted ||
+    step.id === activeSessionStepId;
 
   return (
     <Transition
@@ -300,6 +304,7 @@ type Props = {
   activeSessionStepId?: number;
   currentStepId: number;
   isEditing?: boolean;
+  isPreviewing?: boolean;
   lessonId: number;
   setCurrentStepId: (n: number) => void;
   setShowSteps: (val: boolean) => void;

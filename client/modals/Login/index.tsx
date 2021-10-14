@@ -72,21 +72,19 @@ const Login: React.FC = () => {
             </h1>
             <div className="flex gap-6 justify-center">
               <button
+                className="w-7 h-7"
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
-                <div className="h-7">
-                  <Image src={googlePng} />
-                </div>
+                <Image src={googlePng} />
               </button>
               <button
-                className="bg-bg-nav-offset"
+                className="block w-7 h-7 rounded-full bg-bg-nav-offset"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
+                style={{ padding: '2px' }}
                 type="button"
               >
-                <div className="h-7">
-                  <Image src={githubPng} />
-                </div>
+                <Image src={githubPng} />
               </button>
             </div>
             <div className="sm:p-6 px-4">

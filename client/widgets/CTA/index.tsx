@@ -29,8 +29,10 @@ const CTA: React.FC<Props> = ({
   step,
 }) => {
   const router = useRouter();
-  const [completeCheckpointM] = useCompleteCheckpointMutation();
-  const [passCheckpoint] = usePassCheckpointMutation();
+  const [completeCheckpointM] = useCompleteCheckpointMutation({
+    errorPolicy: 'ignore',
+  });
+  const [passCheckpoint] = usePassCheckpointMutation({ errorPolicy: 'ignore' });
   const isTesting = useReactiveVar(isTestingVar);
 
   const testsRef = useRef<TestDataType[]>([]);
