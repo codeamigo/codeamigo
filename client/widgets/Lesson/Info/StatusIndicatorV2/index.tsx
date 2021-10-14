@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { statusVar } from '👨‍💻apollo/cache';
 import Icon from '👨‍💻components/Icon';
 
-const StatusIndicatorV2: React.FC<Props> = ({ isActive, isPreviewing }) => {
+const StatusIndicatorV2: React.FC<Props> = ({ isActive }) => {
   const status = useReactiveVar(statusVar);
   const [ping, setPing] = useState(false);
 
@@ -30,7 +30,7 @@ const StatusIndicatorV2: React.FC<Props> = ({ isActive, isPreviewing }) => {
             exit={{ bottom: '-2em' }}
             initial={{ bottom: '-2em' }}
           >
-            {isPreviewing ? null : status.connected ? (
+            {status.connected ? (
               ping && isActive ? (
                 <div className="flex relative">
                   {ping && (
@@ -57,7 +57,6 @@ const StatusIndicatorV2: React.FC<Props> = ({ isActive, isPreviewing }) => {
 
 type Props = {
   isActive: boolean;
-  isPreviewing?: boolean;
 };
 
 export default StatusIndicatorV2;

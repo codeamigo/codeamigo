@@ -287,9 +287,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                         plugins={[gfm]}
                       />
                     )}
-                    {showStatusIndicator && (
-                      <StatusIndicatorV2 isActive={showStatusIndicator} />
-                    )}
+                    <StatusIndicatorV2 isActive={showStatusIndicator} />
                   </div>
                 )}
               </div>

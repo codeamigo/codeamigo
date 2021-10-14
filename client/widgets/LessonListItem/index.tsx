@@ -15,7 +15,7 @@ const LessonListItem: React.FC<Props> = ({
   progress,
 }) => {
   return (
-    <div className="flex flex-col rounded-lg border-2 border-bg-nav-offset">
+    <div className="flex flex-col rounded-lg border-2 hover:shadow-lg transition-shadow duration-200 border-bg-nav-offset">
       <div
         className="p-2 border-b-2 cursor-pointer border-bg-nav-offset"
         onClick={() => router.push(href)}

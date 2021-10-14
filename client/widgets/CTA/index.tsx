@@ -7,7 +7,6 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
-  LessonQuery,
   RegularStepFragment,
   StepDocument,
   StepQuery,
@@ -24,16 +23,16 @@ const CTA: React.FC<Props> = ({
   bundlerState,
   handleRunTests,
   isEditing,
-  isPreviewing,
-  lesson,
   loading,
   nextStep,
   selectFile,
   step,
 }) => {
   const router = useRouter();
-  const [completeCheckpointM] = useCompleteCheckpointMutation();
-  const [passCheckpoint] = usePassCheckpointMutation();
+  const [completeCheckpointM] = useCompleteCheckpointMutation({
+    errorPolicy: 'ignore',
+  });
+  const [passCheckpoint] = usePassCheckpointMutation({ errorPolicy: 'ignore' });
   const isTesting = useReactiveVar(isTestingVar);
 
   const testsRef = useRef<TestDataType[]>([]);
@@ -48,6 +47,13 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
+    const lastCheckpointForStep =
+      step.checkpoints &&
+      step.checkpoints.findIndex(
+        ({ id }) => id === step.currentCheckpointId
+      ) ===
+        step.checkpoints.length - 1;
+
     switch (message.data.event) {
       case 'test_end':
         testsRef.current = [...testsRef.current, message.data.test];
@@ -59,30 +65,34 @@ const CTA: React.FC<Props> = ({
           return;
         } else {
           testFailureVar(false);
-          //  prompt register if previewing
-          if (isPreviewing) {
-            modalVar({
-              callback: () =>
-                lesson?.id
-                  ? router.push(`/lessons/start/${lesson.id}`)
-                  : router.push('/'),
-              name: 'registerAfterPreview',
-            });
-            return;
-          }
-
           if (!step.currentCheckpointId) return;
 
+          const q = {
+            query: StepDocument,
+            variables: { id: step.id },
+          };
           await passCheckpoint({
+            update: (store) => {
+              const stepData = store.readQuery<StepQuery>(q);
+              if (!stepData?.step) return;
+
+              store.writeQuery<StepQuery>({
+                ...q,
+                data: {
+                  step: {
+                    ...stepData.step,
+                    checkpoints: stepData?.step?.checkpoints?.map(
+                      (checkpoint) =>
+                        checkpoint.id === stepData?.step?.currentCheckpointId
+                          ? { ...checkpoint, isTested: true }
+                          : checkpoint
+                    ),
+                  },
+                },
+              });
+            },
             variables: { id: step.currentCheckpointId },
           });
-
-          const lastCheckpointForStep =
-            step.checkpoints &&
-            step.checkpoints.findIndex(
-              ({ id }) => id === step.currentCheckpointId
-            ) ===
-              step.checkpoints.length - 1;
 
           modalVar({
             callback: () =>
@@ -124,6 +134,11 @@ const CTA: React.FC<Props> = ({
           data: {
             step: {
               ...stepData.step,
+              checkpoints: stepData?.step?.checkpoints?.map((checkpoint) =>
+                checkpoint.id === stepData?.step?.currentCheckpointId
+                  ? { ...checkpoint, isCompleted: true }
+                  : checkpoint
+              ),
               currentCheckpointId:
                 nextCheckpointId || stepData.step.currentCheckpointId,
             },
@@ -139,17 +154,6 @@ const CTA: React.FC<Props> = ({
     handleRunTests();
   };
 
-  const promptRegistration = () => {
-    //  prompt register if previewing
-    modalVar({
-      callback: () =>
-        lesson?.id
-          ? router.push(`/lessons/start/${lesson.id}`)
-          : router.push('/'),
-      name: 'registerAfterPreview',
-    });
-  };
-
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
@@ -159,9 +163,7 @@ const CTA: React.FC<Props> = ({
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
   const spinner = isTesting || !bundlerState || loading;
-  const fn = isPreviewing
-    ? promptRegistration
-    : isTested
+  const fn = isTested
     ? isStepComplete
       ? nextStep
       : completeCheckpoint
@@ -191,7 +193,6 @@ type Props = {
   handleRunTests: () => void;
   isEditing?: boolean;
   isPreviewing?: boolean;
-  lesson: LessonQuery['lesson'];
   loading: boolean;
   nextStep: () => void;
   selectFile?: React.Dispatch<React.SetStateAction<string | null>>;

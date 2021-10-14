@@ -116,10 +116,7 @@ const Instructions: React.FC<Props> = (props) => {
               plugins={[gfm]}
             />
           )}
-          <StatusIndicatorV2
-            isActive={showStatusIndicator}
-            isPreviewing={props.isPreviewing}
-          />
+          <StatusIndicatorV2 isActive={showStatusIndicator} />
         </div>
         <div className="flex relative flex-col flex-1">
           <Checkpoints {...props} />

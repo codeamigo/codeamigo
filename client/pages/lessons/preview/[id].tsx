@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
 import React, { useState } from 'react';
 
-import { useLessonQuery } from '👨‍💻generated/graphql';
+import { SessionQuery, useLessonQuery } from '👨‍💻generated/graphql';
 import Info from '👨‍💻widgets/Lesson/Info';
 import Step from '👨‍💻widgets/Lesson/Step';
 import Steps from '👨‍💻widgets/Lesson/Steps';
@@ -25,6 +25,7 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
     <div className="flex">
       <Steps
         currentStepId={stepId}
+        isPreviewing
         lessonId={data.lesson.id}
         setCurrentStepId={setCurrentStepId}
         setShowSteps={setShowSteps}
@@ -37,6 +38,7 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
           currentStepId={stepId}
           isPreviewing
           lesson={data.lesson}
+          setCurrentStepId={setCurrentStepId}
           setShowSteps={setShowSteps}
           showSteps={showSteps}
         />
