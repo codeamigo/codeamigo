@@ -151,9 +151,7 @@ const Step: React.FC<Props> = (props) => {
       return;
     }
 
-    // TODO: replace setCurrentStepId w/ session.currentStep
-    // isEditing ? set lesson current step : set session
-    setCurrentStepId(next?.id);
+    next && setCurrentStepId(next.id);
   };
 
   const updateWidths = (x: number) => {
@@ -187,44 +185,7 @@ const Step: React.FC<Props> = (props) => {
   };
 
   const onRunMatchTest = (checkpoint: RegularCheckpointFragment) => {
-    const file = data.step?.codeModules?.find(
-      ({ name }) => checkpoint.fileToMatchRegex === name
-    );
-    const match = file?.value?.match(new RegExp(checkpoint.matchRegex!, 'g'));
-
-    window.postMessage(
-      {
-        event: 'total_test_start',
-        type: 'test',
-      },
-      '*'
-    );
-
-    window.postMessage(
-      {
-        $id: 0,
-        codesandbox: true,
-        event: 'test_end',
-        test: {
-          blocks: ['File', file?.name],
-          duration: 1,
-          errors: [],
-          name: `should include ${checkpoint.matchRegex}.`,
-          path: '',
-          status: match ? 'pass' : 'fail',
-        },
-        type: 'test',
-      } as CodeSandboxTestMsgType,
-      '*'
-    );
-
-    window.postMessage(
-      {
-        event: 'total_test_end',
-        type: 'test',
-      },
-      '*'
-    );
+    window.postMessage({ checkpoint, event: 'runMatchTest' }, '*');
   };
 
   return (

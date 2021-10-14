@@ -4,10 +4,12 @@ import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
 import {
   LessonQuery,
+  RegularCheckpointFragment,
   RegularCodeModuleFragment,
   useMeQuery,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
+import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
 import * as THEMES from '../../../styles/monacoThemes';
 import { camalize, getLanguage } from './utils';
@@ -92,6 +94,64 @@ const Editor: React.FC<Props> = ({
     };
 
     window.addEventListener('message', handleSearch);
+  }, []);
+
+  // When match regex is run
+  useEffect(() => {
+    const handleMatchRegexTest = (
+      ev: MessageEvent<{ checkpoint: RegularCheckpointFragment; event: string }>
+    ) => {
+      if (!ev.data.event) return;
+      if (ev.data.event !== 'runMatchTest') return;
+
+      const checkpoint = ev.data.checkpoint;
+
+      const model = monacoRef.current.editor.getModel(
+        `${URN}${ev.data.checkpoint.fileToMatchRegex}`
+      );
+
+      const match = model
+        .getValue()
+        .match(new RegExp(checkpoint.matchRegex!, 'g'));
+
+      debugger;
+
+      window.postMessage(
+        {
+          event: 'total_test_start',
+          type: 'test',
+        },
+        '*'
+      );
+
+      window.postMessage(
+        {
+          $id: 0,
+          codesandbox: true,
+          event: 'test_end',
+          test: {
+            blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
+            duration: 1,
+            errors: [],
+            name: `does not include the correct value.`,
+            path: '',
+            status: match ? 'pass' : 'fail',
+          },
+          type: 'test',
+        } as CodeSandboxTestMsgType,
+        '*'
+      );
+
+      window.postMessage(
+        {
+          event: 'total_test_end',
+          type: 'test',
+        },
+        '*'
+      );
+    };
+
+    window.addEventListener('message', handleMatchRegexTest);
   }, []);
 
   useEffect(() => {
