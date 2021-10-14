@@ -1,6 +1,5 @@
 import { ApolloClient, ApolloLink, from, HttpLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist';
 import { withApollo as createWithApollo } from 'next-apollo';
 
 import cache, { statusVar } from '👨‍💻apollo/cache';
