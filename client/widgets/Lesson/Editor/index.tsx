@@ -155,14 +155,13 @@ const Editor: React.FC<Props> = ({
     if (monacoRef.current && rest.isTyped) {
       setupTypes();
     }
-    // TODO: fix check
   }, [codeModules?.length, monacoRef.current]);
 
   useEffect(() => {
     refreshPreview && refreshPreview();
   }, [stepId]);
 
-  const handleCodeUpdate = (newCode?: string, _: any) => {
+  const handleCodeUpdate = (newCode?: string, _?: any) => {
     if (!updateCode) return;
     if (!newCode) return;
     updateCode && updateCode(newCode);
