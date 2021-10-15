@@ -114,8 +114,6 @@ const Editor: React.FC<Props> = ({
         .getValue()
         .match(new RegExp(checkpoint.matchRegex!, 'g'));
 
-      debugger;
-
       window.postMessage(
         {
           event: 'total_test_start',

@@ -91,8 +91,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           <div className="p-2">
             <CTA
               {...props}
-              // bundlerState true needed for sandpack
-              bundlerState
+              bundlerReady
               handleRunTests={handleRunTests}
               loading={loading}
               nextStep={nextStep}

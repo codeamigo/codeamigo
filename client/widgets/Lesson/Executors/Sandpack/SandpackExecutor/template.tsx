@@ -52,6 +52,8 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     }
   };
 
+  console.log(sandpack);
+
   return (
     <SandpackLayout>
       <div
@@ -72,7 +74,9 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         <div className="p-2">
           <CTA
             {...props}
-            bundlerState={sandpack.bundlerState}
+            bundlerReady={
+              sandpack.status === 'running' && !!sandpack.bundlerState
+            }
             handleRunTests={handleRunTests}
             loading={loading}
             nextStep={nextStep}

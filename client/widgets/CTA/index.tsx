@@ -1,6 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
-import { useRouter } from 'next/router';
-import React, { useEffect, useRef } from 'react';
+import { SandpackStatus } from '@codesandbox/sandpack-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
@@ -20,7 +20,7 @@ import {
 } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
 const CTA: React.FC<Props> = ({
-  bundlerState,
+  bundlerReady,
   handleRunTests,
   isEditing,
   loading,
@@ -28,14 +28,21 @@ const CTA: React.FC<Props> = ({
   selectFile,
   step,
 }) => {
-  const router = useRouter();
+  const [isReady, setIsReady] = useState(false);
   const [completeCheckpointM] = useCompleteCheckpointMutation({
     errorPolicy: 'ignore',
   });
   const [passCheckpoint] = usePassCheckpointMutation({ errorPolicy: 'ignore' });
   const isTesting = useReactiveVar(isTestingVar);
-
   const testsRef = useRef<TestDataType[]>([]);
+
+  useEffect(() => {
+    if (bundlerReady) {
+      setTimeout(() => {
+        setIsReady(true);
+      }, 1000);
+    }
+  }, [bundlerReady]);
 
   const handlePassCheckpoint = async (
     message: MessageEvent<CodeSandboxTestMsgType>
@@ -93,6 +100,8 @@ const CTA: React.FC<Props> = ({
             },
             variables: { id: step.currentCheckpointId },
           });
+
+          debugger;
 
           modalVar({
             callback: () =>
@@ -162,7 +171,7 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
-  const spinner = isTesting || !bundlerState || loading;
+  const spinner = isTesting || !isReady || loading;
   const fn = isTested
     ? isStepComplete
       ? nextStep
@@ -189,7 +198,7 @@ const CTA: React.FC<Props> = ({
 };
 
 type Props = {
-  bundlerState: any;
+  bundlerReady: boolean;
   handleRunTests: () => void;
   isEditing?: boolean;
   isPreviewing?: boolean;

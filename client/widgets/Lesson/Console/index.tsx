@@ -82,6 +82,7 @@ const Console: React.FC<Props> = (props) => {
                 className={`px-4 py-2 text-text-primary text-xs cursor-pointer capitalize ${
                   activeTab === tab ? 'bg-bg-nav' : ''
                 }`}
+                key={tab}
                 onClick={() => setActiveTab(tab)}
               >
                 {tab}

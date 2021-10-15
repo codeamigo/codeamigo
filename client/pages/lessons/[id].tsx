@@ -26,7 +26,6 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   const { data: sessionData, loading: sessionLoading } = useSessionQuery({
     variables: { lessonId: id },
   });
-  console.log(sessionData);
 
   useEffect(() => {
     if (meLoading) return;
