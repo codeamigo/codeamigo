@@ -37,7 +37,6 @@ const Console: React.FC<Props> = (props) => {
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
       if (msg.data.type === 'console') {
-        console.log(msg);
         setLogList((currentList: any) => [
           ...currentList,
           consoleFeed.Decode(msg.data.log),

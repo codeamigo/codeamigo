@@ -52,8 +52,6 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     }
   };
 
-  console.log(sandpack);
-
   return (
     <SandpackLayout>
       <div

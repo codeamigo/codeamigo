@@ -58,7 +58,12 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           defer
           src="https://plausible.io/js/plausible.exclusions.js"
         ></script>
-
+        <link
+          data-name="vs/editor/editor.main"
+          href="https://cdn.jsdelivr.net/npm/monaco-editor@0.28.1/min/vs/editor/editor.main.css"
+          rel="stylesheet"
+          type="text/css"
+        ></link>
         <link
           href="/favicon/apple-touch-icon.png"
           rel="apple-touch-icon"

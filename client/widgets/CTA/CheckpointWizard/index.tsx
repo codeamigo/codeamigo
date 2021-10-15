@@ -1,10 +1,7 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
-import {
-  RegularStepFragment,
-  StepExecutionTypeEnum,
-} from '👨‍💻generated/graphql';
+import { RegularStepFragment } from '👨‍💻generated/graphql';
 import Jest from '👨‍💻widgets/CTA/CheckpointWizard/jest';
 import Match from '👨‍💻widgets/CTA/CheckpointWizard/match';
 import Output from '👨‍💻widgets/CTA/CheckpointWizard/output';

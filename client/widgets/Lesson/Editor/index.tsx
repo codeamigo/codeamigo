@@ -1,4 +1,4 @@
-import { ControlledEditor, monaco } from '@monaco-editor/react';
+import ControlledEditor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
@@ -79,7 +79,6 @@ const Editor: React.FC<Props> = ({
           if (!controller.getState()._isRegex) {
             controller.toggleRegex();
           }
-          console.log(ev.data.regex);
           const match = editorRef.current
             .getModel()
             .findMatches(ev.data.regex)[0];
@@ -163,7 +162,9 @@ const Editor: React.FC<Props> = ({
     refreshPreview && refreshPreview();
   }, [stepId]);
 
-  const handleCodeUpdate = (newCode: string) => {
+  const handleCodeUpdate = (newCode?: string, _: any) => {
+    if (!updateCode) return;
+    if (!newCode) return;
     updateCode && updateCode(newCode);
     // Wait for pathRef to update
     setTimeout(() => {
@@ -290,9 +291,10 @@ const Editor: React.FC<Props> = ({
 
     try {
       const pkgJson = JSON.parse(pkgJsonString) as {
-        dependencies: { [key in string]: string };
+        dependencies?: { [key in string]: string };
       };
       const dependencies = pkgJson.dependencies;
+      if (!dependencies) return;
       Object.keys(dependencies).map(async (dep) => {
         try {
           const initial = await fetch(
@@ -337,26 +339,22 @@ const Editor: React.FC<Props> = ({
     setupModels();
   };
 
-  const editorDidMount = async (_: any, editor: any) => {
-    const monacoInstance = await monaco.init();
-
+  const editorDidMount = async (editor: any, monaco: any) => {
     editorRef.current = editor;
-    monacoRef.current = monacoInstance;
+    monacoRef.current = monaco;
 
     setupEditor();
   };
 
   return (
     <ControlledEditor
-      editorDidMount={editorDidMount}
       loading={
         <div className="flex justify-center items-center w-full h-full font-bold text-white bg-bg-primary">
           Loading...
         </div>
       }
-      onChange={(_, value) => {
-        handleCodeUpdate(value as string);
-      }}
+      onChange={handleCodeUpdate}
+      onMount={editorDidMount}
       options={{
         automaticLayout: true,
         fontSize: '12px',

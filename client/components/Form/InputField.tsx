@@ -18,6 +18,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
         {...props}
         {...field}
         className="block mt-1 w-full sm:text-sm rounded-md border-gray-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm"
+        component={props.component || 'input'}
         id={field.name}
         name={field.name}
         type={props.type}
@@ -28,6 +29,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
 };
 
 type Props = {
+  component?: 'input' | 'select' | 'textarea';
   label: string;
   name: string;
 };

@@ -1,5 +1,5 @@
 import { Field, Form, Formik } from 'formik';
-import React from 'react';
+import React, { KeyboardEventHandler } from 'react';
 
 import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
@@ -34,7 +34,17 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
   const handleRegexChange: React.ChangeEventHandler<HTMLInputElement> = (
     ev
   ) => {
-    window.postMessage({ regex: ev.target.value.replace(/\\(?!n)/g, '') }, '*');
+    console.log(ev.target.value.replace(/[#-.]|[[-^]|[?|{}]/g, '\\$&'));
+    window.postMessage({ regex: ev.target.value }, '*');
+  };
+
+  const handleKeyDown = (
+    keyEvent: React.KeyboardEvent<HTMLFormElement>,
+    submitForm: () => Promise<void>
+  ) => {
+    if (keyEvent.keyCode === 13 && keyEvent.shiftKey) {
+      submitForm();
+    }
   };
 
   return (
@@ -62,9 +72,9 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
           return errors;
         }}
       >
-        {({ isSubmitting, isValid, values }) => (
+        {({ isSubmitting, isValid, submitForm, values }) => (
           <>
-            <Form>
+            <Form onKeyDown={(ev) => handleKeyDown(ev, submitForm)}>
               <div className="mt-2 mb-1">Select a file</div>
               <Field
                 as="select"
@@ -84,11 +94,13 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
               </div>
               <InputField
                 className="text-black"
+                component={'textarea'}
                 label=""
                 name="regex"
                 onChangeCapture={handleRegexChange}
                 required
-                type="text"
+                style={{ resize: 'none' }}
+                type="textarea"
               />
               <div className="mt-1 text-xs">Regex: /{values.regex}/g</div>
               <div className="flex items-center mt-2">
