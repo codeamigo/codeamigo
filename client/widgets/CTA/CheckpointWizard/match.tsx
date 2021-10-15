@@ -15,6 +15,8 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
     file: string;
     regex: string;
   }) => {
+    console.log(values.regex);
+    debugger;
     await createMatchCheckpointM({
       refetchQueries: ['Checkpoints', 'Step'],
       variables: {
@@ -35,6 +37,7 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
     ev
   ) => {
     console.log(ev.target.value.replace(/[#-.]|[[-^]|[?|{}]/g, '\\$&'));
+    console.log(ev.target);
     window.postMessage({ regex: ev.target.value }, '*');
   };
 

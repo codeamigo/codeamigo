@@ -95,7 +95,7 @@ const Editor: React.FC<Props> = ({
     window.addEventListener('message', handleSearch);
   }, []);
 
-  // When match regex is run
+  // When match regex test is run
   useEffect(() => {
     const handleMatchRegexTest = (
       ev: MessageEvent<{ checkpoint: RegularCheckpointFragment; event: string }>
@@ -109,9 +109,7 @@ const Editor: React.FC<Props> = ({
         `${URN}${ev.data.checkpoint.fileToMatchRegex}`
       );
 
-      const match = model
-        .getValue()
-        .match(new RegExp(checkpoint.matchRegex!, 'g'));
+      const match = model.getValue().includes(checkpoint.matchRegex);
 
       window.postMessage(
         {
