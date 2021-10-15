@@ -101,8 +101,6 @@ const CTA: React.FC<Props> = ({
             variables: { id: step.currentCheckpointId },
           });
 
-          debugger;
-
           modalVar({
             callback: () =>
               lastCheckpointForStep ? nextStep() : completeCheckpoint(),
