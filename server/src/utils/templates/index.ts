@@ -27,30 +27,6 @@ const css = `html, body {
   background-color: white;
 }`;
 
-const tsTemplate: ITemplate = {
-  codeModules: [
-    {
-      name: "/index.html",
-      value: `<html>
-<body>
-</body>
-
-<script src='./app.ts'></script>
-</html>`,
-    },
-    { isEntry: true, name: "/app.ts", value: "// app.ts" },
-    {
-      name: "/package.json",
-      value: `{
-  "main": "./app.ts"
-}`,
-    },
-  ],
-  dependencies: [],
-  executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
-};
-
 const htmlTemplate: ITemplate = {
   codeModules: [
     {
@@ -707,6 +683,14 @@ const jsTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "javascript",
+};
+
+const tsTemplate: ITemplate = {
+  codeModules: [
+    { isEntry: true, name: "/main.ts", value: "console.log('Hello, world!');" },
+  ],
+  executionType: StepExecutionTypeEnum.riju,
+  lang: "typescript",
 };
 
 const goTemplate: ITemplate = {
