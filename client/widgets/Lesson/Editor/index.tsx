@@ -1,4 +1,4 @@
-import ControlledEditor from '@monaco-editor/react';
+import MonacoEditor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
@@ -45,9 +45,10 @@ const Editor: React.FC<Props> = ({
 
   useEffect(() => {
     if (!monacoRef.current) return;
+    if (!editorRef.current) return;
     if (!activePath) return;
     const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
-    editorRef.current.setModel(model);
+    if (model) editorRef.current.setModel(model);
   }, [activePath, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
@@ -222,15 +223,6 @@ const Editor: React.FC<Props> = ({
     );
   };
 
-  const setupDiagnosticsOptions = () => {
-    monacoRef.current.languages.typescript.typescriptDefaults.setDiagnosticsOptions(
-      {
-        noSemanticValidation: true,
-        noSyntaxValidation: true,
-      }
-    );
-  };
-
   const setupCommands = () => {
     editorRef.current.addCommand(
       monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.KEY_S,
@@ -255,18 +247,15 @@ const Editor: React.FC<Props> = ({
   };
 
   const setupModels = () => {
-    codeModules?.map((mod) => {
+    codeModules?.forEach((mod) => {
       const model = monacoRef.current.editor.getModel(`${URN}${mod.name}`);
-
       if (model) return;
-
       monacoRef.current.editor.createModel(
         mod.value,
         getLanguage(mod.name || ''),
-        `${URN}${mod.name}`
+        monacoRef.current.Uri.parse(`${URN}${mod.name}`)
       );
     });
-
     const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
     model?.updateOptions({ tabSize: 2 });
     editorRef.current.setModel(model);
@@ -330,7 +319,6 @@ const Editor: React.FC<Props> = ({
   const setupEditor = () => {
     setupCommands();
     setupCompilerOptions();
-    setupDiagnosticsOptions();
     setupThemes();
     setupModels();
   };
@@ -343,7 +331,8 @@ const Editor: React.FC<Props> = ({
   };
 
   return (
-    <ControlledEditor
+    <MonacoEditor
+      defaultLanguage="typescript"
       loading={
         <div className="flex justify-center items-center w-full h-full font-bold text-white bg-bg-primary">
           Loading...
