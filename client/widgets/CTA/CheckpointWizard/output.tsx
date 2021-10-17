@@ -49,6 +49,9 @@ const Output: React.FC<Props> = ({ setWizardStep, step }) => {
               required
               type="text"
             />
+            <div className="mt-1 text-xxs">
+              Note: the check will be made against any output to the terminal.
+            </div>
             <div className="flex items-center mt-3">
               <Icon
                 className="mr-4 text-base"
