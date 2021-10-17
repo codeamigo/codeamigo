@@ -129,7 +129,9 @@ const Editor: React.FC<Props> = ({
             blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
             duration: 1,
             errors: [],
-            name: `does not include the correct value.`,
+            name: match
+              ? 'includes the correct value(s)!'
+              : `does not include the correct value.`,
             path: '',
             status: match ? 'pass' : 'fail',
           },
