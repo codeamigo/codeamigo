@@ -15,8 +15,6 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
     file: string;
     regex: string;
   }) => {
-    console.log(values.regex);
-    debugger;
     await createMatchCheckpointM({
       refetchQueries: ['Checkpoints', 'Step'],
       variables: {
@@ -89,7 +87,9 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
                   ?.filter(({ name }) => name && name[name.length - 1] !== '/')
                   ?.filter(({ name }) => name && !name.includes('spec'))
                   .map(({ name }) => (
-                    <option value={name!}>{name?.substr(1)}</option>
+                    <option key={name} value={name!}>
+                      {name?.substr(1)}
+                    </option>
                   ))}
               </Field>
               <div className="mt-3 mb-1">

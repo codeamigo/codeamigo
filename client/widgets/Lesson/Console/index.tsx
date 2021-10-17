@@ -106,16 +106,18 @@ const Console: React.FC<Props> = (props) => {
           </div>
         </div>
       </div>
-      <div className={`${activeTab === 'console' ? 'block' : 'hidden'}`}>
-        <consoleFeed.Console
-          logs={logList}
-          styles={{
-            BASE_FONT_SIZE: '13px',
-            LOG_RESULT_BACKGROUND: 'blue',
-          }}
-          variant={'dark'}
-        />
-      </div>
+      {consoleFeed && (
+        <div className={`${activeTab === 'console' ? 'block' : 'hidden'}`}>
+          <consoleFeed.Console
+            logs={logList}
+            styles={{
+              BASE_FONT_SIZE: '13px',
+              LOG_RESULT_BACKGROUND: 'blue',
+            }}
+            variant={'dark'}
+          />
+        </div>
+      )}
       <div className={`${activeTab === 'tests' ? 'block' : 'hidden'}`}>
         <Tests runTests={props.runTests} stepId={props.stepId} />
       </div>
