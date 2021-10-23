@@ -30,8 +30,8 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
           </div>
         </div>
       </div>
-      {/* <div
-        className={`flex opacity-50 hint--right hint--no-animate items-baseline justify-start group-inner-1 cursor-not-allowed pointer-events-none ${
+      <div
+        className={`flex items-baseline justify-start group-inner-1 cursor-not-allowed ${
           step.executionType === StepExecutionTypeEnum.Sandpack
             ? 'hidden'
             : 'block'
@@ -52,7 +52,7 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
           </div>
           <div>Check that the user's output is correct.</div>
         </div>
-      </div> */}
+      </div>
       <div
         aria-label="no"
         className={`flex items-baseline justify-start group-inner-1 ${
