@@ -31,7 +31,7 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
         </div>
       </div>
       <div
-        className={`flex items-baseline justify-start group-inner-1 cursor-not-allowed ${
+        className={`flex items-baseline justify-start group-inner-1 ${
           step.executionType === StepExecutionTypeEnum.Sandpack
             ? 'hidden'
             : 'block'
