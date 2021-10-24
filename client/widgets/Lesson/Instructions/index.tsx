@@ -68,7 +68,7 @@ const Instructions: React.FC<Props> = (props) => {
         id="instructions"
       >
         <h3
-          className={`w-full flex justify-between items-center bg-bg-nav text-xs ${
+          className={`w-full flex sticky top-0 left-0 justify-between items-center bg-bg-nav text-xs ${
             isEditing ? 'p-1.5 border-b border-bg-nav-offset-faded' : ''
           }`}
         >
