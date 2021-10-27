@@ -177,6 +177,18 @@ export class LessonResolver {
   }
 
   @Mutation(() => Lesson, { nullable: true })
+  async updateLessonViews(@Arg("id") id: number): Promise<Lesson | null> {
+    const lesson = await Lesson.findOne(id);
+    if (!lesson) {
+      return null;
+    }
+
+    await Lesson.update({ id }, { ...lesson, views: lesson.views + 1 });
+
+    return lesson;
+  }
+
+  @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
   async updateLessonTitle(
     @Arg("id") id: number,

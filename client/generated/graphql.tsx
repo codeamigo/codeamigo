@@ -144,6 +144,7 @@ export type Lesson = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   thumbnail?: Maybe<Scalars['String']>;
+  views?: Maybe<Scalars['Float']>;
   status?: Maybe<LessonStatus>;
   label?: Maybe<LessonLabel>;
   likes: Scalars['Float'];
@@ -304,6 +305,7 @@ export type Mutation = {
   updateStepName?: Maybe<Step>;
   deleteStep: Scalars['Boolean'];
   createLesson: CreateLessonResponse;
+  updateLessonViews?: Maybe<Lesson>;
   updateLessonTitle?: Maybe<Lesson>;
   updateLessonDescription?: Maybe<Lesson>;
   updateLessonLabel?: Maybe<Lesson>;
@@ -482,6 +484,11 @@ export type MutationDeleteStepArgs = {
 
 export type MutationCreateLessonArgs = {
   options: LessonInput;
+};
+
+
+export type MutationUpdateLessonViewsArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -1184,6 +1191,19 @@ export type UpdateLessonLabelMutation = (
   )> }
 );
 
+export type UpdateLessonViewsMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type UpdateLessonViewsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateLessonViews?: Maybe<(
+    { __typename?: 'Lesson' }
+    & Pick<Lesson, 'id'>
+  )> }
+);
+
 export type UpdateLessonStatusMutationVariables = Exact<{
   id: Scalars['Float'];
   status: Scalars['String'];
@@ -1395,7 +1415,7 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt'>
+    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
     & { students?: Maybe<Array<(
       { __typename?: 'User' }
       & Pick<User, 'id'>
@@ -2674,6 +2694,38 @@ export function useUpdateLessonLabelMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateLessonLabelMutationHookResult = ReturnType<typeof useUpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationResult = Apollo.MutationResult<UpdateLessonLabelMutation>;
 export type UpdateLessonLabelMutationOptions = Apollo.BaseMutationOptions<UpdateLessonLabelMutation, UpdateLessonLabelMutationVariables>;
+export const UpdateLessonViewsDocument = gql`
+    mutation UpdateLessonViews($id: Float!) {
+  updateLessonViews(id: $id) {
+    id
+  }
+}
+    `;
+export type UpdateLessonViewsMutationFn = Apollo.MutationFunction<UpdateLessonViewsMutation, UpdateLessonViewsMutationVariables>;
+
+/**
+ * __useUpdateLessonViewsMutation__
+ *
+ * To run a mutation, you first call `useUpdateLessonViewsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateLessonViewsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateLessonViewsMutation, { data, loading, error }] = useUpdateLessonViewsMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateLessonViewsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateLessonViewsMutation, UpdateLessonViewsMutationVariables>) {
+        return Apollo.useMutation<UpdateLessonViewsMutation, UpdateLessonViewsMutationVariables>(UpdateLessonViewsDocument, baseOptions);
+      }
+export type UpdateLessonViewsMutationHookResult = ReturnType<typeof useUpdateLessonViewsMutation>;
+export type UpdateLessonViewsMutationResult = Apollo.MutationResult<UpdateLessonViewsMutation>;
+export type UpdateLessonViewsMutationOptions = Apollo.BaseMutationOptions<UpdateLessonViewsMutation, UpdateLessonViewsMutationVariables>;
 export const UpdateLessonStatusDocument = gql`
     mutation UpdateLessonStatus($id: Float!, $status: String!) {
   updateLessonStatus(id: $id, status: $status) {
@@ -3164,6 +3216,7 @@ export const LessonsDocument = gql`
     title
     thumbnail
     updatedAt
+    views
     students {
       id
     }

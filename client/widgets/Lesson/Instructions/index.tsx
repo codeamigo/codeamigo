@@ -118,7 +118,7 @@ const Instructions: React.FC<Props> = (props) => {
           )}
           <StatusIndicatorV2 isActive={showStatusIndicator} />
         </div>
-        <div className="flex relative flex-col flex-1">
+        <div className="flex relative flex-col flex-1 bg-bg-primary">
           <Checkpoints {...props} />
         </div>
       </div>

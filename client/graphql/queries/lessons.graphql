@@ -8,6 +8,7 @@ query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels:
     title
     thumbnail
     updatedAt
+    views
     students {
       id
     }

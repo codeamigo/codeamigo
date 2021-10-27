@@ -14,6 +14,8 @@ const LessonListItem: React.FC<Props> = ({
   options,
   progress,
 }) => {
+  const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
+
   return (
     <div className="flex flex-col rounded-lg border-2 hover:shadow-lg transition-shadow duration-200 border-bg-nav-offset">
       <div
@@ -26,10 +28,13 @@ const LessonListItem: React.FC<Props> = ({
         />
       </div>
       <div
-        className="flex flex-col flex-1 justify-between p-3 rounded-br-lg rounded-bl-lg bg-bg-nav"
+        className="flex relative flex-col flex-1 justify-between p-3 rounded-br-lg rounded-bl-lg bg-bg-nav"
         key={lesson.id}
       >
-        <div>
+        <div className="relative">
+          <div className="absolute right-1 bottom-11 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+            <ProfileLogo userId={lesson.owner.id} />
+          </div>
           <div className="flex justify-between items-center">
             <a
               className="font-bold underline hover:underline overflow-ellipsis text-text-primary"
@@ -39,16 +44,13 @@ const LessonListItem: React.FC<Props> = ({
             </a>
             {options ? options : null}
           </div>
-          <h3 className="flex items-center text-xs font-semibold text-text-primary">
-            <div className="p-1 mr-1 w-8 h-8 rounded-full border bg-bg-nav border-bg-nav-offset">
-              <ProfileLogo userId={lesson.owner.id} />
-            </div>{' '}
-            {lesson.owner.username}
+          <h3 className="flex items-center mt-0.5 text-xs font-semibold text-text-primary">
+            by {lesson.owner.username}
           </h3>
         </div>
         <div>
           {progress ? progress : null}
-          <div className="flex justify-between mt-4 text-xs font-bold text-text-primary">
+          <div className="flex mt-4 text-xs font-bold text-text-primary">
             <div
               aria-label={`${lesson.students?.length} Students`}
               className="hint--top hint--no-animate"
@@ -63,8 +65,20 @@ const LessonListItem: React.FC<Props> = ({
                 </div>
               </div>
             </div>
+            <div
+              aria-label={`${views} Views`}
+              className="ml-3 hint--top hint--no-animate"
+            >
+              <div className="flex">
+                <Icon
+                  className="mr-1 cursor-auto text-text-primary"
+                  name="eye"
+                />{' '}
+                <div className="text-text-primary">{views}</div>
+              </div>
+            </div>
           </div>
-          <div className="flex justify-between items-center mt-2 text-xs font-bold text-text-primary">
+          <div className="flex justify-between items-center mt-2 ml-1 text-xs font-bold text-text-primary">
             <div className="flex items-center capitalize text-text-primary">
               <div
                 className={`w-2 h-2 mr-1 rounded-full ${

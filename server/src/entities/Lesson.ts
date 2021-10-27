@@ -61,6 +61,10 @@ export class Lesson extends BaseEntity {
   @Column({ nullable: true })
   thumbnail: string;
 
+  @Field({ nullable: true })
+  @Column({ default: 0, nullable: true })
+  views: number;
+
   @Field(() => LessonStatusTypeEnum, { nullable: true })
   @Column({
     default: LessonStatusTypeEnum.EDITTING,

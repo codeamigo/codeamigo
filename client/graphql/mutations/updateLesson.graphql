@@ -16,11 +16,18 @@ mutation UpdateLessonLabel($id: Float!, $label: String!) {
   }
 }
 
+mutation UpdateLessonViews($id: Float!) {
+  updateLessonViews(id: $id) {
+    id
+  }
+}
+
 mutation UpdateLessonStatus($id: Float!, $status: String!) {
   updateLessonStatus(id: $id, status: $status) {
     ...RegularLesson
   }
 }
+
 
 mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
