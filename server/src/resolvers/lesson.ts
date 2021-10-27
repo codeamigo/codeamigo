@@ -178,14 +178,19 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   async updateLessonViews(@Arg("id") id: number): Promise<Lesson | null> {
-    const lesson = await Lesson.findOne(id);
+    const lesson = await Lesson.createQueryBuilder()
+      .where("Lesson.id = :id", { id })
+      .leftJoinAndSelect("Lesson.students", "students")
+      .getOne();
     if (!lesson) {
       return null;
     }
 
-    await Lesson.update({ id }, { ...lesson, views: lesson.views + 1 });
+    Object.assign(lesson, {
+      views: Math.max(lesson.students.length, lesson.views) + 1,
+    });
 
-    return lesson;
+    return lesson.save();
   }
 
   @Mutation(() => Lesson, { nullable: true })

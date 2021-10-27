@@ -1,7 +1,11 @@
 import { NextPage } from 'next';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { SessionQuery, useLessonQuery } from '👨‍💻generated/graphql';
+import {
+  SessionQuery,
+  useLessonQuery,
+  useUpdateLessonViewsMutation,
+} from '👨‍💻generated/graphql';
 import Info from '👨‍💻widgets/Lesson/Info';
 import Step from '👨‍💻widgets/Lesson/Step';
 import Steps from '👨‍💻widgets/Lesson/Steps';
@@ -10,6 +14,11 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
   const id = parseInt(props.id);
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
+  const [updateLessonViews] = useUpdateLessonViewsMutation();
+
+  useEffect(() => {
+    updateLessonViews({ variables: { id } });
+  }, []);
 
   const { data } = useLessonQuery({
     variables: { id },

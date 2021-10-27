@@ -7,6 +7,7 @@ import {
   useCreateSessionMutation,
   useMeQuery,
   useSessionQuery,
+  useUpdateLessonViewsMutation,
 } from '👨‍💻generated/graphql';
 
 const StartLesson: NextPage<{ id: string }> = (props) => {
@@ -18,6 +19,11 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
     fetchPolicy: 'cache-and-network',
     variables: { lessonId: id },
   });
+  const [updateLessonViews] = useUpdateLessonViewsMutation();
+
+  useEffect(() => {
+    updateLessonViews({ variables: { id } });
+  }, []);
 
   useEffect(() => {
     async function create() {

@@ -30,7 +30,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   useEffect(() => {
     if (meLoading) return;
 
-    if (!meData?.me) router.push('/');
+    if (!meData?.me) router.push(`/lessons/preview/${id}`);
   }, [meData]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   // no lesson exists
   if (!data || !data.lesson) {
     if (typeof window !== 'undefined') {
-      router.push(`/`);
+      router.push(`/lessons/preview/${id}`);
     }
     return null;
   }
