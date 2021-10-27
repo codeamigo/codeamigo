@@ -32,7 +32,7 @@ const LessonListItem: React.FC<Props> = ({
         key={lesson.id}
       >
         <div className="relative">
-          <div className="absolute right-1 bottom-11 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+          <div className="absolute -top-16 right-1 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
             <ProfileLogo userId={lesson.owner.id} />
           </div>
           <div className="flex justify-between items-center">
