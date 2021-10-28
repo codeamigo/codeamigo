@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer: React.FC<Props> = () => {
   return (
-    <div className="bg-bg-nav text-text-primary">
+    <div className="bg-bg-nav text-text-primary footer">
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
         <div className="text-lg font-bold">
           Byte-sized interactive coding tutorials
