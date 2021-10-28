@@ -101,14 +101,26 @@ const CreateLesson: React.FC<Props> = () => {
     <Formik
       initialValues={{ description: '', template: 'react', title: '' }}
       onSubmit={async (values, { setErrors }) => {
-        const { data } = await createLesson({
-          variables: values,
-        });
-        if (data?.createLesson.errors) {
-          setErrors(toErrorMap(data.createLesson.errors));
-        } else if (data?.createLesson.lesson) {
-          modalVar({ callback: () => null, name: null });
-          router.push(`/lessons/edit/${data.createLesson.lesson.id}`);
+        try {
+          const { data } = await createLesson({
+            variables: values,
+          });
+          if (data?.createLesson.errors) {
+            setErrors(toErrorMap(data.createLesson.errors));
+          } else if (data?.createLesson.lesson) {
+            modalVar({ callback: () => null, name: null });
+            router.push(`/lessons/edit/${data.createLesson.lesson.id}`);
+          }
+        } catch (e: any) {
+          if (
+            e &&
+            e.message &&
+            e.message.includes('User is not authenticated.')
+          ) {
+            setErrors({
+              description: 'You must signup to create lessons!',
+            });
+          }
         }
       }}
     >
