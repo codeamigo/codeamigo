@@ -25,6 +25,8 @@ export const getLanguage = (file: string) => {
       return 'c';
     case 'exs':
       return 'elixir';
+    case 'py':
+      return 'python';
     default:
       return ext;
   }
