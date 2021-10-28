@@ -1,11 +1,14 @@
 import React from 'react';
 
+import { Logo } from '👨‍💻components/Logos';
+
 const Footer: React.FC<Props> = () => {
   return (
     <div className="bg-bg-nav text-text-primary">
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
-        <div className="text-lg font-bold">
-          Byte-sized interactive coding tutorials
+        <div className="flex items-center text-lg font-bold">
+          <Logo className="mr-1 sm:mr-1.5 w-8 sm:w-12" />{' '}
+          <div>Byte-sized interactive coding tutorials</div>
         </div>
         <div className="flex gap-2 mt-3 text-sm font-semibold">
           <div
