@@ -28,6 +28,12 @@ const Footer: React.FC<Props> = () => {
           </div>
           &#183;
           <div>
+            <a href="https://twitter.com/codeamigo_dev" target="_blank">
+              Twitter
+            </a>
+          </div>
+          &#183;
+          <div>
             <a href="https://discord.gg/n64Ann2zRc" target="_blank">
               Discord
             </a>
