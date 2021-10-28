@@ -2,12 +2,12 @@ import React from 'react';
 
 const Footer: React.FC<Props> = () => {
   return (
-    <div className="bg-bg-nav text-text-primary footer">
+    <div className="bg-bg-nav text-text-primary">
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
         <div className="text-lg font-bold">
           Byte-sized interactive coding tutorials
         </div>
-        <div className="flex gap-2 mt-3 text-xs">
+        <div className="flex gap-2 mt-3 text-sm font-semibold">
           <div
             aria-label="No landing page.&#10;No signup required.&#10;Nothing to buy.&#10;Codeamigo.dev allows anyone to take&#10;free interactive coding tutorials.&#10;Built by the community."
             className="hint--top hint--no-animate"
@@ -33,6 +33,7 @@ const Footer: React.FC<Props> = () => {
             </a>
           </div>
         </div>
+        <div className="mt-4 text-xs">Copyright &#169; 2021, Codeamigo LLC</div>
       </div>
     </div>
   );
