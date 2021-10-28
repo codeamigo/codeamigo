@@ -14,6 +14,21 @@ body {
   height: 100%;
 }
 
+/* hint css */
+[class*=hint--][aria-label]:after {
+  white-space: pre;
+}
+[class*=hint--]:after {
+  border-radius: 8px;
+  background: black !important;
+  box-shadow: none;
+}
+.hint--top-left:before, .hint--top-right:before, .hint--top:before {
+  border-top-color: black;
+}
+/* hint css */
+
+/* markdown */
 .markdown-body {
   color: var(--text-primary) !important;
 }
@@ -30,7 +45,9 @@ body {
   white-space: -o-pre-wrap !important;
   word-wrap: break-word !important;
 }
+/* markdown */
 
+/* sandpack */
 .st0 {
   fill: var(--text-primary) !important;
 }
@@ -66,6 +83,7 @@ body {
 .decorationsOverviewRuler {
   display: none;
 }
+/* sandpack */
 
 /* Make clicks pass-through */
 #nprogress {

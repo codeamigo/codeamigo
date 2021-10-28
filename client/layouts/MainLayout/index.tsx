@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Container from './Container';
+import Footer from './Footer';
 import TopNav from './TopNav';
 
 const MainLayout: React.FC<Props> = ({ children }) => {
@@ -8,6 +9,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     <>
       <TopNav />
       <Container>{children}</Container>
+      <Footer />
     </>
   );
 };
