@@ -24,7 +24,7 @@ const Dependencies: React.FC<Props> = () => {
     .slice(0, 10);
 
   return (
-    <div className="p-2 rounded-md bg-bg-nav">
+    <div className="p-2 mt-2 rounded-md bg-bg-nav">
       <h4 className="mb-2 font-semibold text-text-primary">Dependencies</h4>
       <Formik
         initialValues={{

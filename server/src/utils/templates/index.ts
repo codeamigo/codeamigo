@@ -1,27 +1,13 @@
+import { TemplatesEnum } from "../../entities/Lesson";
 import { StepExecutionTypeEnum } from "../../entities/Step";
 
 export interface ITemplate {
+  name: keyof typeof TemplatesEnum;
   codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies?: { package: string; version: string }[];
   executionType: keyof typeof StepExecutionTypeEnum;
   lang: string;
 }
-
-export type TemplatesType =
-  | "angular"
-  | "c"
-  | "elixir"
-  | "go"
-  | "html"
-  | "java"
-  | "javascript"
-  | "python"
-  | "react"
-  | "ruby"
-  | "rust"
-  | "swift"
-  | "typescript"
-  | "vue";
 
 const css = `html, body {
   background-color: white;
@@ -85,6 +71,7 @@ const htmlTemplate: ITemplate = {
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  name: "html",
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -123,6 +110,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  name: "react",
 };
 
 const angularTemplate: ITemplate = {
@@ -422,6 +410,7 @@ export const environment = {
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  name: "angular",
 };
 
 const vueTemplate: ITemplate = {
@@ -645,6 +634,7 @@ color: #42b983;
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  name: "vue",
 };
 
 const cTemplate: ITemplate = {
@@ -663,6 +653,7 @@ int main() {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "c",
+  name: "c",
 };
 
 const elixirTemplate: ITemplate = {
@@ -675,6 +666,7 @@ const elixirTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "elixir",
+  name: "elixir",
 };
 
 const jsTemplate: ITemplate = {
@@ -683,6 +675,7 @@ const jsTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "javascript",
+  name: "javascript",
 };
 
 const tsTemplate: ITemplate = {
@@ -691,6 +684,7 @@ const tsTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "typescript",
+  name: "typescript",
 };
 
 const goTemplate: ITemplate = {
@@ -710,6 +704,7 @@ func main() {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "go",
+  name: "go",
 };
 
 const javaTemplate: ITemplate = {
@@ -728,6 +723,7 @@ const javaTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "java",
+  name: "java",
 };
 
 const pythonTemplate: ITemplate = {
@@ -740,6 +736,7 @@ const pythonTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "python",
+  name: "python",
 };
 
 const rubyTemplate: ITemplate = {
@@ -752,6 +749,7 @@ const rubyTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "ruby",
+  name: "ruby",
 };
 
 const rustTemplate: ITemplate = {
@@ -767,6 +765,7 @@ const rustTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "rust",
+  name: "rust",
 };
 
 const swiftTemplate: ITemplate = {
@@ -779,9 +778,10 @@ const swiftTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "swift",
+  name: "swift",
 };
 
-export const getTemplate = (template?: TemplatesType) => {
+export const getTemplate = (template?: keyof typeof TemplatesEnum) => {
   switch (template) {
     case "html":
     case undefined:

@@ -15,13 +15,13 @@ import {
   Lesson,
   LessonLabelEnum,
   LessonStatusTypeEnum,
+  TemplatesEnum,
 } from "../entities/Lesson";
 import { Session } from "../entities/Session";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
-import { TemplatesType } from "../utils/templates";
 import { StepResolver } from "./step";
 
 @InputType()
@@ -31,7 +31,7 @@ class LessonInput {
   @Field()
   description: string;
   @Field({ nullable: true })
-  template: TemplatesType;
+  template: keyof typeof TemplatesEnum;
 }
 
 @InputType()
