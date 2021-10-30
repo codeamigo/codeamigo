@@ -8,9 +8,11 @@ const Footer: React.FC<Props> = () => {
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
         <div className="flex items-center text-lg font-bold">
           <Logo className="mr-1 sm:mr-1.5 w-8 sm:w-12" />{' '}
-          <div>Byte-sized interactive coding tutorials</div>
+          <div className="text-sm md:text-lg">
+            Byte-sized interactive coding tutorials
+          </div>
         </div>
-        <div className="flex gap-2 mt-3 text-sm font-semibold">
+        <div className="flex gap-2 mt-3 text-xs sm:text-sm font-semibold">
           <div
             aria-label="No landing page.&#10;No signup required.&#10;Nothing to buy.&#10;Codeamigo.dev allows anyone to take&#10;free interactive coding tutorials.&#10;Built by the community."
             className="hint--top hint--no-animate"
@@ -42,7 +44,9 @@ const Footer: React.FC<Props> = () => {
             </a>
           </div>
         </div>
-        <div className="mt-4 text-xs">Copyright &#169; 2021, Codeamigo LLC</div>
+        <div className="mt-4 sm:text-xs text-xxs">
+          Copyright &#169; 2021, Codeamigo LLC
+        </div>
       </div>
     </div>
   );

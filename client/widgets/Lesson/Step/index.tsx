@@ -73,6 +73,10 @@ const Step: React.FC<Props> = (props) => {
     return () => window.removeEventListener('resize', setHeightCallback);
   }, [filesRef.current]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [data?.step?.id]);
+
   if (!data) return null;
   if (!data.step) return null;
 
