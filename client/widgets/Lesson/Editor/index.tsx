@@ -220,7 +220,7 @@ const Editor: React.FC<Props> = ({
 
         target: monacoRef.current.languages.typescript.ScriptTarget.ES2016,
 
-        typeRoots: [`${FILE}node_modules/@types`],
+        typeRoots: [`node_modules/@types`],
       }
     );
   };
@@ -302,7 +302,7 @@ const Editor: React.FC<Props> = ({
         try {
           Object.keys(deps.files).map((file) => {
             const code = deps.files[file].module.code;
-            const uri = `${FILE}node_modules${file}`;
+            const uri = `node_modules${file}`;
 
             monacoRef.current.languages.typescript.typescriptDefaults.addExtraLib(
               code,
