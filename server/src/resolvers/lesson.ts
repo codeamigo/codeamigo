@@ -15,13 +15,13 @@ import {
   Lesson,
   LessonLabelEnum,
   LessonStatusTypeEnum,
+  TemplatesEnum,
 } from "../entities/Lesson";
 import { Session } from "../entities/Session";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
-import { TemplatesType } from "../utils/templates";
 import { StepResolver } from "./step";
 
 @InputType()
@@ -31,7 +31,7 @@ class LessonInput {
   @Field()
   description: string;
   @Field({ nullable: true })
-  template: TemplatesType;
+  template: TemplatesEnum;
 }
 
 @InputType()
@@ -44,6 +44,8 @@ class LessonsInput {
   labels?: string;
   @Field({ nullable: true })
   dependencies?: string;
+  @Field({ nullable: true })
+  template?: TemplatesEnum;
 }
 
 @ObjectType()
@@ -61,7 +63,7 @@ const relations = ["owner", "steps", "students", "steps.dependencies"];
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
-    const { status, ownerId, labels, dependencies } = options;
+    const { status, ownerId, labels, dependencies, template } = options;
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
@@ -79,6 +81,11 @@ export class LessonResolver {
       if (labels) {
         query.andWhere("Lesson.label IN (:...labels)", {
           labels: labels.split("|"),
+        });
+      }
+      if (template) {
+        query.andWhere("Lesson.template = :template", {
+          template,
         });
       }
       if (dependencies) {

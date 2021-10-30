@@ -4,6 +4,7 @@ fragment RegularLesson on Lesson {
   label
   status
   label
+  template
   thumbnail
   title
   owner {

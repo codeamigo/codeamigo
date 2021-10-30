@@ -1,10 +1,25 @@
-query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String) {
-  lessons(options: { status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels }) {
+query Lessons(
+  $status: String!
+  $ownerId: Float
+  $dependencies: String
+  $labels: String
+  $template: String
+) {
+  lessons(
+    options: {
+      status: $status
+      ownerId: $ownerId
+      dependencies: $dependencies
+      labels: $labels
+      template: $template
+    }
+  ) {
     id
     createdAt
     label
     likes
     status
+    template
     title
     thumbnail
     updatedAt

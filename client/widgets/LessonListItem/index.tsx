@@ -5,6 +5,7 @@ import React from 'react';
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
+import { templates } from '👨‍💻modals/CreateLesson';
 import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
@@ -15,6 +16,7 @@ const LessonListItem: React.FC<Props> = ({
   progress,
 }) => {
   const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
+  const template = templates.find((t) => t.value === lesson.template);
 
   return (
     <div className="flex flex-col rounded-lg border-2 hover:shadow-lg transition-shadow duration-200 border-bg-nav-offset">
@@ -32,8 +34,17 @@ const LessonListItem: React.FC<Props> = ({
         key={lesson.id}
       >
         <div className="relative">
-          <div className="absolute -top-16 right-1 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
-            <ProfileLogo userId={lesson.owner.id} />
+          <div className="flex absolute -top-16 right-1 justify-center items-center p-2.5 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+            {template ? (
+              <img
+                className={`${
+                  template.withBackground ? 'bg-white rounded-full' : ''
+                }`}
+                src={template.imageUrl}
+              />
+            ) : (
+              <ProfileLogo userId={lesson.owner.id} />
+            )}
           </div>
           <div className="flex justify-between items-center">
             <a

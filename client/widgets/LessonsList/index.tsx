@@ -7,6 +7,7 @@ import LessonListItem from '👨‍💻widgets/LessonListItem';
 const LessonsList: React.FC<Props> = () => {
   const router = useRouter();
 
+  const queryTemplate = router.query.template as string;
   const queryDeps =
     (router.query.deps as string)?.split('|').filter((x) => !!x) || [];
   const queryLevels =
@@ -18,6 +19,7 @@ const LessonsList: React.FC<Props> = () => {
       dependencies: queryDeps.join('|'),
       labels: queryLevels.join('|'),
       status: 'PUBLISHED',
+      template: queryTemplate,
     },
   });
 

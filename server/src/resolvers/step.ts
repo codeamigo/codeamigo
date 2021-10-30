@@ -12,10 +12,10 @@ import {
 } from "type-graphql";
 
 import { CodeModule } from "../entities/CodeModule";
-import { Lesson } from "../entities/Lesson";
+import { Lesson, TemplatesEnum } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
-import { getTemplate, ITemplate, TemplatesType } from "../utils/templates";
+import { getTemplate, ITemplate } from "../utils/templates";
 
 export const DEFAULT_MD = `## Step \#
 
@@ -70,7 +70,7 @@ class CreateStepInput {
   @Field({ nullable: true })
   currentStepId?: number;
   @Field({ nullable: true })
-  template?: TemplatesType;
+  template?: TemplatesEnum;
 }
 
 @Resolver()
@@ -123,7 +123,7 @@ export class StepResolver {
       return null;
     }
 
-    let template: ITemplate;
+    let template: Omit<ITemplate, "templateName">;
 
     if (options.currentStepId) {
       const prevStep = await Step.findOne(options.currentStepId, {

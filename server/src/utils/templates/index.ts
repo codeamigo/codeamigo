@@ -1,27 +1,13 @@
+import { TemplatesEnum } from "../../entities/Lesson";
 import { StepExecutionTypeEnum } from "../../entities/Step";
 
 export interface ITemplate {
+  templateName: keyof typeof TemplatesEnum;
   codeModules: { name: string; value: string; isEntry?: boolean }[];
   dependencies?: { package: string; version: string }[];
   executionType: keyof typeof StepExecutionTypeEnum;
   lang: string;
 }
-
-export type TemplatesType =
-  | "angular"
-  | "c"
-  | "elixir"
-  | "go"
-  | "html"
-  | "java"
-  | "javascript"
-  | "python"
-  | "react"
-  | "ruby"
-  | "rust"
-  | "swift"
-  | "typescript"
-  | "vue";
 
 const css = `html, body {
   background-color: white;
@@ -85,6 +71,7 @@ const htmlTemplate: ITemplate = {
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  templateName: TemplatesEnum.HTML,
 };
 
 const reactTsxTemplate: ITemplate = {
@@ -123,6 +110,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  templateName: TemplatesEnum.React,
 };
 
 const angularTemplate: ITemplate = {
@@ -422,6 +410,7 @@ export const environment = {
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  templateName: TemplatesEnum.Angular,
 };
 
 const vueTemplate: ITemplate = {
@@ -645,6 +634,7 @@ color: #42b983;
   ],
   executionType: StepExecutionTypeEnum.sandpack,
   lang: "javascript",
+  templateName: TemplatesEnum.Vue,
 };
 
 const cTemplate: ITemplate = {
@@ -663,6 +653,7 @@ int main() {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "c",
+  templateName: TemplatesEnum.C,
 };
 
 const elixirTemplate: ITemplate = {
@@ -675,6 +666,7 @@ const elixirTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "elixir",
+  templateName: TemplatesEnum.Elixir,
 };
 
 const jsTemplate: ITemplate = {
@@ -683,6 +675,7 @@ const jsTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "javascript",
+  templateName: TemplatesEnum.JavaScript,
 };
 
 const tsTemplate: ITemplate = {
@@ -691,6 +684,7 @@ const tsTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "typescript",
+  templateName: TemplatesEnum.TypeScript,
 };
 
 const goTemplate: ITemplate = {
@@ -710,6 +704,7 @@ func main() {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "go",
+  templateName: TemplatesEnum.Go,
 };
 
 const javaTemplate: ITemplate = {
@@ -728,6 +723,7 @@ const javaTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "java",
+  templateName: "Java",
 };
 
 const pythonTemplate: ITemplate = {
@@ -740,6 +736,7 @@ const pythonTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "python",
+  templateName: TemplatesEnum.Python,
 };
 
 const rubyTemplate: ITemplate = {
@@ -752,6 +749,7 @@ const rubyTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "ruby",
+  templateName: TemplatesEnum.Ruby,
 };
 
 const rustTemplate: ITemplate = {
@@ -767,6 +765,7 @@ const rustTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "rust",
+  templateName: TemplatesEnum.Rust,
 };
 
 const swiftTemplate: ITemplate = {
@@ -779,38 +778,39 @@ const swiftTemplate: ITemplate = {
   ],
   executionType: StepExecutionTypeEnum.riju,
   lang: "swift",
+  templateName: TemplatesEnum.Swift,
 };
 
-export const getTemplate = (template?: TemplatesType) => {
+export const getTemplate = (template?: keyof typeof TemplatesEnum) => {
   switch (template) {
-    case "html":
     case undefined:
+    case "HTML":
       return htmlTemplate;
-    case "angular":
+    case "Angular":
       return angularTemplate;
-    case "c":
+    case "C":
       return cTemplate;
-    case "elixir":
+    case "Elixir":
       return elixirTemplate;
-    case "go":
+    case "Go":
       return goTemplate;
-    case "java":
+    case "Java":
       return javaTemplate;
-    case "javascript":
+    case "JavaScript":
       return jsTemplate;
-    case "python":
+    case "Python":
       return pythonTemplate;
-    case "react":
+    case "React":
       return reactTsxTemplate;
-    case "ruby":
+    case "Ruby":
       return rubyTemplate;
-    case "rust":
+    case "Rust":
       return rustTemplate;
-    case "swift":
+    case "Swift":
       return swiftTemplate;
-    case "typescript":
+    case "TypeScript":
       return tsTemplate;
-    case "vue":
+    case "Vue":
       return vueTemplate;
   }
 };

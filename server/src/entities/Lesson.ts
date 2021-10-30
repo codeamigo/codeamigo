@@ -16,6 +16,23 @@ import { Session } from "./Session";
 import { Step } from "./Step";
 import { User } from "./User";
 
+export enum TemplatesEnum {
+  "Angular" = "Angular",
+  "C" = "C",
+  "Elixir" = "Elixir",
+  "Go" = "Go",
+  "HTML" = "HTML",
+  "Java" = "Java",
+  "JavaScript" = "JavaScript",
+  "Python" = "Python",
+  "React" = "React",
+  "Ruby" = "Ruby",
+  "Rust" = "Rust",
+  "Swift" = "Swift",
+  "TypeScript" = "TypeScript",
+  "Vue" = "Vue",
+}
+
 export enum LessonStatusTypeEnum {
   EDITTING = "EDITTING",
   PENDING_PUBLISH = "PENDING_PUBLISH",
@@ -33,6 +50,9 @@ registerEnumType(LessonStatusTypeEnum, {
 });
 registerEnumType(LessonLabelEnum, {
   name: "LessonLabel",
+});
+registerEnumType(TemplatesEnum, {
+  name: "LessonTemplate",
 });
 @ObjectType()
 @Entity()
@@ -79,6 +99,13 @@ export class Lesson extends BaseEntity {
     type: "text",
   })
   label: keyof typeof LessonLabelEnum;
+
+  @Field(() => TemplatesEnum, { nullable: true })
+  @Column({
+    nullable: true,
+    type: "text",
+  })
+  template: keyof typeof TemplatesEnum;
 
   @Field()
   @Column({ default: 0, type: "int" })
