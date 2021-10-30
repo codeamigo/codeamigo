@@ -147,6 +147,7 @@ export type Lesson = {
   views?: Maybe<Scalars['Float']>;
   status?: Maybe<LessonStatus>;
   label?: Maybe<LessonLabel>;
+  template?: Maybe<LessonTemplate>;
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
@@ -164,6 +165,23 @@ export enum LessonLabel {
   Beginner = 'BEGINNER',
   Intermediate = 'INTERMEDIATE',
   Advanced = 'ADVANCED'
+}
+
+export enum LessonTemplate {
+  Angular = 'Angular',
+  C = 'C',
+  Elixir = 'Elixir',
+  Go = 'Go',
+  Html = 'HTML',
+  Java = 'Java',
+  JavaScript = 'JavaScript',
+  Python = 'Python',
+  React = 'React',
+  Ruby = 'Ruby',
+  Rust = 'Rust',
+  Swift = 'Swift',
+  TypeScript = 'TypeScript',
+  Vue = 'Vue'
 }
 
 export type User = {
@@ -266,6 +284,7 @@ export type LessonsInput = {
   ownerId?: Maybe<Scalars['Float']>;
   labels?: Maybe<Scalars['String']>;
   dependencies?: Maybe<Scalars['String']>;
+  template?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -701,7 +720,7 @@ export type RegularErrorFragment = (
 
 export type RegularLessonFragment = (
   { __typename?: 'Lesson' }
-  & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'thumbnail' | 'title'>
+  & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'template' | 'thumbnail' | 'title'>
   & { owner: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
@@ -1408,6 +1427,7 @@ export type LessonsQueryVariables = Exact<{
   ownerId?: Maybe<Scalars['Float']>;
   dependencies?: Maybe<Scalars['String']>;
   labels?: Maybe<Scalars['String']>;
+  template?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1415,7 +1435,7 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
+    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'template' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
     & { students?: Maybe<Array<(
       { __typename?: 'User' }
       & Pick<User, 'id'>
@@ -1544,6 +1564,7 @@ export const RegularLessonFragmentDoc = gql`
   label
   status
   label
+  template
   thumbnail
   title
   owner {
@@ -3204,15 +3225,16 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String) {
+    query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String, $template: String) {
   lessons(
-    options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels}
+    options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels, template: $template}
   ) {
     id
     createdAt
     label
     likes
     status
+    template
     title
     thumbnail
     updatedAt
@@ -3244,6 +3266,7 @@ export const LessonsDocument = gql`
  *      ownerId: // value for 'ownerId'
  *      dependencies: // value for 'dependencies'
  *      labels: // value for 'labels'
+ *      template: // value for 'template'
  *   },
  * });
  */

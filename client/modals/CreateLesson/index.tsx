@@ -5,7 +5,7 @@ import React from 'react';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import InputField from '👨‍💻components/Form/InputField';
-import { useCreateLessonMutation } from '👨‍💻generated/graphql';
+import { LessonTemplate, useCreateLessonMutation } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
 export const templates: {
@@ -13,83 +13,86 @@ export const templates: {
   imageUrl: string;
   name: string;
   value: string;
+  withBackground?: boolean;
 }[] = [
   {
     id: 'react-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg`,
     name: 'React TypeScript',
-    value: 'react',
+    value: LessonTemplate.React,
   },
   {
     id: 'angular-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/angular.svg`,
     name: 'Angular',
-    value: 'angular',
+    value: LessonTemplate.Angular,
   },
   {
     id: 'vue-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg`,
     name: 'Vue 3.0',
-    value: 'vue',
+    value: LessonTemplate.Vue,
   },
   {
     id: 'html-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg`,
     name: 'HTML/CSS',
-    value: 'html',
+    value: LessonTemplate.Html,
   },
   {
     id: 'typescript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg`,
     name: 'Vanilla TypeScript',
-    value: 'typescript',
+    value: LessonTemplate.TypeScript,
   },
   {
     id: 'javascript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg`,
     name: 'Vanilla JavaScript',
-    value: 'javascript',
+    value: LessonTemplate.JavaScript,
   },
   {
     id: 'c-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/c.svg',
     name: 'C',
-    value: 'c',
+    value: LessonTemplate.C,
   },
   {
     id: 'elixir-template',
     imageUrl: 'https://avatars.githubusercontent.com/u/1481354?s=200&v=4',
     name: 'Elixir',
-    value: 'elixir',
+    value: LessonTemplate.Elixir,
+    withBackground: true,
   },
   {
     id: 'java-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/java.svg',
     name: 'Java',
-    value: 'java',
+    value: LessonTemplate.Java,
   },
   {
     id: 'python-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/python.svg',
     name: 'Python',
-    value: 'python',
+    value: LessonTemplate.Python,
   },
   {
     id: 'ruby-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/ruby.svg',
     name: 'Ruby',
-    value: 'ruby',
+    value: LessonTemplate.Ruby,
   },
   {
     id: 'rust-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/rust.svg',
     name: 'Rust',
-    value: 'rust',
+    value: LessonTemplate.Rust,
+    withBackground: true,
   },
 ];
 
@@ -118,7 +121,7 @@ const CreateLesson: React.FC<Props> = () => {
             e.message.includes('User is not authenticated.')
           ) {
             setErrors({
-              description: 'You must signup to create lessons!',
+              description: 'You must be logged in to create lessons!',
             });
           }
         }

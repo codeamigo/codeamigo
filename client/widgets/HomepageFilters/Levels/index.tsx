@@ -15,7 +15,9 @@ const Levels: React.FC<Props> = () => {
 
   return (
     <div className="p-2 mt-2 rounded-md bg-bg-nav">
-      <h4 className="mb-2 font-semibold text-text-primary">Levels</h4>
+      <h4 className="mb-2 text-lg font-semibold underline text-text-primary">
+        Levels
+      </h4>
       <Formik
         initialValues={{
           checked: queryLevels ? queryLevels.split('|') : [],

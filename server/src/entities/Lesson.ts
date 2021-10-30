@@ -17,20 +17,20 @@ import { Step } from "./Step";
 import { User } from "./User";
 
 export enum TemplatesEnum {
-  "angular" = "angular",
-  "c" = "c",
-  "elixir" = "elixir",
-  "go" = "go",
-  "html" = "html",
-  "java" = "java",
-  "javascript" = "javascript",
-  "python" = "python",
-  "react" = "react",
-  "ruby" = "ruby",
-  "rust" = "rust",
-  "swift" = "swift",
-  "typescript" = "typescript",
-  "vue" = "vue",
+  "Angular" = "Angular",
+  "C" = "C",
+  "Elixir" = "Elixir",
+  "Go" = "Go",
+  "HTML" = "HTML",
+  "Java" = "Java",
+  "JavaScript" = "JavaScript",
+  "Python" = "Python",
+  "React" = "React",
+  "Ruby" = "Ruby",
+  "Rust" = "Rust",
+  "Swift" = "Swift",
+  "TypeScript" = "TypeScript",
+  "Vue" = "Vue",
 }
 
 export enum LessonStatusTypeEnum {

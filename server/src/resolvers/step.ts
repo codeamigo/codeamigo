@@ -70,7 +70,7 @@ class CreateStepInput {
   @Field({ nullable: true })
   currentStepId?: number;
   @Field({ nullable: true })
-  template?: keyof typeof TemplatesEnum;
+  template?: TemplatesEnum;
 }
 
 @Resolver()
@@ -123,7 +123,7 @@ export class StepResolver {
       return null;
     }
 
-    let template: Omit<ITemplate, "name">;
+    let template: Omit<ITemplate, "templateName">;
 
     if (options.currentStepId) {
       const prevStep = await Step.findOne(options.currentStepId, {
