@@ -23,7 +23,7 @@ export const templates: {
   },
   {
     id: 'angular-template',
-    imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/angular.svg`,
+    imageUrl: `https://angular.io/assets/images/logos/angular/angular.svg`,
     name: 'Angular',
     value: LessonTemplate.Angular,
   },
