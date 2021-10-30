@@ -1,5 +1,6 @@
 import MonacoEditor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
+import { DEFAULT_THEME } from 'styles/appThemes';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
 
 import {
@@ -264,7 +265,7 @@ const Editor: React.FC<Props> = ({
   };
 
   const setupThemes = () => {
-    let themeName = meData?.me?.theme || 'idle';
+    let themeName = meData?.me?.theme || DEFAULT_THEME;
     let theme = THEMES[themeName as keyof typeof THEMES];
     let standardThemeName = themeName.split('_').map(camalize).join('');
     monacoRef.current.editor.defineTheme(standardThemeName, theme);

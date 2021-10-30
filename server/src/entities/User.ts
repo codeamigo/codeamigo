@@ -46,7 +46,7 @@ export class User extends BaseEntity {
 
   @Field(() => ThemeEnum)
   @Column({
-    default: ThemeEnum.idle,
+    default: ThemeEnum.cobalt,
     enum: ThemeEnum,
     nullable: true,
     type: "enum",
