@@ -24,8 +24,17 @@ body {
   background: black !important;
   box-shadow: none;
 }
+.hint--bottom-left:before, .hint--bottom-right:before, .hint--bottom:before {
+  border-bottom-color: black !important;
+}
 .hint--top-left:before, .hint--top-right:before, .hint--top:before {
-  border-top-color: black;
+  border-top-color: black !important;
+}
+.hint--right:before {
+  border-right-color: black !important;
+}
+.hint--left:before {
+  border-left-color: black !important;
 }
 /* hint css */
 
