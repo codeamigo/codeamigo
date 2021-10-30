@@ -34,7 +34,7 @@ const LessonListItem: React.FC<Props> = ({
         key={lesson.id}
       >
         <div className="relative">
-          <div className="flex absolute -top-16 right-1 justify-center items-center p-2.5 w-16 h-16 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+          <div className="flex absolute -top-14 right-2 justify-center items-center p-2.5 w-14 h-14 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
             {template ? (
               <img
                 className={`${
