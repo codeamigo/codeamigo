@@ -5,7 +5,7 @@ import React from 'react';
 import { LessonTemplate } from '👨‍💻generated/graphql';
 import { templates } from '👨‍💻modals/CreateLesson';
 
-const Languages: React.FC<Props> = () => {
+const LanguagesAndTemplates: React.FC<Props> = () => {
   const router = useRouter();
 
   return (
@@ -15,7 +15,7 @@ const Languages: React.FC<Props> = () => {
       </h4>
       <Formik
         initialValues={{
-          checked: [] as string[],
+          checked: null,
         }}
         onSubmit={() => Promise.resolve()}
         validate={(values) => {
@@ -28,7 +28,7 @@ const Languages: React.FC<Props> = () => {
           });
         }}
       >
-        {({ values }) => (
+        {({ resetForm, values }) => (
           <Form>
             {Object.keys(LessonTemplate).map((t) => {
               const template = templates.find(
@@ -61,6 +61,24 @@ const Languages: React.FC<Props> = () => {
                 </label>
               );
             })}
+            {values.checked && (
+              <div
+                className="mt-1 text-sm text-accent"
+                onClick={() => {
+                  resetForm();
+                  router.replace({
+                    pathname: '/',
+                    query: {
+                      ...router.query,
+                      template: '',
+                    },
+                  });
+                }}
+                role="button"
+              >
+                Clear
+              </div>
+            )}
           </Form>
         )}
       </Formik>
@@ -70,4 +88,4 @@ const Languages: React.FC<Props> = () => {
 
 type Props = {};
 
-export default Languages;
+export default LanguagesAndTemplates;
