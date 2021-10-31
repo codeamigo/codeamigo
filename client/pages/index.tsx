@@ -19,6 +19,7 @@ const Home = () => {
   );
 };
 
+// @ts-ignore
 export async function getServerSideProps({ req, res }) {
   res.setHeader(
     'Cache-Control',
