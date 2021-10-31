@@ -19,4 +19,4 @@ const Home = () => {
   );
 };
 
-export default withApollo({ ssr: true })(Home);
+export default Home;
