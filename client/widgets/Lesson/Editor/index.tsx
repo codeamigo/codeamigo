@@ -113,7 +113,7 @@ const Editor: React.FC<Props> = ({
 
       const match =
         model.getValue().includes(checkpoint.matchRegex) ||
-        model.getValue().test(checkpoint.matchRegex);
+        model.getValue()?.match(checkpoint.matchRegex);
 
       window.postMessage(
         {
