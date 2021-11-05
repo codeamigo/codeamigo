@@ -15,7 +15,6 @@ import { CodeModule } from "../entities/CodeModule";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
-import { isSessionOwner } from "../middleware/isSessionOwner";
 
 @InputType()
 class CodeModuleInput {
@@ -105,7 +104,6 @@ export class CodeModuleResolver {
 
   @Mutation(() => CodeModule, { nullable: true })
   @UseMiddleware(isAuth)
-  @UseMiddleware(isSessionOwner)
   async updateCodeModule(
     @Arg("id") id: number,
     @Arg("options") options: CodeModuleInput,

@@ -18,6 +18,7 @@ import {
   TemplatesEnum,
 } from "../entities/Lesson";
 import { Session } from "../entities/Session";
+import { Tag } from "../entities/Tag";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
 import { FieldError } from "../resolvers/user";
@@ -57,7 +58,7 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
-const relations = ["owner", "steps", "students", "steps.dependencies"];
+const relations = ["owner", "steps", "students", "steps.dependencies", "tags"];
 
 @Resolver()
 export class LessonResolver {
@@ -76,7 +77,8 @@ export class LessonResolver {
       let query = Lesson.createQueryBuilder()
         .where("Lesson.status = :status", { status })
         .leftJoinAndSelect("Lesson.owner", "owner")
-        .leftJoinAndSelect("Lesson.students", "students");
+        .leftJoinAndSelect("Lesson.students", "students")
+        .leftJoinAndSelect("Lesson.tags", "tags");
 
       if (labels) {
         query.andWhere("Lesson.label IN (:...labels)", {
@@ -127,6 +129,7 @@ export class LessonResolver {
       .where("Lesson.id = :id", { id })
       .leftJoinAndSelect("Lesson.owner", "owner")
       .leftJoinAndSelect("Lesson.steps", "steps")
+      .leftJoinAndSelect("Lesson.tags", "tags")
       .addOrderBy("steps.createdAt", "ASC")
       .getOne();
 
@@ -313,7 +316,30 @@ export class LessonResolver {
 
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
-  async addTag() {}
+  async addLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
+    const lesson = await Lesson.findOne({
+      relations,
+      where: { id },
+    });
+
+    if (!lesson) {
+      return null;
+    }
+
+    let tag = await Tag.findOne({ where: { name } });
+
+    if (!tag) {
+      tag = await Tag.create({ name }).save();
+    }
+
+    console.log(tag);
+
+    Object.assign(lesson, {
+      tags: [...lesson.tags, tag],
+    });
+
+    return lesson.save();
+  }
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)

@@ -34,3 +34,9 @@ mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
     ...RegularLesson
   }
 }
+
+mutation AddLessonTag($id: Float!, $name: String!) {
+  addLessonTag(id: $id, name: $name) {
+    ...RegularLesson
+  }
+}

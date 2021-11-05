@@ -153,6 +153,7 @@ export type Lesson = {
   owner: User;
   sessions?: Maybe<Array<Session>>;
   steps?: Maybe<Array<Step>>;
+  tags?: Maybe<Array<Tag>>;
 };
 
 export enum LessonStatus {
@@ -269,6 +270,15 @@ export type Session = {
   steps?: Maybe<Array<Step>>;
 };
 
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['Float'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name: Scalars['String'];
+  lessons?: Maybe<Array<Lesson>>;
+};
+
 export type Dependency = {
   __typename?: 'Dependency';
   id: Scalars['Float'];
@@ -330,6 +340,7 @@ export type Mutation = {
   updateLessonLabel?: Maybe<Lesson>;
   updateLessonStatus?: Maybe<Lesson>;
   updateLessonThumbnail?: Maybe<Lesson>;
+  addLessonTag: Lesson;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   updateSession?: Maybe<Session>;
@@ -537,6 +548,12 @@ export type MutationUpdateLessonStatusArgs = {
 
 export type MutationUpdateLessonThumbnailArgs = {
   thumbnail?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+};
+
+
+export type MutationAddLessonTagArgs = {
+  name: Scalars['String'];
   id: Scalars['Float'];
 };
 
@@ -1251,6 +1268,20 @@ export type UpdateLessonThumbnailMutation = (
   )> }
 );
 
+export type AddLessonTagMutationVariables = Exact<{
+  id: Scalars['Float'];
+  name: Scalars['String'];
+}>;
+
+
+export type AddLessonTagMutation = (
+  { __typename?: 'Mutation' }
+  & { addLessonTag: (
+    { __typename?: 'Lesson' }
+    & RegularLessonFragment
+  ) }
+);
+
 export type SetNextStepMutationVariables = Exact<{
   sessionId: Scalars['Float'];
   stepId: Scalars['Float'];
@@ -1412,7 +1443,10 @@ export type LessonQuery = (
   & { lesson?: Maybe<(
     { __typename?: 'Lesson' }
     & Pick<Lesson, 'id' | 'description' | 'label' | 'status' | 'thumbnail' | 'title'>
-    & { owner: (
+    & { tags?: Maybe<Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'name'>
+    )>>, owner: (
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username'>
     ), steps?: Maybe<Array<(
@@ -1436,7 +1470,10 @@ export type LessonsQuery = (
   & { lessons: Array<(
     { __typename?: 'Lesson' }
     & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'template' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
-    & { students?: Maybe<Array<(
+    & { tags?: Maybe<Array<(
+      { __typename?: 'Tag' }
+      & Pick<Tag, 'name'>
+    )>>, students?: Maybe<Array<(
       { __typename?: 'User' }
       & Pick<User, 'id'>
     )>>, owner: (
@@ -2813,6 +2850,39 @@ export function useUpdateLessonThumbnailMutation(baseOptions?: Apollo.MutationHo
 export type UpdateLessonThumbnailMutationHookResult = ReturnType<typeof useUpdateLessonThumbnailMutation>;
 export type UpdateLessonThumbnailMutationResult = Apollo.MutationResult<UpdateLessonThumbnailMutation>;
 export type UpdateLessonThumbnailMutationOptions = Apollo.BaseMutationOptions<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>;
+export const AddLessonTagDocument = gql`
+    mutation AddLessonTag($id: Float!, $name: String!) {
+  addLessonTag(id: $id, name: $name) {
+    ...RegularLesson
+  }
+}
+    ${RegularLessonFragmentDoc}`;
+export type AddLessonTagMutationFn = Apollo.MutationFunction<AddLessonTagMutation, AddLessonTagMutationVariables>;
+
+/**
+ * __useAddLessonTagMutation__
+ *
+ * To run a mutation, you first call `useAddLessonTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddLessonTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addLessonTagMutation, { data, loading, error }] = useAddLessonTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useAddLessonTagMutation(baseOptions?: Apollo.MutationHookOptions<AddLessonTagMutation, AddLessonTagMutationVariables>) {
+        return Apollo.useMutation<AddLessonTagMutation, AddLessonTagMutationVariables>(AddLessonTagDocument, baseOptions);
+      }
+export type AddLessonTagMutationHookResult = ReturnType<typeof useAddLessonTagMutation>;
+export type AddLessonTagMutationResult = Apollo.MutationResult<AddLessonTagMutation>;
+export type AddLessonTagMutationOptions = Apollo.BaseMutationOptions<AddLessonTagMutation, AddLessonTagMutationVariables>;
 export const SetNextStepDocument = gql`
     mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
   setNextStep(options: {sessionId: $sessionId, stepId: $stepId}) {
@@ -3186,6 +3256,9 @@ export const LessonDocument = gql`
     description
     label
     status
+    tags {
+      name
+    }
     thumbnail
     title
     owner {
@@ -3234,6 +3307,9 @@ export const LessonsDocument = gql`
     label
     likes
     status
+    tags {
+      name
+    }
     template
     title
     thumbnail
