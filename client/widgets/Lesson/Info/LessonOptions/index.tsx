@@ -8,6 +8,7 @@ import {
   useUpdateLessonStatusMutation,
 } from '👨‍💻generated/graphql';
 import Label from '👨‍💻widgets/Lesson/Info/LessonOptions/Label';
+import Tags from '👨‍💻widgets/Lesson/Info/LessonOptions/Tags';
 import Thumbnail from '👨‍💻widgets/Lesson/Info/LessonOptions/Thumbnail';
 
 const LessonOptions: React.FC<Props> = ({
@@ -74,9 +75,10 @@ const LessonOptions: React.FC<Props> = ({
 
 export const Options: React.FC<OptionsProps> = (props) => {
   return (
-    <div className="flex absolute z-20 gap-6 justify-end py-2 px-4 pr-16 w-full bg-bg-primary border-b border-bg-nav-offset shadow-lg">
+    <div className="flex absolute z-20 gap-6 justify-end py-2 px-4 pr-16 w-full border-b shadow-2xl bg-bg-primary border-bg-nav-offset">
       <Thumbnail {...props} />
       <Label {...props} />
+      <Tags {...props} />
     </div>
   );
 };

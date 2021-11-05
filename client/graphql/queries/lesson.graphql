@@ -4,6 +4,9 @@ query Lesson($id: Int!) {
     description
     label
     status
+    tags {
+      name
+    }
     thumbnail
     title
     owner {

@@ -18,6 +18,7 @@ import { Dependency } from "./entities/Dependency";
 import { Lesson } from "./entities/Lesson";
 import { Session } from "./entities/Session";
 import { Step } from "./entities/Step";
+import { Tag } from "./entities/Tag";
 import { User } from "./entities/User";
 import { CheckpointResolver } from "./resolvers/checkpoint";
 import { CodeModuleResolver } from "./resolvers/codeModule";
@@ -29,7 +30,16 @@ import { UserResolver } from "./resolvers/user";
 
 const main = async () => {
   const conn = await createConnection({
-    entities: [Checkpoint, CodeModule, Dependency, Lesson, Session, Step, User],
+    entities: [
+      Checkpoint,
+      CodeModule,
+      Dependency,
+      Lesson,
+      Session,
+      Step,
+      Tag,
+      User,
+    ],
     logging: true,
     migrations: ["dist/migrations/*.js"],
     type: "postgres",

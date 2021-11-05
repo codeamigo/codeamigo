@@ -19,6 +19,9 @@ query Lessons(
     label
     likes
     status
+    tags {
+      name
+    }
     template
     title
     thumbnail

@@ -6,6 +6,7 @@ import gfm from 'remark-gfm';
 
 import { testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
+import Pill from '👨‍💻components/Pill';
 import {
   CheckpointsDocument,
   CheckpointsQuery,
@@ -256,11 +257,11 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                 checkpoint.type !== 'spec' &&
                 isEditing ? (
                   <div className="p-3 pt-0 bg-bg-nav">
-                    <span className="py-0.5 px-1 text-xs font-semibold text-white rounded-md border bg-accent-faded border-accent">
+                    <Pill>
                       {checkpoint.type === 'output'
                         ? `Expected output: ${checkpoint.output}`
                         : `Regex: /${checkpoint.matchRegex}/g`}
-                    </span>
+                    </Pill>
                   </div>
                 ) : null}
                 {isCurrentCheckpoint(checkpoint.id) && (
