@@ -1,4 +1,17 @@
-# codeamigo
+# Codeamigo
+
+### What is Codeamigo?
+Codeamigo is a platform for building byte-sized interactive coding tutorials, which can be taken, for free, without signup, by anyone.
+### Stack/Requirements
+
+```
+1. postgresql
+2. redis
+3. express
+4. apollo-server
+5. next.js
+6. tailwindcss
+```
 
 ### Installation
 
@@ -30,42 +43,3 @@ yarn dev
 ```
 
 Visit http://localhost:3000
-
-### Stack/Requirements
-
-```
-1. postgresql
-2. redis
-3. express
-4. apollo-server
-5. next.js
-6. tailwindcss
-```
-
-### Deploying Backend
-
-```
-1. ssh root@104.236.11.118
-2. docker pull plondon/codeamigo:latest
-3. docker tag plondon/codeamigo:latest dokku/api:latest
-4. dokku tags:deploy api latest
-```
-
-### Update letsencrypt
-```
-1. ssh root@104.236.11.118
-2. dokku letsencrypt api
-```
-
-### Migrations
-```
-1. npx typeorm migration:generate -n <DbChange>
-
-See https://medium.com/better-programming/typeorm-migrations-explained-fdb4f27cb1b3
-```
-
-### Deploying Frontend
-
-```
-1. git push origin master
-```
