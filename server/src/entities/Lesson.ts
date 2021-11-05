@@ -14,6 +14,7 @@ import {
 
 import { Session } from "./Session";
 import { Step } from "./Step";
+import { Tag } from "./Tag";
 import { User } from "./User";
 
 export enum TemplatesEnum {
@@ -131,4 +132,9 @@ export class Lesson extends BaseEntity {
   })
   @Field(() => [Step], { defaultValue: [] })
   steps!: Step[];
+
+  @ManyToMany(() => Tag)
+  @Field(() => [Tag], { defaultValue: [] })
+  @JoinTable()
+  tags: Tag[];
 }

@@ -311,6 +311,10 @@ export class LessonResolver {
     return lesson.save();
   }
 
+  @Mutation(() => Lesson)
+  @UseMiddleware(isAuth)
+  async addTag() {}
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteLesson(@Arg("id") id: number): Promise<boolean> {
