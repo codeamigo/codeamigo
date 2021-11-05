@@ -21,7 +21,10 @@ const Home = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  context.res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  context.res.setHeader(
+    'Cache-Control',
+    's-maxage=1, stale-while-revalidate=59'
+  );
   return {
     props: {},
   };
