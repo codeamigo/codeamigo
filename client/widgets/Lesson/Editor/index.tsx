@@ -111,7 +111,9 @@ const Editor: React.FC<Props> = ({
         `${URN}${ev.data.checkpoint.fileToMatchRegex}`
       );
 
-      const match = model.getValue().includes(checkpoint.matchRegex);
+      const match =
+        model.getValue().includes(checkpoint.matchRegex) ||
+        model.getValue().test(checkpoint.matchRegex);
 
       window.postMessage(
         {
