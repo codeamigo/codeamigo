@@ -33,6 +33,12 @@ const Footer: React.FC<Props> = () => {
           </div>
           &#183;
           <div>
+            <a href="https://github.com/codeamigo" target="_blank">
+              GitHub
+            </a>
+          </div>
+          &#183;
+          <div>
             <a href="https://twitter.com/codeamigo_dev" target="_blank">
               Twitter
             </a>
