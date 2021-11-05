@@ -88,14 +88,16 @@ const Tags: React.FC<Props> = ({ lesson }) => {
                     initialValues={{ name: '' }}
                     onSubmit={(values, { setErrors }) => {
                       if (lesson.tags?.find((t) => t.name === values.name)) {
-                        setErrors({ name: 'Tag already exists' });
-                        return true;
+                        setErrors({
+                          name: 'Tag already exists.',
+                        });
+                        return Promise.resolve(true);
                       }
 
                       return addTag(values.name);
                     }}
                   >
-                    {({ isSubmitting, isValid, values }) => (
+                    {({ isSubmitting }) => (
                       <Form className="p-2">
                         <div className="flex flex-wrap gap-1">
                           {lesson.tags?.map((tag) => (
