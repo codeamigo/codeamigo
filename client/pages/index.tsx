@@ -1,4 +1,5 @@
-import withApollo from '👨‍💻utils/withApollo';
+import { GetServerSideProps } from 'next';
+
 import Dependencies from '👨‍💻widgets/HomepageFilters/Dependencies';
 import LanguagesAndTemplates from '👨‍💻widgets/HomepageFilters/LanguagesAndTemplates';
 import Levels from '👨‍💻widgets/HomepageFilters/Levels';
@@ -19,10 +20,11 @@ const Home = () => {
   );
 };
 
-export async function getServerSideProps() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  context.res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
   return {
     props: {},
   };
-}
+};
 
 export default Home;

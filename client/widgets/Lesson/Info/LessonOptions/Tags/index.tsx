@@ -86,7 +86,7 @@ const Tags: React.FC<Props> = ({ lesson }) => {
                 >
                   <Formik
                     initialValues={{ name: '' }}
-                    onSubmit={(values, { setErrors }) => {
+                    onSubmit={(values, { resetForm, setErrors }) => {
                       if (lesson.tags?.find((t) => t.name === values.name)) {
                         setErrors({
                           name: 'Tag already exists.',
@@ -94,6 +94,7 @@ const Tags: React.FC<Props> = ({ lesson }) => {
                         return Promise.resolve(true);
                       }
 
+                      resetForm();
                       return addTag(values.name);
                     }}
                   >
