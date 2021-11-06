@@ -68,7 +68,7 @@ const LessonListItem: React.FC<Props> = ({
               {lesson.tags?.map(({ name }) => {
                 return (
                   <span
-                    className="text-xs opacity-90 text-text-primary"
+                    className="text-xs opacity-70 text-text-primary"
                     key={name}
                   >
                     #{name}
