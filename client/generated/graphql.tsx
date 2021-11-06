@@ -753,11 +753,8 @@ export type RegularLessonFragment = (
 
 export type RegularLessonItemFragment = (
   { __typename?: 'Lesson' }
-  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt'>
-  & { students?: Maybe<Array<(
-    { __typename?: 'User' }
-    & Pick<User, 'id'>
-  )>>, owner: (
+  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
+  & { owner: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username'>
   ), steps?: Maybe<Array<(
@@ -766,6 +763,12 @@ export type RegularLessonItemFragment = (
       { __typename?: 'CodeModule' }
       & Pick<CodeModule, 'name' | 'value'>
     )>> }
+  )>>, students?: Maybe<Array<(
+    { __typename?: 'User' }
+    & Pick<User, 'id'>
+  )>>, tags?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'name'>
   )>> }
 );
 
@@ -1637,23 +1640,27 @@ export const RegularLessonItemFragmentDoc = gql`
   createdAt
   label
   likes
-  status
-  title
-  thumbnail
-  updatedAt
-  students {
-    id
-  }
   owner {
     id
     username
   }
+  status
   steps {
     codeModules {
       name
       value
     }
   }
+  students {
+    id
+  }
+  tags {
+    name
+  }
+  title
+  thumbnail
+  updatedAt
+  views
 }
     `;
 export const RegularCodeModuleFragmentDoc = gql`

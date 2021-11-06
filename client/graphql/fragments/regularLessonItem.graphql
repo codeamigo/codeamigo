@@ -3,21 +3,25 @@ fragment RegularLessonItem on Lesson {
   createdAt
   label
   likes
-  status
-  title
-  thumbnail
-  updatedAt
-  students {
-    id
-  }
   owner {
     id
     username
   }
+  status
   steps {
     codeModules {
       name,
       value
     }
   }
+  students {
+    id
+  }
+  tags {
+    name
+  }
+  title
+  thumbnail
+  updatedAt
+  views
 }
