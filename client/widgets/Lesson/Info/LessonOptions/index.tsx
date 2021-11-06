@@ -44,13 +44,8 @@ const LessonOptions: React.FC<Props> = ({
 
   return (
     <div className="flex items-center">
-      <Icon
-        className="mr-2 text-text-primary"
-        name="list-add"
-        onClick={() => setShowOptions(!showOptions)}
-      />
       {lesson.status === 'PENDING_PUBLISH' ? (
-        <Button className="py-1" disabled>
+        <Button className="py-1" disabled offset>
           Awaiting Approval
         </Button>
       ) : (
@@ -63,12 +58,18 @@ const LessonOptions: React.FC<Props> = ({
           <Button
             className="py-1"
             disabled={!!disabledMessage}
+            offset
             onClick={(e) => publishLesson(e, lesson.id)}
           >
             Publish
           </Button>
         </div>
       )}
+      <Icon
+        className="ml-2 sm:ml-4 text-text-primary"
+        name="list-add"
+        onClick={() => setShowOptions(!showOptions)}
+      />
     </div>
   );
 };

@@ -4,6 +4,9 @@ query Session($lessonId: Int!) {
     currentStep
     requiresUpdate
     lesson {
+      owner {
+        id
+      }
       title
       id
     }

@@ -91,7 +91,10 @@ const Lesson: NextPage<{ id: string }> = (props) => {
       ) : // TODO: loading states
       null}
       <div className="lg:overflow-hidden w-full md:h-screen">
-        <Info lesson={data.lesson} />
+        <Info
+          isLessonOwner={meData?.me?.id === data.lesson.owner.id}
+          lesson={data.lesson}
+        />
         {sessionData.session ? (
           <Step
             currentStepId={stepId}

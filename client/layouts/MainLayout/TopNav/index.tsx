@@ -75,8 +75,8 @@ const TopNav: React.FC<Props> = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center">
-            <div className="hidden sm:block">
+          <div className="flex gap-2 sm:gap-4 items-center">
+            <div className="hidden sm:block ">
               <Button
                 onClick={() =>
                   modalVar({ callback: () => null, name: 'createLesson' })

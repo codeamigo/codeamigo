@@ -84,6 +84,7 @@ export class SessionResolver {
         }
       )
       .leftJoinAndSelect("Session.lesson", "lesson")
+      .leftJoinAndSelect("lesson.owner", "owner")
       .leftJoinAndSelect("Session.steps", "steps")
       .leftJoinAndSelect("steps.codeModules", "codeModules")
       .leftJoinAndSelect("steps.checkpoints", "checkpoints")

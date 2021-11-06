@@ -2,6 +2,7 @@ import { Transition } from '@headlessui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import LessonOptions, { Options } from '👨‍💻widgets/Lesson/Info/LessonOptions';
@@ -12,7 +13,12 @@ import View from './View';
 
 export const LessonInfoHeaderHeight = '2.75';
 
-const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
+const Info: React.FC<Props> = ({
+  isEditing,
+  isLessonOwner,
+  isPreviewing,
+  ...rest
+}) => {
   const router = useRouter();
   const [showOptions, setShowOptions] = useState(false);
 
@@ -34,7 +40,17 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
             {isEditing ? <Form {...rest} /> : <View {...rest} />}
           </div>
         </div>
-        <div className="flex justify-end items-center pl-2 md:w-1/4">
+        <div className="flex gap-2 sm:gap-4 justify-end items-center pl-2 md:w-1/4">
+          {isLessonOwner ? (
+            <Button
+              className="py-1"
+              offset
+              onClick={() => router.push(`/lessons/edit/${rest.lesson?.id}`)}
+            >
+              ✏️ Edit
+            </Button>
+          ) : null}
+
           <div className="flex items-center">
             {isEditing && rest.lesson ? (
               <LessonOptions
@@ -44,13 +60,16 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
               />
             ) : (
               <a
-                href="https://github.com/codeamigo/questions/issues"
+                aria-label="Ask a question on Discord"
+                className="hint--bottom-left hint--no-animate"
+                href="https://discord.gg/k98Hy9rQ"
                 target="_blank"
               >
                 <Icon className="text-lg text-text-primary" name="lifebuoy" />
               </a>
             )}
           </div>
+
           <div className="flex items-center">
             <UserMenu />
           </div>
@@ -65,6 +84,7 @@ const Info: React.FC<Props> = ({ isEditing, isPreviewing, ...rest }) => {
 
 type Props = {
   isEditing?: boolean;
+  isLessonOwner?: boolean;
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
 };

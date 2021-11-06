@@ -5,10 +5,18 @@ const Button: React.FC<Props> = ({ children, ...rest }, ref) => {
     <button
       {...rest}
       className={`flex items-center font-semibold text-sm rounded-md p-2 cursor-pointer whitespace-nowrap focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${
-        rest.className?.includes('bg-') ? '' : 'bg-accent'
-      } ${rest.className?.includes('text-') ? '' : 'text-bg-primary'} ${
-        rest.className
-      }`}
+        rest.className?.includes('bg-')
+          ? ''
+          : rest.offset
+          ? 'bg-bg-nav-offset'
+          : 'bg-accent'
+      } ${
+        rest.className?.includes('text-')
+          ? ''
+          : rest.offset
+          ? 'text-white'
+          : 'text-bg-primary'
+      } ${rest.className}`}
       ref={rest.forwardedRef}
     >
       {children}
@@ -23,6 +31,7 @@ type Props = React.DetailedHTMLProps<
   className?: string;
   disabled?: boolean;
   forwardedRef?: Ref<any>;
+  offset?: boolean;
 };
 
 export default Button;

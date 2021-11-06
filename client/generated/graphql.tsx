@@ -1552,6 +1552,10 @@ export type SessionQuery = (
     & { lesson: (
       { __typename?: 'Lesson' }
       & Pick<Lesson, 'title' | 'id'>
+      & { owner: (
+        { __typename?: 'User' }
+        & Pick<User, 'id'>
+      ) }
     ), steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & RegularStepFragment
@@ -3519,6 +3523,9 @@ export const SessionDocument = gql`
     currentStep
     requiresUpdate
     lesson {
+      owner {
+        id
+      }
       title
       id
     }
