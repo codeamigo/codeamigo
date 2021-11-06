@@ -61,7 +61,21 @@ const LessonListItem: React.FC<Props> = ({
         </div>
         <div>
           {progress ? progress : null}
-          <div className="flex mt-4 text-xs font-bold text-text-primary">
+          {lesson.tags?.length ? (
+            <div className="flex gap-1.5 mt-2">
+              {lesson.tags?.map(({ name }) => {
+                return (
+                  <span
+                    className="text-xs opacity-90 text-text-primary"
+                    key={name}
+                  >
+                    #{name}
+                  </span>
+                );
+              })}
+            </div>
+          ) : null}
+          <div className="flex mt-2 text-xs font-bold text-text-primary">
             <div
               aria-label={`${lesson.students?.length} Students`}
               className="hint--top hint--no-animate"
