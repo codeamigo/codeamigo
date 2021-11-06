@@ -6,6 +6,7 @@ import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
 import { LessonsQuery } from '👨‍💻generated/graphql';
 import { templates } from '👨‍💻modals/CreateLesson';
+import { formatNumber } from '👨‍💻utils/numberUtils';
 import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
@@ -16,6 +17,7 @@ const LessonListItem: React.FC<Props> = ({
   progress,
 }) => {
   const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
+  const students = lesson.students?.length || 0;
   const template = templates.find((t) => t.value === lesson.template);
 
   return (
@@ -78,7 +80,7 @@ const LessonListItem: React.FC<Props> = ({
           <div className="flex mt-2 text-xs font-bold text-text-primary">
             <div
               aria-label={`${lesson.students?.length} Students`}
-              className="hint--top hint--no-animate"
+              className="hint--top-right hint--no-animate"
             >
               <div className="flex">
                 <Icon
@@ -86,20 +88,20 @@ const LessonListItem: React.FC<Props> = ({
                   name="users"
                 />{' '}
                 <div className="text-text-primary">
-                  {lesson.students?.length || 0}
+                  {formatNumber(students)}
                 </div>
               </div>
             </div>
             <div
               aria-label={`${views} Views`}
-              className="ml-3 hint--top hint--no-animate"
+              className="ml-3 hint--top-right hint--no-animate"
             >
               <div className="flex">
                 <Icon
                   className="mr-1 cursor-auto text-text-primary"
                   name="eye"
                 />{' '}
-                <div className="text-text-primary">{views}</div>
+                <div className="text-text-primary">{formatNumber(views)}</div>
               </div>
             </div>
           </div>

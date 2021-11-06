@@ -33,6 +33,7 @@
     "next-apollo": "5.0.7",
     "next-auth": "^3.6.1",
     "nprogress": "^0.2.0",
+    "numeral": "^2.0.6",
     "pg": "^8.5.1",
     "postcss": "8.2.4",
     "react": "17.0.1",
