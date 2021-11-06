@@ -167,7 +167,6 @@ const Editor: React.FC<Props> = ({
   }, [stepId]);
 
   const handleCodeUpdate = (newCode?: string, _?: any) => {
-    console.log(newCode);
     if (!newCode) return;
     updateCode && updateCode(newCode);
     // Wait for pathRef to update
@@ -365,7 +364,6 @@ const Editor: React.FC<Props> = ({
 type Props = {
   activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
-  isEditing: boolean;
   isPreviewing?: boolean;
   isTyped?: boolean;
   lesson: LessonQuery['lesson'];
