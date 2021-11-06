@@ -1,5 +1,3 @@
-import { GetServerSideProps } from 'next';
-
 import Dependencies from '👨‍💻widgets/HomepageFilters/Dependencies';
 import LanguagesAndTemplates from '👨‍💻widgets/HomepageFilters/LanguagesAndTemplates';
 import Levels from '👨‍💻widgets/HomepageFilters/Levels';
@@ -18,16 +16,6 @@ const Home = () => {
       </div>
     </div>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  context.res.setHeader(
-    'Cache-Control',
-    's-maxage=1, stale-while-revalidate=59'
-  );
-  return {
-    props: {},
-  };
 };
 
 export default Home;
