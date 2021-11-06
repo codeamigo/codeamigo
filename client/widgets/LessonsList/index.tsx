@@ -14,7 +14,7 @@ const LessonsList: React.FC<Props> = () => {
     (router.query.levels as string)?.split('|').filter((x) => !!x) || [];
 
   const { data } = useLessonsQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
     variables: {
       dependencies: queryDeps.join('|'),
       labels: queryLevels.join('|'),
