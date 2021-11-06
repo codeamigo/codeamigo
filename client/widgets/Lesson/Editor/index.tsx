@@ -24,6 +24,7 @@ const Editor: React.FC<Props> = ({
   activePath,
   codeModules,
   isPreviewing,
+  lesson,
   refreshPreview,
   runCode,
   sessionId,
@@ -175,12 +176,11 @@ const Editor: React.FC<Props> = ({
       );
 
       if (!currentModule) return;
-      if (!sessionId) return;
 
       updateCodeModule({
         variables: {
           id: currentModule.id,
-          lessonId: null,
+          lessonId: lesson?.id,
           name: pathRef.current,
           sessionId,
           value: newCode,
@@ -364,6 +364,7 @@ const Editor: React.FC<Props> = ({
 type Props = {
   activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
+  isEditing: boolean;
   isPreviewing?: boolean;
   isTyped?: boolean;
   lesson: LessonQuery['lesson'];

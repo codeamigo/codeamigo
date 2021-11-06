@@ -15,7 +15,7 @@ import { CodeModule } from "../entities/CodeModule";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
-import { isStudent } from "../middleware/isStudent";
+import { isStudentOrTeacher } from "../middleware/isStudentOrTeacher";
 
 @InputType()
 class CodeModuleInput {
@@ -33,8 +33,8 @@ class CodeModuleUpdateInput {
   name: string;
   @Field()
   value: string;
-  @Field()
-  sessionId: number;
+  @Field({ nullable: true })
+  sessionId?: number;
   @Field({ nullable: true })
   lessonId?: number;
 }
@@ -117,7 +117,7 @@ export class CodeModuleResolver {
 
   @Mutation(() => CodeModule, { nullable: true })
   @UseMiddleware(isAuth)
-  @UseMiddleware(isStudent)
+  @UseMiddleware(isStudentOrTeacher)
   async updateCodeModule(
     @Arg("id") id: number,
     @Arg("options") options: CodeModuleUpdateInput,

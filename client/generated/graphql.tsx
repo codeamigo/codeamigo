@@ -618,7 +618,7 @@ export type CodeModuleInput = {
 export type CodeModuleUpdateInput = {
   name: Scalars['String'];
   value: Scalars['String'];
-  sessionId: Scalars['Float'];
+  sessionId?: Maybe<Scalars['Float']>;
   lessonId?: Maybe<Scalars['Float']>;
 };
 
@@ -1183,8 +1183,8 @@ export type UpdateCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
   value: Scalars['String'];
-  sessionId: Scalars['Float'];
   lessonId?: Maybe<Scalars['Float']>;
+  sessionId?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -2632,7 +2632,7 @@ export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpoi
 export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
 export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
-    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $sessionId: Float!, $lessonId: Float) {
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $lessonId: Float, $sessionId: Float) {
   updateCodeModule(
     id: $id
     options: {name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId}
@@ -2659,8 +2659,8 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModul
  *      id: // value for 'id'
  *      name: // value for 'name'
  *      value: // value for 'value'
- *      sessionId: // value for 'sessionId'
  *      lessonId: // value for 'lessonId'
+ *      sessionId: // value for 'sessionId'
  *   },
  * });
  */
