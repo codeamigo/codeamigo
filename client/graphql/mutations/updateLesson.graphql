@@ -35,8 +35,14 @@ mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   }
 }
 
-mutation AddLessonTag($id: Float!, $name: String!) {
-  addLessonTag(id: $id, name: $name) {
+mutation CreateLessonTag($id: Float!, $name: String!) {
+  createLessonTag(id: $id, name: $name) {
+    ...RegularLesson
+  }
+}
+
+mutation DeleteLessonTag($id: Float!, $name: String!) {
+  deleteLessonTag(id: $id, name: $name) {
     ...RegularLesson
   }
 }

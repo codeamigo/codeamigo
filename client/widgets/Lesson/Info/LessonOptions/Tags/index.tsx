@@ -10,13 +10,15 @@ import Pill from '👨‍💻components/Pill';
 import {
   LessonDocument,
   LessonQuery,
-  useAddLessonTagMutation,
+  useCreateLessonTagMutation,
+  useDeleteLessonTagMutation,
 } from '👨‍💻generated/graphql';
 
 const Tags: React.FC<Props> = ({ lesson }) => {
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const [showOptions, setShowOptions] = useState(false);
-  const [addTagM] = useAddLessonTagMutation();
+  const [createTagM] = useCreateLessonTagMutation();
+  const [deleteTagM] = useDeleteLessonTagMutation();
 
   if (!lesson) return null;
 
@@ -24,13 +26,13 @@ const Tags: React.FC<Props> = ({ lesson }) => {
     setShowOptions(false);
   });
 
-  const addTag = (tag: string) => {
+  const createTag = (tag: string) => {
     const q = {
       query: LessonDocument,
       variables: { id: lesson.id },
     };
 
-    return addTagM({
+    return createTagM({
       update: (store) => {
         const lessonData = store.readQuery<LessonQuery>(q);
         if (!lessonData?.lesson) return;
@@ -41,6 +43,34 @@ const Tags: React.FC<Props> = ({ lesson }) => {
             lesson: {
               ...lessonData.lesson,
               tags: [...(lessonData.lesson.tags || []), { name: tag }],
+            },
+          },
+        });
+      },
+
+      variables: { id: lesson.id, name: tag },
+    });
+  };
+
+  const deleteTag = (tag: string) => {
+    const q = {
+      query: LessonDocument,
+      variables: { id: lesson.id },
+    };
+
+    return deleteTagM({
+      update: (store) => {
+        const lessonData = store.readQuery<LessonQuery>(q);
+        if (!lessonData?.lesson) return;
+
+        store.writeQuery<LessonQuery>({
+          ...q,
+          data: {
+            lesson: {
+              ...lessonData.lesson,
+              tags: (lessonData.lesson.tags || []).filter(
+                (t) => t.name !== tag
+              ),
             },
           },
         });
@@ -95,18 +125,26 @@ const Tags: React.FC<Props> = ({ lesson }) => {
                       }
 
                       resetForm();
-                      return addTag(values.name);
+                      return createTag(values.name);
                     }}
                   >
                     {({ isSubmitting }) => (
                       <Form className="p-2">
-                        <div className="flex flex-wrap gap-1">
-                          {lesson.tags?.map((tag) => (
-                            <Pill key={tag.name}>{tag.name}</Pill>
-                          ))}
-                        </div>
+                        {lesson.tags?.length ? (
+                          <div className="flex flex-wrap gap-1.5 mb-3">
+                            {lesson.tags?.map((tag) => (
+                              <div className="group relative">
+                                <Icon
+                                  className="hidden group-hover:flex absolute -top-1 -right-1.5 w-3.5 h-3.5 text-xs text-white rounded-full bg-accent"
+                                  name="cancel"
+                                  onClick={() => deleteTag(tag.name)}
+                                />
+                                <Pill key={tag.name}>{tag.name}</Pill>
+                              </div>
+                            ))}
+                          </div>
+                        ) : null}
                         <InputField
-                          className="mt-3"
                           label="Name"
                           name="name"
                           placeholder="Enter a new tag"

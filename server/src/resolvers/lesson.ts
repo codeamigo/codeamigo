@@ -316,7 +316,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
-  async addLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
+  async createLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
     const lesson = await Lesson.findOne({
       relations,
       where: { id },
@@ -332,10 +332,33 @@ export class LessonResolver {
       tag = await Tag.create({ name }).save();
     }
 
-    console.log(tag);
-
     Object.assign(lesson, {
       tags: [...lesson.tags, tag],
+    });
+
+    return lesson.save();
+  }
+
+  @Mutation(() => Lesson)
+  @UseMiddleware(isAuth)
+  async deleteLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
+    const lesson = await Lesson.findOne({
+      relations,
+      where: { id },
+    });
+
+    if (!lesson) {
+      return null;
+    }
+
+    const tag = await Tag.findOne({ where: { name } });
+
+    if (!tag) {
+      return lesson;
+    }
+
+    Object.assign(lesson, {
+      tags: lesson.tags.filter((t) => t.id !== tag.id),
     });
 
     return lesson.save();

@@ -340,7 +340,8 @@ export type Mutation = {
   updateLessonLabel?: Maybe<Lesson>;
   updateLessonStatus?: Maybe<Lesson>;
   updateLessonThumbnail?: Maybe<Lesson>;
-  addLessonTag: Lesson;
+  createLessonTag: Lesson;
+  deleteLessonTag: Lesson;
   deleteLesson: Scalars['Boolean'];
   createSession?: Maybe<Session>;
   updateSession?: Maybe<Session>;
@@ -552,7 +553,13 @@ export type MutationUpdateLessonThumbnailArgs = {
 };
 
 
-export type MutationAddLessonTagArgs = {
+export type MutationCreateLessonTagArgs = {
+  name: Scalars['String'];
+  id: Scalars['Float'];
+};
+
+
+export type MutationDeleteLessonTagArgs = {
   name: Scalars['String'];
   id: Scalars['Float'];
 };
@@ -1268,15 +1275,29 @@ export type UpdateLessonThumbnailMutation = (
   )> }
 );
 
-export type AddLessonTagMutationVariables = Exact<{
+export type CreateLessonTagMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
 }>;
 
 
-export type AddLessonTagMutation = (
+export type CreateLessonTagMutation = (
   { __typename?: 'Mutation' }
-  & { addLessonTag: (
+  & { createLessonTag: (
+    { __typename?: 'Lesson' }
+    & RegularLessonFragment
+  ) }
+);
+
+export type DeleteLessonTagMutationVariables = Exact<{
+  id: Scalars['Float'];
+  name: Scalars['String'];
+}>;
+
+
+export type DeleteLessonTagMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteLessonTag: (
     { __typename?: 'Lesson' }
     & RegularLessonFragment
   ) }
@@ -2850,39 +2871,72 @@ export function useUpdateLessonThumbnailMutation(baseOptions?: Apollo.MutationHo
 export type UpdateLessonThumbnailMutationHookResult = ReturnType<typeof useUpdateLessonThumbnailMutation>;
 export type UpdateLessonThumbnailMutationResult = Apollo.MutationResult<UpdateLessonThumbnailMutation>;
 export type UpdateLessonThumbnailMutationOptions = Apollo.BaseMutationOptions<UpdateLessonThumbnailMutation, UpdateLessonThumbnailMutationVariables>;
-export const AddLessonTagDocument = gql`
-    mutation AddLessonTag($id: Float!, $name: String!) {
-  addLessonTag(id: $id, name: $name) {
+export const CreateLessonTagDocument = gql`
+    mutation CreateLessonTag($id: Float!, $name: String!) {
+  createLessonTag(id: $id, name: $name) {
     ...RegularLesson
   }
 }
     ${RegularLessonFragmentDoc}`;
-export type AddLessonTagMutationFn = Apollo.MutationFunction<AddLessonTagMutation, AddLessonTagMutationVariables>;
+export type CreateLessonTagMutationFn = Apollo.MutationFunction<CreateLessonTagMutation, CreateLessonTagMutationVariables>;
 
 /**
- * __useAddLessonTagMutation__
+ * __useCreateLessonTagMutation__
  *
- * To run a mutation, you first call `useAddLessonTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddLessonTagMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateLessonTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLessonTagMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addLessonTagMutation, { data, loading, error }] = useAddLessonTagMutation({
+ * const [createLessonTagMutation, { data, loading, error }] = useCreateLessonTagMutation({
  *   variables: {
  *      id: // value for 'id'
  *      name: // value for 'name'
  *   },
  * });
  */
-export function useAddLessonTagMutation(baseOptions?: Apollo.MutationHookOptions<AddLessonTagMutation, AddLessonTagMutationVariables>) {
-        return Apollo.useMutation<AddLessonTagMutation, AddLessonTagMutationVariables>(AddLessonTagDocument, baseOptions);
+export function useCreateLessonTagMutation(baseOptions?: Apollo.MutationHookOptions<CreateLessonTagMutation, CreateLessonTagMutationVariables>) {
+        return Apollo.useMutation<CreateLessonTagMutation, CreateLessonTagMutationVariables>(CreateLessonTagDocument, baseOptions);
       }
-export type AddLessonTagMutationHookResult = ReturnType<typeof useAddLessonTagMutation>;
-export type AddLessonTagMutationResult = Apollo.MutationResult<AddLessonTagMutation>;
-export type AddLessonTagMutationOptions = Apollo.BaseMutationOptions<AddLessonTagMutation, AddLessonTagMutationVariables>;
+export type CreateLessonTagMutationHookResult = ReturnType<typeof useCreateLessonTagMutation>;
+export type CreateLessonTagMutationResult = Apollo.MutationResult<CreateLessonTagMutation>;
+export type CreateLessonTagMutationOptions = Apollo.BaseMutationOptions<CreateLessonTagMutation, CreateLessonTagMutationVariables>;
+export const DeleteLessonTagDocument = gql`
+    mutation DeleteLessonTag($id: Float!, $name: String!) {
+  deleteLessonTag(id: $id, name: $name) {
+    ...RegularLesson
+  }
+}
+    ${RegularLessonFragmentDoc}`;
+export type DeleteLessonTagMutationFn = Apollo.MutationFunction<DeleteLessonTagMutation, DeleteLessonTagMutationVariables>;
+
+/**
+ * __useDeleteLessonTagMutation__
+ *
+ * To run a mutation, you first call `useDeleteLessonTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteLessonTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteLessonTagMutation, { data, loading, error }] = useDeleteLessonTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useDeleteLessonTagMutation(baseOptions?: Apollo.MutationHookOptions<DeleteLessonTagMutation, DeleteLessonTagMutationVariables>) {
+        return Apollo.useMutation<DeleteLessonTagMutation, DeleteLessonTagMutationVariables>(DeleteLessonTagDocument, baseOptions);
+      }
+export type DeleteLessonTagMutationHookResult = ReturnType<typeof useDeleteLessonTagMutation>;
+export type DeleteLessonTagMutationResult = Apollo.MutationResult<DeleteLessonTagMutation>;
+export type DeleteLessonTagMutationOptions = Apollo.BaseMutationOptions<DeleteLessonTagMutation, DeleteLessonTagMutationVariables>;
 export const SetNextStepDocument = gql`
     mutation SetNextStep($sessionId: Float!, $stepId: Float!) {
   setNextStep(options: {sessionId: $sessionId, stepId: $stepId}) {
