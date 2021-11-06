@@ -18,6 +18,7 @@ import { Session } from "../entities/Session";
 import { Step } from "../entities/Step";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
+import { isStudent } from "../middleware/isStudent";
 import { MyContext } from "../types";
 
 @InputType()
@@ -276,6 +277,7 @@ export class SessionResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
+  @UseMiddleware(isStudent)
   async deleteSession(
     @Arg("id") id: number,
     @Ctx() { req }: MyContext
@@ -293,6 +295,7 @@ export class SessionResolver {
 
   @Mutation(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isStudent)
   async setNextStep(
     @Arg("options") options: NextStepInput
   ): Promise<Session | null> {

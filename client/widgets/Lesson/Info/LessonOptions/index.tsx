@@ -31,6 +31,9 @@ const LessonOptions: React.FC<Props> = ({
   if (!lesson.thumbnail) {
     disabledMessage = 'A thumbnail (jpg, png, gif) is required.';
   }
+  if (!lesson.tags || lesson.tags?.length < 1) {
+    disabledMessage = 'Please add at least 1 tag.';
+  }
 
   const publishLesson = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,

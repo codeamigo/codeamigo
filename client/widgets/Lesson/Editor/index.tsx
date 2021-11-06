@@ -14,7 +14,6 @@ import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/
 
 import * as THEMES from '../../../styles/monacoThemes';
 import { camalize, getLanguage } from './utils';
-const FILE = 'inmemory://model/';
 const URN = 'urn:';
 const CS_TYPES_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings/@types';
@@ -27,6 +26,7 @@ const Editor: React.FC<Props> = ({
   isPreviewing,
   refreshPreview,
   runCode,
+  sessionId,
   stepId,
   updateCode,
   ...rest
@@ -175,12 +175,14 @@ const Editor: React.FC<Props> = ({
       );
 
       if (!currentModule) return;
+      if (!sessionId) return;
 
       updateCodeModule({
         variables: {
           id: currentModule.id,
           lessonId: null,
           name: pathRef.current,
+          sessionId,
           value: newCode,
         },
       });
@@ -367,6 +369,7 @@ type Props = {
   lesson: LessonQuery['lesson'];
   refreshPreview?: () => void;
   runCode: () => void;
+  sessionId?: number;
   stepId?: number;
   updateCode?: (newCode: string) => void;
 };

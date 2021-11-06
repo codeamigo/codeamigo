@@ -23,6 +23,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     onRunMatchTest,
     onTestStart,
     previewRef,
+    session,
     step,
     updateWidths,
   } = props;
@@ -109,6 +110,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             activePath={activePath || (entryFile?.name as string)}
             codeModules={step.codeModules}
             runCode={postCodeToRiju}
+            sessionId={session?.id}
             stepId={step.id}
             {...props}
           />

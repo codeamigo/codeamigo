@@ -327,12 +327,12 @@ export type Mutation = {
   changePasswordFromToken: UserResponse;
   changePasswordFromPassword: UserResponse;
   changeEmail: UserResponse;
+  updateStepName?: Maybe<Step>;
+  deleteStep: Scalars['Boolean'];
   createStep?: Maybe<Step>;
   completeStep?: Maybe<Step>;
   updateStepCheckpoint?: Maybe<Step>;
   updateStepInstructions?: Maybe<Step>;
-  updateStepName?: Maybe<Step>;
-  deleteStep: Scalars['Boolean'];
   createLesson: CreateLessonResponse;
   updateLessonViews?: Maybe<Lesson>;
   updateLessonTitle?: Maybe<Lesson>;
@@ -393,7 +393,7 @@ export type MutationCreateCodeModuleArgs = {
 
 
 export type MutationUpdateCodeModuleArgs = {
-  options: CodeModuleInput;
+  options: CodeModuleUpdateInput;
   id: Scalars['Float'];
 };
 
@@ -483,6 +483,16 @@ export type MutationChangeEmailArgs = {
 };
 
 
+export type MutationUpdateStepNameArgs = {
+  options: StepNameInput;
+};
+
+
+export type MutationDeleteStepArgs = {
+  options: DeleteStepInput;
+};
+
+
 export type MutationCreateStepArgs = {
   options: CreateStepInput;
 };
@@ -500,16 +510,6 @@ export type MutationUpdateStepCheckpointArgs = {
 
 export type MutationUpdateStepInstructionsArgs = {
   options: StepInstructionsInput;
-};
-
-
-export type MutationUpdateStepNameArgs = {
-  options: StepNameInput;
-};
-
-
-export type MutationDeleteStepArgs = {
-  id: Scalars['Float'];
 };
 
 
@@ -615,6 +615,13 @@ export type CodeModuleInput = {
   lessonId?: Maybe<Scalars['Float']>;
 };
 
+export type CodeModuleUpdateInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+  sessionId: Scalars['Float'];
+  lessonId?: Maybe<Scalars['Float']>;
+};
+
 export type CodeModuleUpdateEntryInput = {
   newId?: Maybe<Scalars['Float']>;
   oldId?: Maybe<Scalars['Float']>;
@@ -669,6 +676,17 @@ export type UpdateUserRoleInput = {
   role: Scalars['String'];
 };
 
+export type StepNameInput = {
+  id: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  name: Scalars['String'];
+};
+
+export type DeleteStepInput = {
+  id: Scalars['Float'];
+  lessonId: Scalars['Float'];
+};
+
 export type CreateStepInput = {
   name: Scalars['String'];
   lessonId: Scalars['Float'];
@@ -688,11 +706,6 @@ export type UpdateStepCheckpointInput = {
 export type StepInstructionsInput = {
   id: Scalars['Float'];
   instructions: Scalars['String'];
-};
-
-export type StepNameInput = {
-  id: Scalars['Float'];
-  name: Scalars['String'];
 };
 
 export type CreateLessonResponse = {
@@ -1011,6 +1024,7 @@ export type DeleteSessionMutation = (
 
 export type DeleteStepMutationVariables = Exact<{
   id: Scalars['Float'];
+  lessonId: Scalars['Float'];
 }>;
 
 
@@ -1169,6 +1183,7 @@ export type UpdateCodeModuleMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
   value: Scalars['String'];
+  sessionId: Scalars['Float'];
   lessonId?: Maybe<Scalars['Float']>;
 }>;
 
@@ -1351,6 +1366,7 @@ export type UpdateStepInstructionsMutation = (
 export type UpdateStepNameMutationVariables = Exact<{
   id: Scalars['Float'];
   name: Scalars['String'];
+  lessonId: Scalars['Float'];
 }>;
 
 
@@ -2236,8 +2252,8 @@ export type DeleteSessionMutationHookResult = ReturnType<typeof useDeleteSession
 export type DeleteSessionMutationResult = Apollo.MutationResult<DeleteSessionMutation>;
 export type DeleteSessionMutationOptions = Apollo.BaseMutationOptions<DeleteSessionMutation, DeleteSessionMutationVariables>;
 export const DeleteStepDocument = gql`
-    mutation DeleteStep($id: Float!) {
-  deleteStep(id: $id)
+    mutation DeleteStep($id: Float!, $lessonId: Float!) {
+  deleteStep(options: {id: $id, lessonId: $lessonId})
 }
     `;
 export type DeleteStepMutationFn = Apollo.MutationFunction<DeleteStepMutation, DeleteStepMutationVariables>;
@@ -2256,6 +2272,7 @@ export type DeleteStepMutationFn = Apollo.MutationFunction<DeleteStepMutation, D
  * const [deleteStepMutation, { data, loading, error }] = useDeleteStepMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      lessonId: // value for 'lessonId'
  *   },
  * });
  */
@@ -2615,10 +2632,10 @@ export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpoi
 export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
 export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
-    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $lessonId: Float) {
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $sessionId: Float!, $lessonId: Float) {
   updateCodeModule(
     id: $id
-    options: {name: $name, value: $value, lessonId: $lessonId}
+    options: {name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId}
   ) {
     ...RegularCodeModule
   }
@@ -2642,6 +2659,7 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModul
  *      id: // value for 'id'
  *      name: // value for 'name'
  *      value: // value for 'value'
+ *      sessionId: // value for 'sessionId'
  *      lessonId: // value for 'lessonId'
  *   },
  * });
@@ -3048,8 +3066,8 @@ export type UpdateStepInstructionsMutationHookResult = ReturnType<typeof useUpda
 export type UpdateStepInstructionsMutationResult = Apollo.MutationResult<UpdateStepInstructionsMutation>;
 export type UpdateStepInstructionsMutationOptions = Apollo.BaseMutationOptions<UpdateStepInstructionsMutation, UpdateStepInstructionsMutationVariables>;
 export const UpdateStepNameDocument = gql`
-    mutation UpdateStepName($id: Float!, $name: String!) {
-  updateStepName(options: {id: $id, name: $name}) {
+    mutation UpdateStepName($id: Float!, $name: String!, $lessonId: Float!) {
+  updateStepName(options: {id: $id, lessonId: $lessonId, name: $name}) {
     id
   }
 }
@@ -3071,6 +3089,7 @@ export type UpdateStepNameMutationFn = Apollo.MutationFunction<UpdateStepNameMut
  *   variables: {
  *      id: // value for 'id'
  *      name: // value for 'name'
+ *      lessonId: // value for 'lessonId'
  *   },
  * });
  */

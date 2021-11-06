@@ -168,6 +168,7 @@ const CreateLesson: React.FC<Props> = () => {
                           <Field
                             id={template.id}
                             name="template"
+                            required
                             type="radio"
                             value={template.value}
                           />{' '}

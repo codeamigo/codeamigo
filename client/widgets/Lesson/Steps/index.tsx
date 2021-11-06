@@ -96,7 +96,7 @@ const Steps: React.FC<Props> = ({
   const updateStep = async (id: number, name: string) => {
     updateStepM({
       refetchQueries: ['Lesson'],
-      variables: { id, name },
+      variables: { id, lessonId, name },
     });
 
     setIsUpdating(false);
@@ -105,7 +105,7 @@ const Steps: React.FC<Props> = ({
   const deleteStep = async (id: number, idx: number) => {
     await deleteStepM({
       refetchQueries: ['Lesson'],
-      variables: { id },
+      variables: { id, lessonId },
     });
 
     setCurrentStepId(steps[idx - 1].id);

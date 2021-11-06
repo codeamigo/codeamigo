@@ -21,6 +21,8 @@ import { Session } from "../entities/Session";
 import { Tag } from "../entities/Tag";
 import { User } from "../entities/User";
 import { isAuth } from "../middleware/isAuth";
+import { isTeacher } from "../middleware/isTeacher";
+import { isTeacherOrAdmin } from "../middleware/isTeacherOrAdmin";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
 import { StepResolver } from "./step";
@@ -160,6 +162,14 @@ export class LessonResolver {
         };
       }
 
+      if (!options.template) {
+        return {
+          errors: [
+            { field: "description", message: "A template is required." },
+          ],
+        };
+      }
+
       const lesson = await Lesson.create({ ...options, owner }).save();
       await stepResolver.createStep({
         lessonId: lesson.id,
@@ -205,6 +215,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async updateLessonTitle(
     @Arg("id") id: number,
     @Arg("title") title: string
@@ -221,6 +232,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async updateLessonDescription(
     @Arg("id") id: number,
     @Arg("description") description: string
@@ -237,6 +249,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async updateLessonLabel(
     @Arg("id") id: number,
     @Arg("label") label: LessonLabelEnum
@@ -253,6 +266,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacherOrAdmin)
   async updateLessonStatus(
     @Arg("id") id: number,
     @Arg("status") status: LessonStatusTypeEnum
@@ -296,6 +310,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async updateLessonThumbnail(
     @Arg("id") id: number,
     @Arg("thumbnail", { nullable: true }) thumbnail?: string
@@ -316,6 +331,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async createLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
     const lesson = await Lesson.findOne({
       relations,
@@ -341,6 +357,7 @@ export class LessonResolver {
 
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async deleteLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
     const lesson = await Lesson.findOne({
       relations,
@@ -366,6 +383,7 @@ export class LessonResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacherOrAdmin)
   async deleteLesson(@Arg("id") id: number): Promise<boolean> {
     await Lesson.delete(id);
     return true;

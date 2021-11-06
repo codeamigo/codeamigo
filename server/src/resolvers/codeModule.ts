@@ -15,6 +15,7 @@ import { CodeModule } from "../entities/CodeModule";
 import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
+import { isStudent } from "../middleware/isStudent";
 
 @InputType()
 class CodeModuleInput {
@@ -22,6 +23,18 @@ class CodeModuleInput {
   name: string;
   @Field()
   value: string;
+  @Field({ nullable: true })
+  lessonId?: number;
+}
+
+@InputType()
+class CodeModuleUpdateInput {
+  @Field()
+  name: string;
+  @Field()
+  value: string;
+  @Field()
+  sessionId: number;
   @Field({ nullable: true })
   lessonId?: number;
 }
@@ -104,9 +117,10 @@ export class CodeModuleResolver {
 
   @Mutation(() => CodeModule, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isStudent)
   async updateCodeModule(
     @Arg("id") id: number,
-    @Arg("options") options: CodeModuleInput,
+    @Arg("options") options: CodeModuleUpdateInput,
     @Ctx() { req }: MyContext
   ): Promise<CodeModule | null> {
     const codeModule = await CodeModule.findOne(id);
@@ -126,7 +140,7 @@ export class CodeModuleResolver {
       }
     }
 
-    const { lessonId, ...rest } = options;
+    const { lessonId, sessionId, ...rest } = options;
 
     await CodeModule.update({ id }, { ...rest });
     const newCodeModule = await CodeModule.findOne(id);

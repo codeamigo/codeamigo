@@ -21,13 +21,7 @@ import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/Sandp
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 
 const Step: React.FC<Props> = (props) => {
-  const {
-    currentStepId: id,
-    lesson,
-    session,
-    setCurrentStepId,
-    showSteps,
-  } = props;
+  const { currentStepId: id, lesson, session, setCurrentStepId } = props;
   const previewRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const filesRef = useRef<HTMLDivElement>(null);

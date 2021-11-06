@@ -15,10 +15,12 @@ mutation UpdateStepInstructions(
 mutation UpdateStepName(
   $id: Float!
   $name: String!
+  $lessonId: Float!
 ) {
   updateStepName(
     options: {
       id: $id
+      lessonId: $lessonId
       name: $name
     }
   ) {

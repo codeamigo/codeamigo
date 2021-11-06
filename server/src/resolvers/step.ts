@@ -15,6 +15,7 @@ import { CodeModule } from "../entities/CodeModule";
 import { Lesson, TemplatesEnum } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
+import { isTeacher } from "../middleware/isTeacher";
 import { getTemplate, ITemplate } from "../utils/templates";
 
 export const DEFAULT_MD = `## Step \#
@@ -44,6 +45,8 @@ class StepNameInput {
   @Field()
   id: number;
   @Field()
+  lessonId: number;
+  @Field()
   name: string;
 }
 
@@ -71,6 +74,14 @@ class CreateStepInput {
   currentStepId?: number;
   @Field({ nullable: true })
   template?: TemplatesEnum;
+}
+
+@InputType()
+class DeleteStepInput {
+  @Field()
+  id: number;
+  @Field()
+  lessonId: number;
 }
 
 @Resolver()
@@ -111,6 +122,37 @@ export class StepResolver {
 
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
+  async updateStepName(
+    @Arg("options") options: StepNameInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    if (!step) {
+      return null;
+    }
+
+    await Step.update({ id: options.id }, { ...step, name: options.name });
+
+    return step;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
+  async deleteStep(@Arg("options") options: DeleteStepInput): Promise<boolean> {
+    const step = await Step.findOne(options.id);
+
+    if (!step) {
+      return false;
+    }
+
+    await Step.delete(options.id);
+    return true;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async createStep(
     @Arg("options") options: CreateStepInput
   ): Promise<Step | null> {
@@ -218,33 +260,5 @@ export class StepResolver {
     );
 
     return step;
-  }
-
-  @Mutation(() => Step, { nullable: true })
-  @UseMiddleware(isAuth)
-  async updateStepName(
-    @Arg("options") options: StepNameInput
-  ): Promise<Step | null> {
-    const step = await Step.findOne({ id: options.id });
-    if (!step) {
-      return null;
-    }
-
-    await Step.update({ id: options.id }, { ...step, name: options.name });
-
-    return step;
-  }
-
-  @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
-  async deleteStep(@Arg("id") id: number): Promise<boolean> {
-    const step = await Step.findOne(id);
-
-    if (!step) {
-      return false;
-    }
-
-    await Step.delete(id);
-    return true;
   }
 }
