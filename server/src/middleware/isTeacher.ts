@@ -10,6 +10,7 @@ export const isTeacher: MiddlewareFn<MyContext> = async ({ context }, next) => {
   });
   const lessonId =
     context.req.body.variables.lessonId || context.req.body.variables.id;
+
   const isUserTeacher = user.lessons.some((lesson) => lesson.id === lessonId);
   if (!isUserTeacher)
     throw new Error(`${USER_IS_NOT_AUTHED}: ${USER_IS_NOT_TEACHER}`);

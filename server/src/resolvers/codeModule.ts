@@ -100,6 +100,7 @@ export class CodeModuleResolver {
 
   @Mutation(() => CodeModule, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
   async createCodeModule(
     @Arg("stepId") stepId: number,
     @Arg("options") options: CodeModuleInput

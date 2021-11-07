@@ -906,6 +906,7 @@ export type CreateOutputCheckpointMutation = (
 
 export type CreateCodeModuleMutationVariables = Exact<{
   stepId: Scalars['Float'];
+  lessonId?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
   value: Scalars['String'];
 }>;
@@ -1954,8 +1955,11 @@ export type CreateOutputCheckpointMutationHookResult = ReturnType<typeof useCrea
 export type CreateOutputCheckpointMutationResult = Apollo.MutationResult<CreateOutputCheckpointMutation>;
 export type CreateOutputCheckpointMutationOptions = Apollo.BaseMutationOptions<CreateOutputCheckpointMutation, CreateOutputCheckpointMutationVariables>;
 export const CreateCodeModuleDocument = gql`
-    mutation CreateCodeModule($stepId: Float!, $name: String!, $value: String!) {
-  createCodeModule(stepId: $stepId, options: {name: $name, value: $value}) {
+    mutation CreateCodeModule($stepId: Float!, $lessonId: Float, $name: String!, $value: String!) {
+  createCodeModule(
+    stepId: $stepId
+    options: {name: $name, lessonId: $lessonId, value: $value}
+  ) {
     ...RegularCodeModule
   }
 }
@@ -1976,6 +1980,7 @@ export type CreateCodeModuleMutationFn = Apollo.MutationFunction<CreateCodeModul
  * const [createCodeModuleMutation, { data, loading, error }] = useCreateCodeModuleMutation({
  *   variables: {
  *      stepId: // value for 'stepId'
+ *      lessonId: // value for 'lessonId'
  *      name: // value for 'name'
  *      value: // value for 'value'
  *   },

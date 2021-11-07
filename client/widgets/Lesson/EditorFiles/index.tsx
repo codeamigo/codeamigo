@@ -73,6 +73,7 @@ type Props = {
   codeModules?: RegularCodeModuleFragment[] | null;
   files: { [key in string]: { code: string } };
   isEditing?: boolean;
+  lessonId?: number;
   selectFile?: (path: string) => void;
   stepId: number;
 };

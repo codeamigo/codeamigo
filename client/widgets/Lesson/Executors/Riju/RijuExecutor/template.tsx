@@ -83,6 +83,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             <EditorFiles
               activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
+              lessonId={props.lesson?.id}
               stepId={step.id}
               {...props}
               files={files!}

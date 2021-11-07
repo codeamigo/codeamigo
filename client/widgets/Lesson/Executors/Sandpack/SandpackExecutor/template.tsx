@@ -64,6 +64,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           <EditorFiles
             activePath={activePath}
             codeModules={step.codeModules}
+            lessonId={props.lesson?.id}
             stepId={step.id}
             {...props}
             files={files!}
