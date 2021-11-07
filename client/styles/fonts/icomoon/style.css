@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?jen12e');
-  src:  url('fonts/icomoon.eot?jen12e#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?jen12e') format('truetype'),
-    url('fonts/icomoon.woff?jen12e') format('woff'),
-    url('fonts/icomoon.svg?jen12e#icomoon') format('svg');
+  src:  url('fonts/icomoon.eot?we8vls');
+  src:  url('fonts/icomoon.eot?we8vls#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?we8vls') format('truetype'),
+    url('fonts/icomoon.woff?we8vls') format('woff'),
+    url('fonts/icomoon.svg?we8vls#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -25,6 +25,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-discord:before {
+  content: "\ea1f";
+}
 .icon-jest:before {
   content: "\ea1d";
 }

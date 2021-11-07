@@ -64,6 +64,7 @@ export type IconType =
   | 'database'
   | 'db-shape'
   | 'direction'
+  | 'discord'
   | 'doc-landscape'
   | 'doc-text-inv'
   | 'doc-text'

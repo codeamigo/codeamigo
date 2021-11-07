@@ -141,6 +141,7 @@ const Step: React.FC<Props> = (props) => {
       modalVar({
         callback: () => router.push('/'),
         data: {
+          lessonId: session.lesson.id,
           lessonTitle: session.lesson.title,
         },
         name: 'lessonFinished',
