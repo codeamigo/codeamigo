@@ -95,6 +95,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
           isTyped
           refreshPreview={() => dispatch({ type: 'refresh' })}
           runCode={() => dispatch({ type: 'start' })}
+          sessionId={session?.id}
           stepId={step.id}
           updateCode={updateCode}
           {...props}
