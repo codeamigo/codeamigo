@@ -61,7 +61,7 @@ const LessonOptions: React.FC<Props> = ({
           <Button
             className="py-1"
             disabled={!!disabledMessage}
-            offset
+            nature="secondary"
             onClick={(e) => publishLesson(e, lesson.id)}
           >
             Publish

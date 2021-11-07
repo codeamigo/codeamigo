@@ -44,7 +44,7 @@ const Info: React.FC<Props> = ({
           {isLessonOwner ? (
             <Button
               className="py-1"
-              offset
+              nature="secondary"
               onClick={() => router.push(`/lessons/edit/${rest.lesson?.id}`)}
             >
               ✏️ Edit
