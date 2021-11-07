@@ -194,6 +194,10 @@ const Editor: React.FC<Props> = ({
     const reactNamespace = 'React';
     const hasNativeTypescript = false;
 
+    monacoRef.current.languages.typescript.javascriptDefaults.setEagerModelSync(
+      true
+    );
+
     // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
       {

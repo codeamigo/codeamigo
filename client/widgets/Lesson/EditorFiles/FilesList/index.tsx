@@ -104,7 +104,7 @@ const FilesList: React.FC<Props> = (props) => {
         {onCreate && isEditing && (
           <div className="flex gap-2 items-center">
             <Icon
-              className="text-xs text-text-primary hover:text-accent cursor-pointer"
+              className="text-xs cursor-pointer text-text-primary hover:text-accent"
               name="folder"
               onClick={() =>
                 setAddFileState({
@@ -115,7 +115,7 @@ const FilesList: React.FC<Props> = (props) => {
               }
             />
             <Icon
-              className="text-xs text-text-primary hover:text-accent cursor-pointer"
+              className="text-xs cursor-pointer text-text-primary hover:text-accent"
               name="file-empty"
               onClick={() =>
                 setAddFileState({

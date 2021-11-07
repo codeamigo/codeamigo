@@ -758,18 +758,18 @@
     style-mod "^4.0.0"
     w3c-keyname "^2.2.4"
 
-"@codesandbox/sandpack-client@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@codesandbox/sandpack-client/-/sandpack-client-0.0.6.tgz"
-  integrity sha512-c9/i2GLicp22pWLTLIhRMFe7vMJ1l6OPMs5bC6jbch0rJBWl5s5sSZwUiBg5EfEryJOX/eyA6YjAmH5I3t/1VQ==
+"@codesandbox/sandpack-client@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@codesandbox/sandpack-client/-/sandpack-client-0.1.19.tgz#ee332b3bf1b4994f254171309f0bb12e148f29de"
+  integrity sha512-g656Bw/ruP1k/2qUZQl8vuOTqk6yZWIrn2Bc8Ug8oJ1RPh+l/W7yn9nOlnf9yoRx9urU3X4hMPswged5IpcWHQ==
   dependencies:
     codesandbox-import-utils "^1.2.3"
     lodash.isequal "^4.5.0"
 
-"@codesandbox/sandpack-react@^0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@codesandbox/sandpack-react/-/sandpack-react-0.0.6.tgz"
-  integrity sha512-UVhJKJJgOXpvyMiHiR9uBE6poFSSXxoRQ/vXPKnM5zihLjuFMIT9D+VTipQZ/grk1t2YEVBzXKC/JF9G6YL2/g==
+"@codesandbox/sandpack-react@^0.1.19":
+  version "0.1.19"
+  resolved "https://registry.yarnpkg.com/@codesandbox/sandpack-react/-/sandpack-react-0.1.19.tgz#e6cc02d587332f166c44972925bb77f5ad186905"
+  integrity sha512-wGOLKEvi0XuadJ71JnaeMaLpSyhqYtmNllie2kyyf+YfrzQ/GhBM+SKaiJOnReIA85oVxZ33ozPQFpF+1A8Nlw==
   dependencies:
     "@code-hike/classer" "^0.0.0-aa6efee"
     "@codemirror/closebrackets" "^0.18.0"
@@ -785,10 +785,9 @@
     "@codemirror/matchbrackets" "^0.18.0"
     "@codemirror/state" "^0.18.0"
     "@codemirror/view" "^0.18.0"
-    "@codesandbox/sandpack-client" "^0.0.6"
+    "@codesandbox/sandpack-client" "^0.1.19"
     codesandbox-import-util-types "^2.2.3"
     codesandbox-import-utils "^2.2.3"
-    prism-react-renderer "^1.1.1"
 
 "@emotion/cache@^10.0.27":
   version "10.0.29"
@@ -6808,11 +6807,6 @@ pretty-hrtime@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/pretty-hrtime/-/pretty-hrtime-1.0.3.tgz"
   integrity sha1-t+PqQkNaTJsnWdmeDyAesZWALuE=
-
-prism-react-renderer@^1.1.1:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/prism-react-renderer/-/prism-react-renderer-1.2.0.tgz"
-  integrity sha512-GHqzxLYImx1iKN1jJURcuRoA/0ygCcNhfGw1IT8nPIMzarmKQ3Nc+JcG0gi8JXQzuh0C5ShE4npMIoqNin40hg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"

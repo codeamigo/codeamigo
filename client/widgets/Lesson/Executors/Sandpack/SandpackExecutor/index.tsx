@@ -23,6 +23,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
       let mods = step.codeModules;
       // if theres a test only eval that test
       // to allow multiple checkpoints
+      console.log(step);
       const test = step.checkpoints.find(
         ({ id }) => id === step?.currentCheckpointId
       )?.test;
@@ -45,8 +46,6 @@ const SandpackExecutor: React.FC<Props> = (props) => {
     }
   }, [step?.id, step?.codeModules?.length, step?.currentCheckpointId]);
 
-  const files = step?.codeModules?.reduce(modToFile, {});
-
   if (!cachedFiles) return null;
 
   return (
@@ -56,7 +55,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
         main: cachedMain,
       }}
     >
-      <SandpackTemplate {...props} files={files} />
+      <SandpackTemplate {...props} files={cachedFiles} />
     </SandpackProvider>
   );
 };

@@ -53,6 +53,8 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     }
   };
 
+  console.log(files);
+
   return (
     <SandpackLayout>
       <div
