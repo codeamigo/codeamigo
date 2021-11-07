@@ -102,7 +102,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-scripts": "^4.0.0",
-    "@types/jest": "^24.0.0",
+    "@types/jest": "^24.0.0"
   },
   "main": "/app.tsx",
   "name": "sandpack-project"

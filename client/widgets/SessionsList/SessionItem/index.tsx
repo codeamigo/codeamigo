@@ -52,7 +52,7 @@ const SessionItem: React.FC<Props> = ({ session }) => {
                   <Menu.Items
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
+                    className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right bg-bg-primary"
                     role="menu"
                   >
                     <Menu.Item>
