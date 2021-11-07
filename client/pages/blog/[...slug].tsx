@@ -5,7 +5,6 @@ const BlogPost: React.FC<Props> = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(router.query.slug);
     if (router.query?.slug?.length) {
       window.location.replace(
         `https://docs.codeamigo.dev/blog/${router.query.slug[0]}`

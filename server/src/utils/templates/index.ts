@@ -85,10 +85,10 @@ import ReactDOM from 'react-dom'
 import "./styles.css";
 
 const HelloWorld = (
-    <div>
-        <h1>Hello, world!</h1>
-        <h2>It is {new Date().toLocaleTimeString()}.</h2>
-    </div>
+  <div>
+    <h1>Hello, world!</h1>
+    <h2>It is {new Date().toLocaleTimeString()}.</h2>
+  </div>
 );
 
 ReactDOM.render(HelloWorld, document.getElementById('root'));
@@ -101,7 +101,8 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
   "dependencies": {
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
-    "react-scripts": "^4.0.0"
+    "react-scripts": "^4.0.0",
+    "@types/jest": "^24.0.0",
   },
   "main": "/app.tsx",
   "name": "sandpack-project"

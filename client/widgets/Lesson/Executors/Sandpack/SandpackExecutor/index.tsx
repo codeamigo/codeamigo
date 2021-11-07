@@ -23,7 +23,6 @@ const SandpackExecutor: React.FC<Props> = (props) => {
       let mods = step.codeModules;
       // if theres a test only eval that test
       // to allow multiple checkpoints
-      console.log(step);
       const test = step.checkpoints.find(
         ({ id }) => id === step?.currentCheckpointId
       )?.test;

@@ -34,8 +34,6 @@ const Match: React.FC<Props> = ({ selectFile, setWizardStep, step }) => {
   const handleRegexChange: React.ChangeEventHandler<HTMLInputElement> = (
     ev
   ) => {
-    console.log(ev.target.value.replace(/[#-.]|[[-^]|[?|{}]/g, '\\$&'));
-    console.log(ev.target);
     window.postMessage({ regex: ev.target.value }, '*');
   };
 
