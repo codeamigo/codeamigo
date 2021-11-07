@@ -16,6 +16,7 @@ import { Lesson } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
 import { isStudentOrTeacher } from "../middleware/isStudentOrTeacher";
+import { isTeacher } from "../middleware/isTeacher";
 
 @InputType()
 class CodeModuleInput {

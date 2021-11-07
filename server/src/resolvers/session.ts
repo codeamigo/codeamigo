@@ -202,6 +202,7 @@ export class SessionResolver {
 
   @Mutation(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
+  @UseMiddleware(isStudent)
   async updateSession(
     @Arg("options") options: UpdateSessionInput,
     @Ctx() { req }: MyContext
