@@ -32,6 +32,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
 
+  const updateCode = (code: string) => {
+    entryFileValueRef.current = code;
+  };
+
   const postCodeToRiju = () => {
     // @ts-ignore
     previewRef.current
@@ -113,6 +117,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             runCode={postCodeToRiju}
             sessionId={session?.id}
             stepId={step.id}
+            updateCode={updateCode}
             {...props}
           />
           <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
