@@ -76,7 +76,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   return (
     <div className="flex">
       <Head>
-        <title>Codeamigo - {data.lesson.title}</title>
+        <title>codeamigo - {data.lesson.title}</title>
       </Head>
       {sessionData ? (
         <Steps

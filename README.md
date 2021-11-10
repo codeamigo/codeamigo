@@ -1,7 +1,7 @@
-# 🐶 Codeamigo
+# 🐶 codeamigo
 
-### What is Codeamigo?
-Codeamigo is a platform for building byte-sized interactive coding tutorials, which can be taken, for free, without signup, by anyone.
+### What is codeamigo?
+codeamigo is a platform for building byte-sized interactive coding tutorials, which can be taken, for free, without signup, by anyone.
 ### Stack/Requirements
 
 ```

@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <Head>
-        <title>Codeamigo</title>
+        <title>codeamigo</title>
         <meta
           content="Byte-sized interactive coding tutorials"
           name="description"
@@ -38,9 +38,9 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           content={'https://docs.codeamigo.dev/img/logo.png'}
           property="og:image"
         ></meta>
-        <meta content={`Codeamigo`} property="og:title"></meta>
+        <meta content={`codeamigo`} property="og:title"></meta>
         <meta
-          content={`Codeamigo - Learn by doing`}
+          content={`codeamigo - Learn by doing`}
           name="twitter:title"
         ></meta>
         <meta
