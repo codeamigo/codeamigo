@@ -4,21 +4,32 @@ import React from 'react';
 
 import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
-import { LessonsQuery } from '👨‍💻generated/graphql';
+import { LessonsQuery, useSessionQuery } from '👨‍💻generated/graphql';
 import { templates } from '👨‍💻modals/CreateLesson';
 import { formatNumber } from '👨‍💻utils/numberUtils';
 import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
-const LessonListItem: React.FC<Props> = ({
-  href,
-  lesson,
-  options,
-  progress,
-}) => {
+const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
+  const { data, loading } = useSessionQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: { lessonId: lesson.id },
+  });
+
+  const { session } = data || {};
+  console.log(session);
+
+  const steps = session?.steps || [];
+  const length = steps?.length || 1;
+  const completed = steps?.filter(({ isCompleted }) => !!isCompleted) || [];
+  const percentComplete = Math.floor((completed.length / length) * 100);
+
   const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
   const students = lesson.students?.length || 0;
   const template = templates.find((t) => t.value === lesson.template);
+  const radius = 24;
+  const circumference = 2 * Math.PI * radius;
+  const dasharrayLength = ((100 - percentComplete) / 100) * circumference;
 
   return (
     <div className="flex flex-col hover:shadow-lg transition-shadow duration-200">
@@ -37,6 +48,42 @@ const LessonListItem: React.FC<Props> = ({
       >
         <div className="relative">
           <div className="flex absolute -top-14 right-2 justify-center items-center p-2.5 w-14 h-14 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+            {/* <span
+              className="absolute top-0 left-0 w-full h-full rounded-full border-2"
+              style={{ borderColor: template?.color }}
+            /> */}
+            <svg
+              className="absolute top-0 left-0"
+              height="100%"
+              id="circle-svg"
+              version="1.1"
+              width="100%"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle
+                cx="50%"
+                cy="50%"
+                fill="transparent"
+                r={24}
+                stroke-dasharray={circumference}
+                stroke-dashoffset={circumference}
+                style={{ stroke: 'var(--color-bg-nav)', strokeWidth: '2px' }}
+              ></circle>
+              <circle
+                cx="50%"
+                cy="50%"
+                fill="transparent"
+                id="bar"
+                r={24}
+                stroke-dasharray={circumference}
+                stroke-dashoffset={dasharrayLength}
+                style={{
+                  stroke: template?.color,
+                  strokeLinecap: 'round',
+                  strokeWidth: '2px',
+                }}
+              ></circle>
+            </svg>
             {template ? (
               <img
                 className={`${
@@ -62,7 +109,6 @@ const LessonListItem: React.FC<Props> = ({
           </h3>
         </div>
         <div>
-          {progress ? progress : null}
           {lesson.tags?.length ? (
             <div className="flex gap-1.5 mt-2">
               {lesson.tags?.map(({ name }) => {
@@ -127,10 +173,6 @@ type Props = {
   href: string;
   lesson: LessonsQuery['lessons'][0];
   options?: React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  >;
-  progress?: React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
   >;

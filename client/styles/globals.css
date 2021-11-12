@@ -15,6 +15,15 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Circular progress bars */
+#circle-svg {
+  transform: rotate(-90deg);
+}
+
+#circle-svg circle {
+  transition: stroke-dashoffset 0.3s linear;
+}
+
 /* hint css */
 [class*=hint--][aria-label]:after {
   white-space: pre;

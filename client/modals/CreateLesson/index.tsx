@@ -9,6 +9,7 @@ import { LessonTemplate, useCreateLessonMutation } from '👨‍💻generated/gr
 import { toErrorMap } from '👨‍💻utils/index';
 
 export const templates: {
+  color: string;
   id: string;
   imageUrl: string;
   name: string;
@@ -16,42 +17,49 @@ export const templates: {
   withBackground?: boolean;
 }[] = [
   {
+    color: '#00d8ff',
     id: 'react-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg`,
     name: 'React TypeScript',
     value: LessonTemplate.React,
   },
   {
+    color: '#cb2b39',
     id: 'angular-template',
     imageUrl: `https://angular.io/assets/images/logos/angular/angular.svg`,
     name: 'Angular',
     value: LessonTemplate.Angular,
   },
   {
+    color: '#64b687',
     id: 'vue-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/vue.svg`,
     name: 'Vue 3.0',
     value: LessonTemplate.Vue,
   },
   {
+    color: '#d35836',
     id: 'html-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/html-5.svg`,
     name: 'HTML/CSS',
     value: LessonTemplate.Html,
   },
   {
+    color: '#3478c6',
     id: 'typescript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg`,
     name: 'Vanilla TypeScript',
     value: LessonTemplate.TypeScript,
   },
   {
+    color: '#f3e050',
     id: 'javascript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg`,
     name: 'Vanilla JavaScript',
     value: LessonTemplate.JavaScript,
   },
   {
+    color: '#818b98',
     id: 'c-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/c.svg',
@@ -59,6 +67,7 @@ export const templates: {
     value: LessonTemplate.C,
   },
   {
+    color: '#2d0c4a',
     id: 'elixir-template',
     imageUrl: 'https://avatars.githubusercontent.com/u/1481354?s=200&v=4',
     name: 'Elixir',
@@ -66,6 +75,7 @@ export const templates: {
     withBackground: true,
   },
   {
+    color: '#d8762c',
     id: 'java-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/java.svg',
@@ -73,6 +83,7 @@ export const templates: {
     value: LessonTemplate.Java,
   },
   {
+    color: '#456f9d',
     id: 'python-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/python.svg',
@@ -80,6 +91,7 @@ export const templates: {
     value: LessonTemplate.Python,
   },
   {
+    color: '#b7311c',
     id: 'ruby-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/ruby.svg',
@@ -87,6 +99,7 @@ export const templates: {
     value: LessonTemplate.Ruby,
   },
   {
+    color: '#000',
     id: 'rust-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/rust.svg',

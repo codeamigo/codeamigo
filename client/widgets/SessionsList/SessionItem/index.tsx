@@ -77,19 +77,6 @@ const SessionItem: React.FC<Props> = ({ session }) => {
           </Menu>
         </div>
       }
-      progress={
-        <div className="mt-4 text-xs">
-          <div
-            aria-label={`Completed: ${percentComplete}%`}
-            className="relative w-full h-2 bg-gray-200 rounded-md hint--top hint--no-animate"
-          >
-            <div
-              className="absolute h-full bg-green-500 rounded-md"
-              style={{ width: `${percentComplete}%` }}
-            />
-          </div>
-        </div>
-      }
     />
   );
 };
