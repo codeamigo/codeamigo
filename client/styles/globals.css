@@ -21,7 +21,7 @@ body {
 }
 
 #circle-svg circle {
-  transition: stroke-dashoffset 0.3s linear;
+  transition: stroke-dashoffset 0.5s 0.3s;
 }
 
 /* hint css */

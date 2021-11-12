@@ -11,13 +11,12 @@ import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
 import ProfileLogo from '👨‍💻widgets/ProfileLogo';
 
 const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
-  const { data, loading } = useSessionQuery({
+  const { data } = useSessionQuery({
     fetchPolicy: 'cache-and-network',
     variables: { lessonId: lesson.id },
   });
 
   const { session } = data || {};
-  console.log(session);
 
   const steps = session?.steps || [];
   const length = steps?.length || 1;
@@ -48,10 +47,6 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
       >
         <div className="relative">
           <div className="flex absolute -top-14 right-2 justify-center items-center p-2.5 w-14 h-14 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
-            {/* <span
-              className="absolute top-0 left-0 w-full h-full rounded-full border-2"
-              style={{ borderColor: template?.color }}
-            /> */}
             <svg
               className="absolute top-0 left-0"
               height="100%"
@@ -65,9 +60,12 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
                 cy="50%"
                 fill="transparent"
                 r={24}
-                stroke-dasharray={circumference}
-                stroke-dashoffset={circumference}
-                style={{ stroke: 'var(--color-bg-nav)', strokeWidth: '2px' }}
+                style={{
+                  stroke: 'var(--color-bg-nav)',
+                  strokeDasharray: circumference,
+                  strokeDashoffset: circumference,
+                  strokeWidth: '2px',
+                }}
               ></circle>
               <circle
                 cx="50%"
@@ -75,10 +73,10 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
                 fill="transparent"
                 id="bar"
                 r={24}
-                stroke-dasharray={circumference}
-                stroke-dashoffset={dasharrayLength}
                 style={{
                   stroke: template?.color,
+                  strokeDasharray: circumference,
+                  strokeDashoffset: dasharrayLength,
                   strokeLinecap: 'round',
                   strokeWidth: '2px',
                 }}
