@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
@@ -28,15 +28,30 @@ const RijuTemplate: React.FC<Props> = (props) => {
     updateWidths,
   } = props;
   const entryFileValueRef = useRef<string | undefined>();
+  const [isExecuting, setIsExecuting] = React.useState(false);
   const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
+
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.event === 'execution_has_results') {
+        console.log(event.data);
+        setIsExecuting(false);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
 
   const updateCode = (code: string) => {
     entryFileValueRef.current = code;
   };
 
   const postCodeToRiju = () => {
+    setIsExecuting(true);
     // @ts-ignore
     previewRef.current
       ?.getElementsByTagName('iframe')[0]
@@ -58,7 +73,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
 
     switch (checkpoint.type) {
       case CheckpointTypeEnum.Output:
-        // @ts-ignore
+        setIsExecuting(true);
         previewRef.current
           ?.getElementsByTagName('iframe')[0]
           .contentWindow?.postMessage(
@@ -121,7 +136,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             {...props}
           />
           <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
-            <RunButton run={postCodeToRiju} />
+            <RunButton isExecuting={isExecuting} run={postCodeToRiju} />
           </div>
           <Separator
             iframeName="riju-frame"
