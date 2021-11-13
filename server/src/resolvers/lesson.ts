@@ -70,6 +70,13 @@ export class LessonResolver {
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
+      console.log(
+        await Lesson.find({
+          order: { updatedAt: "DESC" },
+          relations,
+          where: { owner, status },
+        })
+      );
       return Lesson.find({
         order: { updatedAt: "DESC" },
         relations,

@@ -15,7 +15,6 @@ import {
   useSetNextStepMutation,
   useStepQuery,
 } from '👨‍💻generated/graphql';
-import { CodeSandboxTestMsgType } from '👨‍💻widgets/Lesson/Console/Tests/types';
 import RijuExecutor from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor';
 import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
@@ -27,7 +26,7 @@ const Step: React.FC<Props> = (props) => {
   const filesRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
-  const [setNextStep] = useSetNextStepMutation();
+  const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
 
   const { data: newData, loading, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
@@ -92,6 +91,8 @@ const Step: React.FC<Props> = (props) => {
     };
 
     if (next && session) {
+      // User is authenticated
+
       setNextStep({
         update: (store) => {
           const sessionData = store.readQuery<SessionQuery>(q);
@@ -109,6 +110,7 @@ const Step: React.FC<Props> = (props) => {
         },
         variables: { sessionId: session.id, stepId: next.id },
       });
+      // User is not authenticated
     }
 
     completeStep({

@@ -25,6 +25,8 @@ import { MyContext } from "../types";
 class SessionInput {
   @Field()
   lessonId!: number;
+  @Field({ nullable: true })
+  currentStepId: number;
 }
 
 @InputType()
@@ -172,6 +174,11 @@ export class SessionResolver {
             dependencies,
             executionType: step?.executionType,
             instructions: step?.instructions || "",
+            isCompleted:
+              (step?.id &&
+                options.currentStepId > 0 &&
+                options.currentStepId > step.id) ||
+              false,
             lang: step?.lang,
             name: step?.name || "",
             originalStepId: step?.id,
@@ -179,9 +186,10 @@ export class SessionResolver {
         })
       );
 
-      const currentStep = steps.sort((a, b) =>
-        b.createdAt < a.createdAt ? 1 : -1
-      )[0].id;
+      const currentStep =
+        steps.find((step) => step.originalStepId === options.currentStepId)
+          ?.id ||
+        steps.sort((a, b) => (b.createdAt < a.createdAt ? 1 : -1))[0].id;
 
       const session = await Session.create({
         currentStep,

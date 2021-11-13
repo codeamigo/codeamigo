@@ -2,6 +2,11 @@ import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 
 import {
+  getLessonCurrentStepId,
+  getOrSetLessonsItem,
+  setLessonItem,
+} from '👨‍💻apollo/localStorage';
+import {
   SessionQuery,
   useLessonQuery,
   useUpdateLessonViewsMutation,
@@ -15,20 +20,29 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
   const [currentStepId, setCurrentStepId] = useState(0);
   const [showSteps, setShowSteps] = useState(false);
   const [updateLessonViews] = useUpdateLessonViewsMutation();
+  const { data } = useLessonQuery({
+    variables: { id },
+  });
 
   useEffect(() => {
     updateLessonViews({ variables: { id } });
   }, []);
 
-  const { data } = useLessonQuery({
-    variables: { id },
-  });
+  useEffect(() => {
+    getOrSetLessonsItem();
+  }, []);
+
+  useEffect(() => {
+    if (!currentStepId) return;
+    setLessonItem(id, currentStepId);
+  }, [currentStepId]);
 
   if (!data) return null;
   if (!data.lesson) return null;
   if (!data.lesson.steps) return null;
 
-  const stepId = currentStepId || data.lesson.steps[0].id;
+  const stepId =
+    currentStepId || getLessonCurrentStepId(id) || data.lesson.steps[0].id;
 
   return (
     <div className="flex">

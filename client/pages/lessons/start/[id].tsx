@@ -1,8 +1,8 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
+import { getLessonCurrentStepId } from '👨‍💻apollo/localStorage';
 import {
   useCreateSessionMutation,
   useMeQuery,
@@ -36,7 +36,10 @@ const StartLesson: NextPage<{ id: string }> = (props) => {
         await createSession({
           awaitRefetchQueries: true,
           refetchQueries: ['Session'],
-          variables: { lessonId: id },
+          variables: {
+            currentStepId: getLessonCurrentStepId(id),
+            lessonId: id,
+          },
         });
         router.replace(`/lessons/${id}`);
       } else {

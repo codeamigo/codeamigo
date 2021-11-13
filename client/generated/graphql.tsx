@@ -722,6 +722,7 @@ export type LessonInput = {
 
 export type SessionInput = {
   lessonId: Scalars['Float'];
+  currentStepId?: Maybe<Scalars['Float']>;
 };
 
 export type UpdateSessionInput = {
@@ -947,6 +948,7 @@ export type CreateLessonMutation = (
 
 export type CreateSessionMutationVariables = Exact<{
   lessonId: Scalars['Float'];
+  currentStepId?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -2039,8 +2041,8 @@ export type CreateLessonMutationHookResult = ReturnType<typeof useCreateLessonMu
 export type CreateLessonMutationResult = Apollo.MutationResult<CreateLessonMutation>;
 export type CreateLessonMutationOptions = Apollo.BaseMutationOptions<CreateLessonMutation, CreateLessonMutationVariables>;
 export const CreateSessionDocument = gql`
-    mutation CreateSession($lessonId: Float!) {
-  createSession(options: {lessonId: $lessonId}) {
+    mutation CreateSession($lessonId: Float!, $currentStepId: Float) {
+  createSession(options: {lessonId: $lessonId, currentStepId: $currentStepId}) {
     id
   }
 }
@@ -2061,6 +2063,7 @@ export type CreateSessionMutationFn = Apollo.MutationFunction<CreateSessionMutat
  * const [createSessionMutation, { data, loading, error }] = useCreateSessionMutation({
  *   variables: {
  *      lessonId: // value for 'lessonId'
+ *      currentStepId: // value for 'currentStepId'
  *   },
  * });
  */

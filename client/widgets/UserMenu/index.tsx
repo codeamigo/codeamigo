@@ -124,12 +124,15 @@ const UserMenu: React.FC<Props> = () => {
 
           <button
             className="hidden sm:block py-1 sm:py-1.5 px-1 sm:px-3 text-sm font-medium whitespace-nowrap rounded-md border-2 transition duration-150 text-text-primary border-bg-nav-offset"
-            onClick={() =>
+            onClick={() => {
               modalVar({
-                callback: () => null,
+                callback: () =>
+                  router.pathname.includes('/lessons/preview/[id]')
+                    ? router.push(`/lessons/start/${router.query.id}`)
+                    : null,
                 name: 'register',
-              })
-            }
+              });
+            }}
             role="button"
           >
             Sign Up

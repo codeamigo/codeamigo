@@ -36,7 +36,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.event === 'execution_has_results') {
-        console.log(event.data);
         setIsExecuting(false);
       }
     };
