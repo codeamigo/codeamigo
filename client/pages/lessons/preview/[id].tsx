@@ -1,7 +1,9 @@
 import { NextPage } from 'next';
 import React, { useEffect, useState } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import {
+  getDonations,
   getLessonCurrentStepId,
   getOrSetLessonsItem,
   setLessonItem,
@@ -36,6 +38,17 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
     if (!currentStepId) return;
     setLessonItem(id, currentStepId);
   }, [currentStepId]);
+
+  useEffect(() => {
+    const donations = getDonations();
+
+    if (!donations.hasDonated && !donations.dontAskAgain) {
+      modalVar({
+        callback: () => null,
+        name: 'donate',
+      });
+    }
+  }, []);
 
   if (!data) return null;
   if (!data.lesson) return null;

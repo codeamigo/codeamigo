@@ -1,8 +1,15 @@
 export const LESSONS_STORAGE_KEY = 'codeamigo-active-lessons';
+export const DONATIONS_KEY = 'codeamigo-donations';
 
 export interface LocalStorageLesson {
   currentStepId?: number;
   id: number;
+}
+
+export interface DonationsItem {
+  dontAskAgain: boolean;
+  hasDonated: boolean;
+  lastSeenModal: number;
 }
 
 export const setLessonsItem = () => {
@@ -59,4 +66,21 @@ export const getLessonItem = (id: number): LocalStorageLesson => {
 export const getLessonCurrentStepId = (id: number): number => {
   const lesson = getLessonItem(id);
   return lesson.currentStepId || 0;
+};
+
+export const setDonations = ({ ...args }: DonationsItem) => {
+  localStorage.setItem(DONATIONS_KEY, JSON.stringify(args));
+};
+
+export const getDonations = (): DonationsItem => {
+  if (localStorage.getItem(DONATIONS_KEY)) {
+    return JSON.parse(localStorage.getItem(DONATIONS_KEY) as string);
+  } else {
+    setDonations({
+      dontAskAgain: false,
+      hasDonated: false,
+      lastSeenModal: new Date().getTime(),
+    });
+    return getDonations();
+  }
 };

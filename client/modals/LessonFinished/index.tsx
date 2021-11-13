@@ -9,7 +9,7 @@ const LessonFinished: React.FC<Props> = () => {
     <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
       <div className="text-3xl font-bold text-text-primary">🎉 Nice Work!</div>
       <div className="mt-2 text-sm text-text-primary">
-        You've Finished <b>{modalVar().data.lessonTitle}</b>.
+        You've just finished <b>{modalVar().data.lessonTitle}</b>.
       </div>
       <div className="flex justify-between items-center mt-6">
         <div className="flex gap-3.5 items-center">

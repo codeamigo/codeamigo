@@ -4,6 +4,9 @@ import React, { useCallback, useEffect } from 'react';
 import Icon from '👨‍💻components/Icon';
 import ChangePassword from '👨‍💻modals/ChangePassword';
 import CreateLesson from '👨‍💻modals/CreateLesson';
+import Donate from '👨‍💻modals/Donate';
+import DonationFailure from '👨‍💻modals/DonationFailure';
+import DonationSuccess from '👨‍💻modals/DonationSuccess';
 import LessonFinished from '👨‍💻modals/LessonFinished';
 import Login from '👨‍💻modals/Login';
 import Register from '👨‍💻modals/Register';
@@ -94,6 +97,9 @@ const Modals: React.FC<Props> = () => {
           {/* eslint-disable */}
           {data?.modal?.name === 'changePassword' && <ChangePassword />}
           {data?.modal?.name === 'createLesson' && <CreateLesson />}
+          {data?.modal?.name === 'donate' && <Donate />}
+          {data?.modal?.name === 'donationSuccess' && <DonationSuccess />}
+          {data?.modal?.name === 'donationFailure' && <DonationFailure />}
           {data?.modal?.name === 'lessonFinished' && <LessonFinished />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
