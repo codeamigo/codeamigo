@@ -15,6 +15,7 @@ const DonationSuccess: React.FC<Props> = () => {
         everyone.
       </div>
       <Button
+        className="mt-6"
         nature="secondary"
         onClick={() => {
           modalVar({ callback: () => null, name: 'donate' });
