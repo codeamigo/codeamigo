@@ -43,9 +43,9 @@ class CodeModuleUpdateInput {
 @InputType()
 class CodeModuleUpdateEntryInput {
   @Field({ nullable: true })
-  newId?: number;
+  newId?: string;
   @Field({ nullable: true })
-  oldId?: number;
+  oldId?: string;
 }
 
 @Resolver()
@@ -174,8 +174,8 @@ export class CodeModuleResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCodeModule(@Arg("id") id: number): Promise<boolean> {
-    await CodeModule.delete(id);
+  async deleteCodeModule(@Arg("uuid") uuid: string): Promise<boolean> {
+    await CodeModule.delete(uuid);
     return true;
   }
 }

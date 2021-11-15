@@ -92,7 +92,7 @@ export type Checkpoint = {
   fileToMatchRegex?: Maybe<Scalars['String']>;
   output?: Maybe<Scalars['String']>;
   test?: Maybe<Scalars['String']>;
-  moduleId?: Maybe<Scalars['Float']>;
+  moduleId?: Maybe<Scalars['String']>;
 };
 
 export enum CheckpointTypeEnum {
@@ -103,7 +103,7 @@ export enum CheckpointTypeEnum {
 
 export type CodeModule = {
   __typename?: 'CodeModule';
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -394,7 +394,7 @@ export type MutationCreateCodeModuleArgs = {
 
 export type MutationUpdateCodeModuleArgs = {
   options: CodeModuleUpdateInput;
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
 };
 
 
@@ -623,8 +623,8 @@ export type CodeModuleUpdateInput = {
 };
 
 export type CodeModuleUpdateEntryInput = {
-  newId?: Maybe<Scalars['Float']>;
-  oldId?: Maybe<Scalars['Float']>;
+  newId?: Maybe<Scalars['String']>;
+  oldId?: Maybe<Scalars['String']>;
 };
 
 export type DependencyInput = {
@@ -748,7 +748,7 @@ export type RegularCheckpointFragment = (
 
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
-  & Pick<CodeModule, 'id' | 'isEntry' | 'name' | 'value'>
+  & Pick<CodeModule, 'uuid' | 'isEntry' | 'name' | 'value'>
 );
 
 export type RegularErrorFragment = (
@@ -1183,7 +1183,7 @@ export type PassCheckpointMutation = (
 );
 
 export type UpdateCodeModuleMutationVariables = Exact<{
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
   name: Scalars['String'];
   value: Scalars['String'];
   lessonId?: Maybe<Scalars['Float']>;
@@ -1200,8 +1200,8 @@ export type UpdateCodeModuleMutation = (
 );
 
 export type UpdateCodeModuleEntryFileMutationVariables = Exact<{
-  newId?: Maybe<Scalars['Float']>;
-  oldId?: Maybe<Scalars['Float']>;
+  newId?: Maybe<Scalars['String']>;
+  oldId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1688,7 +1688,7 @@ export const RegularLessonItemFragmentDoc = gql`
     `;
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
-  id
+  uuid
   isEntry
   name
   value
@@ -2640,9 +2640,9 @@ export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpoi
 export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
 export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
-    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $lessonId: Float, $sessionId: Float) {
+    mutation UpdateCodeModule($uuid: String!, $name: String!, $value: String!, $lessonId: Float, $sessionId: Float) {
   updateCodeModule(
-    id: $id
+    uuid: $uuid
     options: {name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId}
   ) {
     ...RegularCodeModule
@@ -2664,7 +2664,7 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModul
  * @example
  * const [updateCodeModuleMutation, { data, loading, error }] = useUpdateCodeModuleMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      uuid: // value for 'uuid'
  *      name: // value for 'name'
  *      value: // value for 'value'
  *      lessonId: // value for 'lessonId'
@@ -2679,7 +2679,7 @@ export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCode
 export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 export const UpdateCodeModuleEntryFileDocument = gql`
-    mutation UpdateCodeModuleEntryFile($newId: Float, $oldId: Float) {
+    mutation UpdateCodeModuleEntryFile($newId: String, $oldId: String) {
   updateCodeModuleEntryFile(options: {newId: $newId, oldId: $oldId}) {
     ...RegularCodeModule
   }
