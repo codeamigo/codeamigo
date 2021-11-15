@@ -1,5 +1,5 @@
 fragment RegularCodeModule on CodeModule {
-  uuid
+  id
   isEntry
   name
   value

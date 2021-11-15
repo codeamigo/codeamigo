@@ -180,10 +180,10 @@ const Editor: React.FC<Props> = ({
 
       updateCodeModule({
         variables: {
+          id: currentModule.id,
           lessonId: isEditing ? lesson?.id : null,
           name: pathRef.current,
           sessionId,
-          uuid: currentModule.uuid,
           value: newCode,
         },
       });

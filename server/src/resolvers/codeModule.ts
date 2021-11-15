@@ -43,9 +43,9 @@ class CodeModuleUpdateInput {
 @InputType()
 class CodeModuleUpdateEntryInput {
   @Field({ nullable: true })
-  newId?: string;
+  newId?: number;
   @Field({ nullable: true })
-  oldId?: string;
+  oldId?: number;
 }
 
 @Resolver()
@@ -121,11 +121,11 @@ export class CodeModuleResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudentOrTeacher)
   async updateCodeModule(
-    @Arg("uuid") uuid: string,
+    @Arg("id") id: number,
     @Arg("options") options: CodeModuleUpdateInput,
     @Ctx() { req }: MyContext
   ): Promise<CodeModule | null> {
-    const codeModule = await CodeModule.findOne(uuid);
+    const codeModule = await CodeModule.findOne(id);
     if (!codeModule) {
       return null;
     }
@@ -144,8 +144,8 @@ export class CodeModuleResolver {
 
     const { lessonId, sessionId, ...rest } = options;
 
-    await CodeModule.update({ uuid }, { ...rest });
-    const newCodeModule = await CodeModule.findOne(uuid);
+    await CodeModule.update({ id }, { ...rest });
+    const newCodeModule = await CodeModule.findOne(id);
 
     if (!newCodeModule) {
       return null;
@@ -174,8 +174,8 @@ export class CodeModuleResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCodeModule(@Arg("uuid") uuid: string): Promise<boolean> {
-    await CodeModule.delete(uuid);
+  async deleteCodeModule(@Arg("id") id: number): Promise<boolean> {
+    await CodeModule.delete(id);
     return true;
   }
 }
