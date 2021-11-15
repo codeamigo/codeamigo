@@ -23,6 +23,7 @@ const CS_TYPES_FALLBACK_URL =
 const Editor: React.FC<Props> = ({
   activePath,
   codeModules,
+  isEditing,
   isPreviewing,
   lesson,
   refreshPreview,
@@ -179,7 +180,7 @@ const Editor: React.FC<Props> = ({
 
       updateCodeModule({
         variables: {
-          lessonId: lesson?.id,
+          lessonId: isEditing ? lesson?.id : null,
           name: pathRef.current,
           sessionId,
           uuid: currentModule.uuid,
@@ -368,6 +369,7 @@ const Editor: React.FC<Props> = ({
 type Props = {
   activePath: string;
   codeModules?: RegularCodeModuleFragment[] | null;
+  isEditing?: boolean;
   isPreviewing?: boolean;
   isTyped?: boolean;
   lesson: LessonQuery['lesson'];
