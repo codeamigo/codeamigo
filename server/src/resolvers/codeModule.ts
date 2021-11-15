@@ -121,11 +121,11 @@ export class CodeModuleResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudentOrTeacher)
   async updateCodeModule(
-    @Arg("id") id: number,
+    @Arg("uuid") uuid: string,
     @Arg("options") options: CodeModuleUpdateInput,
     @Ctx() { req }: MyContext
   ): Promise<CodeModule | null> {
-    const codeModule = await CodeModule.findOne(id);
+    const codeModule = await CodeModule.findOne(uuid);
     if (!codeModule) {
       return null;
     }
@@ -144,8 +144,8 @@ export class CodeModuleResolver {
 
     const { lessonId, sessionId, ...rest } = options;
 
-    await CodeModule.update({ id }, { ...rest });
-    const newCodeModule = await CodeModule.findOne(id);
+    await CodeModule.update({ uuid }, { ...rest });
+    const newCodeModule = await CodeModule.findOne(uuid);
 
     if (!newCodeModule) {
       return null;
