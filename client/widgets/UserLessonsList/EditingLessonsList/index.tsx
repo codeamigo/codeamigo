@@ -18,7 +18,6 @@ const EditingLessonsList: React.FC<Props> = () => {
     fetchPolicy: 'cache-and-network',
     variables: { ownerId: meData?.me?.id, status: 'EDITTING' },
   });
-  console.log(data);
 
   const [deleteLessonM] = useDeleteLessonMutation();
   const [updateLessonStatusM] = useUpdateLessonStatusMutation();

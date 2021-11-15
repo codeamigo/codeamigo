@@ -108,7 +108,7 @@ export class SessionResolver {
 
     const codeModules = await Promise.all(
       step!.codeModules.map(async (codeModule) => {
-        const { id, ...rest } = codeModule;
+        const { uuid, ...rest } = codeModule;
 
         return await CodeModule.create({
           ...rest,

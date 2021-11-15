@@ -100,7 +100,7 @@ export class CheckpointResolver {
     await step.save();
 
     return Checkpoint.create({
-      moduleId: newModule.id,
+      moduleId: newModule.uuid,
       step,
       test: name,
       type: "spec",
