@@ -404,7 +404,7 @@ export type MutationUpdateCodeModuleEntryFileArgs = {
 
 
 export type MutationDeleteCodeModuleArgs = {
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
 };
 
 
@@ -986,7 +986,7 @@ export type DeleteCheckpointMutation = (
 );
 
 export type DeleteCodeModuleMutationVariables = Exact<{
-  id: Scalars['Float'];
+  uuid: Scalars['String'];
 }>;
 
 
@@ -2140,8 +2140,8 @@ export type DeleteCheckpointMutationHookResult = ReturnType<typeof useDeleteChec
 export type DeleteCheckpointMutationResult = Apollo.MutationResult<DeleteCheckpointMutation>;
 export type DeleteCheckpointMutationOptions = Apollo.BaseMutationOptions<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>;
 export const DeleteCodeModuleDocument = gql`
-    mutation DeleteCodeModule($id: Float!) {
-  deleteCodeModule(id: $id)
+    mutation DeleteCodeModule($uuid: String!) {
+  deleteCodeModule(uuid: $uuid)
 }
     `;
 export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
@@ -2159,7 +2159,7 @@ export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModul
  * @example
  * const [deleteCodeModuleMutation, { data, loading, error }] = useDeleteCodeModuleMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      uuid: // value for 'uuid'
  *   },
  * });
  */
