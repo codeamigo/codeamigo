@@ -50,7 +50,7 @@ const EditorFiles: React.FC<Props> = (props) => {
       }
       await deleteCodeModule({
         refetchQueries: ['Step'],
-        variables: { uuid: val.uuid },
+        variables: { id: val.id },
       });
     });
   };

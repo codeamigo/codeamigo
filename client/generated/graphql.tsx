@@ -92,7 +92,7 @@ export type Checkpoint = {
   fileToMatchRegex?: Maybe<Scalars['String']>;
   output?: Maybe<Scalars['String']>;
   test?: Maybe<Scalars['String']>;
-  moduleId?: Maybe<Scalars['String']>;
+  moduleId?: Maybe<Scalars['Float']>;
 };
 
 export enum CheckpointTypeEnum {
@@ -103,7 +103,7 @@ export enum CheckpointTypeEnum {
 
 export type CodeModule = {
   __typename?: 'CodeModule';
-  uuid: Scalars['String'];
+  id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   name?: Maybe<Scalars['String']>;
@@ -394,7 +394,7 @@ export type MutationCreateCodeModuleArgs = {
 
 export type MutationUpdateCodeModuleArgs = {
   options: CodeModuleUpdateInput;
-  uuid: Scalars['String'];
+  id: Scalars['Float'];
 };
 
 
@@ -404,7 +404,7 @@ export type MutationUpdateCodeModuleEntryFileArgs = {
 
 
 export type MutationDeleteCodeModuleArgs = {
-  uuid: Scalars['String'];
+  id: Scalars['Float'];
 };
 
 
@@ -623,8 +623,8 @@ export type CodeModuleUpdateInput = {
 };
 
 export type CodeModuleUpdateEntryInput = {
-  newId?: Maybe<Scalars['String']>;
-  oldId?: Maybe<Scalars['String']>;
+  newId?: Maybe<Scalars['Float']>;
+  oldId?: Maybe<Scalars['Float']>;
 };
 
 export type DependencyInput = {
@@ -748,7 +748,7 @@ export type RegularCheckpointFragment = (
 
 export type RegularCodeModuleFragment = (
   { __typename?: 'CodeModule' }
-  & Pick<CodeModule, 'uuid' | 'isEntry' | 'name' | 'value'>
+  & Pick<CodeModule, 'id' | 'isEntry' | 'name' | 'value'>
 );
 
 export type RegularErrorFragment = (
@@ -986,7 +986,7 @@ export type DeleteCheckpointMutation = (
 );
 
 export type DeleteCodeModuleMutationVariables = Exact<{
-  uuid: Scalars['String'];
+  id: Scalars['Float'];
 }>;
 
 
@@ -1183,7 +1183,7 @@ export type PassCheckpointMutation = (
 );
 
 export type UpdateCodeModuleMutationVariables = Exact<{
-  uuid: Scalars['String'];
+  id: Scalars['Float'];
   name: Scalars['String'];
   value: Scalars['String'];
   lessonId?: Maybe<Scalars['Float']>;
@@ -1200,8 +1200,8 @@ export type UpdateCodeModuleMutation = (
 );
 
 export type UpdateCodeModuleEntryFileMutationVariables = Exact<{
-  newId?: Maybe<Scalars['String']>;
-  oldId?: Maybe<Scalars['String']>;
+  newId?: Maybe<Scalars['Float']>;
+  oldId?: Maybe<Scalars['Float']>;
 }>;
 
 
@@ -1688,7 +1688,7 @@ export const RegularLessonItemFragmentDoc = gql`
     `;
 export const RegularCodeModuleFragmentDoc = gql`
     fragment RegularCodeModule on CodeModule {
-  uuid
+  id
   isEntry
   name
   value
@@ -2140,8 +2140,8 @@ export type DeleteCheckpointMutationHookResult = ReturnType<typeof useDeleteChec
 export type DeleteCheckpointMutationResult = Apollo.MutationResult<DeleteCheckpointMutation>;
 export type DeleteCheckpointMutationOptions = Apollo.BaseMutationOptions<DeleteCheckpointMutation, DeleteCheckpointMutationVariables>;
 export const DeleteCodeModuleDocument = gql`
-    mutation DeleteCodeModule($uuid: String!) {
-  deleteCodeModule(uuid: $uuid)
+    mutation DeleteCodeModule($id: Float!) {
+  deleteCodeModule(id: $id)
 }
     `;
 export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModuleMutation, DeleteCodeModuleMutationVariables>;
@@ -2159,7 +2159,7 @@ export type DeleteCodeModuleMutationFn = Apollo.MutationFunction<DeleteCodeModul
  * @example
  * const [deleteCodeModuleMutation, { data, loading, error }] = useDeleteCodeModuleMutation({
  *   variables: {
- *      uuid: // value for 'uuid'
+ *      id: // value for 'id'
  *   },
  * });
  */
@@ -2640,9 +2640,9 @@ export type PassCheckpointMutationHookResult = ReturnType<typeof usePassCheckpoi
 export type PassCheckpointMutationResult = Apollo.MutationResult<PassCheckpointMutation>;
 export type PassCheckpointMutationOptions = Apollo.BaseMutationOptions<PassCheckpointMutation, PassCheckpointMutationVariables>;
 export const UpdateCodeModuleDocument = gql`
-    mutation UpdateCodeModule($uuid: String!, $name: String!, $value: String!, $lessonId: Float, $sessionId: Float) {
+    mutation UpdateCodeModule($id: Float!, $name: String!, $value: String!, $lessonId: Float, $sessionId: Float) {
   updateCodeModule(
-    uuid: $uuid
+    id: $id
     options: {name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId}
   ) {
     ...RegularCodeModule
@@ -2664,7 +2664,7 @@ export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModul
  * @example
  * const [updateCodeModuleMutation, { data, loading, error }] = useUpdateCodeModuleMutation({
  *   variables: {
- *      uuid: // value for 'uuid'
+ *      id: // value for 'id'
  *      name: // value for 'name'
  *      value: // value for 'value'
  *      lessonId: // value for 'lessonId'
@@ -2679,7 +2679,7 @@ export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCode
 export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 export const UpdateCodeModuleEntryFileDocument = gql`
-    mutation UpdateCodeModuleEntryFile($newId: String, $oldId: String) {
+    mutation UpdateCodeModuleEntryFile($newId: Float, $oldId: Float) {
   updateCodeModuleEntryFile(options: {newId: $newId, oldId: $oldId}) {
     ...RegularCodeModule
   }
