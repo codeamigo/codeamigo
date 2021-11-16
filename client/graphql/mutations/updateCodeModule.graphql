@@ -1,12 +1,12 @@
 mutation UpdateCodeModule(
-  $id: Float!
+  $uuid: String!
   $name: String!
   $value: String!
   $lessonId: Float
   $sessionId: Float
 ) {
   updateCodeModule(
-    id: $id
+    uuid: $uuid
     options: { name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId }
   ) {
     ...RegularCodeModule
@@ -14,8 +14,8 @@ mutation UpdateCodeModule(
 }
 
 mutation UpdateCodeModuleEntryFile(
-  $newId: Float
-  $oldId: Float
+  $newId: String
+  $oldId: String
 ) {
   updateCodeModuleEntryFile(
     options: { newId: $newId, oldId: $oldId }

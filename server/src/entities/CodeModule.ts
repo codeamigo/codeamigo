@@ -15,8 +15,8 @@ import { Step } from "./Step";
 @Entity()
 export class CodeModule extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  uuid!: string;
 
   @Field(() => String)
   @CreateDateColumn()
