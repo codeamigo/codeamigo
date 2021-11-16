@@ -124,6 +124,8 @@ export class SessionResolver {
       })
     );
 
+    console.log(codeModules);
+
     return { checkpoints, codeModules, dependencies };
   };
 
