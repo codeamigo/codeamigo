@@ -189,7 +189,7 @@ export class StepResolver {
         .filter((codeModule) => !codeModule.name.includes("spec"))
         .map(async (codeModule) => {
           // @ts-ignore
-          const { id, ...rest } = codeModule;
+          const { uuid, ...rest } = codeModule;
 
           return await CodeModule.create({
             ...rest,

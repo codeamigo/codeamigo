@@ -75,5 +75,5 @@ export class Checkpoint extends BaseEntity {
   test: string;
   @Field({ nullable: true })
   @Column({ nullable: true })
-  moduleId: number;
+  moduleId: string;
 }

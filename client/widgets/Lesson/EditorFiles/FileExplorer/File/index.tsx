@@ -95,10 +95,10 @@ export class File extends React.PureComponent<Props & OwnProps> {
                     variables: {
                       newId: this.props.codeModules?.find(({ name }) =>
                         name?.includes(fileName!)
-                      )?.id,
+                      )?.uuid,
                       oldId: this.props.codeModules?.find(
                         ({ isEntry }) => !!isEntry
-                      )?.id,
+                      )?.uuid,
                     },
                   })
                 }
