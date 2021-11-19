@@ -42,12 +42,12 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
   useEffect(() => {
     const donations = getDonations();
 
-    if (!donations.hasDonated && !donations.dontAskAgain) {
-      modalVar({
-        callback: () => null,
-        name: 'donate',
-      });
-    }
+    // if (!donations.hasDonated && !donations.dontAskAgain) {
+    //   modalVar({
+    //     callback: () => null,
+    //     name: 'donate',
+    //   });
+    // }
   }, []);
 
   if (!data) return null;
