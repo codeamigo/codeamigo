@@ -767,23 +767,17 @@ export type RegularLessonFragment = (
 
 export type RegularLessonItemFragment = (
   { __typename?: 'Lesson' }
-  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
-  & { owner: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'username'>
-  ), steps?: Maybe<Array<(
-    { __typename?: 'Step' }
-    & { codeModules?: Maybe<Array<(
-      { __typename?: 'CodeModule' }
-      & Pick<CodeModule, 'name' | 'value'>
-    )>> }
+  & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'template' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
+  & { tags?: Maybe<Array<(
+    { __typename?: 'Tag' }
+    & Pick<Tag, 'name'>
   )>>, students?: Maybe<Array<(
     { __typename?: 'User' }
     & Pick<User, 'id'>
-  )>>, tags?: Maybe<Array<(
-    { __typename?: 'Tag' }
-    & Pick<Tag, 'name'>
-  )>> }
+  )>>, owner: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username'>
+  ) }
 );
 
 export type RegularStepFragment = (
@@ -1512,17 +1506,7 @@ export type LessonsQuery = (
   { __typename?: 'Query' }
   & { lessons: Array<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'createdAt' | 'label' | 'likes' | 'status' | 'template' | 'title' | 'thumbnail' | 'updatedAt' | 'views'>
-    & { tags?: Maybe<Array<(
-      { __typename?: 'Tag' }
-      & Pick<Tag, 'name'>
-    )>>, students?: Maybe<Array<(
-      { __typename?: 'User' }
-      & Pick<User, 'id'>
-    )>>, owner: (
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username'>
-    ) }
+    & RegularLessonItemFragment
   )> }
 );
 
@@ -1663,27 +1647,22 @@ export const RegularLessonItemFragmentDoc = gql`
   createdAt
   label
   likes
-  owner {
-    id
-    username
-  }
   status
-  steps {
-    codeModules {
-      name
-      value
-    }
-  }
-  students {
-    id
-  }
   tags {
     name
   }
+  template
   title
   thumbnail
   updatedAt
   views
+  students {
+    id
+  }
+  owner {
+    id
+    username
+  }
 }
     `;
 export const RegularCodeModuleFragmentDoc = gql`
@@ -3394,29 +3373,10 @@ export const LessonsDocument = gql`
   lessons(
     options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels, template: $template}
   ) {
-    id
-    createdAt
-    label
-    likes
-    status
-    tags {
-      name
-    }
-    template
-    title
-    thumbnail
-    updatedAt
-    views
-    students {
-      id
-    }
-    owner {
-      id
-      username
-    }
+    ...RegularLessonItem
   }
 }
-    `;
+    ${RegularLessonItemFragmentDoc}`;
 
 /**
  * __useLessonsQuery__

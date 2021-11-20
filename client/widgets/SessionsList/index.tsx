@@ -18,7 +18,7 @@ const SessionsList: React.FC<Props> = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold text-text-primary border-b-2">
+      <h2 className="mb-4 text-xl font-bold border-b-2 text-text-primary">
         🤓 Recent Activity
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

@@ -14,25 +14,6 @@ query Lessons(
       template: $template
     }
   ) {
-    id
-    createdAt
-    label
-    likes
-    status
-    tags {
-      name
-    }
-    template
-    title
-    thumbnail
-    updatedAt
-    views
-    students {
-      id
-    }
-    owner {
-      id
-      username
-    }
+    ...RegularLessonItem
   }
 }
