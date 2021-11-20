@@ -1,5 +1,5 @@
 import { debounce } from 'debounce';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
@@ -7,6 +7,8 @@ import Icon from '👨‍💻components/Icon';
 import {
   LessonQuery,
   RegularStepFragment,
+  StepDocument,
+  StepQuery,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
 import StatusIndicatorV2 from '👨‍💻widgets/Lesson/Info/StatusIndicatorV2';
@@ -15,6 +17,8 @@ import Checkpoints from '../Checkpoints';
 
 const Instructions: React.FC<Props> = (props) => {
   const { isEditing, setShowSteps, showSteps, step } = props;
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [markdown, setMarkdown] = useState(step?.instructions);
   const [showStatusIndicator, setShowStatusIndicator] = useState(false);
   const [view, toggleView] = useState<'editor' | 'preview'>(
@@ -24,7 +28,26 @@ const Instructions: React.FC<Props> = (props) => {
 
   const updateStep = useCallback(
     debounce((id: number, value: string | undefined) => {
+      const q = {
+        query: StepDocument,
+        variables: { id },
+      };
+
       updateStepM({
+        update: (store) => {
+          const stepData = store.readQuery<StepQuery>(q);
+          if (!stepData?.step) return;
+
+          store.writeQuery<StepQuery>({
+            ...q,
+            data: {
+              step: {
+                ...stepData.step,
+                instructions: value || '',
+              },
+            },
+          });
+        },
         variables: { id, instructions: value || '' },
       });
     }, 1000),
@@ -32,11 +55,12 @@ const Instructions: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    // hack so that instructions update
+    // hack to update instructions
     toggleView('preview');
     setMarkdown(step.instructions);
     setTimeout(() => {
       toggleView(isEditing ? 'editor' : 'preview');
+      isEditing && textareaRef.current?.focus();
     }, 1);
     // hack to scroll back to top of div
     if (document) {
@@ -107,6 +131,7 @@ const Instructions: React.FC<Props> = (props) => {
                 updateStep(step.id, e.currentTarget.value);
               }}
               onFocus={() => setShowStatusIndicator(true)}
+              ref={textareaRef}
               style={{ resize: 'none' }}
             ></textarea>
           ) : (
