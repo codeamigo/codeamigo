@@ -99,7 +99,7 @@ export const templates: {
     value: LessonTemplate.Ruby,
   },
   {
-    color: '#000',
+    color: '#fff',
     id: 'rust-template',
     imageUrl:
       'https://raw.githubusercontent.com/gilbarbara/logos/master/logos/rust.svg',
