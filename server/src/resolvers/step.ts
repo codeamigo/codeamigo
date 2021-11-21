@@ -167,11 +167,11 @@ export class StepResolver {
 
     let template: Omit<ITemplate, "templateName">;
 
-    if (options.currentStepId) {
-      const prevStep = await Step.findOne(options.currentStepId, {
-        relations: ["codeModules", "dependencies"],
-      });
+    const prevStep = await Step.findOne(options.currentStepId, {
+      relations: ["codeModules", "dependencies"],
+    });
 
+    if (options.currentStepId) {
       if (!prevStep) return null;
 
       template = {
@@ -203,6 +203,7 @@ export class StepResolver {
       instructions: DEFAULT_MD.replace("Step #", options.name),
       lang: template.lang,
       name: options.name,
+      position: lesson.steps.length + 1,
     }).save();
 
     lesson.steps.push(step);

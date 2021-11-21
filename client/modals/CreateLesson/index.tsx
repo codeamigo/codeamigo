@@ -186,7 +186,16 @@ const CreateLesson: React.FC<Props> = () => {
                             value={template.value}
                           />{' '}
                           <div className="flex flex-col items-start ml-2">
-                            <img className="mt-1 h-6" src={template.imageUrl} />
+                            <div
+                              className={`rounded-full mt-1 h-6 w-6 ${
+                                template.withBackground ? 'bg-white' : ''
+                              }`}
+                            >
+                              <img
+                                className="w-6 h-6"
+                                src={template.imageUrl}
+                              />
+                            </div>
                             <div className="mt-0.5 text-sm font-semibold text-text-primary">
                               {template.name}
                             </div>
