@@ -65,6 +65,16 @@ class UpdateStepCheckpointInput {
 }
 
 @InputType()
+class UpdateStepPositionInput {
+  @Field()
+  id: number;
+  @Field()
+  lessonId: number;
+  @Field()
+  changeY: number;
+}
+
+@InputType()
 class CreateStepInput {
   @Field()
   name: string;
@@ -259,6 +269,58 @@ export class StepResolver {
       { id: options.id },
       { ...step, instructions: options.instructions }
     );
+
+    return step;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
+  async updateStepPosition(
+    @Arg("options") options: UpdateStepPositionInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    const lesson = await Lesson.findOne(options.lessonId, {
+      relations: ["steps"],
+    });
+
+    if (!step || !lesson || options.changeY === 0) {
+      return null;
+    }
+
+    if (!step.position) return step;
+
+    const currentPosition = step.position;
+    const nextPosition = currentPosition + options.changeY;
+
+    Promise.all(
+      lesson.steps.map(async (s) => {
+        if (!s.position) return;
+        if (s.id === options.id) return;
+
+        let newPosition = s.position;
+
+        // user moving step up
+        if (options.changeY < 0) {
+          // only change steps below the new position
+          if (s.position >= nextPosition && s.position < currentPosition) {
+            newPosition += 1;
+          }
+          // user moving step down
+        } else {
+          if (s.position <= nextPosition && s.position > currentPosition) {
+            newPosition -= 1 || 1;
+          } else if (s.position > nextPosition) {
+            newPosition += 1;
+          }
+        }
+
+        Object.assign(s, { position: newPosition });
+        await Step.save(s);
+      })
+    );
+
+    await Step.update({ id: options.id }, { ...step, position: nextPosition });
 
     return step;
   }

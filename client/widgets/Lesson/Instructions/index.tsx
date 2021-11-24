@@ -72,7 +72,7 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex lg:overflow-hidden sm:flex-col-reverse w-full lg:w-96 lg:h-full border-r border-bg-nav-offset-faded">
+    <div className="lg:flex lg:overflow-hidden lg:flex-col-reverse w-full lg:w-96 lg:h-full border-r border-bg-nav-offset-faded">
       <div className="flex justify-between items-center px-3 w-full h-16 sm:border-t bg-bg-nav border-bg-nav-offset-faded">
         <div
           className="flex items-center cursor-pointer"
@@ -123,7 +123,7 @@ const Instructions: React.FC<Props> = (props) => {
         >
           {view === 'editor' ? (
             <textarea
-              className="w-full h-40 lg:h-full border-none text-text-primary bg-bg-primary"
+              className="w-full h-48 lg:h-full border-none text-text-primary bg-bg-primary"
               defaultValue={markdown || ''}
               onBlur={() => setShowStatusIndicator(false)}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {

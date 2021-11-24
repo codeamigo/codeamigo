@@ -334,6 +334,7 @@ export type Mutation = {
   completeStep?: Maybe<Step>;
   updateStepCheckpoint?: Maybe<Step>;
   updateStepInstructions?: Maybe<Step>;
+  updateStepPosition?: Maybe<Step>;
   createLesson: CreateLessonResponse;
   updateLessonViews?: Maybe<Lesson>;
   updateLessonTitle?: Maybe<Lesson>;
@@ -511,6 +512,11 @@ export type MutationUpdateStepCheckpointArgs = {
 
 export type MutationUpdateStepInstructionsArgs = {
   options: StepInstructionsInput;
+};
+
+
+export type MutationUpdateStepPositionArgs = {
+  options: UpdateStepPositionInput;
 };
 
 
@@ -707,6 +713,12 @@ export type UpdateStepCheckpointInput = {
 export type StepInstructionsInput = {
   id: Scalars['Float'];
   instructions: Scalars['String'];
+};
+
+export type UpdateStepPositionInput = {
+  id: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  changeY: Scalars['Float'];
 };
 
 export type CreateLessonResponse = {
@@ -1398,6 +1410,21 @@ export type CompleteStepMutationVariables = Exact<{
 export type CompleteStepMutation = (
   { __typename?: 'Mutation' }
   & { completeStep?: Maybe<(
+    { __typename?: 'Step' }
+    & Pick<Step, 'id'>
+  )> }
+);
+
+export type UpdateStepPositionMutationVariables = Exact<{
+  id: Scalars['Float'];
+  changeY: Scalars['Float'];
+  lessonId: Scalars['Float'];
+}>;
+
+
+export type UpdateStepPositionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateStepPosition?: Maybe<(
     { __typename?: 'Step' }
     & Pick<Step, 'id'>
   )> }
@@ -3153,6 +3180,40 @@ export function useCompleteStepMutation(baseOptions?: Apollo.MutationHookOptions
 export type CompleteStepMutationHookResult = ReturnType<typeof useCompleteStepMutation>;
 export type CompleteStepMutationResult = Apollo.MutationResult<CompleteStepMutation>;
 export type CompleteStepMutationOptions = Apollo.BaseMutationOptions<CompleteStepMutation, CompleteStepMutationVariables>;
+export const UpdateStepPositionDocument = gql`
+    mutation UpdateStepPosition($id: Float!, $changeY: Float!, $lessonId: Float!) {
+  updateStepPosition(options: {id: $id, lessonId: $lessonId, changeY: $changeY}) {
+    id
+  }
+}
+    `;
+export type UpdateStepPositionMutationFn = Apollo.MutationFunction<UpdateStepPositionMutation, UpdateStepPositionMutationVariables>;
+
+/**
+ * __useUpdateStepPositionMutation__
+ *
+ * To run a mutation, you first call `useUpdateStepPositionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateStepPositionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateStepPositionMutation, { data, loading, error }] = useUpdateStepPositionMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      changeY: // value for 'changeY'
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useUpdateStepPositionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateStepPositionMutation, UpdateStepPositionMutationVariables>) {
+        return Apollo.useMutation<UpdateStepPositionMutation, UpdateStepPositionMutationVariables>(UpdateStepPositionDocument, baseOptions);
+      }
+export type UpdateStepPositionMutationHookResult = ReturnType<typeof useUpdateStepPositionMutation>;
+export type UpdateStepPositionMutationResult = Apollo.MutationResult<UpdateStepPositionMutation>;
+export type UpdateStepPositionMutationOptions = Apollo.BaseMutationOptions<UpdateStepPositionMutation, UpdateStepPositionMutationVariables>;
 export const UpdateUserRoleDocument = gql`
     mutation UpdateUserRole($id: Float!, $role: String!) {
   updateUserRole(options: {id: $id, role: $role}) {

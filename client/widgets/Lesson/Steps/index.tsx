@@ -9,6 +9,7 @@ import {
   useCreateStepMutation,
   useDeleteStepMutation,
   useUpdateStepNameMutation,
+  useUpdateStepPositionMutation,
 } from '👨‍💻generated/graphql';
 import { LessonInfoHeaderHeight } from '👨‍💻widgets/Lesson/Info';
 
@@ -31,9 +32,11 @@ const Steps: React.FC<Props> = ({
   const [createStepM] = useCreateStepMutation();
   const [updateStepM] = useUpdateStepNameMutation();
   const [deleteStepM] = useDeleteStepMutation();
+  const [updateStepPosition] = useUpdateStepPositionMutation();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
+  const [dragChange, setDragChange] = useState<null | number>(null);
   const [stepsHeight, setStepsHeight] = useState<string>(
     // 3rem => header
     // 4rem => footer
@@ -58,6 +61,11 @@ const Steps: React.FC<Props> = ({
 
   useEffect(() => {
     const changeStepsHeight = () => {
+      const width = window.outerWidth;
+      if (width < 1024) {
+        setStepsHeight('100%');
+        return;
+      }
       const instructions = document.getElementById('instructions');
       const height = instructions?.offsetHeight || 0;
       const newHeight = `${height}px`;
@@ -159,7 +167,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="overflow-auto absolute top-11 left-0 z-20 py-2 px-4 w-full lg:w-1/5 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
+      className="overflow-auto absolute top-28 lg:top-11 left-0 z-20 py-2 px-4 w-full lg:w-1/5 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -185,6 +193,7 @@ const Steps: React.FC<Props> = ({
                     ? 'text-accent'
                     : 'text-text-primary'
                 } list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
+                draggable={isEditing}
                 key={step.id}
                 onClick={() => {
                   if (canGoToStep(step)) {
@@ -193,6 +202,28 @@ const Steps: React.FC<Props> = ({
                   }
 
                   if (!isEditing) return;
+                }}
+                onDrag={(event) => {
+                  if (event.nativeEvent.clientX === 0) return;
+                  // @ts-ignore
+                  const height = event.target.offsetHeight;
+                  const changeY = Math.floor(
+                    Math.abs(event.nativeEvent.offsetY / height)
+                  );
+                  const isNegativeChange = event.nativeEvent.offsetY < 0;
+                  setDragChange(isNegativeChange ? changeY * -1 : changeY - 1);
+                }}
+                onDragEnd={() => {
+                  if (dragChange === null) return;
+                  updateStepPosition({
+                    refetchQueries: ['Lesson'],
+                    variables: {
+                      changeY: dragChange,
+                      id: step.id,
+                      lessonId,
+                    },
+                  });
+                  setDragChange(null);
                 }}
               >
                 <div className="flex overflow-hidden w-full whitespace-nowrap">
