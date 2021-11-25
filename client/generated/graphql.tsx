@@ -1496,7 +1496,6 @@ export type LessonQuery = (
 export type LessonsQueryVariables = Exact<{
   status: Scalars['String'];
   ownerId?: Maybe<Scalars['Float']>;
-  dependencies?: Maybe<Scalars['String']>;
   labels?: Maybe<Scalars['String']>;
   template?: Maybe<Scalars['String']>;
 }>;
@@ -3369,9 +3368,9 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String, $template: String) {
+    query Lessons($status: String!, $ownerId: Float, $labels: String, $template: String) {
   lessons(
-    options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels, template: $template}
+    options: {status: $status, ownerId: $ownerId, labels: $labels, template: $template}
   ) {
     ...RegularLessonItem
   }
@@ -3392,7 +3391,6 @@ export const LessonsDocument = gql`
  *   variables: {
  *      status: // value for 'status'
  *      ownerId: // value for 'ownerId'
- *      dependencies: // value for 'dependencies'
  *      labels: // value for 'labels'
  *      template: // value for 'template'
  *   },
