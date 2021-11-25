@@ -6,6 +6,7 @@ import {
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
+import Button from '👨‍💻components/Button';
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
@@ -28,6 +29,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     onDragEnd,
     onRunMatchTest,
     onTestStart,
+    prevStep,
     previewRef,
     session,
     step,
@@ -94,6 +96,15 @@ const SandpackTemplate: React.FC<Props> = (props) => {
             {...props}
           />
           <LessonBottomBarWrapper>
+            <div>
+              <Button
+                className="opacity-50 hover:opacity-100 transition-opacity"
+                nature="secondary"
+                onClick={prevStep}
+              >
+                Previous
+              </Button>
+            </div>
             <CTA
               {...props}
               bundlerReady={

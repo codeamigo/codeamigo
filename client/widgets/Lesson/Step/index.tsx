@@ -162,6 +162,48 @@ const Step: React.FC<Props> = (props) => {
     next && setCurrentStepId(next.id);
   };
 
+  const prevStep = () => {
+    if (!session?.steps && !lesson?.steps) return;
+    if (!setCurrentStepId) return;
+    if (!data.step) return;
+
+    const steps = session?.steps || lesson!.steps!;
+
+    const prev = steps
+      .filter((step) => step.createdAt < data.step!.createdAt)
+      .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))[0];
+
+    const q = {
+      query: SessionDocument,
+      variables: { lessonId: session?.lesson.id },
+    };
+
+    if (prev && session) {
+      // User is authenticated
+
+      setNextStep({
+        update: (store) => {
+          const sessionData = store.readQuery<SessionQuery>(q);
+          if (!sessionData?.session) return;
+
+          store.writeQuery<SessionQuery>({
+            ...q,
+            data: {
+              session: {
+                ...sessionData.session,
+                currentStep: prev.id,
+              },
+            },
+          });
+        },
+        variables: { sessionId: session.id, stepId: prev.id },
+      });
+      // User is not authenticated
+    }
+
+    setCurrentStepId(prev?.id);
+  };
+
   const updateWidths = (x: number) => {
     if (
       previewRef.current &&
@@ -220,6 +262,7 @@ const Step: React.FC<Props> = (props) => {
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
               onTestStart={onTestStart}
+              prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}
