@@ -7,6 +7,7 @@ import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
 import Separator from '👨‍💻widgets/Lesson/Separator';
+import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
 import { Props as OwnProps } from '.';
 
@@ -97,7 +98,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
-          <div className="h-full">
+          <div className="flex flex-col h-full">
             <EditorFiles
               activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
@@ -107,17 +108,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
               files={files!}
               selectFile={setActivePath}
             />
-          </div>
-          <div className="p-2">
-            <CTA
-              {...props}
-              bundlerReady
-              handleRunTests={handleRunTests}
-              loading={loading}
-              nextStep={nextStep}
-              selectFile={setActivePath}
-              step={step}
-            />
+            <LessonBottomBarWrapper />
           </div>
         </div>
         <div
@@ -125,24 +116,37 @@ const RijuTemplate: React.FC<Props> = (props) => {
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
-          <Editor
-            activePath={activePath || (entryFile?.name as string)}
-            codeModules={step.codeModules}
-            runCode={postCodeToRiju}
-            sessionId={session?.id}
-            stepId={step.id}
-            updateCode={updateCode}
-            {...props}
-          />
-          <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
-            <RunButton isExecuting={isExecuting} run={postCodeToRiju} />
+          <div className="flex flex-col h-full bg-bg-primary">
+            <Editor
+              activePath={activePath || (entryFile?.name as string)}
+              codeModules={step.codeModules}
+              runCode={postCodeToRiju}
+              sessionId={session?.id}
+              stepId={step.id}
+              updateCode={updateCode}
+              {...props}
+            />
+            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
+              <RunButton isExecuting={isExecuting} run={postCodeToRiju} />
+            </div>
+            <Separator
+              iframeName="riju-frame"
+              maxDrag={maxDragWidth}
+              onChangeX={updateWidths}
+              onDragEnd={onDragEnd}
+            />
+            <LessonBottomBarWrapper>
+              <CTA
+                {...props}
+                bundlerReady
+                handleRunTests={handleRunTests}
+                loading={loading}
+                nextStep={nextStep}
+                selectFile={setActivePath}
+                step={step}
+              />
+            </LessonBottomBarWrapper>
           </div>
-          <Separator
-            iframeName="riju-frame"
-            maxDrag={maxDragWidth}
-            onChangeX={updateWidths}
-            onDragEnd={onDragEnd}
-          />
         </div>
         <div
           className="flex flex-col flex-grow w-full md:w-5/12 md:h-full"

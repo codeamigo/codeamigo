@@ -185,7 +185,7 @@ const CTA: React.FC<Props> = ({
     </div>
   ) : (
     <Button
-      className="justify-center w-full h-14 text-lg"
+      className="justify-center w-full text-lg"
       disabled={spinner}
       onClick={fn}
       type="button"
