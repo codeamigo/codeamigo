@@ -354,7 +354,7 @@ const Editor: React.FC<Props> = ({
       onMount={editorDidMount}
       options={{
         automaticLayout: true,
-        fontSize: '12px',
+        fontSize: '14px',
         fontWeight: 600,
         lineNumbersMinChars: 3,
         minimap: { enabled: false },

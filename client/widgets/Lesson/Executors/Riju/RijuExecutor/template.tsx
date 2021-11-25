@@ -145,7 +145,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           />
         </div>
         <div
-          className="flex flex-col flex-grow w-full md:w-3/6 md:h-full"
+          className="flex flex-col flex-grow w-full md:w-5/12 md:h-full"
           ref={previewRef}
         >
           {/* eslint-disable-next-line */}
