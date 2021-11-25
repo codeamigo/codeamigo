@@ -2,10 +2,10 @@ import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
 import { RegularStepFragment } from '👨‍💻generated/graphql';
-import Jest from '👨‍💻widgets/CTA/CheckpointWizard/jest';
-import Match from '👨‍💻widgets/CTA/CheckpointWizard/match';
-import Output from '👨‍💻widgets/CTA/CheckpointWizard/output';
-import Select from '👨‍💻widgets/CTA/CheckpointWizard/select';
+import Jest from '👨‍💻widgets/CheckpointWizard/jest';
+import Match from '👨‍💻widgets/CheckpointWizard/match';
+import Output from '👨‍💻widgets/CheckpointWizard/output';
+import Select from '👨‍💻widgets/CheckpointWizard/select';
 
 enum CheckpointWizardStepEnum {
   jest = 'jest',
@@ -50,7 +50,7 @@ const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
 };
 
 type Props = {
-  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
+  selectFile: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

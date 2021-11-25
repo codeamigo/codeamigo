@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   LessonQuery,
@@ -11,6 +12,7 @@ import {
   StepQuery,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
+import CheckpointWizard from '👨‍💻widgets/CheckpointWizard';
 import StatusIndicatorV2 from '👨‍💻widgets/Lesson/Info/StatusIndicatorV2';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
@@ -73,7 +75,7 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex lg:overflow-hidden sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
+    <div className="sm:flex lg:overflow-hidden z-20 sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
       <LessonBottomBarWrapper>
         <div
           className="flex items-center cursor-pointer"
@@ -86,6 +88,16 @@ const Instructions: React.FC<Props> = (props) => {
           <div className="ml-3 text-sm font-semibold text-text-primary">
             Step: {currentStepNum}/{totalSteps}
           </div>
+        </div>
+        <div>
+          {isEditing ? (
+            <div className="group relative pt-2">
+              <Button className="justify-center" nature="secondary">
+                Add Checkpoint
+              </Button>
+              <CheckpointWizard step={step} />
+            </div>
+          ) : null}
         </div>
       </LessonBottomBarWrapper>
       <div

@@ -102,7 +102,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
                 nature="secondary"
                 onClick={prevStep}
               >
-                Previous
+                👈 Previous
               </Button>
             </div>
             <CTA

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
+import Button from '👨‍💻components/Button';
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
@@ -23,6 +24,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     onDragEnd,
     onRunMatchTest,
     onTestStart,
+    prevStep,
     previewRef,
     session,
     step,
@@ -136,13 +138,21 @@ const RijuTemplate: React.FC<Props> = (props) => {
               onDragEnd={onDragEnd}
             />
             <LessonBottomBarWrapper>
+              <div>
+                <Button
+                  className="opacity-50 hover:opacity-100 transition-opacity"
+                  nature="secondary"
+                  onClick={prevStep}
+                >
+                  👈 Previous
+                </Button>
+              </div>
               <CTA
                 {...props}
                 bundlerReady
                 handleRunTests={handleRunTests}
                 loading={loading}
                 nextStep={nextStep}
-                selectFile={setActivePath}
                 step={step}
               />
             </LessonBottomBarWrapper>

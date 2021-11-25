@@ -279,6 +279,7 @@ const Step: React.FC<Props> = (props) => {
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
               onTestStart={onTestStart}
+              prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
               updateWidths={updateWidths}
@@ -297,7 +298,7 @@ export type Props = {
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
   session?: SessionQuery['session'];
-  setCurrentStepId?: (n: number) => void;
+  setCurrentStepId: (n: number) => void;
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;
 };
