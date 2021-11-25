@@ -50,7 +50,7 @@ const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
 };
 
 type Props = {
-  selectFile: React.Dispatch<React.SetStateAction<string | null>>;
+  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

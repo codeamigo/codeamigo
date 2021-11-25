@@ -75,7 +75,7 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex lg:overflow-hidden z-20 sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
+    <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
       <LessonBottomBarWrapper>
         <div
           className="flex items-center cursor-pointer"
@@ -91,7 +91,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         <div>
           {isEditing ? (
-            <div className="group relative pt-2">
+            <div className="group relative z-30 text-sm">
               <Button className="justify-center" nature="secondary">
                 Add Checkpoint
               </Button>
