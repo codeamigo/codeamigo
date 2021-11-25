@@ -101,15 +101,17 @@ const RijuTemplate: React.FC<Props> = (props) => {
           style={{ minHeight: '20rem' }}
         >
           <div className="flex flex-col h-full">
-            <EditorFiles
-              activePath={activePath || (entryFile?.name as string)}
-              codeModules={step.codeModules}
-              lessonId={props.lesson?.id}
-              stepId={step.id}
-              {...props}
-              files={files!}
-              selectFile={setActivePath}
-            />
+            <div className="h-full">
+              <EditorFiles
+                activePath={activePath || (entryFile?.name as string)}
+                codeModules={step.codeModules}
+                lessonId={props.lesson?.id}
+                stepId={step.id}
+                {...props}
+                files={files!}
+                selectFile={setActivePath}
+              />
+            </div>
             <LessonBottomBarWrapper />
           </div>
         </div>
