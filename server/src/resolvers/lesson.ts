@@ -60,23 +60,16 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
-const relations = ["owner", "steps", "students", "steps.dependencies", "tags"];
+const relations = ["owner", "steps", "students", "tags"];
 
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
-    const { status, ownerId, labels, dependencies, template } = options;
+    const { status, ownerId, labels, template } = options;
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
-      console.log(
-        await Lesson.find({
-          order: { updatedAt: "DESC" },
-          relations,
-          where: { owner, status },
-        })
-      );
       return Lesson.find({
         order: { updatedAt: "DESC" },
         relations,
@@ -99,33 +92,6 @@ export class LessonResolver {
           template,
         });
       }
-      if (dependencies) {
-        const queryDeps = dependencies.split("|");
-        query
-          .leftJoinAndSelect("Lesson.steps", "steps")
-          .leftJoinAndSelect("steps.codeModules", "codeModules")
-          .andWhere("codeModules.name = :name", {
-            name: "/package.json",
-          });
-        const lessonWithDeps = await query.getMany();
-        const lookForDeps = lessonWithDeps.filter((value) => {
-          return value.steps.filter((step) => {
-            return step.codeModules.find((codeModule) => {
-              if (codeModule.name === "/package.json") {
-                const value = JSON.parse(codeModule.value!);
-                return Object.keys(value.dependencies).some((value) =>
-                  queryDeps.includes(value)
-                );
-              }
-
-              return false;
-            });
-          }).length;
-        });
-
-        return lookForDeps;
-      }
-
       return (await query.getMany()).sort((a, b) =>
         a.students.length < b.students.length ? 1 : -1
       );
