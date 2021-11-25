@@ -6,12 +6,14 @@ import {
 } from '@codesandbox/sandpack-react';
 import React from 'react';
 
+import Button from '👨‍💻components/Button';
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import Separator from '👨‍💻widgets/Lesson/Separator';
+import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
 import { Props as OwnProps } from '.';
 
@@ -27,6 +29,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     onDragEnd,
     onRunMatchTest,
     onTestStart,
+    prevStep,
     previewRef,
     session,
     step,
@@ -60,46 +63,60 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >
-        <div className="h-full">
-          <EditorFiles
-            activePath={activePath}
-            codeModules={step.codeModules}
-            lessonId={props.lesson?.id}
-            stepId={step.id}
-            {...props}
-            files={files!}
-            selectFile={sandpack.openFile}
-          />
-        </div>
-        <div className="p-2">
-          <CTA
-            {...props}
-            bundlerReady={
-              sandpack.status === 'running' && !!sandpack.bundlerState
-            }
-            handleRunTests={handleRunTests}
-            loading={loading}
-            nextStep={nextStep}
-            step={step}
-          />
+        <div className="flex flex-col h-full">
+          <div className="h-full">
+            <EditorFiles
+              activePath={activePath}
+              codeModules={step.codeModules}
+              lessonId={props.lesson?.id}
+              stepId={step.id}
+              {...props}
+              files={files!}
+              selectFile={sandpack.openFile}
+            />
+          </div>
+          <LessonBottomBarWrapper />
         </div>
       </div>
       <div
-        className="z-20 w-4/6 md:w-2/6 h-96 lg:h-full border-b sm:border-b-0 border-bg-nav-offset"
+        className="z-20 w-4/6 md:w-3/6 h-96 lg:h-full border-b sm:border-b-0 border-bg-nav-offset"
         ref={editorRef}
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >
-        <Editor
-          activePath={activePath}
-          codeModules={step.codeModules}
-          isTyped
-          refreshPreview={() => dispatch({ type: 'refresh' })}
-          runCode={() => dispatch({ type: 'start' })}
-          sessionId={session?.id}
-          stepId={step.id}
-          updateCode={updateCode}
-          {...props}
-        />
+        <div className="flex flex-col h-full bg-bg-primary">
+          <Editor
+            activePath={activePath}
+            codeModules={step.codeModules}
+            isTyped
+            refreshPreview={() => dispatch({ type: 'refresh' })}
+            runCode={() => dispatch({ type: 'start' })}
+            sessionId={session?.id}
+            stepId={step.id}
+            updateCode={updateCode}
+            {...props}
+          />
+          <LessonBottomBarWrapper>
+            <div>
+              <Button
+                className="opacity-50 hover:opacity-100 transition-opacity"
+                nature="secondary"
+                onClick={prevStep}
+              >
+                👈 Previous
+              </Button>
+            </div>
+            <CTA
+              {...props}
+              bundlerReady={
+                sandpack.status === 'running' && !!sandpack.bundlerState
+              }
+              handleRunTests={handleRunTests}
+              loading={loading}
+              nextStep={nextStep}
+              step={step}
+            />
+          </LessonBottomBarWrapper>
+        </div>
         <Separator
           iframeName="sp-preview-iframe"
           maxDrag={maxDragWidth}

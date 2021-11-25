@@ -13,7 +13,6 @@ import {
   useCompleteCheckpointMutation,
   usePassCheckpointMutation,
 } from '👨‍💻generated/graphql';
-import CheckpointWizard from '👨‍💻widgets/CTA/CheckpointWizard';
 import {
   CodeSandboxTestMsgType,
   TestDataType,
@@ -25,7 +24,6 @@ const CTA: React.FC<Props> = ({
   isEditing,
   loading,
   nextStep,
-  selectFile,
   step,
 }) => {
   const [isReady, setIsReady] = useState(false);
@@ -164,29 +162,23 @@ const CTA: React.FC<Props> = ({
   const currentCheck = step.checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
-  const isTested = currentCheck?.isTested || !currentCheck;
+  const isTested = currentCheck?.isTested || !currentCheck || isEditing;
   const isStepComplete = !step.checkpoints?.find(
     (checkpoint) => checkpoint.isCompleted === false
   );
-  const text = isEditing ? 'Add Checkpoint' : isTested ? 'Next' : 'Test';
+  const text = isTested ? 'Next 👉' : 'Test ✅';
   const spinner = isTesting || !isReady || loading;
   const fn = isTested
-    ? isStepComplete
+    ? isStepComplete || isEditing
       ? nextStep
       : completeCheckpoint
     : runTests;
 
-  return isEditing ? (
-    <div className="group relative pt-2">
-      <Button className="justify-center w-full h-14 text-lg">
-        Add Checkpoint
-      </Button>
-      <CheckpointWizard selectFile={selectFile} step={step} />
-    </div>
-  ) : (
+  return (
     <Button
-      className="justify-center w-full h-14 text-lg"
+      className="justify-center w-20"
       disabled={spinner}
+      nature="secondary"
       onClick={fn}
       type="button"
     >
@@ -202,7 +194,6 @@ type Props = {
   isPreviewing?: boolean;
   loading: boolean;
   nextStep: () => void;
-  selectFile?: React.Dispatch<React.SetStateAction<string | null>>;
   step: RegularStepFragment;
 };
 

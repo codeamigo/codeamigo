@@ -24,6 +24,7 @@ export type Props = OwnProps & {
   onDragEnd: () => void;
   onRunMatchTest: (checkpoint: RegularCheckpointFragment) => void;
   onTestStart: () => void;
+  prevStep: () => void;
   previewRef: React.RefObject<HTMLIFrameElement>;
   step: RegularStepFragment;
   updateWidths: (x: number) => void;

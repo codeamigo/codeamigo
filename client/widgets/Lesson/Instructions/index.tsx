@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   LessonQuery,
@@ -11,7 +12,9 @@ import {
   StepQuery,
   useUpdateStepInstructionsMutation,
 } from '👨‍💻generated/graphql';
+import CheckpointWizard from '👨‍💻widgets/CheckpointWizard';
 import StatusIndicatorV2 from '👨‍💻widgets/Lesson/Info/StatusIndicatorV2';
+import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
 import Checkpoints from '../Checkpoints';
 
@@ -72,8 +75,8 @@ const Instructions: React.FC<Props> = (props) => {
   const totalSteps = props.steps.length;
 
   return (
-    <div className="sm:flex lg:overflow-hidden sm:flex-col-reverse w-full lg:w-96 lg:h-full border-r border-bg-nav-offset-faded">
-      <div className="flex justify-between items-center px-3 w-full h-16 sm:border-t bg-bg-nav border-bg-nav-offset-faded">
+    <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
+      <LessonBottomBarWrapper>
         <div
           className="flex items-center cursor-pointer"
           onClick={() => !showSteps && setShowSteps(true)}
@@ -86,7 +89,17 @@ const Instructions: React.FC<Props> = (props) => {
             Step: {currentStepNum}/{totalSteps}
           </div>
         </div>
-      </div>
+        <div>
+          {isEditing ? (
+            <div className="group relative z-30 text-sm">
+              <Button className="justify-center" nature="secondary">
+                Add Checkpoint
+              </Button>
+              <CheckpointWizard step={step} />
+            </div>
+          ) : null}
+        </div>
+      </LessonBottomBarWrapper>
       <div
         className="flex overflow-scroll flex-col flex-1 w-full lg:h-full border-b md:border-b-0 border-bg-nav-offset-faded"
         id="instructions"
