@@ -1,5 +1,4 @@
 import { useReactiveVar } from '@apollo/client';
-import { SandpackStatus } from '@codesandbox/sandpack-react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
@@ -64,7 +63,6 @@ const CTA: React.FC<Props> = ({
         testsRef.current = [...testsRef.current, message.data.test];
         break;
       case 'total_test_end':
-        isTestingVar(false);
         if (testsRef.current[testsRef.current.length - 1]?.status === 'fail') {
           testFailureVar(true);
           return;

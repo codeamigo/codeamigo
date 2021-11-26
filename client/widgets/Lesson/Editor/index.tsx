@@ -117,41 +117,43 @@ const Editor: React.FC<Props> = ({
         model.getValue().includes(checkpoint.matchRegex) ||
         model.getValue()?.match(checkpoint.matchRegex);
 
-      window.postMessage(
-        {
-          event: 'total_test_start',
-          type: 'test',
-        },
-        '*'
-      );
-
-      window.postMessage(
-        {
-          $id: 0,
-          codesandbox: true,
-          event: 'test_end',
-          test: {
-            blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
-            duration: 1,
-            errors: [],
-            name: match
-              ? 'includes the correct value(s)!'
-              : `does not include the correct value.`,
-            path: '',
-            status: match ? 'pass' : 'fail',
+      setTimeout(() => {
+        window.postMessage(
+          {
+            event: 'total_test_start',
+            type: 'test',
           },
-          type: 'test',
-        } as CodeSandboxTestMsgType,
-        '*'
-      );
+          '*'
+        );
 
-      window.postMessage(
-        {
-          event: 'total_test_end',
-          type: 'test',
-        },
-        '*'
-      );
+        window.postMessage(
+          {
+            $id: 0,
+            codesandbox: true,
+            event: 'test_end',
+            test: {
+              blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
+              duration: 1,
+              errors: [],
+              name: match
+                ? 'includes the correct value(s)!'
+                : `does not include the correct value.`,
+              path: '',
+              status: match ? 'pass' : 'fail',
+            },
+            type: 'test',
+          } as CodeSandboxTestMsgType,
+          '*'
+        );
+
+        window.postMessage(
+          {
+            event: 'total_test_end',
+            type: 'test',
+          },
+          '*'
+        );
+      }, 1200);
     };
 
     window.addEventListener('message', handleMatchRegexTest);
