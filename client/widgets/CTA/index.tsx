@@ -51,12 +51,12 @@ const CTA: React.FC<Props> = ({
       return;
     }
 
-    const lastCheckpointForStep =
-      step.checkpoints &&
-      step.checkpoints.findIndex(
-        ({ id }) => id === step.currentCheckpointId
-      ) ===
-        step.checkpoints.length - 1;
+    // const lastCheckpointForStep =
+    //   step.checkpoints &&
+    //   step.checkpoints.findIndex(
+    //     ({ id }) => id === step.currentCheckpointId
+    //   ) ===
+    //     step.checkpoints.length - 1;
 
     switch (message.data.event) {
       case 'test_end':
@@ -97,11 +97,11 @@ const CTA: React.FC<Props> = ({
             variables: { id: step.currentCheckpointId },
           });
 
-          modalVar({
-            callback: () =>
-              lastCheckpointForStep ? nextStep() : completeCheckpoint(),
-            name: 'testsPassed',
-          });
+          // modalVar({
+          //   callback: () =>
+          //     lastCheckpointForStep ? nextStep() : completeCheckpoint(),
+          //   name: 'testsPassed',
+          // });
         }
     }
   };
@@ -176,6 +176,7 @@ const CTA: React.FC<Props> = ({
     <Button
       className="justify-center w-20"
       disabled={spinner}
+      id="execution-button"
       nature="secondary"
       onClick={fn}
       type="button"

@@ -152,7 +152,7 @@ const Step: React.FC<Props> = (props) => {
       return;
     }
 
-    if (!next) {
+    if (!next && !props.isEditing) {
       modalVar({
         callback: () => router.push('/'),
         name: 'registerAfterPreview',

@@ -57,49 +57,33 @@ const RijuTemplate: React.FC<Props> = (props) => {
     entryFileValueRef.current = code;
   };
 
-  const postCodeToRiju = () => {
-    console.log(checkpoint);
-    const runTestsInstead = checkpoint?.type === CheckpointTypeEnum.Output;
+  const runCode = () => {
+    document.getElementById('execution-button')?.click();
+  };
 
-    if (runTestsInstead) {
-      handleRunTests();
-      return;
-    }
-
+  const handleRunTests = () => {
+    onTestStart();
     setIsExecuting(true);
-    // @ts-ignore
+    const shouldRunTests = checkpoint?.type === CheckpointTypeEnum.Output;
+    if (checkpoint) {
+      switch (checkpoint.type) {
+        case CheckpointTypeEnum.Output:
+          setIsExecuting(true);
+          break;
+        case CheckpointTypeEnum.Match:
+          onRunMatchTest(checkpoint);
+      }
+    }
     previewRef.current
       ?.getElementsByTagName('iframe')[0]
       .contentWindow?.postMessage(
         {
           code: entryFileValueRef.current,
-          event: 'runCode',
+          event: shouldRunTests ? 'testCode' : 'runCode',
+          expectedOutput: shouldRunTests ? checkpoint.output : null,
         },
         '*'
       );
-  };
-
-  const handleRunTests = () => {
-    onTestStart();
-    if (!checkpoint) return;
-
-    switch (checkpoint.type) {
-      case CheckpointTypeEnum.Output:
-        setIsExecuting(true);
-        previewRef.current
-          ?.getElementsByTagName('iframe')[0]
-          .contentWindow?.postMessage(
-            {
-              code: entryFileValueRef.current,
-              event: 'testCode',
-              expectedOutput: checkpoint.output,
-            },
-            '*'
-          );
-        break;
-      case CheckpointTypeEnum.Match:
-        onRunMatchTest(checkpoint);
-    }
   };
 
   return (
@@ -134,14 +118,14 @@ const RijuTemplate: React.FC<Props> = (props) => {
             <Editor
               activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
-              runCode={postCodeToRiju}
+              runCode={runCode}
               sessionId={session?.id}
               stepId={step.id}
               updateCode={updateCode}
               {...props}
             />
             <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
-              <RunButton isExecuting={isExecuting} run={postCodeToRiju} />
+              <RunButton isExecuting={isExecuting} run={runCode} />
             </div>
             <Separator
               iframeName="riju-frame"
