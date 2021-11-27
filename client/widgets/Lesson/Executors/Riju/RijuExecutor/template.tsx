@@ -84,6 +84,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
         },
         '*'
       );
+
+    setTimeout(() => {
+      setIsExecuting(false);
+    }, 3000);
   };
 
   return (

@@ -55,12 +55,17 @@ const Editor: React.FC<Props> = ({
   }, [activePath, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
+  // and focus editor
   useEffect(() => {
     if (monacoRef.current) {
       monacoRef.current.editor
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
+    }
+
+    if (editorRef.current) {
+      editorRef.current.focus();
     }
   }, [stepId]);
 

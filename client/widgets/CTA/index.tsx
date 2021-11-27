@@ -2,7 +2,6 @@ import { useReactiveVar } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
-import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
