@@ -71,23 +71,18 @@ const Instructions: React.FC<Props> = (props) => {
     }
   }, [step.id]);
 
-  const currentStepNum = props.steps.findIndex(({ id }) => id === step.id) + 1;
-  const totalSteps = props.steps.length;
-
   return (
     <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
       <LessonBottomBarWrapper>
         <div
-          className="flex items-center cursor-pointer"
+          aria-label="View Steps"
+          className="flex items-center cursor-pointer hint--right hint--no-animate"
           onClick={() => !showSteps && setShowSteps(true)}
         >
           <Icon
             className="w-4 text-2xl text-text-primary"
             name={showSteps ? 'cancel-squared' : 'list'}
           />
-          <div className="ml-3 text-sm font-semibold text-text-primary">
-            Step: {currentStepNum}/{totalSteps}
-          </div>
         </div>
         <div>
           {isEditing ? (
@@ -172,7 +167,6 @@ type Props = {
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;
   step: RegularStepFragment;
-  steps: RegularStepFragment[];
 };
 
 export default Instructions;

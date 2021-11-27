@@ -109,13 +109,13 @@ const Editor: React.FC<Props> = ({
 
       const checkpoint = ev.data.checkpoint;
 
-      const model = monacoRef.current.editor.getModel(
+      const model = monacoRef.current?.editor.getModel(
         `${URN}${ev.data.checkpoint.fileToMatchRegex}`
       );
 
       const match =
-        model.getValue().includes(checkpoint.matchRegex) ||
-        model.getValue()?.match(checkpoint.matchRegex);
+        model?.getValue().includes(checkpoint.matchRegex) ||
+        model?.getValue()?.match(checkpoint.matchRegex);
 
       setTimeout(() => {
         window.postMessage(

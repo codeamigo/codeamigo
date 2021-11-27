@@ -13,6 +13,7 @@ import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import Separator from '👨‍💻widgets/Lesson/Separator';
+import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
 import { Props as OwnProps } from '.';
@@ -105,6 +106,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
                 👈 Previous
               </Button>
             </div>
+            <StepPosition {...props} />
             <CTA
               {...props}
               bundlerReady={
@@ -132,7 +134,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         <Console
           runTests={handleRunTests}
           stepId={step.id}
-          tabs={['console', 'tests']}
+          tabs={step.checkpoints?.length ? ['console', 'tests'] : ['console']}
         />
       </div>
     </SandpackLayout>

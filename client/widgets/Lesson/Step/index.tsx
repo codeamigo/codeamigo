@@ -238,21 +238,20 @@ const Step: React.FC<Props> = (props) => {
     window.postMessage({ checkpoint, event: 'runMatchTest' }, '*');
   };
 
+  const steps = (session?.steps ||
+    props.lesson?.steps) as RegularStepFragment[];
+  const currentStepNum = steps.findIndex(({ id }) => id === data?.step?.id) + 1;
+  const totalStepsNum = steps.length;
+
   return (
     <>
       {/* eslint-disable-next-line */}
       <div className="flex flex-col lg:flex-row md:h-full-minus">
-        <Instructions
-          nextStep={nextStep}
-          step={data.step}
-          steps={
-            (session?.steps || props.lesson?.steps) as RegularStepFragment[]
-          }
-          {...props}
-        />
+        <Instructions nextStep={nextStep} step={data.step} {...props} />
         <div className="w-full h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
+              currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}
               filesRef={filesRef}
@@ -265,11 +264,13 @@ const Step: React.FC<Props> = (props) => {
               prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
+              totalStepsNum={totalStepsNum}
               updateWidths={updateWidths}
               {...props}
             />
           ) : (
             <RijuExecutor
+              currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}
               filesRef={filesRef}
@@ -282,6 +283,7 @@ const Step: React.FC<Props> = (props) => {
               prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
+              totalStepsNum={totalStepsNum}
               updateWidths={updateWidths}
               {...props}
             />

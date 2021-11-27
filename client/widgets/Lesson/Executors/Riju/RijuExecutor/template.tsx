@@ -8,6 +8,7 @@ import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
 import Separator from '👨‍💻widgets/Lesson/Separator';
+import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
 import { Props as OwnProps } from '.';
@@ -36,6 +37,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
 
+  const checkpoint = step.checkpoints?.find(
+    ({ id }) => id === step.currentCheckpointId
+  );
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.event === 'execution_has_results') {
@@ -53,6 +58,14 @@ const RijuTemplate: React.FC<Props> = (props) => {
   };
 
   const postCodeToRiju = () => {
+    console.log(checkpoint);
+    const runTestsInstead = checkpoint?.type === CheckpointTypeEnum.Output;
+
+    if (runTestsInstead) {
+      handleRunTests();
+      return;
+    }
+
     setIsExecuting(true);
     // @ts-ignore
     previewRef.current
@@ -68,9 +81,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
 
   const handleRunTests = () => {
     onTestStart();
-    const checkpoint = step.checkpoints?.find(
-      ({ id }) => id === step.currentCheckpointId
-    );
     if (!checkpoint) return;
 
     switch (checkpoint.type) {
@@ -116,7 +126,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="z-20 w-4/6 md:w-2/6 h-96 lg:h-full border-b sm:border-b-0 border-bg-nav-offset"
+          className="z-20 w-4/6 md:w-2/6 h-96 lg:h-full border-bg-nav-offset"
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
@@ -130,7 +140,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
               updateCode={updateCode}
               {...props}
             />
-            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-2 z-30 md:-mt-6">
+            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
               <RunButton isExecuting={isExecuting} run={postCodeToRiju} />
             </div>
             <Separator
@@ -149,6 +159,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
                   👈 Previous
                 </Button>
               </div>
+              <StepPosition {...props} />
               <CTA
                 {...props}
                 bundlerReady
@@ -161,18 +172,20 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="flex flex-col flex-grow w-full md:w-5/12 md:h-full"
+          className="flex flex-col flex-grow w-full md:w-5/12 h-96 md:h-full"
           ref={previewRef}
         >
           {/* eslint-disable-next-line */}
           <iframe className="h-full bg-bg-primary riju-frame"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
-          <Console
-            runTests={handleRunTests}
-            stepId={step.id}
-            tabs={['tests']}
-          />
+          {step.checkpoints?.length ? (
+            <Console
+              runTests={handleRunTests}
+              stepId={step.id}
+              tabs={['tests']}
+            />
+          ) : null}
         </div>
       </div>
     </div>

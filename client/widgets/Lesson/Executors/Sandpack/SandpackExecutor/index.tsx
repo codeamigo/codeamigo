@@ -60,6 +60,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
 };
 
 export type Props = OwnProps & {
+  currentStepNum: number;
   editorRef: React.RefObject<HTMLDivElement>;
   filesHeight?: number;
   filesRef: React.RefObject<HTMLDivElement>;
@@ -72,6 +73,7 @@ export type Props = OwnProps & {
   prevStep: () => void;
   previewRef: React.RefObject<HTMLDivElement>;
   step: RegularStepFragment;
+  totalStepsNum: number;
   updateWidths: (x: number) => void;
 };
 
