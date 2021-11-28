@@ -1,5 +1,7 @@
+import { useReactiveVar } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { isExecutingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
@@ -32,7 +34,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
     updateWidths,
   } = props;
   const entryFileValueRef = useRef<string | undefined>();
-  const [isExecuting, setIsExecuting] = React.useState(false);
   const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
@@ -44,7 +45,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.event === 'execution_has_results') {
-        setIsExecuting(false);
+        isExecutingVar(false);
       }
     };
 
@@ -58,18 +59,23 @@ const RijuTemplate: React.FC<Props> = (props) => {
   };
 
   const handleRunTests = () => {
-    onTestStart();
-    setIsExecuting(true);
+    isExecutingVar(true);
     const shouldRunTests = checkpoint?.type === CheckpointTypeEnum.Output;
+
     if (checkpoint) {
       switch (checkpoint.type) {
         case CheckpointTypeEnum.Output:
-          setIsExecuting(true);
+          isExecutingVar(true);
           break;
         case CheckpointTypeEnum.Match:
           onRunMatchTest(checkpoint);
       }
     }
+
+    if (shouldRunTests) {
+      onTestStart();
+    }
+
     previewRef.current
       ?.getElementsByTagName('iframe')[0]
       .contentWindow?.postMessage(
@@ -82,7 +88,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
       );
 
     setTimeout(() => {
-      setIsExecuting(false);
+      isExecutingVar(false);
     }, 3000);
   };
 
@@ -110,7 +116,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="z-20 w-4/6 md:w-2/6 h-96 lg:h-full border-bg-nav-offset"
+          className="z-20 w-4/6 md:w-2/6 h-96 md:h-full border-bg-nav-offset"
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
@@ -125,7 +131,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
               {...props}
             />
             <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
-              <RunButton isExecuting={isExecuting} run={handleRunTests} />
+              <RunButton
+                isExecuting={useReactiveVar(isExecutingVar)}
+                run={handleRunTests}
+              />
             </div>
             <Separator
               iframeName="riju-frame"

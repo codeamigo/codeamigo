@@ -113,33 +113,33 @@ const Step: React.FC<Props> = (props) => {
       // User is not authenticated
     }
 
-    completeStep({
-      update: (store, { data }) => {
-        const sessionData = store.readQuery<SessionQuery>(q);
-        if (!sessionData?.session) return;
-        if (!sessionData?.session?.steps) return;
+    if (session) {
+      completeStep({
+        update: (store, { data }) => {
+          const sessionData = store.readQuery<SessionQuery>(q);
+          if (!sessionData?.session) return;
+          if (!sessionData?.session?.steps) return;
 
-        debugger;
+          store.writeQuery<SessionQuery>({
+            ...q,
+            data: {
+              session: {
+                ...sessionData.session,
+                steps: sessionData.session.steps.map((step) => {
+                  if (step.id !== data?.completeStep?.id) return step;
 
-        store.writeQuery<SessionQuery>({
-          ...q,
-          data: {
-            session: {
-              ...sessionData.session,
-              steps: sessionData.session.steps.map((step) => {
-                if (step.id !== data?.completeStep?.id) return step;
-
-                return {
-                  ...step,
-                  isCompleted: true,
-                };
-              }),
+                  return {
+                    ...step,
+                    isCompleted: true,
+                  };
+                }),
+              },
             },
-          },
-        });
-      },
-      variables: { id: data.step.id },
-    });
+          });
+        },
+        variables: { id: data.step.id },
+      });
+    }
 
     if (!next && session) {
       modalVar({

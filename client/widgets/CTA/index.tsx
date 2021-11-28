@@ -1,7 +1,11 @@
 import { useReactiveVar } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
+import {
+  isExecutingVar,
+  isTestingVar,
+  testFailureVar,
+} from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
 import { Spinner } from '👨‍💻components/Spinners';
 import {
@@ -29,6 +33,7 @@ const CTA: React.FC<Props> = ({
     errorPolicy: 'ignore',
   });
   const [passCheckpoint] = usePassCheckpointMutation({ errorPolicy: 'ignore' });
+  const isExecuting = useReactiveVar(isExecutingVar);
   const isTesting = useReactiveVar(isTestingVar);
   const testsRef = useRef<TestDataType[]>([]);
 
@@ -164,7 +169,7 @@ const CTA: React.FC<Props> = ({
     (checkpoint) => checkpoint.isCompleted === false
   );
   const text = isTested ? 'Next 👉' : 'Test ✅';
-  const spinner = isTesting || !isReady || loading;
+  const spinner = isTesting || !isReady || isExecuting || loading;
   const fn = isTested
     ? isStepComplete || isEditing
       ? nextStep
