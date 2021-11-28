@@ -119,6 +119,8 @@ const Step: React.FC<Props> = (props) => {
         if (!sessionData?.session) return;
         if (!sessionData?.session?.steps) return;
 
+        debugger;
+
         store.writeQuery<SessionQuery>({
           ...q,
           data: {

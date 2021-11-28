@@ -25,6 +25,16 @@ export const getOrSetLessonsItem = (): string => {
   }
 };
 
+export const removeLessonItem = (id: number) => {
+  const oldLessons = JSON.parse(
+    getOrSetLessonsItem()
+  ) as Array<LocalStorageLesson>;
+
+  const newLessons = oldLessons.filter(({ id: lessonId }) => lessonId !== id);
+
+  localStorage.setItem(LESSONS_STORAGE_KEY, JSON.stringify(newLessons));
+};
+
 export const setLessonItem = (id: number, currentStepId?: number) => {
   let newLessons: Array<LocalStorageLesson> = [];
   const oldLessons = JSON.parse(

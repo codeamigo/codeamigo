@@ -57,10 +57,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
     entryFileValueRef.current = code;
   };
 
-  const runCode = () => {
-    document.getElementById('execution-button')?.click();
-  };
-
   const handleRunTests = () => {
     onTestStart();
     setIsExecuting(true);
@@ -122,14 +118,14 @@ const RijuTemplate: React.FC<Props> = (props) => {
             <Editor
               activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
-              runCode={runCode}
+              runCode={handleRunTests}
               sessionId={session?.id}
               stepId={step.id}
               updateCode={updateCode}
               {...props}
             />
             <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
-              <RunButton isExecuting={isExecuting} run={runCode} />
+              <RunButton isExecuting={isExecuting} run={handleRunTests} />
             </div>
             <Separator
               iframeName="riju-frame"
@@ -164,7 +160,8 @@ const RijuTemplate: React.FC<Props> = (props) => {
           ref={previewRef}
         >
           {/* eslint-disable-next-line */}
-          <iframe className="h-full bg-bg-primary riju-frame"
+          <iframe
+            className="h-full bg-bg-primary riju-frame"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
           {step.checkpoints?.length ? (
