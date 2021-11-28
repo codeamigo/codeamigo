@@ -59,6 +59,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
   };
 
   const handleRunTests = () => {
+    if (checkpoint?.isTested) {
+      props.ctaRef.current?.click();
+      return;
+    }
+
     isExecutingVar(true);
     const shouldRunTests = checkpoint?.type === CheckpointTypeEnum.Output;
 
@@ -72,11 +77,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
       }
     }
 
-    if (checkpoint) {
-      onTestStart();
-    } else {
-      document.getElementById('execution-button')?.click();
-    }
+    if (shouldRunTests) onTestStart();
 
     previewRef.current
       ?.getElementsByTagName('iframe')[0]

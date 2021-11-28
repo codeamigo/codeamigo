@@ -24,6 +24,7 @@ const Step: React.FC<Props> = (props) => {
   const previewRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const filesRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
   const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
@@ -253,6 +254,7 @@ const Step: React.FC<Props> = (props) => {
         <div className="w-full h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
+              ctaRef={ctaRef}
               currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}
@@ -272,6 +274,7 @@ const Step: React.FC<Props> = (props) => {
             />
           ) : (
             <RijuExecutor
+              ctaRef={ctaRef}
               currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}

@@ -60,6 +60,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
 };
 
 export type Props = OwnProps & {
+  ctaRef: React.RefObject<HTMLButtonElement>;
   currentStepNum: number;
   editorRef: React.RefObject<HTMLDivElement>;
   filesHeight?: number;

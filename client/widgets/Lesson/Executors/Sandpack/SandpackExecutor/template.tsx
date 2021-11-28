@@ -45,8 +45,8 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     const checkpoint = step.checkpoints?.find(
       ({ id }) => id === step.currentCheckpointId
     );
-    if (!checkpoint) {
-      document.getElementById('execution-button')?.click();
+    if (!checkpoint || checkpoint.isCompleted) {
+      props.ctaRef.current?.click();
       return;
     }
 
