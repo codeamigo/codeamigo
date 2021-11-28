@@ -118,6 +118,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
               handleRunTests={handleRunTests}
               loading={loading}
               nextStep={nextStep}
+              ref={props.ctaRef}
               step={step}
             />
           </LessonBottomBarWrapper>

@@ -20,7 +20,7 @@ import {
   TestDataType,
 } from '👨‍💻widgets/Lesson/Console/Tests/types';
 
-const CTA: React.FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
+const CTA = React.forwardRef<HTMLButtonElement, Props>(
   (
     { bundlerReady, handleRunTests, isEditing, loading, nextStep, step },
     ref
@@ -181,10 +181,10 @@ const CTA: React.FC<Props> = React.forwardRef<HTMLButtonElement, Props>(
       <Button
         className="justify-center w-20"
         disabled={spinner}
+        forwardedRef={ref}
         id="execution-button"
         nature="secondary"
         onClick={fn}
-        ref={ref}
         type="button"
       >
         {spinner ? <Spinner /> : text}
