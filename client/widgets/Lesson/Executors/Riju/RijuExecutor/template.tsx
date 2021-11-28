@@ -72,8 +72,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
       }
     }
 
-    if (shouldRunTests) {
+    if (checkpoint) {
       onTestStart();
+    } else {
+      document.getElementById('execution-button')?.click();
     }
 
     previewRef.current

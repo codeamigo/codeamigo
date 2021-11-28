@@ -45,7 +45,10 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     const checkpoint = step.checkpoints?.find(
       ({ id }) => id === step.currentCheckpointId
     );
-    if (!checkpoint) return;
+    if (!checkpoint) {
+      document.getElementById('execution-button')?.click();
+      return;
+    }
 
     switch (checkpoint.type) {
       case CheckpointTypeEnum.Spec:
