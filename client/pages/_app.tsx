@@ -19,7 +19,7 @@ import AuthProvider from '../providers/AuthProvider';
 Router.events.on('routeChangeStart', () => {
   NProgress.start();
   // @ts-ignore
-  window && window.Zigpoll && window.Zigpoll.hide();
+  window && window.Zigpoll && window?.Zigpoll?.hide();
 });
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());

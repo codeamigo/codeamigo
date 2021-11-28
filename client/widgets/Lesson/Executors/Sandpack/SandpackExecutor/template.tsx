@@ -40,15 +40,17 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
 
+  const triggerCTA = () => {
+    props.ctaRef.current?.click();
+  };
+
   const handleRunTests = () => {
     onTestStart();
     const checkpoint = step.checkpoints?.find(
       ({ id }) => id === step.currentCheckpointId
     );
-    if (!checkpoint || checkpoint.isCompleted) {
-      props.ctaRef.current?.click();
-      return;
-    }
+
+    if (!checkpoint) return;
 
     switch (checkpoint.type) {
       case CheckpointTypeEnum.Spec:
@@ -93,7 +95,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
             codeModules={step.codeModules}
             isTyped
             refreshPreview={() => dispatch({ type: 'refresh' })}
-            runCode={() => dispatch({ type: 'start' })}
+            runCode={triggerCTA}
             sessionId={session?.id}
             stepId={step.id}
             updateCode={updateCode}
