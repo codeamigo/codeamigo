@@ -38,6 +38,10 @@ const RijuTemplate: React.FC<Props> = (props) => {
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
 
+  const checkpoint = step.checkpoints?.find(
+    ({ id }) => id === step.currentCheckpointId
+  );
+
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data.event === 'execution_has_results') {
@@ -55,10 +59,6 @@ const RijuTemplate: React.FC<Props> = (props) => {
   };
 
   const handleRunTests = () => {
-    const checkpoint = step.checkpoints?.find(
-      ({ id }) => id === step.currentCheckpointId
-    );
-
     if (checkpoint?.isTested) {
       props.ctaRef.current?.click();
       return;
