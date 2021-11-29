@@ -41,6 +41,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
   checkpointRef.current = checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
+  console.log(step.checkpoints);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {

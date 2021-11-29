@@ -26,7 +26,10 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
     ref
   ) => {
     const [isReady, setIsReady] = useState(false);
-    const [completeCheckpointM] = useCompleteCheckpointMutation({
+    const [
+      completeCheckpointM,
+      { loading: loadingCompleteCheckpoint },
+    ] = useCompleteCheckpointMutation({
       errorPolicy: 'ignore',
     });
     const [passCheckpoint] = usePassCheckpointMutation({
@@ -53,13 +56,6 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
         isTestingVar(false);
         return;
       }
-
-      // const lastCheckpointForStep =
-      //   step.checkpoints &&
-      //   step.checkpoints.findIndex(
-      //     ({ id }) => id === step.currentCheckpointId
-      //   ) ===
-      //     step.checkpoints.length - 1;
 
       switch (message.data.event) {
         case 'test_end':
@@ -101,12 +97,6 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
               },
               variables: { id: step.currentCheckpointId },
             });
-
-            // modalVar({
-            //   callback: () =>
-            //     lastCheckpointForStep ? nextStep() : completeCheckpoint(),
-            //   name: 'testsPassed',
-            // });
           }
       }
     };
@@ -155,6 +145,17 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
         },
         variables: { id: step.currentCheckpointId },
       });
+
+      const lastCheckpointForStep =
+        step.checkpoints &&
+        step.checkpoints.findIndex(
+          ({ id }) => id === step.currentCheckpointId
+        ) ===
+          step.checkpoints.length - 1;
+
+      if (lastCheckpointForStep) {
+        nextStep();
+      }
     };
 
     const runTests = () => {
@@ -170,7 +171,12 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
       (checkpoint) => checkpoint.isCompleted === false
     );
     const text = isTested ? 'Next 👉' : 'Test 🧪';
-    const spinner = isTesting || !isReady || isExecuting || loading;
+    const spinner =
+      isTesting ||
+      !isReady ||
+      isExecuting ||
+      loadingCompleteCheckpoint ||
+      loading;
     const fn = isTested
       ? isStepComplete || isEditing
         ? nextStep
