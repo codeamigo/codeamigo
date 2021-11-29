@@ -1,3 +1,4 @@
+import useKeyPress from 'hooks/useKeyPress';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { useState } from 'react';
@@ -28,6 +29,7 @@ const Step: React.FC<Props> = (props) => {
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
   const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
+  const cmdShiftEnter = useKeyPress(['Meta', 'Shift', 'Enter']);
 
   const { data: newData, loading, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
@@ -66,6 +68,12 @@ const Step: React.FC<Props> = (props) => {
     window.addEventListener('resize', setHeightCallback);
     return () => window.removeEventListener('resize', setHeightCallback);
   }, [filesRef.current]);
+
+  useEffect(() => {
+    if (cmdShiftEnter && ctaRef.current) {
+      ctaRef.current.click();
+    }
+  }, [cmdShiftEnter]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

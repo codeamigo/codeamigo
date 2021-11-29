@@ -260,7 +260,9 @@ const Editor: React.FC<Props> = ({
     );
 
     editorRef.current.addCommand(
-      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
+      monacoRef.current.KeyMod.Shift |
+        monacoRef.current.KeyMod.CtrlCmd |
+        monacoRef.current.KeyCode.Enter,
       runCode
     );
   };

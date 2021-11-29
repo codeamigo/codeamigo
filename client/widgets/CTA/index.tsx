@@ -32,7 +32,10 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
     ] = useCompleteCheckpointMutation({
       errorPolicy: 'ignore',
     });
-    const [passCheckpoint] = usePassCheckpointMutation({
+    const [
+      passCheckpoint,
+      { loading: loadingPassCheckpoint },
+    ] = usePassCheckpointMutation({
       errorPolicy: 'ignore',
     });
     const isExecuting = useReactiveVar(isExecutingVar);
@@ -175,8 +178,10 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
       isTesting ||
       !isReady ||
       isExecuting ||
+      loading ||
       loadingCompleteCheckpoint ||
-      loading;
+      loadingPassCheckpoint;
+
     const fn = isTested
       ? isStepComplete || isEditing
         ? nextStep
@@ -185,7 +190,8 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
 
     return (
       <Button
-        className="justify-center w-20"
+        aria-label="or Meta (Cmd) + Shift + Enter"
+        className="justify-center w-20 hint--top"
         disabled={spinner}
         forwardedRef={ref}
         id="execution-button"
