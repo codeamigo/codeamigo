@@ -60,7 +60,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
 
   const handleRunTests = () => {
     const checkpoint = checkpointRef.current;
-    if (checkpoint?.isTested) {
+    if (checkpoint?.isTested || !checkpoint) {
       props.ctaRef.current?.click();
       return;
     }
