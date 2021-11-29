@@ -4,7 +4,7 @@ import {
   useActiveCode,
   useSandpack,
 } from '@codesandbox/sandpack-react';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import Button from '👨‍💻components/Button';
 import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
@@ -12,14 +12,14 @@ import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
+import { Props as OwnProps } from '👨‍💻widgets/Lesson/Executors';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
-import { Props as OwnProps } from '.';
-
 const SandpackTemplate: React.FC<Props> = (props) => {
   const {
+    checkpoints,
     editorRef,
     files,
     filesHeight,
@@ -39,6 +39,10 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
   const { activePath } = sandpack;
+  const checkpointRef = useRef<any | undefined>();
+  checkpointRef.current = checkpoints?.find(
+    ({ id }) => id === step.currentCheckpointId
+  );
 
   const triggerCTA = () => {
     props.ctaRef.current?.click();
@@ -46,9 +50,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
 
   const handleRunTests = () => {
     onTestStart();
-    const checkpoint = step.checkpoints?.find(
-      ({ id }) => id === step.currentCheckpointId
-    );
+    const checkpoint = checkpointRef.current;
 
     if (!checkpoint) return;
 
@@ -140,7 +142,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         <Console
           runTests={handleRunTests}
           stepId={step.id}
-          tabs={step.checkpoints?.length ? ['console', 'tests'] : ['console']}
+          tabs={checkpoints?.length ? ['console', 'tests'] : ['console']}
         />
       </div>
     </SandpackLayout>

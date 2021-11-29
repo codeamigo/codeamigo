@@ -1,36 +1,13 @@
 import React from 'react';
 
-import {
-  RegularCheckpointFragment,
-  RegularStepFragment,
-} from '👨‍💻generated/graphql';
+import { Props } from '👨‍💻widgets/Lesson/Executors';
 import RijuTemplate from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/template';
 import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
-import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';
 
 const RijuExecutor: React.FC<Props> = (props) => {
   const files = props.step.codeModules?.reduce(modToFile, {});
 
   return <RijuTemplate {...props} files={files} />;
-};
-
-export type Props = OwnProps & {
-  ctaRef: React.RefObject<HTMLButtonElement>;
-  currentStepNum: number;
-  editorRef: React.RefObject<HTMLDivElement>;
-  filesHeight?: number;
-  filesRef: React.RefObject<HTMLDivElement>;
-  loading: boolean;
-  maxDragWidth: number | null;
-  nextStep: () => void;
-  onDragEnd: () => void;
-  onRunMatchTest: (checkpoint: RegularCheckpointFragment) => void;
-  onTestStart: () => void;
-  prevStep: () => void;
-  previewRef: React.RefObject<HTMLIFrameElement>;
-  step: RegularStepFragment;
-  totalStepsNum: number;
-  updateWidths: (x: number) => void;
 };
 
 export default RijuExecutor;

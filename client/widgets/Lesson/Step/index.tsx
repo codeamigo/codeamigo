@@ -254,6 +254,7 @@ const Step: React.FC<Props> = (props) => {
         <div className="w-full h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
+              checkpoints={data.step.checkpoints}
               ctaRef={ctaRef}
               currentStepNum={currentStepNum}
               editorRef={editorRef}
@@ -274,6 +275,7 @@ const Step: React.FC<Props> = (props) => {
             />
           ) : (
             <RijuExecutor
+              checkpoints={data.step.checkpoints}
               ctaRef={ctaRef}
               currentStepNum={currentStepNum}
               editorRef={editorRef}

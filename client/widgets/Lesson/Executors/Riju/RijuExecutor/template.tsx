@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isExecutingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
@@ -8,15 +8,15 @@ import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
+import { Props as OwnProps } from '👨‍💻widgets/Lesson/Executors';
 import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
-import { Props as OwnProps } from '.';
-
 const RijuTemplate: React.FC<Props> = (props) => {
   const {
+    checkpoints,
     editorRef,
     files,
     filesHeight,
@@ -34,11 +34,11 @@ const RijuTemplate: React.FC<Props> = (props) => {
     updateWidths,
   } = props;
   const entryFileValueRef = useRef<string | undefined>();
+  const checkpointRef = useRef<any | undefined>();
   const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
   const [activePath, setActivePath] = useState<string | null>(null);
   entryFileValueRef.current = entryFile?.value as string;
-
-  const checkpoint = step.checkpoints?.find(
+  checkpointRef.current = checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
 
@@ -59,6 +59,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
   };
 
   const handleRunTests = () => {
+    const checkpoint = checkpointRef.current;
     if (checkpoint?.isTested) {
       props.ctaRef.current?.click();
       return;
@@ -177,7 +178,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
             className="h-full bg-bg-primary riju-frame"
             src={`https://riju.codeamigo.xyz/${step.lang}`}
           />
-          {step.checkpoints?.length ? (
+          {checkpoints?.length ? (
             <Console
               runTests={handleRunTests}
               stepId={step.id}
