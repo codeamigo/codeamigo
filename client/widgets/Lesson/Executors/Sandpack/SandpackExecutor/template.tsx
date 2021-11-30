@@ -97,9 +97,10 @@ const SandpackTemplate: React.FC<Props> = (props) => {
             codeModules={step.codeModules}
             isTyped
             refreshPreview={() => dispatch({ type: 'refresh' })}
-            runCode={triggerCTA}
+            runCode={() => dispatch({ type: 'start' })}
             sessionId={session?.id}
             stepId={step.id}
+            testCode={triggerCTA}
             updateCode={updateCode}
             {...props}
           />

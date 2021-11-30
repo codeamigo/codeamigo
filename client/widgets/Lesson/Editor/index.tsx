@@ -30,6 +30,7 @@ const Editor: React.FC<Props> = ({
   runCode,
   sessionId,
   stepId,
+  testCode,
   updateCode,
   ...rest
 }) => {
@@ -263,6 +264,11 @@ const Editor: React.FC<Props> = ({
       monacoRef.current.KeyMod.Shift |
         monacoRef.current.KeyMod.CtrlCmd |
         monacoRef.current.KeyCode.Enter,
+      testCode
+    );
+
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
       runCode
     );
   };
@@ -386,6 +392,7 @@ type Props = {
   runCode: () => void;
   sessionId?: number;
   stepId?: number;
+  testCode: () => void;
   updateCode?: (newCode: string) => void;
 };
 

@@ -10,8 +10,7 @@ const RunButton: React.FC<Props> = ({ isExecuting, run }) => {
 
   return (
     <div
-      aria-label={'or Meta (Cmd) + Shift + Enter'}
-      className={`box-content flex justify-center items-center w-12 h-12 rounded-full border-4 bg-bg-nav border-bg-nav-offset hint--top ${
+      className={`box-content flex justify-center items-center w-12 h-12 rounded-full border-4 bg-bg-nav border-bg-nav-offset ${
         isExecuting ? 'cursor-wait' : 'cursor-pointer'
       }`}
       onClick={handleClick}

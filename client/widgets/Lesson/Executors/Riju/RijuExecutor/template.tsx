@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isExecutingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
-import { CheckpointTypeEnum } from '👨‍💻generated/graphql';
+import { CheckpointTypeEnum, Maybe } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -33,11 +33,12 @@ const RijuTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
-  const entryFileValueRef = useRef<string | undefined>();
   const checkpointRef = useRef<any | undefined>();
-  const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
+  const entryFileValueRef = useRef<Maybe<string> | undefined>();
   const [activePath, setActivePath] = useState<string | null>(null);
-  entryFileValueRef.current = entryFile?.value as string;
+
+  const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
+
   checkpointRef.current = checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
   );
@@ -54,11 +55,27 @@ const RijuTemplate: React.FC<Props> = (props) => {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
+  useEffect(() => {
+    entryFileValueRef.current = entryFile?.value;
+  }, [step.id]);
+
   const updateCode = (code: string) => {
     entryFileValueRef.current = code;
   };
 
-  const handleRunTests = () => {
+  const handleRunCode = useCallback(() => {
+    previewRef.current
+      ?.getElementsByTagName('iframe')[0]
+      .contentWindow?.postMessage(
+        {
+          code: entryFileValueRef.current,
+          event: 'runCode',
+        },
+        '*'
+      );
+  }, [entryFileValueRef.current]);
+
+  const handleRunTests = useCallback(() => {
     const checkpoint = checkpointRef.current;
     if (checkpoint?.isTested || !checkpoint) {
       props.ctaRef.current?.click();
@@ -94,7 +111,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     setTimeout(() => {
       isExecutingVar(false);
     }, 3000);
-  };
+  }, [entryFileValueRef.current]);
 
   return (
     <div className="sp-wrapper">
@@ -128,16 +145,17 @@ const RijuTemplate: React.FC<Props> = (props) => {
             <Editor
               activePath={activePath || (entryFile?.name as string)}
               codeModules={step.codeModules}
-              runCode={handleRunTests}
+              runCode={handleRunCode}
               sessionId={session?.id}
               stepId={step.id}
+              testCode={handleRunTests}
               updateCode={updateCode}
               {...props}
             />
             <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
               <RunButton
                 isExecuting={useReactiveVar(isExecutingVar)}
-                run={handleRunTests}
+                run={handleRunCode}
               />
             </div>
             <Separator
