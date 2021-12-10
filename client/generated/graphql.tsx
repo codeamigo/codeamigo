@@ -148,7 +148,6 @@ export type Lesson = {
   status?: Maybe<LessonStatus>;
   label?: Maybe<LessonLabel>;
   template?: Maybe<LessonTemplate>;
-  codesandboxId?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
