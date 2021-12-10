@@ -115,7 +115,12 @@ const CreateLesson: React.FC<Props> = () => {
 
   return (
     <Formik
-      initialValues={{ description: '', template: 'react', title: '' }}
+      initialValues={{
+        codesandboxId: '',
+        description: '',
+        template: 'React',
+        title: '',
+      }}
       onSubmit={async (values, { setErrors }) => {
         try {
           const { data } = await createLesson({
@@ -163,8 +168,8 @@ const CreateLesson: React.FC<Props> = () => {
                   type="text"
                 />
                 <div>
-                  <label className="block text-sm font-medium text-text-primary">
-                    Templates
+                  <label className="block mb-1 font-medium text-text-primary">
+                    Select a Template
                   </label>
                   <div className="grid grid-cols-3 gap-3">
                     {templates.map((template) => {
@@ -195,6 +200,27 @@ const CreateLesson: React.FC<Props> = () => {
                       );
                     })}
                   </div>
+                </div>
+                <div className="border-b-2 border-dashed text-text-primary border-bg-nav-offset-faded"></div>
+                <div>
+                  <label className="block text-sm font-medium text-text-primary">
+                    Or enter a{' '}
+                    <a
+                      className="underline"
+                      href="https://codesandbox.io"
+                      target="_blank"
+                    >
+                      Codesandbox
+                    </a>{' '}
+                    slug
+                  </label>
+                  <InputField
+                    label=""
+                    maxLength={120}
+                    name="codesandboxId"
+                    placeholder="affectionate-lucy-ibemn"
+                    type="text"
+                  />
                 </div>
               </div>
               <button></button>

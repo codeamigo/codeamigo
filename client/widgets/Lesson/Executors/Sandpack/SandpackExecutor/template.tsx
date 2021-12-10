@@ -24,6 +24,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     files,
     filesHeight,
     filesRef,
+    lesson,
     loading,
     maxDragWidth,
     nextStep,

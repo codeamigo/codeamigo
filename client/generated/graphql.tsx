@@ -148,6 +148,7 @@ export type Lesson = {
   status?: Maybe<LessonStatus>;
   label?: Maybe<LessonLabel>;
   template?: Maybe<LessonTemplate>;
+  codesandboxId?: Maybe<Scalars['String']>;
   likes: Scalars['Float'];
   students?: Maybe<Array<User>>;
   owner: User;
@@ -692,6 +693,7 @@ export type CreateStepInput = {
   lessonId: Scalars['Float'];
   currentStepId?: Maybe<Scalars['Float']>;
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 };
 
 export type UpdateStepInput = {
@@ -718,6 +720,7 @@ export type LessonInput = {
   title: Scalars['String'];
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 };
 
 export type SessionInput = {
@@ -919,6 +922,7 @@ export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1630,7 +1634,6 @@ export const RegularLessonFragmentDoc = gql`
   description
   label
   status
-  label
   template
   thumbnail
   title
@@ -1973,9 +1976,9 @@ export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCode
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
 export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 export const CreateLessonDocument = gql`
-    mutation CreateLesson($title: String!, $description: String!, $template: String) {
+    mutation CreateLesson($title: String!, $description: String!, $template: String, $codesandboxId: String) {
   createLesson(
-    options: {title: $title, description: $description, template: $template}
+    options: {title: $title, description: $description, template: $template, codesandboxId: $codesandboxId}
   ) {
     lesson {
       id
@@ -2009,6 +2012,7 @@ export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutatio
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      template: // value for 'template'
+ *      codesandboxId: // value for 'codesandboxId'
  *   },
  * });
  */

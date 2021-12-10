@@ -2,9 +2,10 @@ mutation CreateLesson(
   $title: String!
   $description: String!
   $template: String
+  $codesandboxId: String
 ) {
   createLesson(
-    options: { title: $title, description: $description, template: $template }
+    options: { title: $title, description: $description, template: $template, codesandboxId: $codesandboxId }
   ) {
     lesson {
       id
