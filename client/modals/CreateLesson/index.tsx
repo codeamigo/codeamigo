@@ -191,7 +191,14 @@ const CreateLesson: React.FC<Props> = () => {
                             value={template.value}
                           />{' '}
                           <div className="flex flex-col items-start ml-2">
-                            <img className="mt-1 h-6" src={template.imageUrl} />
+                            <img
+                              className={`mt-1 h-6 ${
+                                template.withBackground
+                                  ? 'bg-white rounded-full'
+                                  : ''
+                              }`}
+                              src={template.imageUrl}
+                            />
                             <div className="mt-0.5 text-sm font-semibold text-text-primary">
                               {template.name}
                             </div>
@@ -218,7 +225,7 @@ const CreateLesson: React.FC<Props> = () => {
                     label=""
                     maxLength={120}
                     name="codesandboxId"
-                    placeholder="affectionate-lucy-ibemn"
+                    placeholder="loving-kalam-nd0r9"
                     type="text"
                   />
                 </div>
