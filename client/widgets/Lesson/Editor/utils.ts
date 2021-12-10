@@ -27,6 +27,8 @@ export const getLanguage = (file: string) => {
       return 'elixir';
     case 'py':
       return 'python';
+    case 'scss':
+      return 'sass';
     default:
       return ext;
   }
