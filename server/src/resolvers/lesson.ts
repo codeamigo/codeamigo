@@ -25,6 +25,7 @@ import { isTeacher } from "../middleware/isTeacher";
 import { isTeacherOrAdmin } from "../middleware/isTeacherOrAdmin";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
+import { getTemplateFromCodesandbox } from "../utils/codesandbox/getTemplateFromCodesandbox";
 import { StepResolver } from "./step";
 
 @InputType()
@@ -35,6 +36,8 @@ class LessonInput {
   description: string;
   @Field({ nullable: true })
   template: TemplatesEnum;
+  @Field({ nullable: true })
+  codesandboxId: string;
 }
 
 @InputType()
@@ -135,16 +138,36 @@ export class LessonResolver {
         };
       }
 
-      if (!options.template) {
+      if (!options.template && !options.codesandboxId) {
         return {
           errors: [
-            { field: "description", message: "A template is required." },
+            {
+              field: "description",
+              message: "A template or Codesandbox slug is required.",
+            },
           ],
         };
       }
 
+      if (options.codesandboxId) {
+        try {
+          // check we can get the template from codesandbox
+          await getTemplateFromCodesandbox(options.codesandboxId);
+        } catch (e) {
+          return {
+            errors: [
+              {
+                field: "codesandboxId",
+                message: typeof e === "string" ? e : "Sandbox slug is invalid.",
+              },
+            ],
+          };
+        }
+      }
+
       const lesson = await Lesson.create({ ...options, owner }).save();
       await stepResolver.createStep({
+        codesandboxId: options.codesandboxId,
         lessonId: lesson.id,
         name: "Step 1",
         template: options.template,
