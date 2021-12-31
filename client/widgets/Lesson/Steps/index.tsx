@@ -205,13 +205,16 @@ const Steps: React.FC<Props> = ({
                 }}
                 onDrag={(event) => {
                   if (event.nativeEvent.clientX === 0) return;
+
                   // @ts-ignore
                   const height = event.target.offsetHeight;
-                  const changeY = Math.floor(
-                    Math.abs(event.nativeEvent.offsetY / height)
+
+                  const changeY = Math.abs(
+                    Math.floor(event.nativeEvent.offsetY / (height * 1.5))
                   );
                   const isNegativeChange = event.nativeEvent.offsetY < 0;
-                  setDragChange(isNegativeChange ? changeY * -1 : changeY - 1);
+                  console.log(isNegativeChange ? changeY * -1 : changeY);
+                  setDragChange(isNegativeChange ? changeY * -1 : changeY);
                 }}
                 onDragEnd={() => {
                   if (dragChange === null) return;

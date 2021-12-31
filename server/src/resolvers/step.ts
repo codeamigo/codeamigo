@@ -295,6 +295,7 @@ export class StepResolver {
     if (!step || !lesson || options.changeY === 0) {
       return null;
     }
+    if (Math.abs(options.changeY) > lesson.steps.length - 1) return null;
 
     if (!step.position) return step;
 
@@ -318,8 +319,6 @@ export class StepResolver {
         } else {
           if (s.position <= nextPosition && s.position > currentPosition) {
             newPosition -= 1 || 1;
-          } else if (s.position > nextPosition) {
-            newPosition += 1;
           }
         }
 
@@ -328,7 +327,8 @@ export class StepResolver {
       })
     );
 
-    await Step.update({ id: options.id }, { ...step, position: nextPosition });
+    Object.assign(step, { position: nextPosition });
+    await Step.save(step);
 
     return step;
   }
