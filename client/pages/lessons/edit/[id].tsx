@@ -48,6 +48,7 @@ const EditLesson: NextPage<{ id: string }> = (props) => {
           currentStepId={stepId}
           isEditing
           lesson={data.lesson}
+          setCurrentStepId={setCurrentStepId}
           setShowSteps={setShowSteps}
           showSteps={showSteps}
         />

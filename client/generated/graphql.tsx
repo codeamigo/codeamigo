@@ -699,6 +699,7 @@ export type CreateStepInput = {
   lessonId: Scalars['Float'];
   currentStepId?: Maybe<Scalars['Float']>;
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 };
 
 export type UpdateStepInput = {
@@ -731,6 +732,7 @@ export type LessonInput = {
   title: Scalars['String'];
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 };
 
 export type SessionInput = {
@@ -932,6 +934,7 @@ export type CreateLessonMutationVariables = Exact<{
   title: Scalars['String'];
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -1524,7 +1527,6 @@ export type LessonQuery = (
 export type LessonsQueryVariables = Exact<{
   status: Scalars['String'];
   ownerId?: Maybe<Scalars['Float']>;
-  dependencies?: Maybe<Scalars['String']>;
   labels?: Maybe<Scalars['String']>;
   template?: Maybe<Scalars['String']>;
 }>;
@@ -1659,7 +1661,6 @@ export const RegularLessonFragmentDoc = gql`
   description
   label
   status
-  label
   template
   thumbnail
   title
@@ -2003,9 +2004,9 @@ export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCode
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
 export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 export const CreateLessonDocument = gql`
-    mutation CreateLesson($title: String!, $description: String!, $template: String) {
+    mutation CreateLesson($title: String!, $description: String!, $template: String, $codesandboxId: String) {
   createLesson(
-    options: {title: $title, description: $description, template: $template}
+    options: {title: $title, description: $description, template: $template, codesandboxId: $codesandboxId}
   ) {
     lesson {
       id
@@ -2039,6 +2040,7 @@ export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutatio
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      template: // value for 'template'
+ *      codesandboxId: // value for 'codesandboxId'
  *   },
  * });
  */
@@ -3432,9 +3434,9 @@ export type LessonQueryHookResult = ReturnType<typeof useLessonQuery>;
 export type LessonLazyQueryHookResult = ReturnType<typeof useLessonLazyQuery>;
 export type LessonQueryResult = Apollo.QueryResult<LessonQuery, LessonQueryVariables>;
 export const LessonsDocument = gql`
-    query Lessons($status: String!, $ownerId: Float, $dependencies: String, $labels: String, $template: String) {
+    query Lessons($status: String!, $ownerId: Float, $labels: String, $template: String) {
   lessons(
-    options: {status: $status, ownerId: $ownerId, dependencies: $dependencies, labels: $labels, template: $template}
+    options: {status: $status, ownerId: $ownerId, labels: $labels, template: $template}
   ) {
     ...RegularLessonItem
   }
@@ -3455,7 +3457,6 @@ export const LessonsDocument = gql`
  *   variables: {
  *      status: // value for 'status'
  *      ownerId: // value for 'ownerId'
- *      dependencies: // value for 'dependencies'
  *      labels: // value for 'labels'
  *      template: // value for 'template'
  *   },

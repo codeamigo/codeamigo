@@ -30,7 +30,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   useEffect(() => {
     if (meLoading) return;
 
-    if (!meData?.me) router.push(`/lessons/preview/${id}`);
+    if (!meData?.me) router.replace(`/lessons/preview/${id}`);
   }, [meData]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   // no lesson exists
   if (!data || !data.lesson) {
     if (typeof window !== 'undefined') {
-      router.push(`/lessons/preview/${id}`);
+      router.replace(`/lessons/preview/${id}`);
     }
     return null;
   }
@@ -52,7 +52,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
   // no session exists
   if (!sessionData || !sessionData.session) {
     if (typeof window !== 'undefined') {
-      router.push(`/lessons/start/${id}`);
+      router.replace(`/lessons/start/${id}`);
     }
     return null;
   }

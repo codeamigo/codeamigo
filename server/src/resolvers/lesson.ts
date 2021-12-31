@@ -25,6 +25,7 @@ import { isTeacher } from "../middleware/isTeacher";
 import { isTeacherOrAdmin } from "../middleware/isTeacherOrAdmin";
 import { FieldError } from "../resolvers/user";
 import { MyContext } from "../types";
+import { getTemplateFromCodesandbox } from "../utils/codesandbox/getTemplateFromCodesandbox";
 import { StepResolver } from "./step";
 
 @InputType()
@@ -35,6 +36,8 @@ class LessonInput {
   description: string;
   @Field({ nullable: true })
   template: TemplatesEnum;
+  @Field({ nullable: true })
+  codesandboxId: string;
 }
 
 @InputType()
@@ -60,23 +63,16 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
-const relations = ["owner", "steps", "students", "steps.dependencies", "tags"];
+const relations = ["owner", "steps", "students", "tags"];
 
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
-    const { status, ownerId, labels, dependencies, template } = options;
+    const { status, ownerId, labels, template } = options;
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
-      console.log(
-        await Lesson.find({
-          order: { updatedAt: "DESC" },
-          relations,
-          where: { owner, status },
-        })
-      );
       return Lesson.find({
         order: { updatedAt: "DESC" },
         relations,
@@ -99,33 +95,6 @@ export class LessonResolver {
           template,
         });
       }
-      if (dependencies) {
-        const queryDeps = dependencies.split("|");
-        query
-          .leftJoinAndSelect("Lesson.steps", "steps")
-          .leftJoinAndSelect("steps.codeModules", "codeModules")
-          .andWhere("codeModules.name = :name", {
-            name: "/package.json",
-          });
-        const lessonWithDeps = await query.getMany();
-        const lookForDeps = lessonWithDeps.filter((value) => {
-          return value.steps.filter((step) => {
-            return step.codeModules.find((codeModule) => {
-              if (codeModule.name === "/package.json") {
-                const value = JSON.parse(codeModule.value!);
-                return Object.keys(value.dependencies).some((value) =>
-                  queryDeps.includes(value)
-                );
-              }
-
-              return false;
-            });
-          }).length;
-        });
-
-        return lookForDeps;
-      }
-
       return (await query.getMany()).sort((a, b) =>
         a.students.length < b.students.length ? 1 : -1
       );
@@ -170,16 +139,36 @@ export class LessonResolver {
         };
       }
 
-      if (!options.template) {
+      if (!options.template && !options.codesandboxId) {
         return {
           errors: [
-            { field: "description", message: "A template is required." },
+            {
+              field: "description",
+              message: "A template or Codesandbox slug is required.",
+            },
           ],
         };
       }
 
+      if (options.codesandboxId) {
+        try {
+          // check we can get the template from codesandbox
+          await getTemplateFromCodesandbox(options.codesandboxId);
+        } catch (e) {
+          return {
+            errors: [
+              {
+                field: "codesandboxId",
+                message: typeof e === "string" ? e : "Sandbox slug is invalid.",
+              },
+            ],
+          };
+        }
+      }
+
       const lesson = await Lesson.create({ ...options, owner }).save();
       await stepResolver.createStep({
+        codesandboxId: options.codesandboxId,
         lessonId: lesson.id,
         name: "Step 1",
         template: options.template,

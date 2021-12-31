@@ -3,7 +3,7 @@ import { Console as ConsoleFeed, Decode } from 'console-feed';
 import React, { useRef, useState } from 'react';
 import { useEffect } from 'react';
 
-import { testFailureVar } from '👨‍💻apollo/cache/lesson';
+import { isTestingVar, testFailureVar } from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
 import Tests from '👨‍💻widgets/Lesson/Console/Tests';
@@ -33,6 +33,7 @@ const Console: React.FC<Props> = (props) => {
   );
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const testFailure = useReactiveVar(testFailureVar);
+  const isTesting = useReactiveVar(isTestingVar);
 
   useEffect(() => {
     const handleLogs = (msg: MessageEvent<SandpackLogMessageType>) => {
@@ -59,13 +60,19 @@ const Console: React.FC<Props> = (props) => {
   }, [testFailure]);
 
   useEffect(() => {
+    if (isTesting) {
+      setActiveTab('tests');
+    }
+  }, [isTesting]);
+
+  useEffect(() => {
     setLogList([]);
   }, [props.stepId]);
 
   return (
     <div
       className={`bg-bg-primary flex flex-col overflow-scroll ${
-        isCollapsed ? 'h-8' : 'h-1/2'
+        isCollapsed ? 'h-8' : 'sm:h-1/2 h-96'
       }`}
       ref={listRef}
       style={{

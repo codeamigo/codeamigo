@@ -1,6 +1,7 @@
 import { Menu, Transition } from '@headlessui/react';
 import React from 'react';
 
+import { removeLessonItem } from '👨‍💻apollo/localStorage';
 import Icon from '👨‍💻components/Icon';
 import { SessionsQuery, useDeleteSessionMutation } from '👨‍💻generated/graphql';
 import LessonListItem from '👨‍💻widgets/LessonListItem';
@@ -15,6 +16,9 @@ const SessionItem: React.FC<Props> = ({ session }) => {
     e.stopPropagation();
     const yes = window.confirm('Are you sure you want to end this class?');
     if (yes) {
+      // remove from local storage
+      removeLessonItem(id);
+      // delete from db
       await deleteSessionM({ refetchQueries: ['Sessions'], variables: { id } });
     }
   };

@@ -30,6 +30,7 @@ const Editor: React.FC<Props> = ({
   runCode,
   sessionId,
   stepId,
+  testCode,
   updateCode,
   ...rest
 }) => {
@@ -55,12 +56,17 @@ const Editor: React.FC<Props> = ({
   }, [activePath, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
+  // and focus editor
   useEffect(() => {
     if (monacoRef.current) {
       monacoRef.current.editor
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
+    }
+
+    if (editorRef.current) {
+      editorRef.current.focus();
     }
   }, [stepId]);
 
@@ -109,49 +115,51 @@ const Editor: React.FC<Props> = ({
 
       const checkpoint = ev.data.checkpoint;
 
-      const model = monacoRef.current.editor.getModel(
+      const model = monacoRef.current?.editor.getModel(
         `${URN}${ev.data.checkpoint.fileToMatchRegex}`
       );
 
       const match =
-        model.getValue().includes(checkpoint.matchRegex) ||
-        model.getValue()?.match(checkpoint.matchRegex);
+        model?.getValue().includes(checkpoint.matchRegex) ||
+        model?.getValue()?.match(checkpoint.matchRegex);
 
-      window.postMessage(
-        {
-          event: 'total_test_start',
-          type: 'test',
-        },
-        '*'
-      );
-
-      window.postMessage(
-        {
-          $id: 0,
-          codesandbox: true,
-          event: 'test_end',
-          test: {
-            blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
-            duration: 1,
-            errors: [],
-            name: match
-              ? 'includes the correct value(s)!'
-              : `does not include the correct value.`,
-            path: '',
-            status: match ? 'pass' : 'fail',
+      setTimeout(() => {
+        window.postMessage(
+          {
+            event: 'total_test_start',
+            type: 'test',
           },
-          type: 'test',
-        } as CodeSandboxTestMsgType,
-        '*'
-      );
+          '*'
+        );
 
-      window.postMessage(
-        {
-          event: 'total_test_end',
-          type: 'test',
-        },
-        '*'
-      );
+        window.postMessage(
+          {
+            $id: 0,
+            codesandbox: true,
+            event: 'test_end',
+            test: {
+              blocks: ['File', ev.data.checkpoint.fileToMatchRegex],
+              duration: 1,
+              errors: [],
+              name: match
+                ? 'includes the correct value(s)!'
+                : `does not include the correct value.`,
+              path: '',
+              status: match ? 'pass' : 'fail',
+            },
+            type: 'test',
+          } as CodeSandboxTestMsgType,
+          '*'
+        );
+
+        window.postMessage(
+          {
+            event: 'total_test_end',
+            type: 'test',
+          },
+          '*'
+        );
+      }, 1200);
     };
 
     window.addEventListener('message', handleMatchRegexTest);
@@ -250,6 +258,13 @@ const Editor: React.FC<Props> = ({
       () => {
         editorRef.current.getAction('editor.action.quickCommand').run();
       }
+    );
+
+    editorRef.current.addCommand(
+      monacoRef.current.KeyMod.Shift |
+        monacoRef.current.KeyMod.CtrlCmd |
+        monacoRef.current.KeyCode.Enter,
+      testCode
     );
 
     editorRef.current.addCommand(
@@ -354,7 +369,7 @@ const Editor: React.FC<Props> = ({
       onMount={editorDidMount}
       options={{
         automaticLayout: true,
-        fontSize: '12px',
+        fontSize: '14px',
         fontWeight: 600,
         lineNumbersMinChars: 3,
         minimap: { enabled: false },
@@ -377,6 +392,7 @@ type Props = {
   runCode: () => void;
   sessionId?: number;
   stepId?: number;
+  testCode: () => void;
   updateCode?: (newCode: string) => void;
 };
 

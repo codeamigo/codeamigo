@@ -1,3 +1,4 @@
+import useKeyPress from 'hooks/useKeyPress';
 import { useRouter } from 'next/router';
 import React, { useRef } from 'react';
 import { useState } from 'react';
@@ -24,9 +25,11 @@ const Step: React.FC<Props> = (props) => {
   const previewRef = useRef<any>(null);
   const editorRef = useRef<HTMLDivElement>(null);
   const filesRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
   const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
+  const cmdShiftEnter = useKeyPress(['Meta', 'Shift', 'Enter']);
 
   const { data: newData, loading, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
@@ -65,6 +68,12 @@ const Step: React.FC<Props> = (props) => {
     window.addEventListener('resize', setHeightCallback);
     return () => window.removeEventListener('resize', setHeightCallback);
   }, [filesRef.current]);
+
+  useEffect(() => {
+    if (cmdShiftEnter && ctaRef.current) {
+      ctaRef.current.click();
+    }
+  }, [cmdShiftEnter]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -113,31 +122,33 @@ const Step: React.FC<Props> = (props) => {
       // User is not authenticated
     }
 
-    completeStep({
-      update: (store, { data }) => {
-        const sessionData = store.readQuery<SessionQuery>(q);
-        if (!sessionData?.session) return;
-        if (!sessionData?.session?.steps) return;
+    if (session) {
+      completeStep({
+        update: (store, { data }) => {
+          const sessionData = store.readQuery<SessionQuery>(q);
+          if (!sessionData?.session) return;
+          if (!sessionData?.session?.steps) return;
 
-        store.writeQuery<SessionQuery>({
-          ...q,
-          data: {
-            session: {
-              ...sessionData.session,
-              steps: sessionData.session.steps.map((step) => {
-                if (step.id !== data?.completeStep?.id) return step;
+          store.writeQuery<SessionQuery>({
+            ...q,
+            data: {
+              session: {
+                ...sessionData.session,
+                steps: sessionData.session.steps.map((step) => {
+                  if (step.id !== data?.completeStep?.id) return step;
 
-                return {
-                  ...step,
-                  isCompleted: true,
-                };
-              }),
+                  return {
+                    ...step,
+                    isCompleted: true,
+                  };
+                }),
+              },
             },
-          },
-        });
-      },
-      variables: { id: data.step.id },
-    });
+          });
+        },
+        variables: { id: data.step.id },
+      });
+    }
 
     if (!next && session) {
       modalVar({
@@ -152,7 +163,7 @@ const Step: React.FC<Props> = (props) => {
       return;
     }
 
-    if (!next) {
+    if (!next && !props.isEditing) {
       modalVar({
         callback: () => router.push('/'),
         name: 'registerAfterPreview',
@@ -160,6 +171,48 @@ const Step: React.FC<Props> = (props) => {
     }
 
     next && setCurrentStepId(next.id);
+  };
+
+  const prevStep = () => {
+    if (!session?.steps && !lesson?.steps) return;
+    if (!setCurrentStepId) return;
+    if (!data.step) return;
+
+    const steps = session?.steps || lesson!.steps!;
+
+    const prev = steps
+      .filter((step) => step.createdAt < data.step!.createdAt)
+      .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))[0];
+
+    const q = {
+      query: SessionDocument,
+      variables: { lessonId: session?.lesson.id },
+    };
+
+    if (prev && session) {
+      // User is authenticated
+
+      setNextStep({
+        update: (store) => {
+          const sessionData = store.readQuery<SessionQuery>(q);
+          if (!sessionData?.session) return;
+
+          store.writeQuery<SessionQuery>({
+            ...q,
+            data: {
+              session: {
+                ...sessionData.session,
+                currentStep: prev.id,
+              },
+            },
+          });
+        },
+        variables: { sessionId: session.id, stepId: prev.id },
+      });
+      // User is not authenticated
+    }
+
+    setCurrentStepId(prev?.id);
   };
 
   const updateWidths = (x: number) => {
@@ -196,21 +249,22 @@ const Step: React.FC<Props> = (props) => {
     window.postMessage({ checkpoint, event: 'runMatchTest' }, '*');
   };
 
+  const steps = (session?.steps ||
+    props.lesson?.steps) as RegularStepFragment[];
+  const currentStepNum = steps.findIndex(({ id }) => id === data?.step?.id) + 1;
+  const totalStepsNum = steps.length;
+
   return (
     <>
       {/* eslint-disable-next-line */}
       <div className="flex flex-col lg:flex-row md:h-full-minus">
-        <Instructions
-          nextStep={nextStep}
-          step={data.step}
-          steps={
-            (session?.steps || props.lesson?.steps) as RegularStepFragment[]
-          }
-          {...props}
-        />
+        <Instructions nextStep={nextStep} step={data.step} {...props} />
         <div className="w-full h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
+              checkpoints={data.step.checkpoints}
+              ctaRef={ctaRef}
+              currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}
               filesRef={filesRef}
@@ -220,13 +274,18 @@ const Step: React.FC<Props> = (props) => {
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
               onTestStart={onTestStart}
+              prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
+              totalStepsNum={totalStepsNum}
               updateWidths={updateWidths}
               {...props}
             />
           ) : (
             <RijuExecutor
+              checkpoints={data.step.checkpoints}
+              ctaRef={ctaRef}
+              currentStepNum={currentStepNum}
               editorRef={editorRef}
               filesHeight={filesHeight}
               filesRef={filesRef}
@@ -236,8 +295,10 @@ const Step: React.FC<Props> = (props) => {
               onDragEnd={onDragEnd}
               onRunMatchTest={onRunMatchTest}
               onTestStart={onTestStart}
+              prevStep={prevStep}
               previewRef={previewRef}
               step={data.step}
+              totalStepsNum={totalStepsNum}
               updateWidths={updateWidths}
               {...props}
             />
@@ -254,7 +315,7 @@ export type Props = {
   isPreviewing?: boolean;
   lesson: LessonQuery['lesson'];
   session?: SessionQuery['session'];
-  setCurrentStepId?: (n: number) => void;
+  setCurrentStepId: (n: number) => void;
   setShowSteps: (val: boolean) => void;
   showSteps: boolean;
 };

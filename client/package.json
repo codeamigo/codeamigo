@@ -30,6 +30,7 @@
     "framer-motion": "4.1.17",
     "github-markdown-css": "^4.0.0",
     "graphql": "^15.4.0",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "11.1.2",
     "next-apollo": "5.0.7",

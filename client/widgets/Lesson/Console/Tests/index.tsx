@@ -1,5 +1,4 @@
 import { useReactiveVar } from '@apollo/client';
-import { useSandpack } from '@codesandbox/sandpack-react';
 import React from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';

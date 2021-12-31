@@ -3,13 +3,9 @@ import '@codesandbox/sandpack-react/dist/index.css';
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import React, { useEffect, useState } from 'react';
 
-import {
-  RegularCheckpointFragment,
-  RegularStepFragment,
-} from '👨‍💻generated/graphql';
+import { Props } from '👨‍💻widgets/Lesson/Executors';
 import SandpackTemplate from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor/template';
 import { modToFile } from '👨‍💻widgets/Lesson/Executors/utils';
-import { Props as OwnProps } from '👨‍💻widgets/Lesson/Step';
 
 const SandpackExecutor: React.FC<Props> = (props) => {
   const { step } = props;
@@ -57,21 +53,6 @@ const SandpackExecutor: React.FC<Props> = (props) => {
       <SandpackTemplate {...props} files={cachedFiles} />
     </SandpackProvider>
   );
-};
-
-export type Props = OwnProps & {
-  editorRef: React.RefObject<HTMLDivElement>;
-  filesHeight?: number;
-  filesRef: React.RefObject<HTMLDivElement>;
-  loading: boolean;
-  maxDragWidth: number | null;
-  nextStep: () => void;
-  onDragEnd: () => void;
-  onRunMatchTest: (checkpoint: RegularCheckpointFragment) => void;
-  onTestStart: () => void;
-  previewRef: React.RefObject<HTMLDivElement>;
-  step: RegularStepFragment;
-  updateWidths: (x: number) => void;
 };
 
 export default SandpackExecutor;

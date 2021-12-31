@@ -3,7 +3,6 @@ fragment RegularLesson on Lesson {
   description
   label
   status
-  label
   template
   thumbnail
   title

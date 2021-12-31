@@ -16,6 +16,7 @@ import { Lesson, TemplatesEnum } from "../entities/Lesson";
 import { Step } from "../entities/Step";
 import { isAuth } from "../middleware/isAuth";
 import { isTeacher } from "../middleware/isTeacher";
+import { getTemplateFromCodesandbox } from "../utils/codesandbox/getTemplateFromCodesandbox";
 import { getTemplate, ITemplate } from "../utils/templates";
 
 export const DEFAULT_MD = `## Step \#
@@ -84,6 +85,8 @@ class CreateStepInput {
   currentStepId?: number;
   @Field({ nullable: true })
   template?: TemplatesEnum;
+  @Field({ nullable: true })
+  codesandboxId?: string;
 }
 
 @InputType()
@@ -190,12 +193,17 @@ export class StepResolver {
         executionType: prevStep.executionType,
         lang: prevStep.lang,
       };
+    } else if (options.codesandboxId) {
+      const sandbox = await getTemplateFromCodesandbox(options.codesandboxId);
+
+      template = sandbox;
     } else {
       template = getTemplate(options.template);
     }
 
     const codeModules = await Promise.all(
       template.codeModules
+        // filter out the spec files if any
         .filter((codeModule) => !codeModule.name.includes("spec"))
         .map(async (codeModule) => {
           // @ts-ignore

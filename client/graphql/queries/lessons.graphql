@@ -1,7 +1,6 @@
 query Lessons(
   $status: String!
   $ownerId: Float
-  $dependencies: String
   $labels: String
   $template: String
 ) {
@@ -9,7 +8,6 @@ query Lessons(
     options: {
       status: $status
       ownerId: $ownerId
-      dependencies: $dependencies
       labels: $labels
       template: $template
     }
