@@ -32,7 +32,10 @@ const Steps: React.FC<Props> = ({
   const [createStepM] = useCreateStepMutation();
   const [updateStepM] = useUpdateStepNameMutation();
   const [deleteStepM] = useDeleteStepMutation();
-  const [updateStepPosition] = useUpdateStepPositionMutation();
+  const [
+    updateStepPosition,
+    { loading: updatingSteps },
+  ] = useUpdateStepPositionMutation();
 
   const [isAdding, setIsAdding] = useState(false);
   const [isUpdating, setIsUpdating] = useState<boolean | number>(false);
@@ -170,7 +173,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="overflow-auto absolute top-28 lg:top-11 left-0 z-20 py-2 px-4 w-full lg:w-3/12 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
+      className="overflow-auto absolute top-28 lg:top-11 left-0 z-40 py-2 px-4 w-full lg:w-3/12 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -183,138 +186,170 @@ const Steps: React.FC<Props> = ({
       }}
     >
       <div className="h-full" ref={wrapperRef}>
-        <ol>
-          {steps.map((step, i) => {
-            return (
-              <>
-                <li
-                  className={`${
-                    canGoToStep(step)
-                      ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
-                      : 'cursor-not-allowed opacity-50'
-                  } ${
-                    currentStepId === step.id
-                      ? 'text-accent'
-                      : 'text-text-primary'
-                  } list-none w-full flex justify-between items-center py-2 border-b border-bg-nav-offset`}
-                  draggable={isEditing}
-                  key={step.id}
-                  onClick={() => {
-                    if (canGoToStep(step)) {
-                      setCurrentStepId(step.id);
-                      setShowSteps(false);
-                    }
+        {updatingSteps ? (
+          <div className="text-lg font-bold text-text-primary">Loading...</div>
+        ) : (
+          <ol>
+            {steps.map((step, i) => {
+              return (
+                <>
+                  <div
+                    className={`${
+                      dragChange.active &&
+                      dragChange.diff &&
+                      dragChange.diff < 0 &&
+                      step.position === dragChange.active + dragChange.diff
+                        ? 'block'
+                        : 'hidden'
+                    } h-6`}
+                  />
+                  <li
+                    className={`${
+                      canGoToStep(step)
+                        ? `cursor-pointer hover:text-accent transition-colors duration-150 ${styles.STEP}`
+                        : 'cursor-not-allowed opacity-50'
+                    } ${
+                      currentStepId === step.id
+                        ? 'text-accent'
+                        : 'text-text-primary'
+                    } ${
+                      dragChange.active === step.position &&
+                      dragChange.diff !== 0
+                        ? 'opacity-0 h-0 py-0 b-0'
+                        : 'py-2'
+                    } list-none w-full flex justify-between items-center border-b border-bg-nav-offset`}
+                    draggable={isEditing}
+                    key={step.id}
+                    onClick={() => {
+                      if (canGoToStep(step)) {
+                        setCurrentStepId(step.id);
+                        setShowSteps(false);
+                      }
 
-                    if (!isEditing) return;
-                  }}
-                  onDrag={(event) => {
-                    if (event.nativeEvent.clientX === 0) return;
-                    if (!step.position) return;
+                      if (!isEditing) return;
+                    }}
+                    onDrag={(event) => {
+                      if (event.nativeEvent.clientX === 0) return;
+                      if (!step.position) return;
 
-                    // @ts-ignore
-                    const height = event.target.offsetHeight;
+                      const HEIGHT = 41;
+                      const maxUp: number = step.position - 1;
+                      const maxDown: number = steps.length - step.position;
+                      const isNegativeChange = event.nativeEvent.offsetY < 0;
 
-                    const changeY = Math.abs(
-                      Math.floor(event.nativeEvent.offsetY / (height * 1.5))
-                    );
-                    const isNegativeChange = event.nativeEvent.offsetY < 0;
-                    setDragChange({
-                      active: step.position,
-                      diff: isNegativeChange ? changeY * -1 : changeY,
-                    });
-                  }}
-                  onDragEnd={() => {
-                    if (dragChange.diff === null) return;
-                    updateStepPosition({
-                      refetchQueries: ['Lesson'],
-                      variables: {
-                        changeY: dragChange.diff,
-                        id: step.id,
-                        lessonId,
-                      },
-                    });
-                    setDragChange({ active: null, diff: null });
-                  }}
-                >
-                  <div className="flex overflow-hidden w-full whitespace-nowrap">
-                    {isUpdating === step.id ? (
-                      <input
-                        className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
-                        defaultValue={step.name || ''}
-                        onBlur={(e) => handleUpdateBlur(e, step.id)}
-                        onClick={(e) => e.stopPropagation()}
-                        onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
-                        ref={updateRef}
-                        type="text"
-                      />
-                    ) : (
-                      <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
-                        {i + 1}. {step.isCompleted ? '✅' : ''}{' '}
-                        {step.name || ''}
-                      </span>
+                      let changeY = Math.abs(
+                        Math.floor(event.nativeEvent.offsetY / HEIGHT)
+                      );
+
+                      console.log(step.position, changeY);
+                      if (isNegativeChange && changeY > maxUp) {
+                        changeY = maxUp;
+                      }
+
+                      if (!isNegativeChange && changeY > maxDown) {
+                        changeY = maxDown;
+                      }
+
+                      setDragChange({
+                        active: step.position,
+                        diff: isNegativeChange ? -changeY : changeY,
+                      });
+                    }}
+                    onDragEnd={() => {
+                      if (dragChange.diff === null) return;
+                      if (!dragChange.diff) return;
+                      updateStepPosition({
+                        refetchQueries: ['Lesson'],
+                        variables: {
+                          changeY: dragChange.diff,
+                          id: step.id,
+                          lessonId,
+                        },
+                      });
+                      setDragChange({ active: null, diff: null });
+                    }}
+                  >
+                    <div className="flex overflow-hidden w-full whitespace-nowrap">
+                      {isUpdating === step.id ? (
+                        <input
+                          className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
+                          defaultValue={step.name || ''}
+                          onBlur={(e) => handleUpdateBlur(e, step.id)}
+                          onClick={(e) => e.stopPropagation()}
+                          onKeyDown={(e) => handleUpdateKeyDown(e, step.id)}
+                          ref={updateRef}
+                          type="text"
+                        />
+                      ) : (
+                        <span role={`${canGoToStep(step)} ? 'button' : ''}`}>
+                          {i + 1}. {step.isCompleted ? '✅' : ''}{' '}
+                          {step.name || ''}
+                        </span>
+                      )}
+                    </div>
+                    {isEditing && isUpdating === step.id && (
+                      <div className="flex">
+                        <Button className="py-0 ml-1" type="submit">
+                          Submit
+                        </Button>
+                        <a
+                          className="ml-2 text-sm text-text-primary"
+                          onClick={(
+                            e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+                          ) => {
+                            setIsAdding(false);
+                            e.stopPropagation();
+                          }}
+                        >
+                          Cancel
+                        </a>
+                      </div>
                     )}
-                  </div>
-                  {isEditing && isUpdating === step.id && (
-                    <div className="flex">
-                      <Button className="py-0 ml-1" type="submit">
-                        Submit
-                      </Button>
-                      <a
-                        className="ml-2 text-sm text-text-primary"
-                        onClick={(
-                          e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-                        ) => {
-                          setIsAdding(false);
-                          e.stopPropagation();
-                        }}
-                      >
-                        Cancel
-                      </a>
-                    </div>
-                  )}
-                  {isEditing && !isUpdating && (
-                    <div className="flex">
-                      <Icon
-                        className="hidden mr-2 text-text-primary"
-                        name="pencil"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setIsUpdating(step.id);
-                          setTimeout(() => {
-                            updateRef.current?.focus();
-                          }, 0);
-                        }}
-                      />
-                      <Icon
-                        className="hidden text-text-secondary"
-                        name="minus-circled"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const yes = window.confirm(
-                            'Are you sure you want to delete this step?'
-                          );
+                    {isEditing && !isUpdating && (
+                      <div className="flex">
+                        <Icon
+                          className="hidden mr-2 text-text-primary"
+                          name="pencil"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsUpdating(step.id);
+                            setTimeout(() => {
+                              updateRef.current?.focus();
+                            }, 0);
+                          }}
+                        />
+                        <Icon
+                          className="hidden text-text-secondary"
+                          name="minus-circled"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const yes = window.confirm(
+                              'Are you sure you want to delete this step?'
+                            );
 
-                          if (yes) {
-                            deleteStep(step.id, i);
-                          }
-                        }}
-                      />
-                    </div>
-                  )}
-                </li>
-                <div
-                  className={`${
-                    dragChange.active &&
-                    dragChange.diff &&
-                    step.position === dragChange.active + dragChange.diff
-                      ? 'block'
-                      : 'hidden'
-                  } h-6`}
-                />
-              </>
-            );
-          })}
-        </ol>
+                            if (yes) {
+                              deleteStep(step.id, i);
+                            }
+                          }}
+                        />
+                      </div>
+                    )}
+                  </li>
+                  <div
+                    className={`${
+                      dragChange.active &&
+                      dragChange.diff &&
+                      dragChange.diff > 0 &&
+                      step.position === dragChange.active + dragChange.diff
+                        ? 'block'
+                        : 'hidden'
+                    } h-6`}
+                  />
+                </>
+              );
+            })}
+          </ol>
+        )}
         {isAdding && (
           <div className="flex items-center py-2 w-full">
             <input
