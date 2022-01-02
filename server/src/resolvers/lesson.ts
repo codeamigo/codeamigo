@@ -108,6 +108,7 @@ export class LessonResolver {
       .leftJoinAndSelect("Lesson.owner", "owner")
       .leftJoinAndSelect("Lesson.steps", "steps")
       .leftJoinAndSelect("Lesson.tags", "tags")
+      .orderBy("steps.position", "ASC")
       .addOrderBy("steps.createdAt", "ASC")
       .getOne();
 

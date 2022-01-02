@@ -66,6 +66,16 @@ class UpdateStepCheckpointInput {
 }
 
 @InputType()
+class UpdateStepPositionInput {
+  @Field()
+  id: number;
+  @Field()
+  lessonId: number;
+  @Field()
+  changeY: number;
+}
+
+@InputType()
 class CreateStepInput {
   @Field()
   name: string;
@@ -170,11 +180,11 @@ export class StepResolver {
 
     let template: Omit<ITemplate, "templateName">;
 
-    if (options.currentStepId) {
-      const prevStep = await Step.findOne(options.currentStepId, {
-        relations: ["codeModules", "dependencies"],
-      });
+    const prevStep = await Step.findOne(options.currentStepId, {
+      relations: ["codeModules", "dependencies"],
+    });
 
+    if (options.currentStepId) {
       if (!prevStep) return null;
 
       template = {
@@ -211,6 +221,7 @@ export class StepResolver {
       instructions: DEFAULT_MD.replace("Step #", options.name),
       lang: template.lang,
       name: options.name,
+      position: lesson.steps.length + 1,
     }).save();
 
     lesson.steps.push(step);
@@ -266,6 +277,58 @@ export class StepResolver {
       { id: options.id },
       { ...step, instructions: options.instructions }
     );
+
+    return step;
+  }
+
+  @Mutation(() => Step, { nullable: true })
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isTeacher)
+  async updateStepPosition(
+    @Arg("options") options: UpdateStepPositionInput
+  ): Promise<Step | null> {
+    const step = await Step.findOne({ id: options.id });
+    const lesson = await Lesson.findOne(options.lessonId, {
+      relations: ["steps"],
+    });
+
+    if (!step || !lesson || options.changeY === 0) {
+      return null;
+    }
+    if (Math.abs(options.changeY) > lesson.steps.length - 1) return null;
+
+    if (!step.position) return step;
+
+    const currentPosition = step.position;
+    const nextPosition = currentPosition + options.changeY;
+
+    Promise.all(
+      lesson.steps.map(async (s) => {
+        if (!s.position) return;
+        if (s.id === options.id) return;
+
+        let newPosition = s.position;
+
+        // user moving step up
+        if (options.changeY < 0) {
+          // only change steps below the new position
+          if (s.position >= nextPosition && s.position < currentPosition) {
+            newPosition += 1;
+          }
+          // user moving step down
+        } else {
+          if (s.position <= nextPosition && s.position > currentPosition) {
+            newPosition -= 1 || 1;
+          }
+        }
+
+        Object.assign(s, { position: newPosition });
+        await Step.save(s);
+      })
+    );
+
+    Object.assign(step, { position: nextPosition });
+    await Step.save(step);
 
     return step;
   }

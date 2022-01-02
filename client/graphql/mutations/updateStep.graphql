@@ -53,3 +53,19 @@ mutation CompleteStep(
     id
   }
 }
+
+mutation UpdateStepPosition(
+  $id: Float!
+  $changeY: Float!
+  $lessonId: Float!
+) {
+  updateStepPosition(
+    options: {
+      id: $id,
+      lessonId: $lessonId,
+      changeY: $changeY
+    }
+  ) {
+    id
+  }
+}
