@@ -215,7 +215,7 @@ const Steps: React.FC<Props> = ({
                     } ${
                       dragChange.active === step.position &&
                       dragChange.diff !== 0
-                        ? 'opacity-0 h-0 py-0 b-0'
+                        ? ''
                         : 'py-2'
                     } list-none w-full flex justify-between items-center border-b border-bg-nav-offset`}
                     draggable={isEditing}
