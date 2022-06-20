@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddThumbnailToLesson1615656748887 implements MigrationInterface {
-  name = "AddThumbnailToLesson1615656748887";
+  name = 'AddThumbnailToLesson1615656748887';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

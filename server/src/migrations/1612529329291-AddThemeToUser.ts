@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddThemeToUser1612529329291 implements MigrationInterface {
-  name = "AddThemeToUser1612529329291";
+  name = 'AddThemeToUser1612529329291';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

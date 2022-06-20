@@ -1,7 +1,4 @@
-mutation CreateSpecCheckpoint(
-  $checkpointId: Float!
-  $stepId: Float!
-) {
+mutation CreateSpecCheckpoint($checkpointId: Float!, $stepId: Float!) {
   createSpecCheckpoint(
     options: { checkpointId: $checkpointId, stepId: $stepId }
   ) {
@@ -15,19 +12,18 @@ mutation CreateMatchCheckpoint(
   $stepId: Float!
 ) {
   createMatchCheckpoint(
-    options: { matchRegex: $matchRegex, fileToMatchRegex: $fileToMatchRegex, stepId: $stepId }
+    options: {
+      matchRegex: $matchRegex
+      fileToMatchRegex: $fileToMatchRegex
+      stepId: $stepId
+    }
   ) {
     ...RegularCheckpoint
   }
 }
 
-mutation CreateOutputCheckpoint(
-  $output: String!
-  $stepId: Float!
-) {
-  createOutputCheckpoint(
-    options: { output: $output, stepId: $stepId }
-  ) {
+mutation CreateOutputCheckpoint($output: String!, $stepId: Float!) {
+  createOutputCheckpoint(options: { output: $output, stepId: $stepId }) {
     ...RegularCheckpoint
   }
 }

@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class DeleteLessonSessions1611325908947 implements MigrationInterface {
-  name = "DeleteLessonSessions1611325908947";
+  name = 'DeleteLessonSessions1611325908947';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

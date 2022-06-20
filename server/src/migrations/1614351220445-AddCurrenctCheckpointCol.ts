@@ -1,8 +1,8 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddCurrenctCheckpointCol1614351220445
   implements MigrationInterface {
-  name = "AddCurrenctCheckpointCol1614351220445";
+  name = 'AddCurrenctCheckpointCol1614351220445';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

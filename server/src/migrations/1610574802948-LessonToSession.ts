@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class LessonToSession1610574802948 implements MigrationInterface {
-  name = "LessonToSession1610574802948";
+  name = 'LessonToSession1610574802948';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

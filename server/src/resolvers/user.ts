@@ -1,4 +1,4 @@
-import argon2 from "argon2";
+import argon2 from 'argon2';
 import {
   Arg,
   Ctx,
@@ -9,17 +9,17 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-} from "type-graphql";
-import { v4 } from "uuid";
+} from 'type-graphql';
+import { v4 } from 'uuid';
 
-import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from "../constants";
-import { Lesson } from "../entities/Lesson";
-import { Session } from "../entities/Session";
-import { RoleEnum, User } from "../entities/User";
-import { isAuth } from "../middleware/isAuth";
-import { MyContext, ThemeEnum } from "../types";
-import { generateProfileScheme } from "../utils/randomHexColor";
-import { sendEmail } from "../utils/sendEmail";
+import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from '../constants';
+import { Lesson } from '../entities/Lesson';
+import { Session } from '../entities/Session';
+import { RoleEnum, User } from '../entities/User';
+import { isAuth } from '../middleware/isAuth';
+import { MyContext, ThemeEnum } from '../types';
+import { generateProfileScheme } from '../utils/randomHexColor';
+import { sendEmail } from '../utils/sendEmail';
 
 @InputType()
 class RegisterInput {
@@ -105,12 +105,12 @@ export class UserResolver {
       return null;
     }
 
-    return await User.findOne(req.session.userId, { relations: ["lessons"] });
+    return await User.findOne(req.session.userId, { relations: ['lessons'] });
   }
 
   @Query(() => String, { nullable: true })
   async profileColorScheme(
-    @Arg("id", { nullable: true }) id: number,
+    @Arg('id', { nullable: true }) id: number,
     @Ctx() { req }: MyContext
   ) {
     if (!id && !req.session.userId) {
@@ -165,7 +165,7 @@ export class UserResolver {
     try {
       const id = ctx.req.session.userId;
       const user = await User.findOne(id, {
-        relations: ["classes", "lessons"],
+        relations: ['classes', 'lessons'],
       });
 
       if (!user) {
@@ -204,15 +204,15 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: RegisterInput,
+    @Arg('options') options: RegisterInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
       return {
         errors: [
           {
-            field: "username",
-            message: "Username must be at least 3 characters.",
+            field: 'username',
+            message: 'Username must be at least 3 characters.',
           },
         ],
       };
@@ -228,12 +228,12 @@ export class UserResolver {
         username: options.username,
       }).save();
     } catch (e) {
-      if (e.detail && e.detail.includes("already exists")) {
+      if (e.detail && e.detail.includes('already exists')) {
         return {
           errors: [
             {
-              field: "username",
-              message: "User already exists.",
+              field: 'username',
+              message: 'User already exists.',
             },
           ],
         };
@@ -242,7 +242,7 @@ export class UserResolver {
 
     if (!user) {
       return {
-        errors: [{ field: "username", message: "Error creating user." }],
+        errors: [{ field: 'username', message: 'Error creating user.' }],
       };
     }
     req.session.userId = user.id;
@@ -254,7 +254,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: LoginInput,
+    @Arg('options') options: LoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let user = await User.findOne({
@@ -268,7 +268,7 @@ export class UserResolver {
 
     if (!user) {
       return {
-        errors: [{ field: "usernameOrEmail", message: "User does not exist." }],
+        errors: [{ field: 'usernameOrEmail', message: 'User does not exist.' }],
       };
     }
 
@@ -276,7 +276,7 @@ export class UserResolver {
 
     if (!valid) {
       return {
-        errors: [{ field: "password", message: "Incorrect password." }],
+        errors: [{ field: 'password', message: 'Incorrect password.' }],
       };
     }
 
@@ -289,7 +289,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async githubLogin(
-    @Arg("options") options: GitHubLoginInput,
+    @Arg('options') options: GitHubLoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let user = await User.findOne({
@@ -299,7 +299,7 @@ export class UserResolver {
     if (!user) {
       user = await User.create({
         githubId: options.id,
-        username: "github-" + options.username,
+        username: 'github-' + options.username,
       }).save();
     }
 
@@ -312,7 +312,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async googleLogin(
-    @Arg("options") options: GoogleLoginInput,
+    @Arg('options') options: GoogleLoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let user = await User.findOne({
@@ -353,14 +353,14 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseMiddleware(isAuth)
   async updateUserTheme(
-    @Arg("options") options: UpdateUserThemeInput,
+    @Arg('options') options: UpdateUserThemeInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(req.session.userId);
 
     if (!user) {
       return {
-        errors: [{ field: "id", message: "No user found." }],
+        errors: [{ field: 'id', message: 'No user found.' }],
       };
     }
 
@@ -377,21 +377,21 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   @UseMiddleware(isAuth)
   async updateUserRole(
-    @Arg("options") options: UpdateUserRoleInput,
+    @Arg('options') options: UpdateUserRoleInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(options.id);
     const approver = await User.findOne({ id: req.session.userId });
 
-    if (!approver || approver.role !== "ADMIN") {
+    if (!approver || approver.role !== 'ADMIN') {
       return {
-        errors: [{ field: "id", message: "Not a valid approver." }],
+        errors: [{ field: 'id', message: 'Not a valid approver.' }],
       };
     }
 
     if (!user) {
       return {
-        errors: [{ field: "id", message: "No user found." }],
+        errors: [{ field: 'id', message: 'No user found.' }],
       };
     }
 
@@ -407,7 +407,7 @@ export class UserResolver {
 
   @Mutation(() => String)
   async forgotPassword(
-    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg('usernameOrEmail') usernameOrEmail: string,
     @Ctx() { redis }: MyContext
   ): Promise<string> {
     let user = await User.findOne({
@@ -420,7 +420,7 @@ export class UserResolver {
     }
 
     if (!user) {
-      return "";
+      return '';
     }
 
     const token = v4();
@@ -428,14 +428,14 @@ export class UserResolver {
     await redis.set(
       FORGOT_PASSWORD_PREFIX + token,
       user.id,
-      "ex",
+      'ex',
       1000 * 60 * 60 * 24 * 3
     );
 
     const action = `<a href="${process.env.CORS_ORIGIN}/change-password/${token}">Reset password</a>`;
 
     if (!user.email) {
-      return "";
+      return '';
     }
 
     await sendEmail(user.email, action);
@@ -444,8 +444,8 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async changePasswordFromToken(
-    @Arg("token") token: string,
-    @Arg("newPassword") newPassword: string,
+    @Arg('token') token: string,
+    @Arg('newPassword') newPassword: string,
     @Ctx() { redis }: MyContext
   ): Promise<UserResponse> {
     const key = FORGOT_PASSWORD_PREFIX + token;
@@ -453,7 +453,7 @@ export class UserResolver {
 
     if (!userId) {
       return {
-        errors: [{ field: "token", message: "Invalid token." }],
+        errors: [{ field: 'token', message: 'Invalid token.' }],
       };
     }
 
@@ -462,7 +462,7 @@ export class UserResolver {
 
     if (!user) {
       return {
-        errors: [{ field: "token", message: "Could not find user." }],
+        errors: [{ field: 'token', message: 'Could not find user.' }],
       };
     }
 
@@ -478,15 +478,15 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async changePasswordFromPassword(
-    @Arg("oldPassword") oldPassword: string,
-    @Arg("newPassword") newPassword: string,
+    @Arg('oldPassword') oldPassword: string,
+    @Arg('newPassword') newPassword: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(req.session.userId);
 
     if (!user) {
       return {
-        errors: [{ field: "oldPassword", message: "Could not find user." }],
+        errors: [{ field: 'oldPassword', message: 'Could not find user.' }],
       };
     }
 
@@ -494,7 +494,7 @@ export class UserResolver {
 
     if (!valid) {
       return {
-        errors: [{ field: "oldPassword", message: "Incorrect password." }],
+        errors: [{ field: 'oldPassword', message: 'Incorrect password.' }],
       };
     }
 
@@ -508,14 +508,14 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async changeEmail(
-    @Arg("newEmail") newEmail: string,
+    @Arg('newEmail') newEmail: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(req.session.userId);
 
     if (!user) {
       return {
-        errors: [{ field: "newEmail", message: "Could not find user." }],
+        errors: [{ field: 'newEmail', message: 'Could not find user.' }],
       };
     }
 
@@ -523,7 +523,7 @@ export class UserResolver {
 
     if (existingUser) {
       return {
-        errors: [{ field: "newEmail", message: "Email is already taken." }],
+        errors: [{ field: 'newEmail', message: 'Email is already taken.' }],
       };
     }
 

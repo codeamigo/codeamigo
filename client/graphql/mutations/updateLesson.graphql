@@ -28,7 +28,6 @@ mutation UpdateLessonStatus($id: Float!, $status: String!) {
   }
 }
 
-
 mutation UpdateLessonThumbnail($id: Float!, $thumbnail: String) {
   updateLessonThumbnail(id: $id, thumbnail: $thumbnail) {
     ...RegularLesson

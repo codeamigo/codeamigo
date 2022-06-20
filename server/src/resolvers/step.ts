@@ -1,4 +1,4 @@
-import { MyContext } from "src/types";
+import { MyContext } from 'src/types';
 import {
   Arg,
   Ctx,
@@ -9,15 +9,15 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-} from "type-graphql";
+} from 'type-graphql';
 
-import { CodeModule } from "../entities/CodeModule";
-import { Lesson, TemplatesEnum } from "../entities/Lesson";
-import { Step } from "../entities/Step";
-import { isAuth } from "../middleware/isAuth";
-import { isTeacher } from "../middleware/isTeacher";
-import { getTemplateFromCodesandbox } from "../utils/codesandbox/getTemplateFromCodesandbox";
-import { getTemplate, ITemplate } from "../utils/templates";
+import { CodeModule } from '../entities/CodeModule';
+import { Lesson, TemplatesEnum } from '../entities/Lesson';
+import { Step } from '../entities/Step';
+import { isAuth } from '../middleware/isAuth';
+import { isTeacher } from '../middleware/isTeacher';
+import { getTemplateFromCodesandbox } from '../utils/codesandbox/getTemplateFromCodesandbox';
+import { getTemplate, ITemplate } from '../utils/templates';
 
 export const DEFAULT_MD = `## Step \#
 
@@ -102,19 +102,19 @@ export class StepResolver {
   @Query(() => [Step])
   steps(): Promise<Step[]> {
     return Step.find({
-      relations: ["lesson", "checkpoints", "codeModules", "dependencies"],
+      relations: ['lesson', 'checkpoints', 'codeModules', 'dependencies'],
     });
   }
 
   @Query(() => Step, { nullable: true })
-  async step(@Arg("id", () => Int) id: number): Promise<Step | undefined> {
+  async step(@Arg('id', () => Int) id: number): Promise<Step | undefined> {
     const step = await Step.createQueryBuilder()
-      .where("Step.id = :id", { id })
-      .leftJoinAndSelect("Step.lesson", "lesson")
-      .leftJoinAndSelect("Step.codeModules", "codeModules")
-      .leftJoinAndSelect("Step.dependencies", "dependencies")
-      .leftJoinAndSelect("Step.checkpoints", "checkpoints")
-      .addOrderBy("checkpoints.createdAt", "ASC")
+      .where('Step.id = :id', { id })
+      .leftJoinAndSelect('Step.lesson', 'lesson')
+      .leftJoinAndSelect('Step.codeModules', 'codeModules')
+      .leftJoinAndSelect('Step.dependencies', 'dependencies')
+      .leftJoinAndSelect('Step.checkpoints', 'checkpoints')
+      .addOrderBy('checkpoints.createdAt', 'ASC')
       .getOne();
 
     if (!step) {
@@ -137,7 +137,7 @@ export class StepResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateStepName(
-    @Arg("options") options: StepNameInput
+    @Arg('options') options: StepNameInput
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
@@ -152,7 +152,7 @@ export class StepResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
-  async deleteStep(@Arg("options") options: DeleteStepInput): Promise<boolean> {
+  async deleteStep(@Arg('options') options: DeleteStepInput): Promise<boolean> {
     const step = await Step.findOne(options.id);
 
     if (!step) {
@@ -167,21 +167,21 @@ export class StepResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async createStep(
-    @Arg("options") options: CreateStepInput
+    @Arg('options') options: CreateStepInput
   ): Promise<Step | null> {
     const lesson = await Lesson.findOne(
       { id: options.lessonId },
-      { relations: ["steps"] }
+      { relations: ['steps'] }
     );
 
     if (!lesson) {
       return null;
     }
 
-    let template: Omit<ITemplate, "templateName">;
+    let template: Omit<ITemplate, 'templateName'>;
 
     const prevStep = await Step.findOne(options.currentStepId, {
-      relations: ["codeModules", "dependencies"],
+      relations: ['codeModules', 'dependencies'],
     });
 
     if (options.currentStepId) {
@@ -204,7 +204,7 @@ export class StepResolver {
     const codeModules = await Promise.all(
       template.codeModules
         // filter out the spec files if any
-        .filter((codeModule) => !codeModule.name.includes("spec"))
+        .filter((codeModule) => !codeModule.name.includes('spec'))
         .map(async (codeModule) => {
           // @ts-ignore
           const { uuid, ...rest } = codeModule;
@@ -218,7 +218,7 @@ export class StepResolver {
     const step = await Step.create({
       codeModules,
       executionType: template.executionType,
-      instructions: DEFAULT_MD.replace("Step #", options.name),
+      instructions: DEFAULT_MD.replace('Step #', options.name),
       lang: template.lang,
       name: options.name,
       position: lesson.steps.length + 1,
@@ -233,7 +233,7 @@ export class StepResolver {
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
   async completeStep(
-    @Arg("options") options: UpdateStepInput
+    @Arg('options') options: UpdateStepInput
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
@@ -247,7 +247,7 @@ export class StepResolver {
 
   @Mutation(() => Step, { nullable: true })
   async updateStepCheckpoint(
-    @Arg("options") options: UpdateStepCheckpointInput,
+    @Arg('options') options: UpdateStepCheckpointInput,
     @Ctx() { req }: MyContext
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
@@ -266,7 +266,7 @@ export class StepResolver {
   @Mutation(() => Step, { nullable: true })
   @UseMiddleware(isAuth)
   async updateStepInstructions(
-    @Arg("options") options: StepInstructionsInput
+    @Arg('options') options: StepInstructionsInput
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     if (!step) {
@@ -285,11 +285,11 @@ export class StepResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateStepPosition(
-    @Arg("options") options: UpdateStepPositionInput
+    @Arg('options') options: UpdateStepPositionInput
   ): Promise<Step | null> {
     const step = await Step.findOne({ id: options.id });
     const lesson = await Lesson.findOne(options.lessonId, {
-      relations: ["steps"],
+      relations: ['steps'],
     });
 
     if (!step || !lesson || options.changeY === 0) {

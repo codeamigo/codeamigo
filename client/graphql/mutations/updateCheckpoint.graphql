@@ -1,32 +1,18 @@
-mutation UpdateCheckpoint(
-  $id: Float!
-  $description: String!
-) {
-  updateCheckpoint(
-    id: $id
-    options: { description: $description }
-  ) {
-    id,
+mutation UpdateCheckpoint($id: Float!, $description: String!) {
+  updateCheckpoint(id: $id, options: { description: $description }) {
+    id
     description
   }
 }
 
-mutation CompleteCheckpoint(
-  $id: Float!
-) {
-  completeCheckpoint(
-    id: $id
-  ) {
+mutation CompleteCheckpoint($id: Float!) {
+  completeCheckpoint(id: $id) {
     ...RegularCheckpoint
   }
 }
 
-mutation PassCheckpoint(
-  $id: Float!
-) {
-  passCheckpoint(
-    id: $id
-  ) {
+mutation PassCheckpoint($id: Float!) {
+  passCheckpoint(id: $id) {
     ...RegularCheckpoint
   }
 }

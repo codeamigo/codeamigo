@@ -103,7 +103,9 @@ const Modals: React.FC<Props> = () => {
           {data?.modal?.name === 'lessonFinished' && <LessonFinished />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
-          {data?.modal?.name === 'registerAfterPreview' && <RegisterAfterPreview />}
+          {data?.modal?.name === 'registerAfterPreview' && (
+            <RegisterAfterPreview />
+          )}
           {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
           {data?.modal?.name === 'testsPassed' && <TestsPassed />}
           {data?.modal?.name === 'updateSession' && <UpdateSession />}

@@ -1,12 +1,12 @@
-import { MiddlewareFn } from "type-graphql";
+import { MiddlewareFn } from 'type-graphql';
 
-import { User } from "../entities/User";
-import { MyContext } from "../types";
-import { USER_IS_NOT_AUTHED, USER_IS_NOT_TEACHER } from ".";
+import { User } from '../entities/User';
+import { MyContext } from '../types';
+import { USER_IS_NOT_AUTHED, USER_IS_NOT_TEACHER } from '.';
 
 export const isTeacher: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const user = await User.findOneOrFail(context.req.session.userId, {
-    relations: ["lessons"],
+    relations: ['lessons'],
   });
   const lessonId =
     context.req.body.variables.lessonId || context.req.body.variables.id;

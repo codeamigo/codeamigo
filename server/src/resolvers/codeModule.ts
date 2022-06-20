@@ -1,4 +1,4 @@
-import { MyContext } from "src/types";
+import { MyContext } from 'src/types';
 import {
   Arg,
   Ctx,
@@ -9,14 +9,14 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-} from "type-graphql";
+} from 'type-graphql';
 
-import { CodeModule } from "../entities/CodeModule";
-import { Lesson } from "../entities/Lesson";
-import { Step } from "../entities/Step";
-import { isAuth } from "../middleware/isAuth";
-import { isStudentOrTeacher } from "../middleware/isStudentOrTeacher";
-import { isTeacher } from "../middleware/isTeacher";
+import { CodeModule } from '../entities/CodeModule';
+import { Lesson } from '../entities/Lesson';
+import { Step } from '../entities/Step';
+import { isAuth } from '../middleware/isAuth';
+import { isStudentOrTeacher } from '../middleware/isStudentOrTeacher';
+import { isTeacher } from '../middleware/isTeacher';
 
 @InputType()
 class CodeModuleInput {
@@ -52,18 +52,18 @@ class CodeModuleUpdateEntryInput {
 export class CodeModuleResolver {
   @Query(() => [CodeModule])
   codeModules(): Promise<CodeModule[]> {
-    return CodeModule.find({ relations: ["step"] });
+    return CodeModule.find({ relations: ['step'] });
   }
 
   @Query(() => [String])
   async deps(): Promise<String[]> {
     const mods = await CodeModule.createQueryBuilder()
-      .leftJoinAndSelect("CodeModule.step", "step")
-      .leftJoinAndSelect("step.lesson", "lesson")
+      .leftJoinAndSelect('CodeModule.step', 'step')
+      .leftJoinAndSelect('step.lesson', 'lesson')
       .where("lesson.status = 'PUBLISHED'")
       .getMany();
 
-    const pkgs = mods.filter(({ name }) => name === "/package.json");
+    const pkgs = mods.filter(({ name }) => name === '/package.json');
     const depsPerLesson = pkgs.reduce((acc, { value, step }) => {
       const deps = JSON.parse(value).dependencies;
       if (acc[step.lesson.id]) {
@@ -93,7 +93,7 @@ export class CodeModuleResolver {
 
   @Query(() => CodeModule, { nullable: true })
   codeModule(
-    @Arg("id", () => Int) id: number
+    @Arg('id', () => Int) id: number
   ): Promise<CodeModule | undefined> {
     return CodeModule.findOne(id);
   }
@@ -102,10 +102,10 @@ export class CodeModuleResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async createCodeModule(
-    @Arg("stepId") stepId: number,
-    @Arg("options") options: CodeModuleInput
+    @Arg('stepId') stepId: number,
+    @Arg('options') options: CodeModuleInput
   ): Promise<CodeModule | null> {
-    const step = await Step.findOne(stepId, { relations: ["codeModules"] });
+    const step = await Step.findOne(stepId, { relations: ['codeModules'] });
     const codeModule = await CodeModule.create({ ...options }).save();
     if (!step) {
       return null;
@@ -121,8 +121,8 @@ export class CodeModuleResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudentOrTeacher)
   async updateCodeModule(
-    @Arg("uuid") uuid: string,
-    @Arg("options") options: CodeModuleUpdateInput,
+    @Arg('uuid') uuid: string,
+    @Arg('options') options: CodeModuleUpdateInput,
     @Ctx() { req }: MyContext
   ): Promise<CodeModule | null> {
     const codeModule = await CodeModule.findOne(uuid);
@@ -134,7 +134,7 @@ export class CodeModuleResolver {
     if (options.lessonId) {
       lesson = await Lesson.findOne(
         { id: options.lessonId },
-        { relations: ["owner"] }
+        { relations: ['owner'] }
       );
 
       if (lesson?.owner.id !== req.session.userId) {
@@ -156,7 +156,7 @@ export class CodeModuleResolver {
 
   @Mutation(() => CodeModule, { nullable: true })
   async updateCodeModuleEntryFile(
-    @Arg("options") options: CodeModuleUpdateEntryInput
+    @Arg('options') options: CodeModuleUpdateEntryInput
   ): Promise<CodeModule | null> {
     const oldEntry = await CodeModule.findOne(options.oldId);
     const newEntry = await CodeModule.findOne(options.newId);
@@ -174,7 +174,7 @@ export class CodeModuleResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteCodeModule(@Arg("uuid") uuid: string): Promise<boolean> {
+  async deleteCodeModule(@Arg('uuid') uuid: string): Promise<boolean> {
     await CodeModule.delete(uuid);
     return true;
   }

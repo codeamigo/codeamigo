@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -7,18 +7,18 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Step } from "./Step";
+import { Step } from './Step';
 
 export enum CheckpointTypeEnum {
-  spec = "spec",
-  output = "output",
-  match = "match",
+  spec = 'spec',
+  output = 'output',
+  match = 'match',
 }
 
 registerEnumType(CheckpointTypeEnum, {
-  name: "CheckpointTypeEnum",
+  name: 'CheckpointTypeEnum',
 });
 @ObjectType()
 @Entity()
@@ -50,10 +50,10 @@ export class Checkpoint extends BaseEntity {
   @Field(() => CheckpointTypeEnum, {
     defaultValue: CheckpointTypeEnum.spec,
   })
-  @Column({ default: CheckpointTypeEnum.spec, type: "text" })
+  @Column({ default: CheckpointTypeEnum.spec, type: 'text' })
   type: keyof typeof CheckpointTypeEnum;
 
-  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: "CASCADE" })
+  @ManyToOne(() => Step, (step) => step.checkpoints, { onDelete: 'CASCADE' })
   step: Step;
 
   // match

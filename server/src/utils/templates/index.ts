@@ -1,5 +1,5 @@
-import { TemplatesEnum } from "../../entities/Lesson";
-import { StepExecutionTypeEnum } from "../../entities/Step";
+import { TemplatesEnum } from '../../entities/Lesson';
+import { StepExecutionTypeEnum } from '../../entities/Step';
 
 export interface ITemplate {
   templateName: keyof typeof TemplatesEnum;
@@ -17,7 +17,7 @@ const htmlTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/index.html",
+      name: '/index.html',
       value: `<html>
 
 <head>
@@ -31,18 +31,18 @@ const htmlTemplate: ITemplate = {
 </html>`,
     },
     {
-      name: "/styles.css",
+      name: '/styles.css',
       value: css,
     },
     {
-      name: "/sandbox.config.json",
+      name: '/sandbox.config.json',
       value: `{
   "template": "static"
 }
       `,
     },
     {
-      name: "/package.json",
+      name: '/package.json',
       value: `{
   "name": "html",
   "version": "1.0.0",
@@ -70,7 +70,7 @@ const htmlTemplate: ITemplate = {
   ],
   dependencies: [],
   executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
+  lang: 'javascript',
   templateName: TemplatesEnum.HTML,
 };
 
@@ -78,7 +78,7 @@ const reactTsxTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/app.tsx",
+      name: '/app.tsx',
       value: `import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -94,9 +94,9 @@ const HelloWorld = (
 ReactDOM.render(HelloWorld, document.getElementById('root'));
 `,
     },
-    { name: "/styles.css", value: css },
+    { name: '/styles.css', value: css },
     {
-      name: "/package.json",
+      name: '/package.json',
       value: `{
   "dependencies": {
     "react": "^17.0.0",
@@ -110,7 +110,7 @@ ReactDOM.render(HelloWorld, document.getElementById('root'));
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
+  lang: 'javascript',
   templateName: TemplatesEnum.React,
 };
 
@@ -118,7 +118,7 @@ const angularTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/src/main.ts",
+      name: '/src/main.ts',
       value: `import { enableProdMode } from "@angular/core";
 import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
 
@@ -135,7 +135,7 @@ platformBrowserDynamic()
 `,
     },
     {
-      name: "/src/index.html",
+      name: '/src/index.html',
       value: `<!doctype html>
 <html lang="en">
 
@@ -155,7 +155,7 @@ platformBrowserDynamic()
 </html>`,
     },
     {
-      name: "/src/polyfills.ts",
+      name: '/src/polyfills.ts',
       value: `/**
 * This file includes polyfills needed by Angular and is loaded before the app.
 * You can add your own extra polyfills to this file.
@@ -219,7 +219,7 @@ import "zone.js/dist/zone"; // Included with Angular CLI.
 `,
     },
     {
-      name: "/src/styles.css",
+      name: '/src/styles.css',
       value: `/* You can add global styles to this file, and also import other style files */
 
 html,
@@ -229,7 +229,7 @@ body {
 `,
     },
     {
-      name: "/src/typings.d.ts",
+      name: '/src/typings.d.ts',
       value: `/* SystemJS module definition */
 declare var module: NodeModule;
 interface NodeModule {
@@ -238,7 +238,7 @@ interface NodeModule {
 `,
     },
     {
-      name: "/.angular-cli.json",
+      name: '/.angular-cli.json',
       value: `{
 "apps": [
   {
@@ -262,7 +262,7 @@ interface NodeModule {
 `,
     },
     {
-      name: "/package.json",
+      name: '/package.json',
       value: `{
 "name": "angular",
 "version": "0.0.0",
@@ -317,7 +317,7 @@ interface NodeModule {
 `,
     },
     {
-      name: "/tsconfig.json",
+      name: '/tsconfig.json',
       value: `{
 "compileOnSave": false,
 "compilerOptions": {
@@ -339,13 +339,13 @@ interface NodeModule {
 }`,
     },
     {
-      name: "/src/app/app.component.css",
+      name: '/src/app/app.component.css',
       value: `div {
   text-align: center;
 }`,
     },
     {
-      name: "/src/app/app.component.html",
+      name: '/src/app/app.component.html',
       value: `<!--The content below is only a placeholder and can be replaced.-->
 <div>
   <h1>
@@ -360,7 +360,7 @@ interface NodeModule {
 `,
     },
     {
-      name: "/src/app/app.component.ts",
+      name: '/src/app/app.component.ts',
       value: `import { Component } from "@angular/core";
 
 @Component({
@@ -374,7 +374,7 @@ export class AppComponent {
 `,
     },
     {
-      name: "/src/app/app.module.ts",
+      name: '/src/app/app.module.ts',
       value: `import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
@@ -390,14 +390,14 @@ export class AppModule {}
 `,
     },
     {
-      name: "/src/environments/environment.prod.ts",
+      name: '/src/environments/environment.prod.ts',
       value: `export const environment = {
   production: true
 };
 `,
     },
     {
-      name: "/src/environments/environment.ts",
+      name: '/src/environments/environment.ts',
       value: `// The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses \`environment.ts\`, but if you do
 // \`ng build --env=prod\` then \`environment.prod.ts\` will be used instead.
@@ -410,7 +410,7 @@ export const environment = {
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
+  lang: 'javascript',
   templateName: TemplatesEnum.Angular,
 };
 
@@ -418,7 +418,7 @@ const vueTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/src/App.vue",
+      name: '/src/App.vue',
       value: `<template>
   <div id="app">
     <HelloWorld msg="Hello Vue in CodeSandbox!"/>
@@ -449,7 +449,7 @@ export default {
 `,
     },
     {
-      name: "/public/index.html",
+      name: '/public/index.html',
       value: `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -473,7 +473,7 @@ export default {
   `,
     },
     {
-      name: "/src/main.js",
+      name: '/src/main.js',
       value: `import Vue from "vue";
 import App from "./App.vue";
 
@@ -485,7 +485,7 @@ new Vue({
 `,
     },
     {
-      name: "/src/components/HelloWorld.vue",
+      name: '/src/components/HelloWorld.vue',
       value: `<template>
 <div class="hello">
   <h1>{{ msg }}</h1>
@@ -578,7 +578,7 @@ color: #42b983;
 `,
     },
     {
-      name: "/package.json",
+      name: '/package.json',
       value: `{
   "name": "vue",
   "version": "0.1.0",
@@ -634,7 +634,7 @@ color: #42b983;
     },
   ],
   executionType: StepExecutionTypeEnum.sandpack,
-  lang: "javascript",
+  lang: 'javascript',
   templateName: TemplatesEnum.Vue,
 };
 
@@ -642,7 +642,7 @@ const cTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.c",
+      name: '/main.c',
       value: `#include <stdio.h>
 
 int main() {
@@ -653,7 +653,7 @@ int main() {
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "c",
+  lang: 'c',
   templateName: TemplatesEnum.C,
 };
 
@@ -661,30 +661,30 @@ const elixirTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.exs",
+      name: '/main.exs',
       value: 'IO.puts("Hello, world!")',
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "elixir",
+  lang: 'elixir',
   templateName: TemplatesEnum.Elixir,
 };
 
 const jsTemplate: ITemplate = {
   codeModules: [
-    { isEntry: true, name: "/main.js", value: "console.log('Hello, world!');" },
+    { isEntry: true, name: '/main.js', value: "console.log('Hello, world!');" },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "javascript",
+  lang: 'javascript',
   templateName: TemplatesEnum.JavaScript,
 };
 
 const tsTemplate: ITemplate = {
   codeModules: [
-    { isEntry: true, name: "/main.ts", value: "console.log('Hello, world!');" },
+    { isEntry: true, name: '/main.ts', value: "console.log('Hello, world!');" },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "typescript",
+  lang: 'typescript',
   templateName: TemplatesEnum.TypeScript,
 };
 
@@ -692,7 +692,7 @@ const goTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.go",
+      name: '/main.go',
       value: `package main
 
 import "fmt"
@@ -704,7 +704,7 @@ func main() {
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "go",
+  lang: 'go',
   templateName: TemplatesEnum.Go,
 };
 
@@ -712,7 +712,7 @@ const javaTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.java",
+      name: '/main.java',
       value: `public class Main {
   public static void main(String[] args) {
     System.out.println("Hello, world!");
@@ -723,20 +723,20 @@ const javaTemplate: ITemplate = {
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "java",
-  templateName: "Java",
+  lang: 'java',
+  templateName: 'Java',
 };
 
 const pythonTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.py",
+      name: '/main.py',
       value: 'print("Hello, world!")',
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "python",
+  lang: 'python',
   templateName: TemplatesEnum.Python,
 };
 
@@ -744,12 +744,12 @@ const rubyTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.rb",
+      name: '/main.rb',
       value: 'puts "Hello, world!"',
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "ruby",
+  lang: 'ruby',
   templateName: TemplatesEnum.Ruby,
 };
 
@@ -757,7 +757,7 @@ const rustTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.rs",
+      name: '/main.rs',
       value: `fn main() {
   println!("Hello, world!");
 }
@@ -765,7 +765,7 @@ const rustTemplate: ITemplate = {
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "rust",
+  lang: 'rust',
   templateName: TemplatesEnum.Rust,
 };
 
@@ -773,45 +773,45 @@ const swiftTemplate: ITemplate = {
   codeModules: [
     {
       isEntry: true,
-      name: "/main.swift",
+      name: '/main.swift',
       value: `print("Hello, world!")`,
     },
   ],
   executionType: StepExecutionTypeEnum.riju,
-  lang: "swift",
+  lang: 'swift',
   templateName: TemplatesEnum.Swift,
 };
 
 export const getTemplate = (template?: keyof typeof TemplatesEnum) => {
   switch (template) {
     case undefined:
-    case "HTML":
+    case 'HTML':
       return htmlTemplate;
-    case "Angular":
+    case 'Angular':
       return angularTemplate;
-    case "C":
+    case 'C':
       return cTemplate;
-    case "Elixir":
+    case 'Elixir':
       return elixirTemplate;
-    case "Go":
+    case 'Go':
       return goTemplate;
-    case "Java":
+    case 'Java':
       return javaTemplate;
-    case "JavaScript":
+    case 'JavaScript':
       return jsTemplate;
-    case "Python":
+    case 'Python':
       return pythonTemplate;
-    case "React":
+    case 'React':
       return reactTsxTemplate;
-    case "Ruby":
+    case 'Ruby':
       return rubyTemplate;
-    case "Rust":
+    case 'Rust':
       return rustTemplate;
-    case "Swift":
+    case 'Swift':
       return swiftTemplate;
-    case "TypeScript":
+    case 'TypeScript':
       return tsTemplate;
-    case "Vue":
+    case 'Vue':
       return vueTemplate;
   }
 };

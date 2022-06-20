@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -7,22 +7,22 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { ThemeEnum } from "../types";
-import { Lesson } from "./Lesson";
-import { Session } from "./Session";
+import { ThemeEnum } from '../types';
+import { Lesson } from './Lesson';
+import { Session } from './Session';
 
 export enum RoleEnum {
-  ADMIN = "ADMIN",
-  USER = "USER",
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
 
 registerEnumType(RoleEnum, {
-  name: "Role",
+  name: 'Role',
 });
 registerEnumType(ThemeEnum, {
-  name: "Theme",
+  name: 'Theme',
 });
 
 @ObjectType()
@@ -41,7 +41,7 @@ export class User extends BaseEntity {
   updatedAt = new Date();
 
   @Field(() => RoleEnum)
-  @Column({ default: RoleEnum.USER, nullable: true, type: "text" })
+  @Column({ default: RoleEnum.USER, nullable: true, type: 'text' })
   role: keyof typeof RoleEnum;
 
   @Field(() => ThemeEnum)
@@ -49,7 +49,7 @@ export class User extends BaseEntity {
     default: ThemeEnum.cobalt,
     enum: ThemeEnum,
     nullable: true,
-    type: "enum",
+    type: 'enum',
   })
   theme: ThemeEnum;
 
@@ -61,21 +61,21 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   profileColorScheme: string;
 
-  @Column({ nullable: true, type: "text", unique: true })
+  @Column({ nullable: true, type: 'text', unique: true })
   githubId: number;
 
-  @Column({ nullable: true, type: "text", unique: true })
+  @Column({ nullable: true, type: 'text', unique: true })
   googleId: string;
 
   @Field()
-  @Column({ type: "text", unique: true })
+  @Column({ type: 'text', unique: true })
   username!: string;
 
   @Field(() => String, { nullable: true })
-  @Column({ nullable: true, type: "text", unique: true })
+  @Column({ nullable: true, type: 'text', unique: true })
   email: string;
 
-  @Column({ nullable: true, type: "text" })
+  @Column({ nullable: true, type: 'text' })
   password: string;
 
   @Field(() => [Lesson])

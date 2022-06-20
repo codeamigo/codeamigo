@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class UniqueTitle1611263201210 implements MigrationInterface {
-  name = "UniqueTitle1611263201210";
+  name = 'UniqueTitle1611263201210';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "lesson" DROP COLUMN "title"`);

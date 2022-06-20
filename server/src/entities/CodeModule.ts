@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -7,15 +7,15 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Step } from "./Step";
+import { Step } from './Step';
 
 @ObjectType()
 @Entity()
 export class CodeModule extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   uuid!: string;
 
   @Field(() => String)
@@ -26,7 +26,7 @@ export class CodeModule extends BaseEntity {
   @UpdateDateColumn()
   updatedAt = new Date();
 
-  @Field(() => String, { defaultValue: "app.tsx" })
+  @Field(() => String, { defaultValue: 'app.tsx' })
   @Column()
   name!: string;
 
@@ -38,7 +38,7 @@ export class CodeModule extends BaseEntity {
   @Column()
   value!: string;
 
-  @ManyToOne(() => Step, (step) => step.codeModules, { onDelete: "CASCADE" })
+  @ManyToOne(() => Step, (step) => step.codeModules, { onDelete: 'CASCADE' })
   @Field(() => Step)
   step: Step;
 }

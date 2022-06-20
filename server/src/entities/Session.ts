@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -8,11 +8,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Lesson } from "./Lesson";
-import { Step } from "./Step";
-import { User } from "./User";
+import { Lesson } from './Lesson';
+import { Step } from './Step';
+import { User } from './User';
 
 @ObjectType()
 @Entity()
@@ -49,7 +49,7 @@ export class Session extends BaseEntity {
   student: User;
 
   @Field(() => Lesson)
-  @ManyToOne(() => Lesson, (lesson) => lesson.sessions, { onDelete: "CASCADE" })
+  @ManyToOne(() => Lesson, (lesson) => lesson.sessions, { onDelete: 'CASCADE' })
   lesson: Lesson;
 
   @OneToMany(() => Step, (step) => step.session, {

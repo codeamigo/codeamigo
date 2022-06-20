@@ -7,19 +7,19 @@ mutation UpdateCodeModule(
 ) {
   updateCodeModule(
     uuid: $uuid
-    options: { name: $name, value: $value, sessionId: $sessionId, lessonId: $lessonId }
+    options: {
+      name: $name
+      value: $value
+      sessionId: $sessionId
+      lessonId: $lessonId
+    }
   ) {
     ...RegularCodeModule
   }
 }
 
-mutation UpdateCodeModuleEntryFile(
-  $newId: String
-  $oldId: String
-) {
-  updateCodeModuleEntryFile(
-    options: { newId: $newId, oldId: $oldId }
-  ) {
+mutation UpdateCodeModuleEntryFile($newId: String, $oldId: String) {
+  updateCodeModuleEntryFile(options: { newId: $newId, oldId: $oldId }) {
     ...RegularCodeModule
   }
 }

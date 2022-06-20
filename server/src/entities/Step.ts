@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -8,21 +8,21 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Checkpoint } from "./Checkpoint";
-import { CodeModule } from "./CodeModule";
-import { Dependency } from "./Dependency";
-import { Lesson } from "./Lesson";
-import { Session } from "./Session";
+import { Checkpoint } from './Checkpoint';
+import { CodeModule } from './CodeModule';
+import { Dependency } from './Dependency';
+import { Lesson } from './Lesson';
+import { Session } from './Session';
 
 export enum StepExecutionTypeEnum {
-  riju = "riju",
-  sandpack = "sandpack",
+  riju = 'riju',
+  sandpack = 'sandpack',
 }
 
 registerEnumType(StepExecutionTypeEnum, {
-  name: "StepExecutionTypeEnum",
+  name: 'StepExecutionTypeEnum',
 });
 @ObjectType()
 @Entity()
@@ -62,13 +62,13 @@ export class Step extends BaseEntity {
   @Field(() => StepExecutionTypeEnum, {
     defaultValue: StepExecutionTypeEnum.sandpack,
   })
-  @Column({ default: StepExecutionTypeEnum.sandpack, type: "text" })
+  @Column({ default: StepExecutionTypeEnum.sandpack, type: 'text' })
   executionType: keyof typeof StepExecutionTypeEnum;
 
   @Field(() => String, {
-    defaultValue: "javascript",
+    defaultValue: 'javascript',
   })
-  @Column({ default: "javascript" })
+  @Column({ default: 'javascript' })
   lang: string;
 
   @Field(() => Number, {
@@ -79,12 +79,12 @@ export class Step extends BaseEntity {
   originalStepId: number;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
-    onDelete: "CASCADE",
+    onDelete: 'CASCADE',
   })
   @Field(() => Lesson)
   lesson: Lesson;
 
-  @ManyToOne(() => Session, (session) => session.steps, { onDelete: "CASCADE" })
+  @ManyToOne(() => Session, (session) => session.steps, { onDelete: 'CASCADE' })
   @Field(() => Session)
   session: Session;
 

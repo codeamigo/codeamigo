@@ -7,10 +7,10 @@ import {
   Mutation,
   Query,
   Resolver,
-} from "type-graphql";
+} from 'type-graphql';
 
-import { Dependency } from "../entities/Dependency";
-import { Step } from "../entities/Step";
+import { Dependency } from '../entities/Dependency';
+import { Step } from '../entities/Step';
 
 @InputType()
 class DependencyInput {
@@ -25,8 +25,8 @@ export class DependencyResolver {
   @Query(() => [Dependency])
   async dependencies(): Promise<Dependency[]> {
     const dependencies = await Dependency.createQueryBuilder()
-      .leftJoinAndSelect("Dependency.step", "step")
-      .leftJoinAndSelect("step.lesson", "lesson")
+      .leftJoinAndSelect('Dependency.step', 'step')
+      .leftJoinAndSelect('step.lesson', 'lesson')
       .where("lesson.status = 'PUBLISHED'")
       .getMany();
 
@@ -49,17 +49,17 @@ export class DependencyResolver {
 
   @Query(() => Dependency, { nullable: true })
   dependency(
-    @Arg("id", () => Int) id: number
+    @Arg('id', () => Int) id: number
   ): Promise<Dependency | undefined> {
     return Dependency.findOne(id);
   }
 
   @Mutation(() => Dependency, { nullable: true })
   async createDependency(
-    @Arg("stepId") stepId: number,
-    @Arg("options") options: DependencyInput
+    @Arg('stepId') stepId: number,
+    @Arg('options') options: DependencyInput
   ): Promise<Dependency | null> {
-    const step = await Step.findOne(stepId, { relations: ["dependencies"] });
+    const step = await Step.findOne(stepId, { relations: ['dependencies'] });
     const dependency = await Dependency.create({ ...options }).save();
     if (!step) {
       return null;
@@ -73,8 +73,8 @@ export class DependencyResolver {
 
   @Mutation(() => Dependency, { nullable: true })
   async updateDependency(
-    @Arg("id") id: number,
-    @Arg("options") options: DependencyInput
+    @Arg('id') id: number,
+    @Arg('options') options: DependencyInput
   ): Promise<Dependency | null> {
     const dependency = await Dependency.findOne(id);
     if (!dependency) {
@@ -88,8 +88,8 @@ export class DependencyResolver {
 
   @Mutation(() => Dependency, { nullable: true })
   async updateDependencyVersion(
-    @Arg("id") id: number,
-    @Arg("version") version: String
+    @Arg('id') id: number,
+    @Arg('version') version: String
   ): Promise<Dependency | null> {
     const dependency = await Dependency.findOne(id);
     if (!dependency) {
@@ -103,7 +103,7 @@ export class DependencyResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteDependency(@Arg("id") id: number): Promise<boolean> {
+  async deleteDependency(@Arg('id') id: number): Promise<boolean> {
     await Dependency.delete(id);
     return true;
   }

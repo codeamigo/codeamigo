@@ -1,70 +1,30 @@
-mutation UpdateStepInstructions(
-  $id: Float!
-  $instructions: String!
-) {
-  updateStepInstructions(
-    options: {
-      id: $id
-      instructions: $instructions
-    }
-  ) {
+mutation UpdateStepInstructions($id: Float!, $instructions: String!) {
+  updateStepInstructions(options: { id: $id, instructions: $instructions }) {
     id
   }
 }
 
-mutation UpdateStepName(
-  $id: Float!
-  $name: String!
-  $lessonId: Float!
-) {
-  updateStepName(
-    options: {
-      id: $id
-      lessonId: $lessonId
-      name: $name
-    }
-  ) {
+mutation UpdateStepName($id: Float!, $name: String!, $lessonId: Float!) {
+  updateStepName(options: { id: $id, lessonId: $lessonId, name: $name }) {
     id
   }
 }
 
-mutation UpdateStepCheckpoint(
-  $id: Float!
-  $checkpointId: Float!
-) {
-  updateStepCheckpoint(
-    options: {
-      id: $id
-      checkpointId: $checkpointId
-    }
-  ) {
+mutation UpdateStepCheckpoint($id: Float!, $checkpointId: Float!) {
+  updateStepCheckpoint(options: { id: $id, checkpointId: $checkpointId }) {
     id
   }
 }
 
-mutation CompleteStep(
-  $id: Float!
-) {
-  completeStep(
-    options: {
-      id: $id
-    }
-  ) {
+mutation CompleteStep($id: Float!) {
+  completeStep(options: { id: $id }) {
     id
   }
 }
 
-mutation UpdateStepPosition(
-  $id: Float!
-  $changeY: Float!
-  $lessonId: Float!
-) {
+mutation UpdateStepPosition($id: Float!, $changeY: Float!, $lessonId: Float!) {
   updateStepPosition(
-    options: {
-      id: $id,
-      lessonId: $lessonId,
-      changeY: $changeY
-    }
+    options: { id: $id, lessonId: $lessonId, changeY: $changeY }
   ) {
     id
   }

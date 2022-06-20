@@ -1,5 +1,5 @@
 // Deprecated
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -8,9 +8,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Step } from "./Step";
+import { Step } from './Step';
 
 @ObjectType()
 @Entity()
@@ -35,7 +35,7 @@ export class Dependency extends BaseEntity {
   @Column()
   version!: string;
 
-  @ManyToOne(() => Step, (step) => step.dependencies, { onDelete: "CASCADE" })
+  @ManyToOne(() => Step, (step) => step.dependencies, { onDelete: 'CASCADE' })
   @Field(() => Step)
   step: Step;
 }

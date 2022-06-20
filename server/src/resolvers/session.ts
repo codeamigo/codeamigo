@@ -8,18 +8,18 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-} from "type-graphql";
+} from 'type-graphql';
 
-import { Checkpoint } from "../entities/Checkpoint";
-import { CodeModule } from "../entities/CodeModule";
-import { Dependency } from "../entities/Dependency";
-import { Lesson } from "../entities/Lesson";
-import { Session } from "../entities/Session";
-import { Step } from "../entities/Step";
-import { User } from "../entities/User";
-import { isAuth } from "../middleware/isAuth";
-import { isStudent } from "../middleware/isStudent";
-import { MyContext } from "../types";
+import { Checkpoint } from '../entities/Checkpoint';
+import { CodeModule } from '../entities/CodeModule';
+import { Dependency } from '../entities/Dependency';
+import { Lesson } from '../entities/Lesson';
+import { Session } from '../entities/Session';
+import { Step } from '../entities/Step';
+import { User } from '../entities/User';
+import { isAuth } from '../middleware/isAuth';
+import { isStudent } from '../middleware/isStudent';
+import { MyContext } from '../types';
 
 @InputType()
 class SessionInput {
@@ -57,14 +57,14 @@ export class SessionResolver {
     }
 
     const sessions = await Session.createQueryBuilder()
-      .where("Session.student.id = :studentId", {
+      .where('Session.student.id = :studentId', {
         studentId: student.id,
       })
-      .leftJoinAndSelect("Session.steps", "steps")
-      .leftJoinAndSelect("Session.lesson", "lesson")
-      .leftJoinAndSelect("lesson.owner", "owner")
-      .leftJoinAndSelect("lesson.students", "students")
-      .addOrderBy("Session.updatedAt", "DESC")
+      .leftJoinAndSelect('Session.steps', 'steps')
+      .leftJoinAndSelect('Session.lesson', 'lesson')
+      .leftJoinAndSelect('lesson.owner', 'owner')
+      .leftJoinAndSelect('lesson.students', 'students')
+      .addOrderBy('Session.updatedAt', 'DESC')
       .getMany();
 
     return sessions;
@@ -73,25 +73,25 @@ export class SessionResolver {
   @Query(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
   async session(
-    @Arg("lessonId", () => Int) lessonId: number,
+    @Arg('lessonId', () => Int) lessonId: number,
     @Ctx() { req }: MyContext
   ): Promise<Session | undefined> {
     const student = await User.findOne({ id: req.session.userId });
 
     const session = await Session.createQueryBuilder()
       .where(
-        "Session.lessonId = :lessonId AND Session.student.id = :studentId",
+        'Session.lessonId = :lessonId AND Session.student.id = :studentId',
         {
           lessonId,
           studentId: student?.id,
         }
       )
-      .leftJoinAndSelect("Session.lesson", "lesson")
-      .leftJoinAndSelect("lesson.owner", "owner")
-      .leftJoinAndSelect("Session.steps", "steps")
-      .leftJoinAndSelect("steps.codeModules", "codeModules")
-      .leftJoinAndSelect("steps.checkpoints", "checkpoints")
-      .addOrderBy("steps.createdAt", "ASC")
+      .leftJoinAndSelect('Session.lesson', 'lesson')
+      .leftJoinAndSelect('lesson.owner', 'owner')
+      .leftJoinAndSelect('Session.steps', 'steps')
+      .leftJoinAndSelect('steps.codeModules', 'codeModules')
+      .leftJoinAndSelect('steps.checkpoints', 'checkpoints')
+      .addOrderBy('steps.createdAt', 'ASC')
       .getOne();
 
     return session;
@@ -130,7 +130,7 @@ export class SessionResolver {
   @Mutation(() => Session, { nullable: true })
   @UseMiddleware(isAuth)
   async createSession(
-    @Arg("options") options: SessionInput,
+    @Arg('options') options: SessionInput,
     @Ctx() { req }: MyContext
   ): Promise<Session | null> {
     const student = await User.findOne({ id: req.session.userId });
@@ -142,7 +142,7 @@ export class SessionResolver {
     const lessonId = options.lessonId;
     const lesson = await Lesson.findOne(
       { id: lessonId },
-      { relations: ["steps", "students", "sessions"] }
+      { relations: ['steps', 'students', 'sessions'] }
     );
 
     if (!lesson) {
@@ -156,7 +156,7 @@ export class SessionResolver {
       const steps = await Promise.all(
         lesson.steps.map(async ({ id }) => {
           const step = await Step.findOne(id, {
-            relations: ["codeModules", "checkpoints", "dependencies"],
+            relations: ['codeModules', 'checkpoints', 'dependencies'],
           });
 
           const { createdAt } = step!;
@@ -173,14 +173,14 @@ export class SessionResolver {
             createdAt,
             dependencies,
             executionType: step?.executionType,
-            instructions: step?.instructions || "",
+            instructions: step?.instructions || '',
             isCompleted:
               (step?.id &&
                 options.currentStepId > 0 &&
                 options.currentStepId > step.id) ||
               false,
             lang: step?.lang,
-            name: step?.name || "",
+            name: step?.name || '',
             originalStepId: step?.id,
           }).save();
         })
@@ -212,20 +212,20 @@ export class SessionResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudent)
   async updateSession(
-    @Arg("options") options: UpdateSessionInput,
+    @Arg('options') options: UpdateSessionInput,
     @Ctx() { req }: MyContext
   ): Promise<Session | null> {
     try {
       const student = await User.findOne({ id: req.session.userId });
       const session = await Session.findOne({
-        relations: ["steps"],
+        relations: ['steps'],
         where: { id: options.sessionId, student },
       });
       const lesson = await Lesson.findOne(
         {
           id: options.lessonId,
         },
-        { relations: ["steps"] }
+        { relations: ['steps'] }
       );
 
       if (!lesson) {
@@ -246,7 +246,7 @@ export class SessionResolver {
           else sessionStep?.remove();
 
           const updatedStep = await Step.findOne(id, {
-            relations: ["codeModules", "checkpoints", "dependencies"],
+            relations: ['codeModules', 'checkpoints', 'dependencies'],
           });
 
           const { createdAt } = updatedStep!;
@@ -263,9 +263,9 @@ export class SessionResolver {
             createdAt,
             dependencies,
             executionType: updatedStep?.executionType,
-            instructions: updatedStep?.instructions || "",
+            instructions: updatedStep?.instructions || '',
             lang: updatedStep?.lang,
-            name: updatedStep?.name || "",
+            name: updatedStep?.name || '',
             originalStepId: updatedStep?.id,
           }).save();
         })
@@ -288,7 +288,7 @@ export class SessionResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudent)
   async deleteSession(
-    @Arg("id") id: number,
+    @Arg('id') id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
     const student = await User.findOne({ id: req.session.userId });
@@ -306,7 +306,7 @@ export class SessionResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isStudent)
   async setNextStep(
-    @Arg("options") options: NextStepInput
+    @Arg('options') options: NextStepInput
   ): Promise<Session | null> {
     const session = await Session.findOne({ id: options.sessionId });
 

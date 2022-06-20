@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AddGoogle1614776763950 implements MigrationInterface {
-  name = "AddGoogle1614776763950";
+  name = 'AddGoogle1614776763950';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "user" ADD "googleId" text`);

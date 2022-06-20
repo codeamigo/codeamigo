@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CodeModuleUseUUID1637069918771 implements MigrationInterface {
-  name = "CodeModuleUseUUID1637069918771";
+  name = 'CodeModuleUseUUID1637069918771';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(

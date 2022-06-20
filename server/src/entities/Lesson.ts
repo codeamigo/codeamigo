@@ -1,4 +1,4 @@
-import { Field, ObjectType, registerEnumType } from "type-graphql";
+import { Field, ObjectType, registerEnumType } from 'type-graphql';
 import {
   BaseEntity,
   Column,
@@ -10,50 +10,50 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import { Session } from "./Session";
-import { Step } from "./Step";
-import { Tag } from "./Tag";
-import { User } from "./User";
+import { Session } from './Session';
+import { Step } from './Step';
+import { Tag } from './Tag';
+import { User } from './User';
 
 export enum TemplatesEnum {
-  "Angular" = "Angular",
-  "C" = "C",
-  "Elixir" = "Elixir",
-  "Go" = "Go",
-  "HTML" = "HTML",
-  "Java" = "Java",
-  "JavaScript" = "JavaScript",
-  "Python" = "Python",
-  "React" = "React",
-  "Ruby" = "Ruby",
-  "Rust" = "Rust",
-  "Swift" = "Swift",
-  "TypeScript" = "TypeScript",
-  "Vue" = "Vue",
+  'Angular' = 'Angular',
+  'C' = 'C',
+  'Elixir' = 'Elixir',
+  'Go' = 'Go',
+  'HTML' = 'HTML',
+  'Java' = 'Java',
+  'JavaScript' = 'JavaScript',
+  'Python' = 'Python',
+  'React' = 'React',
+  'Ruby' = 'Ruby',
+  'Rust' = 'Rust',
+  'Swift' = 'Swift',
+  'TypeScript' = 'TypeScript',
+  'Vue' = 'Vue',
 }
 
 export enum LessonStatusTypeEnum {
-  EDITTING = "EDITTING",
-  PENDING_PUBLISH = "PENDING_PUBLISH",
-  PUBLISHED = "PUBLISHED",
+  EDITTING = 'EDITTING',
+  PENDING_PUBLISH = 'PENDING_PUBLISH',
+  PUBLISHED = 'PUBLISHED',
 }
 
 export enum LessonLabelEnum {
-  BEGINNER = "BEGINNER",
-  INTERMEDIATE = "INTERMEDIATE",
-  ADVANCED = "ADVANCED",
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED',
 }
 
 registerEnumType(LessonStatusTypeEnum, {
-  name: "LessonStatus",
+  name: 'LessonStatus',
 });
 registerEnumType(LessonLabelEnum, {
-  name: "LessonLabel",
+  name: 'LessonLabel',
 });
 registerEnumType(TemplatesEnum, {
-  name: "LessonTemplate",
+  name: 'LessonTemplate',
 });
 @ObjectType()
 @Entity()
@@ -71,7 +71,7 @@ export class Lesson extends BaseEntity {
   updatedAt = new Date();
 
   @Field({ nullable: true })
-  @Column({ nullable: true, type: "text", unique: true })
+  @Column({ nullable: true, type: 'text', unique: true })
   title!: string;
 
   @Field({ nullable: true })
@@ -90,26 +90,26 @@ export class Lesson extends BaseEntity {
   @Column({
     default: LessonStatusTypeEnum.EDITTING,
     nullable: true,
-    type: "text",
+    type: 'text',
   })
   status: keyof typeof LessonStatusTypeEnum;
 
   @Field(() => LessonLabelEnum, { nullable: true })
   @Column({
     nullable: true,
-    type: "text",
+    type: 'text',
   })
   label: keyof typeof LessonLabelEnum;
 
   @Field(() => TemplatesEnum, { nullable: true })
   @Column({
     nullable: true,
-    type: "text",
+    type: 'text',
   })
   template: keyof typeof TemplatesEnum;
 
   @Field()
-  @Column({ default: 0, type: "int" })
+  @Column({ default: 0, type: 'int' })
   likes!: number;
 
   @ManyToMany(() => User)

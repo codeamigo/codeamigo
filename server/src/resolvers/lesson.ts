@@ -9,24 +9,24 @@ import {
   Query,
   Resolver,
   UseMiddleware,
-} from "type-graphql";
+} from 'type-graphql';
 
 import {
   Lesson,
   LessonLabelEnum,
   LessonStatusTypeEnum,
   TemplatesEnum,
-} from "../entities/Lesson";
-import { Session } from "../entities/Session";
-import { Tag } from "../entities/Tag";
-import { User } from "../entities/User";
-import { isAuth } from "../middleware/isAuth";
-import { isTeacher } from "../middleware/isTeacher";
-import { isTeacherOrAdmin } from "../middleware/isTeacherOrAdmin";
-import { FieldError } from "../resolvers/user";
-import { MyContext } from "../types";
-import { getTemplateFromCodesandbox } from "../utils/codesandbox/getTemplateFromCodesandbox";
-import { StepResolver } from "./step";
+} from '../entities/Lesson';
+import { Session } from '../entities/Session';
+import { Tag } from '../entities/Tag';
+import { User } from '../entities/User';
+import { isAuth } from '../middleware/isAuth';
+import { isTeacher } from '../middleware/isTeacher';
+import { isTeacherOrAdmin } from '../middleware/isTeacherOrAdmin';
+import { FieldError } from '../resolvers/user';
+import { MyContext } from '../types';
+import { getTemplateFromCodesandbox } from '../utils/codesandbox/getTemplateFromCodesandbox';
+import { StepResolver } from './step';
 
 @InputType()
 class LessonInput {
@@ -63,35 +63,35 @@ class CreateLessonResponse {
   lesson?: Lesson;
 }
 
-const relations = ["owner", "steps", "students", "tags"];
+const relations = ['owner', 'steps', 'students', 'tags'];
 
 @Resolver()
 export class LessonResolver {
   @Query(() => [Lesson])
-  async lessons(@Arg("options") options: LessonsInput): Promise<Lesson[]> {
+  async lessons(@Arg('options') options: LessonsInput): Promise<Lesson[]> {
     const { status, ownerId, labels, template } = options;
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
       return Lesson.find({
-        order: { updatedAt: "DESC" },
+        order: { updatedAt: 'DESC' },
         relations,
         where: { owner, status },
       });
     } else {
       let query = Lesson.createQueryBuilder()
-        .where("Lesson.status = :status", { status })
-        .leftJoinAndSelect("Lesson.owner", "owner")
-        .leftJoinAndSelect("Lesson.students", "students")
-        .leftJoinAndSelect("Lesson.tags", "tags");
+        .where('Lesson.status = :status', { status })
+        .leftJoinAndSelect('Lesson.owner', 'owner')
+        .leftJoinAndSelect('Lesson.students', 'students')
+        .leftJoinAndSelect('Lesson.tags', 'tags');
 
       if (labels) {
-        query.andWhere("Lesson.label IN (:...labels)", {
-          labels: labels.split("|"),
+        query.andWhere('Lesson.label IN (:...labels)', {
+          labels: labels.split('|'),
         });
       }
       if (template) {
-        query.andWhere("Lesson.template = :template", {
+        query.andWhere('Lesson.template = :template', {
           template,
         });
       }
@@ -102,14 +102,14 @@ export class LessonResolver {
   }
 
   @Query(() => Lesson, { nullable: true })
-  async lesson(@Arg("id", () => Int) id: number): Promise<Lesson | undefined> {
+  async lesson(@Arg('id', () => Int) id: number): Promise<Lesson | undefined> {
     const lesson = await Lesson.createQueryBuilder()
-      .where("Lesson.id = :id", { id })
-      .leftJoinAndSelect("Lesson.owner", "owner")
-      .leftJoinAndSelect("Lesson.steps", "steps")
-      .leftJoinAndSelect("Lesson.tags", "tags")
-      .orderBy("steps.position", "ASC")
-      .addOrderBy("steps.createdAt", "ASC")
+      .where('Lesson.id = :id', { id })
+      .leftJoinAndSelect('Lesson.owner', 'owner')
+      .leftJoinAndSelect('Lesson.steps', 'steps')
+      .leftJoinAndSelect('Lesson.tags', 'tags')
+      .orderBy('steps.position', 'ASC')
+      .addOrderBy('steps.createdAt', 'ASC')
       .getOne();
 
     return lesson;
@@ -118,7 +118,7 @@ export class LessonResolver {
   @Mutation(() => CreateLessonResponse)
   @UseMiddleware(isAuth)
   async createLesson(
-    @Arg("options") options: LessonInput,
+    @Arg('options') options: LessonInput,
     @Ctx() { req }: MyContext
   ): Promise<CreateLessonResponse> {
     try {
@@ -127,14 +127,14 @@ export class LessonResolver {
 
       if (!options.title) {
         return {
-          errors: [{ field: "title", message: "A title is required." }],
+          errors: [{ field: 'title', message: 'A title is required.' }],
         };
       }
 
       if (!options.description) {
         return {
           errors: [
-            { field: "description", message: "A description is required." },
+            { field: 'description', message: 'A description is required.' },
           ],
         };
       }
@@ -143,8 +143,8 @@ export class LessonResolver {
         return {
           errors: [
             {
-              field: "description",
-              message: "A template or Codesandbox slug is required.",
+              field: 'description',
+              message: 'A template or Codesandbox slug is required.',
             },
           ],
         };
@@ -158,8 +158,8 @@ export class LessonResolver {
           return {
             errors: [
               {
-                field: "codesandboxId",
-                message: typeof e === "string" ? e : "Sandbox slug is invalid.",
+                field: 'codesandboxId',
+                message: typeof e === 'string' ? e : 'Sandbox slug is invalid.',
               },
             ],
           };
@@ -170,34 +170,34 @@ export class LessonResolver {
       await stepResolver.createStep({
         codesandboxId: options.codesandboxId,
         lessonId: lesson.id,
-        name: "Step 1",
+        name: 'Step 1',
         template: options.template,
       });
 
       return { lesson };
     } catch (e) {
-      if (e.detail && e.detail.includes("already exists")) {
+      if (e.detail && e.detail.includes('already exists')) {
         return {
           errors: [
             {
-              field: "title",
-              message: "Sorry, this title is already taken.",
+              field: 'title',
+              message: 'Sorry, this title is already taken.',
             },
           ],
         };
       }
 
       return {
-        errors: [{ field: "lesson", message: "Error creating lesson." }],
+        errors: [{ field: 'lesson', message: 'Error creating lesson.' }],
       };
     }
   }
 
   @Mutation(() => Lesson, { nullable: true })
-  async updateLessonViews(@Arg("id") id: number): Promise<Lesson | null> {
+  async updateLessonViews(@Arg('id') id: number): Promise<Lesson | null> {
     const lesson = await Lesson.createQueryBuilder()
-      .where("Lesson.id = :id", { id })
-      .leftJoinAndSelect("Lesson.students", "students")
+      .where('Lesson.id = :id', { id })
+      .leftJoinAndSelect('Lesson.students', 'students')
       .getOne();
     if (!lesson) {
       return null;
@@ -214,8 +214,8 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateLessonTitle(
-    @Arg("id") id: number,
-    @Arg("title") title: string
+    @Arg('id') id: number,
+    @Arg('title') title: string
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
@@ -231,8 +231,8 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateLessonDescription(
-    @Arg("id") id: number,
-    @Arg("description") description: string
+    @Arg('id') id: number,
+    @Arg('description') description: string
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
@@ -248,8 +248,8 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateLessonLabel(
-    @Arg("id") id: number,
-    @Arg("label") label: LessonLabelEnum
+    @Arg('id') id: number,
+    @Arg('label') label: LessonLabelEnum
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne(id);
     if (!lesson) {
@@ -265,30 +265,30 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacherOrAdmin)
   async updateLessonStatus(
-    @Arg("id") id: number,
-    @Arg("status") status: LessonStatusTypeEnum
+    @Arg('id') id: number,
+    @Arg('status') status: LessonStatusTypeEnum
   ): Promise<Lesson | null | FieldError[]> {
     const lesson = await Lesson.findOne(id, { relations });
     if (!lesson) {
       return null;
     }
 
-    if (status === "PENDING_PUBLISH") {
+    if (status === 'PENDING_PUBLISH') {
       if (!lesson.thumbnail) {
-        return [{ field: "thumbnail", message: "A thumbnail is required." }];
+        return [{ field: 'thumbnail', message: 'A thumbnail is required.' }];
       }
 
       if (!lesson.label) {
-        return [{ field: "label", message: "A label is required." }];
+        return [{ field: 'label', message: 'A label is required.' }];
       }
     }
 
     if (status === LessonStatusTypeEnum.PUBLISHED) {
       const sessions = await Session.createQueryBuilder()
-        .where("Session.lessonId = :lessonId", {
+        .where('Session.lessonId = :lessonId', {
           lessonId: lesson.id,
         })
-        .leftJoinAndSelect("Session.steps", "steps")
+        .leftJoinAndSelect('Session.steps', 'steps')
         .getMany();
 
       sessions.forEach((session) => {
@@ -309,8 +309,8 @@ export class LessonResolver {
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
   async updateLessonThumbnail(
-    @Arg("id") id: number,
-    @Arg("thumbnail", { nullable: true }) thumbnail?: string
+    @Arg('id') id: number,
+    @Arg('thumbnail', { nullable: true }) thumbnail?: string
   ): Promise<Lesson | null> {
     const lesson = await Lesson.findOne({
       relations,
@@ -329,7 +329,7 @@ export class LessonResolver {
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
-  async createLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
+  async createLessonTag(@Arg('id') id: number, @Arg('name') name: string) {
     const lesson = await Lesson.findOne({
       relations,
       where: { id },
@@ -355,7 +355,7 @@ export class LessonResolver {
   @Mutation(() => Lesson)
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacher)
-  async deleteLessonTag(@Arg("id") id: number, @Arg("name") name: string) {
+  async deleteLessonTag(@Arg('id') id: number, @Arg('name') name: string) {
     const lesson = await Lesson.findOne({
       relations,
       where: { id },
@@ -381,7 +381,7 @@ export class LessonResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isTeacherOrAdmin)
-  async deleteLesson(@Arg("id") id: number): Promise<boolean> {
+  async deleteLesson(@Arg('id') id: number): Promise<boolean> {
     await Lesson.delete(id);
     return true;
   }

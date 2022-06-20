@@ -1,7 +1,7 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class GithubLogin1614703848554 implements MigrationInterface {
-  name = "GithubLogin1614703848554";
+  name = 'GithubLogin1614703848554';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "user" ADD "githubId" text`);
