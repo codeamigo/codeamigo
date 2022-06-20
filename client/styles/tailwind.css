@@ -13,6 +13,6 @@
 }
 
 .md\:h-full-minus,
-.lg\:h-full-minus{
+.lg\:h-full-minus {
   height: calc(100% - 44px) !important;
 }

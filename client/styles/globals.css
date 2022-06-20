@@ -25,18 +25,22 @@ body {
 }
 
 /* hint css */
-[class*=hint--][aria-label]:after {
+[class*='hint--'][aria-label]:after {
   white-space: pre;
 }
-[class*=hint--]:after {
+[class*='hint--']:after {
   border-radius: 8px;
   background: black !important;
   box-shadow: none;
 }
-.hint--bottom-left:before, .hint--bottom-right:before, .hint--bottom:before {
+.hint--bottom-left:before,
+.hint--bottom-right:before,
+.hint--bottom:before {
   border-bottom-color: black !important;
 }
-.hint--top-left:before, .hint--top-right:before, .hint--top:before {
+.hint--top-left:before,
+.hint--top-right:before,
+.hint--top:before {
   border-top-color: black !important;
 }
 .hint--right:before {

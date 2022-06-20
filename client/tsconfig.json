@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,45 +15,19 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "👨‍💻api/*": [
-        "./api/*"
-      ],
-      "👨‍💻apollo/*": [
-        "./apollo/*"
-      ],
-      "👨‍💻assets/*": [
-        "./assets/*"
-      ],
-      "👨‍💻components/*": [
-        "./components/*"
-      ],
-      "👨‍💻generated/*": [
-        "./generated/*"
-      ],
-      "👨‍💻pages/*": [
-        "./pages/*"
-      ],
-      "👨‍💻modals/*": [
-        "./modals/*"
-      ],
-      "👨‍💻utils/*": [
-        "./utils/*"
-      ],
-      "👨‍💻state/*": [
-        "./state/*"
-      ],
-      "👨‍💻widgets/*": [
-        "./widgets/*"
-      ]
+      "👨‍💻api/*": ["./api/*"],
+      "👨‍💻apollo/*": ["./apollo/*"],
+      "👨‍💻assets/*": ["./assets/*"],
+      "👨‍💻components/*": ["./components/*"],
+      "👨‍💻generated/*": ["./generated/*"],
+      "👨‍💻pages/*": ["./pages/*"],
+      "👨‍💻modals/*": ["./modals/*"],
+      "👨‍💻utils/*": ["./utils/*"],
+      "👨‍💻state/*": ["./state/*"],
+      "👨‍💻widgets/*": ["./widgets/*"]
     },
     "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }
