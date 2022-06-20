@@ -1,5 +1,7 @@
+import { useReactiveVar } from '@apollo/client';
 import React, { useState } from 'react';
 
+import { isFileExplorerOpenVar } from '👨‍💻apollo/cache/editor';
 import {
   RegularCodeModuleFragment,
   useCreateCodeModuleMutation,
@@ -13,7 +15,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
-  const [isOpen, setIsOpen] = useState<boolean>(true);
+  const isFileExplorerOpen = useReactiveVar(isFileExplorerOpenVar);
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -58,14 +60,14 @@ const EditorFiles: React.FC<Props> = (props) => {
 
   if (!props.files) return null;
 
-  return isOpen ? (
+  return isFileExplorerOpen ? (
     <div className="w-2/6 md:w-48">
       <FilesList
+        closeExplorer={() => isFileExplorerOpenVar(false)}
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
         onUpdateCodeModuleEntryFile={updateCodeModuleEntryFile}
-        setIsOpen={setIsOpen}
         {...props}
       />
       {props.isEditing && (
@@ -76,7 +78,7 @@ const EditorFiles: React.FC<Props> = (props) => {
     <div
       className="w-0.5 h-full opacity-50 hover:opacity-100 transition-all duration-200 bg-bg-nav-offset-faded cursor-e-resize hover:bg-bg-nav-offset"
       onMouseDown={() => {
-        document.addEventListener('mouseup', () => setIsOpen(true));
+        document.addEventListener('mouseup', () => isFileExplorerOpenVar(true));
       }}
     />
   );

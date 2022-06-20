@@ -128,11 +128,11 @@ const FilesList: React.FC<Props> = (props) => {
               }
             />
           ) : null}
-          {props.setIsOpen ? (
+          {props.closeExplorer ? (
             <Icon
               className="text-xs cursor-pointer text-text-primary hover:text-accent"
               name="cancel-circled"
-              onClick={() => props.setIsOpen!(false)}
+              onClick={() => props.closeExplorer!()}
             />
           ) : null}
         </div>
@@ -167,6 +167,7 @@ const FilesList: React.FC<Props> = (props) => {
 
 export type Props = {
   activePath: string;
+  closeExplorer?: () => void;
   codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;
   files: { [key in string]: { code: string } };
@@ -179,7 +180,6 @@ export type Props = {
     variables: { newId: any; oldId: any };
   }) => void;
   selectFile?: (path: string) => void;
-  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   stepId: number;
 };
 
