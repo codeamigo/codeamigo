@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   RegularCodeModuleFragment,
@@ -13,6 +13,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -57,19 +58,27 @@ const EditorFiles: React.FC<Props> = (props) => {
 
   if (!props.files) return null;
 
-  return (
-    <>
+  return isOpen ? (
+    <div className="w-2/6 md:w-48">
       <FilesList
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
         onUpdateCodeModuleEntryFile={updateCodeModuleEntryFile}
+        setIsOpen={setIsOpen}
         {...props}
       />
       {props.isEditing && (
         <FilesList name={'Tests'} onDelete={deleteFile} {...props} />
       )}
-    </>
+    </div>
+  ) : (
+    <div
+      className="w-0.5 h-full opacity-50 hover:opacity-100 transition-all duration-200 bg-bg-nav-offset-faded cursor-e-resize hover:bg-bg-nav-offset"
+      onMouseDown={() => {
+        document.addEventListener('mouseup', () => setIsOpen(true));
+      }}
+    />
   );
 };
 

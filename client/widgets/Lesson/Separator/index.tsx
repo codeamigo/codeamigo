@@ -46,7 +46,7 @@ const Separator: React.FC<Props> = ({
 
   return (
     <div
-      className={`hidden md:block absolute right-0 top-0 h-full w-1 bg-bg-nav-offset-faded cursor-col-resize transition-all duration-500 hover:bg-bg-nav-offset ${
+      className={`hidden md:block absolute right-0 top-0 h-full w-1 bg-bg-nav-offset-faded cursor-col-resize transition-all duration-200 hover:bg-bg-nav-offset ${
         isDragging ? 'opacity-50' : ''
       }`}
       onMouseDown={startDrag}

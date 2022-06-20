@@ -117,7 +117,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     <div className="sp-wrapper">
       <div className="sp-layout">
         <div
-          className="flex z-50 flex-col justify-between w-2/6 md:w-48 border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+          className="flex z-50 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
@@ -133,7 +133,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
                 selectFile={setActivePath}
               />
             </div>
-            <LessonBottomBarWrapper />
+            <LessonBottomBarWrapper padding={false} />
           </div>
         </div>
         <div
@@ -164,7 +164,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
               onChangeX={updateWidths}
               onDragEnd={onDragEnd}
             />
-            <LessonBottomBarWrapper>
+            <LessonBottomBarWrapper padding>
               <div>
                 <Button
                   className="opacity-50 hover:opacity-100 transition-opacity"

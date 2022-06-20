@@ -27,6 +27,7 @@ module.exports = {
       },
       cursor: {
         'col-resize': 'col-resize',
+        'e-resize': 'e-resize',
       },
       fontSize: {
         xxs: '.5rem',

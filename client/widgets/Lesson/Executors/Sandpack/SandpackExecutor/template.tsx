@@ -68,7 +68,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-50 flex-col justify-between w-2/6 md:w-48 border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+        className="flex z-50 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >
@@ -84,7 +84,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
               selectFile={sandpack.openFile}
             />
           </div>
-          <LessonBottomBarWrapper />
+          <LessonBottomBarWrapper padding={false} />
         </div>
       </div>
       <div
@@ -105,7 +105,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
             updateCode={updateCode}
             {...props}
           />
-          <LessonBottomBarWrapper>
+          <LessonBottomBarWrapper padding>
             <div>
               <Button
                 className="opacity-50 hover:opacity-100 transition-opacity"

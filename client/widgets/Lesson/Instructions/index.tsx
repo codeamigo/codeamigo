@@ -73,7 +73,7 @@ const Instructions: React.FC<Props> = (props) => {
 
   return (
     <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
-      <LessonBottomBarWrapper>
+      <LessonBottomBarWrapper padding>
         <div
           aria-label="View Steps"
           className="flex items-center cursor-pointer hint--right hint--no-animate"
