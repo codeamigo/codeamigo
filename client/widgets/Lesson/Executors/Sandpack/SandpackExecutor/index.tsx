@@ -1,5 +1,3 @@
-import '@codesandbox/sandpack-react/dist/index.css';
-
 import { SandpackProvider } from '@codesandbox/sandpack-react';
 import React, { useEffect, useState } from 'react';
 
@@ -12,7 +10,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
   const [cachedFiles, setCachedFiles] = useState<
     null | { [key in string]: { code: string } }
   >(null);
-  const [cachedMain, setCachedMain] = useState<string | undefined>(undefined);
+  const [cachedEntry, setCachedEntry] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (step?.codeModules && step.checkpoints) {
@@ -37,7 +35,7 @@ const SandpackExecutor: React.FC<Props> = (props) => {
       const main = mods.find(({ isEntry }) => isEntry)?.name || undefined;
 
       setCachedFiles(files);
-      setCachedMain(main);
+      setCachedEntry(main);
     }
   }, [step?.id, step?.codeModules?.length, step?.currentCheckpointId]);
 
@@ -46,9 +44,9 @@ const SandpackExecutor: React.FC<Props> = (props) => {
   return (
     <SandpackProvider
       customSetup={{
-        files: cachedFiles,
-        main: cachedMain,
+        entry: cachedEntry,
       }}
+      files={cachedFiles}
     >
       <SandpackTemplate {...props} files={cachedFiles} />
     </SandpackProvider>

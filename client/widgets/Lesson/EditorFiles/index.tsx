@@ -85,7 +85,7 @@ const EditorFiles: React.FC<Props> = (props) => {
 };
 
 type Props = {
-  activePath: string;
+  activeFile: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   files: { [key in string]: { code: string } };
   isEditing?: boolean;

@@ -39,7 +39,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   } = props;
   const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
-  const { activePath } = sandpack;
+  const { activeFile } = sandpack;
   const checkpointRef = useRef<any | undefined>();
   checkpointRef.current = checkpoints?.find(
     ({ id }) => id === step.currentCheckpointId
@@ -75,7 +75,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         <div className="flex flex-col h-full">
           <div className="h-full">
             <EditorFiles
-              activePath={activePath}
+              activeFile={activeFile}
               codeModules={step.codeModules}
               lessonId={props.lesson?.id}
               stepId={step.id}
@@ -94,7 +94,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
       >
         <div className="flex flex-col h-full bg-bg-primary">
           <Editor
-            activePath={activePath}
+            activeFile={activeFile}
             codeModules={step.codeModules}
             isTyped
             refreshPreview={() => dispatch({ type: 'refresh' })}

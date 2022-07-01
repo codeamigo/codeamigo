@@ -166,7 +166,7 @@ const FilesList: React.FC<Props> = (props) => {
 };
 
 export type Props = {
-  activePath: string;
+  activeFile: string;
   closeExplorer?: () => void;
   codeModules?: RegularCodeModuleFragment[] | null;
   currentPath?: string;

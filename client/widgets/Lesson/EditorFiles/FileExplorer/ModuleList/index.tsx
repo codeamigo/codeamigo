@@ -7,7 +7,7 @@ import { File } from '../File';
 
 export class ModuleList extends React.PureComponent<Props & OwnProps> {
   render(): JSX.Element {
-    const { activePath, depth = 0, files, prefixedPath } = this.props;
+    const { activeFile, depth = 0, files, prefixedPath } = this.props;
     const sortAbc = (a: string, b: string) => (a < b ? -1 : 1);
 
     const fileListWithoutPrefix = Object.keys(files)
@@ -41,7 +41,7 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
         {filesToShow.map((file) => (
           <File
             {...this.props}
-            active={activePath === file.path}
+            active={activeFile === file.path}
             depth={depth + 1}
             isDirectory={false}
             key={file.path}
@@ -54,7 +54,7 @@ export class ModuleList extends React.PureComponent<Props & OwnProps> {
 }
 
 export type Props = {
-  activePath: string;
+  activeFile: string;
   addFileState: FileSystemStateType;
   depth?: number;
   error?: string;

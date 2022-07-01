@@ -35,7 +35,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
   } = props;
   const checkpointRef = useRef<any | undefined>();
   const entryFileValueRef = useRef<Maybe<string> | undefined>();
-  const [activePath, setActivePath] = useState<string | null>(null);
+  const [activeFile, setActivePath] = useState<string | null>(null);
 
   const entryFile = step?.codeModules?.find(({ isEntry }) => !!isEntry);
 
@@ -124,7 +124,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           <div className="flex flex-col h-full">
             <div className="h-full">
               <EditorFiles
-                activePath={activePath || (entryFile?.name as string)}
+                activeFile={activeFile || (entryFile?.name as string)}
                 codeModules={step.codeModules}
                 lessonId={props.lesson?.id}
                 stepId={step.id}
@@ -143,7 +143,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
         >
           <div className="flex flex-col h-full bg-bg-primary">
             <Editor
-              activePath={activePath || (entryFile?.name as string)}
+              activeFile={activeFile || (entryFile?.name as string)}
               codeModules={step.codeModules}
               runCode={handleRunCode}
               sessionId={session?.id}

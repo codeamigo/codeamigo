@@ -21,7 +21,7 @@ const CS_TYPES_FALLBACK_URL =
   'https://prod-packager-packages.codesandbox.io/v1/typings';
 
 const Editor: React.FC<Props> = ({
-  activePath,
+  activeFile,
   codeModules,
   isEditing,
   isPreviewing,
@@ -39,21 +39,21 @@ const Editor: React.FC<Props> = ({
   });
   const { data: meData } = useMeQuery();
 
-  const pathRef = useRef(activePath);
+  const pathRef = useRef(activeFile);
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
   useEffect(() => {
-    pathRef.current = activePath;
-  }, [activePath]);
+    pathRef.current = activeFile;
+  }, [activeFile]);
 
   useEffect(() => {
     if (!monacoRef.current) return;
     if (!editorRef.current) return;
-    if (!activePath) return;
-    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
+    if (!activeFile) return;
+    const model = monacoRef.current.editor.getModel(`${URN}${activeFile}`);
     if (model) editorRef.current.setModel(model);
-  }, [activePath, monacoRef.current, editorRef.current]);
+  }, [activeFile, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
   // and focus editor
@@ -72,10 +72,10 @@ const Editor: React.FC<Props> = ({
 
   // When file added add to models
   useEffect(() => {
-    if (monacoRef.current && editorRef.current && activePath) {
+    if (monacoRef.current && editorRef.current && activeFile) {
       setupModels();
     }
-  }, [codeModules?.length, monacoRef.current, editorRef.current, activePath]);
+  }, [codeModules?.length, monacoRef.current, editorRef.current, activeFile]);
 
   // When regex is searched
   useEffect(() => {
@@ -283,7 +283,7 @@ const Editor: React.FC<Props> = ({
         monacoRef.current.Uri.parse(`${URN}${mod.name}`)
       );
     });
-    const model = monacoRef.current.editor.getModel(`${URN}${activePath}`);
+    const model = monacoRef.current.editor.getModel(`${URN}${activeFile}`);
     model?.updateOptions({ tabSize: 2 });
     editorRef.current.setModel(model);
   };
@@ -382,7 +382,7 @@ const Editor: React.FC<Props> = ({
 };
 
 type Props = {
-  activePath: string;
+  activeFile: string;
   codeModules?: RegularCodeModuleFragment[] | null;
   isEditing?: boolean;
   isPreviewing?: boolean;
