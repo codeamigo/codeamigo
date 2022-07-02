@@ -88,7 +88,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="z-20 w-4/6 md:w-3/6 h-96 md:h-full border-b sm:border-b-0 border-bg-nav-offset"
+        className="z-20 flex-1 w-4/6 md:w-3/6 h-96 md:h-full border-b sm:border-b-0 border-bg-nav-offset"
         ref={editorRef}
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >

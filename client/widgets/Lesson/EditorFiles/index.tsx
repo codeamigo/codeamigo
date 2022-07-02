@@ -61,7 +61,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   if (!props.files) return null;
 
   return isFileExplorerOpen ? (
-    <div className="w-2/6 md:w-48">
+    <div className="w-full md:w-48">
       <FilesList
         closeExplorer={() => isFileExplorerOpenVar(false)}
         name={'Files'}

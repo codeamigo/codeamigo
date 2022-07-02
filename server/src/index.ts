@@ -49,6 +49,10 @@ const main = async () => {
   await conn.runMigrations();
 
   const app = express();
+  app.use(express.json({ limit: '1mb' }));
+  app.use(
+    express.urlencoded({ extended: true, limit: '1mb', parameterLimit: 50000 })
+  );
   app.set('trust proxy', 1);
   app.use(
     cors({
@@ -97,7 +101,11 @@ const main = async () => {
     }),
   });
 
-  apolloServer.applyMiddleware({ app, cors: false });
+  apolloServer.applyMiddleware({
+    app,
+    bodyParserConfig: { limit: '1mb' },
+    cors: false,
+  });
 
   cloudinary.v2.config({
     api_key: process.env.CLOUDINARY_API_KEY,
