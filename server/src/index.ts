@@ -49,10 +49,6 @@ const main = async () => {
   await conn.runMigrations();
 
   const app = express();
-  app.use(express.json({ limit: '1mb' }));
-  app.use(
-    express.urlencoded({ extended: true, limit: '1mb', parameterLimit: 50000 })
-  );
   app.set('trust proxy', 1);
   app.use(
     cors({
@@ -101,9 +97,13 @@ const main = async () => {
     }),
   });
 
+  await apolloServer.start();
+
   apolloServer.applyMiddleware({
     app,
-    bodyParserConfig: { limit: '1mb' },
+    bodyParserConfig: {
+      limit: '10mb',
+    },
     cors: false,
   });
 

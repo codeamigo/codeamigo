@@ -14,6 +14,7 @@ const Separator: React.FC<Props> = ({
   const startDrag = (e: MouseEvent) => {
     let xStart = e.pageX;
     const iframe = document.getElementsByClassName(iframeName)[0];
+    console.log(iframe);
     // @ts-ignore
     iframe.style.pointerEvents = 'none';
     setIsDragging(true);

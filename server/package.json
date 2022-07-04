@@ -33,7 +33,7 @@
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
-    "apollo-server-express": "^2.19.0",
+    "apollo-server-express": "^3.9.0",
     "argon2": "^0.27.0",
     "cloudinary": "^1.25.0",
     "codesandbox": "^2.2.1",
