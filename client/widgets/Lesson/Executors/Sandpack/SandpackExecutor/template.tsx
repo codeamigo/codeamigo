@@ -68,7 +68,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-50 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+        className="flex z-50 flex-col justify-between w-2/6 md:w-48 border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >
@@ -88,7 +88,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         </div>
       </div>
       <div
-        className="z-20 flex-1 w-4/6 md:min-w-full h-96 md:h-full border-b sm:border-b-0 border-bg-nav-offset"
+        className="z-20 w-4/6 md:w-3/6 h-96 md:h-full border-b sm:border-b-0 border-bg-nav-offset"
         ref={editorRef}
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >
@@ -137,7 +137,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         />
       </div>
       <div
-        className="flex flex-col flex-grow w-full md:min-w-full md:h-full"
+        className="flex flex-col flex-grow w-full md:w-3/6 md:h-full"
         ref={previewRef}
       >
         <SandpackPreview />

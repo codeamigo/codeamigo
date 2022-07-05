@@ -48,6 +48,9 @@ module.exports = {
         '3/5': '60%',
         '4/5': '80%',
       },
+      minWidth: {
+        '3/6': '50%',
+      },
       transition: {
         height: 'height',
       },
