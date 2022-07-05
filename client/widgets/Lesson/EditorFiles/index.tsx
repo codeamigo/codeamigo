@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { isFileExplorerOpenVar } from '👨‍💻apollo/cache/editor';
 import {
@@ -15,7 +15,8 @@ const EditorFiles: React.FC<Props> = (props) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
-  const isFileExplorerOpen = useReactiveVar(isFileExplorerOpenVar);
+  // const isFileExplorerOpen = useReactiveVar(isFileExplorerOpenVar);
+  const isFileExplorerOpen = true;
 
   const createFile = async (file: string) => {
     const value = ``;
@@ -61,7 +62,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   if (!props.files) return null;
 
   return isFileExplorerOpen ? (
-    <div className="w-full md:w-48">
+    <div className="w-2/6 md:w-48">
       <FilesList
         closeExplorer={() => isFileExplorerOpenVar(false)}
         name={'Files'}

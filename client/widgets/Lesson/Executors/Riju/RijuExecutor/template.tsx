@@ -137,7 +137,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="z-20 w-4/6 md:w-2/6 h-96 md:h-full border-bg-nav-offset"
+          className="z-20 w-3/6 md:w-2/6 h-96 md:h-full border-bg-nav-offset"
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
@@ -188,7 +188,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
           </div>
         </div>
         <div
-          className="flex flex-col flex-grow w-full md:w-5/12 h-96 md:h-full"
+          className="flex flex-col flex-grow w-full md:w-3/6 h-96 md:h-full"
           ref={previewRef}
         >
           {/* eslint-disable-next-line */}
