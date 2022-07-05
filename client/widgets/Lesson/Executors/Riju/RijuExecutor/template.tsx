@@ -152,7 +152,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
               updateCode={updateCode}
               {...props}
             />
-            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0">
+            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0 h-fit-content">
               <RunButton
                 isExecuting={useReactiveVar(isExecutingVar)}
                 run={handleRunCode}

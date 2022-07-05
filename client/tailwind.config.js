@@ -32,6 +32,9 @@ module.exports = {
       fontSize: {
         xxs: '.5rem',
       },
+      height: {
+        'fit-content': 'fit-content',
+      },
       maxHeight: {
         '3/5': '60%',
         6: '1.5rem',
