@@ -72,7 +72,7 @@ const Instructions: React.FC<Props> = (props) => {
   }, [step.id]);
 
   return (
-    <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/3 lg:h-full border-r border-bg-nav-offset-faded">
+    <div className="sm:flex sm:flex-col-reverse w-full lg:w-1/4 lg:h-full border-r border-bg-nav-offset-faded">
       <LessonBottomBarWrapper padding>
         <div
           aria-label="View Steps"

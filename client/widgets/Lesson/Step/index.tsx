@@ -259,7 +259,7 @@ const Step: React.FC<Props> = (props) => {
       {/* eslint-disable-next-line */}
       <div className="flex flex-col lg:flex-row md:h-full-minus">
         <Instructions nextStep={nextStep} step={data.step} {...props} />
-        <div className="w-full h-full">
+        <div className="w-full lg:w-3/4 h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
               checkpoints={data.step.checkpoints}

@@ -15,8 +15,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   const [createCodeModule] = useCreateCodeModuleMutation();
   const [deleteCodeModule] = useDeleteCodeModuleMutation();
   const [updateCodeModuleEntryFile] = useUpdateCodeModuleEntryFileMutation();
-  // const isFileExplorerOpen = useReactiveVar(isFileExplorerOpenVar);
-  const isFileExplorerOpen = true;
+  const isFileExplorerOpen = useReactiveVar(isFileExplorerOpenVar);
 
   const createFile = async (file: string) => {
     const value = ``;
