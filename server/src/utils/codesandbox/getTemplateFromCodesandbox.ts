@@ -1,3 +1,4 @@
+import fetch from 'node-fetch';
 import { CodeSandboxI } from 'src/types/codesandbox';
 import { ITemplate } from 'src/utils/templates';
 

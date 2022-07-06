@@ -27,7 +27,7 @@ const PendingLessonsList: React.FC<Props> = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {data?.lessons.map((lesson) => (
         <LessonListItem
           href={`/lessons/edit/${lesson.id}`}
@@ -57,7 +57,7 @@ const PendingLessonsList: React.FC<Props> = () => {
                       <Menu.Items
                         aria-labelledby="user-menu"
                         aria-orientation="vertical"
-                        className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
+                        className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right bg-bg-primary"
                         role="menu"
                       >
                         <Menu.Item>

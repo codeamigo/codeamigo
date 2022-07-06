@@ -2,9 +2,12 @@ import moment from 'moment';
 import router from 'next/router';
 import React from 'react';
 
-import * as codeamigoPng from '👨‍💻assets/codeamigo_logo.png';
 import Icon from '👨‍💻components/Icon';
-import { LessonsQuery, useSessionQuery } from '👨‍💻generated/graphql';
+import {
+  LessonsQuery,
+  LessonTemplate,
+  useSessionQuery,
+} from '👨‍💻generated/graphql';
 import { templates } from '👨‍💻modals/CreateLesson';
 import { formatNumber } from '👨‍💻utils/numberUtils';
 import { levelColorMap } from '👨‍💻widgets/HomepageFilters/Levels';
@@ -25,28 +28,29 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
 
   const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
   const students = lesson.students?.length || 0;
-  const template = templates.find((t) => t.value === lesson.template);
+  const template = [
+    ...templates,
+    {
+      color: '#fff',
+      id: 'sandpack',
+      imageUrl: `http://res.cloudinary.com/dqki6kci3/image/upload/v1657147466/oyxsnwyn6h7kexiybt4l.ico`,
+      name: 'Sandpack',
+      value: LessonTemplate.Sandpack,
+    },
+  ].find((t) => t.value === lesson.template);
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
   const dasharrayLength = ((100 - percentComplete) / 100) * circumference;
 
   return (
-    <div className="flex flex-col hover:shadow-lg transition-shadow duration-200">
-      <div
-        className="overflow-hidden rounded-t-lg border-2 cursor-pointer border-bg-nav-offset"
-        onClick={() => router.push(href)}
-      >
-        <div
-          className="overflow-hidden h-48 bg-center bg-no-repeat bg-cover"
-          style={{ backgroundImage: `url(${lesson.thumbnail || codeamigoPng}` }}
-        />
-      </div>
-      <div
-        className="flex relative flex-col flex-1 justify-between p-3 rounded-br-lg rounded-bl-lg border-2 border-t-0 bg-bg-nav border-bg-nav-offset"
-        key={lesson.id}
-      >
-        <div className="relative">
-          <div className="flex absolute -top-14 right-2 justify-center items-center p-2.5 w-14 h-14 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
+    <div
+      className="flex flex-col rounded-lg border-2 hover:shadow-2xl transition-shadow duration-200 cursor-pointer bg-bg-nav border-bg-nav-offset"
+      key={lesson.id}
+      onClick={() => router.push(href)}
+    >
+      <div className="flex relative flex-col flex-1 justify-between p-3">
+        <div className="flex gap-3 items-center">
+          <div className="flex relative justify-center items-center p-2 w-14 h-14 rounded-full border-2 bg-bg-nav border-bg-nav-offset">
             <svg
               className="absolute top-0 left-0"
               height="100%"
@@ -93,30 +97,31 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
               <ProfileLogo userId={lesson.owner.id} />
             )}
           </div>
-          <div className="flex justify-between items-center">
-            <a
-              className="font-bold underline hover:underline overflow-ellipsis text-text-primary"
-              href={href}
-            >
-              {lesson.title}
-            </a>
-            {options ? options : null}
+          <div className="relative flex-1">
+            <div className="flex justify-between items-center">
+              <a
+                className="font-bold underline hover:underline overflow-ellipsis text-text-primary"
+                href={href}
+              >
+                {lesson.title}
+              </a>
+              {options ? options : null}
+            </div>
+            <h3 className="flex items-center mt-0.5 text-xs font-semibold text-text-primary">
+              by {lesson.owner.username}
+            </h3>
           </div>
-          <h3 className="flex items-center mt-0.5 text-xs font-semibold text-text-primary">
-            by {lesson.owner.username}
-          </h3>
         </div>
         <div>
           {lesson.tags?.length ? (
             <div className="flex gap-1.5 mt-2">
               {lesson.tags?.map(({ name }) => {
                 return (
-                  <span
-                    className="text-xs opacity-70 text-text-primary"
-                    key={name}
-                  >
-                    #{name}
-                  </span>
+                  <div className="flex py-1 px-2 rounded-md bg-bg-nav-offset">
+                    <span className="text-xs text-white" key={name}>
+                      #{name}
+                    </span>
+                  </div>
                 );
               })}
             </div>

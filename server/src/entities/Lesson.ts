@@ -29,6 +29,7 @@ export enum TemplatesEnum {
   'React' = 'React',
   'Ruby' = 'Ruby',
   'Rust' = 'Rust',
+  'Sandpack' = 'Sandpack',
   'Swift' = 'Swift',
   'TypeScript' = 'TypeScript',
   'Vue' = 'Vue',

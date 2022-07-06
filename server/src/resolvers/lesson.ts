@@ -155,6 +155,7 @@ export class LessonResolver {
           // check we can get the template from codesandbox
           await getTemplateFromCodesandbox(options.codesandboxId);
         } catch (e) {
+          console.log(e);
           return {
             errors: [
               {
@@ -164,6 +165,8 @@ export class LessonResolver {
             ],
           };
         }
+
+        options.template = TemplatesEnum.Sandpack;
       }
 
       const lesson = await Lesson.create({ ...options, owner }).save();
