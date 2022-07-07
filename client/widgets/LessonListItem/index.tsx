@@ -3,6 +3,7 @@ import router from 'next/router';
 import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
+import Pill from '👨‍💻components/Pill';
 import {
   LessonsQuery,
   LessonTemplate,
@@ -107,13 +108,7 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
           {lesson.tags?.length ? (
             <div className="flex gap-1.5 mt-2">
               {lesson.tags?.map(({ name }) => {
-                return (
-                  <div className="flex py-1 px-2 rounded-md bg-bg-nav-offset">
-                    <span className="text-xs text-white" key={name}>
-                      #{name}
-                    </span>
-                  </div>
-                );
+                return <Pill>#{name}</Pill>;
               })}
             </div>
           ) : null}
