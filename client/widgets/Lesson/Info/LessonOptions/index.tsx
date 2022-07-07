@@ -75,7 +75,7 @@ const LessonOptions: React.FC<Props> = ({
 
 export const Options: React.FC<OptionsProps> = (props) => {
   return (
-    <div className="flex absolute z-20 gap-6 justify-end py-2 px-4 pr-16 w-full border-b shadow-2xl bg-bg-primary border-bg-nav-offset">
+    <div className="flex absolute z-30 gap-6 justify-end py-2 px-4 pr-16 w-full border-b shadow-2xl bg-bg-primary border-bg-nav-offset">
       <Label {...props} />
       <Tags {...props} />
     </div>
