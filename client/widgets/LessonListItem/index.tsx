@@ -28,16 +28,7 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
 
   const views = Math.max(lesson.students?.length || 0, lesson.views || 0);
   const students = lesson.students?.length || 0;
-  const template = [
-    ...templates,
-    {
-      color: '#fff',
-      id: 'sandpack',
-      imageUrl: `http://res.cloudinary.com/dqki6kci3/image/upload/v1657147466/oyxsnwyn6h7kexiybt4l.ico`,
-      name: 'Sandpack',
-      value: LessonTemplate.Sandpack,
-    },
-  ].find((t) => t.value === lesson.template);
+  const template = templates.find((t) => t.value === lesson.template);
   const radius = 24;
   const circumference = 2 * Math.PI * radius;
   const dasharrayLength = ((100 - percentComplete) / 100) * circumference;

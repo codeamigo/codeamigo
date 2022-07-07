@@ -17,6 +17,13 @@ export const templates: {
   withBackground?: boolean;
 }[] = [
   {
+    color: '#fff',
+    id: 'sandpack-template',
+    imageUrl: `http://res.cloudinary.com/dqki6kci3/image/upload/v1657147466/oyxsnwyn6h7kexiybt4l.ico`,
+    name: 'Sandpack',
+    value: LessonTemplate.Sandpack,
+  },
+  {
     color: '#00d8ff',
     id: 'react-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/react.svg`,
@@ -173,6 +180,8 @@ const CreateLesson: React.FC<Props> = () => {
                   </label>
                   <div className="grid grid-cols-3 gap-3">
                     {templates.map((template) => {
+                      if (template.value === LessonTemplate.Sandpack)
+                        return null;
                       return (
                         <label
                           className={`w-full flex ${

@@ -36,7 +36,7 @@ const Modals: React.FC<Props> = () => {
   const isOpen = !!data?.modal?.name;
 
   return isOpen ? (
-    <div className="overflow-y-auto fixed inset-0 z-10">
+    <div className="overflow-y-auto fixed inset-0 z-50">
       <div className="flex sm:block justify-center items-end sm:p-0 px-4 pt-4 pb-20 min-h-screen text-center">
         {/* Background overlay, show/hide based on modal state.
   
