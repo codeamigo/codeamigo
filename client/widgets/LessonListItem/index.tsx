@@ -126,7 +126,7 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
               })}
             </div>
           ) : null}
-          <div className="flex mt-2 text-xs font-bold text-text-primary">
+          <div className="flex mt-4 text-xs font-bold text-text-primary">
             <div
               aria-label={`${lesson.students?.length} Students`}
               className="hint--top-right hint--no-animate"
