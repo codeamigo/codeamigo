@@ -100,7 +100,6 @@ const main = async () => {
   await apolloServer.start();
 
   apolloServer.applyMiddleware({
-    // @ts-ignore
     app,
     bodyParserConfig: {
       limit: '10mb',
