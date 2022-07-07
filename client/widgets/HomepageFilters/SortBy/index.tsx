@@ -63,24 +63,6 @@ const SortBy: React.FC<Props> = () => {
                 </label>
               );
             })}
-            {values.checked && (
-              <div
-                className="mt-1 text-sm text-accent"
-                onClick={() => {
-                  resetForm();
-                  router.replace({
-                    pathname: '/',
-                    query: {
-                      ...router.query,
-                      sortBy: '',
-                    },
-                  });
-                }}
-                role="button"
-              >
-                Clear
-              </div>
-            )}
           </Form>
         )}
       </Formik>
