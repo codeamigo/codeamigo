@@ -198,6 +198,7 @@ export class StepResolver {
 
       template = sandbox;
     } else {
+      // @ts-ignore
       template = getTemplate(options.template);
     }
 
