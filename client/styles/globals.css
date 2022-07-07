@@ -68,6 +68,12 @@ body {
   white-space: -o-pre-wrap !important;
   word-wrap: break-word !important;
 }
+
+.markdown-body blockquote {
+  font-style: italic;
+  color: var(--text-primary) !important;
+  border-left: 0.25em solid var(--bg-nav-offset) !important;
+}
 /* markdown */
 
 /* sandpack */
