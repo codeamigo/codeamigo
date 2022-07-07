@@ -283,10 +283,6 @@ export class LessonResolver {
     }
 
     if (status === 'PENDING_PUBLISH') {
-      if (!lesson.thumbnail) {
-        return [{ field: 'thumbnail', message: 'A thumbnail is required.' }];
-      }
-
       if (!lesson.label) {
         return [{ field: 'label', message: 'A label is required.' }];
       }
