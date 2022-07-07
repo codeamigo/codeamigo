@@ -15,7 +15,7 @@ const TopNav: React.FC<Props> = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="border-b bg-bg-nav border-bg-nav-offset-faded">
+    <nav className="relative z-50 border-b bg-bg-nav border-bg-nav-offset-faded">
       <div className="px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl">
         <div className="flex relative justify-between items-center h-16">
           <div className="flex items-center">
