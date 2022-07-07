@@ -51,6 +51,8 @@ class LessonsInput {
   @Field({ nullable: true })
   dependencies?: string;
   @Field({ nullable: true })
+  sortBy?: string;
+  @Field({ nullable: true })
   template?: TemplatesEnum;
 }
 
@@ -69,7 +71,7 @@ const relations = ['owner', 'steps', 'students', 'tags'];
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(@Arg('options') options: LessonsInput): Promise<Lesson[]> {
-    const { status, ownerId, labels, template } = options;
+    const { status, ownerId, labels, template, sortBy } = options;
     const owner = await User.findOne({ id: ownerId });
 
     if (owner) {
@@ -85,6 +87,12 @@ export class LessonResolver {
         .leftJoinAndSelect('Lesson.students', 'students')
         .leftJoinAndSelect('Lesson.tags', 'tags');
 
+      if (sortBy) {
+        query.orderBy(
+          'Lesson.' + sortBy.split('-')[0],
+          sortBy.split('-')[1] === 'asc' ? 'ASC' : 'DESC'
+        );
+      }
       if (labels) {
         query.andWhere('Lesson.label IN (:...labels)', {
           labels: labels.split('|'),
@@ -95,9 +103,7 @@ export class LessonResolver {
           template,
         });
       }
-      return (await query.getMany()).sort((a, b) =>
-        a.students.length < b.students.length ? 1 : -1
-      );
+      return await query.getMany();
     }
   }
 

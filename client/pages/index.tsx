@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 import LanguagesAndTemplates from '👨‍💻widgets/HomepageFilters/LanguagesAndTemplates';
 import Levels from '👨‍💻widgets/HomepageFilters/Levels';
+import SortBy from '👨‍💻widgets/HomepageFilters/SortBy';
 import LessonsList from '👨‍💻widgets/LessonsList';
 
 const Home = () => {
@@ -24,6 +25,7 @@ const Home = () => {
         </script>
       </Head>
       <div className="sm:sticky sm:top-4 mb-4 w-full sm:w-5/12 md:w-1/4 h-full">
+        <SortBy />
         <LanguagesAndTemplates />
         <Levels />
       </div>

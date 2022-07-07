@@ -1,6 +1,7 @@
 query Lessons(
   $status: String!
   $ownerId: Float
+  $sortBy: String
   $labels: String
   $template: String
 ) {
@@ -9,6 +10,7 @@ query Lessons(
       status: $status
       ownerId: $ownerId
       labels: $labels
+      sortBy: $sortBy
       template: $template
     }
   ) {

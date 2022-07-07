@@ -14,7 +14,7 @@ const Levels: React.FC<Props> = () => {
   const queryLevels = router.query.levels as string;
 
   return (
-    <div className="p-2 mt-2 rounded-md bg-bg-nav">
+    <div className="p-2 mb-2 rounded-md bg-bg-nav">
       <h4 className="mb-2 text-lg font-semibold underline text-text-primary">
         Levels
       </h4>
