@@ -107,20 +107,12 @@ const Instructions: React.FC<Props> = (props) => {
           {isEditing ? (
             <>
               <span
-                className={`cursor-pointer ${
-                  view === 'editor' ? 'text-accent' : 'text-text-primary'
-                }`}
-                onClick={() => toggleView('editor')}
+                className="cursor-pointer text-text-primary"
+                onClick={() =>
+                  toggleView(view === 'preview' ? 'editor' : 'preview')
+                }
               >
-                Edit Instructions
-              </span>
-              <span
-                className={`cursor-pointer ${
-                  view === 'preview' ? 'text-accent' : 'text-text-primary'
-                }`}
-                onClick={() => toggleView('preview')}
-              >
-                Preview
+                {view === 'preview' ? 'Edit Instructions' : 'Preview'}
               </span>
             </>
           ) : null}

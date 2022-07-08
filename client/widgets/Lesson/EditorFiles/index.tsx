@@ -61,7 +61,7 @@ const EditorFiles: React.FC<Props> = (props) => {
   if (!props.files) return null;
 
   return isFileExplorerOpen ? (
-    <div className="w-2/6 md:w-48">
+    <div className="flex-1 sm:flex-auto md:w-48">
       <FilesList
         closeExplorer={() => isFileExplorerOpenVar(false)}
         name={'Files'}
@@ -77,8 +77,14 @@ const EditorFiles: React.FC<Props> = (props) => {
   ) : (
     <div
       className="w-0.5 h-full opacity-50 hover:opacity-100 transition-all duration-200 bg-bg-nav-offset-faded cursor-e-resize hover:bg-bg-nav-offset"
+      id="file-explorer-click-target"
       onMouseDown={() => {
-        document.addEventListener('mouseup', () => isFileExplorerOpenVar(true));
+        document.addEventListener('mouseup', (e) => {
+          // @ts-ignore
+          if (e?.target?.id === 'file-explorer-click-target') {
+            isFileExplorerOpenVar(true);
+          }
+        });
       }}
     />
   );
