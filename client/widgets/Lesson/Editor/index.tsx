@@ -298,14 +298,19 @@ const Editor: React.FC<Props> = ({
 
   const setupTypes = async () => {
     let deps: CodeSandboxV1ResponseI;
-    let pkgJsonString = codeModules?.find((val) => val.name === '/package.json')
-      ?.value as string;
+    let pkgJsonString = codeModules?.find(
+      (val) => val.name === '/package.json' || val.name === 'package.json'
+    )?.value as string;
 
     try {
       const pkgJson = JSON.parse(pkgJsonString) as {
         dependencies?: { [key in string]: string };
+        devDependencies?: { [key in string]: string };
       };
-      const dependencies = pkgJson.dependencies;
+      const dependencies = {
+        ...pkgJson.dependencies,
+        ...pkgJson.devDependencies,
+      };
       if (!dependencies) return;
       Object.keys(dependencies).map(async (dep) => {
         try {

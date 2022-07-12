@@ -1,16 +1,13 @@
-import { useReactiveVar } from '@apollo/client';
-import StackblitzSdk, { VM } from '@stackblitz/sdk';
+import StackblitzSdk, { FsDiff, VM } from '@stackblitz/sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { isExecutingVar } from '👨‍💻apollo/cache/lesson';
 import Button from '👨‍💻components/Button';
-import { CheckpointTypeEnum, Maybe } from '👨‍💻generated/graphql';
+import { Maybe } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
 import EditorFiles from '👨‍💻widgets/Lesson/EditorFiles';
 import { Props as OwnProps } from '👨‍💻widgets/Lesson/Executors';
-import RunButton from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor/RunButton';
 import Separator from '👨‍💻widgets/Lesson/Separator';
 import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
@@ -67,6 +64,34 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
     entryFileValueRef.current = entryFile?.value;
   }, [step.id]);
 
+  useEffect(() => {
+    if (!VM) return;
+    const getDiff = async () => {
+      const snapshot = await VM.getFsSnapshot();
+      const diff = { create: {}, destroy: [] } as FsDiff;
+      if (!snapshot) return diff;
+
+      Object.keys(files).map((file) => {
+        if (!snapshot[file]) {
+          diff.destroy.push(file);
+        }
+        if (snapshot[file] !== files[file]) {
+          diff.create[file] = files[file];
+        }
+      });
+
+      return diff;
+    };
+
+    const applyDiff = async () => {
+      const diff = await getDiff();
+      console.log(diff);
+      VM.applyFsDiff(diff);
+    };
+
+    applyDiff();
+  }, [VM, step.id, files]);
+
   const updateCode = useCallback(
     (code: string) => {
       const file = activeFile?.substring(1);
@@ -114,6 +139,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
             <Editor
               activeFile={activeFile || (entryFile?.name as string)}
               codeModules={step.codeModules}
+              isTyped
               runCode={() => void 0}
               sessionId={session?.id}
               stepId={step.id}
