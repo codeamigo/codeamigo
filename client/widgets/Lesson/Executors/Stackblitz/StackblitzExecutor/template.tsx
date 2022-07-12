@@ -1,4 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
+import StackblitzSdk, { VM } from '@stackblitz/sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { isExecutingVar } from '👨‍💻apollo/cache/lesson';
@@ -14,9 +15,10 @@ import Separator from '👨‍💻widgets/Lesson/Separator';
 import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
-const RijuTemplate: React.FC<Props> = (props) => {
+const StackblitzTemplate: React.FC<Props> = (props) => {
   const {
     checkpoints,
+    editorFiles,
     editorRef,
     files,
     filesHeight,
@@ -33,6 +35,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
+  const [VM, setVM] = useState<VM | null>(null);
   const checkpointRef = useRef<any | undefined>();
   const entryFileValueRef = useRef<Maybe<string> | undefined>();
   const [activeFile, setActivePath] = useState<string | null>(null);
@@ -44,74 +47,44 @@ const RijuTemplate: React.FC<Props> = (props) => {
   );
 
   useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data.event === 'execution_has_results') {
-        isExecutingVar(false);
-      }
+    const setupVM = async () => {
+      const stackblitzVM = await StackblitzSdk.embedProject(
+        'stackblitz',
+        {
+          description: '',
+          files,
+          template: 'node',
+          title: '',
+        },
+        { view: 'preview' }
+      );
+      setVM(stackblitzVM);
     };
-
-    window.addEventListener('message', handleMessage);
-
-    return () => window.removeEventListener('message', handleMessage);
+    setupVM();
   }, []);
 
   useEffect(() => {
     entryFileValueRef.current = entryFile?.value;
   }, [step.id]);
 
-  const updateCode = (code: string) => {
-    entryFileValueRef.current = code;
-  };
+  const updateCode = useCallback(
+    (code: string) => {
+      const file = activeFile?.substring(1);
+      VM?.applyFsDiff({
+        create: { [file as string]: code },
+        destroy: [file as string],
+      });
+    },
+    [VM, activeFile]
+  );
 
   const handleRunCode = useCallback(() => {
-    previewRef.current
-      ?.getElementsByTagName('iframe')[0]
-      .contentWindow?.postMessage(
-        {
-          code: entryFileValueRef.current,
-          event: 'runCode',
-        },
-        '*'
-      );
-  }, [entryFileValueRef.current]);
+    console.log('code runner');
+  }, []);
 
   const handleRunTests = useCallback(() => {
-    const checkpoint = checkpointRef.current;
-    if (checkpoint?.isTested || !checkpoint) {
-      props.ctaRef.current?.click();
-      return;
-    }
-
-    isExecutingVar(true);
-    const shouldRunTests = checkpoint?.type === CheckpointTypeEnum.Output;
-
-    if (checkpoint) {
-      switch (checkpoint.type) {
-        case CheckpointTypeEnum.Output:
-          isExecutingVar(true);
-          break;
-        case CheckpointTypeEnum.Match:
-          onRunMatchTest(checkpoint);
-      }
-    }
-
-    if (shouldRunTests) onTestStart();
-
-    previewRef.current
-      ?.getElementsByTagName('iframe')[0]
-      .contentWindow?.postMessage(
-        {
-          code: entryFileValueRef.current,
-          event: shouldRunTests ? 'testCode' : 'runCode',
-          expectedOutput: shouldRunTests ? checkpoint.output : null,
-        },
-        '*'
-      );
-
-    setTimeout(() => {
-      isExecutingVar(false);
-    }, 3000);
-  }, [entryFileValueRef.current]);
+    console.log('test runner');
+  }, []);
 
   return (
     <div className="sp-wrapper">
@@ -129,7 +102,7 @@ const RijuTemplate: React.FC<Props> = (props) => {
                 lessonId={props.lesson?.id}
                 stepId={step.id}
                 {...props}
-                files={files!}
+                files={editorFiles!}
                 selectFile={setActivePath}
               />
             </div>
@@ -191,18 +164,12 @@ const RijuTemplate: React.FC<Props> = (props) => {
           className="flex flex-col flex-grow w-full md:w-3/6 h-96 md:h-full"
           ref={previewRef}
         >
-          {/* eslint-disable-next-line */}
-          <iframe
-            className="h-full bg-bg-primary riju-frame"
-            src={`https://riju.codeamigo.xyz/${step.lang}`}
+          <div className="h-full" id="stackblitz" />
+          <Console
+            runTests={handleRunTests}
+            stepId={step.id}
+            tabs={['console', 'tests']}
           />
-          {checkpoints?.length ? (
-            <Console
-              runTests={handleRunTests}
-              stepId={step.id}
-              tabs={['tests']}
-            />
-          ) : null}
         </div>
       </div>
     </div>
@@ -210,7 +177,8 @@ const RijuTemplate: React.FC<Props> = (props) => {
 };
 
 type Props = OwnProps & {
-  files?: { [key in string]: { code: string } };
+  editorFiles: { [key in string]: { code: string } };
+  files: { [key in string]: string };
 };
 
-export default RijuTemplate;
+export default StackblitzTemplate;

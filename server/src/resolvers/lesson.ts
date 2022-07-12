@@ -26,6 +26,7 @@ import { isTeacherOrAdmin } from '../middleware/isTeacherOrAdmin';
 import { FieldError } from '../resolvers/user';
 import { MyContext } from '../types';
 import { getTemplateFromCodesandbox } from '../utils/codesandbox/getTemplateFromCodesandbox';
+import { getTemplateFromStackblitz } from '../utils/stackblitz/getTemplateFromStackblitz';
 import { StepResolver } from './step';
 
 @InputType()
@@ -38,6 +39,8 @@ class LessonInput {
   template: TemplatesEnum;
   @Field({ nullable: true })
   codesandboxId: string;
+  @Field({ nullable: true })
+  stackblitzId: string;
 }
 
 @InputType()
@@ -137,20 +140,17 @@ export class LessonResolver {
         };
       }
 
-      if (!options.description) {
-        return {
-          errors: [
-            { field: 'description', message: 'A description is required.' },
-          ],
-        };
-      }
-
-      if (!options.template && !options.codesandboxId) {
+      if (
+        !options.template &&
+        !options.codesandboxId &&
+        !options.stackblitzId
+      ) {
         return {
           errors: [
             {
-              field: 'description',
-              message: 'A template or Codesandbox slug is required.',
+              field: 'title',
+              message:
+                'A template, Codesandbox slug, or Stackblitz slug is required.',
             },
           ],
         };
@@ -158,7 +158,7 @@ export class LessonResolver {
 
       if (options.codesandboxId) {
         try {
-          // check we can get the template from codesandbox
+          // check if we can get the template from codesandbox
           await getTemplateFromCodesandbox(options.codesandboxId);
         } catch (e) {
           console.log(e);
@@ -175,16 +175,38 @@ export class LessonResolver {
         options.template = TemplatesEnum.Sandpack;
       }
 
+      if (options.stackblitzId) {
+        try {
+          // check if we can get the template from stackblitz
+          await getTemplateFromStackblitz(options.stackblitzId);
+        } catch (e) {
+          console.log(e);
+          return {
+            errors: [
+              {
+                field: 'stackblitzId',
+                message:
+                  typeof e === 'string' ? e : 'Stackblitz slug is invalid.',
+              },
+            ],
+          };
+        }
+
+        options.template = TemplatesEnum.Stackblitz;
+      }
+
       const lesson = await Lesson.create({ ...options, owner }).save();
       await stepResolver.createStep({
         codesandboxId: options.codesandboxId,
         lessonId: lesson.id,
         name: 'Step 1',
+        stackblitzId: options.stackblitzId,
         template: options.template,
       });
 
       return { lesson };
     } catch (e) {
+      console.log(e);
       if (e.detail && e.detail.includes('already exists')) {
         return {
           errors: [

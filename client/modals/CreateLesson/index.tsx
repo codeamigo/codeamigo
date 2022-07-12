@@ -124,7 +124,8 @@ const CreateLesson: React.FC<Props> = () => {
     <Formik
       initialValues={{
         codesandboxId: '',
-        description: '',
+        description: 'description',
+        stackblitzId: '',
         template: 'React',
         title: '',
       }}
@@ -168,19 +169,16 @@ const CreateLesson: React.FC<Props> = () => {
                     type="text"
                   />
                 </div>
-                <InputField
-                  label="Description"
-                  maxLength={120}
-                  name="description"
-                  type="text"
-                />
                 <div>
                   <label className="block mb-1 font-medium text-text-primary">
                     Select a Template
                   </label>
                   <div className="grid grid-cols-3 gap-3">
                     {templates.map((template) => {
-                      if (template.value === LessonTemplate.Sandpack)
+                      if (
+                        template.value === LessonTemplate.Sandpack ||
+                        template.value === LessonTemplate.Stackblitz
+                      )
                         return null;
                       return (
                         <label
@@ -235,6 +233,27 @@ const CreateLesson: React.FC<Props> = () => {
                     maxLength={120}
                     name="codesandboxId"
                     placeholder="loving-kalam-nd0r9"
+                    type="text"
+                  />
+                </div>
+                <div className="border-b-2 border-dashed text-text-primary border-bg-nav-offset-faded"></div>
+                <div>
+                  <label className="block text-sm font-medium text-text-primary">
+                    Or enter a{' '}
+                    <a
+                      className="underline"
+                      href="https://stackblitz.com"
+                      target="_blank"
+                    >
+                      Stackblitz
+                    </a>{' '}
+                    slug
+                  </label>
+                  <InputField
+                    label=""
+                    maxLength={120}
+                    name="stackblitzId"
+                    placeholder="node-sfhvhp"
                     type="text"
                   />
                 </div>

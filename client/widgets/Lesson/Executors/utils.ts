@@ -5,3 +5,11 @@ export const modToFile = (
   ...acc,
   [curr.name as string]: { code: curr.value },
 });
+
+export const modToStackblitzFile = (
+  acc: { [key in string]: string },
+  curr: any
+) => ({
+  ...acc,
+  [curr.name.substr(1) as string]: curr.value,
+});

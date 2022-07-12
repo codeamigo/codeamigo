@@ -19,6 +19,7 @@ import { Session } from './Session';
 export enum StepExecutionTypeEnum {
   riju = 'riju',
   sandpack = 'sandpack',
+  stackblitz = 'stackblitz',
 }
 
 registerEnumType(StepExecutionTypeEnum, {

@@ -17,6 +17,7 @@ import { Step } from '../entities/Step';
 import { isAuth } from '../middleware/isAuth';
 import { isTeacher } from '../middleware/isTeacher';
 import { getTemplateFromCodesandbox } from '../utils/codesandbox/getTemplateFromCodesandbox';
+import { getTemplateFromStackblitz } from '../utils/stackblitz/getTemplateFromStackblitz';
 import { getTemplate, ITemplate } from '../utils/templates';
 
 export const DEFAULT_MD = `## Step \#
@@ -87,6 +88,8 @@ class CreateStepInput {
   template?: TemplatesEnum;
   @Field({ nullable: true })
   codesandboxId?: string;
+  @Field({ nullable: true })
+  stackblitzId?: string;
 }
 
 @InputType()
@@ -197,6 +200,10 @@ export class StepResolver {
       const sandbox = await getTemplateFromCodesandbox(options.codesandboxId);
 
       template = sandbox;
+    } else if (options.stackblitzId) {
+      const stackblitz = await getTemplateFromStackblitz(options.stackblitzId);
+
+      template = stackblitz;
     } else {
       // @ts-ignore
       template = getTemplate(options.template);

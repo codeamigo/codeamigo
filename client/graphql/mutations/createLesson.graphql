@@ -3,6 +3,7 @@ mutation CreateLesson(
   $description: String!
   $template: String
   $codesandboxId: String
+  $stackblitzId: String
 ) {
   createLesson(
     options: {
@@ -10,6 +11,7 @@ mutation CreateLesson(
       description: $description
       template: $template
       codesandboxId: $codesandboxId
+      stackblitzId: $stackblitzId
     }
   ) {
     lesson {

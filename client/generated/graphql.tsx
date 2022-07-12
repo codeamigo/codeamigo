@@ -134,7 +134,8 @@ export type Step = {
 
 export enum StepExecutionTypeEnum {
   Riju = 'riju',
-  Sandpack = 'sandpack'
+  Sandpack = 'sandpack',
+  Stackblitz = 'stackblitz'
 }
 
 export type Lesson = {
@@ -182,6 +183,7 @@ export enum LessonTemplate {
   Ruby = 'Ruby',
   Rust = 'Rust',
   Sandpack = 'Sandpack',
+  Stackblitz = 'Stackblitz',
   Swift = 'Swift',
   TypeScript = 'TypeScript',
   Vue = 'Vue'
@@ -735,6 +737,7 @@ export type LessonInput = {
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
   codesandboxId?: Maybe<Scalars['String']>;
+  stackblitzId?: Maybe<Scalars['String']>;
 };
 
 export type SessionInput = {
@@ -937,6 +940,7 @@ export type CreateLessonMutationVariables = Exact<{
   description: Scalars['String'];
   template?: Maybe<Scalars['String']>;
   codesandboxId?: Maybe<Scalars['String']>;
+  stackblitzId?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -2007,9 +2011,9 @@ export type CreateCodeModuleMutationHookResult = ReturnType<typeof useCreateCode
 export type CreateCodeModuleMutationResult = Apollo.MutationResult<CreateCodeModuleMutation>;
 export type CreateCodeModuleMutationOptions = Apollo.BaseMutationOptions<CreateCodeModuleMutation, CreateCodeModuleMutationVariables>;
 export const CreateLessonDocument = gql`
-    mutation CreateLesson($title: String!, $description: String!, $template: String, $codesandboxId: String) {
+    mutation CreateLesson($title: String!, $description: String!, $template: String, $codesandboxId: String, $stackblitzId: String) {
   createLesson(
-    options: {title: $title, description: $description, template: $template, codesandboxId: $codesandboxId}
+    options: {title: $title, description: $description, template: $template, codesandboxId: $codesandboxId, stackblitzId: $stackblitzId}
   ) {
     lesson {
       id
@@ -2044,6 +2048,7 @@ export type CreateLessonMutationFn = Apollo.MutationFunction<CreateLessonMutatio
  *      description: // value for 'description'
  *      template: // value for 'template'
  *      codesandboxId: // value for 'codesandboxId'
+ *      stackblitzId: // value for 'stackblitzId'
  *   },
  * });
  */
