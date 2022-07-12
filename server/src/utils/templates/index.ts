@@ -813,6 +813,7 @@ export const getTemplate = (template?: keyof typeof TemplatesEnum) => {
       return tsTemplate;
     case 'Vue':
       return vueTemplate;
+    case 'Stackblitz':
     case 'Sandpack':
       return htmlTemplate;
   }

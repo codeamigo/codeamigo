@@ -80,7 +80,7 @@ const LessonListItem: React.FC<Props> = ({ href, lesson, options }) => {
             </svg>
             {template ? (
               <img
-                className={`${
+                className={`${template.rounded ? 'rounded-full' : ''} ${
                   template.withBackground ? 'bg-white rounded-full' : ''
                 }`}
                 src={template.imageUrl}

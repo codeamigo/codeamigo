@@ -13,9 +13,6 @@ export async function getTemplateFromCodesandbox(
     );
     const { data: sandbox }: CodeSandboxI = await response.json();
 
-    if (sandbox.is_sse)
-      return Promise.reject('SSE Sandboxes are not supported.');
-
     return {
       codeModules: sandbox.modules.map((module) => {
         const filename = getPath(module, sandbox.directories, true);

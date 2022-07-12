@@ -68,7 +68,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-50 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+        className="flex z-40 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >

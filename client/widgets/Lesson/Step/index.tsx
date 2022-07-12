@@ -18,6 +18,7 @@ import {
 } from '👨‍💻generated/graphql';
 import RijuExecutor from '👨‍💻widgets/Lesson/Executors/Riju/RijuExecutor';
 import SandpackExecutor from '👨‍💻widgets/Lesson/Executors/Sandpack/SandpackExecutor';
+import StackblitzExecutor from '👨‍💻widgets/Lesson/Executors/Stackblitz/StackblitzExecutor';
 import Instructions from '👨‍💻widgets/Lesson/Instructions';
 
 const Step: React.FC<Props> = (props) => {
@@ -262,6 +263,27 @@ const Step: React.FC<Props> = (props) => {
         <div className="w-full lg:w-3/4 h-full">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
+              checkpoints={data.step.checkpoints}
+              ctaRef={ctaRef}
+              currentStepNum={currentStepNum}
+              editorRef={editorRef}
+              filesHeight={filesHeight}
+              filesRef={filesRef}
+              loading={loading}
+              maxDragWidth={maxDragWidth}
+              nextStep={nextStep}
+              onDragEnd={onDragEnd}
+              onRunMatchTest={onRunMatchTest}
+              onTestStart={onTestStart}
+              prevStep={prevStep}
+              previewRef={previewRef}
+              step={data.step}
+              totalStepsNum={totalStepsNum}
+              updateWidths={updateWidths}
+              {...props}
+            />
+          ) : data.step.executionType === 'stackblitz' ? (
+            <StackblitzExecutor
               checkpoints={data.step.checkpoints}
               ctaRef={ctaRef}
               currentStepNum={currentStepNum}

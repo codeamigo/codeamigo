@@ -117,6 +117,12 @@ body {
 }
 /* sandpack */
 
+/* stackblitz */
+#stackblitz {
+  height: 100%;
+}
+/* stackblitz */
+
 /* Make clicks pass-through */
 #nprogress {
   pointer-events: none;
