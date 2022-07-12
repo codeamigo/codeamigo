@@ -78,10 +78,6 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
     [VM, activeFile]
   );
 
-  const handleRunCode = useCallback(() => {
-    console.log('code runner');
-  }, []);
-
   const handleRunTests = useCallback(() => {
     console.log('test runner');
   }, []);
@@ -118,21 +114,15 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
             <Editor
               activeFile={activeFile || (entryFile?.name as string)}
               codeModules={step.codeModules}
-              runCode={handleRunCode}
+              runCode={() => void 0}
               sessionId={session?.id}
               stepId={step.id}
               testCode={handleRunTests}
               updateCode={updateCode}
               {...props}
             />
-            <div className="absolute md:top-1/2 right-2 md:-right-6 bottom-16 md:bottom-2 z-30 md:-mt-6 mb-2 md:mb-0 h-fit-content">
-              <RunButton
-                isExecuting={useReactiveVar(isExecutingVar)}
-                run={handleRunCode}
-              />
-            </div>
             <Separator
-              iframeName="riju-frame"
+              iframeName="stackblitz"
               maxDrag={maxDragWidth}
               onChangeX={updateWidths}
               onDragEnd={onDragEnd}

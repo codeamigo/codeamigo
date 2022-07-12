@@ -8,7 +8,7 @@ import {
 } from '👨‍💻widgets/Lesson/Executors/utils';
 
 const StackblitzExecutor: React.FC<Props> = (props) => {
-  const { session, step } = props;
+  const { step } = props;
   const [cachedFiles, setCachedFiles] = useState<
     null | { [key in string]: string }
   >(null);
@@ -34,10 +34,6 @@ const StackblitzExecutor: React.FC<Props> = (props) => {
 
   if (!cachedFiles) return null;
   if (!cachedEditorFiles) return null;
-
-  const files = session?.steps
-    ?.find(({ id }) => id === step?.id)
-    ?.codeModules?.reduce(modToStackblitzFile, {});
 
   return (
     <StackblitzTemplate

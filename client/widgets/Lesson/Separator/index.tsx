@@ -16,7 +16,7 @@ const Separator: React.FC<Props> = ({
     const iframe = document.getElementsByClassName(iframeName)[0];
     console.log(iframe);
     // @ts-ignore
-    iframe.style.pointerEvents = 'none';
+    if (iframe) iframe.style.pointerEvents = 'none';
     setIsDragging(true);
 
     const onMouseMove = (e: any) => {
@@ -26,7 +26,7 @@ const Separator: React.FC<Props> = ({
     const endDrag = (e: MouseEvent) => {
       xStart = e.pageX;
       // @ts-ignore
-      iframe.style.pointerEvents = 'none';
+      if (iframe) iframe.style.pointerEvents = 'none';
       document.removeEventListener('mousemove', onMouseMove);
       setIsDragging(false);
       onDragEnd();
