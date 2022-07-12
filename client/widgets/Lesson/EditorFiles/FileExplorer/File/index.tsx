@@ -47,7 +47,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
 
     return (
       <button
-        className={`w-full py-0.5 ${
+        className={`w-full py-0.5 text-sm ${
           this.props.active
             ? 'bg-bg-nav-offset text-white'
             : 'bg-bg-primary text-text-primary'

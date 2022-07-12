@@ -13,9 +13,19 @@ export const templates: {
   id: string;
   imageUrl: string;
   name: string;
+  rounded?: boolean;
   value: string;
   withBackground?: boolean;
 }[] = [
+  {
+    color: '#fff',
+    id: 'stackblitz-template',
+    imageUrl:
+      'https://res.cloudinary.com/dqki6kci3/image/upload/v1657654940/wqxz9qrw6bukyghhnesf.jpg',
+    name: 'Stackblitz',
+    rounded: true,
+    value: LessonTemplate.Stackblitz,
+  },
   {
     color: '#fff',
     id: 'sandpack-template',
@@ -56,6 +66,7 @@ export const templates: {
     id: 'typescript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/typescript-icon.svg`,
     name: 'Vanilla TypeScript',
+    rounded: true,
     value: LessonTemplate.TypeScript,
   },
   {
@@ -63,6 +74,7 @@ export const templates: {
     id: 'javascript-template',
     imageUrl: `https://raw.githubusercontent.com/gilbarbara/logos/master/logos/javascript.svg`,
     name: 'Vanilla JavaScript',
+    rounded: true,
     value: LessonTemplate.JavaScript,
   },
   {
