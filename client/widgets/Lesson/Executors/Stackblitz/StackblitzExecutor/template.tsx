@@ -72,7 +72,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       const file = activeFile?.substring(1);
       VM?.applyFsDiff({
         create: { [file as string]: code },
-        destroy: [file as string],
+        destroy: [],
       });
     },
     [VM, activeFile]
