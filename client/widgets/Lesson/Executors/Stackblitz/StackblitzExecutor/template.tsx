@@ -74,7 +74,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       Object.keys(files).map((file) => {
         if (file[file.length - 1] === '/') return;
 
-        if (!snapshot[file]) {
+        if (snapshot[file] === undefined) {
           diff.destroy.push(file);
         }
         if (snapshot[file] !== files[file]) {
