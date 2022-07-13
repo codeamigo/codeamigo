@@ -76,6 +76,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           diff.destroy.push(file);
         }
         if (snapshot[file] !== files[file]) {
+          if (file[file.length - 1] === '/') file = file + 'index.js';
           diff.create[file] = files[file];
         }
       });
@@ -184,7 +185,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           <Console
             runTests={handleRunTests}
             stepId={step.id}
-            tabs={['console', 'tests']}
+            tabs={['tests']}
           />
         </div>
       </div>
