@@ -2,7 +2,7 @@ import StackblitzSdk, { FsDiff, VM } from '@stackblitz/sdk';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from '👨‍💻components/Button';
-import { Maybe } from '👨‍💻generated/graphql';
+import { CheckpointTypeEnum, Maybe } from '👨‍💻generated/graphql';
 import CTA from '👨‍💻widgets/CTA';
 import Console from '👨‍💻widgets/Lesson/Console';
 import Editor from '👨‍💻widgets/Lesson/Editor';
@@ -111,7 +111,15 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
   );
 
   const handleRunTests = useCallback(() => {
-    console.log('test runner');
+    onTestStart();
+    const checkpoint = checkpointRef.current;
+
+    if (!checkpoint) return;
+
+    switch (checkpoint.type) {
+      case CheckpointTypeEnum.Match:
+        onRunMatchTest(checkpoint);
+    }
   }, []);
 
   return (
