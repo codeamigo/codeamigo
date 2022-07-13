@@ -71,12 +71,17 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       const diff = { create: {}, destroy: [] } as FsDiff;
       if (!snapshot) return diff;
 
+      Object.keys(snapshot).map((file) => {
+        if (file[file.length - 1] === '/') return;
+
+        if (files[file] === undefined) {
+          diff.destroy.push(file);
+        }
+      });
+
       Object.keys(files).map((file) => {
         if (file[file.length - 1] === '/') return;
 
-        if (snapshot[file] === undefined) {
-          diff.destroy.push(file);
-        }
         if (snapshot[file] !== files[file]) {
           diff.create[file] = files[file];
         }
