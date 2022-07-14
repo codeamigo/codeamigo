@@ -10,7 +10,6 @@ const SandpackExecutor: React.FC<Props> = (props) => {
   const [cachedFiles, setCachedFiles] = useState<
     null | { [key in string]: { code: string } }
   >(null);
-  const [cachedEntry, setCachedEntry] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (step?.codeModules && step.checkpoints) {
@@ -32,22 +31,15 @@ const SandpackExecutor: React.FC<Props> = (props) => {
       }
 
       const files = mods.reduce(modToFile, {});
-      const main = mods.find(({ isEntry }) => isEntry)?.name || undefined;
 
       setCachedFiles(files);
-      setCachedEntry(main);
     }
   }, [step?.id, step?.codeModules?.length, step?.currentCheckpointId]);
 
   if (!cachedFiles) return null;
 
   return (
-    <SandpackProvider
-      customSetup={{
-        entry: cachedEntry,
-      }}
-      files={cachedFiles}
-    >
+    <SandpackProvider files={cachedFiles}>
       <SandpackTemplate {...props} files={cachedFiles} />
     </SandpackProvider>
   );

@@ -3,7 +3,7 @@ export const modToFile = (
   curr: any
 ) => ({
   ...acc,
-  [curr.name as string]: { code: curr.value },
+  [curr.name as string]: { active: curr.isEntry, code: curr.value },
 });
 
 export const modToStackblitzFile = (
