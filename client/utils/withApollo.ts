@@ -37,6 +37,7 @@ const activityLink = new ApolloLink((operation, forward) => {
 export const client = new ApolloClient({
   cache,
   link: from([errorLink, activityLink, httpLink]),
+  ssrMode: true,
 });
 
 export default createWithApollo(client);
