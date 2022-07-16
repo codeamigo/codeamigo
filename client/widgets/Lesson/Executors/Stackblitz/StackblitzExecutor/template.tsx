@@ -12,6 +12,8 @@ import Separator from '👨‍💻widgets/Lesson/Separator';
 import StepPosition from '👨‍💻widgets/Lesson/StepPosition';
 import LessonBottomBarWrapper from '👨‍💻widgets/LessonBottomBarWrapper';
 
+import { isDirectory } from '../../utils';
+
 const StackblitzTemplate: React.FC<Props> = (props) => {
   const {
     checkpoints,
@@ -72,7 +74,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       if (!snapshot) return diff;
 
       Object.keys(snapshot).map((file) => {
-        if (file[file.length - 1] === '/') return;
+        if (isDirectory(file)) return;
 
         if (files[file] === undefined) {
           diff.destroy.push(file);
@@ -80,7 +82,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       });
 
       Object.keys(files).map((file) => {
-        if (file[file.length - 1] === '/') return;
+        if (isDirectory(file)) return;
 
         if (snapshot[file] !== files[file]) {
           diff.create[file] = files[file];
@@ -126,7 +128,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
     <div className="sp-wrapper">
       <div className="sp-layout">
         <div
-          className="flex z-40 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+          className="flex z-40 flex-col justify-between bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >

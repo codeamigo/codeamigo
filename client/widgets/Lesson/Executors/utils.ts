@@ -13,3 +13,5 @@ export const modToStackblitzFile = (
   ...acc,
   [curr.name.substr(1) as string]: curr.value,
 });
+
+export const isDirectory = (file: string) => file[file.length - 1] === '/';

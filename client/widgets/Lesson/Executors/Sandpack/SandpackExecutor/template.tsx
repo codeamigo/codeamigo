@@ -24,7 +24,6 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     files,
     filesHeight,
     filesRef,
-    lesson,
     loading,
     maxDragWidth,
     nextStep,
@@ -68,7 +67,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-40 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+        className="flex z-40 flex-col justify-between bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >
@@ -81,7 +80,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
               stepId={step.id}
               {...props}
               files={files!}
-              selectFile={sandpack.openFile}
+              selectFile={sandpack.setActiveFile}
             />
           </div>
           <LessonBottomBarWrapper padding={false} />

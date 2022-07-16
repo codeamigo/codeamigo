@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { isFileExplorerOpenVar } from '👨‍💻apollo/cache/editor';
 import {
@@ -9,6 +9,7 @@ import {
   useUpdateCodeModuleEntryFileMutation,
 } from '👨‍💻generated/graphql';
 
+import { isDirectory } from '../Executors/utils';
 import FilesList from './FilesList';
 
 const EditorFiles: React.FC<Props> = (props) => {
@@ -29,6 +30,15 @@ const EditorFiles: React.FC<Props> = (props) => {
         value,
       },
     });
+
+    if (isDirectory(file)) return;
+
+    // For some reason the active file can not be set as soon as the file is created.
+    setTimeout(() => {
+      if (props.selectFile) {
+        props.selectFile(file);
+      }
+    }, 75);
   };
 
   const deleteFile = async (file: string, isDirectory?: boolean) => {
@@ -76,7 +86,7 @@ const EditorFiles: React.FC<Props> = (props) => {
     </div>
   ) : (
     <div
-      className="w-0.5 h-full opacity-50 hover:opacity-100 transition-all duration-200 bg-bg-nav-offset-faded cursor-e-resize hover:bg-bg-nav-offset"
+      className="w-0.5 h-full bg-bg-nav-offset-faded hover:bg-bg-nav-offset opacity-50 hover:opacity-100 transition-all duration-200 cursor-e-resize"
       id="file-explorer-click-target"
       onMouseDown={() => {
         document.addEventListener('mouseup', (e) => {
