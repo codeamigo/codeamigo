@@ -104,7 +104,7 @@ const FilesList: React.FC<Props> = (props) => {
         <div className="flex gap-2 items-center">
           {onCreate && isEditing ? (
             <Icon
-              className="text-xs cursor-pointer text-text-primary hover:text-accent"
+              className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="folder"
               onClick={() =>
                 setAddFileState({
@@ -117,7 +117,7 @@ const FilesList: React.FC<Props> = (props) => {
           ) : null}
           {onCreate && isEditing ? (
             <Icon
-              className="text-xs cursor-pointer text-text-primary hover:text-accent"
+              className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="file-empty"
               onClick={() =>
                 setAddFileState({
@@ -130,7 +130,7 @@ const FilesList: React.FC<Props> = (props) => {
           ) : null}
           {props.closeExplorer ? (
             <Icon
-              className="text-xs cursor-pointer text-text-primary hover:text-accent"
+              className="text-xs text-text-primary hover:text-accent cursor-pointer"
               name="cancel-circled"
               onClick={() => props.closeExplorer!()}
             />
@@ -176,8 +176,12 @@ export type Props = {
   name: 'Tests' | 'Files';
   onCreate?: (path: string) => void;
   onDelete: (path: string, isDirectory?: boolean) => void;
-  onUpdateCodeModuleEntryFile?: (variables: {
-    variables: { newId: any; oldId: any };
+  onUpdateCodeModuleEntryFile?: ({
+    newId,
+    oldId,
+  }: {
+    newId?: string;
+    oldId?: string;
   }) => void;
   selectFile?: (path: string) => void;
   stepId: number;

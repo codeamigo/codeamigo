@@ -68,6 +68,22 @@ const EditorFiles: React.FC<Props> = (props) => {
     });
   };
 
+  const updateEntryFile = async ({
+    newId,
+    oldId,
+  }: {
+    newId?: string;
+    oldId?: string;
+  }) => {
+    await updateCodeModuleEntryFile({
+      refetchQueries: ['Step'],
+      variables: {
+        newId,
+        oldId,
+      },
+    });
+  };
+
   if (!props.files) return null;
 
   return isFileExplorerOpen ? (
@@ -77,7 +93,7 @@ const EditorFiles: React.FC<Props> = (props) => {
         name={'Files'}
         onCreate={createFile}
         onDelete={deleteFile}
-        onUpdateCodeModuleEntryFile={updateCodeModuleEntryFile}
+        onUpdateCodeModuleEntryFile={updateEntryFile}
         {...props}
       />
       {props.isEditing && (

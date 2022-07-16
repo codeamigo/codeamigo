@@ -185,7 +185,7 @@ const CreateLesson: React.FC<Props> = () => {
                   <label className="block mb-1 font-medium text-text-primary">
                     Select a Template
                   </label>
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-6 gap-3">
                     {templates.map((template) => {
                       if (
                         template.value === LessonTemplate.Sandpack ||
@@ -218,16 +218,13 @@ const CreateLesson: React.FC<Props> = () => {
                               }`}
                               src={template.imageUrl}
                             />
-                            <div className="mt-0.5 text-sm font-semibold text-text-primary">
-                              {template.name}
-                            </div>
                           </div>
                         </label>
                       );
                     })}
                   </div>
                 </div>
-                <div className="border-b-2 border-dashed text-text-primary border-bg-nav-offset-faded"></div>
+                <div className="text-text-primary border-b-2 border-bg-nav-offset-faded border-dashed"></div>
                 <div>
                   <label className="block text-sm font-medium text-text-primary">
                     Or enter a{' '}
@@ -248,7 +245,7 @@ const CreateLesson: React.FC<Props> = () => {
                     type="text"
                   />
                 </div>
-                <div className="border-b-2 border-dashed text-text-primary border-bg-nav-offset-faded"></div>
+                <div className="text-text-primary border-b-2 border-bg-nav-offset-faded border-dashed"></div>
                 <div>
                   <label className="block text-sm font-medium text-text-primary">
                     Or enter a{' '}
