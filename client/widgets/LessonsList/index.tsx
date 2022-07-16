@@ -12,7 +12,6 @@ const LessonsList: React.FC<Props> = () => {
   const queryLevels =
     (router.query.levels as string)?.split('|').filter((x) => !!x) || [];
 
-  console.log(querySortBy);
   const { data } = useLessonsQuery({
     fetchPolicy: 'cache-first',
     variables: {
@@ -22,8 +21,6 @@ const LessonsList: React.FC<Props> = () => {
       template: queryTemplate,
     },
   });
-
-  console.log(data?.lessons);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

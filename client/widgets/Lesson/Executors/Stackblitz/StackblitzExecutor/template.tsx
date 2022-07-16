@@ -94,7 +94,6 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
 
     const applyDiff = async () => {
       const diff = await getDiff();
-      console.log(diff);
       VM.applyFsDiff(diff);
     };
 
