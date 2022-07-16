@@ -33,7 +33,7 @@
     "graphql": "^15.4.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
-    "next": "11.1.2",
+    "next": "12.2.0",
     "next-apollo": "5.0.7",
     "next-auth": "^3.6.1",
     "nprogress": "^0.2.0",
