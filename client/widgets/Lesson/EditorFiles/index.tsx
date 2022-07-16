@@ -50,8 +50,8 @@ const EditorFiles: React.FC<Props> = (props) => {
 
     if (!confirm) return;
 
-    const modules = props.codeModules?.filter(
-      (module) => module.name!.indexOf(file) > -1
+    const modules = props.codeModules?.filter((module) =>
+      isDirectory ? module.name!.indexOf(file) > -1 : module.name === file
     );
 
     if (!modules?.length) return;
@@ -65,6 +65,12 @@ const EditorFiles: React.FC<Props> = (props) => {
         refetchQueries: ['Step'],
         variables: { uuid: val.uuid },
       });
+
+      if (isDirectory) return;
+
+      if (props.deleteFile) {
+        props.deleteFile(val.name!);
+      }
     });
   };
 
@@ -119,6 +125,7 @@ const EditorFiles: React.FC<Props> = (props) => {
 type Props = {
   activeFile: string;
   codeModules?: RegularCodeModuleFragment[] | null;
+  deleteFile?: (path: string) => void;
   files: { [key in string]: { code: string } };
   isEditing?: boolean;
   lessonId?: number;

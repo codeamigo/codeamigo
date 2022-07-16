@@ -79,6 +79,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
               lessonId={props.lesson?.id}
               stepId={step.id}
               {...props}
+              deleteFile={(path) => sandpack.updateFile(path, '')}
               files={files!}
               selectFile={sandpack.setActiveFile}
             />

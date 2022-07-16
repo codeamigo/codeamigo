@@ -175,6 +175,7 @@ const CreateLesson: React.FC<Props> = () => {
               <div className="flex flex-col gap-4">
                 <div className="w-1/2">
                   <InputField
+                    autoFocus
                     label="Title"
                     maxLength={90}
                     name="title"

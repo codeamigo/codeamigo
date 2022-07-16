@@ -92,8 +92,8 @@ export class File extends React.PureComponent<Props & OwnProps> {
                 onClick={() =>
                   this.props.onUpdateCodeModuleEntryFile &&
                   this.props.onUpdateCodeModuleEntryFile({
-                    newId: this.props.codeModules?.find(({ name }) =>
-                      name?.includes(fileName!)
+                    newId: this.props.codeModules?.find(
+                      ({ name }) => name === fileName
                     )?.uuid,
                     oldId: this.props.codeModules?.find(
                       ({ isEntry }) => !!isEntry
