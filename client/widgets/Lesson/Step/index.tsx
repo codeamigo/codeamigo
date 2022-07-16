@@ -30,7 +30,7 @@ const Step: React.FC<Props> = (props) => {
   const router = useRouter();
   const [completeStep] = useCompleteStepMutation({ errorPolicy: 'ignore' });
   const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
-  const cmdShiftEnter = useKeyPress(['Meta', 'Shift', 'Enter']);
+  const cmdEnter = useKeyPress(['Meta', 'Enter']);
 
   const { data: newData, loading, previousData } = useStepQuery({
     fetchPolicy: 'cache-and-network',
@@ -71,10 +71,10 @@ const Step: React.FC<Props> = (props) => {
   }, [filesRef.current]);
 
   useEffect(() => {
-    if (cmdShiftEnter && ctaRef.current) {
+    if (cmdEnter && ctaRef.current) {
       ctaRef.current.click();
     }
-  }, [cmdShiftEnter]);
+  }, [cmdEnter]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
