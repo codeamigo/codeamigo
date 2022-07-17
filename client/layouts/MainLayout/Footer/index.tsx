@@ -13,12 +13,6 @@ const Footer: React.FC<Props> = () => {
           </div>
         </div>
         <div className="flex gap-2 mt-3 text-xs sm:text-sm font-semibold">
-          <div
-            aria-label="No landing page.&#10;-&#10;No signup required.&#10;-&#10;Nothing to buy.&#10;-&#10;codeamigo allows anyone to take&#10;free interactive coding tutorials.&#10;Built by the community."
-            className="hint--top-right hint--no-animate"
-          >
-            About
-          </div>
           &#183;
           <div>
             <a href="https://docs.codeamigo.dev" target="_blank">
