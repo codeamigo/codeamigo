@@ -14,7 +14,7 @@ interface State {
 
 export class Directory extends React.Component<Props & OwnProps, State> {
   state = {
-    open: true,
+    open: false,
   };
 
   componentDidUpdate(prevProps: Props & OwnProps) {

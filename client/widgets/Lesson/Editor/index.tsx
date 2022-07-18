@@ -51,7 +51,9 @@ const Editor: React.FC<Props> = ({
     if (!monacoRef.current) return;
     if (!editorRef.current) return;
     if (!activeFile) return;
-    const model = monacoRef.current.editor.getModel(`${URN}${activeFile}`);
+    const model = monacoRef.current.editor.getModel(
+      monacoRef.current.Uri.parse(`${URN}${activeFile}`)
+    );
     if (model) editorRef.current.setModel(model);
   }, [activeFile, monacoRef.current, editorRef.current]);
 
@@ -116,7 +118,9 @@ const Editor: React.FC<Props> = ({
       const checkpoint = ev.data.checkpoint;
 
       const model = monacoRef.current?.editor.getModel(
-        `${URN}${ev.data.checkpoint.fileToMatchRegex}`
+        monacoRef.current.Uri.parse(
+          `${URN}${ev.data.checkpoint.fileToMatchRegex}`
+        )
       );
 
       const match =
@@ -261,6 +265,13 @@ const Editor: React.FC<Props> = ({
     );
 
     editorRef.current.addCommand(
+      monacoRef.current.KeyMod.Option |
+        monacoRef.current.KeyMod.CtrlCmd |
+        monacoRef.current.KeyCode.Enter,
+      testCode
+    );
+
+    editorRef.current.addCommand(
       monacoRef.current.KeyMod.CtrlCmd | monacoRef.current.KeyCode.Enter,
       runCode
     );
@@ -268,7 +279,9 @@ const Editor: React.FC<Props> = ({
 
   const setupModels = () => {
     codeModules?.forEach((mod) => {
-      const model = monacoRef.current.editor.getModel(`${URN}${mod.name}`);
+      const model = monacoRef.current.editor.getModel(
+        monacoRef.current.Uri.parse(`${URN}${mod.name}`)
+      );
       if (model) return;
       monacoRef.current.editor.createModel(
         mod.value,
@@ -276,7 +289,9 @@ const Editor: React.FC<Props> = ({
         monacoRef.current.Uri.parse(`${URN}${mod.name}`)
       );
     });
-    const model = monacoRef.current.editor.getModel(`${URN}${activeFile}`);
+    const model = monacoRef.current.editor.getModel(
+      monacoRef.current.Uri.parse(`${URN}${activeFile}`)
+    );
     model?.updateOptions({ tabSize: 2 });
     editorRef.current.setModel(model);
   };
