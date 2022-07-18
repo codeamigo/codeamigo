@@ -29,6 +29,8 @@ export const getLanguage = (file: string) => {
       return 'python';
     case 'scss':
       return 'sass';
+    case 'gitignore':
+      return 'git';
     default:
       return ext;
   }

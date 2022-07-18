@@ -190,7 +190,7 @@ const CTA = React.forwardRef<HTMLButtonElement, Props>(
 
     return (
       <Button
-        aria-label="or Meta (Cmd) + Enter"
+        aria-label="or Meta (Cmd) + Option + Enter"
         className="justify-center w-20 hint--top"
         disabled={spinner}
         forwardedRef={ref}
