@@ -32,7 +32,8 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
       </div>
       <div
         className={`flex items-baseline justify-start group-inner-1 ${
-          step.executionType === StepExecutionTypeEnum.Sandpack
+          step.executionType === StepExecutionTypeEnum.Sandpack ||
+          step.executionType === StepExecutionTypeEnum.Stackblitz
             ? 'hidden'
             : 'block'
         }`}
@@ -56,7 +57,10 @@ const Select: React.FC<Props> = ({ setWizardStep, step }) => {
       <div
         aria-label="no"
         className={`flex items-baseline justify-start group-inner-1 ${
-          step.executionType === StepExecutionTypeEnum.Riju ? 'hidden' : 'block'
+          step.executionType === StepExecutionTypeEnum.Riju ||
+          step.executionType === StepExecutionTypeEnum.Stackblitz
+            ? 'hidden'
+            : 'block'
         }`}
         onClick={() => setWizardStep('jest')}
         role="button"
