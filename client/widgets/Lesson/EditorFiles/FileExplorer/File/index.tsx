@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 import { IconType } from '👨‍💻components/Icon/types';
+import { getFileName } from '👨‍💻utils/stringUtils';
 import { getLanguage } from '👨‍💻widgets/Lesson/Editor/utils';
 import StatusIndicator from '👨‍💻widgets/Lesson/Info/StatusIndicator';
 
@@ -89,17 +90,17 @@ export class File extends React.PureComponent<Props & OwnProps> {
                     this.isEntry(fileName) ? 'star' : 'star-empty'
                   }` as IconType
                 }
-                onClick={() =>
+                onClick={() => {
                   this.props.onUpdateCodeModuleEntryFile &&
-                  this.props.onUpdateCodeModuleEntryFile({
-                    newId: this.props.codeModules?.find(
-                      ({ name }) => name === fileName
-                    )?.uuid,
-                    oldId: this.props.codeModules?.find(
-                      ({ isEntry }) => !!isEntry
-                    )?.uuid,
-                  })
-                }
+                    this.props.onUpdateCodeModuleEntryFile({
+                      newId: this.props.codeModules?.find(
+                        ({ name }) => getFileName(name!) === fileName
+                      )?.uuid,
+                      oldId: this.props.codeModules?.find(
+                        ({ isEntry }) => !!isEntry
+                      )?.uuid,
+                    });
+                }}
               />
             )}
           {this.props.isEditing &&

@@ -160,12 +160,14 @@ export class CodeModuleResolver {
   ): Promise<CodeModule | null> {
     const oldEntry = await CodeModule.findOne(options.oldId);
     const newEntry = await CodeModule.findOne(options.newId);
-    if (!oldEntry || !newEntry) {
+    if (!newEntry) {
       return null;
     }
 
-    Object.assign(oldEntry, { isEntry: false });
-    await oldEntry.save();
+    if (oldEntry) {
+      Object.assign(oldEntry, { isEntry: false });
+      await oldEntry.save();
+    }
 
     Object.assign(newEntry, { isEntry: true });
     await newEntry.save();

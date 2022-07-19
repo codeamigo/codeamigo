@@ -108,7 +108,7 @@ const EditorFiles: React.FC<Props> = (props) => {
     </div>
   ) : (
     <div
-      className="w-0.5 h-full bg-bg-nav-offset-faded hover:bg-bg-nav-offset opacity-50 hover:opacity-100 transition-all duration-200 cursor-e-resize"
+      className="w-0.5 h-full opacity-50 hover:opacity-100 transition-all duration-200 bg-bg-nav-offset-faded hover:bg-bg-nav-offset cursor-e-resize"
       id="file-explorer-click-target"
       onMouseDown={() => {
         document.addEventListener('mouseup', (e) => {
