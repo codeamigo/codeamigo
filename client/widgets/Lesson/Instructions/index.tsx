@@ -118,7 +118,7 @@ const Instructions: React.FC<Props> = (props) => {
           ) : null}
         </h3>
         <div
-          className={`lg:flex lg:flex-col h-full relative`}
+          className={`lg:flex lg:flex-col h-full relative overflow-scroll`}
           id="markdown-parent"
         >
           {view === 'editor' ? (
