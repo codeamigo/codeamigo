@@ -12,7 +12,7 @@ const LessonsList: React.FC<Props> = () => {
   const queryLevels =
     (router.query.levels as string)?.split('|').filter((x) => !!x) || [];
 
-  const { data } = useLessonsQuery({
+  const { data, loading } = useLessonsQuery({
     fetchPolicy: 'cache-first',
     variables: {
       labels: queryLevels.join('|'),
@@ -24,15 +24,35 @@ const LessonsList: React.FC<Props> = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {data?.lessons.map((lesson) => {
-        return (
-          <LessonListItem
-            href={`/lessons/start/${lesson.id}`}
-            key={lesson.id}
-            lesson={lesson}
-          />
-        );
-      })}
+      {loading
+        ? Array.from({ length: 12 }, (_, i) => (
+            <div
+              className="flex flex-col rounded-lg border-2 hover:shadow-2xl transition-shadow duration-200 animate-pulse cursor-pointer bg-bg-nav border-bg-nav-offset"
+              key={i}
+            >
+              <div className="flex relative flex-col flex-1 justify-between p-3">
+                <div className="flex gap-3 items-center">
+                  <div className="w-14 h-14 bg-gray-200 rounded-full opacity-50"></div>
+                </div>
+                <div className="flex gap-1.5">
+                  <div className="mt-2 w-5 h-2 bg-gray-200 rounded-md opacity-50"></div>
+                  <div className="mt-2 w-5 h-2 bg-gray-200 rounded-md opacity-50"></div>
+                  <div className="mt-2 w-5 h-2 bg-gray-200 rounded-md opacity-50"></div>
+                </div>
+                <div className="mt-2 w-20 h-4 bg-gray-200 rounded-md opacity-50"></div>
+                <div className="mt-2 w-36 h-4 bg-gray-200 rounded-md opacity-50"></div>
+              </div>
+            </div>
+          ))
+        : data?.lessons.map((lesson) => {
+            return (
+              <LessonListItem
+                href={`/lessons/start/${lesson.id}`}
+                key={lesson.id}
+                lesson={lesson}
+              />
+            );
+          })}
     </div>
   );
 };
