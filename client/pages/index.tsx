@@ -1,6 +1,5 @@
 import Head from 'next/head';
 
-import withApollo from '👨‍💻utils/withApollo';
 import LanguagesAndTemplates from '👨‍💻widgets/HomepageFilters/LanguagesAndTemplates';
 import Levels from '👨‍💻widgets/HomepageFilters/Levels';
 import SortBy from '👨‍💻widgets/HomepageFilters/SortBy';
@@ -38,4 +37,4 @@ const Home = () => {
   );
 };
 
-export default withApollo({ ssr: true })(Home);
+export default Home;
