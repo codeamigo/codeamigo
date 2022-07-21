@@ -68,6 +68,10 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
   }, [step.id]);
 
   useEffect(() => {
+    if (entryFile?.name) setActivePath(entryFile.name);
+  }, [entryFile?.name]);
+
+  useEffect(() => {
     console.log('applying diff, vm:', VM);
     if (!VM) return;
     const getDiff = async () => {
