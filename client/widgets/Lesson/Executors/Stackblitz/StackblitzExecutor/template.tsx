@@ -89,6 +89,8 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
         }
       });
 
+      console.log(diff);
+
       return diff;
     };
 
@@ -127,7 +129,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
     <div className="sp-wrapper">
       <div className="sp-layout">
         <div
-          className="flex z-40 flex-col justify-between bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
+          className="flex z-40 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
