@@ -58,6 +58,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
         { view: 'preview' }
       );
       setVM(stackblitzVM);
+      console.log('stackblitzVM', stackblitzVM);
     };
     setupVM();
   }, []);
@@ -67,9 +68,11 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
   }, [step.id]);
 
   useEffect(() => {
+    console.log('applying diff, vm:', VM);
     if (!VM) return;
     const getDiff = async () => {
       const snapshot = await VM.getFsSnapshot();
+      console.log('applying diff, snapshot:', snapshot);
       const diff = { create: {}, destroy: [] } as FsDiff;
       if (!snapshot) return diff;
 
@@ -88,8 +91,6 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           diff.create[file] = files[file];
         }
       });
-
-      console.log(diff);
 
       return diff;
     };
