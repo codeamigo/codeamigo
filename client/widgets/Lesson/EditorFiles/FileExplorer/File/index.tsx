@@ -87,14 +87,14 @@ export class File extends React.PureComponent<Props & OwnProps> {
                 className={`empty-star hidden group-hover:block hover:text-accent text-xs ml-1`}
                 name={
                   `${
-                    this.isEntry(fileName) ? 'star' : 'star-empty'
+                    this.isEntry(this.props.path) ? 'star' : 'star-empty'
                   }` as IconType
                 }
                 onClick={() => {
                   this.props.onUpdateCodeModuleEntryFile &&
                     this.props.onUpdateCodeModuleEntryFile({
                       newId: this.props.codeModules?.find(
-                        ({ name }) => getFileName(name!) === fileName
+                        ({ name }) => name === this.props.path
                       )?.uuid,
                       oldId: this.props.codeModules?.find(
                         ({ isEntry }) => !!isEntry
@@ -106,7 +106,7 @@ export class File extends React.PureComponent<Props & OwnProps> {
           {this.props.isEditing &&
             fileName &&
             !fileName.includes('spec') &&
-            !this.isEntry(fileName) && (
+            !this.isEntry(this.props.path) && (
               <Icon
                 className={
                   'hidden group-hover:block ml-1 text-xs text-text-primary hover:text-accent'
