@@ -51,7 +51,7 @@ body {
 }
 @media (max-width: 768px) {
   [class*='hint--'] {
-    display: none;
+    display: none !important;
   }
 }
 /* hint css */
