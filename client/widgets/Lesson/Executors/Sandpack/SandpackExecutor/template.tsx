@@ -67,11 +67,11 @@ const SandpackTemplate: React.FC<Props> = (props) => {
   return (
     <SandpackLayout>
       <div
-        className="flex z-40 flex-col justify-between bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
+        className="flex z-20 flex-col justify-between bg-bg-primary border-r sm:border-b-0 border-bg-nav-offset-faded"
         ref={filesRef}
         style={{ minHeight: '20rem' }}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col-reverse sm:flex-col h-full">
           <div className="h-full">
             <EditorFiles
               activeFile={activeFile}
@@ -92,7 +92,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
         ref={editorRef}
         style={{ height: filesHeight, maxHeight: filesHeight }}
       >
-        <div className="flex flex-col h-full bg-bg-primary">
+        <div className="flex flex-col-reverse sm:flex-col h-full bg-bg-primary">
           <Editor
             activeFile={activeFile}
             codeModules={step.codeModules}
