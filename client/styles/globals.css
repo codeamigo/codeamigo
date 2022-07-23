@@ -50,13 +50,11 @@ body {
   border-left-color: black !important;
 }
 @media (max-width: 768px) {
-  [class*='hint--'] {
-    &:before {
-      display: none !important;
-    }
-    &:after {
-      display: none !important;
-    }
+  [class*='hint--']:before {
+    display: none !important;
+  }
+  [class*='hint--']:after {
+    display: none !important;
   }
 }
 /* hint css */
