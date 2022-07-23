@@ -49,6 +49,11 @@ body {
 .hint--left:before {
   border-left-color: black !important;
 }
+@media (max-width: 768px) {
+  [class*='hint--'] {
+    display: none;
+  }
+}
 /* hint css */
 
 /* markdown */

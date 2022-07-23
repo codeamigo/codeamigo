@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "predev": "postcss ./styles/globals.css -o ./styles/App.css",
     "lint": "eslint --fix \"./**/*.{ts,tsx,js,jsx}\"",
     "gen": "graphql-codegen --config codegen.yml"
   },

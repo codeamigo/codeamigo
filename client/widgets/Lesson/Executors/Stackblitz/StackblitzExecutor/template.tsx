@@ -138,7 +138,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col-reverse sm:flex-col h-full">
             <div className="h-full">
               <EditorFiles
                 activeFile={activeFile || (entryFile?.name as string)}
@@ -158,7 +158,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           ref={editorRef}
           style={{ height: filesHeight, maxHeight: filesHeight }}
         >
-          <div className="flex flex-col h-full bg-bg-primary">
+          <div className="flex flex-col-reverse sm:flex-col h-full bg-bg-primary">
             <Editor
               activeFile={activeFile || (entryFile?.name as string)}
               codeModules={step.codeModules}
