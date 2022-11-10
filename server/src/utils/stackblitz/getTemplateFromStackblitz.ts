@@ -8,9 +8,7 @@ export async function getTemplateFromStackblitz(
     const response = await fetch(`https://stackblitz.com/edit/${id}`);
     const text = await response.text();
     const scriptContents = text
-      .split(
-        '<script type="application/json" data-js-react-on-rails-store="appStore">'
-      )[1]
+      .split('<script type="application/json" data-redux-store="">')[1]
       .split('</script>')[0];
 
     const { project } = JSON.parse(scriptContents);
@@ -34,8 +32,6 @@ export async function getTemplateFromStackblitz(
         name: '/' + key,
         value: appFiles[key].contents,
       }));
-
-    console.log(codeModules);
 
     return {
       codeModules,
