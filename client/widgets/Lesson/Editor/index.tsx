@@ -201,20 +201,18 @@ const Editor: React.FC<Props> = ({
       });
     }, 0);
 
-    const choices = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + '/completions',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt: newCode,
-        }),
-      }
-    ).then((res) => res.json());
-
-    console.log(choices);
+    // const choices = await fetch(
+    //   process.env.NEXT_PUBLIC_API_URL + '/completions',
+    //   {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       prompt: newCode,
+    //     }),
+    //   }
+    // ).then((res) => res.json());
   };
 
   const setupCompilerOptions = () => {
