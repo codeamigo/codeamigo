@@ -1,3 +1,6 @@
+import { parse } from '@babel/parser';
+import traverse from "@babel/traverse";
+import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
 import MonacoEditor from '@monaco-editor/react';
 import React, { useEffect, useRef } from 'react';
 import { DEFAULT_THEME } from 'styles/appThemes';
@@ -378,11 +381,22 @@ const Editor: React.FC<Props> = ({
     }
   };
 
+  const setupMonacoJSX = () => {
+    const monacoJSXHighlighter = new MonacoJSXHighlighter(
+      monacoRef.current, parse, traverse, editorRef.current
+   );
+   // Activate highlighting (debounceTime default: 100ms)
+   monacoJSXHighlighter.highlightOnDidChangeModelContent(100);
+   // Activate JSX commenting
+   monacoJSXHighlighter.addJSXCommentCommand();
+  };
+
   const setupEditor = () => {
     setupCommands();
     setupCompilerOptions();
     setupThemes();
     setupModels();
+    setupMonacoJSX();
   };
 
   const editorDidMount = async (editor: any, monaco: any) => {
@@ -400,6 +414,7 @@ const Editor: React.FC<Props> = ({
           Loading...
         </div>
       }
+      language={'react-jsx'}
       onChange={handleCodeUpdate}
       onMount={editorDidMount}
       options={{
