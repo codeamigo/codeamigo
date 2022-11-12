@@ -179,7 +179,7 @@ const Editor: React.FC<Props> = ({
     refreshPreview && refreshPreview();
   }, [stepId]);
 
-  const handleCodeUpdate = (newCode?: string, _?: any) => {
+  const handleCodeUpdate = async (newCode?: string, _?: any) => {
     if (!newCode) return;
     updateCode && updateCode(newCode);
     // Wait for pathRef to update
@@ -187,7 +187,7 @@ const Editor: React.FC<Props> = ({
       const currentModule = codeModules?.find(
         (module) => module.name === pathRef.current
       );
-
+      
       if (!currentModule) return;
 
       updateCodeModule({
@@ -200,6 +200,18 @@ const Editor: React.FC<Props> = ({
         },
       });
     }, 0);
+
+    const choices = await fetch(process.env.NEXT_PUBLIC_API_URL + '/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: newCode,
+      }),
+    }).then((res) => res.json());
+
+    console.log(choices)
   };
 
   const setupCompilerOptions = () => {
@@ -211,13 +223,16 @@ const Editor: React.FC<Props> = ({
       true
     );
 
+    const tsConfig = codeModules?.find((module) => module.name === '/tsconfig.json')
+    const compilerOptions = tsConfig ? JSON.parse(tsConfig?.value || '') : undefined
+
     // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
       {
         allowJs: true,
         allowNonTsExtensions: !hasNativeTypescript,
         experimentalDecorators: true,
-        jsx: monacoRef.current.languages.typescript.JsxEmit.React,
+        jsx: compilerOptions ? compilerOptions.jsx : monacoRef.current.languages.typescript.JsxEmit.React,
         jsxFactory,
         module: hasNativeTypescript
           ? monacoRef.current.languages.typescript.ModuleKind.ES2015

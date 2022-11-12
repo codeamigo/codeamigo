@@ -27,6 +27,7 @@ import { LessonResolver } from './resolvers/lesson';
 import { SessionResolver } from './resolvers/session';
 import { StepResolver } from './resolvers/step';
 import { UserResolver } from './resolvers/user';
+import { complete } from './utils/openai';
 
 const main = async () => {
   const conn = await createConnection({
@@ -50,6 +51,7 @@ const main = async () => {
 
   const app = express();
   app.set('trust proxy', 1);
+  app.use(express.json());
   app.use(
     cors({
       credentials: true,
@@ -120,6 +122,13 @@ const main = async () => {
     );
 
     res.json({ signature, timestamp });
+  });
+
+  app.post('/completions', async (req, res) => {
+    const result = await complete(req.body.prompt as string);
+
+    console.log(result.data.choices);
+    res.json(result.data.choices);
   });
 
   app.listen(parseInt(process.env.PORT), () => {

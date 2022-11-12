@@ -9,5 +9,6 @@ declare namespace NodeJS {
     GITHUB_CLIENT_SECRET: string;
     CLOUDINARY_API_KEY: string;
     CLOUDINARY_API_SECRET: string;
+    OPENAI_API_KEY_SECRET: string;
   }
 }
