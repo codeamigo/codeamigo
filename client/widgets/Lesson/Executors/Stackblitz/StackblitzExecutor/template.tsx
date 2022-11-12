@@ -74,7 +74,6 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
   }, [entryFile?.name]);
 
   useEffect(() => {
-    console.log('applying diff, vm:', VM);
     if (!VM) return;
     const getDiff = async () => {
       const snapshot = await VM.getFsSnapshot();
@@ -103,6 +102,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
 
     const applyDiff = async () => {
       const diff = await getDiff();
+      console.log('applying diff:', diff);
       VM.applyFsDiff(diff);
     };
 
