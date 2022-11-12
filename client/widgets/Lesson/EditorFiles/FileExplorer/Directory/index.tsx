@@ -17,6 +17,15 @@ export class Directory extends React.Component<Props & OwnProps, State> {
     open: false,
   };
 
+  componentDidMount() {
+    const { codeModules, prefixedPath } = this.props;
+    const entry = codeModules?.find((m) => m.isEntry)
+
+    if (entry?.name?.includes(prefixedPath)) {
+      this.toggleOpen(true);
+    }
+  }
+
   componentDidUpdate(prevProps: Props & OwnProps) {
     const {
       addFileState: prevAddFileState,
