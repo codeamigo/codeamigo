@@ -187,7 +187,7 @@ const Editor: React.FC<Props> = ({
       const currentModule = codeModules?.find(
         (module) => module.name === pathRef.current
       );
-      
+
       if (!currentModule) return;
 
       updateCodeModule({
@@ -201,17 +201,20 @@ const Editor: React.FC<Props> = ({
       });
     }, 0);
 
-    const choices = await fetch(process.env.NEXT_PUBLIC_API_URL + '/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        prompt: newCode,
-      }),
-    }).then((res) => res.json());
+    const choices = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + '/completions',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: newCode,
+        }),
+      }
+    ).then((res) => res.json());
 
-    console.log(choices)
+    console.log(choices);
   };
 
   const setupCompilerOptions = () => {
@@ -223,8 +226,12 @@ const Editor: React.FC<Props> = ({
       true
     );
 
-    const tsConfig = codeModules?.find((module) => module.name === '/tsconfig.json')
-    const compilerOptions = tsConfig ? JSON.parse(tsConfig?.value || '') : undefined
+    const tsConfigFile = codeModules?.find(
+      (module) => module.name === '/tsconfig.json'
+    );
+    const tsConfig = tsConfigFile
+      ? JSON.parse(tsConfigFile?.value || '')
+      : undefined;
 
     // https://github.com/codesandbox/codesandbox-client/blob/master/packages/app/src/embed/components/Content/Monaco/index.js
     monacoRef.current.languages.typescript.typescriptDefaults.setCompilerOptions(
@@ -232,7 +239,9 @@ const Editor: React.FC<Props> = ({
         allowJs: true,
         allowNonTsExtensions: !hasNativeTypescript,
         experimentalDecorators: true,
-        jsx: compilerOptions ? compilerOptions.jsx : monacoRef.current.languages.typescript.JsxEmit.React,
+        jsx: tsConfig?.compilerOptions
+          ? tsConfig?.compilerOptions.jsx
+          : monacoRef.current.languages.typescript.JsxEmit.React,
         jsxFactory,
         module: hasNativeTypescript
           ? monacoRef.current.languages.typescript.ModuleKind.ES2015
