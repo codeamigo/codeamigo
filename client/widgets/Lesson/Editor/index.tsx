@@ -58,6 +58,7 @@ const Editor: React.FC<Props> = ({
       monacoRef.current.Uri.parse(`${URN}${activeFile}`)
     );
     if (model) editorRef.current.setModel(model);
+    setupMonacoJSX()
   }, [activeFile, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models

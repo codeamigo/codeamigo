@@ -60,7 +60,9 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
       setVM(stackblitzVM);
       console.log('stackblitzVM', stackblitzVM);
     };
-    setupVM();
+    if (!VM) {
+      setupVM();
+    }
   }, []);
 
   useEffect(() => {
@@ -156,7 +158,11 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
         <div
           className="z-20 flex-1 sm:flex-auto sm:w-3/6 h-96 md:h-full border-bg-nav-offset"
           ref={editorRef}
-          style={{ height: filesHeight, maxHeight: filesHeight, minHeight: '20rem' }}
+          style={{
+            height: filesHeight,
+            maxHeight: filesHeight,
+            minHeight: '20rem',
+          }}
         >
           <div className="flex flex-col-reverse sm:flex-col h-full bg-bg-primary">
             <Editor
