@@ -64,6 +64,10 @@ body {
   color: var(--text-primary) !important;
 }
 
+.markdown-body code {
+  background-color: var(--bg-nav-offset) !important;
+}
+
 .markdown-body pre {
   color: black !important;
 }
@@ -75,6 +79,7 @@ body {
   white-space: -pre-wrap !important;
   white-space: -o-pre-wrap !important;
   word-wrap: break-word !important;
+  background-color: initial !important;
 }
 
 .markdown-body blockquote {
