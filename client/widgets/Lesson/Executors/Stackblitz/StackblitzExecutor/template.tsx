@@ -102,13 +102,17 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
 
     const applyDiff = async () => {
       const diff = await getDiff();
-      console.log('applying diff:', diff);
-      await VM.applyFsDiff({ create: diff.create, destroy: []});
+      console.log('applying diff:', { create: diff.create, destroy: [] });
+      try {
+        await VM.applyFsDiff({ create: diff.create, destroy: [] });
+      } catch (e) {
+        console.log('error applying diff:', e);
+      }
 
       try {
         await VM.applyFsDiff({ create: {}, destroy: diff.destroy });
       } catch (e) {
-        console.log('error applying diff:', e);
+        console.log('error applying destroy:', e);
       }
     };
 
