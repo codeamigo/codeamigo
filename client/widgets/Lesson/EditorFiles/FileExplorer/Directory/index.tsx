@@ -22,7 +22,7 @@ export class Directory extends React.Component<Props & OwnProps, State> {
     const entry = codeModules?.find((m) => m.isEntry)
 
     if (entry?.name?.includes(prefixedPath)) {
-      this.toggleOpen(true);
+      this.toggleOpen(true)
     }
   }
 
@@ -31,13 +31,19 @@ export class Directory extends React.Component<Props & OwnProps, State> {
       addFileState: prevAddFileState,
       prefixedPath: prevPrefixedPath,
     } = prevProps;
-    const { addFileState, prefixedPath } = this.props;
+    const { addFileState, prefixedPath, codeModules } = this.props;
 
     if (
       prevPrefixedPath === addFileState.path &&
       !prevAddFileState.active &&
       addFileState.active
     ) {
+      this.toggleOpen(true);
+    }
+
+    const entry = codeModules?.find((m) => m.isEntry)
+
+    if (entry?.name?.includes(prefixedPath) && !this.state.open) {
       this.toggleOpen(true);
     }
   }
