@@ -17,7 +17,7 @@
     "@codesandbox/sandpack-client": "^1.2.2",
     "@codesandbox/sandpack-react": "^1.2.2",
     "@headlessui/react": "1.4.1",
-    "@monaco-editor/react": "4.3.1",
+    "@monaco-editor/react": "4.4.6",
     "@stackblitz/sdk": "^1.8.0",
     "@stripe/stripe-js": "1.21.1",
     "@tailwindcss/forms": "^0.2.1",

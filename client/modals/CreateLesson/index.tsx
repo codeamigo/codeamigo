@@ -168,7 +168,7 @@ const CreateLesson: React.FC<Props> = () => {
       {({ isSubmitting, values }) => {
         return (
           <Form>
-            <div className="p-6 lg:px-8 mx-auto max-w-2xl">
+            <div className="p-6 lg:px-8 mx-auto">
               <h1 className="flex mb-4 text-xl font-semibold text-text-primary">
                 New Lesson
               </h1>
@@ -186,7 +186,7 @@ const CreateLesson: React.FC<Props> = () => {
                   <label className="block mb-1 font-medium text-text-primary">
                     Select a Template
                   </label>
-                  <div className="grid grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                     {templates.map((template) => {
                       if (
                         template.value === LessonTemplate.Sandpack ||

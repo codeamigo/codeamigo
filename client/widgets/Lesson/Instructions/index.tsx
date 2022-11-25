@@ -86,7 +86,7 @@ const Instructions: React.FC<Props> = (props) => {
         </div>
         <div>
           {isEditing ? (
-            <div className="group relative z-50 text-sm">
+            <div className="group relative z-20 text-sm">
               <Button className="justify-center" nature="secondary">
                 Add Checkpoint
               </Button>

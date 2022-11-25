@@ -4,6 +4,7 @@ import {
   useActiveCode,
   useSandpack,
 } from '@codesandbox/sandpack-react';
+import { useWindowSize } from 'hooks/useWindowSize';
 import React, { useRef } from 'react';
 
 import Button from '👨‍💻components/Button';
@@ -36,6 +37,7 @@ const SandpackTemplate: React.FC<Props> = (props) => {
     step,
     updateWidths,
   } = props;
+  const { minWidth } = useWindowSize();
   const { updateCode } = useActiveCode();
   const { dispatch, sandpack } = useSandpack();
   const { activeFile } = sandpack;
@@ -90,44 +92,90 @@ const SandpackTemplate: React.FC<Props> = (props) => {
       <div
         className="z-20 flex-1 sm:flex-auto w-4/6 md:w-3/6 h-96 md:h-full border-b sm:border-b-0 border-bg-nav-offset"
         ref={editorRef}
-        style={{ height: filesHeight, maxHeight: filesHeight, minHeight: '20rem' }}
+        style={{
+          height: filesHeight,
+          maxHeight: filesHeight,
+          minHeight: '20rem',
+        }}
       >
-        <div className="flex flex-col-reverse sm:flex-col h-full bg-bg-primary">
-          <Editor
-            activeFile={activeFile}
-            codeModules={step.codeModules}
-            isTyped
-            refreshPreview={() => dispatch({ type: 'refresh' })}
-            runCode={() => dispatch({ type: 'start' })}
-            sessionId={session?.id}
-            stepId={step.id}
-            testCode={triggerCTA}
-            updateCode={updateCode}
-            {...props}
-          />
-          <LessonBottomBarWrapper padding>
-            <div>
-              <Button
-                className="opacity-50 hover:opacity-100 transition-opacity"
-                nature="secondary"
-                onClick={prevStep}
-              >
-                👈 Previous
-              </Button>
-            </div>
-            <StepPosition {...props} />
-            <CTA
-              {...props}
-              bundlerReady={
-                sandpack.status === 'running' && !!sandpack.bundlerState
-              }
-              handleRunTests={handleRunTests}
-              loading={loading}
-              nextStep={nextStep}
-              ref={props.ctaRef}
-              step={step}
-            />
-          </LessonBottomBarWrapper>
+        <div className="flex flex-col h-full bg-bg-primary">
+          {minWidth('sm') ? (
+            <>
+              <Editor
+                activeFile={activeFile}
+                codeModules={step.codeModules}
+                isTyped
+                refreshPreview={() => dispatch({ type: 'refresh' })}
+                runCode={() => dispatch({ type: 'start' })}
+                sessionId={session?.id}
+                stepId={step.id}
+                testCode={triggerCTA}
+                updateCode={updateCode}
+                {...props}
+              />
+              <LessonBottomBarWrapper padding>
+                <div>
+                  <Button
+                    className="opacity-50 hover:opacity-100 transition-opacity"
+                    nature="secondary"
+                    onClick={prevStep}
+                  >
+                    👈 Previous
+                  </Button>
+                </div>
+                <StepPosition {...props} />
+                <CTA
+                  {...props}
+                  bundlerReady={
+                    sandpack.status === 'running' && !!sandpack.bundlerState
+                  }
+                  handleRunTests={handleRunTests}
+                  loading={loading}
+                  nextStep={nextStep}
+                  ref={props.ctaRef}
+                  step={step}
+                />
+              </LessonBottomBarWrapper>
+            </>
+          ) : (
+            <>
+              <LessonBottomBarWrapper padding>
+                <div>
+                  <Button
+                    className="opacity-50 hover:opacity-100 transition-opacity"
+                    nature="secondary"
+                    onClick={prevStep}
+                  >
+                    👈 Previous
+                  </Button>
+                </div>
+                <StepPosition {...props} />
+                <CTA
+                  {...props}
+                  bundlerReady={
+                    sandpack.status === 'running' && !!sandpack.bundlerState
+                  }
+                  handleRunTests={handleRunTests}
+                  loading={loading}
+                  nextStep={nextStep}
+                  ref={props.ctaRef}
+                  step={step}
+                />
+              </LessonBottomBarWrapper>
+              <Editor
+                activeFile={activeFile}
+                codeModules={step.codeModules}
+                isTyped
+                refreshPreview={() => dispatch({ type: 'refresh' })}
+                runCode={() => dispatch({ type: 'start' })}
+                sessionId={session?.id}
+                stepId={step.id}
+                testCode={triggerCTA}
+                updateCode={updateCode}
+                {...props}
+              />
+            </>
+          )}
         </div>
         <Separator
           iframeName="sp-preview-iframe"

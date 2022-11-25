@@ -146,7 +146,7 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
     <div className="sp-wrapper">
       <div className="sp-layout">
         <div
-          className="sm:flex hidden z-20 flex-col justify-between border-r sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
+          className="sm:flex hidden z-20 flex-col justify-between border-r-2 sm:border-b-0 bg-bg-primary border-bg-nav-offset-faded"
           ref={filesRef}
           style={{ minHeight: '20rem' }}
         >
