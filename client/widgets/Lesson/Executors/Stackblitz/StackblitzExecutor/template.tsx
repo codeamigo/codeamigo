@@ -169,8 +169,8 @@ const StackblitzTemplate: React.FC<Props> = (props) => {
           className="z-20 flex-1 sm:flex-auto sm:w-3/6 h-96 md:h-full border-bg-nav-offset"
           ref={editorRef}
           style={{
-            height: filesHeight,
-            maxHeight: filesHeight,
+            height: filesHeight || 'auto',
+            maxHeight: filesHeight || 'auto',
             minHeight: '20rem',
           }}
         >
