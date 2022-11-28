@@ -2,7 +2,7 @@ module.exports = {
   // or 'media' or 'class'
   darkMode: false,
   plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
-  purge: [
+  content: [
     './components/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './layouts/**/*.{js,ts,jsx,tsx}',
