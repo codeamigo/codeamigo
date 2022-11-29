@@ -82,7 +82,7 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="inline-block w-full sm:w-auto sm:my-8 text-left align-bottom sm:align-middle rounded-lg shadow-xl transition-all transform bg-bg-primary"
+          className="inline-block w-full sm:w-auto text-left align-bottom sm:align-middle rounded-lg shadow-xl transition-all transform bg-bg-primary"
           role="dialog"
         >
           <div
