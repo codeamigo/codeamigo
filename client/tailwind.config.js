@@ -4,7 +4,6 @@ module.exports = {
     './pages/**/*.{js,ts,jsx,tsx}',
     './layouts/**/*.{js,ts,jsx,tsx}',
     './modals/**/*.{js,ts,jsx,tsx}',
-    './modals/*.${js,ts,jsx,tsx}',
     './widgets/**/*.{js,ts,jsx,tsx}',
   ],
   // or 'media' or 'class'
