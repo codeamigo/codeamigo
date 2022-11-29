@@ -19,10 +19,10 @@ export class Directory extends React.Component<Props & OwnProps, State> {
 
   componentDidMount() {
     const { codeModules, prefixedPath } = this.props;
-    const entry = codeModules?.find((m) => m.isEntry)
+    const entry = codeModules?.find((m) => m.isEntry);
 
     if (entry?.name?.includes(prefixedPath)) {
-      this.toggleOpen(true)
+      this.toggleOpen(true);
     }
   }
 
@@ -31,7 +31,7 @@ export class Directory extends React.Component<Props & OwnProps, State> {
       addFileState: prevAddFileState,
       prefixedPath: prevPrefixedPath,
     } = prevProps;
-    const { addFileState, prefixedPath, codeModules } = this.props;
+    const { addFileState, codeModules, prefixedPath } = this.props;
 
     if (
       prevPrefixedPath === addFileState.path &&
@@ -41,7 +41,7 @@ export class Directory extends React.Component<Props & OwnProps, State> {
       this.toggleOpen(true);
     }
 
-    const entry = codeModules?.find((m) => m.isEntry)
+    const entry = codeModules?.find((m) => m.isEntry);
 
     if (entry?.name?.includes(prefixedPath) && !this.state.open) {
       this.toggleOpen(true);

@@ -14,8 +14,8 @@ const Levels: React.FC<Props> = () => {
   const queryLevels = router.query.levels as string;
 
   return (
-    <div className="p-2 mb-2 rounded-md bg-bg-nav">
-      <h4 className="mb-2 text-lg font-semibold underline text-text-primary">
+    <div className="p-2 mb-2 bg-bg-nav rounded-md">
+      <h4 className="mb-2 text-lg font-semibold text-text-primary underline">
         Levels
       </h4>
       <Formik
@@ -49,7 +49,7 @@ const Levels: React.FC<Props> = () => {
                       type="checkbox"
                       value={level.toUpperCase()}
                     />{' '}
-                    <div className="flex items-center ml-1 capitalize text-text-primary">
+                    <div className="flex items-center ml-1 text-text-primary capitalize">
                       <div
                         // @ts-ignore
                         className={`w-2 h-2 mr-1 rounded-full ${levelColorMap[level]}`}

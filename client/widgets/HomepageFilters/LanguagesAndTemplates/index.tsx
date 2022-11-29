@@ -9,8 +9,8 @@ const LanguagesAndTemplates: React.FC<Props> = () => {
   const router = useRouter();
 
   return (
-    <div className="p-2 mb-2 rounded-md bg-bg-nav">
-      <h4 className="mb-2 text-lg font-semibold underline text-text-primary">
+    <div className="p-2 mb-2 bg-bg-nav rounded-md">
+      <h4 className="mb-2 text-lg font-semibold text-text-primary underline">
         Languages and Templates
       </h4>
       <Formik

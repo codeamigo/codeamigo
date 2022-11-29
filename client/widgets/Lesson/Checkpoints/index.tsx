@@ -235,7 +235,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                       />
                       {i === checkpoints.length - 1 ? (
                         <button
-                          className="inline-flex justify-center py-0.5 px-1 ml-2 text-xs font-medium bg-red-600 hover:bg-red-700 rounded-md border border-transparent focus:ring-1 focus:ring-red-500 focus:ring-offset-1 shadow-sm disabled:opacity-50 focus:outline-none text-text-primary"
+                          className="inline-flex justify-center py-0.5 px-1 ml-2 text-xs font-medium text-text-primary bg-red-600 hover:bg-red-700 rounded-md border border-transparent focus:ring-1 focus:ring-red-500 focus:ring-offset-1 shadow-sm disabled:opacity-50 focus:outline-none"
                           onClick={(e) => {
                             e.stopPropagation();
                             const yes = window.confirm(
@@ -268,7 +268,7 @@ const Checkpoints: React.FC<Props> = ({ isEditing, step }) => {
                   <div>
                     {view === 'editor' ? (
                       <textarea
-                        className="block w-full h-52 border-none text-text-primary bg-bg-primary"
+                        className="block w-full h-52 text-text-primary bg-bg-primary border-none"
                         defaultValue={checkpoint.description || ''}
                         onBlur={() => setShowStatusIndicator(false)}
                         onChange={(

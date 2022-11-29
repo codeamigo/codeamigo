@@ -18,7 +18,7 @@ const Themes: React.FC<Props> = () => {
   return (
     <div>
       <div>
-        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Choose Theme
         </h2>
         <Formik initialValues={{ theme: data.me.theme }} onSubmit={() => {}}>

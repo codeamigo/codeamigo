@@ -27,7 +27,7 @@ const LessonsList: React.FC<Props> = () => {
       {loading
         ? Array.from({ length: 12 }, (_, i) => (
             <div
-              className="flex flex-col rounded-lg border-2 hover:shadow-2xl transition-shadow duration-200 animate-pulse cursor-pointer bg-bg-nav border-bg-nav-offset"
+              className="flex flex-col bg-bg-nav rounded-lg border-2 border-bg-nav-offset hover:shadow-2xl transition-shadow duration-200 animate-pulse cursor-pointer"
               key={i}
             >
               <div className="flex relative flex-col flex-1 justify-between p-3">

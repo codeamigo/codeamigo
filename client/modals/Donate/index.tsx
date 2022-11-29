@@ -83,7 +83,7 @@ const Donate: React.FC<Props> = () => {
                       value={donation.amount}
                     />{' '}
                     <div className="flex items-center ml-2 h-12">
-                      <div className="absolute top-1/2 left-1/2 mt-0.5 text-xl font-bold transform -translate-x-1/2 -translate-y-1/2 text-text-primary">
+                      <div className="absolute top-1/2 left-1/2 mt-0.5 text-xl font-bold text-text-primary transform -translate-x-1/2 -translate-y-1/2">
                         {donation.description}
                       </div>
                     </div>
@@ -121,7 +121,7 @@ const Donate: React.FC<Props> = () => {
             </div>
             <div className="flex gap-3 justify-end items-center">
               <div
-                className="text-sm font-semibold underline cursor-pointer text-text-primary"
+                className="text-sm font-semibold text-text-primary underline cursor-pointer"
                 onClick={() => {
                   modalVar(InitialModalState);
                   setDonations({

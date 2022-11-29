@@ -23,7 +23,7 @@ const Backoffice: React.FC<Props> = () => {
   return (
     <div>
       <div className="md:w-1/4">
-        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Create Admin
         </h2>
         <Formik
@@ -57,13 +57,13 @@ const Backoffice: React.FC<Props> = () => {
         </Formik>
       </div>
       <div className="mt-8">
-        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Publish Pending Lessons
         </h2>
         <PendingLessonsList />
       </div>
       <div className="mt-8">
-        <h2 className="mb-3 text-xl font-bold underline text-text-primary">
+        <h2 className="mb-3 text-xl font-bold text-text-primary underline">
           Students (beta testers)
         </h2>
         <StudentList />

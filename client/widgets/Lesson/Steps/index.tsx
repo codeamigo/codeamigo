@@ -173,7 +173,7 @@ const Steps: React.FC<Props> = ({
 
   return (
     <Transition
-      className="overflow-auto absolute top-28 lg:top-11 left-0 z-40 py-2 px-4 w-full lg:w-3/12 bg-opacity-5 border-r shadow-2xl bg-bg-primary border-bg-nav-offset"
+      className="overflow-auto absolute top-28 lg:top-11 left-0 z-40 py-2 px-4 w-full lg:w-3/12 bg-bg-primary bg-opacity-5 border-r border-bg-nav-offset shadow-2xl"
       enter="transition ease-in-out duration-200 transform"
       enterFrom="-translate-x-full"
       enterTo="translate-x-0"
@@ -272,7 +272,7 @@ const Steps: React.FC<Props> = ({
                     <div className="flex overflow-hidden w-full whitespace-nowrap">
                       {isUpdating === step.id ? (
                         <input
-                          className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
+                          className="py-0 px-0 w-full text-text-primary bg-transparent border-blue-50 border-none focus:ring-0"
                           defaultValue={step.name || ''}
                           onBlur={(e) => handleUpdateBlur(e, step.id)}
                           onClick={(e) => e.stopPropagation()}
@@ -353,7 +353,7 @@ const Steps: React.FC<Props> = ({
         {isAdding && (
           <div className="flex items-center py-2 w-full">
             <input
-              className="py-0 px-0 w-full bg-transparent border-blue-50 border-none focus:ring-0 text-text-primary"
+              className="py-0 px-0 w-full text-text-primary bg-transparent border-blue-50 border-none focus:ring-0"
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               ref={inputRef}
@@ -363,7 +363,7 @@ const Steps: React.FC<Props> = ({
               Submit
             </Button>
             <a
-              className="ml-2 text-sm cursor-pointer text-text-primary"
+              className="ml-2 text-sm text-text-primary cursor-pointer"
               onClick={(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
                 e.stopPropagation();
                 setIsAdding(false);

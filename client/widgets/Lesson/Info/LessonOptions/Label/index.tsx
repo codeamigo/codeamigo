@@ -50,7 +50,7 @@ const Label: React.FC<Props> = ({ lesson }) => {
   return (
     <div ref={wrapperRef}>
       <div
-        className="flex items-center text-sm cursor-pointer text-text-primary"
+        className="flex items-center text-sm text-text-primary cursor-pointer"
         onClick={() => setShowOptions(!showOptions)}
         role="button"
       >
@@ -78,7 +78,7 @@ const Label: React.FC<Props> = ({ lesson }) => {
                 <div
                   aria-labelledby="session-menu"
                   aria-orientation="vertical"
-                  className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-left bg-bg-primary"
+                  className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-left"
                   role="menu"
                 >
                   <Button

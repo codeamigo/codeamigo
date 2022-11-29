@@ -79,7 +79,7 @@ const Login: React.FC = () => {
                 <Image src={googlePng} />
               </button>
               <button
-                className="block w-8 h-8 rounded-full bg-bg-nav-offset"
+                className="block w-8 h-8 bg-bg-nav-offset rounded-full"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 style={{ padding: '2px' }}
                 type="button"
@@ -105,7 +105,7 @@ const Login: React.FC = () => {
                     type="password"
                   />
                   <div
-                    className="absolute top-0.5 right-0 text-xs underline cursor-pointer text-text-primary"
+                    className="absolute top-0.5 right-0 text-xs text-text-primary underline cursor-pointer"
                     onClick={() =>
                       forgotPassword({
                         variables: { usernameOrEmail: values.usernameOrEmail },
@@ -129,7 +129,7 @@ const Login: React.FC = () => {
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium rounded-md focus:outline-none text-accent"
+                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
                 disabled={isSubmitting || loading}
                 onClick={() =>
                   modalVar({ callback: () => null, name: 'register' })

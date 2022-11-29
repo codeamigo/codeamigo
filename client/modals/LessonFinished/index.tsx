@@ -20,7 +20,7 @@ const LessonFinished: React.FC<Props> = () => {
             target="_blank"
           >
             <Icon
-              className="opacity-80 hover:opacity-100 transition-opacity duration-100 text-text-primary"
+              className="text-text-primary opacity-80 hover:opacity-100 transition-opacity duration-100"
               name="discord"
             />
           </a>
@@ -31,7 +31,7 @@ const LessonFinished: React.FC<Props> = () => {
             target="_blank"
           >
             <Icon
-              className="opacity-80 hover:opacity-100 transition-opacity duration-100 text-text-primary"
+              className="text-text-primary opacity-80 hover:opacity-100 transition-opacity duration-100"
               name="github"
             />
           </a>
@@ -48,7 +48,7 @@ const LessonFinished: React.FC<Props> = () => {
             target="_blank"
           >
             <Icon
-              className="opacity-80 hover:opacity-100 transition-opacity duration-100 text-text-primary"
+              className="text-text-primary opacity-80 hover:opacity-100 transition-opacity duration-100"
               name="twitter"
             />
           </a>

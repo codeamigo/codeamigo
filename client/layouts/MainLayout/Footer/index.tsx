@@ -4,7 +4,7 @@ import { Logo } from '👨‍💻components/Logos';
 
 const Footer: React.FC<Props> = () => {
   return (
-    <div className="bg-bg-nav text-text-primary">
+    <div className="text-text-primary bg-bg-nav">
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
         <div className="flex items-center text-lg font-bold">
           <Logo className="mr-1 sm:mr-1.5 w-8 sm:w-12" />{' '}
@@ -50,7 +50,7 @@ const Footer: React.FC<Props> = () => {
             </a>
           </div>
         </div>
-        <div className="mt-4 sm:text-xs text-xxs">
+        <div className="mt-4 text-xxs sm:text-xs">
           Copyright &#169; 2021, codeamigo, LLC
         </div>
       </div>

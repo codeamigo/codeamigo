@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 const tailwindBreakpoints = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
   '2xl': 1536,
+  lg: 1024,
+  md: 768,
+  sm: 640,
+  xl: 1280,
 };
 
 export const useWindowSize = () => {
@@ -13,8 +13,8 @@ export const useWindowSize = () => {
     height?: number;
     width?: number;
   }>({
-    width: undefined,
     height: undefined,
+    width: undefined,
   });
 
   useEffect(() => {
@@ -22,8 +22,8 @@ export const useWindowSize = () => {
     function handleResize() {
       // Set window width/height to state
       setWindowSize({
-        width: window.innerWidth,
         height: window.innerHeight,
+        width: window.innerWidth,
       });
     }
     // Add event listener
@@ -40,5 +40,5 @@ export const useWindowSize = () => {
     );
   };
 
-  return { windowSize, minWidth };
+  return { minWidth, windowSize };
 };

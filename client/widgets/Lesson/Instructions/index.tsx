@@ -107,7 +107,7 @@ const Instructions: React.FC<Props> = (props) => {
           {isEditing ? (
             <>
               <span
-                className="cursor-pointer text-text-primary"
+                className="text-text-primary cursor-pointer"
                 onClick={() =>
                   toggleView(view === 'preview' ? 'editor' : 'preview')
                 }
@@ -123,7 +123,7 @@ const Instructions: React.FC<Props> = (props) => {
         >
           {view === 'editor' ? (
             <textarea
-              className="w-full h-48 lg:h-full border-none text-text-primary bg-bg-primary"
+              className="w-full h-48 lg:h-full text-text-primary bg-bg-primary border-none"
               defaultValue={markdown || ''}
               onBlur={() => setShowStatusIndicator(false)}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {

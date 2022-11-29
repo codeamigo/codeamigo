@@ -57,7 +57,7 @@ const Modals: React.FC<Props> = () => {
         >
           <div
             aria-hidden="true"
-            className="fixed inset-0 opacity-50 transition-opacity bg-bg-nav"
+            className="fixed inset-0 bg-bg-nav opacity-50 transition-opacity"
             onClick={() => modalVar(InitialModalState)}
           >
             <div className="absolute inset-0 opacity-75"></div>
@@ -82,11 +82,11 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="inline-block w-full sm:w-auto text-left align-bottom sm:align-middle rounded-lg shadow-xl transition-all transform bg-bg-primary"
+          className="inline-block w-full sm:w-auto text-left align-bottom sm:align-middle bg-bg-primary rounded-lg shadow-xl transition-all transform"
           role="dialog"
         >
           <div
-            className="flex absolute -top-3 -right-3 justify-center items-center w-10 h-10 rounded-full bg-bg-primary"
+            className="flex absolute -top-3 -right-3 justify-center items-center w-10 h-10 bg-bg-primary rounded-full"
             onClick={() => modalVar(InitialModalState)}
           >
             <Icon

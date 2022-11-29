@@ -1,7 +1,7 @@
 import { parse } from '@babel/parser';
-import traverse from "@babel/traverse";
-import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
+import traverse from '@babel/traverse';
 import MonacoEditor from '@monaco-editor/react';
+import MonacoJSXHighlighter from 'monaco-jsx-highlighter';
 import React, { useEffect, useRef } from 'react';
 import { DEFAULT_THEME } from 'styles/appThemes';
 import { CodeSandboxV1ResponseI } from 'types/codesandbox';
@@ -58,7 +58,7 @@ const Editor: React.FC<Props> = ({
       monacoRef.current.Uri.parse(`${URN}${activeFile}`)
     );
     if (model) editorRef.current.setModel(model);
-    setupMonacoJSX()
+    setupMonacoJSX();
   }, [activeFile, monacoRef.current, editorRef.current]);
 
   // When step changes reinit models
@@ -384,12 +384,15 @@ const Editor: React.FC<Props> = ({
 
   const setupMonacoJSX = () => {
     const monacoJSXHighlighter = new MonacoJSXHighlighter(
-      monacoRef.current, parse, traverse, editorRef.current
-   );
-   // Activate highlighting (debounceTime default: 100ms)
-   monacoJSXHighlighter.highlightOnDidChangeModelContent(100);
-   // Activate JSX commenting
-   monacoJSXHighlighter.addJSXCommentCommand();
+      monacoRef.current,
+      parse,
+      traverse,
+      editorRef.current
+    );
+    // Activate highlighting (debounceTime default: 100ms)
+    monacoJSXHighlighter.highlightOnDidChangeModelContent(100);
+    // Activate JSX commenting
+    monacoJSXHighlighter.addJSXCommentCommand();
   };
 
   const setupEditor = () => {
@@ -410,12 +413,12 @@ const Editor: React.FC<Props> = ({
   return (
     <MonacoEditor
       defaultLanguage="typescript"
+      language={'react-jsx'}
       loading={
         <div className="flex justify-center items-center w-full h-full font-bold text-white bg-bg-primary">
           Loading...
         </div>
       }
-      language={'react-jsx'}
       onChange={handleCodeUpdate}
       onMount={editorDidMount}
       options={{

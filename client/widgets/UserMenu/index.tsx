@@ -30,7 +30,7 @@ const UserMenu: React.FC<Props> = () => {
   if (loading)
     return (
       <Icon
-        className="-mr-1 sm:mr-0 w-8 h-8 text-lg rounded-full animate-pulse text-text-primary"
+        className="-mr-1 sm:mr-0 w-8 h-8 text-lg text-text-primary rounded-full animate-pulse"
         name="user"
       />
     );
@@ -50,7 +50,7 @@ const UserMenu: React.FC<Props> = () => {
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="-mr-1 sm:mr-0 w-8 h-8 text-lg rounded-full text-text-primary"
+                    className="-mr-1 sm:mr-0 w-8 h-8 text-lg text-text-primary rounded-full"
                     name="user"
                   />
                 </Menu.Button>
@@ -66,7 +66,7 @@ const UserMenu: React.FC<Props> = () => {
                   <Menu.Items
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right bg-bg-primary"
+                    className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
                     role="menu"
                   >
                     <Menu.Item>
@@ -110,7 +110,7 @@ const UserMenu: React.FC<Props> = () => {
       ) : (
         <>
           <button
-            className="py-1.5 sm:px-3 pl-3 text-sm font-medium text-right sm:text-center rounded-md transition duration-150 text-text-primary"
+            className="py-1.5 sm:px-3 pl-3 text-sm font-medium text-right sm:text-center text-text-primary rounded-md transition duration-150"
             onClick={() =>
               modalVar({
                 callback: () => null,
@@ -123,7 +123,7 @@ const UserMenu: React.FC<Props> = () => {
           </button>
 
           <button
-            className="hidden sm:block py-1 sm:py-1.5 px-1 sm:px-3 text-sm font-medium whitespace-nowrap rounded-md border-2 transition duration-150 text-text-primary border-bg-nav-offset"
+            className="hidden sm:block py-1 sm:py-1.5 px-1 sm:px-3 text-sm font-medium text-text-primary whitespace-nowrap rounded-md border-2 border-bg-nav-offset transition duration-150"
             onClick={() => {
               modalVar({
                 callback: () =>

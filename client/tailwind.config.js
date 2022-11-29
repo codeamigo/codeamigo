@@ -1,7 +1,4 @@
 module.exports = {
-  // or 'media' or 'class'
-  darkMode: false,
-  plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
   content: [
     './components/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
@@ -10,6 +7,9 @@ module.exports = {
     './modals/*.${js,ts,jsx,tsx}',
     './widgets/**/*.{js,ts,jsx,tsx}',
   ],
+  // or 'media' or 'class'
+  darkMode: false,
+  plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
   theme: {
     extend: {
       animation: {

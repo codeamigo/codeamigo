@@ -25,13 +25,13 @@ const Info: React.FC<Props> = ({
   return (
     <div className="relative">
       <div
-        className="flex relative z-30 justify-between items-center py-1 px-3 sm:px-4 w-full border-b bg-bg-nav border-bg-nav-offset-faded"
+        className="flex relative z-30 justify-between items-center py-1 px-3 sm:px-4 w-full bg-bg-nav border-b border-bg-nav-offset-faded"
         style={{ minHeight: `${LessonInfoHeaderHeight}rem` }}
       >
         <div className="flex overflow-x-hidden items-center w-full overflow-ellipsis">
           <div>
             <Icon
-              className="mr-2 sm:mr-4 text-lg cursor-pointer text-text-primary"
+              className="mr-2 sm:mr-4 text-lg text-text-primary cursor-pointer"
               name="home"
               onClick={() => router.push('/')}
             />

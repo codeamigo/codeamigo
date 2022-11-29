@@ -51,7 +51,7 @@ const Register: React.FC = () => {
                 <Image src={googlePng} />
               </button>
               <button
-                className="block w-8 h-8 rounded-full bg-bg-nav-offset"
+                className="block w-8 h-8 bg-bg-nav-offset rounded-full"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 style={{ padding: '2px' }}
                 type="button"
@@ -95,7 +95,7 @@ const Register: React.FC = () => {
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium rounded-md focus:outline-none text-accent"
+                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
                 onClick={() =>
                   modalVar({
                     callback: modalVar().callback,

@@ -15,7 +15,7 @@ const TopNav: React.FC<Props> = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="relative z-50 border-b bg-bg-nav border-bg-nav-offset-faded">
+    <nav className="relative z-50 bg-bg-nav border-b border-bg-nav-offset-faded">
       <div className="px-2 sm:px-6 lg:px-8 mx-auto max-w-7xl">
         <div className="flex relative justify-between items-center h-16">
           <div className="flex items-center">
@@ -23,7 +23,7 @@ const TopNav: React.FC<Props> = () => {
               {/* <!-- Mobile menu button--> */}
               <button
                 aria-expanded="false"
-                className="inline-flex justify-center items-center p-2 rounded-md focus:ring-2 focus:ring-inset focus:ring-white focus:outline-none text-text-primary"
+                className="inline-flex justify-center items-center p-2 text-text-primary rounded-md focus:ring-2 focus:ring-inset focus:ring-white focus:outline-none"
               >
                 <span className="sr-only">Open main menu</span>
                 {isMobileMenuOpen ? (

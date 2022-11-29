@@ -20,7 +20,7 @@ const CheckpointWizard: React.FC<Props> = ({ selectFile, step }) => {
   >('select');
 
   return (
-    <div className="absolute bottom-full left-0 invisible group-hover:visible p-4 mb-1 group-hover:mb-0 md:w-72 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 md:transform text-text-primary bg-bg-nav">
+    <div className="absolute bottom-full left-0 invisible group-hover:visible p-4 mb-1 group-hover:mb-0 md:w-72 text-text-primary bg-bg-nav rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-200 md:transform">
       <motion.div
         animate={{ display: wizardStep === 'select' ? 'block' : 'none' }}
       >

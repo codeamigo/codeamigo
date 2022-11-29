@@ -38,7 +38,7 @@ const PublishedLessonsList: React.FC<Props> = () => {
 
   return data?.lessons.length ? (
     <div className="mt-8">
-      <h2 className="mb-4 text-xl font-bold border-b-2 text-text-primary">
+      <h2 className="mb-4 text-xl font-bold text-text-primary border-b-2">
         🚀 Published
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -72,7 +72,7 @@ const PublishedLessonsList: React.FC<Props> = () => {
                           <Menu.Items
                             aria-labelledby="session-menu"
                             aria-orientation="vertical"
-                            className="absolute right-0 py-1 mt-2 w-48 rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right bg-bg-primary"
+                            className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
                             role="menu"
                           >
                             <Menu.Item>
