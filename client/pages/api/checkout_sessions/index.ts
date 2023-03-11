@@ -37,13 +37,12 @@ export default async function handler(
         submit_type: 'donate',
         success_url: `${req.headers.origin}/stripe-success?session_id={CHECKOUT_SESSION_ID}`,
       };
-      const checkoutSession: Stripe.Checkout.Session = await stripe.checkout.sessions.create(
-        params
-      );
+      const checkoutSession: Stripe.Checkout.Session =
+        await stripe.checkout.sessions.create(params);
 
       res.status(200).json(checkoutSession);
     } catch (err) {
-      const error = (err as unknown) as { message: string };
+      const error = err as unknown as { message: string };
       console.log(error.message);
       res.status(500).json({ message: error.message, statusCode: 500 });
     }
