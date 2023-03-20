@@ -1,38 +1,55 @@
-import Head from 'next/head';
+import {
+  FileTabs,
+  SandpackLayout,
+  SandpackPreview,
+  SandpackProvider,
+  SandpackStack,
+  useActiveCode,
+  useSandpack,
+} from '@codesandbox/sandpack-react';
+import Editor from '@monaco-editor/react';
 
-import LanguagesAndTemplates from '👨‍💻widgets/HomepageFilters/LanguagesAndTemplates';
-import Levels from '👨‍💻widgets/HomepageFilters/Levels';
-import SortBy from '👨‍💻widgets/HomepageFilters/SortBy';
-import LessonsList from '👨‍💻widgets/LessonsList';
+function MonacoEditor() {
+  const { code, updateCode } = useActiveCode();
+  const { sandpack } = useSandpack();
+
+  return (
+    <SandpackStack style={{ height: '100vh', margin: 0 }}>
+      <FileTabs />
+      <Editor
+        defaultValue={code}
+        height="100%"
+        key={sandpack.activeFile}
+        language="javascript"
+        onChange={(value) => updateCode(value || '')}
+        options={{
+          fontSize: 16,
+          minimap: {
+            enabled: false,
+          },
+          scrollBeyondLastLine: false,
+        }}
+        theme="vs-dark"
+        width="100%"
+      />
+    </SandpackStack>
+  );
+}
 
 const Home = () => {
   return (
-    <div className="flex flex-col sm:flex-row sm:space-x-8">
-      <Head>
-        <script type="application/javascript">
-          {`;(function () {
-    window.Zigpoll = {
-      accountId: '61903b87a693e36a9327bd62'
-    };
-
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.charset = "utf-8";
-    script.src = "//cdn.zigpoll.com/static/js/main.js";
-
-    document.head.appendChild(script);
-  }());`}
-        </script>
-      </Head>
-      <div className="sm:sticky sm:top-4 mb-4 w-full sm:w-5/12 md:w-1/4 h-full">
-        <SortBy />
-        <LanguagesAndTemplates />
-        <Levels />
+    <div className="flex h-full w-full items-center justify-center">
+      <div
+        className="overflow-hidden rounded-lg border-2 border-gray-700"
+        style={{ height: '92%', width: '92%' }}
+      >
+        <SandpackProvider template="nextjs" theme={'dark'}>
+          <SandpackLayout>
+            <MonacoEditor />
+            <SandpackPreview />
+          </SandpackLayout>
+        </SandpackProvider>
       </div>
-      <div className="w-full sm:w-7/12 md:w-3/4">
-        <LessonsList />
-      </div>
-      <div id="zigpoll-embed-target"></div>
     </div>
   );
 };

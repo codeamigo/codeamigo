@@ -10,7 +10,7 @@ export const complete = async (prompt: string) => {
   const response = await openai.createCompletion({
     frequency_penalty: 0,
     max_tokens: 12,
-    model: 'code-cushman-001',
+    model: 'code-davinci-002',
     presence_penalty: 0,
     prompt,
     temperature: 0,
