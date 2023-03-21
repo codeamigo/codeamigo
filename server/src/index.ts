@@ -125,9 +125,8 @@ const main = async () => {
   });
 
   app.post('/completions', async (req, res) => {
-    const result = await complete(req.body.prompt as string);
+    const result = await complete(req.body.prompt as string, req.body.suffix);
 
-    console.log(result.data.choices);
     res.json(result.data.choices);
   });
 
