@@ -127,7 +127,10 @@ const main = async () => {
   app.post('/completions', async (req, res) => {
     const result = await complete(req.body.prompt as string, req.body.suffix);
 
-    res.json(result.data.choices);
+    // filter result.data.choices if choice.text is empty and if not unique
+    const choices = result.data.choices.filter((choice: any) => choice.text);
+
+    res.json(choices);
   });
 
   app.listen(parseInt(process.env.PORT), () => {
