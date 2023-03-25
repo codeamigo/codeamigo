@@ -64,16 +64,6 @@ const steps = [
   },
 ];
 
-function usePrevious(value: any) {
-  const ref = useRef();
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-}
-
 function MonacoEditor({
   currentStep,
   files,
@@ -147,16 +137,13 @@ function MonacoEditor({
   const debouncedUpdatePrompt = useMemo(() => debounce(updatePrompt, 100), []);
 
   const setupModels = () => {
-    if (!monacoRef.current) return;
-    if (!editorRef.current) return;
-
-    Object.keys(files).forEach((mod) => {
+    Object.keys(sandpack.files).forEach((mod) => {
       const model = monacoRef.current.editor.getModel(
         monacoRef.current.Uri.parse(`${URN}${mod}`)
       );
       if (model) return;
       monacoRef.current.editor.createModel(
-        files[mod].code,
+        sandpack.files[mod].code,
         getLanguage(mod || ''),
         monacoRef.current.Uri.parse(`${URN}${mod}`)
       );
@@ -223,10 +210,9 @@ function MonacoEditor({
   };
 
   const handleMount = (editor: any, monaco: any) => {
-    if (editorRef.current) return;
     if (monacoRef.current) return;
-    editorRef.current = editor;
     monacoRef.current = monaco;
+    editorRef.current = editor;
 
     setupModels();
     setupCompilerOptions();
@@ -245,7 +231,6 @@ function MonacoEditor({
       <Editor
         defaultValue={code}
         height="100%"
-        key={sandpack.activeFile}
         language="javascript"
         onChange={(value, ev) => {
           setCompletions([]);
@@ -286,25 +271,26 @@ function MonacoEditor({
                   className="relative cursor-pointer rounded-md bg-white p-2 font-bold text-black hover:bg-gray-200"
                   key={completion}
                   onClick={() => {
-                    editorRef.current.executeEdits('my-source', [
+                    monacoRef.current.editor.executeEdits('my-source', [
                       {
                         forceMoveMarkers: true,
                         identifier: { major: 1, minor: 1 },
                         // @ts-ignore
                         range: new monaco.Range(
-                          editorRef.current.getPosition().lineNumber,
-                          editorRef.current.getPosition().column,
-                          editorRef.current.getPosition().lineNumber,
-                          editorRef.current.getPosition().column
+                          monacoRef.current.editor.getPosition().lineNumber,
+                          monacoRef.current.editor.getPosition().column,
+                          monacoRef.current.editor.getPosition().lineNumber,
+                          monacoRef.current.editor.getPosition().column
                         ),
                         text: completion,
                       },
                     ]);
-                    editorRef.current.setPosition({
-                      column: editorRef.current.getPosition().column,
-                      lineNumber: editorRef.current.getPosition().lineNumber,
+                    monacoRef.current.editor.setPosition({
+                      column: monacoRef.current.editor.getPosition().column,
+                      lineNumber:
+                        monacoRef.current.editor.getPosition().lineNumber,
                     });
-                    editorRef.current.focus();
+                    monacoRef.current.editor.focus();
                     setCompletions([]);
                   }}
                   variants={{
