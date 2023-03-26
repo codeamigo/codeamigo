@@ -1,5 +1,6 @@
 import {
   FileTabs,
+  SandpackConsole,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
@@ -30,8 +31,8 @@ const steps = [
       },
     },
     instructions:
-      '## Introduction to Node.js\nObjective: By the end of this lesson, you will be able to understand the basics of Node.js, including its features, advantages, and how it can be used to build web applications.',
-    start: 'I like to eat ',
+      '## Introduction to Node.js\nObjective: By the end of this lesson, you will be able to understand the basics of Node.js, including its features, advantages, and how it can be used to build web applications.\n\nBelow is a simple starter template for a Node.js application. We will be using this template throughout the lesson. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.',
+    start: '',
   },
   {
     files: {
@@ -43,8 +44,60 @@ const steps = [
       },
     },
     instructions:
-      'Node.js is a powerful, cross-platform runtime environment that enables developers to build server-side applications using JavaScript. It is fast, scalable, and efficient due to its non-blocking I/O model and event-driven architecture.\n\nNode.js is popular among developers because it is easy to learn and use, thanks to its support for JavaScript. It is also widely used for building web servers, command-line tools, and real-time applications, and has a large number of libraries and modules available for use.',
-    start: ' return ',
+      "Node.js is a powerful, cross-platform runtime environment that enables developers to build server-side applications using JavaScript. It is fast, scalable, and efficient due to its non-blocking I/O model and event-driven architecture.\n\nNode.js is popular among developers because it is easy to learn and use, thanks to its support for JavaScript. It is also widely used for building web servers, command-line tools, and real-time applications, and has a large number of libraries and modules available for use.\n\n**Let's use AI** to recreate the server, explaining every step along the way. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.",
+    start: '',
+  },
+  {
+    files: {
+      '/index.js': {
+        code: 'const ',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "Using AI is easy! Start by **typing some code**, and the AI will try to predict what you're going to type next.\n\n Start by typing out `const http = require('http');`\n\n**Note! Make sure you type the code above by hand to get a sense of the power of AI.**",
+    start: 'const ',
+  },
+  {
+    files: {
+      '/index.js': {
+        code: '// Create a Node.js server using the http library\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "Great! AI helped you require the `http` library. Or, maybe it struggled to do so!\nLet's try again, but first let's give the AI a **little more context**. Try again after the comment `// Create a Node.js server`.\n\nStart by typing out `const http = require('http');`\n\n**Note! Make sure you type the code above by hand to get a sense of the power of AI.**",
+    start: '// Create a Node.js server using the http library\n',
+  },
+  {
+    files: {
+      '/index.js': {
+        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\n",
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "Nice work! AI is a lot more powerful when you give it context. We can 'train' the AI to understand the context of our code by adding comments.\n\nLet's keep going. Try again after the comment `// Set the hostname and port`.\n\n**Start by typing the letter 'c'**",
+    start: '// Set the hostname and port\n',
+  },
+  {
+    files: {
+      '/index.js': {
+        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\n",
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them.\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**",
+    start: "Create the server and respond with 200 'Hello world'\n",
   },
 ];
 
@@ -62,8 +115,6 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
-  console.log(sandpack.files);
-
   useEffect(() => {
     if (!monacoRef.current) return;
     if (!editorRef.current) return;
@@ -80,6 +131,7 @@ function MonacoEditor({
         .getModels()
         .forEach((model: any) => model.dispose());
       setupModels();
+      setupStart();
     }
   }, [currentStep]);
 
@@ -91,7 +143,10 @@ function MonacoEditor({
     const insert =
       line.substring(0, changePos) + ' [insert] ' + line.substring(changePos);
     lines[ev.changes[0].range.startLineNumber - 1] = insert;
-    const prompt = lines.join('\n').split(' [insert] ')[0];
+    const prompt =
+      steps[currentStep].instructions +
+      '\n' +
+      lines.join('\n').split(' [insert] ')[0];
     const suffix = lines.join('\n').split(' [insert] ')[1];
 
     try {
@@ -123,13 +178,13 @@ function MonacoEditor({
   const debouncedUpdatePrompt = useMemo(() => debounce(updatePrompt, 100), []);
 
   const setupModels = () => {
-    Object.keys(sandpack.files).forEach((mod) => {
+    Object.keys(files).forEach((mod) => {
       const model = monacoRef.current.editor.getModel(
         monacoRef.current.Uri.parse(`${URN}${mod}`)
       );
       if (model) return;
       monacoRef.current.editor.createModel(
-        sandpack.files[mod].code,
+        files[mod].code,
         getLanguage(mod || ''),
         monacoRef.current.Uri.parse(`${URN}${mod}`)
       );
@@ -195,20 +250,24 @@ function MonacoEditor({
     );
   };
 
+  const setupStart = () => {
+    const match = editorRef.current
+      .getModel()
+      .findMatches(steps[currentStep].start, true, false, false, null, true)[0];
+
+    if (!match) return;
+    editorRef.current.setPosition(match.range.getEndPosition());
+    editorRef.current.focus();
+  };
+
   const handleMount = (editor: any, monaco: any) => {
     if (monacoRef.current) return;
     monacoRef.current = monaco;
     editorRef.current = editor;
 
-    setupModels();
     setupCompilerOptions();
-
-    const match = editor
-      .getModel()
-      .findMatches(steps[currentStep].start, true, false, false, null, true)[0];
-    if (!match) return;
-    editor.setPosition(match.range.getEndPosition());
-    editor.focus();
+    setupModels();
+    setupStart();
   };
 
   return (
@@ -309,6 +368,8 @@ function MonacoEditor({
 const Home = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
+  console.log(steps[currentStep].files);
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-5">
       <div
@@ -316,7 +377,7 @@ const Home = () => {
         style={{ height: '100%', width: '92%' }}
       >
         <SandpackProvider
-          // files={steps[currentStep].files}
+          files={steps[currentStep].files}
           template="node"
           theme={'dark'}
         >
@@ -334,7 +395,10 @@ const Home = () => {
                 files={steps[currentStep].files}
               />
             </SandpackStack>
-            <SandpackPreview />
+            <SandpackStack>
+              <SandpackPreview />
+              <SandpackConsole />
+            </SandpackStack>
           </SandpackLayout>
         </SandpackProvider>
       </div>
