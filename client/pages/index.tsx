@@ -22,44 +22,28 @@ const URN = 'urn:';
 const steps = [
   {
     files: {
-      '/App.js': {
-        code: 'export default function App() {\n // return a type of food you like to eat \n return <h1>I like to eat </h1>\n}\n',
-      },
       '/index.js': {
-        code: 'import React, { StrictMode } from "react";\nimport { createRoot } from "react-dom/client";\nimport "./styles.css";\n\nimport App from "./App";\n\nconst root = createRoot(document.getElementById("root"));\nroot.render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);',
+        code: "const http = require('http');\n\nconst hostname = '127.0.0.1';\nconst port = 3000;\n\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});",
       },
       '/package.json': {
-        code: '{\n  "dependencies": {\n    "react": "^18.0.0",\n    "react-dom": "^18.0.0",\n    "react-scripts": "^4.0.0"\n  },\n  "main": "/index.js",\n  "devDependencies": {}\n}',
-      },
-      '/public/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Document</title>\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
-    instructions: 'Start typing to get suggestions for foods you like to eat.',
+    instructions:
+      '## Introduction to Node.js\nObjective: By the end of this lesson, you will be able to understand the basics of Node.js, including its features, advantages, and how it can be used to build web applications.',
     start: 'I like to eat ',
   },
   {
     files: {
-      '/App.js': {
-        code: 'export default function App() {\n // Create an element that can be used to display a box \n return \n}\n',
-      },
       '/index.js': {
-        code: 'import React, { StrictMode } from "react";\nimport { createRoot } from "react-dom/client";\nimport "./styles.css";\n\nimport App from "./App";\n\nconst root = createRoot(document.getElementById("root"));\nroot.render(\n  <StrictMode>\n    <App />\n  </StrictMode>\n);',
+        code: "const http = require('http');\n\nconst hostname = '127.0.0.1';\nconst port = 3000;\n\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});",
       },
       '/package.json': {
-        code: '{\n  "dependencies": {\n    "react": "^18.0.0",\n    "react-dom": "^18.0.0",\n    "react-scripts": "^4.0.0"\n  },\n  "main": "/index.js",\n  "devDependencies": {}\n}',
-      },
-      '/public/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Document</title>\n  </head>\n  <body>\n    <div id="root"></div>\n  </body>\n</html>',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
-    instructions: 'Create an element that can be used to display a box',
+    instructions:
+      'Node.js is a powerful, cross-platform runtime environment that enables developers to build server-side applications using JavaScript. It is fast, scalable, and efficient due to its non-blocking I/O model and event-driven architecture.\n\nNode.js is popular among developers because it is easy to learn and use, thanks to its support for JavaScript. It is also widely used for building web servers, command-line tools, and real-time applications, and has a large number of libraries and modules available for use.',
     start: ' return ',
   },
 ];
@@ -78,11 +62,13 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
 
+  console.log(sandpack.files);
+
   useEffect(() => {
     if (!monacoRef.current) return;
     if (!editorRef.current) return;
     if (!activeFile) return;
-    const model = monacoRef.current.editor.getModel(
+    const model = editorRef.current.getModel(
       monacoRef.current.Uri.parse(`${URN}${activeFile}`)
     );
     if (model) editorRef.current.setModel(model);
@@ -108,30 +94,30 @@ function MonacoEditor({
     const prompt = lines.join('\n').split(' [insert] ')[0];
     const suffix = lines.join('\n').split(' [insert] ')[1];
 
-    // try {
-    //   const response = await fetch(
-    //     `${process.env.NEXT_PUBLIC_API_URL}/completions`,
-    //     {
-    //       body: JSON.stringify({
-    //         prompt,
-    //         suffix,
-    //       }),
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //       },
-    //       method: 'POST',
-    //     }
-    //   );
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/completions`,
+        {
+          body: JSON.stringify({
+            prompt,
+            suffix,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        }
+      );
 
-    //   const completions = await response.json();
-    //   const uniqueCompletions = [
-    //     ...new Set(completions.map((item: any) => item.text)),
-    //   ];
+      const completions = await response.json();
+      const uniqueCompletions = [
+        ...new Set(completions.map((item: any) => item.text)),
+      ];
 
-    //   setCompletions(uniqueCompletions);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      setCompletions(uniqueCompletions);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const debouncedUpdatePrompt = useMemo(() => debounce(updatePrompt, 100), []);
@@ -245,6 +231,7 @@ function MonacoEditor({
           },
           quickSuggestions: false,
           scrollBeyondLastLine: false,
+          wordWrap: 'on',
         }}
         theme="vs-dark"
         width="100%"
@@ -271,27 +258,37 @@ function MonacoEditor({
                   className="relative cursor-pointer rounded-md bg-white p-2 font-bold text-black hover:bg-gray-200"
                   key={completion}
                   onClick={() => {
-                    monacoRef.current.editor.executeEdits('my-source', [
+                    editorRef.current.executeEdits('my-source', [
                       {
                         forceMoveMarkers: true,
                         identifier: { major: 1, minor: 1 },
                         // @ts-ignore
                         range: new monaco.Range(
-                          monacoRef.current.editor.getPosition().lineNumber,
-                          monacoRef.current.editor.getPosition().column,
-                          monacoRef.current.editor.getPosition().lineNumber,
-                          monacoRef.current.editor.getPosition().column
+                          editorRef.current.getPosition().lineNumber,
+                          editorRef.current.getPosition().column,
+                          editorRef.current.getPosition().lineNumber,
+                          editorRef.current.getPosition().column
                         ),
                         text: completion,
                       },
                     ]);
-                    monacoRef.current.editor.setPosition({
-                      column: monacoRef.current.editor.getPosition().column,
-                      lineNumber:
-                        monacoRef.current.editor.getPosition().lineNumber,
+                    editorRef.current.setPosition({
+                      column: editorRef.current.getPosition().column,
+                      lineNumber: editorRef.current.getPosition().lineNumber,
                     });
-                    monacoRef.current.editor.focus();
+                    editorRef.current.focus();
                     setCompletions([]);
+                    updatePrompt(editorRef.current.getValue(), {
+                      changes: [
+                        {
+                          range: {
+                            startColumn: editorRef.current.getPosition().column,
+                            startLineNumber:
+                              editorRef.current.getPosition().lineNumber,
+                          },
+                        },
+                      ],
+                    });
                   }}
                   variants={{
                     hidden: { opacity: 0, top: '10px' },
@@ -319,8 +316,8 @@ const Home = () => {
         style={{ height: '100%', width: '92%' }}
       >
         <SandpackProvider
-          files={steps[currentStep].files}
-          template="react"
+          // files={steps[currentStep].files}
+          template="node"
           theme={'dark'}
         >
           <SandpackLayout>
