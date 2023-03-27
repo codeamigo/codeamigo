@@ -139,7 +139,7 @@ function MonacoEditor({
     if (!value || !ev) return;
     const lines = value.split(/\n/);
     const line = lines[ev.changes[0].range.startLineNumber - 1];
-    const changePos = ev.changes[0].range.startColumn;
+    const changePos = ev.changes[0].range.endColumn;
     const insert =
       line.substring(0, changePos) + ' [insert] ' + line.substring(changePos);
     lines[ev.changes[0].range.startLineNumber - 1] = insert;
@@ -280,7 +280,10 @@ function MonacoEditor({
         onChange={(value, ev) => {
           setCompletions([]);
           updateCode(value || '');
-          debouncedUpdatePrompt(value, ev);
+          if (ev.changes[0].text.length > 1) {
+          } else {
+            debouncedUpdatePrompt(value, ev);
+          }
         }}
         onMount={handleMount}
         options={{
