@@ -400,7 +400,10 @@ const Home = () => {
         >
           <SandpackLayout>
             <SandpackStack className="editor-instructions-container">
-              <div className="h-72 overflow-scroll border-b border-neutral-700 bg-neutral-900">
+              <div
+                className="h-72 overflow-scroll border-b border-neutral-700 bg-neutral-900"
+                key={currentStep}
+              >
                 <ReactMarkdown
                   children={steps[currentStep].instructions}
                   className="markdown-body py-2 px-3"
