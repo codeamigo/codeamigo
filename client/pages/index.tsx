@@ -11,6 +11,7 @@ import {
 import Editor from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useWindowSize } from 'hooks/useWindowSize';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -63,19 +64,6 @@ const steps = [
   {
     files: {
       '/index.js': {
-        code: '// Create a Node.js server using the http library\n',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
-      },
-    },
-    instructions:
-      "Great! AI helped you require the `http` library. Or, maybe it struggled to do so!\nLet's try again, but first let's give the AI a **little more context**. Try again after the comment `// Create a Node.js server`.\n\nStart by typing out `const http = require('http');`\n\n**Note! Make sure you type the code above by hand to get a sense of the power of AI.**",
-    start: '// Create a Node.js server using the http library\n',
-  },
-  {
-    files: {
-      '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\n",
       },
       '/package.json': {
@@ -99,6 +87,32 @@ const steps = [
       "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them.\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**",
     start: "Create the server and respond with 200 'Hello world'\n",
   },
+  {
+    files: {
+      '/index.js': {
+        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\n// Start the server on `hostname` and `port`\n",
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "Nice work! All that's left is to start the server. Try again after the comment `// Start the server on `hostname` and `port``.\n\n**Start by typing the letter 's'**",
+    start: '// Start the server on `hostname` and `port`\n',
+  },
+  {
+    files: {
+      '/index.js': {
+        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\n// Start the server\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});\n",
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      'Congratulations! You have created a Node.js server using the http library. You can now run the server by clicking the "Run" button in the top right corner.\n\n**Note!** The AI is not perfect. It will make mistakes, and you will need to correct them.',
+    start: '',
+  },
 ];
 
 function MonacoEditor({
@@ -114,6 +128,8 @@ function MonacoEditor({
   const [completions, setCompletions] = useState<any>([]);
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
+  const { minWidth } = useWindowSize();
+  const sm = minWidth('sm');
 
   useEffect(() => {
     if (!monacoRef.current) return;
@@ -287,7 +303,7 @@ function MonacoEditor({
         }}
         onMount={handleMount}
         options={{
-          fontSize: 16,
+          fontSize: sm ? 16 : 12,
           minimap: {
             enabled: false,
           },
@@ -371,10 +387,8 @@ function MonacoEditor({
 const Home = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
-  console.log(steps[currentStep].files);
-
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-3 p-5">
+    <div className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full">
       <div
         className="overflow-hidden rounded-lg border border-neutral-700"
         style={{ height: '100%', width: '92%' }}
@@ -385,7 +399,7 @@ const Home = () => {
           theme={'dark'}
         >
           <SandpackLayout>
-            <SandpackStack>
+            <SandpackStack className="editor-instructions-container">
               <div className="h-72 overflow-scroll border-b border-neutral-700 bg-neutral-900">
                 <ReactMarkdown
                   children={steps[currentStep].instructions}

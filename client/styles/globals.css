@@ -101,6 +101,12 @@ body, #__next {
 .sp-layout {
   height: 100% !important;
 }
+
+@media (max-width: 768px) {
+  .editor-instructions-container {
+    height: 60vh !important;
+  }
+}
 /* sandpack */
 
 /* stackblitz */
