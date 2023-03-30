@@ -12,14 +12,28 @@ import Editor from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useWindowSize } from 'hooks/useWindowSize';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
+import Icon from '👨‍💻components/Icon';
 import { getLanguage } from '👨‍💻widgets/Lesson/Editor/utils';
 import PrevNext from '👨‍💻widgets/PrevNext';
 
 const URN = 'urn:';
+
+const instructionsHeight = 15;
+const defaultLeftPanelHeight = {
+  editor: 'calc(100% - 15rem)',
+  instructions: '15rem',
+};
 
 const steps = [
   {
@@ -84,7 +98,7 @@ const steps = [
       },
     },
     instructions:
-      "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them.\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**",
+      "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them. Understanding where and when the AI makes mistakes will likely be the future developer's most important job!\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**",
     start: "Create the server and respond with 200 'Hello world'\n",
   },
   {
@@ -118,9 +132,21 @@ const steps = [
 function MonacoEditor({
   currentStep,
   files,
+  leftPanelHeight,
+  setLeftPanelHeight,
 }: {
   currentStep: number;
   files: any;
+  leftPanelHeight: {
+    editor: string;
+    instructions: string;
+  };
+  setLeftPanelHeight: Dispatch<
+    SetStateAction<{
+      editor: string;
+      instructions: string;
+    }>
+  >;
 }) {
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
@@ -130,6 +156,14 @@ function MonacoEditor({
   const monacoRef = useRef<any>();
   const { minWidth } = useWindowSize();
   const sm = minWidth('sm');
+  const [full, setFull] = useState(false);
+
+  useEffect(() => {
+    setLeftPanelHeight({
+      editor: full ? '100%' : 'calc(100% - 15rem)',
+      instructions: full ? '0px' : '15rem',
+    });
+  }, [full]);
 
   useEffect(() => {
     if (!monacoRef.current) return;
@@ -287,7 +321,10 @@ function MonacoEditor({
   };
 
   return (
-    <SandpackStack className="relative" style={{ height: '100%', margin: 0 }}>
+    <SandpackStack
+      className="relative z-10 transition-all"
+      style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
+    >
       <FileTabs />
       <Editor
         defaultValue={code}
@@ -380,18 +417,99 @@ function MonacoEditor({
           )}
         </AnimatePresence>
       </div>
+      <Icon
+        className="absolute bottom-0 right-0 m-2 text-neutral-400 hover:text-white"
+        name={full ? 'resize-small' : 'resize-full'}
+        onClick={() => setFull(!full)}
+      />
     </SandpackStack>
   );
 }
 
+const Markdown = ({
+  currentStep,
+  leftPanelHeight,
+  setLeftPanelHeight,
+}: {
+  currentStep: number;
+  leftPanelHeight: {
+    editor: string;
+    instructions: string;
+  };
+  setLeftPanelHeight: Dispatch<
+    SetStateAction<{
+      editor: string;
+      instructions: string;
+    }>
+  >;
+}) => {
+  const [full, setFull] = useState(false);
+
+  useEffect(() => {
+    setLeftPanelHeight({
+      editor: full ? '0px' : 'calc(100% - 15rem)',
+      instructions: full ? '100%' : '15rem',
+    });
+  }, [full]);
+
+  useEffect(() => {
+    const handleSelection = () => {
+      let selection = document.getSelection
+        ? document?.getSelection?.()?.toString()
+        : // @ts-ignore
+          document?.selection?.createRange().toString();
+      console.log(selection);
+
+      // if selection alert the user that they can't select text
+      if (selection) {
+        alert(
+          "Don't copy and paste the code! Instead, try typing it out. Trust me, you'll have more fun."
+        );
+      }
+    };
+
+    document.addEventListener('selectionchange', handleSelection);
+
+    return () => {
+      document.removeEventListener('selectionchange', handleSelection);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`relative z-20 overflow-scroll border-b border-neutral-700 bg-neutral-900 transition-all`}
+      key={currentStep}
+      style={{ height: `${leftPanelHeight.instructions}` }}
+    >
+      <ReactMarkdown
+        children={steps[currentStep].instructions}
+        className="markdown-body py-2 px-3"
+        plugins={[gfm]}
+      />
+      <Icon
+        className="absolute bottom-0 right-0 m-2 text-neutral-400 hover:text-white"
+        name={full ? 'resize-small' : 'resize-full'}
+        onClick={() => setFull(!full)}
+      />
+    </div>
+  );
+};
+
 const V2 = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [leftPanelHeight, setLeftPanelHeight] = useState(
+    defaultLeftPanelHeight
+  );
+
+  useEffect(() => {
+    setLeftPanelHeight(defaultLeftPanelHeight);
+  }, [currentStep]);
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full">
       <div
-        className="overflow-hidden rounded-lg border border-neutral-700"
-        style={{ height: '100%', width: '92%' }}
+        className="h-full overflow-hidden rounded-lg border border-neutral-700"
+        style={{ width: '94%' }}
       >
         <SandpackProvider
           files={steps[currentStep].files}
@@ -399,23 +517,20 @@ const V2 = () => {
           theme={'dark'}
         >
           <SandpackLayout>
-            <SandpackStack className="editor-instructions-container">
-              <div
-                className="h-72 overflow-scroll border-b border-neutral-700 bg-neutral-900"
-                key={currentStep}
-              >
-                <ReactMarkdown
-                  children={steps[currentStep].instructions}
-                  className="markdown-body py-2 px-3"
-                  plugins={[gfm]}
-                />
-              </div>
+            <SandpackStack className="editor-instructions-container !h-full">
+              <Markdown
+                currentStep={currentStep}
+                leftPanelHeight={leftPanelHeight}
+                setLeftPanelHeight={setLeftPanelHeight}
+              />
               <MonacoEditor
                 currentStep={currentStep}
                 files={steps[currentStep].files}
+                leftPanelHeight={leftPanelHeight}
+                setLeftPanelHeight={setLeftPanelHeight}
               />
             </SandpackStack>
-            <SandpackStack>
+            <SandpackStack className="!h-full">
               <SandpackPreview />
               <SandpackConsole />
             </SandpackStack>

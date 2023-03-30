@@ -15,6 +15,12 @@ body, #__next {
   scroll-behavior: smooth;
 }
 
+/* monaco */
+.decorationsOverviewRuler {
+  display: none;
+}
+/* monaco */
+
 /* Circular progress bars */
 #circle-svg {
   transform: rotate(-90deg);
@@ -95,7 +101,7 @@ body, #__next {
 }
 
 .v2 .sp-stack {
-  height: 100% !important;
+  height: 100%;
 }
 
 .v2 .sp-layout {
