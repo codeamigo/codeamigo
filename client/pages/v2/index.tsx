@@ -166,6 +166,10 @@ function MonacoEditor({
   }, [full]);
 
   useEffect(() => {
+    setFull(false);
+  }, [currentStep]);
+
+  useEffect(() => {
     if (!monacoRef.current) return;
     if (!editorRef.current) return;
     if (!activeFile) return;
@@ -444,6 +448,10 @@ const Markdown = ({
   >;
 }) => {
   const [full, setFull] = useState(false);
+
+  useEffect(() => {
+    setFull(false);
+  }, [currentStep]);
 
   useEffect(() => {
     setLeftPanelHeight({
