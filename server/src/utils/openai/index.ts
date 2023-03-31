@@ -12,7 +12,6 @@ const stopSequences = Array.from(
 );
 
 export const complete = async (prompt: string, suffix: string) => {
-  var startTime = performance.now();
   const response = await openai.createCompletion({
     frequency_penalty: 0,
     max_tokens: 5,
@@ -25,10 +24,6 @@ export const complete = async (prompt: string, suffix: string) => {
     temperature: 1,
     top_p: 1,
   });
-  var endTime = performance.now();
-  console.log(
-    'OpenAI API call took ' + (endTime - startTime) + ' milliseconds.'
-  );
 
   return response;
 };
