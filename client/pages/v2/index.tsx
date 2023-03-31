@@ -52,19 +52,6 @@ const steps = [
   {
     files: {
       '/index.js': {
-        code: "const http = require('http');\n\nconst hostname = '127.0.0.1';\nconst port = 3000;\n\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});",
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
-      },
-    },
-    instructions:
-      "Node.js is a powerful, cross-platform runtime environment that enables developers to build server-side applications using JavaScript. It is fast, scalable, and efficient due to its non-blocking I/O model and event-driven architecture.\n\nNode.js is popular among developers because it is easy to learn and use, thanks to its support for JavaScript. It is also widely used for building web servers, command-line tools, and real-time applications, and has a large number of libraries and modules available for use.\n\n**Let's use AI** to recreate the server, explaining every step along the way. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.",
-    start: '',
-  },
-  {
-    files: {
-      '/index.js': {
         code: 'const ',
       },
       '/package.json': {
