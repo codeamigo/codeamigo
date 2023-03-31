@@ -12,6 +12,7 @@ import Editor from '@monaco-editor/react';
 import { debounce } from 'debounce';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useWindowSize } from 'hooks/useWindowSize';
+import Image from 'next/image';
 import {
   Dispatch,
   SetStateAction,
@@ -27,9 +28,12 @@ import Icon from '👨‍💻components/Icon';
 import { getLanguage } from '👨‍💻widgets/Lesson/Editor/utils';
 import PrevNext from '👨‍💻widgets/PrevNext';
 
+import * as hal from '../../assets/hal.png';
+
 const URN = 'urn:';
 
-const instructionsHeight = 15;
+const transition = { bounce: 0.4, duration: 0.6, type: 'spring' };
+
 const defaultLeftPanelHeight = {
   editor: 'calc(100% - 15rem)',
   instructions: '15rem',
@@ -120,6 +124,7 @@ function MonacoEditor({
   currentStep,
   files,
   leftPanelHeight,
+  onReady,
   setLeftPanelHeight,
 }: {
   currentStep: number;
@@ -128,6 +133,7 @@ function MonacoEditor({
     editor: string;
     instructions: string;
   };
+  onReady: () => void;
   setLeftPanelHeight: Dispatch<
     SetStateAction<{
       editor: string;
@@ -310,6 +316,7 @@ function MonacoEditor({
     setupCompilerOptions();
     setupModels();
     setupStart();
+    onReady();
   };
 
   return (
@@ -450,13 +457,13 @@ const Markdown = ({
 
   return (
     <div
-      className={`relative z-20 overflow-scroll border-b border-neutral-700 bg-neutral-900 transition-all`}
+      className={`relative z-20 border-b border-neutral-700 bg-neutral-900 transition-all`}
       key={currentStep}
       style={{ height: `${leftPanelHeight.instructions}` }}
     >
       <ReactMarkdown
         children={steps[currentStep].instructions}
-        className="markdown-body py-2 px-3"
+        className="markdown-body h-full overflow-scroll py-2 px-3"
         plugins={[gfm]}
       />
       <Icon
@@ -469,6 +476,9 @@ const Markdown = ({
 };
 
 const V2 = () => {
+  const [ready, setReady] = useState(false);
+  const [loaderReady, setLoaderReady] = useState(false);
+  const [editorReady, setEditorReady] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
@@ -478,44 +488,89 @@ const V2 = () => {
     setLeftPanelHeight(defaultLeftPanelHeight);
   }, [currentStep]);
 
+  useEffect(() => {
+    let timeout: any;
+    if (loaderReady && editorReady) {
+      timeout = setTimeout(() => {
+        setReady(true);
+      }, 2000);
+    }
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    };
+  }, [editorReady, loaderReady]);
+
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full">
-      <div
-        className="h-full overflow-hidden rounded-lg border border-neutral-700"
-        style={{ width: '94%' }}
+    <AnimatePresence>
+      <motion.div
+        animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+        className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full"
+        initial={{ opacity: 0, scale: 0 }}
+        style={{ transformOrigin: 'center' }}
+        transition={transition}
       >
-        <SandpackProvider
-          files={steps[currentStep].files}
-          template="node"
-          theme={'dark'}
+        <div
+          className="h-full overflow-hidden rounded-lg border border-neutral-700"
+          style={{ width: '94%' }}
         >
-          <SandpackLayout>
-            <SandpackStack className="editor-instructions-container !h-full">
-              <Markdown
-                currentStep={currentStep}
-                leftPanelHeight={leftPanelHeight}
-                setLeftPanelHeight={setLeftPanelHeight}
-              />
-              <MonacoEditor
-                currentStep={currentStep}
-                files={steps[currentStep].files}
-                leftPanelHeight={leftPanelHeight}
-                setLeftPanelHeight={setLeftPanelHeight}
-              />
-            </SandpackStack>
-            <SandpackStack className="!h-full">
-              <SandpackPreview />
-              <SandpackConsole />
-            </SandpackStack>
-          </SandpackLayout>
-        </SandpackProvider>
-      </div>
-      <PrevNext
-        currentStep={currentStep}
-        setCurrentStep={setCurrentStep}
-        steps={steps.length}
-      />
-    </div>
+          <SandpackProvider
+            files={steps[currentStep].files}
+            template="node"
+            theme={'dark'}
+          >
+            <SandpackLayout>
+              <SandpackStack className="editor-instructions-container !h-full">
+                <Markdown
+                  currentStep={currentStep}
+                  leftPanelHeight={leftPanelHeight}
+                  setLeftPanelHeight={setLeftPanelHeight}
+                />
+                <MonacoEditor
+                  currentStep={currentStep}
+                  files={steps[currentStep].files}
+                  leftPanelHeight={leftPanelHeight}
+                  onReady={() => setEditorReady(true)}
+                  setLeftPanelHeight={setLeftPanelHeight}
+                />
+              </SandpackStack>
+              <SandpackStack className="!h-full">
+                <SandpackPreview />
+                <SandpackConsole />
+              </SandpackStack>
+            </SandpackLayout>
+          </SandpackProvider>
+        </div>
+        <PrevNext
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+          steps={steps.length}
+        />
+      </motion.div>
+      <motion.div
+        animate={
+          ready || !loaderReady
+            ? { opacity: 0, scale: 0 }
+            : { opacity: 1, scale: 1 }
+        }
+        className="fixed top-0 left-0 flex h-full w-full items-center justify-center text-white"
+        initial={{ opacity: 0.5, scale: 0.5 }}
+        style={{ transformOrigin: 'center' }}
+        transition={transition}
+      >
+        <Image
+          height={60}
+          onLoad={() => setLoaderReady(true)}
+          src={hal}
+          width={60}
+        />
+        <span className="absolute flex h-3 w-3">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F9D154] opacity-75"></span>
+        </span>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
