@@ -111,7 +111,7 @@ const steps = [
       },
     },
     instructions:
-      'Congratulations! You have created a Node.js server using the http library. You can now run the server by clicking the "Run" button in the top right corner.\n\n**Note!** The AI is not perfect. It will make mistakes, and you will need to correct them.',
+      'Congratulations! You have created a Node.js server using the http library. You can now run the server by clicking the **Restart script** button in the bottom right corner.',
     start: '',
   },
 ];
