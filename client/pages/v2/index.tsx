@@ -154,6 +154,7 @@ function MonacoEditor({
 
   useEffect(() => {
     setFull(false);
+    setCompletions([]);
   }, [currentStep]);
 
   useEffect(() => {
