@@ -460,29 +460,6 @@ const Markdown = ({
     });
   }, [full]);
 
-  useEffect(() => {
-    const handleSelection = () => {
-      let selection = document.getSelection
-        ? document?.getSelection?.()?.toString()
-        : // @ts-ignore
-          document?.selection?.createRange().toString();
-      console.log(selection);
-
-      // if selection alert the user that they can't select text
-      if (selection) {
-        alert(
-          "Don't copy and paste the code! Instead, try typing it out. Trust me, you'll have more fun."
-        );
-      }
-    };
-
-    document.addEventListener('selectionchange', handleSelection);
-
-    return () => {
-      document.removeEventListener('selectionchange', handleSelection);
-    };
-  }, []);
-
   return (
     <div
       className={`relative z-20 overflow-scroll border-b border-neutral-700 bg-neutral-900 transition-all`}
