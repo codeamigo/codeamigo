@@ -50,7 +50,7 @@ const steps = [
       },
     },
     instructions:
-      '## Introduction to Node.js\nObjective: By the end of this lesson, you will be able to understand the basics of Node.js, including its features, advantages, and how it can be used to build web applications.\n\nBelow is a simple starter template for a Node.js application. We will be using this template throughout the lesson. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.',
+      '## Introduction to Node.js\nObjective: Using **AI as a coding assistant**, you will be able to understand the basics of Node.js, including its features, advantages, and how it can be used to build web applications.\n\nBelow is a simple starter template for a Node.js application. We will be using this template throughout the lesson. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.',
     start: '',
   },
   {
