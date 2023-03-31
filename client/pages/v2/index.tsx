@@ -59,7 +59,7 @@ const steps = [
       },
     },
     instructions:
-      "Using AI is easy! Start by **typing some code**, and the AI will try to predict what you're going to type next.\n\n Start by typing out `const http = require('http');`\n\n**Note! Make sure you type the code above by hand to get a sense of the power of AI.**",
+      "Using AI is easy! Start by **typing some code**, and the AI will try to predict what you're going to type next.\n\n Start by typing out `const http = require('http');`\n\n**Note! Make sure you type the code above by hand to get a sense of the power of AI.**\n\n### What is this line doing? \n\nThis line is importing the `http` library from Node.js. The `http` library is used to create a Node.js server.",
     start: 'const ',
   },
   {
@@ -72,7 +72,7 @@ const steps = [
       },
     },
     instructions:
-      "Nice work! AI is a lot more powerful when you give it context. We can 'train' the AI to understand the context of our code by adding comments.\n\nLet's keep going. Try again after the comment `// Set the hostname and port`.\n\n**Start by typing the letter 'c'**",
+      "Nice work! AI is a lot more powerful when you give it context. We can 'train' the AI to understand the context of our code by adding comments.\n\nLet's keep going. Try again after the comment `// Set the hostname and port`.\n\n**Start by typing the letter 'c'**\n\n### What is this line doing? \n\nThis line is setting the hostname and port for the server. The hostname is the address of the server, and the port is the port that the server will listen on.",
     start: '// Set the hostname and port\n',
   },
   {
@@ -85,7 +85,7 @@ const steps = [
       },
     },
     instructions:
-      "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them. Understanding where and when the AI makes mistakes will likely be the future developer's most important job!\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**",
+      "Great! AI helped you set the hostname and port. You may have noticed by now that the **AI is not perfect**. It will make mistakes, and you will need to correct them. Understanding where and when the AI makes mistakes will likely be the future developer's most important job!\n\nLet's keep going. Try again after the comment `// Create the server and respond with 200 'Hello world'`.\n\n**Start by typing the letter 'c'**\n\n### What is this line doing? \n\nThis line is creating the server and responding with 200 'Hello world'. 200 is the status code for a successful response.",
     start: "Create the server and respond with 200 'Hello world'\n",
   },
   {
@@ -98,7 +98,7 @@ const steps = [
       },
     },
     instructions:
-      "Nice work! All that's left is to start the server. Try again after the comment `// Start the server on `hostname` and `port``.\n\n**Start by typing the letter 's'**",
+      "Nice work! All that's left is to start the server. Try again after the comment `// Start the server on `hostname` and `port``.\n\n**Start by typing the letter 's'**\n\n### What is this line doing? \n\nThis line is starting the server on `hostname` and `port`.",
     start: '// Start the server on `hostname` and `port`\n',
   },
   {
