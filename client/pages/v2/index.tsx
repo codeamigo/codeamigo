@@ -32,7 +32,7 @@ import * as hal from '../../assets/hal.png';
 
 const URN = 'urn:';
 
-const transition = { bounce: 0.4, duration: 0.6, type: 'spring' };
+const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
 const defaultLeftPanelHeight = {
   editor: 'calc(100% - 15rem)',
@@ -40,6 +40,25 @@ const defaultLeftPanelHeight = {
 };
 
 const steps = [
+  {
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello world</h1>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      '## Introduction to HTML\nObjective: Using **AI as a coding assistant**, you will be able to understand the basics of HTML, including its features, advantages, and how it can be used to build web applications.\n\nBelow is a simple starter template for an HTML application. We will be using this template throughout the lesson. To view your changes, click the **Restart Script** button in the bottom right corner of the editor.',
+    start: '',
+  },
+];
+
+const nodejs_steps = [
   {
     files: {
       '/index.js': {
@@ -164,16 +183,6 @@ function MonacoEditor({
   }, [currentStep]);
 
   useEffect(() => {
-    if (!monacoRef.current) return;
-    if (!editorRef.current) return;
-    if (!activeFile) return;
-    const model = editorRef.current.getModel(
-      monacoRef.current.Uri.parse(`${URN}${activeFile}`)
-    );
-    if (model) editorRef.current.setModel(model);
-  }, [activeFile, monacoRef.current, editorRef.current]);
-
-  useEffect(() => {
     if (monacoRef.current) {
       monacoRef.current.editor
         .getModels()
@@ -182,6 +191,16 @@ function MonacoEditor({
       setupStart();
     }
   }, [currentStep]);
+
+  useEffect(() => {
+    if (!monacoRef.current) return;
+    if (!editorRef.current) return;
+    if (!activeFile) return;
+    const model = monacoRef.current.editor.getModel(
+      monacoRef.current.Uri.parse(`${URN}${activeFile}`)
+    );
+    if (model) editorRef.current.setModel(model);
+  }, [activeFile, monacoRef.current, editorRef.current]);
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
@@ -518,7 +537,7 @@ const V2 = () => {
         >
           <SandpackProvider
             files={steps[currentStep].files}
-            template="node"
+            template="static"
             theme={'dark'}
           >
             <SandpackLayout>
