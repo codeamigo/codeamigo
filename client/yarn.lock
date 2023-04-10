@@ -716,20 +716,21 @@
     outvariant "^1.3.0"
     strict-event-emitter "^0.4.3"
 
-"@codesandbox/sandpack-client@^2.1.9":
-  version "2.1.9"
-  resolved "https://registry.npmjs.org/@codesandbox/sandpack-client/-/sandpack-client-2.1.9.tgz#5910e5ef376f1121ab4133770671497253c020a1"
-  integrity sha512-cITKFBwchcLcLwy6wi6NeF31X3duSND1hNytvHe43wAh5zp0IxDRrhKB5dFl4snq+A38SaKH+Yrn1c0vEd4duA==
+"@codesandbox/sandpack-client@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/@codesandbox/sandpack-client/-/sandpack-client-2.2.0.tgz#aa026cb8c1b5cc3d7cc90bdfb21bf99481e879a2"
+  integrity sha512-OiwdAEh0xZy2gkVYnfHQnA/FjOb0E0j4QeO2SOTea8ekTE54y1rzxutPG4YUbN26xh1/1KKM6FyY2xwvmFyiIw==
   dependencies:
     "@codesandbox/nodebox" "0.1.4"
     buffer "^6.0.3"
     dequal "^2.0.2"
     outvariant "1.3.0"
+    static-browser-server "1.0.3"
 
-"@codesandbox/sandpack-react@2.1.9":
-  version "2.1.9"
-  resolved "https://registry.npmjs.org/@codesandbox/sandpack-react/-/sandpack-react-2.1.9.tgz#ad0c0b8f7a5b3fea6c5fc199be6add4ae0d4e471"
-  integrity sha512-lklGU83XDTpWDw1CaqIqkkNsZj0WbdLxKd/qaYG5TV/yLqTiGivHKux/6KQJlS7w2Q8lR53/59ByrSPp+d/3bw==
+"@codesandbox/sandpack-react@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npmjs.org/@codesandbox/sandpack-react/-/sandpack-react-2.2.0.tgz#b5427a8adc0aea8ac1e5d2dbe2f2c361b0da9cd9"
+  integrity sha512-+rF3rwtmVNlBcHr05C5KNr/hcBcWE1XIM4D8FZesm5DaYNZ8l8jW0iaMk/FZf4lbf90H9BLG5MTYY9HejrYpRg==
   dependencies:
     "@code-hike/classer" "^0.0.0-aa6efee"
     "@codemirror/autocomplete" "^6.4.0"
@@ -740,7 +741,7 @@
     "@codemirror/language" "^6.3.2"
     "@codemirror/state" "^6.2.0"
     "@codemirror/view" "^6.7.1"
-    "@codesandbox/sandpack-client" "^2.1.9"
+    "@codesandbox/sandpack-client" "^2.2.0"
     "@lezer/highlight" "^1.1.3"
     "@react-hook/intersection-observer" "^3.1.1"
     "@stitches/core" "^1.2.6"
@@ -1659,6 +1660,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@open-draft/deferred-promise@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.npmjs.org/@open-draft/deferred-promise/-/deferred-promise-2.1.0.tgz#4fb33ebdf5c05a0e47a26490ed9037ca36275a66"
+  integrity sha512-Rzd5JrXZX8zErHzgcGyngh4fmEbSHqTETdGj9rXtejlqMIgXFlyKBA7Jn1Xp0Ls0M0Y22+xHcWiEzbmdWl0BOA==
+
 "@panva/asn1.js@^1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
@@ -1731,7 +1737,7 @@
   resolved "https://registry.npmjs.org/@sqltools/formatter/-/formatter-1.2.5.tgz#3abc203c79b8c3e90fd6c156a0c62d5403520e12"
   integrity sha512-Uy0+khmZqUrUGm5dmMqVlnvufZRSK0FbYzVgp0UMstm+F5+W2/jnEEQyc9vo1ZR/E5ZI/B1WjjoTqBqwJL6Krw==
 
-"@stackblitz/sdk@^1.8.2":
+"@stackblitz/sdk@^1.8.0":
   version "1.8.2"
   resolved "https://registry.npmjs.org/@stackblitz/sdk/-/sdk-1.8.2.tgz#f91c7b35cd5c4523fcacb74b51cee4ec92b608e0"
   integrity sha512-3aTg0Tb9dNs1huPkpdYxPEX/yc8A28eZneUMOEJzOLi7EJwl5onr9gCAVjIOkN4WLYu1iBSiJiGBYT629bZIJQ==
@@ -3160,6 +3166,11 @@ dotenv@^10.0.0:
   version "10.0.0"
   resolved "https://registry.npmjs.org/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+
+dotenv@^16.0.3:
+  version "16.0.3"
+  resolved "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
+  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
 
 dotenv@^8.2.0:
   version "8.6.0"
@@ -5269,7 +5280,7 @@ micromatch@^4.0.4, micromatch@^4.0.5:
     braces "^3.0.2"
     picomatch "^2.3.1"
 
-mime-db@1.52.0:
+mime-db@1.52.0, mime-db@^1.52.0:
   version "1.52.0"
   resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
@@ -6819,6 +6830,16 @@ state-local@^1.0.6:
   version "1.0.7"
   resolved "https://registry.npmjs.org/state-local/-/state-local-1.0.7.tgz#da50211d07f05748d53009bee46307a37db386d5"
   integrity sha512-HTEHMNieakEnoe33shBYcZ7NX83ACUjCu8c40iOGEZsngj9zRnkqS9j1pqQPXwobB0ZcVTk27REb7COQ0UR59w==
+
+static-browser-server@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/static-browser-server/-/static-browser-server-1.0.3.tgz#9030d141b99ed92c8eec1a7546b87548fd036f5d"
+  integrity sha512-ZUyfgGDdFRbZGGJQ1YhiM930Yczz5VlbJObrQLlk24+qNHVQx4OlLcYswEUo3bIyNAbQUIUR9Yr5/Hqjzqb4zA==
+  dependencies:
+    "@open-draft/deferred-promise" "^2.1.0"
+    dotenv "^16.0.3"
+    mime-db "^1.52.0"
+    outvariant "^1.3.0"
 
 streamsearch@^1.1.0:
   version "1.1.0"

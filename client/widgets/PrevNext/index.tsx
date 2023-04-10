@@ -2,7 +2,14 @@ import React from 'react';
 
 import Icon from '👨‍💻components/Icon';
 
-const PrevNext: React.FC<Props> = ({ currentStep, setCurrentStep, steps }) => {
+const PrevNext: React.FC<Props> = ({
+  currentStep,
+  disabled,
+  setCurrentStep,
+  steps,
+}) => {
+  const nextDisabled = currentStep === steps - 1 || disabled;
+
   return (
     <div className="flex items-center gap-2">
       <button
@@ -17,7 +24,7 @@ const PrevNext: React.FC<Props> = ({ currentStep, setCurrentStep, steps }) => {
       </button>
       <button
         className="rounded-md bg-gray-800 px-2 py-1 text-gray-200 hover:bg-gray-900 disabled:cursor-not-allowed disabled:bg-gray-600 disabled:opacity-40"
-        disabled={currentStep === steps - 1}
+        disabled={nextDisabled}
         onClick={() => setCurrentStep(currentStep + 1)}
       >
         <Icon
@@ -31,8 +38,9 @@ const PrevNext: React.FC<Props> = ({ currentStep, setCurrentStep, steps }) => {
 
 type Props = {
   currentStep: number;
+  disabled: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  steps: number;
+  steps: any;
 };
 
 export default PrevNext;
