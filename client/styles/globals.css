@@ -6,20 +6,14 @@ and does not update automatically
 */
 
 html {
-  background-color: black;
+  background-color: var(--bg-primary);
 }
 
 html,
-body, #__next {
+body {
   height: 100%;
   scroll-behavior: smooth;
 }
-
-/* monaco */
-.decorationsOverviewRuler {
-  display: none !important;
-}
-/* monaco */
 
 /* Circular progress bars */
 #circle-svg {
@@ -94,26 +88,6 @@ body, #__next {
   border-left: 0.25em solid var(--bg-nav-offset) !important;
 }
 /* markdown */
-
-/* sandpack v2 */
-.v2 .sp-wrapper {
-  height: 100% !important;
-}
-
-.v2 .sp-stack {
-  height: 100%;
-}
-
-.v2 .sp-layout {
-  height: 100% !important;
-}
-
-@media (max-width: 768px) {
-  .v2 .editor-instructions-container {
-    height: 60vh !important;
-  }
-}
-/* sandpack v2 */
 
 /* sandpack */
 .st0 {

@@ -1,4 +1,3 @@
-import V2Layout from 'layouts/V2Layout';
 import React, { useEffect } from 'react';
 import { DEFAULT_THEME } from 'styles/appThemes';
 import { applyTheme } from 'styles/appThemes/utils';
@@ -24,8 +23,6 @@ const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
 
   if (!theme) return null;
   switch (pathname) {
-    case '/v2':
-      return <V2Layout>{children}</V2Layout>;
     case '/lessons/[id]':
     case '/lessons/edit/[id]':
     case '/lessons/start/[id]':

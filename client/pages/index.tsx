@@ -14,15 +14,17 @@ const Home = () => {
     window.Zigpoll = {
       accountId: '61903b87a693e36a9327bd62'
     };
+
     var script = document.createElement("script");
     script.type = "text/javascript";
     script.charset = "utf-8";
     script.src = "//cdn.zigpoll.com/static/js/main.js";
+
     document.head.appendChild(script);
   }());`}
         </script>
       </Head>
-      <div className="mb-4 h-full w-full sm:sticky sm:top-4 sm:w-5/12 md:w-1/4">
+      <div className="sm:sticky sm:top-4 mb-4 w-full sm:w-5/12 md:w-1/4 h-full">
         <SortBy />
         <LanguagesAndTemplates />
         <Levels />

@@ -1,8 +1,8 @@
-import Footer from 'layouts/MainLayout/Footer';
-import TopNav from 'layouts/MainLayout/TopNav';
 import React from 'react';
 
 import Container from './Container';
+import Footer from './Footer';
+import TopNav from './TopNav';
 
 const MainLayout: React.FC<Props> = ({ children }) => {
   return (
