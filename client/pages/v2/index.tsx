@@ -39,7 +39,7 @@ const defaultLeftPanelHeight = {
   instructions: '15rem',
 };
 
-const steps = [
+const static_steps = [
   {
     checkpoints: [
       {
@@ -68,8 +68,9 @@ const steps = [
   },
 ];
 
-const nodejs_steps = [
+const steps = [
   {
+    checkpoints: [],
     files: {
       '/index.js': {
         code: "const http = require('http');\n\nconst hostname = '127.0.0.1';\nconst port = 3000;\n\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});",
@@ -83,6 +84,13 @@ const nodejs_steps = [
     start: '',
   },
   {
+    checkpoints: [
+      {
+        message: 'Require the http library',
+        passed: false,
+        test: /const http = require\(['"]http['"]\)/i,
+      },
+    ],
     files: {
       '/index.js': {
         code: 'const ',
@@ -96,6 +104,21 @@ const nodejs_steps = [
     start: 'const ',
   },
   {
+    checkpoints: [
+      {
+        message: 'Set the hostname',
+        passed: false,
+        // test regex to check if the user has set the hostname which can be
+        // either 'localhost' or '127.0.0.1'
+        test: /const hostname = ['"]localhost['"]|const hostname = ['"]127\.0\.0\.1['"]/i,
+      },
+      {
+        message: 'Set the port to 3000',
+        passed: false,
+        // test regex to check if the user has set the port to 3000
+        test: /const port = 3000/i,
+      },
+    ],
     files: {
       '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\n",
@@ -109,6 +132,7 @@ const nodejs_steps = [
     start: '// Set the hostname and port\n',
   },
   {
+    checkpoints: [],
     files: {
       '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\n",
@@ -122,6 +146,7 @@ const nodejs_steps = [
     start: "Create the server and respond with 200 'Hello world'\n",
   },
   {
+    checkpoints: [],
     files: {
       '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\n// Start the server on `hostname` and `port`\n",
@@ -135,6 +160,7 @@ const nodejs_steps = [
     start: '// Start the server on `hostname` and `port`\n',
   },
   {
+    checkpoints: [],
     files: {
       '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\n// Start the server\nserver.listen(port, hostname, () => {\n  console.log(`Server running at http://${hostname}:${port}/`);\n});\n",
@@ -150,19 +176,27 @@ const nodejs_steps = [
 ];
 
 function MonacoEditor({
+  currentCheckpoint,
   currentStep,
   files,
+  isStepComplete,
   leftPanelHeight,
   onReady,
+  setCurrentCheckpoint,
+  setIsStepComplete,
   setLeftPanelHeight,
 }: {
+  currentCheckpoint: number;
   currentStep: number;
   files: any;
+  isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
     instructions: string;
   };
   onReady: () => void;
+  setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
+  setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
     SetStateAction<{
       editor: string;
@@ -214,6 +248,11 @@ function MonacoEditor({
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
+    if (
+      isStepComplete ||
+      steps[currentStep].checkpoints[currentCheckpoint]?.passed
+    )
+      return;
     const lines = value.split(/\n/);
     const line = lines[ev.changes[0].range.startLineNumber - 1];
     const changePos = ev.changes[0].range.endColumn;
@@ -255,11 +294,22 @@ function MonacoEditor({
   const debouncedUpdatePrompt = useMemo(() => debounce(updatePrompt, 100), []);
 
   const testCheckpoint = (value: string) => {
-    const checkpoint = steps[currentStep].checkpoints[0];
+    const checkpoint = steps[currentStep].checkpoints[currentCheckpoint];
     const test = checkpoint.test;
     const regex = new RegExp(test);
     if (regex.test(value)) {
-      steps[currentStep].checkpoints[0].passed = true;
+      // check if all checkpoints are passed
+      steps[currentStep].checkpoints[currentCheckpoint].passed = true;
+      if (
+        steps[currentStep].checkpoints.every(
+          (checkpoint: any) => checkpoint.passed
+        )
+      ) {
+        setIsStepComplete(true);
+      } else {
+        setCurrentCheckpoint((c) => c + 1);
+      }
+      setCompletions([]);
     }
   };
 
@@ -370,6 +420,7 @@ function MonacoEditor({
       className="relative z-10 transition-all"
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
+      <Checkpoints currentStep={currentStep} />
       <FileTabs />
       <div
         className={`flex h-full w-full items-center justify-center ${
@@ -566,12 +617,32 @@ const V2 = () => {
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const [currentCheckpoint, setCurrentCheckpoint] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
   );
+  const [isStepComplete, setIsStepComplete] = useState(false);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
+  }, [currentStep]);
+
+  useEffect(() => {
+    const allPassed =
+      steps[currentStep].checkpoints.every((checkpoint) => checkpoint.passed) ||
+      !steps[currentStep].checkpoints.length;
+    setIsStepComplete(allPassed);
+  }, [currentStep]);
+
+  useEffect(() => {
+    const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
+      (checkpoint) => {
+        return !checkpoint.passed;
+      }
+    );
+    if (nextCheckpoint !== -1) {
+      setCurrentCheckpoint(nextCheckpoint);
+    }
   }, [currentStep]);
 
   useEffect(() => {
@@ -604,7 +675,7 @@ const V2 = () => {
         >
           <SandpackProvider
             files={steps[currentStep].files}
-            template="static"
+            template="node"
             theme={'dark'}
           >
             <SandpackLayout>
@@ -614,12 +685,15 @@ const V2 = () => {
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
-                <Checkpoints currentStep={currentStep} />
                 <MonacoEditor
+                  currentCheckpoint={currentCheckpoint}
                   currentStep={currentStep}
                   files={steps[currentStep].files}
+                  isStepComplete={isStepComplete}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
+                  setCurrentCheckpoint={setCurrentCheckpoint}
+                  setIsStepComplete={setIsStepComplete}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
               </SandpackStack>
@@ -632,8 +706,9 @@ const V2 = () => {
         </div>
         <PrevNext
           currentStep={currentStep}
+          disabled={!isStepComplete}
           setCurrentStep={setCurrentStep}
-          steps={steps.length}
+          steps={steps}
         />
       </motion.div>
       <motion.div
