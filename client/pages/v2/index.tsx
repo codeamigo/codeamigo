@@ -283,7 +283,6 @@ function MonacoEditor({
       }` +
       lines.join('\n').split(' [insert] ')[0];
     const suffix = lines.join('\n').split(' [insert] ')[1];
-    console.log(prompt);
 
     try {
       const response = await fetch(
