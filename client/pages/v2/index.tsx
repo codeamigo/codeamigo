@@ -601,6 +601,7 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
                 className={`text-xxs ${
                   checkpoint.passed ? `text-green-500` : 'text-neutral-500'
                 }`}
+                // @ts-ignore
                 name={checkpoint.passed ? 'check' : ''}
               />
             </div>
