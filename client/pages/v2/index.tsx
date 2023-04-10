@@ -271,12 +271,19 @@ function MonacoEditor({
       line.substring(0, changePos) + ' [insert] ' + line.substring(changePos);
     lines[ev.changes[0].range.startLineNumber - 1] = insert;
     const prompt =
+      'Only respond with code that matches the instructions.\n' +
       steps[currentStep].instructions +
       '\n' +
-      steps[currentStep].checkpoints[currentCheckpoint]?.test +
-      '\n' +
+      `${
+        steps[currentStep].checkpoints[currentCheckpoint]?.test
+          ? '\n' +
+            'Must match regex: ' +
+            steps[currentStep].checkpoints[currentCheckpoint]?.test
+          : ''
+      }` +
       lines.join('\n').split(' [insert] ')[0];
     const suffix = lines.join('\n').split(' [insert] ')[1];
+    console.log(prompt);
 
     try {
       const response = await fetch(
