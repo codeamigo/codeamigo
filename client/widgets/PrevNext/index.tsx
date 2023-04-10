@@ -40,7 +40,7 @@ type Props = {
   currentStep: number;
   disabled: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
-  steps: any;
+  steps: number;
 };
 
 export default PrevNext;

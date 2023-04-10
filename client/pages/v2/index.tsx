@@ -132,10 +132,18 @@ const steps = [
     start: '// Set the hostname and port\n',
   },
   {
-    checkpoints: [],
+    checkpoints: [
+      {
+        message: 'Create the server',
+        passed: false,
+        // test regex to check if the user has created the server and responded
+        // with 200 'Hello world' or 'Hello world!' or 'hello world' and content type text/html
+        test: /const server = http\.createServer\(\(req, res\) => {\s+res\.statusCode = 200;\s+res\.setHeader\('Content-Type', 'text\/html'\);\s+res\.end\(['"]Hello world['"]\);\s+}\);/i,
+      },
+    ],
     files: {
       '/index.js': {
-        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\n",
+        code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world' and content type text/html\n",
       },
       '/package.json': {
         code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
@@ -146,7 +154,15 @@ const steps = [
     start: "Create the server and respond with 200 'Hello world'\n",
   },
   {
-    checkpoints: [],
+    checkpoints: [
+      {
+        message: 'Start the server',
+        passed: false,
+        // test regex to check if the user has started the server
+        // only look for server.listen(port, hostname, () => { and anything after
+        test: /server\.listen\(port, hostname, \(\) => {\s+/i,
+      },
+    ],
     files: {
       '/index.js': {
         code: "// Create a Node.js server using the http library\nconst http = require('http');\n\n// Set the hostname and port\nconst hostname = 'localhost';\nconst port = 3000;\n\n// Create the server and respond with 200 'Hello world'\nconst server = http.createServer((req, res) => {\n  res.statusCode = 200;\n  res.setHeader('Content-Type', 'text/html');\n  res.end('Hello world');\n});\n\n// Start the server on `hostname` and `port`\n",
@@ -156,7 +172,7 @@ const steps = [
       },
     },
     instructions:
-      "Nice work! All that's left is to start the server. Try again after the comment `// Start the server on `hostname` and `port``.\n\n**Start by typing the letter 's'**\n\n### What is this line doing? \n\nThis line is starting the server on `hostname` and `port`.",
+      "Nice work! All that's left is to start the server. Try again after the comment `// Start the server on hostname and port`.\n\n**Start by typing the letter 's'**\n\n### What is this line doing? \n\nThis line is starting the server on `hostname` and `port`.",
     start: '// Start the server on `hostname` and `port`\n',
   },
   {
@@ -248,11 +264,6 @@ function MonacoEditor({
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
-    if (
-      isStepComplete ||
-      steps[currentStep].checkpoints[currentCheckpoint]?.passed
-    )
-      return;
     const lines = value.split(/\n/);
     const line = lines[ev.changes[0].range.startLineNumber - 1];
     const changePos = ev.changes[0].range.endColumn;
@@ -261,6 +272,8 @@ function MonacoEditor({
     lines[ev.changes[0].range.startLineNumber - 1] = insert;
     const prompt =
       steps[currentStep].instructions +
+      '\n' +
+      steps[currentStep].checkpoints[currentCheckpoint]?.test +
       '\n' +
       lines.join('\n').split(' [insert] ')[0];
     const suffix = lines.join('\n').split(' [insert] ')[1];
@@ -295,22 +308,26 @@ function MonacoEditor({
 
   const testCheckpoint = (value: string) => {
     const checkpoint = steps[currentStep].checkpoints[currentCheckpoint];
-    const test = checkpoint.test;
+    const test = checkpoint?.test;
     const regex = new RegExp(test);
+    let allPassed;
     if (regex.test(value)) {
-      // check if all checkpoints are passed
+      setCompletions([]);
       steps[currentStep].checkpoints[currentCheckpoint].passed = true;
-      if (
-        steps[currentStep].checkpoints.every(
-          (checkpoint: any) => checkpoint.passed
-        )
-      ) {
+      allPassed = steps[currentStep].checkpoints.every(
+        (checkpoint: any) => checkpoint.passed
+      );
+      if (allPassed) {
         setIsStepComplete(true);
       } else {
-        setCurrentCheckpoint((c) => c + 1);
+        const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
+          (checkpoint: any) => !checkpoint.passed
+        );
+        setCurrentCheckpoint(nextCheckpoint);
       }
-      setCompletions([]);
     }
+
+    return allPassed;
   };
 
   const setupModels = () => {
@@ -435,9 +452,10 @@ function MonacoEditor({
           height="100%"
           language="javascript"
           onChange={(value, ev) => {
+            const allPassed = testCheckpoint(value || '');
             setCompletions([]);
             updateCode(value || '');
-            testCheckpoint(value || '');
+            if (allPassed) return;
             if (ev.changes[0].text.length === 1) {
               debouncedUpdatePrompt(value, ev);
             }
@@ -498,6 +516,10 @@ function MonacoEditor({
                     });
                     editorRef.current.focus();
                     setCompletions([]);
+                    const allPassed = testCheckpoint(
+                      editorRef.current.getValue()
+                    );
+                    if (allPassed) return;
                     updatePrompt(editorRef.current.getValue(), {
                       changes: [
                         {
@@ -709,7 +731,7 @@ const V2 = () => {
           currentStep={currentStep}
           disabled={!isStepComplete}
           setCurrentStep={setCurrentStep}
-          steps={steps}
+          steps={steps.length}
         />
       </motion.div>
       <motion.div
