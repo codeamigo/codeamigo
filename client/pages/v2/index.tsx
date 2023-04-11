@@ -195,7 +195,6 @@ function MonacoEditor({
   currentCheckpoint,
   currentStep,
   files,
-  isStepComplete,
   leftPanelHeight,
   onReady,
   setCurrentCheckpoint,
@@ -205,7 +204,6 @@ function MonacoEditor({
   currentCheckpoint: number;
   currentStep: number;
   files: any;
-  isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
     instructions: string;
@@ -299,12 +297,14 @@ function MonacoEditor({
         }
       );
 
-      const completions = await response.json();
+      const completions: { text: string }[] = await response.json();
       const uniqueCompletions = [
         ...new Set(completions.map((item: any) => item.text)),
-      ];
+      ] as string[];
+      const suggestion: string = uniqueCompletions[0];
 
       setCompletions(uniqueCompletions);
+      return completions;
     } catch (error) {
       console.log(error);
     }
@@ -419,11 +419,41 @@ function MonacoEditor({
     editorRef.current.focus();
   };
 
+  class InlineCompleter {
+    async provideInlineCompletions() {
+      const completions = await updatePrompt(editorRef.current.getValue(), {
+        changes: [
+          {
+            range: {
+              startColumn: editorRef.current.getPosition().column,
+              startLineNumber: editorRef.current.getPosition().lineNumber,
+            },
+          },
+        ],
+      });
+      if (!completions) return;
+      return {
+        items: completions.map((completion) => {
+          return { insertText: completion.text };
+        }),
+      };
+    }
+    freeInlineCompletions() {}
+  }
+
+  const setupInlineCompletions = () => {
+    monacoRef.current.languages.registerInlineCompletionsProvider(
+      { pattern: '**' },
+      new InlineCompleter()
+    );
+  };
+
   const handleMount = (editor: any, monaco: any) => {
     if (monacoRef.current) return;
     monacoRef.current = monaco;
     editorRef.current = editor;
 
+    setupInlineCompletions();
     setupCompilerOptions();
     setupModels();
     setupStart();
@@ -440,7 +470,7 @@ function MonacoEditor({
 
   return (
     <SandpackStack
-      className="relative z-10 transition-all"
+      className="relative z-30 transition-all"
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
       <Checkpoints currentStep={currentStep} />
@@ -526,17 +556,17 @@ function MonacoEditor({
                       editorRef.current.getValue()
                     );
                     if (allPassed) return;
-                    updatePrompt(editorRef.current.getValue(), {
-                      changes: [
-                        {
-                          range: {
-                            startColumn: editorRef.current.getPosition().column,
-                            startLineNumber:
-                              editorRef.current.getPosition().lineNumber,
-                          },
-                        },
-                      ],
-                    });
+                    // updatePrompt(editorRef.current.getValue(), {
+                    //   changes: [
+                    //     {
+                    //       range: {
+                    //         startColumn: editorRef.current.getPosition().column,
+                    //         startLineNumber:
+                    //           editorRef.current.getPosition().lineNumber,
+                    //       },
+                    //     },
+                    //   ],
+                    // });
                   }}
                   variants={{
                     hidden: { opacity: 0, top: '10px' },
@@ -718,7 +748,6 @@ const V2 = () => {
                   currentCheckpoint={currentCheckpoint}
                   currentStep={currentStep}
                   files={steps[currentStep].files}
-                  isStepComplete={isStepComplete}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
                   setCurrentCheckpoint={setCurrentCheckpoint}
