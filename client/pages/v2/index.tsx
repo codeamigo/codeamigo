@@ -195,6 +195,7 @@ function MonacoEditor({
   currentCheckpoint,
   currentStep,
   files,
+  isStepComplete,
   leftPanelHeight,
   onReady,
   setCurrentCheckpoint,
@@ -204,6 +205,7 @@ function MonacoEditor({
   currentCheckpoint: number;
   currentStep: number;
   files: any;
+  isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
     instructions: string;
@@ -221,12 +223,16 @@ function MonacoEditor({
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
   const { activeFile } = sandpack;
-  const [completions, setCompletions] = useState<any>([]);
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const { minWidth } = useWindowSize();
   const sm = minWidth('sm');
   const [full, setFull] = useState(false);
+  const isStepCompleteRef = useRef(isStepComplete);
+
+  useEffect(() => {
+    isStepCompleteRef.current = isStepComplete;
+  }, [isStepComplete]);
 
   useEffect(() => {
     setLeftPanelHeight({
@@ -237,7 +243,6 @@ function MonacoEditor({
 
   useEffect(() => {
     setFull(false);
-    setCompletions([]);
   }, [currentStep]);
 
   useEffect(() => {
@@ -262,6 +267,7 @@ function MonacoEditor({
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
+    if (isStepCompleteRef.current) return;
     const lines = value.split(/\n/);
     const line = lines[ev.changes[0].range.startLineNumber - 1];
     const changePos = ev.changes[0].range.endColumn;
@@ -302,9 +308,7 @@ function MonacoEditor({
         ...new Set(completions.map((item: any) => item.text)),
       ] as string[];
       const suggestion: string = uniqueCompletions[0];
-
-      setCompletions(uniqueCompletions);
-      return completions;
+      return suggestion;
     } catch (error) {
       console.log(error);
     }
@@ -318,7 +322,6 @@ function MonacoEditor({
     const regex = new RegExp(test);
     let allPassed;
     if (regex.test(value)) {
-      setCompletions([]);
       steps[currentStep].checkpoints[currentCheckpoint].passed = true;
       allPassed = steps[currentStep].checkpoints.every(
         (checkpoint: any) => checkpoint.passed
@@ -421,7 +424,7 @@ function MonacoEditor({
 
   class InlineCompleter {
     async provideInlineCompletions() {
-      const completions = await updatePrompt(editorRef.current.getValue(), {
+      const suggestion = await updatePrompt(editorRef.current.getValue(), {
         changes: [
           {
             range: {
@@ -431,11 +434,21 @@ function MonacoEditor({
           },
         ],
       });
-      if (!completions) return;
+      if (!suggestion) return;
+
       return {
-        items: completions.map((completion) => {
-          return { insertText: completion.text };
-        }),
+        items: [
+          {
+            insertText: suggestion,
+            range: {
+              endColumn:
+                editorRef.current.getPosition().column + suggestion.length,
+              endLineNumber: editorRef.current.getPosition().lineNumber,
+              startColumn: editorRef.current.getPosition().column,
+              startLineNumber: editorRef.current.getPosition().lineNumber,
+            },
+          },
+        ],
       };
     }
     freeInlineCompletions() {}
@@ -489,7 +502,6 @@ function MonacoEditor({
           language="javascript"
           onChange={(value, ev) => {
             const allPassed = testCheckpoint(value || '');
-            setCompletions([]);
             updateCode(value || '');
             if (allPassed) return;
             if (ev.changes[0].text.length === 1) {
@@ -509,76 +521,6 @@ function MonacoEditor({
           theme="vs-dark"
           width="100%"
         />
-      </div>
-      <div className="absolute bottom-4 w-full">
-        <AnimatePresence>
-          {completions.length > 0 && (
-            <motion.div
-              animate="show"
-              className="mb-1 flex w-full items-center justify-center gap-3"
-              initial="hidden"
-              variants={{
-                hidden: { opacity: 0 },
-                show: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.2,
-                  },
-                },
-              }}
-            >
-              {completions.map((completion: string) => (
-                <motion.div
-                  className="relative cursor-pointer rounded-md bg-white p-2 font-bold text-black hover:bg-gray-200"
-                  key={completion}
-                  onClick={() => {
-                    editorRef.current.executeEdits('my-source', [
-                      {
-                        forceMoveMarkers: true,
-                        identifier: { major: 1, minor: 1 },
-                        // @ts-ignore
-                        range: new monaco.Range(
-                          editorRef.current.getPosition().lineNumber,
-                          editorRef.current.getPosition().column,
-                          editorRef.current.getPosition().lineNumber,
-                          editorRef.current.getPosition().column
-                        ),
-                        text: completion,
-                      },
-                    ]);
-                    editorRef.current.setPosition({
-                      column: editorRef.current.getPosition().column,
-                      lineNumber: editorRef.current.getPosition().lineNumber,
-                    });
-                    editorRef.current.focus();
-                    setCompletions([]);
-                    const allPassed = testCheckpoint(
-                      editorRef.current.getValue()
-                    );
-                    if (allPassed) return;
-                    // updatePrompt(editorRef.current.getValue(), {
-                    //   changes: [
-                    //     {
-                    //       range: {
-                    //         startColumn: editorRef.current.getPosition().column,
-                    //         startLineNumber:
-                    //           editorRef.current.getPosition().lineNumber,
-                    //       },
-                    //     },
-                    //   ],
-                    // });
-                  }}
-                  variants={{
-                    hidden: { opacity: 0, top: '10px' },
-                    show: { opacity: 1, top: '0px' },
-                  }}
-                >
-                  {completion}
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
       <Icon
         className="absolute bottom-0 right-0 m-2 text-neutral-400 hover:text-white"
@@ -748,6 +690,7 @@ const V2 = () => {
                   currentCheckpoint={currentCheckpoint}
                   currentStep={currentStep}
                   files={steps[currentStep].files}
+                  isStepComplete={isStepComplete}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
                   setCurrentCheckpoint={setCurrentCheckpoint}

@@ -16,13 +16,22 @@ body, #__next {
 }
 
 /* monaco */
+.monaco-editor textarea:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none;
+}
 .decorationsOverviewRuler {
   display: none !important;
 }
-.suggestion {
-  color: gray !important;
+.ghost-text-decoration, .suggest-preview-text {
+  @apply text-neutral-200;
   opacity: 0.7;
   font-style: italic;
+}
+.monaco-hover {
+  @apply bg-neutral-800 !important;
+  color: var(--text-primary) !important;
 }
 /* monaco */
 

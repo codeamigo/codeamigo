@@ -5,21 +5,14 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const numChoices = 2;
-const stopSequences = Array.from(
-  { length: numChoices },
-  (_, i) => `<|endoftext${i + 1}|>`
-);
-
 export const complete = async (prompt: string, suffix: string) => {
   const response = await openai.createCompletion({
     frequency_penalty: 0,
     max_tokens: 5,
     model: 'text-davinci-003',
-    n: numChoices,
+    n: 1,
     presence_penalty: 0,
     prompt,
-    stop: stopSequences,
     suffix,
     temperature: 1,
     top_p: 1,
