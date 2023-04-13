@@ -598,7 +598,7 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
       {steps[currentStep].checkpoints?.map((checkpoint) => {
         return (
           <div
-            className="relative z-20 flex items-center gap-2 bg-black p-2 px-3"
+            className="relative z-20 flex items-center gap-2 border-b border-neutral-800 bg-black p-2 px-3"
             key={checkpoint.message}
           >
             <div
