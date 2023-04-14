@@ -507,7 +507,6 @@ function MonacoEditor({
               ...wordAtPosition,
             };
 
-        // get info on hover selection from openai
         const prompt = `${editorRef.current.getValue()}} """ In the above code explain what ${nextHoverSelection} is doing in a simple and concise sentence. Start the explanation with ${
           word && !isWordInSelection
             ? `${nextHoverSelection} is`
@@ -600,7 +599,7 @@ function MonacoEditor({
           }}
           onMount={handleMount}
           options={{
-            fontSize: sm ? 16 : 12,
+            fontSize: sm ? 14 : 12,
             minimap: {
               enabled: false,
             },

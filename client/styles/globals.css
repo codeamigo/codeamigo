@@ -10,29 +10,21 @@ html {
 }
 
 html,
-body, #__next {
+body,
+#__next {
   height: 100%;
   scroll-behavior: smooth;
 }
 
 /* monaco */
-.monaco-editor textarea:focus {
-  outline: none !important;
-  border: none !important;
-  box-shadow: none;
-}
 .decorationsOverviewRuler {
   display: none !important;
 }
-.ghost-text-decoration, .suggest-preview-text {
-  @apply text-neutral-200;
-  opacity: 0.7;
-  font-style: italic;
+
+.hover-contents.code-hover-contents {
+  display: none !important;
 }
-.monaco-hover {
-  @apply bg-neutral-800 !important;
-  color: var(--text-primary) !important;
-}
+
 /* monaco */
 
 /* Circular progress bars */
@@ -48,35 +40,43 @@ body, #__next {
 [class*='hint--'][aria-label]:after {
   white-space: pre;
 }
+
 [class*='hint--']:after {
   border-radius: 8px;
   background: black !important;
   box-shadow: none;
 }
+
 .hint--bottom-left:before,
 .hint--bottom-right:before,
 .hint--bottom:before {
   border-bottom-color: black !important;
 }
+
 .hint--top-left:before,
 .hint--top-right:before,
 .hint--top:before {
   border-top-color: black !important;
 }
+
 .hint--right:before {
   border-right-color: black !important;
 }
+
 .hint--left:before {
   border-left-color: black !important;
 }
+
 @media (max-width: 768px) {
   [class*='hint--']:before {
     display: none !important;
   }
+
   [class*='hint--']:after {
     display: none !important;
   }
 }
+
 /* hint css */
 
 /* markdown */
@@ -92,7 +92,7 @@ body, #__next {
   color: black !important;
 }
 
-.markdown-body > pre > code {
+.markdown-body>pre>code {
   overflow-x: auto !important;
   white-space: pre-wrap !important;
   white-space: -moz-pre-wrap !important;
@@ -107,6 +107,7 @@ body, #__next {
   color: var(--text-primary) !important;
   border-left: 0.25em solid var(--bg-nav-offset) !important;
 }
+
 /* markdown */
 
 /* sandpack v2 */
@@ -127,6 +128,7 @@ body, #__next {
     height: 60vh !important;
   }
 }
+
 /* sandpack v2 */
 
 /* sandpack */
@@ -145,16 +147,18 @@ body, #__next {
   border: 0px !important;
   border-radius: 0 !important;
 }
+
 @media (min-width: 768px) {
   .sp-layout {
     flex-wrap: nowrap !important;
   }
-  .sp-layout > :not(:first-child) {
+
+  .sp-layout> :not(:first-child) {
     border: 0px !important;
   }
 }
 
-.sp-layout > :not(:first-child) {
+.sp-layout> :not(:first-child) {
   position: relative;
   margin-top: 0px !important;
   border-top-width: 0px !important;
@@ -168,12 +172,14 @@ body, #__next {
 .decorationsOverviewRuler {
   display: none;
 }
+
 /* sandpack */
 
 /* stackblitz */
 #stackblitz {
   height: 100%;
 }
+
 /* stackblitz */
 
 /* Make clicks pass-through */
@@ -246,14 +252,17 @@ body, #__next {
   0% {
     -webkit-transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
   }
 }
+
 @keyframes nprogress-spinner {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
