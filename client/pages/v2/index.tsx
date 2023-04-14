@@ -242,6 +242,7 @@ function MonacoEditor({
   const sm = minWidth('sm');
   const [full, setFull] = useState(false);
   const isStepCompleteRef = useRef(isStepComplete);
+  const [hoverSelection, setHoverSelection] = useState<string | null>(null);
 
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
@@ -474,6 +475,85 @@ function MonacoEditor({
     );
   };
 
+  const setupHoverProvider = () => {
+    monacoRef.current.languages.registerHoverProvider('javascript', {
+      provideHover: async (model: any, position: any) => {
+        const selection = editorRef.current.getSelection();
+        const selectionValue = model.getValueInRange(selection);
+        const wordAtPosition = model.getWordAtPosition(position);
+        const { word } = wordAtPosition || {};
+        const isWordInSelection =
+          word &&
+          selection.containsPosition({
+            column: position.column,
+            lineNumber: position.lineNumber,
+          });
+
+        let nextHoverSelection = null;
+        if (word && !isWordInSelection) {
+          nextHoverSelection = word;
+        } else if (selectionValue) {
+          nextHoverSelection = selectionValue;
+        }
+
+        if (nextHoverSelection === hoverSelection) return;
+        setHoverSelection(nextHoverSelection);
+
+        const range = selectionValue
+          ? selection
+          : {
+              endLineNumber: position.lineNumber,
+              startLineNumber: position.lineNumber,
+              ...wordAtPosition,
+            };
+
+        // get info on hover selection from openai
+        const prompt = `${editorRef.current.getValue()}} """ In the above code explain what ${nextHoverSelection} is doing in a simple and concise sentence. Start the explanation with ${
+          word && !isWordInSelection
+            ? `${nextHoverSelection} is`
+            : 'This code is'
+        } ""}`;
+        if (nextHoverSelection) {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/explain`,
+              {
+                body: JSON.stringify({
+                  nextHoverSelection,
+                  prompt,
+                }),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                method: 'POST',
+              }
+            );
+
+            const explainations: { text: string }[] = await response.json();
+            const value = explainations[0].text;
+
+            return {
+              contents: [
+                {
+                  value: '**What is this code doing?**',
+                },
+                { value },
+              ],
+              range: new monacoRef.current.Range(
+                range.startLineNumber,
+                range.startColumn,
+                range.endLineNumber,
+                range.endColumn
+              ),
+            };
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      },
+    });
+  };
+
   const handleMount = (editor: any, monaco: any) => {
     if (monacoRef.current) return;
     monacoRef.current = monaco;
@@ -481,6 +561,7 @@ function MonacoEditor({
 
     setupInlineCompletions();
     setupCompilerOptions();
+    setupHoverProvider();
     setupModels();
     setupStart();
     onReady();

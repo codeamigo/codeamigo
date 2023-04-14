@@ -27,7 +27,7 @@ import { LessonResolver } from './resolvers/lesson';
 import { SessionResolver } from './resolvers/session';
 import { StepResolver } from './resolvers/step';
 import { UserResolver } from './resolvers/user';
-import { complete } from './utils/openai';
+import { complete, explain } from './utils/openai';
 
 const main = async () => {
   const conn = await createConnection({
@@ -129,6 +129,15 @@ const main = async () => {
 
   app.post('/completions', async (req, res) => {
     const result = await complete(req.body.prompt as string, req.body.suffix);
+
+    // filter result.data.choices if choice.text is empty and if not unique
+    const choices = result.data.choices.filter((choice: any) => choice.text);
+
+    res.json(choices);
+  });
+
+  app.post('/explain', async (req, res) => {
+    const result = await explain(req.body.prompt as string);
 
     // filter result.data.choices if choice.text is empty and if not unique
     const choices = result.data.choices.filter((choice: any) => choice.text);

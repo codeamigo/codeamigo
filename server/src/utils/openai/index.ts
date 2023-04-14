@@ -20,3 +20,20 @@ export const complete = async (prompt: string, suffix: string) => {
 
   return response;
 };
+
+export const explain = async (prompt: string) => {
+  const response = await openai.createCompletion({
+    frequency_penalty: 0,
+    max_tokens: 100,
+    model: 'text-davinci-003',
+    n: 1,
+    presence_penalty: 0,
+    prompt,
+    // eslint-disable-next-line
+    stop: ["\"\"\""],
+    temperature: 0,
+    top_p: 1,
+  });
+
+  return response;
+};
