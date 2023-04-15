@@ -8,7 +8,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Router } from 'next/router';
 import NProgress from 'nprogress';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { client } from '👨‍💻utils/withApollo';
 
@@ -24,7 +24,31 @@ Router.events.on('routeChangeStart', () => {
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+import posthog from 'posthog-js';
+import { PostHogProvider } from 'posthog-js/react';
+
+// Check that PostHog is client-side (used to handle Next.js SSR)
+if (typeof window !== 'undefined') {
+  // @ts-ignore
+  posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
+    api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com',
+    // Enable debug mode in development
+    loaded: (posthog) => {
+      if (process.env.NODE_ENV === 'development') posthog.debug();
+    },
+  });
+}
+
 function MyApp({ Component, pageProps, router }: AppProps) {
+  useEffect(() => {
+    // Track page views
+    const handleRouteChange = () => posthog?.capture('$pageview');
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, []);
   return (
     <ApolloProvider client={client}>
       <Head>
@@ -88,12 +112,14 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         <meta content="#da532c" name="msapplication-TileColor" />
         <meta content="#ffffff" name="theme-color"></meta>
       </Head>
-      <AuthProvider>
-        <Layout pathname={router.pathname}>
-          <Component {...pageProps} />
-        </Layout>
-        <Modals />
-      </AuthProvider>
+      <PostHogProvider client={posthog}>
+        <AuthProvider>
+          <Layout pathname={router.pathname}>
+            <Component {...pageProps} />
+          </Layout>
+          <Modals />
+        </AuthProvider>
+      </PostHogProvider>
     </ApolloProvider>
   );
 }
