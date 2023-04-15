@@ -6,14 +6,26 @@ and does not update automatically
 */
 
 html {
-  background-color: var(--bg-primary);
+  background-color: black;
 }
 
 html,
-body {
+body,
+#__next {
   height: 100%;
   scroll-behavior: smooth;
 }
+
+/* monaco */
+.decorationsOverviewRuler {
+  display: none !important;
+}
+
+.hover-contents.code-hover-contents {
+  display: none !important;
+}
+
+/* monaco */
 
 /* Circular progress bars */
 #circle-svg {
@@ -28,35 +40,43 @@ body {
 [class*='hint--'][aria-label]:after {
   white-space: pre;
 }
+
 [class*='hint--']:after {
   border-radius: 8px;
   background: black !important;
   box-shadow: none;
 }
+
 .hint--bottom-left:before,
 .hint--bottom-right:before,
 .hint--bottom:before {
   border-bottom-color: black !important;
 }
+
 .hint--top-left:before,
 .hint--top-right:before,
 .hint--top:before {
   border-top-color: black !important;
 }
+
 .hint--right:before {
   border-right-color: black !important;
 }
+
 .hint--left:before {
   border-left-color: black !important;
 }
+
 @media (max-width: 768px) {
   [class*='hint--']:before {
     display: none !important;
   }
+
   [class*='hint--']:after {
     display: none !important;
   }
 }
+
 /* hint css */
 
 /* markdown */
@@ -72,7 +92,7 @@ body {
   color: black !important;
 }
 
-.markdown-body > pre > code {
+.markdown-body>pre>code {
   overflow-x: auto !important;
   white-space: pre-wrap !important;
   white-space: -moz-pre-wrap !important;
@@ -87,7 +107,29 @@ body {
   color: var(--text-primary) !important;
   border-left: 0.25em solid var(--bg-nav-offset) !important;
 }
+
 /* markdown */
+
+/* sandpack v2 */
+.v2 .sp-wrapper {
+  height: 100% !important;
+}
+
+.v2 .sp-stack {
+  height: 100%;
+}
+
+.v2 .sp-layout {
+  height: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .v2 .editor-instructions-container {
+    height: 60vh !important;
+  }
+}
+
+/* sandpack v2 */
 
 /* sandpack */
 .st0 {
@@ -105,16 +147,18 @@ body {
   border: 0px !important;
   border-radius: 0 !important;
 }
+
 @media (min-width: 768px) {
   .sp-layout {
     flex-wrap: nowrap !important;
   }
-  .sp-layout > :not(:first-child) {
+
+  .sp-layout> :not(:first-child) {
     border: 0px !important;
   }
 }
 
-.sp-layout > :not(:first-child) {
+.sp-layout> :not(:first-child) {
   position: relative;
   margin-top: 0px !important;
   border-top-width: 0px !important;
@@ -128,12 +172,14 @@ body {
 .decorationsOverviewRuler {
   display: none;
 }
+
 /* sandpack */
 
 /* stackblitz */
 #stackblitz {
   height: 100%;
 }
+
 /* stackblitz */
 
 /* Make clicks pass-through */
@@ -206,14 +252,17 @@ body {
   0% {
     -webkit-transform: rotate(0deg);
   }
+
   100% {
     -webkit-transform: rotate(360deg);
   }
 }
+
 @keyframes nprogress-spinner {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }

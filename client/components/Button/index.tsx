@@ -2,14 +2,16 @@ import React, { Ref } from 'react';
 
 const Button: React.FC<Props> = ({ children, ...rest }, ref) => {
   const bgColor =
-    rest.nature === 'secondary' ? 'bg-bg-nav-offset' : 'bg-accent';
-  const textColor =
-    rest.nature === 'secondary' ? 'text-white' : 'text-bg-primary';
+    rest.nature === 'secondary' ? 'bg-bg-nav-offset' : 'bg-neutral-900';
+  const textColor = rest.nature === 'secondary' ? 'text-white' : 'text-white';
+
+  const hoverColor =
+    rest.nature === 'secondary' ? 'hover:bg-bg-nav' : 'hover:bg-neutral-800';
 
   return (
     <button
       {...rest}
-      className={`flex items-center font-semibold text-sm rounded-md p-2 cursor-pointer whitespace-nowrap focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed ${bgColor} ${textColor} ${rest.className}`}
+      className={`flex cursor-pointer items-center whitespace-nowrap rounded-md border border-neutral-800 px-2 py-1 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${bgColor} ${textColor} ${rest.className} ${hoverColor}`}
       ref={rest.forwardedRef}
     >
       {children}

@@ -5,21 +5,35 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export const complete = async (prompt: string) => {
-  var startTime = performance.now();
+export const complete = async (prompt: string, suffix: string) => {
   const response = await openai.createCompletion({
     frequency_penalty: 0,
-    max_tokens: 12,
-    model: 'code-cushman-001',
+    max_tokens: 5,
+    model: 'text-davinci-003',
+    n: 1,
     presence_penalty: 0,
     prompt,
+    suffix,
+    temperature: 1,
+    top_p: 1,
+  });
+
+  return response;
+};
+
+export const explain = async (prompt: string) => {
+  const response = await openai.createCompletion({
+    frequency_penalty: 0,
+    max_tokens: 100,
+    model: 'text-davinci-003',
+    n: 1,
+    presence_penalty: 0,
+    prompt,
+    // eslint-disable-next-line
+    stop: ["\"\"\""],
     temperature: 0,
     top_p: 1,
   });
-  var endTime = performance.now();
-  console.log(
-    'OpenAI API call took ' + (endTime - startTime) + ' milliseconds.'
-  );
 
   return response;
 };
