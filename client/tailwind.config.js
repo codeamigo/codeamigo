@@ -6,10 +6,13 @@ module.exports = {
     './modals/**/*.{js,ts,jsx,tsx}',
     './widgets/**/*.{js,ts,jsx,tsx}',
   ],
-
   // or 'media' or 'class'
   darkMode: false,
-  plugins: [require('tailwindcss-named-groups'), require('@tailwindcss/forms')],
+  plugins: [
+    require('tailwindcss-named-groups'),
+    require('@tailwindcss/forms'),
+    require('autoprefixer'),
+  ],
   theme: {
     extend: {
       animation: {

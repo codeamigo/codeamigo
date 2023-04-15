@@ -28,8 +28,8 @@ const URN = 'urn:';
 const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
 const defaultLeftPanelHeight = {
-  editor: 'calc(100% - 20rem)',
-  instructions: '20rem',
+  editor: 'calc(100% - 18rem)',
+  instructions: '18rem',
 };
 
 const steps = [
@@ -128,7 +128,7 @@ const steps = [
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 4\nHere's a helpful hint for those of you new to code. When Codeamigo makes a suggestion for you it will be in **gray** and _italicized_. If you want to use Codeamigo's suggestion, you can press tab to accept it. Let's give it a shot. After `<h1>Hello codeamigo!</h1>` type `p` and wait for Codeamigo to suggest something. Then press tab to accept Codeamigo's suggestion.\n\nReady to learn more? Click **Next** to continue.",
+      "## Intro to Codeamigo - Part 4\nHere's a helpful hint for those of you new to code. When Codeamigo makes a suggestion for you it will be in **gray** and _italicized_. If you want to use Codeamigo's suggestion, you can press tab to accept it. Let's give it a shot. After `<h1>Hello codeamigo!</h1>` type `<p` and wait for Codeamigo to suggest something. Then press tab to accept Codeamigo's suggestion.\n\nReady to learn more? Click **Next** to continue.",
     start: '-->\n    ',
   },
   {
@@ -145,7 +145,7 @@ const steps = [
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way!",
+      "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs (either created by the AI or a fellow human) and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way! If you'd like to stay updated on Codeamigo's progress, you can join the waitlist at [codeamigo.dev](https://codeamigo.dev).",
     start: '',
   },
 ];
@@ -158,6 +158,7 @@ function MonacoEditor({
   leftPanelHeight,
   onReady,
   setCurrentCheckpoint,
+  setCurrentStep,
   setIsStepComplete,
   setLeftPanelHeight,
 }: {
@@ -171,6 +172,7 @@ function MonacoEditor({
   };
   onReady: () => void;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
+  setCurrentStep: Dispatch<SetStateAction<number>>;
   setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
     SetStateAction<{
@@ -196,8 +198,8 @@ function MonacoEditor({
 
   useEffect(() => {
     setLeftPanelHeight({
-      editor: full ? '100%' : 'calc(100% - 20rem)',
-      instructions: full ? '0px' : '20rem',
+      editor: full ? '100%' : 'calc(100% - 18rem)',
+      instructions: full ? '0px' : '18rem',
     });
   }, [full]);
 
@@ -530,6 +532,12 @@ function MonacoEditor({
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
       <Checkpoints currentStep={currentStep} />
+      <PrevNext
+        currentStep={currentStep}
+        disabled={!isStepComplete}
+        setCurrentStep={setCurrentStep}
+        steps={steps.length}
+      />
       <FileTabs />
       <div
         className={`flex h-full w-full items-center justify-center ${
@@ -554,7 +562,6 @@ function MonacoEditor({
               enabled: false,
             },
             quickSuggestions: false,
-            scrollBeyondLastLine: false,
             wordWrap: 'on',
           }}
           theme="vs-dark"
@@ -595,8 +602,8 @@ const Markdown = ({
 
   useEffect(() => {
     setLeftPanelHeight({
-      editor: full ? '0px' : 'calc(100% - 20rem)',
-      instructions: full ? '100%' : '20rem',
+      editor: full ? '0px' : 'calc(100% - 18rem)',
+      instructions: full ? '100%' : '18rem',
     });
   }, [full]);
 
@@ -735,14 +742,9 @@ const V2 = () => {
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
                   setCurrentCheckpoint={setCurrentCheckpoint}
+                  setCurrentStep={setCurrentStep}
                   setIsStepComplete={setIsStepComplete}
                   setLeftPanelHeight={setLeftPanelHeight}
-                />
-                <PrevNext
-                  currentStep={currentStep}
-                  disabled={!isStepComplete}
-                  setCurrentStep={setCurrentStep}
-                  steps={steps.length}
                 />
               </SandpackStack>
               <SandpackStack className="!h-full">
@@ -759,7 +761,7 @@ const V2 = () => {
             ? { opacity: 0, scale: 0 }
             : { opacity: 1, scale: 1 }
         }
-        className="fixed top-0 left-0 flex h-full w-full items-center justify-center text-white"
+        className="fixed top-0 left-0 flex h-full w-full animate-pulse items-center justify-center text-white"
         initial={{ opacity: 0.5, scale: 0.5 }}
         style={{ transformOrigin: 'center' }}
         transition={transition}
@@ -770,9 +772,9 @@ const V2 = () => {
           src={hal}
           width={60}
         />
-        <span className="absolute flex h-3 w-3">
+        {/* <span className="absolute flex h-3 w-3">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#F9D154] opacity-75"></span>
-        </span>
+        </span> */}
       </motion.div>
     </AnimatePresence>
   );
