@@ -546,10 +546,9 @@ function MonacoEditor({
       >
         <img className="w-1/2" src={sandpack.files[activeFile].code} />
       </div>
-      <div className={`h-full ${isImage ? 'hidden' : 'block'}`}>
+      <div className={`h-[320px] sm:h-full ${isImage ? 'hidden' : 'block'}`}>
         <Editor
           defaultValue={code}
-          height="100%"
           language="javascript"
           onChange={(value) => {
             testCheckpoint(value || '');
@@ -557,7 +556,8 @@ function MonacoEditor({
           }}
           onMount={handleMount}
           options={{
-            fontSize: sm ? 14 : 12,
+            fontSize: 14,
+            lineNumbers: 'off',
             minimap: {
               enabled: false,
             },
