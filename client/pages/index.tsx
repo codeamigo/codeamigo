@@ -6,7 +6,7 @@ import * as hal from '../assets/hal.png';
 const Home = () => {
   // watch for keydown of the 'a' key
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: any) => {
       console.log(event.key);
       if (event.key === 'a') {
         // open a new window
