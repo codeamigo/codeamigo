@@ -123,12 +123,6 @@ body,
   height: 100% !important;
 }
 
-@media (max-width: 768px) {
-  .v2 .editor-instructions-container {
-    height: 60vh !important;
-  }
-}
-
 /* sandpack v2 */
 
 /* sandpack */
