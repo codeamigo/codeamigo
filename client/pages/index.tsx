@@ -7,7 +7,6 @@ const Home = () => {
   // watch for keydown of the 'a' key
   useEffect(() => {
     const handleKeyDown = (event: any) => {
-      console.log(event.key);
       if (event.key === 'a') {
         // open a new window
         window.open('https://forms.gle/PtW2z4ehfhikHooy5', '_blank');
