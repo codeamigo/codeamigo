@@ -111,14 +111,14 @@ const steps = [
   {
     checkpoints: [
       {
-        message: 'Add a <p> tag with the text "This is a paragraph"',
+        message: 'Add a <p> tag with the text "Welcome to Codeamigo"',
         passed: false,
-        test: /<p>\s*This is a paragraph\s*\<\/p>/i,
+        test: /<p>\D*Welcome to Codeamigo\D*\<\/p>/i,
       },
     ],
     files: {
       '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "This is a paragraph" -->\n    \n  </body>\n</html>',
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    \n  </body>\n</html>',
       },
       '/package.json': {
         code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
@@ -135,7 +135,7 @@ const steps = [
     checkpoints: [],
     files: {
       '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "This is a paragraph" -->\n    <p>This is a paragraph</p>\n  </body>\n</html>',
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    <p>Welcome to Codeamigo</p>\n  </body>\n</html>',
       },
       '/package.json': {
         code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
@@ -187,10 +187,10 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const { minWidth } = useWindowSize();
-  const sm = minWidth('sm');
   const [full, setFull] = useState(false);
   const isStepCompleteRef = useRef(isStepComplete);
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
+  const [nextLoader, setNextLoader] = useState(false);
 
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
@@ -205,6 +205,10 @@ function MonacoEditor({
 
   useEffect(() => {
     setFull(false);
+  }, [currentStep]);
+
+  useEffect(() => {
+    setNextLoader(false);
   }, [currentStep]);
 
   useEffect(() => {
@@ -293,6 +297,7 @@ function MonacoEditor({
       );
       if (allPassed) {
         setIsStepComplete(true);
+        setNextLoader(true);
       } else {
         const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
           (checkpoint: any) => !checkpoint.passed
@@ -535,6 +540,7 @@ function MonacoEditor({
       <PrevNext
         currentStep={currentStep}
         disabled={!isStepComplete}
+        nextLoader={nextLoader}
         setCurrentStep={setCurrentStep}
         steps={steps.length}
       />
@@ -700,7 +706,7 @@ const V2 = () => {
     if (loaderReady && editorReady) {
       timeout = setTimeout(() => {
         setReady(true);
-      }, 2000);
+      }, 1000);
     }
 
     return () => {
