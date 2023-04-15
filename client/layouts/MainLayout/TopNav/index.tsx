@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -40,6 +41,12 @@ const TopNav: React.FC<Props> = () => {
                 <span>Join Waitlist</span>
               </Button>
             </div>
+            <Link href="/v2">
+              <Button>
+                <Icon className="mr-1.5" name="eye" />
+                <span>Demo</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
