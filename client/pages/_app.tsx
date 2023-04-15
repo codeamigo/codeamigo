@@ -111,6 +111,10 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         />
         <meta content="#da532c" name="msapplication-TileColor" />
         <meta content="#ffffff" name="theme-color"></meta>
+        <meta
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+          name="viewport"
+        ></meta>
       </Head>
       <PostHogProvider client={posthog}>
         <AuthProvider>
