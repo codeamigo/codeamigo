@@ -15,6 +15,10 @@ const PrevNext: React.FC<Props> = ({
   const [loaderWidth, setLoaderWidth] = useState(0);
 
   useEffect(() => {
+    setLoaderWidth(0);
+  }, [currentStep]);
+
+  useEffect(() => {
     let interval: any;
     if (nextLoader) {
       // increase the width of the loader to 100% over 4 seconds
