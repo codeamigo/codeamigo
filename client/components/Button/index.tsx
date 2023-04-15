@@ -11,7 +11,7 @@ const Button: React.FC<Props> = ({ children, ...rest }, ref) => {
   return (
     <button
       {...rest}
-      className={`flex cursor-pointer items-center whitespace-nowrap rounded-md border border-neutral-800 p-2 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${bgColor} ${textColor} ${rest.className} ${hoverColor}`}
+      className={`flex cursor-pointer items-center whitespace-nowrap rounded-md border border-neutral-800 px-2 py-1 text-sm font-semibold focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 ${bgColor} ${textColor} ${rest.className} ${hoverColor}`}
       ref={rest.forwardedRef}
     >
       {children}

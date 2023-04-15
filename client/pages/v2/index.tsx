@@ -113,7 +113,7 @@ const steps = [
       {
         message: 'Add a <p> tag with the text "This is a paragraph"',
         passed: false,
-        test: /<p>This is a paragraph<\/p>|<p>This is a paragraph\.<\/p>/i,
+        test: /<p>\s*This is a paragraph\s*\<\/p>/i,
       },
     ],
     files: {
