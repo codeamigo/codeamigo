@@ -557,6 +557,7 @@ function MonacoEditor({
           onMount={handleMount}
           options={{
             fontSize: 14,
+            fontWeight: 600,
             lineNumbers: 'off',
             minimap: {
               enabled: false,
@@ -639,7 +640,7 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
             key={checkpoint.message}
           >
             <div
-              className={`flex h-4 w-4 items-center justify-center rounded-full border ${
+              className={`flex h-4 min-h-[1rem] w-4 min-w-[1rem] items-center justify-center rounded-full border ${
                 checkpoint.passed
                   ? 'border-green-500 bg-green-900'
                   : 'border-neutral-500 bg-black'
@@ -653,7 +654,7 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
                 name={checkpoint.passed ? 'check' : ''}
               />
             </div>
-            <pre>{checkpoint.message}</pre>
+            <pre className="text-white">{checkpoint.message}</pre>
           </div>
         );
       })}
