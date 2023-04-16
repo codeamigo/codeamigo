@@ -9,7 +9,7 @@ const Home = () => {
     const handleKeyDown = (event: any) => {
       if (event.key === 'a') {
         // open a new window
-        window.open('https://forms.gle/PtW2z4ehfhikHooy5', '_blank');
+        window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
       } else if (event.key === 'd') {
         window.open('/v2', '_blank');
       }
@@ -43,7 +43,7 @@ const Home = () => {
         <button
           className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
           onClick={() => {
-            window.open('https://forms.gle/PtW2z4ehfhikHooy5', '_blank');
+            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
           }}
         >
           Press{' '}
@@ -67,7 +67,7 @@ const Home = () => {
         <button
           className="inline-flex h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-white px-4 text-sm font-semibold text-black transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
           onClick={() => {
-            window.open('https://forms.gle/PtW2z4ehfhikHooy5', '_blank');
+            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
           }}
           style={{
             boxShadow:

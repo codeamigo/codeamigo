@@ -55,7 +55,7 @@ const PrevNext: React.FC<Props> = ({
         <div className="flex items-center justify-center gap-2 bg-black py-2">
           <Button
             onClick={() =>
-              window.open('https://forms.gle/PtW2z4ehfhikHooy5', '_blank')
+              window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
             }
           >
             <Icon className="mr-1.5" name="plus-circled" />
@@ -80,7 +80,7 @@ const PrevNext: React.FC<Props> = ({
             {nextLoader && (
               // element that expands in the style of the netflix loader
               <span
-                className="absolute left-0 z-0 h-full w-0 bg-neutral-800"
+                className="absolute left-0 z-0 h-full w-0 bg-neutral-500"
                 id="loader"
               ></span>
             )}
