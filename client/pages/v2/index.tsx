@@ -618,9 +618,8 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
   return (
     <div
       className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
-      ref={streamedTextsRef}
     >
-      <div className="h-full overflow-scroll">
+      <div className="h-full overflow-scroll" ref={streamedTextsRef}>
         <div className="sticky top-0 bg-black px-4 py-2">
           <div className="mb-1 flex items-center gap-2">
             <Image height={24} src={hal} width={24} />
