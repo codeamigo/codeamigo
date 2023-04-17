@@ -150,7 +150,6 @@ function MonacoEditor({
     const language = getLanguage(activeFile);
 
     setupHoverProvider(language);
-    setupSelectionProvider(language);
   }, [activeFile, monacoRef.current, editorRef.current]);
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
@@ -351,15 +350,6 @@ function MonacoEditor({
     );
   };
 
-  const setupSelectionProvider = (language: string) => {
-    monacoRef.current.languages.registerSelectionRangeProvider(language, {
-      provideSelectionRanges: async (model: any, position: any) => {
-        const selection = editorRef.current.getSelection();
-        const selectionValue = model.getValueInRange(selection);
-      },
-    });
-  };
-
   const setupHoverProvider = (language: string) => {
     monacoRef.current.languages.registerHoverProvider(language, {
       provideHover: async (model: any, position: any) => {
@@ -383,59 +373,6 @@ function MonacoEditor({
 
         if (nextHoverSelection === hoverSelection) return;
         setHoverSelection(nextHoverSelection);
-
-        const range = selectionValue
-          ? selection
-          : {
-              endLineNumber: position.lineNumber,
-              startLineNumber: position.lineNumber,
-              ...wordAtPosition,
-            };
-
-        const prompt = `${editorRef.current.getValue()}} """ In the above code explain what ${nextHoverSelection} is doing to a total noob. Start the explanation with ${
-          word && !isWordInSelection
-            ? `${nextHoverSelection} is`
-            : 'This code is'
-        } ""}`;
-        if (nextHoverSelection) {
-          try {
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/explain`,
-              {
-                body: JSON.stringify({
-                  apiKey: localStorage.getItem('openaiKey'),
-                  nextHoverSelection,
-                  prompt,
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                method: 'POST',
-              }
-            );
-
-            const explainations: { text: string }[] = await response.json();
-            const value = `${explainations[0].text}`;
-
-            return {
-              contents: [
-                {
-                  supportHtml: true,
-                  value: '**What is this code doing?**',
-                },
-                { value },
-              ],
-              range: new monacoRef.current.Range(
-                range.startLineNumber,
-                range.startColumn,
-                range.endLineNumber,
-                range.endColumn
-              ),
-            };
-          } catch (error) {
-            console.log(error);
-          }
-        }
       },
     });
   };
@@ -444,8 +381,6 @@ function MonacoEditor({
     if (monacoRef.current) return;
     monacoRef.current = monaco;
     editorRef.current = editor;
-
-    debugger;
 
     setupInlineCompletions();
     setupCompilerOptions();
@@ -591,7 +526,9 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
                 name={checkpoint.passed ? 'check' : ''}
               />
             </div>
-            <pre className="text-white">{checkpoint.message}</pre>
+            <pre className="whitespace-normal text-white">
+              {checkpoint.message}
+            </pre>
           </div>
         );
       })}
@@ -599,9 +536,64 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
   );
 };
 
-const ChatBot = ({ hoverSelection }: { hoverSelection: string }) => {
+const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
   // expand textarea height on enter
   const [height, setHeight] = useState(0);
+  const { code } = useActiveCode();
+  const [response, setResponse] = useState('');
+  const [streamTextIndex, setStreamTextIndex] = useState(0);
+  const [streamedTexts, setStreamedTexts] = useState<string[][]>([]);
+  const streamedTextsRef = useRef();
+
+  useEffect(() => {
+    if (!response) return;
+    if (!hoverSelection) return;
+    setStreamTextIndex((prev) => prev + 1);
+    streamText();
+  }, [response]);
+
+  useEffect(() => {
+    if (streamedTextsRef.current) {
+      // scroll to bottom
+      const element = streamedTextsRef.current;
+      console.log(element.scrollHeight);
+      element.scrollTop = element.scrollHeight;
+    }
+  }, [streamedTexts]);
+
+  useEffect(() => {
+    if (hoverSelection) {
+      const run = async () => {
+        const prompt = `${code} """ In the above code explain what ${hoverSelection} is doing to a total beginner.}`;
+        if (hoverSelection) {
+          try {
+            const response = await fetch(
+              `${process.env.NEXT_PUBLIC_API_URL}/explain`,
+              {
+                body: JSON.stringify({
+                  apiKey: localStorage.getItem('openaiKey'),
+                  hoverSelection,
+                  prompt,
+                }),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                method: 'POST',
+              }
+            );
+
+            const explainations: { text: string }[] = await response.json();
+            const value = `${explainations[0].text}`;
+            setResponse(value);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      };
+
+      run();
+    }
+  }, [hoverSelection]);
 
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter' || e.key === 'Backspace') {
@@ -609,27 +601,61 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string }) => {
     }
   };
 
-  useEffect(() => {
-    if (hoverSelection) {
-      console.log(hoverSelection);
-    }
-  }, [hoverSelection]);
+  const streamText = () => {
+    let index = 0;
+    const intervalId = setInterval(() => {
+      setStreamedTexts((prev) => {
+        const newStream = [...prev];
+        if (!newStream[streamTextIndex]) newStream.push([]);
+        newStream[streamTextIndex].push(response[index]);
+        return newStream;
+      });
+      index++;
+      if (index === response.length) clearInterval(intervalId);
+    }, 50);
+  };
 
   return (
-    <div className="flex max-h-[50%] flex-col border-t border-neutral-800 bg-black px-4 py-2">
-      <div className="mb-1 flex items-center gap-2">
-        <Image height={24} src={hal} width={24} />
-        <pre className="text-white">
-          Hello, I'm Codeamigo. I'm here to help you with this tutorial.
-        </pre>
-      </div>
-      <div className="w-full rounded-lg border border-neutral-800 bg-neutral-900 p-2">
-        <textarea
-          className="min-h-[36px] w-full rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-all placeholder:text-neutral-400 focus:border-neutral-700"
-          onKeyDown={handleKeyDown}
-          placeholder="Ask me anything, or hover over some code to see what I can do."
-          style={{ height: `${height}px` }}
-        />
+    <div
+      className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
+      ref={streamedTextsRef}
+    >
+      <div className="h-full overflow-scroll">
+        <div className="sticky top-0 bg-black px-4 py-2">
+          <div className="mb-1 flex items-center gap-2">
+            <Image height={24} src={hal} width={24} />
+            <pre className="whitespace-normal text-white">
+              Hello, I'm Codeamigo. I'm here to help you with this tutorial.
+            </pre>
+          </div>
+          <div className="w-full rounded-lg border border-neutral-800 bg-neutral-900 p-2">
+            <textarea
+              className="min-h-[40px] w-full rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-all placeholder:text-neutral-400 focus:border-neutral-700"
+              onKeyDown={handleKeyDown}
+              placeholder="Ask me anything, or hover over some code to see what I can do."
+              style={{ height: `${height}px` }}
+            />
+          </div>
+        </div>
+        {streamedTexts.length ? (
+          <div className="flex flex-col bg-black">
+            {streamedTexts.map((text, index) => {
+              if (text.length === 0) return null;
+              return (
+                <div
+                  className={`px-4 py-2 text-sm ${
+                    index % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
+                  }`}
+                  key={text.join('')}
+                >
+                  {text.map((char, index) => {
+                    return <span key={`${char}-${index}`}>{char}</span>;
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -700,6 +726,7 @@ const V2 = () => {
         animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
         className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full"
         initial={{ opacity: 0, scale: 0 }}
+        key="v2"
         style={{ transformOrigin: 'center' }}
         transition={transition}
       >
@@ -737,7 +764,7 @@ const V2 = () => {
               <SandpackStack className="!h-full">
                 <SandpackPreview className="!h-0" />
                 <SandpackConsole className="overflow-scroll" />
-                <ChatBot />
+                <ChatBot hoverSelection={hoverSelection} />
               </SandpackStack>
             </SandpackLayout>
           </SandpackProvider>
