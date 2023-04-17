@@ -617,7 +617,7 @@ const Markdown = ({
 
   return (
     <div
-      className={`relative overflow-hidden border-neutral-800 bg-neutral-900 transition-all ${
+      className={`relative overflow-hidden bg-neutral-900 transition-all ${
         full ? 'z-40' : 'z-20'
       }`}
       key={currentStep}
@@ -625,7 +625,7 @@ const Markdown = ({
     >
       <ReactMarkdown
         children={steps[currentStep].instructions}
-        className="markdown-body h-full overflow-scroll py-2 px-3"
+        className="markdown-body h-full overflow-scroll border-b border-neutral-800 py-2 px-3"
         plugins={[gfm]}
       />
       <Icon

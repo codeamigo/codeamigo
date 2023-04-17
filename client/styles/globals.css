@@ -161,6 +161,7 @@ body,
 
 .sp-stack {
   height: 100%;
+  gap: 0 !important;
 }
 
 .decorationsOverviewRuler {

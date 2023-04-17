@@ -52,7 +52,7 @@ const PrevNext: React.FC<Props> = ({
   return (
     <div>
       {isLastStep ? (
-        <div className="flex items-center justify-center gap-2 bg-black py-2">
+        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
           <Button
             onClick={() =>
               window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
@@ -63,7 +63,7 @@ const PrevNext: React.FC<Props> = ({
           </Button>
         </div>
       ) : (
-        <div className="flex items-center justify-center gap-2 bg-black py-2">
+        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
           <Button
             disabled={currentStep === 0}
             onClick={() => setCurrentStep(currentStep - 1)}
