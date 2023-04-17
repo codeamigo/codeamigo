@@ -542,21 +542,21 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
   const { code } = useActiveCode();
   const [response, setResponse] = useState('');
   const [streamTextIndex, setStreamTextIndex] = useState(0);
-  const [streamedTexts, setStreamedTexts] = useState<string[][]>([]);
-  const streamedTextsRef = useRef();
+  const [streamedTexts, setStreamedTexts] = useState<
+    { selection: string; text: string[] }[]
+  >([]);
+  const streamedTextsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!response) return;
     if (!hoverSelection) return;
     setStreamTextIndex((prev) => prev + 1);
-    streamText();
+    streamText(hoverSelection);
   }, [response]);
 
   useEffect(() => {
     if (streamedTextsRef.current) {
-      // scroll to bottom
       const element = streamedTextsRef.current;
-      console.log(element.scrollHeight);
       element.scrollTop = element.scrollHeight;
     }
   }, [streamedTexts]);
@@ -601,13 +601,14 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
     }
   };
 
-  const streamText = () => {
+  const streamText = (selection: string) => {
     let index = 0;
     const intervalId = setInterval(() => {
       setStreamedTexts((prev) => {
         const newStream = [...prev];
-        if (!newStream[streamTextIndex]) newStream.push([]);
-        newStream[streamTextIndex].push(response[index]);
+        if (!newStream[streamTextIndex])
+          newStream.push({ selection, text: [] });
+        newStream[streamTextIndex].text.push(response[index]);
         return newStream;
       });
       index++;
@@ -638,7 +639,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
         </div>
         {streamedTexts.length ? (
           <div className="flex flex-col bg-black">
-            {streamedTexts.map((text, index) => {
+            {streamedTexts.map(({ selection, text }, index) => {
               if (text.length === 0) return null;
               return (
                 <div
@@ -647,6 +648,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                   }`}
                   key={text.join('')}
                 >
+                  <pre>{selection}</pre>
                   {text.map((char, index) => {
                     return <span key={`${char}-${index}`}>{char}</span>;
                   })}
