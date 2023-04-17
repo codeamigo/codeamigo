@@ -17,6 +17,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
 
+import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 import PrevNext from '👨‍💻widgets/PrevNext';
@@ -755,6 +756,15 @@ const V2 = () => {
                 />
               </SandpackStack>
               <SandpackStack className="!h-full">
+                <Button
+                  className="absolute top-2 right-2 z-10"
+                  onClick={() =>
+                    window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+                  }
+                >
+                  <Icon className="mr-1.5" name="plus-circled" />
+                  <span>Join Waitlist</span>
+                </Button>
                 <SandpackPreview />
                 <SandpackConsole />
               </SandpackStack>
