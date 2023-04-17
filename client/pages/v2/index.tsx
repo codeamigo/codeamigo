@@ -10,7 +10,6 @@ import {
 } from '@codesandbox/sandpack-react';
 import Editor from '@monaco-editor/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useWindowSize } from 'hooks/useWindowSize';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -33,121 +32,35 @@ const defaultLeftPanelHeight = {
   instructions: '18rem',
 };
 
-const steps = [
+type Step = {
+  checkpoints: {
+    message: string;
+    passed: boolean;
+    test: string;
+  }[];
+  files: {
+    [key: string]: {
+      code: string;
+    };
+  };
+  instructions: string;
+  start: string;
+};
+
+const steps: Step[] = [
   {
     checkpoints: [],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello World!</h1>\n  </body>\n</html>',
+      '/index.js': {
+        code: "console.log('Hello World!');",
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
       "## Hello Codeamigo!\nWelcome to Codeamigo. **Codeamigo uses AI** to help you learn how to code. Today, **almost 50% of code is written by AI**, so why shouldn't you _learn how to code with AI?_\n\nWe're building Codeamigo to help current and future developers learn to take advantage of the amazing tools we have at our disposal.\n\nReady to get started with a few of the basics? Let's go! Click **Next** to get started.",
     start: 'Hello World!',
-  },
-  {
-    checkpoints: [
-      {
-        message: 'Change the text to "Hello Codeamigo!"',
-        passed: false,
-        // regex test that matches the text "Hello Codeamigo!" in upper or lower case
-        test: /Hello Codeamigo!/i,
-      },
-    ],
-    files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello </h1>\n  </body>\n</html>',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
-      },
-    },
-    instructions:
-      "## Intro to Codeamigo - Part 1\nCodeamigo comes equipped with a built-in editor, preview and terminal. Let's get familiar with these tools. The editor below is where you'll be spending most of your time. The preview is where you'll see the results of your code. The terminal is where you'll see any errors or warnings that your code might have.\n\nTo see these tools in action, let's modify the code in the editor. Change the text in the `h1` tag to say **Hello Codeamigo!**\n\nThen, click **Next** when you're ready to continue.",
-    start: 'Hello ',
-  },
-  {
-    checkpoints: [],
-    files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
-      },
-    },
-    instructions:
-      "## Intro to Codeamigo - Part 2\n**Woah! Did you see that?!** How did Codeamigo know what you were going to type next? Codeamigo talks to OpenAI to suggest code for you! It's like magic 🔮.\n\nWhat else can we use this technology for? Well, maybe you're a bit confused about what some of these lines of code are doing in the editor. For example, what does `<!DOCTYPE html>` do? **Using your cursor select the line of code and hover over the highlighted text to see a description of what it does.**\n\nReady to learn more? Click **Next** to continue.",
-    start: '',
-  },
-  {
-    checkpoints: [],
-    files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
-      },
-    },
-    instructions:
-      "## Intro to Codeamigo - Part 3\nCodeamigo's helpful tooltip can also be used on a single word. Without highlighting anything, **find and hover over the word `head`** and wait for Codeamigo to tell you what it does.\n\nReady to learn more? Click **Next** to continue.",
-    start: '',
-  },
-  {
-    checkpoints: [
-      {
-        message: 'Add a <p> tag with the text "Welcome to Codeamigo"',
-        passed: false,
-        test: /<p>\D*Welcome to Codeamigo\D*\<\/p>/i,
-      },
-    ],
-    files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    \n  </body>\n</html>',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
-      },
-    },
-    instructions:
-      "## Intro to Codeamigo - Part 4\nHere's a helpful hint for those of you new to code. When Codeamigo makes a suggestion for you it will be in **gray** and _italicized_. If you want to use Codeamigo's suggestion, you can press tab to accept it. Let's give it a shot. After `<h1>Hello codeamigo!</h1>` type `<p` and wait for Codeamigo to suggest something. Then press tab to accept Codeamigo's suggestion.\n\nReady to learn more? Click **Next** to continue.",
-    start: '-->\n    ',
-  },
-  {
-    checkpoints: [],
-    files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    <p>Welcome to Codeamigo</p>\n  </body>\n</html>',
-      },
-      '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
-      },
-    },
-    instructions:
-      "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs (either created by the AI or a fellow human) and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way! If you'd like to stay updated on Codeamigo's progress, you can join the waitlist at [codeamigo.dev](https://codeamigo.dev).",
-    start: '',
   },
 ];
 
@@ -155,17 +68,20 @@ function MonacoEditor({
   currentCheckpoint,
   currentStep,
   files,
+  hoverSelection,
   isStepComplete,
   leftPanelHeight,
   onReady,
   setCurrentCheckpoint,
   setCurrentStep,
+  setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
 }: {
   currentCheckpoint: number;
   currentStep: number;
   files: any;
+  hoverSelection: string | null;
   isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
@@ -174,6 +90,7 @@ function MonacoEditor({
   onReady: () => void;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  setHoverSelection: Dispatch<SetStateAction<string | null>>;
   setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
     SetStateAction<{
@@ -187,10 +104,8 @@ function MonacoEditor({
   const { activeFile } = sandpack;
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
-  const { minWidth } = useWindowSize();
   const [full, setFull] = useState(false);
   const isStepCompleteRef = useRef(isStepComplete);
-  const [hoverSelection, setHoverSelection] = useState<string | null>(null);
   const [nextLoader, setNextLoader] = useState(false);
 
   useEffect(() => {
@@ -234,6 +149,7 @@ function MonacoEditor({
     const language = getLanguage(activeFile);
 
     setupHoverProvider(language);
+    setupSelectionProvider(language);
   }, [activeFile, monacoRef.current, editorRef.current]);
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
@@ -291,7 +207,7 @@ function MonacoEditor({
     const test = checkpoint?.test;
     const regex = new RegExp(test);
     let allPassed;
-    if (regex.test(value)) {
+    if (regex.test(value) && checkpoint && checkpoint.passed === false) {
       steps[currentStep].checkpoints[currentCheckpoint].passed = true;
       allPassed = steps[currentStep].checkpoints.every(
         (checkpoint: any) => checkpoint.passed
@@ -433,6 +349,15 @@ function MonacoEditor({
     );
   };
 
+  const setupSelectionProvider = (language: string) => {
+    monacoRef.current.languages.registerSelectionRangeProvider(language, {
+      provideSelectionRanges: async (model: any, position: any) => {
+        const selection = editorRef.current.getSelection();
+        const selectionValue = model.getValueInRange(selection);
+      },
+    });
+  };
+
   const setupHoverProvider = (language: string) => {
     monacoRef.current.languages.registerHoverProvider(language, {
       provideHover: async (model: any, position: any) => {
@@ -516,6 +441,8 @@ function MonacoEditor({
     if (monacoRef.current) return;
     monacoRef.current = monaco;
     editorRef.current = editor;
+
+    debugger;
 
     setupInlineCompletions();
     setupCompilerOptions();
@@ -669,6 +596,42 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
   );
 };
 
+const ChatBot = ({ hoverSelection }: { hoverSelection: string }) => {
+  // expand textarea height on enter
+  const [height, setHeight] = useState(0);
+
+  const handleKeyDown = (e: any) => {
+    if (e.key === 'Enter' || e.key === 'Backspace') {
+      setHeight(e.target.scrollHeight);
+    }
+  };
+
+  useEffect(() => {
+    if (hoverSelection) {
+      console.log(hoverSelection);
+    }
+  }, [hoverSelection]);
+
+  return (
+    <div className="flex max-h-[50%] flex-col border-t border-neutral-800 bg-black px-4 py-2">
+      <div className="mb-1 flex items-center gap-2">
+        <Image height={24} src={hal} width={24} />
+        <pre className="text-white">
+          Hello, I'm Codeamigo. I'm here to help you with this tutorial.
+        </pre>
+      </div>
+      <div className="w-full rounded-lg border border-neutral-800 bg-neutral-900 p-2">
+        <textarea
+          className="min-h-[36px] w-full rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-all placeholder:text-neutral-400 focus:border-neutral-700"
+          onKeyDown={handleKeyDown}
+          placeholder="Ask me anything, or hover over some code to see what I can do."
+          style={{ height: `${height}px` }}
+        />
+      </div>
+    </div>
+  );
+};
+
 const V2 = () => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
@@ -679,6 +642,7 @@ const V2 = () => {
     defaultLeftPanelHeight
   );
   const [isStepComplete, setIsStepComplete] = useState(false);
+  const [hoverSelection, setHoverSelection] = useState<string | null>(null);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
@@ -732,7 +696,7 @@ const V2 = () => {
         >
           <SandpackProvider
             files={steps[currentStep].files}
-            template="static"
+            template="vanilla"
             theme={'dark'}
           >
             <SandpackLayout>
@@ -746,27 +710,21 @@ const V2 = () => {
                   currentCheckpoint={currentCheckpoint}
                   currentStep={currentStep}
                   files={steps[currentStep].files}
+                  hoverSelection={hoverSelection}
                   isStepComplete={isStepComplete}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
                   setCurrentCheckpoint={setCurrentCheckpoint}
                   setCurrentStep={setCurrentStep}
+                  setHoverSelection={setHoverSelection}
                   setIsStepComplete={setIsStepComplete}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
               </SandpackStack>
               <SandpackStack className="!h-full">
-                <Button
-                  className="absolute top-2 right-2 z-10"
-                  onClick={() =>
-                    window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-                  }
-                >
-                  <Icon className="mr-1.5" name="plus-circled" />
-                  <span>Join Waitlist</span>
-                </Button>
-                <SandpackPreview />
-                <SandpackConsole />
+                <SandpackPreview className="!h-0" />
+                <SandpackConsole className="overflow-scroll" />
+                <ChatBot />
               </SandpackStack>
             </SandpackLayout>
           </SandpackProvider>
