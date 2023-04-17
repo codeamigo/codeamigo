@@ -78,7 +78,7 @@ const Home = () => {
         </button>
       </div>
       <div className="hidden w-full animate-pulse items-center justify-center sm:flex">
-        <Image height={120} src={hal} width={120} />
+        <Image height={80} src={hal} width={80} />
       </div>
     </div>
   );
