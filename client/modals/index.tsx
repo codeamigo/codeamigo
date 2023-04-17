@@ -7,6 +7,7 @@ import CreateLesson from '👨‍💻modals/CreateLesson';
 import Donate from '👨‍💻modals/Donate';
 import DonationFailure from '👨‍💻modals/DonationFailure';
 import DonationSuccess from '👨‍💻modals/DonationSuccess';
+import HighDemand from '👨‍💻modals/HighDemand';
 import LessonFinished from '👨‍💻modals/LessonFinished';
 import Login from '👨‍💻modals/Login';
 import Register from '👨‍💻modals/Register';
@@ -22,7 +23,7 @@ const Modals: React.FC<Props> = () => {
   const { data } = useModalQuery();
 
   const handleEscape = useCallback((event) => {
-    if (event.keyCode === 27) modalVar(InitialModalState);
+    // if (event.keyCode === 27) modalVar(InitialModalState);
   }, []);
 
   useEffect(() => {
@@ -36,8 +37,8 @@ const Modals: React.FC<Props> = () => {
   const isOpen = !!data?.modal?.name;
 
   return isOpen ? (
-    <div className="overflow-y-auto fixed inset-0 z-50">
-      <div className="flex sm:block justify-center items-end sm:p-0 px-4 pt-4 pb-20 min-h-screen text-center">
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay, show/hide based on modal state.
   
         Entering: "ease-out duration-300"
@@ -57,8 +58,8 @@ const Modals: React.FC<Props> = () => {
         >
           <div
             aria-hidden="true"
-            className="fixed inset-0 opacity-50 transition-opacity bg-bg-nav"
-            onClick={() => modalVar(InitialModalState)}
+            className="fixed inset-0 bg-neutral-800 opacity-50 transition-opacity"
+            // onClick={() => modalVar(InitialModalState)}
           >
             <div className="absolute inset-0 opacity-75"></div>
           </div>
@@ -82,18 +83,18 @@ const Modals: React.FC<Props> = () => {
         <div
           aria-labelledby="modal-headline"
           aria-modal="true"
-          className="inline-block text-left align-bottom sm:align-middle rounded-lg shadow-xl transition-all transform bg-bg-primary"
+          className="relative inline-block rounded-lg border border-neutral-800 bg-black text-left align-bottom shadow-xl transition-all sm:align-middle"
           role="dialog"
         >
-          <div
-            className="flex absolute -top-3 -right-3 justify-center items-center w-10 h-10 rounded-full bg-bg-primary"
+          {/* <div
+            className="bg-bg-primary absolute -top-3 -right-3 flex h-10 w-10 items-center justify-center rounded-full"
             onClick={() => modalVar(InitialModalState)}
           >
             <Icon
-              className="text-3xl text-text-primary"
+              className="text-text-primary text-3xl"
               name="cancel-circled"
             />
-          </div>
+          </div> */}
           {/* eslint-disable */}
           {data?.modal?.name === 'changePassword' && <ChangePassword />}
           {data?.modal?.name === 'createLesson' && <CreateLesson />}
@@ -109,6 +110,7 @@ const Modals: React.FC<Props> = () => {
           {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
           {data?.modal?.name === 'testsPassed' && <TestsPassed />}
           {data?.modal?.name === 'updateSession' && <UpdateSession />}
+          {data?.modal?.name === 'highDemand' && <HighDemand />}
           {/* eslint-enable */}
         </div>
       </div>
