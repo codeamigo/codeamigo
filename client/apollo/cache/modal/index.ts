@@ -6,6 +6,7 @@ export type ModalNameType =
   | 'donate'
   | 'donationSuccess'
   | 'donationFailure'
+  | 'highDemand'
   | 'lessonFinished'
   | 'login'
   | 'register'

@@ -17,6 +17,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
@@ -266,6 +267,7 @@ function MonacoEditor({
         `${process.env.NEXT_PUBLIC_API_URL}/completions`,
         {
           body: JSON.stringify({
+            apiKey: localStorage.getItem('openaiKey'),
             prompt,
             suffix,
           }),
@@ -476,6 +478,7 @@ function MonacoEditor({
               `${process.env.NEXT_PUBLIC_API_URL}/explain`,
               {
                 body: JSON.stringify({
+                  apiKey: localStorage.getItem('openaiKey'),
                   nextHoverSelection,
                   prompt,
                 }),
@@ -679,6 +682,16 @@ const V2 = () => {
     defaultLeftPanelHeight
   );
   const [isStepComplete, setIsStepComplete] = useState(false);
+
+  // HIGH DEMAND
+  useEffect(() => {
+    if (!localStorage.getItem('openaiKey')) {
+      modalVar({
+        callback: () => null,
+        name: 'highDemand',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);

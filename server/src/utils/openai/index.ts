@@ -1,11 +1,15 @@
 const { Configuration, OpenAIApi } = require('openai');
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY_SECRET,
-});
-const openai = new OpenAIApi(configuration);
+export const complete = async (
+  prompt: string,
+  suffix: string,
+  apiKey: string
+) => {
+  const configuration = new Configuration({
+    apiKey,
+  });
+  const openai = new OpenAIApi(configuration);
 
-export const complete = async (prompt: string, suffix: string) => {
   const response = await openai.createCompletion({
     frequency_penalty: 0,
     max_tokens: 5,
@@ -21,7 +25,12 @@ export const complete = async (prompt: string, suffix: string) => {
   return response;
 };
 
-export const explain = async (prompt: string) => {
+export const explain = async (prompt: string, apiKey: string) => {
+  const configuration = new Configuration({
+    apiKey,
+  });
+  const openai = new OpenAIApi(configuration);
+
   const response = await openai.createCompletion({
     frequency_penalty: 0,
     max_tokens: 100,
