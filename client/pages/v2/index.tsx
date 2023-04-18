@@ -9,6 +9,7 @@ import {
   useSandpack,
 } from '@codesandbox/sandpack-react';
 import Editor from '@monaco-editor/react';
+import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
@@ -537,82 +538,109 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
 };
 
 const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
-  // expand textarea height on enter
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
-  const [response, setResponse] = useState('');
-  const [streamTextIndex, setStreamTextIndex] = useState(0);
-  const [streamedTexts, setStreamedTexts] = useState<
-    { selection: string; text: string[] }[]
+  const [responses, setResponses] = useState<
+    { question: string; value: string }[]
   >([]);
+  const [textStreams, setTextStreams] = useState<
+    {
+      question: string;
+      stream: string[];
+    }[]
+  >([]);
+  const [isBusy, setIsBusy] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const streamedTextsRef = useRef<HTMLDivElement | null>(null);
+  const formRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!response) return;
-    if (!hoverSelection) return;
-    setStreamTextIndex((prev) => prev + 1);
-    streamText(hoverSelection);
-  }, [response]);
+    if (isBusy) return;
 
-  useEffect(() => {
-    if (streamedTextsRef.current) {
-      const element = streamedTextsRef.current;
-      element.scrollTop = element.scrollHeight;
-    }
-  }, [streamedTexts]);
-
-  useEffect(() => {
     if (hoverSelection) {
-      const run = async () => {
-        const prompt = `${code} """ In the above code explain what ${hoverSelection} is doing to a total beginner.}`;
-        if (hoverSelection) {
-          try {
-            const response = await fetch(
-              `${process.env.NEXT_PUBLIC_API_URL}/explain`,
-              {
-                body: JSON.stringify({
-                  apiKey: localStorage.getItem('openaiKey'),
-                  hoverSelection,
-                  prompt,
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                method: 'POST',
-              }
-            );
-
-            const explainations: { text: string }[] = await response.json();
-            const value = `${explainations[0].text}`;
-            setResponse(value);
-          } catch (error) {
-            console.log(error);
-          }
-        }
-      };
-
-      run();
+      const prompt =
+        'Code: ' +
+        code +
+        '### Explain what ' +
+        hoverSelection +
+        ' does in the code above.';
+      fetchExplain(prompt, hoverSelection);
     }
   }, [hoverSelection]);
 
-  const handleKeyDown = (e: any) => {
-    if (e.key === 'Enter' || e.key === 'Backspace') {
-      setHeight(e.target.scrollHeight);
+  const fetchExplain = async (prompt: string, question: string) => {
+    try {
+      const oldStream = textStreams.find(
+        (stream) => stream.question === question
+      );
+      if (oldStream) {
+        const oldDiv = document.getElementById(oldStream.question);
+        console.log(formRef?.current?.clientHeight);
+        if (oldDiv && streamedTextsRef.current) {
+          streamedTextsRef.current.scrollTo({
+            behavior: 'smooth',
+            top: oldDiv.offsetTop - (formRef?.current?.offsetHeight || 0) || 0,
+          });
+          oldDiv.classList.add('animate-pulse');
+          setTimeout(() => {
+            oldDiv.classList.remove('animate-pulse');
+          }, 5000);
+        }
+        throw new Error('Already asked this question');
+      }
+      if (isBusy) throw new Error('Busy');
+      setIsBusy(true);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/explain`,
+        {
+          body: JSON.stringify({
+            apiKey: localStorage.getItem('openaiKey'),
+            prompt,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+        }
+      );
+
+      const explainations: { text: string }[] = await response.json();
+      const value = `${explainations[0].text}`;
+      setResponses((prev) => [...prev, { question, value }]);
+      streamText(value, question, responses.length);
+      setTimeout(() => {
+        textAreaRef.current?.focus();
+      }, 10);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsBusy(false);
     }
   };
 
-  const streamText = (selection: string) => {
+  const streamText = (text: string, question: string, streamIndex: number) => {
     let index = 0;
     const intervalId = setInterval(() => {
-      setStreamedTexts((prev) => {
-        const newStream = [...prev];
-        if (!newStream[streamTextIndex])
-          newStream.push({ selection, text: [] });
-        newStream[streamTextIndex].text.push(response[index]);
-        return newStream;
+      if (index < text.length) {
+        streamedTextsRef.current?.scrollTo({
+          behavior: 'smooth',
+          top: streamedTextsRef.current?.scrollHeight,
+        });
+        index++;
+      }
+
+      setTextStreams((prev) => {
+        const newStreams = [...prev];
+        newStreams[streamIndex] = {
+          question,
+          stream: text.slice(0, index).split(''),
+        };
+        return newStreams;
       });
-      index++;
-      if (index === response.length) clearInterval(intervalId);
+
+      if (index === text.length) {
+        clearInterval(intervalId);
+      }
     }, 50);
   };
 
@@ -620,8 +648,8 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
     <div
       className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
     >
-      <div className="h-full overflow-scroll" ref={streamedTextsRef}>
-        <div className="sticky top-0 bg-black px-4 py-2">
+      <div className="relative h-full overflow-scroll" ref={streamedTextsRef}>
+        <div className="sticky top-0 z-10 bg-black px-4 py-2" ref={formRef}>
           <div className="mb-1 flex items-center gap-2">
             <Image height={24} src={hal} width={24} />
             <pre className="whitespace-normal text-white">
@@ -629,34 +657,73 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
             </pre>
           </div>
           <div className="w-full rounded-lg border border-neutral-800 bg-neutral-900 p-2">
-            <textarea
-              className="min-h-[40px] w-full rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-all placeholder:text-neutral-400 focus:border-neutral-700"
-              onKeyDown={handleKeyDown}
-              placeholder="Ask me anything, or hover over some code to see what I can do."
-              style={{ height: `${height}px` }}
-            />
+            <Formik
+              initialValues={{ question: '' }}
+              onSubmit={async (values) => {
+                if (!values.question) return;
+                const prompt = `${code} """ ${values.question}`;
+                await fetchExplain(prompt, values.question);
+              }}
+            >
+              {({ setFieldValue, submitForm }) => (
+                <Form className="relative">
+                  <textarea
+                    autoFocus
+                    className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
+                    disabled={isBusy}
+                    name="question"
+                    onChange={(e) => {
+                      setFieldValue('question', e.target.value);
+                    }}
+                    onInput={(e) => {
+                      setHeight(0);
+                      setTimeout(() => {
+                        // @ts-ignore
+                        setHeight(e.target.scrollHeight);
+                      }, 1);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.which === 13 && !e.shiftKey) {
+                        e.preventDefault();
+
+                        submitForm();
+                      }
+                    }}
+                    placeholder="Ask me anything, or hover over some code to see what I can do."
+                    ref={textAreaRef}
+                    style={{ height: `${height}px` }}
+                  />
+                  {isBusy ? (
+                    <Icon
+                      className="absolute right-3 top-1.5 animate-spin text-lg text-neutral-500"
+                      name="cog"
+                    />
+                  ) : null}
+                </Form>
+              )}
+            </Formik>
           </div>
         </div>
-        {streamedTexts.length ? (
-          <div className="flex flex-col bg-black">
-            {streamedTexts.map(({ selection, text }, index) => {
-              if (text.length === 0) return null;
-              return (
-                <div
-                  className={`px-4 py-2 text-sm ${
-                    index % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
-                  }`}
-                  key={text.join('')}
-                >
-                  <pre>{selection}</pre>
-                  {text.map((char, index) => {
-                    return <span key={`${char}-${index}`}>{char}</span>;
-                  })}
-                </div>
-              );
-            })}
-          </div>
-        ) : null}
+        {textStreams.map(({ question, stream }, index) => {
+          return (
+            <div
+              className={`border-b border-neutral-800 px-4 py-2 text-sm first:border-t last:border-b-0 ${
+                index % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
+              }`}
+              id={question}
+            >
+              <div className="mb-1">
+                <pre className="bg-green-950 inline-block rounded-md border border-green-500 px-1 py-0.5 text-xs text-green-500">
+                  {question}
+                </pre>
+              </div>
+              {stream.map((char) => {
+                if (stream.length === 0) return null;
+                return <span>{char}</span>;
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
