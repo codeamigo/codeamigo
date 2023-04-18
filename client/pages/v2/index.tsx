@@ -797,7 +797,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
               </div>
               {stream.map((char) => {
                 if (stream.length === 0) return null;
-                return <span>{char}</span>;
+                return <span className="text-white">{char}</span>;
               })}
             </div>
           );
