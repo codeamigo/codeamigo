@@ -6,7 +6,7 @@ export const complete = async (
   apiKey: string
 ) => {
   const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY_SECRET,
+    apiKey: apiKey || process.env.OPENAI_API_KEY_SECRET,
   });
   const openai = new OpenAIApi(configuration);
 
@@ -27,7 +27,7 @@ export const complete = async (
 
 export const explain = async (prompt: string, apiKey: string) => {
   const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY_SECRET,
+    apiKey: apiKey || process.env.OPENAI_API_KEY_SECRET,
   });
   const openai = new OpenAIApi(configuration);
 
