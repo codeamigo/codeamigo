@@ -820,14 +820,14 @@ const V2 = () => {
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
 
   // HIGH DEMAND
-  useEffect(() => {
-    if (!localStorage.getItem('openaiKey')) {
-      modalVar({
-        callback: () => null,
-        name: 'highDemand',
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!localStorage.getItem('openaiKey')) {
+  //     modalVar({
+  //       callback: () => null,
+  //       name: 'highDemand',
+  //     });
+  //   }
+  // }, []);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
