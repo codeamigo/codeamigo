@@ -11,7 +11,7 @@ const Home = () => {
         // open a new window
         window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
       } else if (event.key === 'd') {
-        window.open('/v2', '_blank');
+        window.open('/v2');
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -77,7 +77,12 @@ const Home = () => {
           Request access
         </button>
       </div>
-      <div className="hidden w-full animate-pulse items-center justify-center sm:flex">
+      <div
+        className="hidden w-full animate-pulse cursor-pointer items-center justify-center hover:animate-none sm:flex"
+        onClick={() => {
+          window.open('/v2');
+        }}
+      >
         <Image height={80} src={hal} width={80} />
       </div>
     </div>
