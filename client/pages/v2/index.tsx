@@ -807,20 +807,20 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                     <pre
                       className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
-                        setValues({ question: 'What is a variable?' });
-                        submitForm();
-                      }}
-                    >
-                      What is a variable?
-                    </pre>
-                    <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
-                      onClick={() => {
                         setValues({ question: "Why isn't my code accepted?" });
                         submitForm();
                       }}
                     >
                       Why isn't my code accepted?
+                    </pre>
+                    <pre
+                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      onClick={() => {
+                        setValues({ question: 'What is a variable?' });
+                        submitForm();
+                      }}
+                    >
+                      What is a variable?
                     </pre>
                     <pre
                       className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
