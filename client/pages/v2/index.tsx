@@ -1,6 +1,5 @@
 import {
   FileTabs,
-  SandpackConsole,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
@@ -13,6 +12,7 @@ import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { isDesktop } from 'react-device-detect';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
@@ -728,8 +728,13 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
     >
       <div className="relative h-full overflow-scroll" ref={streamedTextsRef}>
         <div className="sticky top-0 z-10 bg-black px-4 py-2" ref={formRef}>
-          <div className="mb-1 flex items-center gap-2">
-            <Image height={24} src={hal} width={24} />
+          <div className="mb-2 flex items-center gap-2 sm:mb-1">
+            <Image
+              height={'24px'}
+              src={hal}
+              style={{ minHeight: '24px', minWidth: '24px' }}
+              width={'24px'}
+            />
             <pre className="whitespace-normal text-white">
               Hello, I'm Codeamigo. I'm here to help you with this tutorial.
             </pre>
@@ -767,7 +772,11 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                         submitForm();
                       }
                     }}
-                    placeholder="Ask me anything, or hover over some code to see what I can do."
+                    placeholder={
+                      isDesktop
+                        ? 'Ask me anything, or hover over some code to see what I can do.'
+                        : 'Ask me anything.'
+                    }
                     ref={textAreaRef}
                     style={{ height: `${height}px` }}
                   />
@@ -828,6 +837,14 @@ const V2 = () => {
   //     });
   //   }
   // }, []);
+  useEffect(() => {
+    if (!isDesktop) {
+      modalVar({
+        callback: () => null,
+        name: 'mobileWarning',
+      });
+    }
+  }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);

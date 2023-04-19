@@ -10,6 +10,7 @@ import DonationSuccess from '👨‍💻modals/DonationSuccess';
 import HighDemand from '👨‍💻modals/HighDemand';
 import LessonFinished from '👨‍💻modals/LessonFinished';
 import Login from '👨‍💻modals/Login';
+import MobileWarning from '👨‍💻modals/MobileWarning';
 import Register from '👨‍💻modals/Register';
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
 import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
@@ -111,6 +112,7 @@ const Modals: React.FC<Props> = () => {
           {data?.modal?.name === 'testsPassed' && <TestsPassed />}
           {data?.modal?.name === 'updateSession' && <UpdateSession />}
           {data?.modal?.name === 'highDemand' && <HighDemand />}
+          {data?.modal?.name === 'mobileWarning' && <MobileWarning />}
           {/* eslint-enable */}
         </div>
       </div>
