@@ -10,6 +10,7 @@ import {
 import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
+import Head from 'next/head';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
@@ -726,6 +727,12 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
     <div
       className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
     >
+      <Head>
+        <meta
+          content="https://codeamigo.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhal.5acdb897.png&w=256&q=75"
+          property="og:image"
+        />
+      </Head>
       <div className="relative h-full overflow-scroll" ref={streamedTextsRef}>
         <div className="sticky top-0 z-10 bg-black px-4 py-2" ref={formRef}>
           <div className="mb-2 flex items-center gap-2 sm:mb-1">
