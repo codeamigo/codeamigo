@@ -876,7 +876,7 @@ const ProgressBar = ({
 }) => {
   return (
     <div
-      className="flex cursor-pointer items-center gap-2 font-bold"
+      className="flex cursor-pointer items-center gap-2 text-xs font-light"
       onClick={() => {
         modalVar({
           callback: (step: number) => {
