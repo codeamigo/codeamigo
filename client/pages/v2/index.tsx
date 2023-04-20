@@ -35,7 +35,7 @@ const defaultLeftPanelHeight = {
   instructions: '18rem',
 };
 
-type Step = {
+export type Step = {
   checkpoints: {
     message: string;
     passed: boolean;
@@ -48,6 +48,7 @@ type Step = {
   };
   instructions: string;
   start: string;
+  title: string;
 };
 
 const steps: Step[] = [
@@ -67,6 +68,7 @@ const steps: Step[] = [
     instructions:
       "## Hello Codeamigo!\nWelcome to Codeamigo. **Codeamigo uses AI** to help you learn how to code. Today, **almost 50% of code is written by AI**, so why shouldn't you _learn how to code with AI?_\n\nWe're building Codeamigo to help current and future developers learn to take advantage of the amazing tools we have at our disposal.\n\nReady to get started with a few of the basics? Let's go! Click **Next** to get started.",
     start: 'Hello World!',
+    title: 'Hello Codeamigo!',
   },
   {
     checkpoints: [
@@ -91,6 +93,7 @@ const steps: Step[] = [
     instructions:
       "## Intro to Codeamigo - Part 1\nCodeamigo comes equipped with a built-in editor, preview and chatbot. Let's get familiar with these tools. The editor below is where you'll be spending most of your time.\n\nTo see these tools in action, let's modify the code in the editor. Change the text in the `h1` tag to say **Hello Codeamigo!**\n\nThen, click **Next** when you're ready to continue.",
     start: 'Hello ',
+    title: 'Code Completion',
   },
   {
     checkpoints: [],
@@ -108,6 +111,7 @@ const steps: Step[] = [
     instructions:
       "## Intro to Codeamigo - Part 2\nMaybe you're a bit confused about what some of these lines of code are doing in the editor. That's okay! You have an AI assistant at your disposal.\n\nFor example, what does `<!DOCTYPE html>` do? **Using your cursor select the line of code and hover over the highlighted text to see a description of what it does.**\n\nReady to learn more? Click **Next** to continue.",
     start: '',
+    title: 'Hover to Learn',
   },
   {
     checkpoints: [],
@@ -125,6 +129,7 @@ const steps: Step[] = [
     instructions:
       "## Intro to Codeamigo - Part 3\nYou can also ask Codeamigo just about anything you want. For example, why don't you try typing\n\n**Explain HTML as if I was a film maker.**\n\ninto the chatbot.\n\nReady to learn more? Click **Next** to continue.",
     start: '',
+    title: 'Ask Codeamigo Anything',
   },
   {
     checkpoints: [],
@@ -142,6 +147,7 @@ const steps: Step[] = [
     instructions:
       "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs (either created by the AI or a fellow human) and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way! If you'd like to stay updated on Codeamigo's progress, you can join the waitlist at [codeamigo.dev](https://codeamigo.dev).",
     start: '',
+    title: 'The End (for now)',
   },
 ];
 
@@ -570,7 +576,7 @@ const Markdown = ({
     >
       <ReactMarkdown
         children={steps[currentStep].instructions}
-        className="markdown-body h-full overflow-scroll border-b border-neutral-800 py-2 px-3"
+        className="markdown-body h-full overflow-scroll border-b border-neutral-800 px-3 py-2"
         plugins={[gfm]}
       />
       <Icon
@@ -654,7 +660,6 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
       );
       if (oldStream) {
         const oldDiv = document.getElementById(oldStream.question);
-        console.log(formRef?.current?.clientHeight);
         if (oldDiv && streamedTextsRef.current) {
           streamedTextsRef.current.scrollTo({
             behavior: 'smooth',
@@ -759,7 +764,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                 <Form className="relative">
                   <textarea
                     autoFocus
-                    className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
+                    className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black px-3 py-2 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
                     disabled={isBusy}
                     name="question"
                     onChange={(e) => {
@@ -796,7 +801,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'What is this code doing?' });
                         submitForm();
@@ -805,7 +810,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       What is this code doing?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: "Why isn't my code accepted?" });
                         submitForm();
@@ -814,7 +819,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       Why isn't my code accepted?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'What is a variable?' });
                         submitForm();
@@ -823,7 +828,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       What is a variable?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'Explain HTML as if I was 5.' });
                         submitForm();
@@ -846,7 +851,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
               id={question}
             >
               <div className="mb-1">
-                <pre className="bg-green-950 inline-block rounded-md border border-green-500 px-1 py-0.5 text-xs text-green-500">
+                <pre className="inline-block rounded-md border border-green-500 bg-green-950 px-1 py-0.5 text-xs text-green-500">
                   {question}
                 </pre>
               </div>
@@ -857,6 +862,53 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+};
+
+const ProgressBar = ({
+  currentStep,
+  setCurrentStep,
+}: {
+  currentStep: number;
+  setCurrentStep: Dispatch<SetStateAction<number>>;
+}) => {
+  return (
+    <div
+      className="flex cursor-pointer items-center gap-2 font-bold"
+      onClick={() => {
+        modalVar({
+          callback: (step: number) => {
+            setCurrentStep(step);
+          },
+          data: { steps, title: 'Intro to Codeamigo' },
+          name: 'steps',
+        });
+      }}
+    >
+      <div className="h-2 w-32 rounded-full bg-green-900">
+        <div
+          className="h-full rounded-full bg-green-500 transition-all"
+          style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+        />
+      </div>
+      <div className="text-xs text-white">
+        {currentStep + 1}/{steps.length}
+      </div>
+    </div>
+  );
+};
+
+const Credits = () => {
+  return (
+    <div className="flex items-center gap-2">
+      <div className="h-2 w-32 rounded-full bg-blue-900">
+        <div
+          className="h-full rounded-full bg-blue-500 transition-all"
+          // todo: don't hardcode this
+          style={{ width: `33%` }}
+        />
       </div>
     </div>
   );
@@ -933,12 +985,17 @@ const V2 = () => {
     <AnimatePresence>
       <motion.div
         animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-        className="flex w-full flex-col items-center justify-center gap-3 p-5 md:h-full"
+        className="flex w-full flex-col items-center justify-center gap-1.5 p-5 pt-2 md:h-full"
         initial={{ opacity: 0, scale: 0 }}
         key="v2"
         style={{ transformOrigin: 'center' }}
         transition={transition}
       >
+        {/* top bar */}
+        <div className="flex w-full justify-between">
+          <ProgressBar currentStep={currentStep} />
+          <Credits />
+        </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
           style={{ width: '100%' }}
@@ -972,7 +1029,7 @@ const V2 = () => {
               </SandpackStack>
               <SandpackStack className="!h-full">
                 <Button
-                  className="absolute top-2 right-2 z-10"
+                  className="absolute right-2 top-2 z-10"
                   onClick={() =>
                     window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
                   }
@@ -994,7 +1051,7 @@ const V2 = () => {
             ? { opacity: 0, scale: 0 }
             : { opacity: 1, scale: 1 }
         }
-        className="fixed top-0 left-0 flex h-full w-full animate-pulse items-center justify-center text-white"
+        className="fixed left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
         initial={{ opacity: 0.5, scale: 0.5 }}
         style={{ transformOrigin: 'center' }}
         transition={transition}

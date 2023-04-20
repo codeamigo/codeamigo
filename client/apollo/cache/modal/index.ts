@@ -13,6 +13,7 @@ export type ModalNameType =
   | 'registerAfterPreview'
   | 'resetPasswordSent'
   | 'mobileWarning'
+  | 'steps'
   | 'testsPassed'
   | 'updateSession';
 export type ModalType = {

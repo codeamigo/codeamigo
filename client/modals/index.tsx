@@ -14,6 +14,7 @@ import MobileWarning from '👨‍💻modals/MobileWarning';
 import Register from '👨‍💻modals/Register';
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
 import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
+import Steps from '👨‍💻modals/Steps';
 import TestsPassed from '👨‍💻modals/TestsPassed';
 import UpdateSession from '👨‍💻modals/UpdateSession';
 
@@ -39,7 +40,7 @@ const Modals: React.FC<Props> = () => {
 
   return isOpen ? (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex min-h-screen items-end justify-center px-4 pb-20 pt-4 text-center sm:block sm:p-0">
         {/* Background overlay, show/hide based on modal state.
   
         Entering: "ease-out duration-300"
@@ -113,6 +114,7 @@ const Modals: React.FC<Props> = () => {
           {data?.modal?.name === 'updateSession' && <UpdateSession />}
           {data?.modal?.name === 'highDemand' && <HighDemand />}
           {data?.modal?.name === 'mobileWarning' && <MobileWarning />}
+          {data?.modal?.name === 'steps' && <Steps />}
           {/* eslint-enable */}
         </div>
       </div>
