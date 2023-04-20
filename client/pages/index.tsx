@@ -33,7 +33,7 @@ const Home = () => {
             Like a Developer
           </span>
         </h1>
-        <p className=" mt-4 mb-8 text-base font-normal text-neutral-600">
+        <p className=" mb-8 mt-4 text-base font-normal text-neutral-600">
           <span className="inline-block max-w-[591px] align-top">
             Today's developers didn’t learn C before learning JavaScript or
             Python, why should you learn how to code without the latest
@@ -65,7 +65,7 @@ const Home = () => {
           to demo.
         </button>
         <button
-          className="inline-flex h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-white px-4 text-sm font-semibold text-black transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
+          className="h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-white px-4 text-sm font-semibold text-black transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
           onClick={() => {
             window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
           }}
@@ -74,7 +74,20 @@ const Home = () => {
               'rgba(5, 162, 194, 0.3) -8px 0px 20px, rgba(112, 225, 200, 0.3) 0px 0px 20px, rgba(255, 178, 36, 0.3) 8px 0px 20px;',
           }}
         >
-          Request access
+          Join Waitlist
+        </button>
+        <br />
+        <button
+          className="mt-3 h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-black px-4 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
+          onClick={() => {
+            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
+          }}
+          style={{
+            boxShadow:
+              'rgba(5, 162, 194, 0.3) -8px 0px 20px, rgba(112, 225, 200, 0.3) 0px 0px 20px, rgba(255, 178, 36, 0.3) 8px 0px 20px;',
+          }}
+        >
+          Demo
         </button>
       </div>
       <div
