@@ -338,7 +338,7 @@ const steps: Step[] = [
       },
     },
     instructions:
-      '## Arrays\n\nArrays are like baskets of things in JavaScript. They help you store lots of values in just one variable! To create an array, you put a list of values inside square brackets, separated by commas. To get a value out of the array, you use its "index" number, which starts counting at 0. You can also do other cool things with arrays, like adding or removing things, sorting them, or searching for specific values.',
+      '## Arrays\n\nArrays are like baskets of things in JavaScript. They help you store lots of values in just one variable! To create an array, you put a list of values inside square brackets, separated by commas. To get a value out of the array, you use its "index" number, which starts counting at 0. You can also do other cool things with arrays, like adding or removing things, sorting them, or searching for specific values. Heres an example:\n\n```\nlet fruits = ["apple", "orange", "pear"];\n```',
     questions: [
       ...defaultQuestions,
       'What are some real world examples of arrays?',
