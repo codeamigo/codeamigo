@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
+import Toggle from '👨‍💻components/Toggle';
 
-const PrevNext: React.FC<Props> = ({
+const StepActions: React.FC<Props> = ({
   currentStep,
   disabled,
+  isCompletionEnabled,
   nextLoader,
   setCurrentStep,
+  setIsCompletionEnabled,
   steps,
 }) => {
   const nextDisabled = currentStep === steps - 1 || disabled;
@@ -71,28 +74,37 @@ const PrevNext: React.FC<Props> = ({
           </Button>
         </div>
       ) : (
-        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
-          <Button
-            disabled={currentStep === 0}
-            onClick={() => setCurrentStep(currentStep - 1)}
-          >
-            Prev
-          </Button>
-          <Button
-            className="relative overflow-hidden"
-            disabled={nextDisabled}
-            id="next-button"
-            onClick={() => setCurrentStep(currentStep + 1)}
-          >
-            <span className="relative z-10">Next</span>
-            {nextLoader && (
-              // element that expands in the style of the netflix loader
-              <span
-                className="absolute left-0 z-0 h-full w-0 bg-neutral-500"
-                id="loader"
-              ></span>
-            )}
-          </Button>
+        <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
+          <div />
+          <div className="flex items-center gap-2">
+            <Button
+              disabled={currentStep === 0}
+              onClick={() => setCurrentStep(currentStep - 1)}
+            >
+              Prev
+            </Button>
+            <Button
+              className="relative overflow-hidden"
+              disabled={nextDisabled}
+              id="next-button"
+              onClick={() => setCurrentStep(currentStep + 1)}
+            >
+              <span className="relative z-10">Next</span>
+              {nextLoader && (
+                // element that expands in the style of the netflix loader
+                <span
+                  className="absolute left-0 z-0 h-full w-0 bg-neutral-500"
+                  id="loader"
+                ></span>
+              )}
+            </Button>
+          </div>
+          <div aria-label="Toggle Code Completion" className="hint hint--left">
+            <Toggle
+              checked={isCompletionEnabled}
+              setChecked={setIsCompletionEnabled}
+            />
+          </div>
         </div>
       )}
     </div>
@@ -102,9 +114,11 @@ const PrevNext: React.FC<Props> = ({
 type Props = {
   currentStep: number;
   disabled: boolean;
+  isCompletionEnabled: boolean;
   nextLoader: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   steps: number;
 };
 
-export default PrevNext;
+export default StepActions;

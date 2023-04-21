@@ -22,7 +22,7 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
-import PrevNext from '👨‍💻widgets/PrevNext';
+import StepActions from '👨‍💻widgets/StepActions';
 
 import * as hal from '../../assets/hal.png';
 
@@ -192,12 +192,18 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
+  const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
   const isStepCompleteRef = useRef(isStepComplete);
+  const isCompletionEnabledRef = useRef(isCompletionEnabled);
   const [nextLoader, setNextLoader] = useState(false);
 
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
   }, [isStepComplete]);
+
+  useEffect(() => {
+    isCompletionEnabledRef.current = isCompletionEnabled;
+  }, [isCompletionEnabled]);
 
   useEffect(() => {
     setLeftPanelHeight({
@@ -241,6 +247,7 @@ function MonacoEditor({
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
     if (isStepCompleteRef.current) return;
+    if (!isCompletionEnabledRef.current) return;
     const lines = value.split(/\n/);
     const lineNumber = ev.changes[0].range.startLineNumber - 1;
     const line = lines[lineNumber];
@@ -489,11 +496,13 @@ function MonacoEditor({
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
       <Checkpoints currentStep={currentStep} />
-      <PrevNext
+      <StepActions
         currentStep={currentStep}
         disabled={!isStepComplete}
+        isCompletionEnabled={isCompletionEnabled}
         nextLoader={nextLoader}
         setCurrentStep={setCurrentStep}
+        setIsCompletionEnabled={setIsCompletionEnabled}
         steps={steps.length}
       />
       <FileTabs />
