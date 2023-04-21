@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
-import { Icon as LogoIcon, Logo } from '👨‍💻components/Logos';
+import { Logo } from '👨‍💻components/Logos';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 const TopNav: React.FC<Props> = () => {
