@@ -3,11 +3,11 @@ import 'dotenv-safe/config';
 
 import { ApolloServer } from 'apollo-server-express';
 import cloudinary from 'cloudinary';
-import connectRedis from 'connect-redis';
+// import connectRedis from 'connect-redis';
 import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
-import Redis from 'ioredis';
+// import Redis from 'ioredis';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 
@@ -59,8 +59,8 @@ const main = async () => {
     })
   );
 
-  const RedisStore = connectRedis(session);
-  const redis = new Redis(process.env.REDIS_URL);
+  // const RedisStore = connectRedis(session);
+  // const redis = new Redis(process.env.REDIS_URL);
 
   app.use(
     session({
@@ -76,15 +76,15 @@ const main = async () => {
       resave: false,
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
-      store: new RedisStore({
-        client: redis,
-        disableTouch: true,
-      }),
+      // store: new RedisStore({
+      //   client: redis,
+      //   disableTouch: true,
+      // }),
     })
   );
 
   const apolloServer = new ApolloServer({
-    context: ({ req, res }) => ({ redis, req, res }),
+    context: ({ req, res }) => ({ req, res }),
     schema: await buildSchema({
       resolvers: [
         CheckpointResolver,
