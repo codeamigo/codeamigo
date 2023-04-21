@@ -19,10 +19,8 @@ import { toErrorMap } from '👨‍💻utils/index';
 const Login: React.FC = () => {
   const router = useRouter();
   const [login] = useLoginMutation();
-  const [
-    forgotPassword,
-    { data: forgotPasswordData, loading },
-  ] = useForgotPasswordMutation();
+  const [forgotPassword, { data: forgotPasswordData, loading }] =
+    useForgotPasswordMutation();
   const { data: modalData } = useModalQuery();
 
   useEffect(() => {
@@ -66,20 +64,20 @@ const Login: React.FC = () => {
     >
       {({ isSubmitting, values }) => (
         <Form>
-          <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
-            <h1 className="flex justify-center mb-4 text-2xl font-semibold text-text-primary">
+          <div className="mx-auto w-96 max-w-lg p-6 lg:px-4">
+            <h1 className="text-text-primary mb-4 flex justify-center text-2xl font-semibold">
               Login
             </h1>
-            <div className="flex gap-6 justify-center">
+            <div className="flex justify-center gap-6">
               <button
-                className="w-8 h-8"
+                className="h-8 w-8"
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
                 <Image src={googlePng} />
               </button>
               <button
-                className="block w-8 h-8 bg-bg-nav-offset rounded-full"
+                className="bg-bg-nav-offset block h-8 w-8 rounded-full"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 style={{ padding: '2px' }}
                 type="button"
@@ -87,7 +85,7 @@ const Login: React.FC = () => {
                 <Image src={githubPng} />
               </button>
             </div>
-            <div className="sm:p-6 px-4">
+            <div className="px-4 sm:p-6">
               <div className="flex flex-col gap-3">
                 <InputField
                   label="Email or username"
@@ -105,7 +103,7 @@ const Login: React.FC = () => {
                     type="password"
                   />
                   <div
-                    className="absolute top-0.5 right-0 text-xs text-text-primary underline cursor-pointer"
+                    className="text-text-primary absolute right-0 top-0.5 cursor-pointer text-xs underline"
                     onClick={() =>
                       forgotPassword({
                         variables: { usernameOrEmail: values.usernameOrEmail },
@@ -117,22 +115,26 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="px-4 sm:px-6 w-full">
+            <div className="w-full px-4 sm:px-6">
               <Button
-                className="justify-center w-full"
+                className="w-full justify-center"
                 disabled={isSubmitting || loading}
                 type="submit"
               >
                 Login
               </Button>
-              <div className="my-1 mt-3 w-full text-xs text-center text-text-primary">
+              <div className="text-text-primary my-1 mt-3 w-full text-center text-xs">
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
+                className="text-accent w-full justify-center rounded-md text-sm font-medium focus:outline-none"
                 disabled={isSubmitting || loading}
                 onClick={() =>
-                  modalVar({ callback: () => null, name: 'register' })
+                  modalVar({
+                    callback: () => null,
+                    name: 'register',
+                    persistent: false,
+                  })
                 }
                 type="button"
               >

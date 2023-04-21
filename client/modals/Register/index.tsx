@@ -38,20 +38,20 @@ const Register: React.FC = () => {
     >
       {({ isSubmitting, isValid, values }) => (
         <Form>
-          <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
-            <h1 className="flex justify-center mb-4 text-2xl font-semibold text-text-primary">
+          <div className="mx-auto w-96 max-w-lg p-6 lg:px-4">
+            <h1 className="text-text-primary mb-4 flex justify-center text-2xl font-semibold">
               Sign Up
             </h1>
-            <div className="flex gap-6 justify-center">
+            <div className="flex justify-center gap-6">
               <button
-                className="w-8 h-8"
+                className="h-8 w-8"
                 onClick={() => signIn('google', { callbackUrl: router.asPath })}
                 type="button"
               >
                 <Image src={googlePng} />
               </button>
               <button
-                className="block w-8 h-8 bg-bg-nav-offset rounded-full"
+                className="bg-bg-nav-offset block h-8 w-8 rounded-full"
                 onClick={() => signIn('github', { callbackUrl: router.asPath })}
                 style={{ padding: '2px' }}
                 type="button"
@@ -59,7 +59,7 @@ const Register: React.FC = () => {
                 <Image src={githubPng} />
               </button>
             </div>
-            <div className="sm:p-6 px-4">
+            <div className="px-4 sm:p-6">
               <div className="grid gap-3">
                 <InputField
                   label="Username"
@@ -85,21 +85,22 @@ const Register: React.FC = () => {
             </div>
             <div className="px-4 sm:px-6">
               <Button
-                className="justify-center w-full"
+                className="w-full justify-center"
                 disabled={isSubmitting || !isValid}
                 type="submit"
               >
                 Register
               </Button>
-              <div className="my-1 mt-3 w-full text-xs text-center text-text-primary">
+              <div className="text-text-primary my-1 mt-3 w-full text-center text-xs">
                 or
               </div>
               <button
-                className="justify-center w-full text-sm font-medium text-accent rounded-md focus:outline-none"
+                className="text-accent w-full justify-center rounded-md text-sm font-medium focus:outline-none"
                 onClick={() =>
                   modalVar({
                     callback: modalVar().callback,
                     name: 'login',
+                    persistent: false,
                   })
                 }
                 type="button"

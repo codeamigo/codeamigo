@@ -12,6 +12,7 @@ const ChangePassword: NextPage<{ token: string }> = (props) => {
       callback: () => null,
       data: props.token,
       name: 'changePassword',
+      persistent: false,
     });
     router.replace('/');
   }, []);

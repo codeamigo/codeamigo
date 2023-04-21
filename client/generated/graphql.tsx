@@ -13,72 +13,6 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  checkpoint?: Maybe<Checkpoint>;
-  checkpoints: Array<Checkpoint>;
-  codeModule?: Maybe<CodeModule>;
-  codeModules: Array<CodeModule>;
-  dependencies: Array<Dependency>;
-  dependency?: Maybe<Dependency>;
-  deps: Array<Scalars['String']>;
-  lesson?: Maybe<Lesson>;
-  lessons: Array<Lesson>;
-  me?: Maybe<User>;
-  modal?: Maybe<Modal>;
-  profileColorScheme?: Maybe<Scalars['String']>;
-  session?: Maybe<Session>;
-  sessions: Array<Session>;
-  step?: Maybe<Step>;
-  steps: Array<Step>;
-  users?: Maybe<Array<User>>;
-};
-
-
-export type QueryCheckpointArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCheckpointsArgs = {
-  stepId: Scalars['Float'];
-};
-
-
-export type QueryCodeModuleArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryDependencyArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryLessonArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryLessonsArgs = {
-  options: LessonsInput;
-};
-
-
-export type QueryProfileColorSchemeArgs = {
-  id?: Maybe<Scalars['Float']>;
-};
-
-
-export type QuerySessionArgs = {
-  lessonId: Scalars['Int'];
-};
-
-
-export type QueryStepArgs = {
-  id: Scalars['Int'];
-};
-
 export type Checkpoint = {
   __typename?: 'Checkpoint';
   id: Scalars['Float'];
@@ -112,31 +46,92 @@ export type CodeModule = {
   step: Step;
 };
 
-export type Step = {
-  __typename?: 'Step';
+export type CodeModuleInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+  lessonId?: Maybe<Scalars['Float']>;
+};
+
+export type CodeModuleUpdateEntryInput = {
+  newId?: Maybe<Scalars['String']>;
+  oldId?: Maybe<Scalars['String']>;
+};
+
+export type CodeModuleUpdateInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+  sessionId?: Maybe<Scalars['Float']>;
+  lessonId?: Maybe<Scalars['Float']>;
+};
+
+export type CreateLessonResponse = {
+  __typename?: 'CreateLessonResponse';
+  errors?: Maybe<Array<FieldError>>;
+  lesson?: Maybe<Lesson>;
+};
+
+export type CreateMatchCheckpointInput = {
+  matchRegex: Scalars['String'];
+  fileToMatchRegex: Scalars['String'];
+  stepId: Scalars['Float'];
+};
+
+export type CreateOutputCheckpointInput = {
+  output: Scalars['String'];
+  stepId: Scalars['Float'];
+};
+
+export type CreateSpecCheckpointInput = {
+  checkpointId: Scalars['Float'];
+  stepId: Scalars['Float'];
+};
+
+export type CreateStepInput = {
+  name: Scalars['String'];
+  lessonId: Scalars['Float'];
+  currentStepId?: Maybe<Scalars['Float']>;
+  template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
+  stackblitzId?: Maybe<Scalars['String']>;
+};
+
+export type DeleteStepInput = {
+  id: Scalars['Float'];
+  lessonId: Scalars['Float'];
+};
+
+export type Dependency = {
+  __typename?: 'Dependency';
   id: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  name?: Maybe<Scalars['String']>;
-  instructions?: Maybe<Scalars['String']>;
-  position?: Maybe<Scalars['Float']>;
-  currentCheckpointId?: Maybe<Scalars['Float']>;
-  isCompleted?: Maybe<Scalars['Boolean']>;
-  executionType?: Maybe<StepExecutionTypeEnum>;
-  lang?: Maybe<Scalars['String']>;
-  originalStepId?: Maybe<Scalars['Float']>;
-  lesson: Lesson;
-  session: Session;
-  codeModules?: Maybe<Array<CodeModule>>;
-  checkpoints?: Maybe<Array<Checkpoint>>;
-  dependencies?: Maybe<Array<Dependency>>;
+  package: Scalars['String'];
+  version?: Maybe<Scalars['String']>;
+  step: Step;
 };
 
-export enum StepExecutionTypeEnum {
-  Riju = 'riju',
-  Sandpack = 'sandpack',
-  Stackblitz = 'stackblitz'
-}
+export type DependencyInput = {
+  package: Scalars['String'];
+  version: Scalars['String'];
+};
+
+export type FieldError = {
+  __typename?: 'FieldError';
+  field: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type GitHubLoginInput = {
+  id: Scalars['Float'];
+  accessToken: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type GoogleLoginInput = {
+  id: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
+};
 
 export type Lesson = {
   __typename?: 'Lesson';
@@ -158,16 +153,24 @@ export type Lesson = {
   tags?: Maybe<Array<Tag>>;
 };
 
-export enum LessonStatus {
-  Editting = 'EDITTING',
-  PendingPublish = 'PENDING_PUBLISH',
-  Published = 'PUBLISHED'
-}
+export type LessonInput = {
+  title: Scalars['String'];
+  description: Scalars['String'];
+  template?: Maybe<Scalars['String']>;
+  codesandboxId?: Maybe<Scalars['String']>;
+  stackblitzId?: Maybe<Scalars['String']>;
+};
 
 export enum LessonLabel {
   Beginner = 'BEGINNER',
   Intermediate = 'INTERMEDIATE',
   Advanced = 'ADVANCED'
+}
+
+export enum LessonStatus {
+  Editting = 'EDITTING',
+  PendingPublish = 'PENDING_PUBLISH',
+  Published = 'PUBLISHED'
 }
 
 export enum LessonTemplate {
@@ -189,110 +192,6 @@ export enum LessonTemplate {
   Vue = 'Vue'
 }
 
-export type User = {
-  __typename?: 'User';
-  classes: Array<Session>;
-  createdAt: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  id: Scalars['Float'];
-  isAuthenticated?: Maybe<Scalars['Boolean']>;
-  lessons: Array<Lesson>;
-  profileColorScheme: Scalars['String'];
-  profilePic: Scalars['String'];
-  role: Role;
-  theme: Theme;
-  updatedAt: Scalars['String'];
-  username: Scalars['String'];
-};
-
-export enum Role {
-  Admin = 'ADMIN',
-  User = 'USER'
-}
-
-export enum Theme {
-  Active4d = 'active4d',
-  AllHallowsEve = 'all_hallows_eve',
-  Amy = 'amy',
-  BirdsOfParadise = 'birds_of_paradise',
-  Blackboard = 'blackboard',
-  BrillianceBlack = 'brilliance_black',
-  BrillianceDull = 'brilliance_dull',
-  ChromeDevtools = 'chrome_devtools',
-  CloudsMidnight = 'clouds_midnight',
-  Clouds = 'clouds',
-  Cobalt = 'cobalt',
-  Dawn = 'dawn',
-  Dreamweaver = 'dreamweaver',
-  Eiffel = 'eiffel',
-  EspressoLibre = 'espresso_libre',
-  Github = 'github',
-  Idle = 'idle',
-  Katzenmilch = 'katzenmilch',
-  KuroirTheme = 'kuroir_theme',
-  Lazy = 'lazy',
-  MagicwbAmiga = 'magicwb__amiga_',
-  MerbivoreSoft = 'merbivore_soft',
-  Merbivore = 'merbivore',
-  MonokaiBright = 'monokai_bright',
-  Monokai = 'monokai',
-  NightOwl = 'night_owl',
-  OceanicNext = 'oceanic_next',
-  PastelsOnDark = 'pastels_on_dark',
-  SlushAndPoppies = 'slush_and_poppies',
-  SolarizedDark = 'solarized_dark',
-  SolarizedLight = 'solarized_light',
-  Spacecadet = 'spacecadet',
-  Sunburst = 'sunburst',
-  TextmateMacClassic = 'textmate_mac_classic_',
-  TomorrowNightBlue = 'tomorrow_night_blue',
-  TomorrowNightBright = 'tomorrow_night_bright',
-  TomorrowNightEighties = 'tomorrow_night_eighties',
-  TomorrowNight = 'tomorrow_night',
-  Tomorrow = 'tomorrow',
-  Twilight = 'twilight',
-  UpstreamSunburst = 'upstream_sunburst',
-  VibrantInk = 'vibrant_ink',
-  XcodeDefault = 'xcode_default',
-  Zenburnesque = 'zenburnesque',
-  Iplastic = 'iplastic',
-  Idlefingers = 'idlefingers',
-  Krtheme = 'krtheme',
-  Monoindustrial = 'monoindustrial'
-}
-
-export type Session = {
-  __typename?: 'Session';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  currentStep: Scalars['Float'];
-  lessonId: Scalars['Float'];
-  requiresUpdate?: Maybe<Scalars['Boolean']>;
-  student: User;
-  lesson: Lesson;
-  steps?: Maybe<Array<Step>>;
-};
-
-export type Tag = {
-  __typename?: 'Tag';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  name: Scalars['String'];
-  lessons?: Maybe<Array<Lesson>>;
-};
-
-export type Dependency = {
-  __typename?: 'Dependency';
-  id: Scalars['Float'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
-  package: Scalars['String'];
-  version?: Maybe<Scalars['String']>;
-  step: Step;
-};
-
 export type LessonsInput = {
   status: Scalars['String'];
   ownerId?: Maybe<Scalars['Float']>;
@@ -300,6 +199,18 @@ export type LessonsInput = {
   dependencies?: Maybe<Scalars['String']>;
   sortBy?: Maybe<Scalars['String']>;
   template?: Maybe<Scalars['String']>;
+};
+
+export type LoginInput = {
+  usernameOrEmail: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type Modal = {
+  __typename?: 'Modal';
+  name?: Maybe<Scalars['String']>;
+  callback?: Maybe<Scalars['String']>;
+  persistent?: Maybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
@@ -600,59 +511,75 @@ export type MutationSetNextStepArgs = {
   options: NextStepInput;
 };
 
-export type CreateSpecCheckpointInput = {
-  checkpointId: Scalars['Float'];
+export type NextStepInput = {
+  sessionId: Scalars['Float'];
   stepId: Scalars['Float'];
 };
 
-export type CreateMatchCheckpointInput = {
-  matchRegex: Scalars['String'];
-  fileToMatchRegex: Scalars['String'];
+export type Query = {
+  __typename?: 'Query';
+  checkpoint?: Maybe<Checkpoint>;
+  checkpoints: Array<Checkpoint>;
+  codeModule?: Maybe<CodeModule>;
+  codeModules: Array<CodeModule>;
+  dependencies: Array<Dependency>;
+  dependency?: Maybe<Dependency>;
+  deps: Array<Scalars['String']>;
+  lesson?: Maybe<Lesson>;
+  lessons: Array<Lesson>;
+  me?: Maybe<User>;
+  modal?: Maybe<Modal>;
+  profileColorScheme?: Maybe<Scalars['String']>;
+  session?: Maybe<Session>;
+  sessions: Array<Session>;
+  step?: Maybe<Step>;
+  steps: Array<Step>;
+  users?: Maybe<Array<User>>;
+};
+
+
+export type QueryCheckpointArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryCheckpointsArgs = {
   stepId: Scalars['Float'];
 };
 
-export type CreateOutputCheckpointInput = {
-  output: Scalars['String'];
-  stepId: Scalars['Float'];
+
+export type QueryCodeModuleArgs = {
+  id: Scalars['Int'];
 };
 
-export type UpdateCheckpointInput = {
-  description: Scalars['String'];
+
+export type QueryDependencyArgs = {
+  id: Scalars['Int'];
 };
 
-export type CodeModuleInput = {
-  name: Scalars['String'];
-  value: Scalars['String'];
-  lessonId?: Maybe<Scalars['Float']>;
+
+export type QueryLessonArgs = {
+  id: Scalars['Int'];
 };
 
-export type CodeModuleUpdateInput = {
-  name: Scalars['String'];
-  value: Scalars['String'];
-  sessionId?: Maybe<Scalars['Float']>;
-  lessonId?: Maybe<Scalars['Float']>;
+
+export type QueryLessonsArgs = {
+  options: LessonsInput;
 };
 
-export type CodeModuleUpdateEntryInput = {
-  newId?: Maybe<Scalars['String']>;
-  oldId?: Maybe<Scalars['String']>;
+
+export type QueryProfileColorSchemeArgs = {
+  id?: Maybe<Scalars['Float']>;
 };
 
-export type DependencyInput = {
-  package: Scalars['String'];
-  version: Scalars['String'];
+
+export type QuerySessionArgs = {
+  lessonId: Scalars['Int'];
 };
 
-export type UserResponse = {
-  __typename?: 'UserResponse';
-  errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<User>;
-};
 
-export type FieldError = {
-  __typename?: 'FieldError';
-  field: Scalars['String'];
-  message: Scalars['String'];
+export type QueryStepArgs = {
+  id: Scalars['Int'];
 };
 
 export type RegisterInput = {
@@ -661,30 +588,58 @@ export type RegisterInput = {
   password: Scalars['String'];
 };
 
-export type LoginInput = {
-  usernameOrEmail: Scalars['String'];
-  password: Scalars['String'];
-};
+export enum Role {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
-export type GitHubLoginInput = {
+export type Session = {
+  __typename?: 'Session';
   id: Scalars['Float'];
-  accessToken: Scalars['String'];
-  username: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  currentStep: Scalars['Float'];
+  lessonId: Scalars['Float'];
+  requiresUpdate?: Maybe<Scalars['Boolean']>;
+  student: User;
+  lesson: Lesson;
+  steps?: Maybe<Array<Step>>;
 };
 
-export type GoogleLoginInput = {
-  id: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
+export type SessionInput = {
+  lessonId: Scalars['Float'];
+  currentStepId?: Maybe<Scalars['Float']>;
 };
 
-export type UpdateUserThemeInput = {
-  theme: Scalars['String'];
-};
-
-export type UpdateUserRoleInput = {
+export type Step = {
+  __typename?: 'Step';
   id: Scalars['Float'];
-  role: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  instructions?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['Float']>;
+  currentCheckpointId?: Maybe<Scalars['Float']>;
+  isCompleted?: Maybe<Scalars['Boolean']>;
+  executionType?: Maybe<StepExecutionTypeEnum>;
+  lang?: Maybe<Scalars['String']>;
+  originalStepId?: Maybe<Scalars['Float']>;
+  lesson: Lesson;
+  session: Session;
+  codeModules?: Maybe<Array<CodeModule>>;
+  checkpoints?: Maybe<Array<Checkpoint>>;
+  dependencies?: Maybe<Array<Dependency>>;
+};
+
+export enum StepExecutionTypeEnum {
+  Riju = 'riju',
+  Sandpack = 'sandpack',
+  Stackblitz = 'stackblitz'
+}
+
+export type StepInstructionsInput = {
+  id: Scalars['Float'];
+  instructions: Scalars['String'];
 };
 
 export type StepNameInput = {
@@ -693,21 +648,73 @@ export type StepNameInput = {
   name: Scalars['String'];
 };
 
-export type DeleteStepInput = {
+export type Tag = {
+  __typename?: 'Tag';
   id: Scalars['Float'];
-  lessonId: Scalars['Float'];
-};
-
-export type CreateStepInput = {
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
   name: Scalars['String'];
-  lessonId: Scalars['Float'];
-  currentStepId?: Maybe<Scalars['Float']>;
-  template?: Maybe<Scalars['String']>;
-  codesandboxId?: Maybe<Scalars['String']>;
+  lessons?: Maybe<Array<Lesson>>;
 };
 
-export type UpdateStepInput = {
-  id: Scalars['Float'];
+export enum Theme {
+  Active4d = 'active4d',
+  AllHallowsEve = 'all_hallows_eve',
+  Amy = 'amy',
+  BirdsOfParadise = 'birds_of_paradise',
+  Blackboard = 'blackboard',
+  BrillianceBlack = 'brilliance_black',
+  BrillianceDull = 'brilliance_dull',
+  ChromeDevtools = 'chrome_devtools',
+  CloudsMidnight = 'clouds_midnight',
+  Clouds = 'clouds',
+  Cobalt = 'cobalt',
+  Dawn = 'dawn',
+  Dreamweaver = 'dreamweaver',
+  Eiffel = 'eiffel',
+  EspressoLibre = 'espresso_libre',
+  Github = 'github',
+  Idle = 'idle',
+  Katzenmilch = 'katzenmilch',
+  KuroirTheme = 'kuroir_theme',
+  Lazy = 'lazy',
+  MagicwbAmiga = 'magicwb__amiga_',
+  MerbivoreSoft = 'merbivore_soft',
+  Merbivore = 'merbivore',
+  MonokaiBright = 'monokai_bright',
+  Monokai = 'monokai',
+  NightOwl = 'night_owl',
+  OceanicNext = 'oceanic_next',
+  PastelsOnDark = 'pastels_on_dark',
+  SlushAndPoppies = 'slush_and_poppies',
+  SolarizedDark = 'solarized_dark',
+  SolarizedLight = 'solarized_light',
+  Spacecadet = 'spacecadet',
+  Sunburst = 'sunburst',
+  TextmateMacClassic = 'textmate_mac_classic_',
+  TomorrowNightBlue = 'tomorrow_night_blue',
+  TomorrowNightBright = 'tomorrow_night_bright',
+  TomorrowNightEighties = 'tomorrow_night_eighties',
+  TomorrowNight = 'tomorrow_night',
+  Tomorrow = 'tomorrow',
+  Twilight = 'twilight',
+  UpstreamSunburst = 'upstream_sunburst',
+  VibrantInk = 'vibrant_ink',
+  XcodeDefault = 'xcode_default',
+  Zenburnesque = 'zenburnesque',
+  Iplastic = 'iplastic',
+  Idlefingers = 'idlefingers',
+  Krtheme = 'krtheme',
+  Monoindustrial = 'monoindustrial'
+}
+
+export type UpdateCheckpointInput = {
+  description: Scalars['String'];
+};
+
+export type UpdateSessionInput = {
+  lessonId: Scalars['Float'];
+  sessionId: Scalars['Float'];
 };
 
 export type UpdateStepCheckpointInput = {
@@ -715,9 +722,8 @@ export type UpdateStepCheckpointInput = {
   checkpointId: Scalars['Float'];
 };
 
-export type StepInstructionsInput = {
+export type UpdateStepInput = {
   id: Scalars['Float'];
-  instructions: Scalars['String'];
 };
 
 export type UpdateStepPositionInput = {
@@ -726,39 +732,35 @@ export type UpdateStepPositionInput = {
   changeY: Scalars['Float'];
 };
 
-export type CreateLessonResponse = {
-  __typename?: 'CreateLessonResponse';
+export type UpdateUserRoleInput = {
+  id: Scalars['Float'];
+  role: Scalars['String'];
+};
+
+export type UpdateUserThemeInput = {
+  theme: Scalars['String'];
+};
+
+export type User = {
+  __typename?: 'User';
+  classes: Array<Session>;
+  createdAt: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  id: Scalars['Float'];
+  isAuthenticated?: Maybe<Scalars['Boolean']>;
+  lessons: Array<Lesson>;
+  profileColorScheme: Scalars['String'];
+  profilePic: Scalars['String'];
+  role: Role;
+  theme: Theme;
+  updatedAt: Scalars['String'];
+  username: Scalars['String'];
+};
+
+export type UserResponse = {
+  __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
-  lesson?: Maybe<Lesson>;
-};
-
-export type LessonInput = {
-  title: Scalars['String'];
-  description: Scalars['String'];
-  template?: Maybe<Scalars['String']>;
-  codesandboxId?: Maybe<Scalars['String']>;
-  stackblitzId?: Maybe<Scalars['String']>;
-};
-
-export type SessionInput = {
-  lessonId: Scalars['Float'];
-  currentStepId?: Maybe<Scalars['Float']>;
-};
-
-export type UpdateSessionInput = {
-  lessonId: Scalars['Float'];
-  sessionId: Scalars['Float'];
-};
-
-export type NextStepInput = {
-  sessionId: Scalars['Float'];
-  stepId: Scalars['Float'];
-};
-
-export type Modal = {
-  __typename?: 'Modal';
-  name?: Maybe<Scalars['String']>;
-  callback?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
 };
 
 export type RegularCheckpointFragment = (
@@ -1575,7 +1577,7 @@ export type ModalQuery = (
   { __typename?: 'Query' }
   & { modal?: Maybe<(
     { __typename?: 'Modal' }
-    & Pick<Modal, 'name' | 'callback'>
+    & Pick<Modal, 'name' | 'callback' | 'persistent'>
   )> }
 );
 
@@ -3548,6 +3550,7 @@ export const ModalDocument = gql`
   modal @client {
     name
     callback
+    persistent
   }
 }
     `;

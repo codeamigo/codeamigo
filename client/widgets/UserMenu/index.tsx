@@ -30,13 +30,13 @@ const UserMenu: React.FC<Props> = () => {
   if (loading)
     return (
       <Icon
-        className="-mr-1 sm:mr-0 w-8 h-8 text-lg text-text-primary rounded-full animate-pulse"
+        className="text-text-primary -mr-1 h-8 w-8 animate-pulse rounded-full text-lg sm:mr-0"
         name="user"
       />
     );
 
   return (
-    <div className="flex sm:static sm:inset-auto inset-y-0 right-0 items-center pr-0">
+    <div className="inset-y-0 right-0 flex items-center pr-0 sm:static sm:inset-auto">
       {data?.me?.isAuthenticated ? (
         <div className="relative">
           <Menu>
@@ -44,13 +44,13 @@ const UserMenu: React.FC<Props> = () => {
               <>
                 <Menu.Button
                   aria-haspopup="true"
-                  className={`bg-bg-nav flex text-sm rounded-full outline-none focus:outline-none focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white ${
+                  className={`bg-bg-nav flex rounded-full text-sm outline-none focus:outline-none focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 ${
                     open ? 'focus:ring-2' : ''
                   }`}
                 >
                   <span className="sr-only">Open user menu</span>
                   <Icon
-                    className="-mr-1 sm:mr-0 w-8 h-8 text-lg text-text-primary rounded-full"
+                    className="text-text-primary -mr-1 h-8 w-8 rounded-full text-lg sm:mr-0"
                     name="user"
                   />
                 </Menu.Button>
@@ -66,13 +66,13 @@ const UserMenu: React.FC<Props> = () => {
                   <Menu.Items
                     aria-labelledby="user-menu"
                     aria-orientation="vertical"
-                    className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
+                    className="bg-bg-primary absolute right-0 mt-2 w-48 origin-top-right rounded-md py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                     role="menu"
                   >
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                          className={`inline-block w-full px-4 py-2 text-left text-sm ${
                             active
                               ? 'bg-accent text-bg-primary'
                               : 'text-text-primary'
@@ -86,7 +86,7 @@ const UserMenu: React.FC<Props> = () => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
-                          className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                          className={`inline-block w-full px-4 py-2 text-left text-sm ${
                             active
                               ? 'bg-accent text-bg-primary'
                               : 'text-text-primary'
@@ -110,11 +110,12 @@ const UserMenu: React.FC<Props> = () => {
       ) : (
         <>
           <button
-            className="py-1.5 sm:px-3 pl-3 text-sm font-medium text-right sm:text-center text-text-primary rounded-md transition duration-150"
+            className="text-text-primary rounded-md py-1.5 pl-3 text-right text-sm font-medium transition duration-150 sm:px-3 sm:text-center"
             onClick={() =>
               modalVar({
                 callback: () => null,
                 name: 'login',
+                persistent: false,
               })
             }
             role="button"
@@ -123,7 +124,7 @@ const UserMenu: React.FC<Props> = () => {
           </button>
 
           <button
-            className="hidden sm:block py-1 sm:py-1.5 px-1 sm:px-3 text-sm font-medium text-text-primary whitespace-nowrap rounded-md border-2 border-bg-nav-offset transition duration-150"
+            className="text-text-primary border-bg-nav-offset hidden whitespace-nowrap rounded-md border-2 p-1 text-sm font-medium transition duration-150 sm:block sm:px-3 sm:py-1.5"
             onClick={() => {
               modalVar({
                 callback: () =>
@@ -131,6 +132,7 @@ const UserMenu: React.FC<Props> = () => {
                     ? router.push(`/lessons/start/${router.query.id}`)
                     : null,
                 name: 'register',
+                persistent: false,
               });
             }}
             role="button"

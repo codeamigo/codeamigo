@@ -11,6 +11,7 @@ const StripeRedirect: NextPage<{ token: string }> = (props) => {
     modalVar({
       callback: () => null,
       name: 'donationFailure',
+      persistent: false,
     });
     router.replace('/');
   }, []);

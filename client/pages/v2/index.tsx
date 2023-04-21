@@ -882,8 +882,9 @@ const ProgressBar = ({
           callback: (step: number) => {
             setCurrentStep(step);
           },
-          data: { steps, title: 'Intro to Codeamigo' },
+          data: { currentStep, steps, title: 'Intro to Codeamigo' },
           name: 'steps',
+          persistent: false,
         });
       }}
     >
@@ -932,6 +933,7 @@ const V2 = () => {
   //     modalVar({
   //       callback: () => null,
   //       name: 'highDemand',
+  //       persistent: true,
   //     });
   //   }
   // }, []);
@@ -940,6 +942,7 @@ const V2 = () => {
       modalVar({
         callback: () => null,
         name: 'mobileWarning',
+        persistent: true,
       });
     }
   }, [isDesktop]);
@@ -993,8 +996,11 @@ const V2 = () => {
       >
         {/* top bar */}
         <div className="flex w-full justify-between">
-          <ProgressBar currentStep={currentStep} />
-          <Credits />
+          <ProgressBar
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+          />
+          {/* <Credits /> */}
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"

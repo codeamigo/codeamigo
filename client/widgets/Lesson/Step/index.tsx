@@ -32,7 +32,11 @@ const Step: React.FC<Props> = (props) => {
   const [setNextStep] = useSetNextStepMutation({ errorPolicy: 'ignore' });
   const cmdEnter = useKeyPress(['Meta', 'Enter']);
 
-  const { data: newData, loading, previousData } = useStepQuery({
+  const {
+    data: newData,
+    loading,
+    previousData,
+  } = useStepQuery({
     fetchPolicy: 'cache-and-network',
     variables: { id },
   });
@@ -159,6 +163,7 @@ const Step: React.FC<Props> = (props) => {
           lessonTitle: session.lesson.title,
         },
         name: 'lessonFinished',
+        persistent: false,
       });
 
       return;
@@ -168,6 +173,7 @@ const Step: React.FC<Props> = (props) => {
       modalVar({
         callback: () => router.push('/'),
         name: 'registerAfterPreview',
+        persistent: false,
       });
     }
 
@@ -260,7 +266,7 @@ const Step: React.FC<Props> = (props) => {
       {/* eslint-disable-next-line */}
       <div className="flex flex-col lg:flex-row md:h-full-minus">
         <Instructions nextStep={nextStep} step={data.step} {...props} />
-        <div className="w-full lg:w-3/4 h-full">
+        <div className="h-full w-full lg:w-3/4">
           {data.step.executionType === 'sandpack' ? (
             <SandpackExecutor
               checkpoints={data.step.checkpoints}

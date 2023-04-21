@@ -68,6 +68,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
         sessionId: sessionData.session.id,
       },
       name: 'updateSession',
+      persistent: false,
     });
   }
 
@@ -90,7 +91,7 @@ const Lesson: NextPage<{ id: string }> = (props) => {
         />
       ) : // TODO: loading states
       null}
-      <div className="lg:overflow-hidden w-full md:h-screen">
+      <div className="w-full md:h-screen lg:overflow-hidden">
         <Info
           isLessonOwner={meData?.me?.id === data.lesson.owner.id}
           lesson={data.lesson}

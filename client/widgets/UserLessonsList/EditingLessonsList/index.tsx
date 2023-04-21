@@ -53,10 +53,10 @@ const EditingLessonsList: React.FC<Props> = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-bold text-text-primary border-b-2">
+      <h2 className="text-text-primary mb-4 border-b-2 text-xl font-bold">
         📝 Editing
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {data?.lessons.length ? (
           data?.lessons?.map((lesson) => {
             return (
@@ -88,13 +88,13 @@ const EditingLessonsList: React.FC<Props> = () => {
                             <Menu.Items
                               aria-labelledby="session-menu"
                               aria-orientation="vertical"
-                              className="absolute right-0 py-1 mt-2 w-48 bg-bg-primary rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right"
+                              className="bg-bg-primary absolute right-0 mt-2 w-48 origin-top-right rounded-md py-1 shadow-lg ring-1 ring-black ring-opacity-5"
                               role="menu"
                             >
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
-                                    className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                                    className={`inline-block w-full px-4 py-2 text-left text-sm ${
                                       active
                                         ? 'bg-accent text-bg-primary'
                                         : 'text-text-primary'
@@ -109,7 +109,7 @@ const EditingLessonsList: React.FC<Props> = () => {
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
-                                    className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                                    className={`inline-block w-full px-4 py-2 text-left text-sm ${
                                       active
                                         ? 'bg-accent text-bg-primary'
                                         : 'text-text-primary'
@@ -126,7 +126,7 @@ const EditingLessonsList: React.FC<Props> = () => {
                               <Menu.Item>
                                 {({ active }) => (
                                   <button
-                                    className={`w-full inline-block text-left px-4 py-2 text-sm ${
+                                    className={`inline-block w-full px-4 py-2 text-left text-sm ${
                                       active
                                         ? 'bg-accent text-bg-primary'
                                         : 'text-text-primary'
@@ -150,9 +150,13 @@ const EditingLessonsList: React.FC<Props> = () => {
           })
         ) : (
           <div
-            className="flex flex-col justify-center items-center w-32 h-32 text-gray-600 hover:text-blue-600 bg-gray-100 rounded-md transition-all duration-300 transform hover:scale-105 cursor-pointer"
+            className="flex h-32 w-32 cursor-pointer flex-col items-center justify-center rounded-md bg-gray-100 text-gray-600 transition-all duration-300 hover:scale-105 hover:text-blue-600"
             onClick={() =>
-              modalVar({ callback: () => null, name: 'createLesson' })
+              modalVar({
+                callback: () => null,
+                name: 'createLesson',
+                persistent: false,
+              })
             }
           >
             <Icon className="text-xl" name="plus-squared" />

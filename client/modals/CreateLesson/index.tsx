@@ -149,7 +149,7 @@ const CreateLesson: React.FC<Props> = () => {
           if (data?.createLesson.errors) {
             setErrors(toErrorMap(data.createLesson.errors));
           } else if (data?.createLesson.lesson) {
-            modalVar({ callback: () => null, name: null });
+            modalVar({ callback: () => null, name: null, persistent: false });
             router.push(`/lessons/edit/${data.createLesson.lesson.id}`);
           }
         } catch (e: any) {
@@ -168,8 +168,8 @@ const CreateLesson: React.FC<Props> = () => {
       {({ isSubmitting, values }) => {
         return (
           <Form>
-            <div className="p-6 lg:px-8 mx-auto">
-              <h1 className="flex mb-4 text-xl font-semibold text-text-primary">
+            <div className="mx-auto p-6 lg:px-8">
+              <h1 className="text-text-primary mb-4 flex text-xl font-semibold">
                 New Lesson
               </h1>
               <div className="flex flex-col gap-4">
@@ -183,10 +183,10 @@ const CreateLesson: React.FC<Props> = () => {
                   />
                 </div>
                 <div>
-                  <label className="block mb-1 font-medium text-text-primary">
+                  <label className="text-text-primary mb-1 block font-medium">
                     Select a Template
                   </label>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                  <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                     {templates.map((template) => {
                       if (
                         template.value === LessonTemplate.Sandpack ||
@@ -195,11 +195,11 @@ const CreateLesson: React.FC<Props> = () => {
                         return null;
                       return (
                         <label
-                          className={`w-full flex ${
+                          className={`flex w-full ${
                             values.template === template.value
                               ? 'shadow-md'
                               : 'shadow-sm'
-                          } hover:shadow-md transition-shadow duration-300 items-center bg-bg-nav-faded p-2 rounded-md cursor-pointer`}
+                          } bg-bg-nav-faded cursor-pointer items-center rounded-md p-2 transition-shadow duration-300 hover:shadow-md`}
                           htmlFor={template.id}
                           key={template.id}
                         >
@@ -210,11 +210,11 @@ const CreateLesson: React.FC<Props> = () => {
                             type="radio"
                             value={template.value}
                           />{' '}
-                          <div className="flex flex-col items-start ml-2">
+                          <div className="ml-2 flex flex-col items-start">
                             <img
                               className={`mt-1 h-6 ${
                                 template.withBackground
-                                  ? 'bg-white rounded-full'
+                                  ? 'rounded-full bg-white'
                                   : ''
                               }`}
                               src={template.imageUrl}
@@ -225,9 +225,9 @@ const CreateLesson: React.FC<Props> = () => {
                     })}
                   </div>
                 </div>
-                <div className="text-text-primary border-b-2 border-bg-nav-offset-faded border-dashed"></div>
+                <div className="text-text-primary border-bg-nav-offset-faded border-b-2 border-dashed"></div>
                 <div>
-                  <label className="block text-sm font-medium text-text-primary">
+                  <label className="text-text-primary block text-sm font-medium">
                     Or enter a{' '}
                     <a
                       className="underline"
@@ -246,9 +246,9 @@ const CreateLesson: React.FC<Props> = () => {
                     type="text"
                   />
                 </div>
-                <div className="text-text-primary border-b-2 border-bg-nav-offset-faded border-dashed"></div>
+                <div className="text-text-primary border-bg-nav-offset-faded border-b-2 border-dashed"></div>
                 <div>
-                  <label className="block text-sm font-medium text-text-primary">
+                  <label className="text-text-primary block text-sm font-medium">
                     Or enter a{' '}
                     <a
                       className="underline"

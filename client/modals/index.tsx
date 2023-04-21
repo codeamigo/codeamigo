@@ -25,7 +25,9 @@ const Modals: React.FC<Props> = () => {
   const { data } = useModalQuery();
 
   const handleEscape = useCallback((event) => {
-    // if (event.keyCode === 27) modalVar(InitialModalState);
+    if (data?.modal?.persistent !== true) {
+      if (event.keyCode === 27) modalVar(InitialModalState);
+    }
   }, []);
 
   useEffect(() => {
@@ -61,7 +63,9 @@ const Modals: React.FC<Props> = () => {
           <div
             aria-hidden="true"
             className="fixed inset-0 bg-neutral-800 opacity-50 transition-opacity"
-            // onClick={() => modalVar(InitialModalState)}
+            onClick={() => {
+              if (data?.modal?.persistent !== true) modalVar(InitialModalState);
+            }}
           >
             <div className="absolute inset-0 opacity-75"></div>
           </div>

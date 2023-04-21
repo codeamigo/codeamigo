@@ -55,10 +55,7 @@ const main = async () => {
   app.use(
     cors({
       credentials: true,
-      origin: [
-        process.env.CORS_ORIGIN,
-        'https://codeamigo-git-v2-codeamigo-dev.vercel.app',
-      ],
+      origin: process.env.CORS_ORIGIN,
     })
   );
 

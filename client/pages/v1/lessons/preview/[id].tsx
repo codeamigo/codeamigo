@@ -46,6 +46,7 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
     //   modalVar({
     //     callback: () => null,
     //     name: 'donate',
+    //     persistent: false,
     //   });
     // }
   }, []);
@@ -68,7 +69,7 @@ const PreviewLesson: NextPage<{ id: string }> = (props) => {
         showSteps={showSteps}
         steps={data.lesson.steps}
       />
-      <div className="lg:overflow-hidden w-full md:h-screen">
+      <div className="w-full md:h-screen lg:overflow-hidden">
         <Info isPreviewing lesson={data.lesson} />
         <Step
           currentStepId={stepId}

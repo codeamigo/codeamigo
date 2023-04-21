@@ -20,11 +20,13 @@ export type ModalType = {
   callback: Function;
   data?: any;
   name: null | ModalNameType;
+  persistent?: boolean;
 };
 export const InitialModalState = {
   callback: () => null,
   data: null,
   name: null,
+  persistent: false,
 };
 
 export const modalVar = makeVar(InitialModalState as ModalType);
