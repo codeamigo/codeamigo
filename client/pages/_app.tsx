@@ -51,7 +51,11 @@ function MyApp({ Component, pageProps, router }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <Head>
-        <title>codeamigo</title>
+        <title>AI-Powered Coding Tutorials | Codeamigo</title>
+        <meta
+          content="Learn to code with AI-powered tutorials from Codeamigo. Our tutorials cover a wide range of programming languages and topics, from beginner to advanced."
+          name="description"
+        />
         <meta
           content="Byte-sized interactive coding tutorials"
           name="description"
