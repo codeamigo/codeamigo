@@ -9,7 +9,7 @@ const Steps: React.FC<Props> = () => {
     data: { currentStep: number; steps: Step[]; title: string };
   };
   return (
-    <div className="flex flex-col overflow-hidden rounded-md text-sm text-white">
+    <div className="flex flex-col overflow-hidden rounded-md text-sm text-white sm:min-w-[320px]">
       <div className="bg-black px-2.5 py-1.5 font-bold">{data.title}</div>
       {data.steps.map((step: any, i: number) => {
         const passed =

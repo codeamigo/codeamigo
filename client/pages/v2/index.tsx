@@ -11,7 +11,6 @@ import {
 import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
-import Head from 'next/head';
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
@@ -36,6 +35,11 @@ const defaultLeftPanelHeight = {
   instructions: '18rem',
 };
 
+const defaultQuestions = [
+  'What is this code doing?',
+  "Why isn't my code accepted?",
+];
+
 export type Step = {
   checkpoints: {
     message: string;
@@ -48,6 +52,7 @@ export type Step = {
     };
   };
   instructions: string;
+  questions: string[];
   start: string;
   title: string;
 };
@@ -71,6 +76,7 @@ const steps: Step[] = [
     },
     instructions:
       "## Comments \n\n JavaScript is used to create dynamic and interactive web pages, and is an essential skill for anyone interested in web development. \n\n Before we dive into the code, let's start with the basics. One important aspect of programming is adding comments to your code. Comments are used to provide context and explanation for your code, and are not executed by the computer. They are a helpful tool for you and other developers who may read your code in the future.\n\nTo add a comment in JavaScript, simply start your comment with '//' (double forward slashes). Anything after those slashes will be ignored by the computer. For example: \n\n ```// This is a comment```",
+    questions: [...defaultQuestions, 'When do I use comments?'],
     start: '',
     title: 'Comments',
   },
@@ -92,6 +98,11 @@ const steps: Step[] = [
     },
     instructions:
       '## console.log \n\n In JavaScript, console.log() is a method that allows you to output information to the console, which can be a helpful tool for debugging and testing your code. We\'ll be using console.log a lot so let\'s get us to it now! \n\n To use console.log(), simply type `console.log()` followed by the message you want to log. For example: \n\n ```console.log("Hello world!")```',
+    questions: [
+      ...defaultQuestions,
+      'What is the console?',
+      'What is a method?',
+    ],
     start: 'This is a comment\n',
     title: 'console.log',
   },
@@ -107,6 +118,11 @@ const steps: Step[] = [
     },
     instructions:
       '## Intro to Data Types \n\n Great, the next step in our JavaScript course is all about data types! In programming, data types are used to define the kind of data that a variable can hold. JavaScript has several built-in data types, including:\n\n - `numbers` (e.g. `42`, `3.14`)\n\n - `strings` (e.g. `"Hello world!"`)\n\n - `booleans` (e.g. `true`, `false`)\n\n - `arrays` (e.g. `[1, 2, 3]`)\n\n - `objects` (e.g. `{ name: "John", age: 30 }`)\n\n - `functions` (e.g. `function myFunction() {}`)\n\n - `null` (e.g. `null`)\n\n - `undefined` (e.g. `undefined`)\n\n - `NaN` (e.g. `NaN`)',
+    questions: [
+      ...defaultQuestions,
+      'What is a data type?',
+      'Why are data types important?',
+    ],
     start: 'Hello world!")\n',
     title: 'Intro to Data Types',
   },
@@ -135,6 +151,11 @@ const steps: Step[] = [
     },
     instructions:
       "## Variables \n\nIn JavaScript, variables are used to store and manipulate data. There are three different ways to declare a variable in JavaScript: let, var, and const. \n\nLet's start with const. The const keyword is used to declare a variable that cannot be reassigned. For example: \n\n```const myNumber = 42``` \n\nIf you try to reassign a const variable, you will get an error. For example: \n\n```const myNumber = 42\nmyNumber = 99 // Error: Assignment to constant variable.\n``` \n\nThe let keyword is used to declare a variable that can be reassigned. For example: \n\n```let myNumber = 42\nmyNumber = 99 // No error\n``` \n\nThe var keyword is used to declare a variable that can be reassigned, but has some different behaviors than let. We won't be using var in this course, so feel free to ignore it for now. \n\n",
+    questions: [
+      ...defaultQuestions,
+      'What is a variable?',
+      'Why are variables important?',
+    ],
     start: 'Hello world!")\n',
     title: 'Variables',
   },
@@ -161,8 +182,169 @@ const steps: Step[] = [
     },
     instructions:
       '## Arithmetic Operators \n\nIn JavaScript, arithmetic operators are used to perform mathematical calculations on numerical values. There are several different arithmetic operators in JavaScript, including:\n\n - `+` (addition)\n\n - `-` (subtraction)\n\n - `*` (multiplication)\n\n - `/` (division)\n\n - `%` (modulus)\n\n - `**` (exponentiation)\n\n',
+    questions: [
+      ...defaultQuestions,
+      'What is modulus?',
+      'What is exponentiation?',
+      'Do I have to be good at math to learn JavaScript?',
+    ],
     start: 'const exponent = 2 ** 3\n',
     title: 'Arithmetic Operators',
+  },
+  {
+    checkpoints: [
+      {
+        message:
+          'Create a new object called `dog` with the following properties:\n\n name, age, favoriteFood, favoriteToy. Console.log the value of `dog`.',
+        passed: false,
+        // console.log the value of dog
+        test: /console\.log\(\s*dog\s*\)/,
+      },
+    ],
+    files: {
+      '/index.js': {
+        code: 'let person = {\n  name: "John",\n  age: 30,\n  email: "john@example.com"\n};\n\nconsole.log(person.name);\nconsole.log(person.age);\nconsole.log(person.email);\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Properties\n\nIn JavaScript, properties are used to store values or other properties inside objects. An object is a collection of key-value pairs, where each key is a property name and each value is the corresponding property value.\n\n',
+    questions: [...defaultQuestions, 'Why is it called an object?'],
+    start: 'console.log(person.email);\n',
+    title: 'Properties',
+  },
+  {
+    checkpoints: [
+      {
+        message:
+          'Add a method to `dog` called bark that returns "Woof!". Then, run dog.bark();',
+        passed: false,
+        // dog.bark();
+        test: /dog\.bark\(\s*\)/,
+      },
+    ],
+    files: {
+      '/index.js': {
+        code: 'let person = {\n  name: "John",\n  age: 30,\n  email: "john@example.com",\n  sayHello: function() {\n    console.log("Hello, my name is " + this.name + "!");\n  }\n};\n\nperson.sayHello();\n\nlet dog = {\n  name: "Buddy",\n  breed: "Golden Retriever",\n  age: 5\n};',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      "## Methods\n\nIn JavaScript, methods are functions that are stored as properties inside objects. Methods are used to perform actions on an object. For example, you can use a method to change the value of a property or access the value of a property on the object.\n\nTo call a method write the method name and add paranthesis at the end.\n\nHere's an example of how you can create an object with a method and use it in JavaScript:\n\n```\nlet person = {\n  name: 'John',\n  age: 30,\n  email: 'john@example.com',\n  sayHello: function() {\n    console.log('Hello, my name is ' + this.name + '!');\n  }\n};\n\nconsole.log(person.sayHello())\n```",
+    questions: [...defaultQuestions, 'When do I use methods?'],
+    start: '\n  age: 5\n};',
+    title: 'Methods',
+  },
+  {
+    checkpoints: [
+      {
+        message: 'Call toUpperCase() on the variable `greeting`.',
+        passed: false,
+        test: /\s*myString\.toUpperCase()/,
+      },
+    ],
+    files: {
+      '/index.js': {
+        code: 'let greeting = "hello";\nconsole.log(greeting.toUpperCase());\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Built-in Methods\n\nJavaScript comes with a number of built-in methods that can be used to perform common tasks. For example, you can use the `toUpperCase()` method to convert a string to uppercase letters.\n\n```\nlet greeting = "hello";\nconsole.log(greeting.toUpperCase());\n// Output: HELLO\n```\n\n',
+    questions: [...defaultQuestions, 'What are built-in methods?'],
+    start: 'let greeting = "hello";\n',
+    title: 'Built-in Methods',
+  },
+  {
+    checkpoints: [
+      {
+        message: 'Change y so that it is greater than x.',
+        passed: false,
+        // match all numbers greater than 100
+        test: /const y \= (1\d{2}|[2-9]\d{2,})/,
+      },
+    ],
+    files: {
+      '/index.js': {
+        code: 'const x = 100;\nconst y = 50;\n\nif (x > y) {\n  console.log("x is greater than y");\n} else {\n  console.log("x is less than or equal to y");\n}\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Conditionals\n\nIn JavaScript, conditional statements are used to execute different blocks of code depending on whether a condition is true or false. The basic structure of a conditional statement is:\n\n```\nif (condition) {\n  // code to run if condition is true\n} else {\n  // code to run if condition is false\n}\n```\n\nIn this structure, the `if` keyword is followed by a set of parentheses containing the condition to be tested. If the condition is true, the code inside the curly braces following the `if` statement is executed. If the condition is false, the code inside the curly braces following the `else` statement is executed.',
+    questions: [
+      ...defaultQuestions,
+      'When do I use if statements?',
+      'What is an else statement?',
+    ],
+    start: 'const y = ',
+    title: 'Conditionals',
+  },
+  {
+    checkpoints: [],
+    files: {
+      '/index.js': {
+        code: 'const x = 1;\nconst y = 50;\nconst z = 10\n\nif (x > y) {\n  console.log("x is greater than y");\n} else if (x > z) {\n  console.log("x is greater than z");\n} else {\n  console.log("x is less than or equal to y or z")\n}\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Conditionals - Part 2\n\nYou can also use an else if statement to test additional conditions, like this:\n```\nif (condition1) {\n  // code to execute if condition1 is true\n} else if (condition2) {\n  // code to execute if condition1 is false and condition2 is true\n} else {\n  // code to execute if both condition1 and condition2 are false\n}\n```',
+    questions: [...defaultQuestions, 'When do I use an else if statement?'],
+    start: '',
+    title: 'Conditionals - Part 2',
+  },
+  {
+    checkpoints: [
+      {
+        message:
+          'Return the product of the two numbers passed to the function. Assign the result to a variable called `result`.',
+        passed: false,
+        test: /const result = multiply\(\s*\w+\s*,\s*\w+\s*\)/,
+      },
+    ],
+    files: {
+      '/index.js': {
+        code: 'function multiply(a, b) {\n  // your code here\n}\n\n// call multiply here\n',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Functions\n\nFunctions are like recipes in JavaScript. They tell the computer what to do when you call them by name. To define a function, use the `function` keyword followed by the function name and any parameters it takes. To call a function, use its name followed by any arguments it needs. Functions can return values using the return keyword.',
+    questions: [...defaultQuestions, 'Write a poem about functions.'],
+    start: '',
+    title: 'Functions',
+  },
+  {
+    checkpoints: [],
+    files: {
+      '/index.js': {
+        code: '// Create an array called "fruits"\nlet fruits = ["apple", "orange", "pear"];\n\n// Use index to log the second fruit to console\nconsole.log(fruits[1]); // Output: "orange"\n\n// Add "kiwi" to the end of the array\nfruits.push("kiwi");\n\n// Log the number of fruits in the array\nconsole.log(fruits.length); // Output: 4',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
+      },
+    },
+    instructions:
+      '## Arrays\n\nArrays are like baskets of things in JavaScript. They help you store lots of values in just one variable! To create an array, you put a list of values inside square brackets, separated by commas. To get a value out of the array, you use its "index" number, which starts counting at 0. You can also do other cool things with arrays, like adding or removing things, sorting them, or searching for specific values.',
+    questions: [
+      ...defaultQuestions,
+      'What are some real world examples of arrays?',
+    ],
+    start: '',
+    title: 'Arrays',
   },
 ];
 
@@ -471,19 +653,9 @@ function MonacoEditor({
       provideHover: async (model: any, position: any) => {
         const selection = editorRef.current.getSelection();
         const selectionValue = model.getValueInRange(selection);
-        const wordAtPosition = model.getWordAtPosition(position);
-        const { word } = wordAtPosition || {};
-        const isWordInSelection =
-          word &&
-          selection.containsPosition({
-            column: position.column,
-            lineNumber: position.lineNumber,
-          });
 
         let nextHoverSelection = null;
-        if (word && !isWordInSelection) {
-          nextHoverSelection = word;
-        } else if (selectionValue) {
+        if (selectionValue) {
           nextHoverSelection = selectionValue;
         }
 
@@ -656,7 +828,13 @@ const Checkpoints = ({ currentStep }: { currentStep: number }) => {
   );
 };
 
-const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
+const ChatBot = ({
+  currentStep,
+  hoverSelection,
+}: {
+  currentStep: number;
+  hoverSelection: string | null;
+}) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
   const [responses, setResponses] = useState<
@@ -722,8 +900,14 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
         }
       );
 
-      const explainations: { text: string }[] = await response.json();
-      const value = `${explainations[0].text}`;
+      const explainations: {
+        finish_reason: 'length' | 'stop';
+        text: string;
+      }[] = await response.json();
+      let value = `${explainations[0].text}`;
+      if (explainations[0].finish_reason === 'length') {
+        value += '...';
+      }
       setResponses((prev) => [...prev, { question, value }]);
       streamText(value, question, responses.length);
       setTimeout(() => {
@@ -766,12 +950,6 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
     <div
       className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
     >
-      <Head>
-        <meta
-          content="https://codeamigo.dev/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhal.5acdb897.png&w=256&q=75"
-          property="og:image"
-        />
-      </Head>
       <div className="relative h-full overflow-scroll" ref={streamedTextsRef}>
         <div className="sticky top-0 z-10 bg-black px-4 py-2" ref={formRef}>
           <div className="mb-2 flex items-center gap-2 sm:mb-1">
@@ -834,42 +1012,19 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                     />
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    <pre
-                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
-                      onClick={() => {
-                        setValues({ question: 'What is this code doing?' });
-                        submitForm();
-                      }}
-                    >
-                      What is this code doing?
-                    </pre>
-                    <pre
-                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
-                      onClick={() => {
-                        setValues({ question: "Why isn't my code accepted?" });
-                        submitForm();
-                      }}
-                    >
-                      Why isn't my code accepted?
-                    </pre>
-                    <pre
-                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
-                      onClick={() => {
-                        setValues({ question: 'What is a variable?' });
-                        submitForm();
-                      }}
-                    >
-                      What is a variable?
-                    </pre>
-                    <pre
-                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
-                      onClick={() => {
-                        setValues({ question: 'Explain HTML as if I was 10.' });
-                        submitForm();
-                      }}
-                    >
-                      Explain HTML as if I was 10.
-                    </pre>
+                    {steps[currentStep].questions.map((question) => {
+                      return (
+                        <pre
+                          className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
+                          onClick={() => {
+                            setValues({ question });
+                            submitForm();
+                          }}
+                        >
+                          {question}
+                        </pre>
+                      );
+                    })}
                   </div>
                 </Form>
               )}
@@ -889,8 +1044,11 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                   {question}
                 </pre>
               </div>
-              {stream.map((char) => {
+              {stream.map((char, i) => {
                 if (stream.length === 0) return null;
+                if ((char === '\n' && i === 0) || (char === '\n' && i === 1))
+                  return null;
+                if (char === '\n') return <br />;
                 return <span className="text-white">{char}</span>;
               })}
             </div>
@@ -929,7 +1087,11 @@ const ProgressBar = ({
         />
       </div>
       <div className="text-xs text-white">
-        {currentStep + 1}/{steps.length}
+        {/* percent completed */}
+        <pre>
+          Step{' '}
+          {`${currentStep + 1}/${steps.length} ${steps[currentStep].title}`}
+        </pre>
       </div>
     </div>
   );
@@ -1079,7 +1241,10 @@ const V2 = () => {
                 </Button>
                 <SandpackPreview className="!h-0" />
                 <SandpackConsole className="overflow-scroll" />
-                <ChatBot hoverSelection={hoverSelection} />
+                <ChatBot
+                  currentStep={currentStep}
+                  hoverSelection={hoverSelection}
+                />
               </SandpackStack>
             </SandpackLayout>
           </SandpackProvider>

@@ -56,33 +56,33 @@ const StepActions: React.FC<Props> = ({
 
   return (
     <div>
-      {isLastStep ? (
-        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
-          <Button
-            onClick={() =>
-              window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-            }
-          >
-            <Icon className="mr-1.5" name="plus-circled" />
-            <span>Join Waitlist</span>
-          </Button>
-          <Button
-            onClick={() =>
-              window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-            }
-          >
-            <Icon className="mr-1.5" name="twitter" />
-            <span>Follow us on Twitter</span>
-          </Button>
+      <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
+        <div aria-label="Autoplay" className="hint hint--right">
+          <Toggle
+            checked={isAutoPlayEnabled}
+            setChecked={setIsAutoPlayEnabled}
+          />
         </div>
-      ) : (
-        <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
-          <div aria-label="Autoplay" className="hint hint--right">
-            <Toggle
-              checked={isAutoPlayEnabled}
-              setChecked={setIsAutoPlayEnabled}
-            />
+        {isLastStep ? (
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() =>
+                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+              }
+            >
+              <Icon className="mr-1.5" name="plus-circled" />
+              <span>Join Waitlist</span>
+            </Button>
+            <Button
+              onClick={() =>
+                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+              }
+            >
+              <Icon className="mr-1.5" name="twitter" />
+              <span>Follow us on Twitter</span>
+            </Button>
           </div>
+        ) : (
           <div className="flex items-center gap-2">
             <Button
               disabled={currentStep === 0}
@@ -106,14 +106,14 @@ const StepActions: React.FC<Props> = ({
               )}
             </Button>
           </div>
-          <div aria-label="Toggle Code Completion" className="hint hint--left">
-            <Toggle
-              checked={isCompletionEnabled}
-              setChecked={setIsCompletionEnabled}
-            />
-          </div>
+        )}
+        <div aria-label="Toggle Code Completion" className="hint hint--left">
+          <Toggle
+            checked={isCompletionEnabled}
+            setChecked={setIsCompletionEnabled}
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 };
