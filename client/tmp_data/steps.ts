@@ -170,4 +170,104 @@ const node_steps = [
   },
 ];
 
+const demo_steps = [
+  {
+    checkpoints: [],
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello World!</h1>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      "## Hello Codeamigo!\nWelcome to Codeamigo. **Codeamigo uses AI** to help you learn how to code. Today, **almost 50% of code is written by AI**, so why shouldn't you _learn how to code with AI?_\n\nWe're building Codeamigo to help current and future developers learn to take advantage of the amazing tools we have at our disposal.\n\nReady to get started with a few of the basics? Let's go! Click **Next** to get started.",
+    start: 'Hello World!',
+    title: 'Hello Codeamigo!',
+  },
+  {
+    checkpoints: [
+      {
+        message: 'Change the text to "Hello Codeamigo!"',
+        passed: false,
+        // regex test that matches the text "Hello Codeamigo!" in upper or lower case
+        test: /Hello Codeamigo!/i,
+      },
+    ],
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello </h1>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      "## Intro to Codeamigo - Part 1\nCodeamigo comes equipped with a built-in editor, preview and chatbot. Let's get familiar with these tools. The editor below is where you'll be spending most of your time.\n\nTo see these tools in action, let's modify the code in the editor. Change the text in the `h1` tag to say **Hello Codeamigo!**\n\nThen, click **Next** when you're ready to continue.",
+    start: 'Hello ',
+    title: 'Code Completion',
+  },
+  {
+    checkpoints: [],
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      "## Intro to Codeamigo - Part 2\nMaybe you're a bit confused about what some of these lines of code are doing in the editor. That's okay! You have an AI assistant at your disposal.\n\nFor example, what does `<!DOCTYPE html>` do? **Using your cursor select the line of code and hover over the highlighted text to see a description of what it does.**\n\nReady to learn more? Click **Next** to continue.",
+    start: '',
+    title: 'Hover to Learn',
+  },
+  {
+    checkpoints: [],
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      "## Intro to Codeamigo - Part 3\nYou can also ask Codeamigo just about anything you want. For example, why don't you try typing\n\n**Explain HTML as if I was a film maker.**\n\ninto the chatbot.\n\nReady to learn more? Click **Next** to continue.",
+    start: '',
+    title: 'Ask Codeamigo Anything',
+  },
+  {
+    checkpoints: [],
+    files: {
+      '/index.html': {
+        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    <p>Welcome to Codeamigo</p>\n  </body>\n</html>',
+      },
+      '/package.json': {
+        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
+      },
+      '/styles.css': {
+        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+      },
+    },
+    instructions:
+      "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs (either created by the AI or a fellow human) and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way! If you'd like to stay updated on Codeamigo's progress, you can join the waitlist at [codeamigo.dev](https://codeamigo.dev).",
+    start: '',
+    title: 'The End (for now)',
+  },
+];
+
 export {};

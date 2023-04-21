@@ -7,9 +7,11 @@ import Toggle from '👨‍💻components/Toggle';
 const StepActions: React.FC<Props> = ({
   currentStep,
   disabled,
+  isAutoPlayEnabled,
   isCompletionEnabled,
   nextLoader,
   setCurrentStep,
+  setIsAutoPlayEnabled,
   setIsCompletionEnabled,
   steps,
 }) => {
@@ -75,7 +77,12 @@ const StepActions: React.FC<Props> = ({
         </div>
       ) : (
         <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
-          <div />
+          <div aria-label="Autoplay" className="hint hint--right">
+            <Toggle
+              checked={isAutoPlayEnabled}
+              setChecked={setIsAutoPlayEnabled}
+            />
+          </div>
           <div className="flex items-center gap-2">
             <Button
               disabled={currentStep === 0}
@@ -114,9 +121,11 @@ const StepActions: React.FC<Props> = ({
 type Props = {
   currentStep: number;
   disabled: boolean;
+  isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
   nextLoader: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   steps: number;
 };

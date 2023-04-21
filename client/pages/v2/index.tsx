@@ -1,5 +1,6 @@
 import {
   FileTabs,
+  SandpackConsole,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
@@ -53,101 +54,115 @@ export type Step = {
 
 const steps: Step[] = [
   {
-    checkpoints: [],
+    checkpoints: [
+      {
+        message: 'Add a comment to the code below.',
+        passed: false,
+        test: /\/\/\s*[\w\s]+/,
+      },
+    ],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello World!</h1>\n  </body>\n</html>',
+      '/index.js': {
+        code: '',
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
-      "## Hello Codeamigo!\nWelcome to Codeamigo. **Codeamigo uses AI** to help you learn how to code. Today, **almost 50% of code is written by AI**, so why shouldn't you _learn how to code with AI?_\n\nWe're building Codeamigo to help current and future developers learn to take advantage of the amazing tools we have at our disposal.\n\nReady to get started with a few of the basics? Let's go! Click **Next** to get started.",
-    start: 'Hello World!',
-    title: 'Hello Codeamigo!',
+      "## Comments \n\n JavaScript is used to create dynamic and interactive web pages, and is an essential skill for anyone interested in web development. \n\n Before we dive into the code, let's start with the basics. One important aspect of programming is adding comments to your code. Comments are used to provide context and explanation for your code, and are not executed by the computer. They are a helpful tool for you and other developers who may read your code in the future.\n\nTo add a comment in JavaScript, simply start your comment with '//' (double forward slashes). Anything after those slashes will be ignored by the computer. For example: \n\n ```// This is a comment```",
+    start: '',
+    title: 'Comments',
   },
   {
     checkpoints: [
       {
-        message: 'Change the text to "Hello Codeamigo!"',
+        message: 'Log a message to the console.',
         passed: false,
-        // regex test that matches the text "Hello Codeamigo!" in upper or lower case
-        test: /Hello Codeamigo!/i,
+        test: /console\.log\(\s*['"`].*['"`]\s*\)/,
       },
     ],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello </h1>\n  </body>\n</html>',
+      '/index.js': {
+        code: '// This is a comment\n',
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 1\nCodeamigo comes equipped with a built-in editor, preview and chatbot. Let's get familiar with these tools. The editor below is where you'll be spending most of your time.\n\nTo see these tools in action, let's modify the code in the editor. Change the text in the `h1` tag to say **Hello Codeamigo!**\n\nThen, click **Next** when you're ready to continue.",
-    start: 'Hello ',
-    title: 'Code Completion',
+      '## console.log \n\n In JavaScript, console.log() is a method that allows you to output information to the console, which can be a helpful tool for debugging and testing your code. We\'ll be using console.log a lot so let\'s get us to it now! \n\n To use console.log(), simply type `console.log()` followed by the message you want to log. For example: \n\n ```console.log("Hello world!")```',
+    start: 'This is a comment\n',
+    title: 'console.log',
   },
   {
     checkpoints: [],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
+      '/index.js': {
+        code: '// This is a comment\nconsole.log("Hello world!")\nconst name = "John"\nconst myNumber = 42\nconst isCool = true\nconst myArray = [1, 2, 3]\nconst myObject = { name: "John", age: 30 }\nconst myFunction = function() {}\nconst myNull = null\nconst myUndefined = undefined\nconst myNaN = NaN\n',
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 2\nMaybe you're a bit confused about what some of these lines of code are doing in the editor. That's okay! You have an AI assistant at your disposal.\n\nFor example, what does `<!DOCTYPE html>` do? **Using your cursor select the line of code and hover over the highlighted text to see a description of what it does.**\n\nReady to learn more? Click **Next** to continue.",
-    start: '',
-    title: 'Hover to Learn',
+      '## Intro to Data Types \n\n Great, the next step in our JavaScript course is all about data types! In programming, data types are used to define the kind of data that a variable can hold. JavaScript has several built-in data types, including:\n\n - `numbers` (e.g. `42`, `3.14`)\n\n - `strings` (e.g. `"Hello world!"`)\n\n - `booleans` (e.g. `true`, `false`)\n\n - `arrays` (e.g. `[1, 2, 3]`)\n\n - `objects` (e.g. `{ name: "John", age: 30 }`)\n\n - `functions` (e.g. `function myFunction() {}`)\n\n - `null` (e.g. `null`)\n\n - `undefined` (e.g. `undefined`)\n\n - `NaN` (e.g. `NaN`)',
+    start: 'Hello world!")\n',
+    title: 'Intro to Data Types',
   },
   {
-    checkpoints: [],
+    checkpoints: [
+      {
+        message:
+          'Declare a const variable called `myNumber` and assign it the value `42`.',
+        passed: false,
+        test: /const\s+myNumber\s*=\s*42\s*/,
+      },
+      {
+        message:
+          'Declare a let variable called `myString` and assign it the value `"Hello world!"`.',
+        passed: false,
+        test: /let\s+myString\s*=\s*['"`]Hello world!['"`]\s*/i,
+      },
+    ],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n  </body>\n</html>',
+      '/index.js': {
+        code: '// This is a comment\nconsole.log("Hello world!")\n',
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 3\nYou can also ask Codeamigo just about anything you want. For example, why don't you try typing\n\n**Explain HTML as if I was a film maker.**\n\ninto the chatbot.\n\nReady to learn more? Click **Next** to continue.",
-    start: '',
-    title: 'Ask Codeamigo Anything',
+      "## Variables \n\nIn JavaScript, variables are used to store and manipulate data. There are three different ways to declare a variable in JavaScript: let, var, and const. \n\nLet's start with const. The const keyword is used to declare a variable that cannot be reassigned. For example: \n\n```const myNumber = 42``` \n\nIf you try to reassign a const variable, you will get an error. For example: \n\n```const myNumber = 42\nmyNumber = 99 // Error: Assignment to constant variable.\n``` \n\nThe let keyword is used to declare a variable that can be reassigned. For example: \n\n```let myNumber = 42\nmyNumber = 99 // No error\n``` \n\nThe var keyword is used to declare a variable that can be reassigned, but has some different behaviors than let. We won't be using var in this course, so feel free to ignore it for now. \n\n",
+    start: 'Hello world!")\n',
+    title: 'Variables',
   },
   {
-    checkpoints: [],
+    checkpoints: [
+      {
+        message: 'console.log the value of remainder.',
+        passed: false,
+        test: /console\.log\(\s*remainder\s*\)/,
+      },
+      {
+        message: 'console.log the value of exponent.',
+        passed: false,
+        test: /console\.log\(\s*exponent\s*\)/,
+      },
+    ],
     files: {
-      '/index.html': {
-        code: '<!DOCTYPE html>\n<html lang="en">\n  <head>\n    <meta charset="UTF-8" />\n    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n    <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n    <link rel="stylesheet" href="./styles.css" />\n    <title>Document</title>\n  </head>\n  <body>\n    <h1>Hello codeamigo!</h1>\n    <!-- Add a p tag with the text "Welcome to Codeamigo" -->\n    <p>Welcome to Codeamigo</p>\n  </body>\n</html>',
+      '/index.js': {
+        code: '// This is a comment\nconsole.log("Hello world!")\nconst myNumber = 42\nconst myString = "Hello world!"\nconst difference = 100 - 50\nconst product = 100 * 2\nconst quotient = 100 / 2\nconst remainder = 100 % 3\nconst exponent = 2 ** 3\n',
       },
       '/package.json': {
-        code: '{\n  "dependencies": {},\n  "main": "/index.html",\n  "devDependencies": {}\n}',
-      },
-      '/styles.css': {
-        code: 'body {\n  font-family: sans-serif;\n  -webkit-font-smoothing: auto;\n  -moz-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n  font-smoothing: auto;\n  text-rendering: optimizeLegibility;\n  font-smooth: always;\n  -webkit-tap-highlight-color: transparent;\n  -webkit-touch-callout: none;\n}\n\nh1 {\n  font-size: 1.5rem;\n}',
+        code: '{\n  "dependencies": {},\n  "scripts": {\n    "start": "node index.js"\n  },\n  "main": "index.js",\n  "devDependencies": {}\n}',
       },
     },
     instructions:
-      "## Intro to Codeamigo - Part 5\nCongrats on making it this far! Maybe you noticed in the last step that AI is not perfect. That's okay! It's your job as a programmer to find bugs (either created by the AI or a fellow human) and fix them. So you'll need to learn how to read and write code. But Codeamigo will be there to help you along the way! If you'd like to stay updated on Codeamigo's progress, you can join the waitlist at [codeamigo.dev](https://codeamigo.dev).",
-    start: '',
-    title: 'The End (for now)',
+      '## Arithmetic Operators \n\nIn JavaScript, arithmetic operators are used to perform mathematical calculations on numerical values. There are several different arithmetic operators in JavaScript, including:\n\n - `+` (addition)\n\n - `-` (subtraction)\n\n - `*` (multiplication)\n\n - `/` (division)\n\n - `%` (modulus)\n\n - `**` (exponentiation)\n\n',
+    start: 'const exponent = 2 ** 3\n',
+    title: 'Arithmetic Operators',
   },
 ];
 
@@ -193,8 +208,10 @@ function MonacoEditor({
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
   const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
+  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
   const isStepCompleteRef = useRef(isStepComplete);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
+  const isAutoPlayEnabledRef = useRef(isAutoPlayEnabled);
   const [nextLoader, setNextLoader] = useState(false);
 
   useEffect(() => {
@@ -204,6 +221,10 @@ function MonacoEditor({
   useEffect(() => {
     isCompletionEnabledRef.current = isCompletionEnabled;
   }, [isCompletionEnabled]);
+
+  useEffect(() => {
+    isAutoPlayEnabledRef.current = isAutoPlayEnabled;
+  }, [isAutoPlayEnabled]);
 
   useEffect(() => {
     setLeftPanelHeight({
@@ -308,7 +329,9 @@ function MonacoEditor({
       );
       if (allPassed) {
         setIsStepComplete(true);
-        setNextLoader(true);
+        if (isAutoPlayEnabledRef.current) {
+          setNextLoader(true);
+        }
       } else {
         const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
           (checkpoint: any) => !checkpoint.passed
@@ -499,9 +522,11 @@ function MonacoEditor({
       <StepActions
         currentStep={currentStep}
         disabled={!isStepComplete}
+        isAutoPlayEnabled={isAutoPlayEnabled}
         isCompletionEnabled={isCompletionEnabled}
         nextLoader={nextLoader}
         setCurrentStep={setCurrentStep}
+        setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
         steps={steps.length}
       />
@@ -839,11 +864,11 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                     <pre
                       className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
-                        setValues({ question: 'Explain HTML as if I was 5.' });
+                        setValues({ question: 'Explain HTML as if I was 10.' });
                         submitForm();
                       }}
                     >
-                      Explain HTML as if I was 5.
+                      Explain HTML as if I was 10.
                     </pre>
                   </div>
                 </Form>
@@ -1017,7 +1042,7 @@ const V2 = () => {
         >
           <SandpackProvider
             files={steps[currentStep].files}
-            template="static"
+            template="vanilla"
             theme={'dark'}
           >
             <SandpackLayout>
@@ -1052,8 +1077,8 @@ const V2 = () => {
                   <Icon className="mr-1.5" name="plus-circled" />
                   <span>Join Waitlist</span>
                 </Button>
-                <SandpackPreview />
-                {/* <SandpackConsole className="overflow-scroll" /> */}
+                <SandpackPreview className="!h-0" />
+                <SandpackConsole className="overflow-scroll" />
                 <ChatBot hoverSelection={hoverSelection} />
               </SandpackStack>
             </SandpackLayout>
