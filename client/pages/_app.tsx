@@ -53,17 +53,17 @@ function MyApp({ Component, pageProps, router }: AppProps) {
       <Head>
         <title>AI-Powered Coding Tutorials | Codeamigo</title>
         <meta
-          content="Learn to code with AI-powered tutorials from Codeamigo. Our tutorials cover a wide range of programming languages and topics, from beginner to advanced."
+          content="Learn to code with AI-powered tutorials from Codeamigo."
           name="description"
         />
         <meta
-          content="Byte-sized interactive coding tutorials"
-          name="description"
+          content="ai assistant, coding tutorials, programming languages, learn to code"
+          name="keywords"
         />
         <meta
-          content="Byte-sized interactive coding tutorials"
-          property="og:description"
-        ></meta>
+          content="Learn to code with AI-powered tutorials from Codeamigo."
+          name="og:description"
+        />
         <meta content={`https://codeamigo.dev`} property="og:url"></meta>
         <meta
           content={'https://docs.codeamigo.dev/img/logo.png'}
