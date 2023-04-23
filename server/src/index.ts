@@ -42,7 +42,7 @@ const main = async () => {
       User,
     ],
     logging: true,
-    migrations: ['dist/migrations/*.js'],
+    migrations: ['dist/migrations/v2/*.js'],
     type: 'postgres',
     url: process.env.DATABASE_URL,
   });
