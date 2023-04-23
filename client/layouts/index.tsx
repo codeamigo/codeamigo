@@ -9,20 +9,6 @@ import LessonLayout from './LessonLayout';
 import MainLayout from './MainLayout';
 
 const Layout: React.FC<{ pathname: string }> = ({ children, pathname }) => {
-  const { data, loading } = useMeQuery();
-  const theme = loading
-    ? null
-    : data?.me
-    ? data.me?.theme || DEFAULT_THEME
-    : DEFAULT_THEME;
-
-  useEffect(() => {
-    if (theme) {
-      applyTheme(theme);
-    }
-  }, [theme]);
-
-  if (!theme) return null;
   switch (pathname) {
     case '/v2':
       return <V2Layout>{children}</V2Layout>;
