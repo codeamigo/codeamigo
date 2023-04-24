@@ -12,14 +12,11 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 
 import { __prod__, SESSION_COOKIE } from './constants';
-import { Checkpoint } from './entities/Checkpoint';
-import { CodeModule } from './entities/CodeModule';
-import { Dependency } from './entities/Dependency';
-import { Lesson } from './entities/Lesson';
-import { Session } from './entities/Session';
-import { Step } from './entities/Step';
-import { Tag } from './entities/Tag';
-import { User } from './entities/User';
+import { Checkpoint } from './entities/v2/Checkpoint';
+import { CodeModule } from './entities/v2/CodeModule';
+import { Lesson } from './entities/v2/Lesson';
+import { Step } from './entities/v2/Step';
+import { User } from './entities/v2/User';
 import { CheckpointResolver } from './resolvers/checkpoint';
 import { CodeModuleResolver } from './resolvers/codeModule';
 import { DependencyResolver } from './resolvers/dependency';
@@ -31,16 +28,7 @@ import { complete, explain } from './utils/openai';
 
 const main = async () => {
   const conn = await createConnection({
-    entities: [
-      Checkpoint,
-      CodeModule,
-      Dependency,
-      Lesson,
-      Session,
-      Step,
-      Tag,
-      User,
-    ],
+    entities: [Checkpoint, CodeModule, Lesson, Step, User],
     logging: true,
     migrations: ['dist/migrations/v2/*.js'],
     type: 'postgres',
