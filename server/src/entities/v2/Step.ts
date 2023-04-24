@@ -50,12 +50,9 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   isCompleted?: boolean;
 
-  @Field(() => Number, {
-    defaultValue: null,
-    nullable: true,
-  })
+  @Field(() => Number, { defaultValue: null, nullable: true })
   @Column({ nullable: true })
-  originalStepId: number;
+  position?: number;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: 'CASCADE',
