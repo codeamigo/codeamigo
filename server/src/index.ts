@@ -15,6 +15,7 @@ import { __prod__, SESSION_COOKIE } from './constants';
 import { Checkpoint } from './entities/v2/Checkpoint';
 import { CodeModule } from './entities/v2/CodeModule';
 import { Lesson } from './entities/v2/Lesson';
+import { Question } from './entities/v2/Question';
 import { Step } from './entities/v2/Step';
 import { User } from './entities/v2/User';
 import { CheckpointResolver } from './resolvers/checkpoint';
@@ -28,7 +29,7 @@ import { complete, explain } from './utils/openai';
 
 const main = async () => {
   const conn = await createConnection({
-    entities: [Checkpoint, CodeModule, Lesson, Step, User],
+    entities: [Checkpoint, CodeModule, Lesson, Question, Step, User],
     logging: true,
     migrations: ['dist/migrations/v2/*.js'],
     type: 'postgres',

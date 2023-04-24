@@ -13,6 +13,7 @@ import {
 import { Checkpoint } from './Checkpoint';
 import { CodeModule } from './CodeModule';
 import { Lesson } from './Lesson';
+import { Question } from './Question';
 
 export enum StepExecutionTypeEnum {
   riju = 'riju',
@@ -54,11 +55,22 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   position?: number;
 
+  @Field(() => String, { defaultValue: null, nullable: true })
+  @Column({ nullable: true })
+  start: string;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: 'CASCADE',
   })
   @Field(() => Lesson)
   lesson: Lesson;
+
+  // questions
+  @OneToMany(() => Question, (question) => question.step, {
+    cascade: true,
+  })
+  @Field(() => [Question], { defaultValue: [] })
+  questions: Question[];
 
   // code modules
   @OneToMany(() => CodeModule, (codeModule) => codeModule.step, {
