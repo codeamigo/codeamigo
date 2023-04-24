@@ -25,8 +25,8 @@ registerEnumType(RoleEnum, {
 @Entity()
 export class User extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Field(() => String)
   @CreateDateColumn()

@@ -25,8 +25,8 @@ registerEnumType(CheckpointTypeEnum, {
 @Entity()
 export class Checkpoint extends BaseEntity {
   @Field()
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Field(() => String)
   @CreateDateColumn()
