@@ -4,7 +4,7 @@
   "port": 5432,
   "username": "postgres",
   "password": "postgres",
-  "database": "codeamigodb2",
+  "database": "codeamigo",
   "entities": ["dist/entities/v2/*.js"],
   "migrations": ["dist/migrations/v2/*.js"],
   "cli": {
