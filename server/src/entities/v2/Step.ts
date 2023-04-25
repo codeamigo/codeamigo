@@ -59,6 +59,10 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   start: string;
 
+  @Field(() => String, { defaultValue: null, nullable: true })
+  @Column({ nullable: true })
+  title: string;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: 'CASCADE',
   })
