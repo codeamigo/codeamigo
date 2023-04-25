@@ -12,14 +12,11 @@ import {
 } from 'type-graphql';
 import { v4 } from 'uuid';
 
-import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from '../constants';
-import { Lesson } from '../entities/Lesson';
-import { Session } from '../entities/Session';
-import { RoleEnum, User } from '../entities/User';
-import { isAuth } from '../middleware/isAuth';
-import { MyContext, ThemeEnum } from '../types';
-import { generateProfileScheme } from '../utils/randomHexColor';
-import { sendEmail } from '../utils/sendEmail';
+import { FORGOT_PASSWORD_PREFIX, SESSION_COOKIE } from '../../constants';
+import { RoleEnum, User } from '../../entities/v2/User';
+import { isAuth } from '../../middleware/isAuth';
+import { MyContext } from '../../types';
+import { sendEmail } from '../../utils/sendEmail';
 
 @InputType()
 class RegisterInput {
@@ -62,15 +59,9 @@ class GoogleLoginInput {
 @InputType()
 class UpdateUserRoleInput {
   @Field()
-  id: number;
+  id: string;
   @Field()
   role: RoleEnum;
-}
-
-@InputType()
-class UpdateUserThemeInput {
-  @Field(() => String)
-  theme: keyof typeof ThemeEnum;
 }
 
 @ObjectType()
@@ -108,91 +99,30 @@ export class UserResolver {
     return await User.findOne(req.session.userId, { relations: ['lessons'] });
   }
 
-  @Query(() => String, { nullable: true })
-  async profileColorScheme(
-    @Arg('id', { nullable: true }) id: number,
-    @Ctx() { req }: MyContext
-  ) {
-    if (!id && !req.session.userId) {
-      return null;
-    }
-
-    const user = await User.findOne(id || req.session.userId);
-
-    if (!user) {
-      return null;
-    }
-
-    if (user.profileColorScheme) {
-      return user.profileColorScheme;
-    }
-
-    const profileColorScheme = generateProfileScheme();
-
-    Object.assign(user, { profileColorScheme });
-
-    await user.save();
-
-    return user.profileColorScheme;
-  }
-
-  @Mutation(() => String, { nullable: true })
-  async updateProfileColorScheme(
-    @Ctx() { req }: MyContext
-  ): Promise<String | null> {
-    if (!req.session.userId) {
-      return null;
-    }
-
-    const user = await User.findOne(req.session.userId);
-
-    if (!user) {
-      return null;
-    }
-
-    const profileColorScheme = generateProfileScheme();
-
-    Object.assign(user, { profileColorScheme });
-
-    await user.save();
-
-    return user.profileColorScheme;
-  }
-
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteUser(@Ctx() ctx: MyContext): Promise<boolean> {
     try {
       const id = ctx.req.session.userId;
       const user = await User.findOne(id, {
-        relations: ['classes', 'lessons'],
+        relations: ['lessons'],
       });
 
       if (!user) {
         return false;
       }
 
-      // First need to delete the users sessions (classes) and lessons.
-      const sessionIds = user.classes.map(({ id }) => id);
-      const sessions = await Session.findByIds(sessionIds);
-      const lessonIds = user.lessons.map(({ id }) => id);
-      const lessons = await Lesson.findByIds(lessonIds);
+      // First need to delete the users lessons.
+      // const lessonIds = user.lessons.map(({ id }) => id);
+      // const lessons = await Lesson.findByIds(lessonIds);
 
-      await Promise.all(
-        sessions.map(async (session) => {
-          const { id } = session;
+      // await Promise.all(
+      //   lessons.map(async (lesson) => {
+      //     const { id } = lesson;
 
-          return await Session.delete(id);
-        })
-      );
-
-      await Promise.all(
-        lessons.map(async (lesson) => {
-          const { id } = lesson;
-
-          return await Lesson.delete(id);
-        })
-      );
+      //     return await Lesson.delete(id);
+      //   })
+      // );
 
       await User.delete(id);
       await this.logout(ctx);
@@ -245,7 +175,6 @@ export class UserResolver {
         errors: [{ field: 'username', message: 'Error creating user.' }],
       };
     }
-    // @ts-ignore
     req.session.userId = user.id;
 
     return {
@@ -281,7 +210,6 @@ export class UserResolver {
       };
     }
 
-    // @ts-ignore
     req.session.userId = user.id;
 
     return {
@@ -305,7 +233,6 @@ export class UserResolver {
       }).save();
     }
 
-    // @ts-ignore
     req.session.userId = user.id;
 
     return {
@@ -330,7 +257,6 @@ export class UserResolver {
       }).save();
     }
 
-    // @ts-ignore
     req.session.userId = user.id;
 
     return {
@@ -356,36 +282,11 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   @UseMiddleware(isAuth)
-  async updateUserTheme(
-    @Arg('options') options: UpdateUserThemeInput,
-    @Ctx() { req }: MyContext
-  ): Promise<UserResponse> {
-    const user = await User.findOne(req.session.userId);
-
-    if (!user) {
-      return {
-        errors: [{ field: 'id', message: 'No user found.' }],
-      };
-    }
-
-    await User.update(
-      {
-        id: user.id,
-      },
-      { theme: ThemeEnum[options.theme] }
-    );
-
-    return { user };
-  }
-
-  @Mutation(() => UserResponse)
-  @UseMiddleware(isAuth)
   async updateUserRole(
     @Arg('options') options: UpdateUserRoleInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     const user = await User.findOne(options.id);
-    // @ts-ignore
     const approver = await User.findOne({ id: req.session.userId });
 
     if (!approver || approver.role !== 'ADMIN') {
@@ -462,8 +363,7 @@ export class UserResolver {
       };
     }
 
-    const userIdNum = parseInt(userId);
-    const user = await User.findOne(userIdNum);
+    const user = await User.findOne(userId);
 
     if (!user) {
       return {
@@ -472,7 +372,7 @@ export class UserResolver {
     }
 
     await User.update(
-      { id: userIdNum },
+      { id: userId },
       { password: await argon2.hash(newPassword) }
     );
 

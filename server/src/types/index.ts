@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { Session } from 'express-session';
 import { Redis } from 'ioredis';
 
-type MySession = Session & { userId: number };
+type MySession = Session & { userId: string };
 
 export type MyContext = {
   redis: Redis;

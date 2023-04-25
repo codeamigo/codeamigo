@@ -18,13 +18,11 @@ import { Lesson } from './entities/v2/Lesson';
 import { Question } from './entities/v2/Question';
 import { Step } from './entities/v2/Step';
 import { User } from './entities/v2/User';
-import { CheckpointResolver } from './resolvers/checkpoint';
-import { CodeModuleResolver } from './resolvers/codeModule';
-import { DependencyResolver } from './resolvers/dependency';
-import { LessonResolver } from './resolvers/lesson';
-import { SessionResolver } from './resolvers/session';
-import { StepResolver } from './resolvers/step';
-import { UserResolver } from './resolvers/user';
+import { CheckpointResolver } from './resolvers/v2/checkpoint';
+import { CodeModuleResolver } from './resolvers/v2/codeModule';
+import { LessonResolver } from './resolvers/v2/lesson';
+import { StepResolver } from './resolvers/v2/step';
+import { UserResolver } from './resolvers/v2/user';
 import { complete, explain } from './utils/openai';
 
 const main = async () => {
@@ -43,8 +41,11 @@ const main = async () => {
   app.use(express.json());
   app.use(
     cors({
-      credentials: true,
-      origin: process.env.CORS_ORIGIN,
+      credentials: false,
+      // origin: [
+      //   process.env.CORS_ORIGIN,
+      //   'https://studio.apollographql.com/sandbox/explorer',
+      // ],
     })
   );
 
@@ -76,12 +77,10 @@ const main = async () => {
     context: ({ req, res }) => ({ req, res }),
     schema: await buildSchema({
       resolvers: [
-        CheckpointResolver,
-        CodeModuleResolver,
-        DependencyResolver,
         LessonResolver,
-        SessionResolver,
         StepResolver,
+        CodeModuleResolver,
+        CheckpointResolver,
         UserResolver,
       ],
       validate: false,
