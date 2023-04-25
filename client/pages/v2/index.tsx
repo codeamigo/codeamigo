@@ -1080,7 +1080,7 @@ const ProgressBar = ({
         });
       }}
     >
-      <div className="h-2 w-32 rounded-full bg-green-900">
+      <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
           style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
