@@ -17,7 +17,7 @@ import { User } from './User';
 export class CodeModule extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn('uuid')
-  uuid!: string;
+  id!: string;
 
   @Field(() => String)
   @CreateDateColumn()
