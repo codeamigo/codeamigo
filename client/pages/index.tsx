@@ -70,10 +70,6 @@ const Home = () => {
           onClick={() => {
             window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
           }}
-          style={{
-            boxShadow:
-              'rgba(5, 162, 194, 0.3) -8px 0px 20px, rgba(112, 225, 200, 0.3) 0px 0px 20px, rgba(255, 178, 36, 0.3) 8px 0px 20px;',
-          }}
         >
           Join Waitlist
         </button>
@@ -81,7 +77,7 @@ const Home = () => {
         <button
           className="mt-3 h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-black px-4 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
           onClick={() => {
-            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
+            window.open('/v2');
           }}
           style={{
             boxShadow:

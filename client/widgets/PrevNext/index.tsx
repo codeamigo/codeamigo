@@ -51,8 +51,8 @@ const PrevNext: React.FC<Props> = ({
 
   return (
     <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
-      <div className="w-full" />
-      <div className="flex w-full items-center justify-center gap-2">
+      <div className="hidden w-full sm:flex" />
+      <div className="flex w-full items-center justify-start gap-2 sm:justify-center">
         <Button
           disabled={currentStep === 0}
           onClick={() => setCurrentStep(currentStep - 1)}

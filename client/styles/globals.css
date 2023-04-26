@@ -81,7 +81,7 @@ body,
 
 /* markdown */
 .markdown-body {
-  color: var(--text-primary) !important;
+  @apply !text-white;
 }
 
 .markdown-body code {
