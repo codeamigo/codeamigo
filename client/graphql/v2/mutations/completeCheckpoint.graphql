@@ -1,0 +1,5 @@
+mutation CompleteCheckpoint($id: String!) {
+  completeCheckpoint(id: $id) {
+    id
+  }
+}

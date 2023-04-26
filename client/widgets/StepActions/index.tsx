@@ -14,7 +14,6 @@ const StepActions: React.FC<Props> = ({
   setIsAutoPlayEnabled,
   setIsCompletionEnabled,
   step,
-  steps,
 }) => {
   const isLastStep = !step.nextSlug;
   const nextDisabled = isLastStep || disabled;

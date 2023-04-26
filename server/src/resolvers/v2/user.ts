@@ -251,7 +251,7 @@ export class UserResolver {
       user = await User.create({
         email: options.email,
         googleId: options.id,
-        username: options.username,
+        username: options.email,
       }).save();
     }
 

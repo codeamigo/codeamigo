@@ -96,6 +96,8 @@ export type Modal = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  completeCheckpoint: Checkpoint;
+  createCheckpoint: Checkpoint;
   deleteUser: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
@@ -107,6 +109,19 @@ export type Mutation = {
   changePasswordFromToken: UserResponse;
   changePasswordFromPassword: UserResponse;
   changeEmail: UserResponse;
+};
+
+
+export type MutationCompleteCheckpointArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationCreateCheckpointArgs = {
+  matchRegex?: Maybe<Scalars['String']>;
+  type: Scalars['String'];
+  description: Scalars['String'];
+  stepId: Scalars['String'];
 };
 
 
@@ -309,6 +324,19 @@ export type ChangePasswordFromPasswordMutation = (
   ) }
 );
 
+export type CompleteCheckpointMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type CompleteCheckpointMutation = (
+  { __typename?: 'Mutation' }
+  & { completeCheckpoint: (
+    { __typename?: 'Checkpoint' }
+    & Pick<Checkpoint, 'id'>
+  ) }
+);
+
 export type ForgotPasswordMutationVariables = Exact<{
   usernameOrEmail: Scalars['String'];
 }>;
@@ -408,7 +436,7 @@ export type CheckpointsQuery = (
   { __typename?: 'Query' }
   & { checkpoints: Array<(
     { __typename?: 'Checkpoint' }
-    & Pick<Checkpoint, 'isCompleted' | 'matchRegex' | 'description'>
+    & Pick<Checkpoint, 'id' | 'isCompleted' | 'matchRegex' | 'description'>
   )> }
 );
 
@@ -574,6 +602,38 @@ export function useChangePasswordFromPasswordMutation(baseOptions?: Apollo.Mutat
 export type ChangePasswordFromPasswordMutationHookResult = ReturnType<typeof useChangePasswordFromPasswordMutation>;
 export type ChangePasswordFromPasswordMutationResult = Apollo.MutationResult<ChangePasswordFromPasswordMutation>;
 export type ChangePasswordFromPasswordMutationOptions = Apollo.BaseMutationOptions<ChangePasswordFromPasswordMutation, ChangePasswordFromPasswordMutationVariables>;
+export const CompleteCheckpointDocument = gql`
+    mutation CompleteCheckpoint($id: String!) {
+  completeCheckpoint(id: $id) {
+    id
+  }
+}
+    `;
+export type CompleteCheckpointMutationFn = Apollo.MutationFunction<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
+
+/**
+ * __useCompleteCheckpointMutation__
+ *
+ * To run a mutation, you first call `useCompleteCheckpointMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteCheckpointMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeCheckpointMutation, { data, loading, error }] = useCompleteCheckpointMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCompleteCheckpointMutation(baseOptions?: Apollo.MutationHookOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>) {
+        return Apollo.useMutation<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>(CompleteCheckpointDocument, baseOptions);
+      }
+export type CompleteCheckpointMutationHookResult = ReturnType<typeof useCompleteCheckpointMutation>;
+export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
+export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($usernameOrEmail: String!) {
   forgotPassword(usernameOrEmail: $usernameOrEmail)
@@ -770,6 +830,7 @@ export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutatio
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: String!) {
   checkpoints(stepId: $stepId) {
+    id
     isCompleted
     matchRegex
     description

@@ -29,6 +29,8 @@ import {
   Step,
   StepDocument,
   useCheckpointsQuery,
+  useCodeModulesQuery,
+  useCompleteCheckpointMutation,
   useMeQuery,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
@@ -370,7 +372,6 @@ function MonacoEditor({
   isStepComplete,
   leftPanelHeight,
   onReady,
-  setCheckpoints,
   setCurrentCheckpoint,
   setCurrentStep,
   setHoverSelection,
@@ -392,7 +393,6 @@ function MonacoEditor({
     instructions: string;
   };
   onReady: () => void;
-  setCheckpoints: Dispatch<SetStateAction<Checkpoint[]>>;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
   setCurrentStep: Dispatch<SetStateAction<string>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
@@ -417,6 +417,8 @@ function MonacoEditor({
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
   const isAutoPlayEnabledRef = useRef(isAutoPlayEnabled);
   const [nextLoader, setNextLoader] = useState(false);
+
+  const [completeCheckpoint] = useCompleteCheckpointMutation();
 
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
@@ -521,30 +523,44 @@ function MonacoEditor({
 
   const debouncedUpdatePrompt = debounce(updatePrompt, 100);
 
-  const testCheckpoint = (value: string) => {
+  const testCheckpoint = async (value: string) => {
     const checkpoint = checkpoints[currentCheckpoint];
     const test = checkpoint?.matchRegex as string;
     const regex = new RegExp(test);
-    let allPassed;
 
     if (regex.test(value) && checkpoint && checkpoint.isCompleted === false) {
-      checkpoints[currentCheckpoint].isCompleted = true;
-      setCheckpoints(() => checkpoints);
-      allPassed = checkpoints.every((checkpoint) => checkpoint.isCompleted);
+      const response = await completeCheckpoint({
+        refetchQueries: ['Checkpoints'],
+        variables: {
+          id: checkpoint.id,
+        },
+      });
+
+      let newCheckpoints = checkpoints.map((checkpoint) => {
+        if (checkpoint.id === response.data?.completeCheckpoint.id) {
+          return {
+            ...checkpoint,
+            isCompleted: true,
+          };
+        }
+        return checkpoint;
+      });
+
+      const allPassed = newCheckpoints.every(
+        (checkpoint) => checkpoint.isCompleted
+      );
       if (allPassed) {
         setIsStepComplete(true);
         if (isAutoPlayEnabledRef.current) {
           setNextLoader(true);
         }
       } else {
-        const nextCheckpoint = checkpoints.findIndex(
+        const nextCheckpoint = checkpoints?.findIndex(
           (checkpoint) => !checkpoint.isCompleted
         );
         setCurrentCheckpoint(nextCheckpoint);
       }
     }
-
-    return allPassed;
   };
 
   const setupModels = () => {
@@ -1142,16 +1158,17 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
   );
   const [isStepComplete, setIsStepComplete] = useState(false);
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
-  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(
-    step?.checkpoints as Checkpoint[]
-  );
   const { data } = useMeQuery();
-  const { data: checkTest } = useCheckpointsQuery({
+  const { data: checkpointsData } = useCheckpointsQuery({
     variables: {
       stepId: step?.id as string,
     },
   });
-  console.log(checkTest);
+  const { data: codeModules } = useCodeModulesQuery({
+    variables: {
+      stepId: step?.id as string,
+    },
+  });
 
   // HIGH DEMAND
   // useEffect(() => {
@@ -1178,24 +1195,26 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
   }, [step?.id]);
 
   useEffect(() => {
-    const allPassed =
-      checkpoints?.every((checkpoint) => checkpoint.isCompleted) ||
-      !checkpoints?.length;
-    setIsStepComplete(allPassed);
-  }, [step?.id]);
+    if (!checkpointsData?.checkpoints) return;
+
+    const allPassed = checkpointsData?.checkpoints?.every(
+      (checkpoint) => checkpoint.isCompleted
+    );
+
+    const hasCheckpoint = checkpointsData?.checkpoints?.length > 0;
+    const allPassedOrNoCheckpoints = allPassed || !hasCheckpoint;
+
+    setIsStepComplete(allPassedOrNoCheckpoints);
+  }, [step?.id, checkpointsData?.checkpoints]);
 
   useEffect(() => {
-    const nextCheckpoint = checkpoints?.findIndex((checkpoint) => {
-      return !checkpoint.isCompleted;
-    });
+    const nextCheckpoint = checkpointsData?.checkpoints?.findIndex(
+      (checkpoint) => {
+        return !checkpoint.isCompleted;
+      }
+    );
     if (nextCheckpoint && nextCheckpoint !== -1) {
       setCurrentCheckpoint(nextCheckpoint);
-    }
-  }, [step?.id]);
-
-  useEffect(() => {
-    if (step?.checkpoints) {
-      setCheckpoints(step?.checkpoints as Checkpoint[]);
     }
   }, [step?.id]);
 
@@ -1270,14 +1289,13 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
                 <MonacoEditor
-                  checkpoints={checkpoints as Checkpoint[]}
+                  checkpoints={checkpointsData?.checkpoints as Checkpoint[]}
                   currentCheckpoint={currentCheckpoint}
                   files={files}
                   hoverSelection={hoverSelection}
                   isStepComplete={isStepComplete}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
-                  setCheckpoints={setCheckpoints}
                   setCurrentCheckpoint={setCurrentCheckpoint}
                   setCurrentStep={setCurrentStep}
                   setHoverSelection={setHoverSelection}
