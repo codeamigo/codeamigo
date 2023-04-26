@@ -1,0 +1,7 @@
+mutation UpdateCodeModule($id: String!, $code: String!) {
+  updateCodeModule(id: $id, code: $code) {
+    id
+    code
+    name
+  }
+}

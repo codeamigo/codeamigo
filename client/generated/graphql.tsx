@@ -97,7 +97,8 @@ export type Modal = {
 export type Mutation = {
   __typename?: 'Mutation';
   completeCheckpoint: Checkpoint;
-  createCheckpoint: Checkpoint;
+  createCheckpoint: CodeModule;
+  updateCodeModule: CodeModule;
   deleteUser: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
@@ -118,10 +119,16 @@ export type MutationCompleteCheckpointArgs = {
 
 
 export type MutationCreateCheckpointArgs = {
-  matchRegex?: Maybe<Scalars['String']>;
-  type: Scalars['String'];
-  description: Scalars['String'];
+  isEntry: Scalars['Boolean'];
+  name: Scalars['String'];
+  code: Scalars['String'];
   stepId: Scalars['String'];
+};
+
+
+export type MutationUpdateCodeModuleArgs = {
+  code: Scalars['String'];
+  id: Scalars['String'];
 };
 
 
@@ -427,6 +434,20 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateCodeModuleMutationVariables = Exact<{
+  id: Scalars['String'];
+  code: Scalars['String'];
+}>;
+
+
+export type UpdateCodeModuleMutation = (
+  { __typename?: 'Mutation' }
+  & { updateCodeModule: (
+    { __typename?: 'CodeModule' }
+    & Pick<CodeModule, 'id' | 'code' | 'name'>
+  ) }
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['String'];
 }>;
@@ -449,7 +470,7 @@ export type CodeModulesQuery = (
   { __typename?: 'Query' }
   & { codeModules: Array<(
     { __typename?: 'CodeModule' }
-    & Pick<CodeModule, 'code' | 'name'>
+    & Pick<CodeModule, 'id' | 'code' | 'name'>
   )> }
 );
 
@@ -827,6 +848,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateCodeModuleDocument = gql`
+    mutation UpdateCodeModule($id: String!, $code: String!) {
+  updateCodeModule(id: $id, code: $code) {
+    id
+    code
+    name
+  }
+}
+    `;
+export type UpdateCodeModuleMutationFn = Apollo.MutationFunction<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
+
+/**
+ * __useUpdateCodeModuleMutation__
+ *
+ * To run a mutation, you first call `useUpdateCodeModuleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCodeModuleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCodeModuleMutation, { data, loading, error }] = useUpdateCodeModuleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useUpdateCodeModuleMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>) {
+        return Apollo.useMutation<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>(UpdateCodeModuleDocument, baseOptions);
+      }
+export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCodeModuleMutation>;
+export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
+export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: String!) {
   checkpoints(stepId: $stepId) {
@@ -866,6 +922,7 @@ export type CheckpointsQueryResult = Apollo.QueryResult<CheckpointsQuery, Checkp
 export const CodeModulesDocument = gql`
     query CodeModules($stepId: String!) {
   codeModules(stepId: $stepId) {
+    id
     code
     name
   }

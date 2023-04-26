@@ -11,6 +11,7 @@ import {
 import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
+import { NextApiRequest } from 'next';
 import Image from 'next/image';
 import React from 'react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
@@ -24,14 +25,19 @@ import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
   Checkpoint,
+  CheckpointsQuery,
   CodeModulesDocument,
+  CodeModulesQuery,
   LessonDocument,
+  LessonQueryVariables,
   Step,
   StepDocument,
+  StepQueryVariables,
   useCheckpointsQuery,
   useCodeModulesQuery,
   useCompleteCheckpointMutation,
   useMeQuery,
+  useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
@@ -366,6 +372,7 @@ const steps: StepLocal[] = [
 
 function MonacoEditor({
   checkpoints,
+  codeModules,
   currentCheckpoint,
   files,
   hoverSelection,
@@ -379,7 +386,8 @@ function MonacoEditor({
   setLeftPanelHeight,
   step,
 }: {
-  checkpoints: Checkpoint[];
+  checkpoints?: CheckpointsQuery['checkpoints'];
+  codeModules?: CodeModulesQuery['codeModules'];
   currentCheckpoint: number;
   files: {
     [key: string]: {
@@ -419,6 +427,7 @@ function MonacoEditor({
   const [nextLoader, setNextLoader] = useState(false);
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
+  const [updateCodeModule] = useUpdateCodeModuleMutation();
 
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
@@ -488,7 +497,7 @@ function MonacoEditor({
       step.instructions +
       '\n' +
       `${
-        checkpoints[currentCheckpoint]?.matchRegex
+        checkpoints?.[currentCheckpoint]?.matchRegex
           ? '\n' +
             'Satisfy Regex: ' +
             checkpoints[currentCheckpoint]?.matchRegex
@@ -524,7 +533,7 @@ function MonacoEditor({
   const debouncedUpdatePrompt = debounce(updatePrompt, 100);
 
   const testCheckpoint = async (value: string) => {
-    const checkpoint = checkpoints[currentCheckpoint];
+    const checkpoint = checkpoints?.[currentCheckpoint];
     const test = checkpoint?.matchRegex as string;
     const regex = new RegExp(test);
 
@@ -755,6 +764,19 @@ function MonacoEditor({
           onChange={(value) => {
             testCheckpoint(value || '');
             updateCode(value || '');
+
+            const codeModuleId = codeModules?.find(
+              (codeModule) => codeModule.name === activeFile
+            )?.id;
+
+            if (!codeModuleId) return;
+
+            updateCodeModule({
+              variables: {
+                code: value || '',
+                id: codeModuleId,
+              },
+            });
           }}
           onMount={handleMount}
           options={{
@@ -834,7 +856,11 @@ const Markdown = ({
   );
 };
 
-const Checkpoints = ({ checkpoints }: { checkpoints: Checkpoint[] }) => {
+const Checkpoints = ({
+  checkpoints,
+}: {
+  checkpoints?: CheckpointsQuery['checkpoints'];
+}) => {
   return (
     <div>
       {checkpoints?.map((checkpoint) => {
@@ -1045,8 +1071,8 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       name="cog"
                     />
                   ) : null}
-                  {/* <div className="mt-2 flex flex-wrap items-center gap-2">
-                    {steps[currentStep].questions.map((question) => {
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    {defaultQuestions.map((question) => {
                       return (
                         <pre
                           className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
@@ -1059,7 +1085,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                         </pre>
                       );
                     })}
-                  </div> */}
+                  </div>
                 </Form>
               )}
             </Formik>
@@ -1147,7 +1173,7 @@ const Credits = () => {
   );
 };
 
-const V2Lesson = ({ files, lesson, step }: Props) => {
+const V2Lesson = ({ lesson, step }: Props) => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -1164,11 +1190,21 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
       stepId: step?.id as string,
     },
   });
-  const { data: codeModules } = useCodeModulesQuery({
+  const { data: codeModulesData, loading } = useCodeModulesQuery({
     variables: {
       stepId: step?.id as string,
     },
   });
+
+  const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
+    if (!codeModule.name) return acc;
+    if (!codeModule.code) return acc;
+
+    return {
+      ...acc,
+      [codeModule.name]: { code: codeModule.code.replace(/\\n/g, '\n') },
+    };
+  }, {});
 
   // HIGH DEMAND
   // useEffect(() => {
@@ -1288,21 +1324,24 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
-                <MonacoEditor
-                  checkpoints={checkpointsData?.checkpoints as Checkpoint[]}
-                  currentCheckpoint={currentCheckpoint}
-                  files={files}
-                  hoverSelection={hoverSelection}
-                  isStepComplete={isStepComplete}
-                  leftPanelHeight={leftPanelHeight}
-                  onReady={() => setEditorReady(true)}
-                  setCurrentCheckpoint={setCurrentCheckpoint}
-                  setCurrentStep={setCurrentStep}
-                  setHoverSelection={setHoverSelection}
-                  setIsStepComplete={setIsStepComplete}
-                  setLeftPanelHeight={setLeftPanelHeight}
-                  step={step as Step}
-                />
+                {loading || !files ? null : (
+                  <MonacoEditor
+                    checkpoints={checkpointsData?.checkpoints as Checkpoint[]}
+                    codeModules={codeModulesData?.codeModules}
+                    currentCheckpoint={currentCheckpoint}
+                    files={files}
+                    hoverSelection={hoverSelection}
+                    isStepComplete={isStepComplete}
+                    leftPanelHeight={leftPanelHeight}
+                    onReady={() => setEditorReady(true)}
+                    setCurrentCheckpoint={setCurrentCheckpoint}
+                    setCurrentStep={setCurrentStep}
+                    setHoverSelection={setHoverSelection}
+                    setIsStepComplete={setIsStepComplete}
+                    setLeftPanelHeight={setLeftPanelHeight}
+                    step={step as Step}
+                  />
+                )}
               </SandpackStack>
               <SandpackStack className="!h-full">
                 <Button
@@ -1345,11 +1384,6 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
 };
 
 type Props = {
-  files: {
-    [key: string]: {
-      code: string;
-    };
-  };
   lesson: LessonQuery['lesson'];
   step: StepQuery['step'];
 };
@@ -1362,29 +1396,15 @@ export async function getServerSideProps(context: {
 
   const lesson = await client.query({
     query: LessonDocument,
-    variables: { slug: lessonSlug },
+    variables: { slug: lessonSlug } as LessonQueryVariables,
   });
   const step = await client.query({
     query: StepDocument,
-    variables: { slug: stepSlug },
+    variables: { slug: stepSlug } as StepQueryVariables,
   });
-  const codeModules = await client.query({
-    query: CodeModulesDocument,
-    variables: { stepId: step.data.step.id },
-  });
-  const files = codeModules.data.codeModules.reduce(
-    (acc: any, codeModule: any) => {
-      acc[codeModule.name] = {
-        code: codeModule.code.replace(/\\n/g, '\n'),
-      };
-      return acc;
-    },
-    {}
-  );
 
   return {
     props: {
-      files,
       lesson: lesson.data.lesson,
       step: step.data.step,
     },

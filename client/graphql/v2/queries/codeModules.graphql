@@ -1,5 +1,6 @@
 query CodeModules($stepId: String!) {
   codeModules(stepId: $stepId) {
+    id
     code
     name
   }

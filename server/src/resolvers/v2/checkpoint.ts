@@ -72,11 +72,9 @@ export class CheckpointResolver {
       },
     });
 
-    if (req.session.userId) {
-      const user = await User.findOne(req.session.userId);
-      if (!user) {
-        return [];
-      }
+    const user = await User.findOne(req.session.userId);
+
+    if (user) {
       const userCheckpoints = await Checkpoint.find({
         relations: ['user', 'step'],
         where: {
