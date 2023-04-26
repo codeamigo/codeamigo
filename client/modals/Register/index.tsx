@@ -39,7 +39,7 @@ const Register: React.FC = () => {
       {({ isSubmitting, isValid, values }) => (
         <Form>
           <div className="mx-auto w-96 max-w-lg p-6 lg:px-4">
-            <h1 className="text-text-primary mb-4 flex justify-center text-2xl font-semibold">
+            <h1 className="text-white mb-4 flex justify-center text-2xl font-semibold">
               Sign Up
             </h1>
             <div className="flex justify-center gap-6">
@@ -91,11 +91,11 @@ const Register: React.FC = () => {
               >
                 Register
               </Button>
-              <div className="text-text-primary my-1 mt-3 w-full text-center text-xs">
+              <div className="text-white my-1 mt-3 w-full text-center text-xs">
                 or
               </div>
               <button
-                className="text-accent w-full justify-center rounded-md text-sm font-medium focus:outline-none"
+                className="text-neutral-500 w-full justify-center rounded-md text-sm font-medium focus:outline-none"
                 onClick={() =>
                   modalVar({
                     callback: modalVar().callback,

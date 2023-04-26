@@ -64,32 +64,17 @@ const Login: React.FC = () => {
     >
       {({ isSubmitting, values }) => (
         <Form>
-          <div className="mx-auto w-96 max-w-lg p-6 lg:px-4">
-            <h1 className="text-text-primary mb-4 flex justify-center text-2xl font-semibold">
+          <div className="mx-auto min-w-[300px] p-6 sm:min-w-[320px] lg:px-4">
+            <h1 className="mb-4 flex items-end justify-center text-xl font-semibold text-white">
               Login
             </h1>
-            <div className="flex justify-center gap-6">
-              <button
-                className="h-8 w-8"
-                onClick={() => signIn('google', { callbackUrl: router.asPath })}
-                type="button"
-              >
-                <Image src={googlePng} />
-              </button>
-              <button
-                className="bg-bg-nav-offset block h-8 w-8 rounded-full"
-                onClick={() => signIn('github', { callbackUrl: router.asPath })}
-                style={{ padding: '2px' }}
-                type="button"
-              >
-                <Image src={githubPng} />
-              </button>
-            </div>
-            <div className="px-4 sm:p-6">
-              <div className="flex flex-col gap-3">
+            <div className="w-full">
+              <div className="flex w-full flex-col gap-3">
                 <InputField
+                  className="w-full"
                   label="Email or username"
                   name="usernameOrEmail"
+                  placeholder="margaret_hamilton"
                   type="text"
                 />
                 <div
@@ -103,7 +88,7 @@ const Login: React.FC = () => {
                     type="password"
                   />
                   <div
-                    className="text-text-primary absolute right-0 top-0.5 cursor-pointer text-xs underline"
+                    className="absolute right-0 top-0.5 cursor-pointer text-xs text-white underline"
                     onClick={() =>
                       forgotPassword({
                         variables: { usernameOrEmail: values.usernameOrEmail },
@@ -115,7 +100,7 @@ const Login: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className="w-full px-4 sm:px-6">
+            <div className="mt-2 w-full">
               <Button
                 className="w-full justify-center"
                 disabled={isSubmitting || loading}
@@ -123,23 +108,50 @@ const Login: React.FC = () => {
               >
                 Login
               </Button>
-              <div className="text-text-primary my-1 mt-3 w-full text-center text-xs">
-                or
+              <div className="my-3 w-full border-t-2 border-dotted border-neutral-500 text-center text-xs text-white" />
+              <div className="flex items-center justify-center gap-8">
+                <button
+                  className="flex items-center gap-2"
+                  onClick={() =>
+                    signIn('google', { callbackUrl: router.asPath })
+                  }
+                  type="button"
+                >
+                  <span className="h-6 w-6">
+                    <Image src={googlePng} />
+                  </span>
+                  <pre className="text-xs text-white">Google</pre>
+                </button>
+                <button
+                  className="flex items-center gap-2"
+                  onClick={() =>
+                    signIn('github', { callbackUrl: router.asPath })
+                  }
+                  style={{ padding: '2px' }}
+                  type="button"
+                >
+                  <span className="h-6 w-6">
+                    <Image src={githubPng} />
+                  </span>
+                  <pre className="text-xs text-white">GitHub</pre>
+                </button>
               </div>
-              <button
-                className="text-accent w-full justify-center rounded-md text-sm font-medium focus:outline-none"
-                disabled={isSubmitting || loading}
-                onClick={() =>
-                  modalVar({
-                    callback: () => null,
-                    name: 'register',
-                    persistent: false,
-                  })
-                }
-                type="button"
-              >
-                Create Account
-              </button>
+              <div className="mt-4 flex w-full justify-center text-xs text-neutral-500">
+                Don't have an account?&nbsp;
+                <span
+                  className="text-xs text-blue-600"
+                  onClick={() =>
+                    modalVar({
+                      callback: () => null,
+                      name: 'register',
+                      persistent: false,
+                    })
+                  }
+                  role="button"
+                >
+                  Create one
+                </span>
+              </div>
             </div>
           </div>
         </Form>

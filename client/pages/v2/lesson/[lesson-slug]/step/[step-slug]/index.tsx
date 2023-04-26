@@ -11,7 +11,6 @@ import {
 import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
-import { NextApiRequest } from 'next';
 import Image from 'next/image';
 import React from 'react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
@@ -26,7 +25,6 @@ import Icon from '👨‍💻components/Icon';
 import {
   Checkpoint,
   CheckpointsQuery,
-  CodeModulesDocument,
   CodeModulesQuery,
   LessonDocument,
   LessonQueryVariables,
@@ -45,6 +43,7 @@ import { Maybe } from '👨‍💻generated/graphql';
 import { client } from '👨‍💻utils/withApollo';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 import StepActions from '👨‍💻widgets/StepActions';
+import UserMenu from '👨‍💻widgets/UserMenu';
 
 import * as hal from '../../../../../../assets/hal.png';
 
@@ -1184,7 +1183,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
   );
   const [isStepComplete, setIsStepComplete] = useState(false);
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
-  const { data } = useMeQuery();
   const { data: checkpointsData } = useCheckpointsQuery({
     variables: {
       stepId: step?.id as string,
@@ -1287,29 +1285,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             step={step as Step}
             steps={lesson?.steps?.length}
           />
-          {/* <Credits /> */}
-          <div className="relative">
-            {data?.me ? (
-              <div className="absolute right-[0px] top-[0px] flex h-[6px] w-[6px] items-center justify-center rounded-full bg-green-900">
-                <div className="h-[4px] w-[4px] rounded-full bg-green-500" />
-              </div>
-            ) : (
-              <div className="absolute right-[0px] top-[0px] flex h-[6px] w-[6px] items-center justify-center rounded-full bg-red-900">
-                <div className="h-[4px] w-[4px] rounded-full bg-red-500" />
-              </div>
-            )}
-            <Icon
-              className="text-neutral-300 transition-colors hover:text-white"
-              name="user"
-              onClick={() => {
-                modalVar({
-                  callback: () => null,
-                  name: 'login',
-                  persistent: false,
-                });
-              }}
-            />
-          </div>
+          <UserMenu />
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
@@ -1324,6 +1300,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
+                {/* TODO: is there anyway to prevent this from going to null? */}
                 {loading || !files ? null : (
                   <MonacoEditor
                     checkpoints={checkpointsData?.checkpoints as Checkpoint[]}

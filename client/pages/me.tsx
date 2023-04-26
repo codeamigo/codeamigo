@@ -24,14 +24,14 @@ const Me = () => {
     }
   }, [tab]);
 
-  if (loading) return <div className="text-text-primary">Loading...</div>;
+  if (loading) return <div className="text-white">Loading...</div>;
   // if (error) return <div>{error.toString()}</div>;
 
   return (
     <div className="flex flex-col sm:flex-row sm:space-x-8">
       <div className="mb-4 w-full sm:w-1/4">
         <div className="sticky top-3">
-          <h2 className="text-text-primary mb-2 font-semibold">
+          <h2 className="text-white mb-2 font-semibold">
             User: {data?.me?.username}
           </h2>
         </div>

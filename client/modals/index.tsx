@@ -90,7 +90,7 @@ const Modals: React.FC<Props> = () => {
             onClick={() => modalVar(InitialModalState)}
           >
             <Icon
-              className="text-text-primary text-3xl"
+              className="text-white text-3xl"
               name="cancel-circled"
             />
           </div> */}

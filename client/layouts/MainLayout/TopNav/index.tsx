@@ -17,7 +17,7 @@ const TopNav: React.FC<Props> = () => {
             <div className="h-full">
               <div className="flex space-x-4 text-white">
                 <button
-                  className={`text-text-primary flex items-center text-xl font-bold focus:outline-none`}
+                  className={`text-white flex items-center text-xl font-bold focus:outline-none`}
                   onClick={() => router.push('/')}
                 >
                   <Logo className="mr-1 w-8 text-xs sm:mr-1.5 sm:w-12 sm:text-lg" />

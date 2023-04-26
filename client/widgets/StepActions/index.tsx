@@ -67,6 +67,14 @@ const StepActions: React.FC<Props> = ({
         {isLastStep ? (
           <div className="flex items-center gap-2">
             <Button
+              disabled={step.position === 0}
+              onClick={() => {
+                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
+              }}
+            >
+              Prev
+            </Button>
+            <Button
               onClick={() =>
                 window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
               }

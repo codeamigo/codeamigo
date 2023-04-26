@@ -7,8 +7,8 @@ const RegisterAfterPreview: React.FC<Props> = () => {
   return (
     <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
       <div className="text-3xl">🎉</div>
-      <div className="text-xl font-semibold text-text-primary">Nice work!</div>
-      <div className="leading-5 text-text-primary">
+      <div className="text-xl font-semibold text-white">Nice work!</div>
+      <div className="leading-5 text-white">
         If you enjoyed that lesson please consider signing up to save your
         progress.
       </div>
@@ -23,10 +23,10 @@ const RegisterAfterPreview: React.FC<Props> = () => {
         >
           Sign Up
         </Button>
-        <div className="ml-2 text-sm text-text-primary">
+        <div className="ml-2 text-sm text-white">
           Follow us on{' '}
           <a
-            className="text-accent"
+            className="text-neutral-500"
             href="https://twitter.com/codeamigo_dev"
             target="_blank"
           >
