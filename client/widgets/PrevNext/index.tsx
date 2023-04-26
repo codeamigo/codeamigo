@@ -50,51 +50,41 @@ const PrevNext: React.FC<Props> = ({
   }, [loaderWidth]);
 
   return (
-    <div>
-      {isLastStep ? (
-        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
-          <Button
-            onClick={() =>
-              window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-            }
-          >
-            <Icon className="mr-1.5" name="plus-circled" />
-            <span>Join Waitlist</span>
-          </Button>
-          <Button
-            onClick={() =>
-              window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-            }
-          >
-            <Icon className="mr-1.5" name="twitter" />
-            <span>Follow us on Twitter</span>
-          </Button>
-        </div>
-      ) : (
-        <div className="flex items-center justify-center gap-2 border-b border-neutral-800 bg-black py-2">
-          <Button
-            disabled={currentStep === 0}
-            onClick={() => setCurrentStep(currentStep - 1)}
-          >
-            Prev
-          </Button>
-          <Button
-            className="relative overflow-hidden"
-            disabled={nextDisabled}
-            id="next-button"
-            onClick={() => setCurrentStep(currentStep + 1)}
-          >
-            <span className="relative z-10">Next</span>
-            {nextLoader && (
-              // element that expands in the style of the netflix loader
-              <span
-                className="absolute left-0 z-0 h-full w-0 bg-neutral-500"
-                id="loader"
-              ></span>
-            )}
-          </Button>
-        </div>
-      )}
+    <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
+      <div className="w-full" />
+      <div className="flex w-full items-center justify-center gap-2">
+        <Button
+          disabled={currentStep === 0}
+          onClick={() => setCurrentStep(currentStep - 1)}
+        >
+          Prev
+        </Button>
+        <Button
+          className="relative overflow-hidden"
+          disabled={nextDisabled}
+          id="next-button"
+          onClick={() => setCurrentStep(currentStep + 1)}
+        >
+          <span className="relative z-10">Next</span>
+          {nextLoader && (
+            // element that expands in the style of the netflix loader
+            <span
+              className="absolute left-0 z-0 h-full w-0 bg-neutral-500"
+              id="loader"
+            ></span>
+          )}
+        </Button>
+      </div>
+      <div className="flex w-full items-center justify-end">
+        <Button
+          onClick={() =>
+            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+          }
+        >
+          <Icon className="mr-1.5" name="plus-circled" />
+          <span>Join Waitlist</span>
+        </Button>
+      </div>
     </div>
   );
 };

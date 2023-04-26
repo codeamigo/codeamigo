@@ -570,7 +570,7 @@ const Markdown = ({
     >
       <ReactMarkdown
         children={steps[currentStep].instructions}
-        className="markdown-body h-full overflow-scroll border-b border-neutral-800 py-2 px-3"
+        className="markdown-body h-full overflow-scroll border-b border-neutral-800 px-3 py-2"
         plugins={[gfm]}
       />
       <Icon
@@ -759,7 +759,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                 <Form className="relative">
                   <textarea
                     autoFocus
-                    className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black py-2 px-3 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
+                    className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black px-3 py-2 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
                     disabled={isBusy}
                     name="question"
                     onChange={(e) => {
@@ -796,7 +796,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'What is this code doing?' });
                         submitForm();
@@ -805,7 +805,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       What is this code doing?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: "Why isn't my code accepted?" });
                         submitForm();
@@ -814,7 +814,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       Why isn't my code accepted?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'What is a variable?' });
                         submitForm();
@@ -823,7 +823,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                       What is a variable?
                     </pre>
                     <pre
-                      className="bg-blue-950 inline-block cursor-pointer rounded-md border border-blue-500 px-1 py-0.5 text-xs text-blue-500"
+                      className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                       onClick={() => {
                         setValues({ question: 'Explain HTML as if I was 5.' });
                         submitForm();
@@ -846,7 +846,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
               id={question}
             >
               <div className="mb-1">
-                <pre className="bg-green-950 inline-block rounded-md border border-green-500 px-1 py-0.5 text-xs text-green-500">
+                <pre className="inline-block rounded-md border border-green-500 bg-green-950 px-1 py-0.5 text-xs text-green-500">
                   {question}
                 </pre>
               </div>
@@ -971,15 +971,6 @@ const V2 = () => {
                 />
               </SandpackStack>
               <SandpackStack className="!h-full">
-                <Button
-                  className="absolute top-2 right-2 z-10"
-                  onClick={() =>
-                    window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-                  }
-                >
-                  <Icon className="mr-1.5" name="plus-circled" />
-                  <span>Join Waitlist</span>
-                </Button>
                 <SandpackPreview />
                 {/* <SandpackConsole className="overflow-scroll" /> */}
                 <ChatBot hoverSelection={hoverSelection} />
@@ -994,7 +985,7 @@ const V2 = () => {
             ? { opacity: 0, scale: 0 }
             : { opacity: 1, scale: 1 }
         }
-        className="fixed top-0 left-0 flex h-full w-full animate-pulse items-center justify-center text-white"
+        className="fixed left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
         initial={{ opacity: 0.5, scale: 0.5 }}
         style={{ transformOrigin: 'center' }}
         transition={transition}
