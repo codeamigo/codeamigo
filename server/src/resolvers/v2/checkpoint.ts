@@ -1,4 +1,5 @@
-import { Arg, Int, Query, Resolver } from 'type-graphql';
+import { MyContext } from 'src/types';
+import { Arg, Ctx, Int, Query, Resolver } from 'type-graphql';
 
 import { Checkpoint } from '../../entities/v2/Checkpoint';
 import { Step } from '../../entities/v2/Step';
@@ -6,16 +7,39 @@ import { Step } from '../../entities/v2/Step';
 @Resolver()
 export class CheckpointResolver {
   @Query(() => [Checkpoint])
-  async checkpoints(@Arg('stepId') stepId: string): Promise<Checkpoint[]> {
-    const step = await Step.createQueryBuilder()
-      .where('Step.id = :stepId', {
+  async checkpoints(
+    @Arg('stepId') stepId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Checkpoint[]> {
+    const checkpoints = await Checkpoint.createQueryBuilder().where(
+      'Checkpoint.stepId = :stepId',
+      {
         stepId,
-      })
-      .leftJoinAndSelect('Step.checkpoints', 'checkpoints')
-      .addOrderBy('checkpoints.createdAt', 'ASC')
-      .getOne();
+      }
+    );
 
-    return step?.checkpoints || [];
+    if (req.session.userId) {
+      const userCheckpoints = checkpoints
+        .leftJoinAndSelect('Checkpoint.user', 'user')
+        .where('user.id = :userId', {
+          userId: req.session.userId,
+        })
+        .getMany();
+
+      if (!userCheckpoints) {
+        // create them
+        checkpoints.getMany().then((checkpoints) => {
+          checkpoints.forEach((checkpoint) => {
+            const newCheckpoint = Checkpoint.create({
+              ...checkpoint,
+              user: req.session.userId,
+            });
+          });
+        }
+      }
+    }
+
+    return checkpoints.getMany();
   }
 
   @Query(() => Checkpoint, { nullable: true })

@@ -3,6 +3,10 @@ query Step($slug: String!) {
     id
     instructions
     position
+    slug
+    nextSlug
+    prevSlug
+    start
     title
     checkpoints {
       description

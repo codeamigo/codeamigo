@@ -1,0 +1,7 @@
+query Checkpoints($stepId: String!) {
+  checkpoints(stepId: $stepId) {
+    isCompleted
+    matchRegex
+    description
+  }
+}

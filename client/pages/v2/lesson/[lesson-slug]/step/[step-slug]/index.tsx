@@ -28,6 +28,8 @@ import {
   LessonDocument,
   Step,
   StepDocument,
+  useCheckpointsQuery,
+  useMeQuery,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
@@ -363,10 +365,8 @@ const steps: StepLocal[] = [
 function MonacoEditor({
   checkpoints,
   currentCheckpoint,
-  currentStep,
   files,
   hoverSelection,
-  instructions,
   isStepComplete,
   leftPanelHeight,
   onReady,
@@ -376,17 +376,16 @@ function MonacoEditor({
   setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
+  step,
 }: {
   checkpoints: Checkpoint[];
   currentCheckpoint: number;
-  currentStep: number;
   files: {
     [key: string]: {
       code: string;
     };
   };
   hoverSelection: string | null;
-  instructions: string;
   isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
@@ -395,7 +394,7 @@ function MonacoEditor({
   onReady: () => void;
   setCheckpoints: Dispatch<SetStateAction<Checkpoint[]>>;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
-  setCurrentStep: Dispatch<SetStateAction<number>>;
+  setCurrentStep: Dispatch<SetStateAction<string>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
   setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
@@ -404,6 +403,7 @@ function MonacoEditor({
       instructions: string;
     }>
   >;
+  step: Step;
 }) {
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
@@ -439,11 +439,11 @@ function MonacoEditor({
 
   useEffect(() => {
     setFull(false);
-  }, [currentStep]);
+  }, [step.id]);
 
   useEffect(() => {
     setNextLoader(false);
-  }, [currentStep]);
+  }, [step.id]);
 
   useEffect(() => {
     if (monacoRef.current) {
@@ -453,7 +453,7 @@ function MonacoEditor({
       setupModels();
       setupStart();
     }
-  }, [currentStep]);
+  }, [step.id]);
 
   useEffect(() => {
     if (!monacoRef.current) return;
@@ -483,7 +483,7 @@ function MonacoEditor({
     const prompt =
       'Only respond with code that follows the instructions.\n' +
       'Instructions: ' +
-      instructions +
+      step.instructions +
       '\n' +
       `${
         checkpoints[currentCheckpoint]?.matchRegex
@@ -538,7 +538,7 @@ function MonacoEditor({
         }
       } else {
         const nextCheckpoint = checkpoints.findIndex(
-          (checkpoint: any) => !checkpoint.passed
+          (checkpoint) => !checkpoint.isCompleted
         );
         setCurrentCheckpoint(nextCheckpoint);
       }
@@ -623,7 +623,7 @@ function MonacoEditor({
   const setupStart = () => {
     const match = editorRef.current
       .getModel()
-      .findMatches(steps[currentStep].start, true, false, false, null, true)[0];
+      .findMatches(step.start, true, false, false, null, true)[0];
 
     if (!match) return;
     editorRef.current.setPosition(match.range.getEndPosition());
@@ -714,7 +714,6 @@ function MonacoEditor({
     >
       <Checkpoints checkpoints={checkpoints} />
       <StepActions
-        currentStep={currentStep}
         disabled={!isStepComplete}
         isAutoPlayEnabled={isAutoPlayEnabled}
         isCompletionEnabled={isCompletionEnabled}
@@ -722,6 +721,7 @@ function MonacoEditor({
         setCurrentStep={setCurrentStep}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
+        step={step}
         steps={steps.length}
       />
       <FileTabs />
@@ -770,7 +770,7 @@ const Markdown = ({
   leftPanelHeight,
   setLeftPanelHeight,
 }: {
-  currentStep: number;
+  currentStep: string;
   instructions: string;
   leftPanelHeight: {
     editor: string;
@@ -852,13 +852,7 @@ const Checkpoints = ({ checkpoints }: { checkpoints: Checkpoint[] }) => {
   );
 };
 
-const ChatBot = ({
-  currentStep,
-  hoverSelection,
-}: {
-  currentStep: number;
-  hoverSelection: string | null;
-}) => {
+const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
   const [responses, setResponses] = useState<
@@ -1035,7 +1029,7 @@ const ChatBot = ({
                       name="cog"
                     />
                   ) : null}
-                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {/* <div className="mt-2 flex flex-wrap items-center gap-2">
                     {steps[currentStep].questions.map((question) => {
                       return (
                         <pre
@@ -1049,7 +1043,7 @@ const ChatBot = ({
                         </pre>
                       );
                     })}
-                  </div>
+                  </div> */}
                 </Form>
               )}
             </Formik>
@@ -1089,8 +1083,8 @@ const ProgressBar = ({
   step,
   steps,
 }: {
-  currentStep: number;
-  setCurrentStep: Dispatch<SetStateAction<number>>;
+  currentStep: string;
+  setCurrentStep: Dispatch<SetStateAction<string>>;
   step: Step;
   steps?: number;
 }) => {
@@ -1100,7 +1094,7 @@ const ProgressBar = ({
       className="flex cursor-pointer items-center gap-2 text-xs font-light"
       onClick={() => {
         modalVar({
-          callback: (step: number) => {
+          callback: (step: string) => {
             setCurrentStep(step);
           },
           data: { currentStep, steps, title: 'Intro to Codeamigo' },
@@ -1112,7 +1106,7 @@ const ProgressBar = ({
       <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
-          style={{ width: `${((currentStep + 1) / steps) * 100}%` }}
+          style={{ width: `${(((step.position || 0) + 1) / steps) * 100}%` }}
         />
       </div>
       <div className="text-xs text-white">
@@ -1141,7 +1135,7 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(step?.slug as string);
   const [currentCheckpoint, setCurrentCheckpoint] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
@@ -1151,6 +1145,13 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
   const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(
     step?.checkpoints as Checkpoint[]
   );
+  const { data } = useMeQuery();
+  const { data: checkTest } = useCheckpointsQuery({
+    variables: {
+      stepId: step?.id as string,
+    },
+  });
+  console.log(checkTest);
 
   // HIGH DEMAND
   // useEffect(() => {
@@ -1232,6 +1233,28 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
             steps={lesson?.steps?.length}
           />
           {/* <Credits /> */}
+          <div className="relative">
+            {data?.me ? (
+              <div className="absolute right-[0px] top-[0px] flex h-[6px] w-[6px] items-center justify-center rounded-full bg-green-900">
+                <div className="h-[4px] w-[4px] rounded-full bg-green-500" />
+              </div>
+            ) : (
+              <div className="absolute right-[0px] top-[0px] flex h-[6px] w-[6px] items-center justify-center rounded-full bg-red-900">
+                <div className="h-[4px] w-[4px] rounded-full bg-red-500" />
+              </div>
+            )}
+            <Icon
+              className="text-neutral-300 transition-colors hover:text-white"
+              name="user"
+              onClick={() => {
+                modalVar({
+                  callback: () => null,
+                  name: 'login',
+                  persistent: false,
+                });
+              }}
+            />
+          </div>
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
@@ -1249,12 +1272,9 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
                 <MonacoEditor
                   checkpoints={checkpoints as Checkpoint[]}
                   currentCheckpoint={currentCheckpoint}
-                  currentStep={currentStep}
                   files={files}
                   hoverSelection={hoverSelection}
-                  instructions={step?.instructions as string}
                   isStepComplete={isStepComplete}
-                  key={step?.id}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
                   setCheckpoints={setCheckpoints}
@@ -1263,6 +1283,7 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
                   setHoverSelection={setHoverSelection}
                   setIsStepComplete={setIsStepComplete}
                   setLeftPanelHeight={setLeftPanelHeight}
+                  step={step as Step}
                 />
               </SandpackStack>
               <SandpackStack className="!h-full">
@@ -1277,10 +1298,7 @@ const V2Lesson = ({ files, lesson, step }: Props) => {
                 </Button>
                 <SandpackPreview className="!h-0" />
                 <SandpackConsole className="overflow-scroll" />
-                <ChatBot
-                  currentStep={currentStep}
-                  hoverSelection={hoverSelection}
-                />
+                <ChatBot hoverSelection={hoverSelection} />
               </SandpackStack>
             </SandpackLayout>
           </SandpackProvider>

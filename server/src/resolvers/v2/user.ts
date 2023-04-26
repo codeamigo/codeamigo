@@ -96,7 +96,7 @@ export class UserResolver {
       return null;
     }
 
-    return await User.findOne(req.session.userId, { relations: ['lessons'] });
+    return await User.findOne(req.session.userId);
   }
 
   @Mutation(() => Boolean)
@@ -104,9 +104,7 @@ export class UserResolver {
   async deleteUser(@Ctx() ctx: MyContext): Promise<boolean> {
     try {
       const id = ctx.req.session.userId;
-      const user = await User.findOne(id, {
-        relations: ['lessons'],
-      });
+      const user = await User.findOne(id);
 
       if (!user) {
         return false;

@@ -43,6 +43,12 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   slug: string;
 
+  @Field(() => String, { nullable: true })
+  nextSlug: string;
+
+  @Field(() => String, { nullable: true })
+  prevSlug: string;
+
   @Field(() => String, { defaultValue: `` })
   @Column()
   instructions!: string;

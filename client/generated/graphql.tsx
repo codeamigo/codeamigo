@@ -221,6 +221,8 @@ export type Step = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   slug: Scalars['String'];
+  nextSlug?: Maybe<Scalars['String']>;
+  prevSlug?: Maybe<Scalars['String']>;
   instructions?: Maybe<Scalars['String']>;
   isCompleted?: Maybe<Scalars['Boolean']>;
   position?: Maybe<Scalars['Float']>;
@@ -397,6 +399,19 @@ export type RegisterMutation = (
   ) }
 );
 
+export type CheckpointsQueryVariables = Exact<{
+  stepId: Scalars['String'];
+}>;
+
+
+export type CheckpointsQuery = (
+  { __typename?: 'Query' }
+  & { checkpoints: Array<(
+    { __typename?: 'Checkpoint' }
+    & Pick<Checkpoint, 'isCompleted' | 'matchRegex' | 'description'>
+  )> }
+);
+
 export type CodeModulesQueryVariables = Exact<{
   stepId: Scalars['String'];
 }>;
@@ -458,7 +473,7 @@ export type StepQuery = (
   { __typename?: 'Query' }
   & { step?: Maybe<(
     { __typename?: 'Step' }
-    & Pick<Step, 'id' | 'instructions' | 'position' | 'title'>
+    & Pick<Step, 'id' | 'instructions' | 'position' | 'slug' | 'nextSlug' | 'prevSlug' | 'start' | 'title'>
     & { checkpoints?: Maybe<Array<(
       { __typename?: 'Checkpoint' }
       & Pick<Checkpoint, 'description' | 'matchRegex' | 'isCompleted'>
@@ -752,6 +767,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CheckpointsDocument = gql`
+    query Checkpoints($stepId: String!) {
+  checkpoints(stepId: $stepId) {
+    isCompleted
+    matchRegex
+    description
+  }
+}
+    `;
+
+/**
+ * __useCheckpointsQuery__
+ *
+ * To run a query within a React component, call `useCheckpointsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckpointsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckpointsQuery({
+ *   variables: {
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useCheckpointsQuery(baseOptions: Apollo.QueryHookOptions<CheckpointsQuery, CheckpointsQueryVariables>) {
+        return Apollo.useQuery<CheckpointsQuery, CheckpointsQueryVariables>(CheckpointsDocument, baseOptions);
+      }
+export function useCheckpointsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckpointsQuery, CheckpointsQueryVariables>) {
+          return Apollo.useLazyQuery<CheckpointsQuery, CheckpointsQueryVariables>(CheckpointsDocument, baseOptions);
+        }
+export type CheckpointsQueryHookResult = ReturnType<typeof useCheckpointsQuery>;
+export type CheckpointsLazyQueryHookResult = ReturnType<typeof useCheckpointsLazyQuery>;
+export type CheckpointsQueryResult = Apollo.QueryResult<CheckpointsQuery, CheckpointsQueryVariables>;
 export const CodeModulesDocument = gql`
     query CodeModules($stepId: String!) {
   codeModules(stepId: $stepId) {
@@ -897,6 +947,10 @@ export const StepDocument = gql`
     id
     instructions
     position
+    slug
+    nextSlug
+    prevSlug
+    start
     title
     checkpoints {
       description

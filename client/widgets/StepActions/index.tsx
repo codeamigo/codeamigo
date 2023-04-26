@@ -4,26 +4,26 @@ import React, { useEffect, useState } from 'react';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import Toggle from '👨‍💻components/Toggle';
+import { Step } from '👨‍💻generated/graphql';
 
 const StepActions: React.FC<Props> = ({
-  currentStep,
   disabled,
   isAutoPlayEnabled,
   isCompletionEnabled,
   nextLoader,
-  setCurrentStep,
   setIsAutoPlayEnabled,
   setIsCompletionEnabled,
+  step,
   steps,
 }) => {
-  const nextDisabled = currentStep === steps - 1 || disabled;
-  const isLastStep = currentStep === steps - 1;
+  const isLastStep = !step.nextSlug;
+  const nextDisabled = isLastStep || disabled;
   const [loaderWidth, setLoaderWidth] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     setLoaderWidth(0);
-  }, [currentStep]);
+  }, [step.id]);
 
   useEffect(() => {
     let interval: any;
@@ -87,9 +87,9 @@ const StepActions: React.FC<Props> = ({
         ) : (
           <div className="flex items-center gap-2">
             <Button
-              // disabled={currentStep === 0}
+              disabled={step.position === 0}
               onClick={() => {
-                router.push('/v2/lesson/intro-to-js/step/comment');
+                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
               }}
             >
               Prev
@@ -99,7 +99,7 @@ const StepActions: React.FC<Props> = ({
               disabled={nextDisabled}
               id="next-button"
               onClick={() => {
-                router.push('/v2/lesson/intro-to-js/step/console-log');
+                router.push(`/v2/lesson/intro-to-js/step/${step.nextSlug}`);
               }}
             >
               <span className="relative z-10">Next</span>
@@ -125,14 +125,14 @@ const StepActions: React.FC<Props> = ({
 };
 
 type Props = {
-  currentStep: number;
   disabled: boolean;
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
   nextLoader: boolean;
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
+  step: Step;
   steps: number;
 };
 

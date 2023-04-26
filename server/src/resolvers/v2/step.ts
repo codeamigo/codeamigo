@@ -12,7 +12,7 @@ export class StepResolver {
   @Query(() => Step, { nullable: true })
   async step(
     @Arg('slug', () => String) slug: string
-  ): Promise<Step | undefined> {
+  ): Promise<(Step & { nextSlug: string; prevSlug: string }) | undefined> {
     const step = await Step.createQueryBuilder()
       .where('Step.slug = :slug', { slug })
       .leftJoinAndSelect('Step.lesson', 'lesson')
@@ -25,10 +25,31 @@ export class StepResolver {
       return undefined;
     }
 
+    const nextStep = await Step.createQueryBuilder()
+      .where('Step.lessonId = :lessonId', { lessonId: step.lesson.id })
+      .andWhere('Step.position > :position', { position: step.position })
+      .orderBy('Step.position', 'ASC')
+      .addOrderBy('Step.createdAt', 'ASC')
+      .getOne();
+
+    const prevStep = await Step.createQueryBuilder()
+      .where('Step.lessonId = :lessonId', { lessonId: step.lesson.id })
+      .andWhere('Step.position < :position', { position: step.position })
+      .orderBy('Step.position', 'DESC')
+      .addOrderBy('Step.createdAt', 'DESC')
+      .getOne();
+
     // BUG: typeorm escapes backslashes
     // change \\n in step.instructions
     step.instructions = step.instructions.replace(/\\n/g, '\n');
 
-    return step;
+    return {
+      ...step,
+      nextSlug: nextStep?.slug,
+      prevSlug: prevStep?.slug,
+    } as Step & {
+      nextSlug: string;
+      prevSlug: string;
+    };
   }
 }
