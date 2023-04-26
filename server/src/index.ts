@@ -42,10 +42,10 @@ const main = async () => {
   app.use(
     cors({
       credentials: false,
-      // origin: [
-      //   process.env.CORS_ORIGIN,
-      //   'https://studio.apollographql.com/sandbox/explorer',
-      // ],
+      origin: [
+        process.env.CORS_ORIGIN,
+        'https://studio.apollographql.com/sandbox/explorer',
+      ],
     })
   );
 

@@ -1,3 +1,0 @@
-mutation DeleteCodeModule($uuid: String!) {
-  deleteCodeModule(uuid: $uuid)
-}

@@ -10,9 +10,11 @@ export class StepResolver {
   }
 
   @Query(() => Step, { nullable: true })
-  async step(@Arg('id', () => String) id: string): Promise<Step | undefined> {
+  async step(
+    @Arg('slug', () => String) slug: string
+  ): Promise<Step | undefined> {
     const step = await Step.createQueryBuilder()
-      .where('Step.id = :id', { id })
+      .where('Step.slug = :slug', { slug })
       .leftJoinAndSelect('Step.lesson', 'lesson')
       .leftJoinAndSelect('Step.codeModules', 'codeModules')
       .leftJoinAndSelect('Step.checkpoints', 'checkpoints')
@@ -22,6 +24,10 @@ export class StepResolver {
     if (!step) {
       return undefined;
     }
+
+    // BUG: typeorm escapes backslashes
+    // change \\n in step.instructions
+    step.instructions = step.instructions.replace(/\\n/g, '\n');
 
     return step;
   }

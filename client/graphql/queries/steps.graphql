@@ -1,5 +1,0 @@
-query Steps {
-  steps {
-    ...RegularStep
-  }
-}

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import Button from '👨‍💻components/Button';
@@ -18,6 +19,7 @@ const StepActions: React.FC<Props> = ({
   const nextDisabled = currentStep === steps - 1 || disabled;
   const isLastStep = currentStep === steps - 1;
   const [loaderWidth, setLoaderWidth] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
     setLoaderWidth(0);
@@ -85,8 +87,10 @@ const StepActions: React.FC<Props> = ({
         ) : (
           <div className="flex items-center gap-2">
             <Button
-              disabled={currentStep === 0}
-              onClick={() => setCurrentStep(currentStep - 1)}
+              // disabled={currentStep === 0}
+              onClick={() => {
+                router.push('/v2/lesson/intro-to-js/step/comment');
+              }}
             >
               Prev
             </Button>
@@ -94,7 +98,9 @@ const StepActions: React.FC<Props> = ({
               className="relative overflow-hidden"
               disabled={nextDisabled}
               id="next-button"
-              onClick={() => setCurrentStep(currentStep + 1)}
+              onClick={() => {
+                router.push('/v2/lesson/intro-to-js/step/console-log');
+              }}
             >
               <span className="relative z-10">Next</span>
               {nextLoader && (

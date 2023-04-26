@@ -1,0 +1,13 @@
+query Step($slug: String!) {
+  step(slug: $slug) {
+    id
+    instructions
+    position
+    title
+    checkpoints {
+      description
+      matchRegex
+      isCompleted
+    }
+  }
+}

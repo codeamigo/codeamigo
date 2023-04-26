@@ -2,20 +2,14 @@ import { makeVar } from '@apollo/client';
 
 export type ModalNameType =
   | 'changePassword'
-  | 'createLesson'
-  | 'donate'
-  | 'donationSuccess'
-  | 'donationFailure'
   | 'highDemand'
-  | 'lessonFinished'
   | 'login'
   | 'register'
   | 'registerAfterPreview'
   | 'resetPasswordSent'
   | 'mobileWarning'
   | 'steps'
-  | 'testsPassed'
-  | 'updateSession';
+  | 'testsPassed';
 export type ModalType = {
   callback: Function;
   data?: any;

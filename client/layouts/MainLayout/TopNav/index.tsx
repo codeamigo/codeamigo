@@ -2,16 +2,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { Logo } from '👨‍💻components/Logos';
-import UserMenu from '👨‍💻widgets/UserMenu';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();
-
-  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className="relative z-50">

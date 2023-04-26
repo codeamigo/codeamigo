@@ -1,9 +1,0 @@
-query Me {
-  me {
-    ...RegularUser
-  }
-}
-
-query ProfileColorScheme($id: Float) {
-  profileColorScheme(id: $id)
-}

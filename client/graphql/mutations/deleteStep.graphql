@@ -1,3 +1,0 @@
-mutation DeleteStep($id: Float!, $lessonId: Float!) {
-  deleteStep(options: { id: $id, lessonId: $lessonId })
-}

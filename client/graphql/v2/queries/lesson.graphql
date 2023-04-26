@@ -1,0 +1,11 @@
+query Lesson($slug: String!) {
+  lesson(slug: $slug) {
+    id
+    description
+    thumbnail
+    title
+    steps {
+      slug
+    }
+  }
+}

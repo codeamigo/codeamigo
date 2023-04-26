@@ -1,6 +1,0 @@
-fragment RegularCodeModule on CodeModule {
-  uuid
-  isEntry
-  name
-  value
-}

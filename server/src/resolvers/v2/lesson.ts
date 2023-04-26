@@ -11,10 +11,10 @@ export class LessonResolver {
 
   @Query(() => Lesson, { nullable: true })
   async lesson(
-    @Arg('id', () => String) id: string
+    @Arg('slug', () => String) slug: string
   ): Promise<Lesson | undefined> {
     const lesson = await Lesson.createQueryBuilder()
-      .where('Lesson.id = :id', { id })
+      .where('Lesson.slug = :slug', { slug })
       .leftJoinAndSelect('Lesson.steps', 'steps')
       .orderBy('steps.position', 'ASC')
       .addOrderBy('steps.createdAt', 'ASC')

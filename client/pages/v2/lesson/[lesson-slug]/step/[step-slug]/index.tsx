@@ -12,6 +12,7 @@ import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import React from 'react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
 import ReactMarkdown from 'react-markdown';
@@ -21,10 +22,21 @@ import debounce from 'utils/debounce';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
+import {
+  Checkpoint,
+  CodeModulesDocument,
+  LessonDocument,
+  Step,
+  StepDocument,
+} from '👨‍💻generated/graphql';
+import { LessonQuery } from '👨‍💻generated/graphql';
+import { StepQuery } from '👨‍💻generated/graphql';
+import { Maybe } from '👨‍💻generated/graphql';
+import { client } from '👨‍💻utils/withApollo';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 import StepActions from '👨‍💻widgets/StepActions';
 
-import * as hal from '../../assets/hal.png';
+import * as hal from '../../../../../../assets/hal.png';
 
 const URN = 'urn:';
 
@@ -40,7 +52,7 @@ const defaultQuestions = [
   "Why isn't my code accepted?",
 ];
 
-export type Step = {
+export type StepLocal = {
   checkpoints: {
     message: string;
     passed: boolean;
@@ -57,7 +69,7 @@ export type Step = {
   title: string;
 };
 
-const steps: Step[] = [
+const steps: StepLocal[] = [
   {
     checkpoints: [
       {
@@ -349,29 +361,39 @@ const steps: Step[] = [
 ];
 
 function MonacoEditor({
+  checkpoints,
   currentCheckpoint,
   currentStep,
   files,
   hoverSelection,
+  instructions,
   isStepComplete,
   leftPanelHeight,
   onReady,
+  setCheckpoints,
   setCurrentCheckpoint,
   setCurrentStep,
   setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
 }: {
+  checkpoints: Checkpoint[];
   currentCheckpoint: number;
   currentStep: number;
-  files: any;
+  files: {
+    [key: string]: {
+      code: string;
+    };
+  };
   hoverSelection: string | null;
+  instructions: string;
   isStepComplete: boolean;
   leftPanelHeight: {
     editor: string;
     instructions: string;
   };
   onReady: () => void;
+  setCheckpoints: Dispatch<SetStateAction<Checkpoint[]>>;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
   setCurrentStep: Dispatch<SetStateAction<number>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
@@ -461,13 +483,13 @@ function MonacoEditor({
     const prompt =
       'Only respond with code that follows the instructions.\n' +
       'Instructions: ' +
-      steps[currentStep].instructions +
+      instructions +
       '\n' +
       `${
-        steps[currentStep].checkpoints[currentCheckpoint]?.test
+        checkpoints[currentCheckpoint]?.matchRegex
           ? '\n' +
             'Satisfy Regex: ' +
-            steps[currentStep].checkpoints[currentCheckpoint]?.test
+            checkpoints[currentCheckpoint]?.matchRegex
           : ''
       }` +
       lines.join('\n').split('[insert]')[0];
@@ -500,22 +522,22 @@ function MonacoEditor({
   const debouncedUpdatePrompt = debounce(updatePrompt, 100);
 
   const testCheckpoint = (value: string) => {
-    const checkpoint = steps[currentStep].checkpoints[currentCheckpoint];
-    const test = checkpoint?.test;
+    const checkpoint = checkpoints[currentCheckpoint];
+    const test = checkpoint?.matchRegex as string;
     const regex = new RegExp(test);
     let allPassed;
-    if (regex.test(value) && checkpoint && checkpoint.passed === false) {
-      steps[currentStep].checkpoints[currentCheckpoint].passed = true;
-      allPassed = steps[currentStep].checkpoints.every(
-        (checkpoint: any) => checkpoint.passed
-      );
+
+    if (regex.test(value) && checkpoint && checkpoint.isCompleted === false) {
+      checkpoints[currentCheckpoint].isCompleted = true;
+      setCheckpoints(() => checkpoints);
+      allPassed = checkpoints.every((checkpoint) => checkpoint.isCompleted);
       if (allPassed) {
         setIsStepComplete(true);
         if (isAutoPlayEnabledRef.current) {
           setNextLoader(true);
         }
       } else {
-        const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
+        const nextCheckpoint = checkpoints.findIndex(
           (checkpoint: any) => !checkpoint.passed
         );
         setCurrentCheckpoint(nextCheckpoint);
@@ -690,7 +712,7 @@ function MonacoEditor({
       className="relative z-30 transition-all"
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
-      <Checkpoints currentStep={currentStep} />
+      <Checkpoints checkpoints={checkpoints} />
       <StepActions
         currentStep={currentStep}
         disabled={!isStepComplete}
@@ -744,10 +766,12 @@ function MonacoEditor({
 
 const Markdown = ({
   currentStep,
+  instructions,
   leftPanelHeight,
   setLeftPanelHeight,
 }: {
   currentStep: number;
+  instructions: string;
   leftPanelHeight: {
     editor: string;
     instructions: string;
@@ -781,7 +805,7 @@ const Markdown = ({
       style={{ height: `${leftPanelHeight.instructions}` }}
     >
       <ReactMarkdown
-        children={steps[currentStep].instructions}
+        children={instructions as string}
         className="markdown-body h-full overflow-scroll border-b border-neutral-800 px-3 py-2"
         plugins={[gfm]}
       />
@@ -794,32 +818,32 @@ const Markdown = ({
   );
 };
 
-const Checkpoints = ({ currentStep }: { currentStep: number }) => {
+const Checkpoints = ({ checkpoints }: { checkpoints: Checkpoint[] }) => {
   return (
     <div>
-      {steps[currentStep].checkpoints?.map((checkpoint) => {
+      {checkpoints?.map((checkpoint) => {
         return (
           <div
             className="relative z-20 flex items-center gap-2 border-b border-neutral-800 bg-black p-2 px-3"
-            key={checkpoint.message}
+            key={checkpoint.description}
           >
             <div
               className={`flex h-4 min-h-[1rem] w-4 min-w-[1rem] items-center justify-center rounded-full border ${
-                checkpoint.passed
+                checkpoint.isCompleted
                   ? 'border-green-500 bg-green-900'
                   : 'border-neutral-500 bg-black'
               }`}
             >
               <Icon
                 className={`text-xxs ${
-                  checkpoint.passed ? `text-green-500` : 'text-neutral-500'
+                  checkpoint.isCompleted ? `text-green-500` : 'text-neutral-500'
                 }`}
                 // @ts-ignore
-                name={checkpoint.passed ? 'check' : ''}
+                name={checkpoint.isCompleted ? 'check' : ''}
               />
             </div>
             <pre className="whitespace-normal text-white">
-              {checkpoint.message}
+              {checkpoint.description}
             </pre>
           </div>
         );
@@ -1062,10 +1086,15 @@ const ChatBot = ({
 const ProgressBar = ({
   currentStep,
   setCurrentStep,
+  step,
+  steps,
 }: {
   currentStep: number;
   setCurrentStep: Dispatch<SetStateAction<number>>;
+  step: Step;
+  steps?: number;
 }) => {
+  if (typeof steps === 'undefined') return null;
   return (
     <div
       className="flex cursor-pointer items-center gap-2 text-xs font-light"
@@ -1083,15 +1112,12 @@ const ProgressBar = ({
       <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
-          style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+          style={{ width: `${((currentStep + 1) / steps) * 100}%` }}
         />
       </div>
       <div className="text-xs text-white">
         {/* percent completed */}
-        <pre>
-          Step{' '}
-          {`${currentStep + 1}/${steps.length} ${steps[currentStep].title}`}
-        </pre>
+        <pre>Step {`${step.position}/${steps} ${step.title}`}</pre>
       </div>
     </div>
   );
@@ -1111,7 +1137,7 @@ const Credits = () => {
   );
 };
 
-const V2 = () => {
+const V2Lesson = ({ files, lesson, step }: Props) => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
@@ -1122,6 +1148,9 @@ const V2 = () => {
   );
   const [isStepComplete, setIsStepComplete] = useState(false);
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
+  const [checkpoints, setCheckpoints] = useState<Checkpoint[]>(
+    step?.checkpoints as Checkpoint[]
+  );
 
   // HIGH DEMAND
   // useEffect(() => {
@@ -1145,25 +1174,29 @@ const V2 = () => {
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
-  }, [currentStep]);
+  }, [step?.id]);
 
   useEffect(() => {
     const allPassed =
-      steps[currentStep].checkpoints.every((checkpoint) => checkpoint.passed) ||
-      !steps[currentStep].checkpoints.length;
+      checkpoints?.every((checkpoint) => checkpoint.isCompleted) ||
+      !checkpoints?.length;
     setIsStepComplete(allPassed);
-  }, [currentStep]);
+  }, [step?.id]);
 
   useEffect(() => {
-    const nextCheckpoint = steps[currentStep].checkpoints.findIndex(
-      (checkpoint) => {
-        return !checkpoint.passed;
-      }
-    );
-    if (nextCheckpoint !== -1) {
+    const nextCheckpoint = checkpoints?.findIndex((checkpoint) => {
+      return !checkpoint.isCompleted;
+    });
+    if (nextCheckpoint && nextCheckpoint !== -1) {
       setCurrentCheckpoint(nextCheckpoint);
     }
-  }, [currentStep]);
+  }, [step?.id]);
+
+  useEffect(() => {
+    if (step?.checkpoints) {
+      setCheckpoints(step?.checkpoints as Checkpoint[]);
+    }
+  }, [step?.id]);
 
   useEffect(() => {
     let timeout: any;
@@ -1195,6 +1228,8 @@ const V2 = () => {
           <ProgressBar
             currentStep={currentStep}
             setCurrentStep={setCurrentStep}
+            step={step as Step}
+            steps={lesson?.steps?.length}
           />
           {/* <Credits /> */}
         </div>
@@ -1202,26 +1237,27 @@ const V2 = () => {
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
           style={{ width: '100%' }}
         >
-          <SandpackProvider
-            files={steps[currentStep].files}
-            template="vanilla"
-            theme={'dark'}
-          >
+          <SandpackProvider files={files} template="vanilla" theme={'dark'}>
             <SandpackLayout>
               <SandpackStack className="editor-instructions-container !h-full">
                 <Markdown
                   currentStep={currentStep}
+                  instructions={step?.instructions as string}
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
                 />
                 <MonacoEditor
+                  checkpoints={checkpoints as Checkpoint[]}
                   currentCheckpoint={currentCheckpoint}
                   currentStep={currentStep}
-                  files={steps[currentStep].files}
+                  files={files}
                   hoverSelection={hoverSelection}
+                  instructions={step?.instructions as string}
                   isStepComplete={isStepComplete}
+                  key={step?.id}
                   leftPanelHeight={leftPanelHeight}
                   onReady={() => setEditorReady(true)}
+                  setCheckpoints={setCheckpoints}
                   setCurrentCheckpoint={setCurrentCheckpoint}
                   setCurrentStep={setCurrentStep}
                   setHoverSelection={setHoverSelection}
@@ -1272,4 +1308,51 @@ const V2 = () => {
   );
 };
 
-export default V2;
+type Props = {
+  files: {
+    [key: string]: {
+      code: string;
+    };
+  };
+  lesson: LessonQuery['lesson'];
+  step: StepQuery['step'];
+};
+
+export async function getServerSideProps(context: {
+  params: { 'lesson-slug': string; 'step-slug': string };
+}) {
+  const lessonSlug = context.params['lesson-slug'];
+  const stepSlug = context.params['step-slug'];
+
+  const lesson = await client.query({
+    query: LessonDocument,
+    variables: { slug: lessonSlug },
+  });
+  const step = await client.query({
+    query: StepDocument,
+    variables: { slug: stepSlug },
+  });
+  const codeModules = await client.query({
+    query: CodeModulesDocument,
+    variables: { stepId: step.data.step.id },
+  });
+  const files = codeModules.data.codeModules.reduce(
+    (acc: any, codeModule: any) => {
+      acc[codeModule.name] = {
+        code: codeModule.code.replace(/\\n/g, '\n'),
+      };
+      return acc;
+    },
+    {}
+  );
+
+  return {
+    props: {
+      files,
+      lesson: lesson.data.lesson,
+      step: step.data.step,
+    },
+  };
+}
+
+export default V2Lesson;

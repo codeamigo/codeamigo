@@ -1,14 +1,8 @@
 import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
-import Icon from '👨‍💻components/Icon';
 import ChangePassword from '👨‍💻modals/ChangePassword';
-import CreateLesson from '👨‍💻modals/CreateLesson';
-import Donate from '👨‍💻modals/Donate';
-import DonationFailure from '👨‍💻modals/DonationFailure';
-import DonationSuccess from '👨‍💻modals/DonationSuccess';
 import HighDemand from '👨‍💻modals/HighDemand';
-import LessonFinished from '👨‍💻modals/LessonFinished';
 import Login from '👨‍💻modals/Login';
 import MobileWarning from '👨‍💻modals/MobileWarning';
 import Register from '👨‍💻modals/Register';
@@ -16,7 +10,6 @@ import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
 import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
 import Steps from '👨‍💻modals/Steps';
 import TestsPassed from '👨‍💻modals/TestsPassed';
-import UpdateSession from '👨‍💻modals/UpdateSession';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
@@ -103,11 +96,6 @@ const Modals: React.FC<Props> = () => {
           </div> */}
           {/* eslint-disable */}
           {data?.modal?.name === 'changePassword' && <ChangePassword />}
-          {data?.modal?.name === 'createLesson' && <CreateLesson />}
-          {data?.modal?.name === 'donate' && <Donate />}
-          {data?.modal?.name === 'donationSuccess' && <DonationSuccess />}
-          {data?.modal?.name === 'donationFailure' && <DonationFailure />}
-          {data?.modal?.name === 'lessonFinished' && <LessonFinished />}
           {data?.modal?.name === 'login' && <Login />}
           {data?.modal?.name === 'register' && <Register />}
           {data?.modal?.name === 'registerAfterPreview' && (
@@ -115,7 +103,6 @@ const Modals: React.FC<Props> = () => {
           )}
           {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
           {data?.modal?.name === 'testsPassed' && <TestsPassed />}
-          {data?.modal?.name === 'updateSession' && <UpdateSession />}
           {data?.modal?.name === 'highDemand' && <HighDemand />}
           {data?.modal?.name === 'mobileWarning' && <MobileWarning />}
           {data?.modal?.name === 'steps' && <Steps />}
