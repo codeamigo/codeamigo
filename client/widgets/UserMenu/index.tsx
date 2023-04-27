@@ -38,7 +38,9 @@ const UserMenu: React.FC<Props> = () => {
       role="button"
     >
       {data?.me?.username ? (
-        <pre className="text-[10px]">{data.me.username}</pre>
+        <pre className="hidden text-[10px] sm:inline-block">
+          {data.me.username}
+        </pre>
       ) : null}
       <Icon className="" name="user" />
       {data?.me ? (
