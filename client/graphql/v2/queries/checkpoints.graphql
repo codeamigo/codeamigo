@@ -4,5 +4,8 @@ query Checkpoints($stepId: String!) {
     isCompleted
     matchRegex
     description
+    step {
+      slug
+    }
   }
 }

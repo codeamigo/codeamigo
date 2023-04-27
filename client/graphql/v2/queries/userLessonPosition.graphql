@@ -1,0 +1,7 @@
+query UserLessonPosition($lessonId: String!) {
+  userLessonPosition(lessonId: $lessonId) {
+    id
+    lastSlugSeen
+    currentPosition
+  }
+}

@@ -111,6 +111,9 @@ export type Mutation = {
   changePasswordFromToken: UserResponse;
   changePasswordFromPassword: UserResponse;
   changeEmail: UserResponse;
+  updateUserLessonCurrentPosition: UserLessonPosition;
+  updateUserLessonLastSlugSeen: UserLessonPosition;
+  createUserLessonPosition: UserLessonPosition;
 };
 
 
@@ -187,6 +190,23 @@ export type MutationChangeEmailArgs = {
   newEmail: Scalars['String'];
 };
 
+
+export type MutationUpdateUserLessonCurrentPositionArgs = {
+  currentPosition: Scalars['Float'];
+  lessonId: Scalars['String'];
+};
+
+
+export type MutationUpdateUserLessonLastSlugSeenArgs = {
+  lastSlugSeen: Scalars['String'];
+  lessonId: Scalars['String'];
+};
+
+
+export type MutationCreateUserLessonPositionArgs = {
+  lessonId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   checkpoint?: Maybe<Checkpoint>;
@@ -198,6 +218,7 @@ export type Query = {
   modal?: Maybe<Modal>;
   step?: Maybe<Step>;
   steps: Array<Step>;
+  userLessonPosition?: Maybe<UserLessonPosition>;
   users?: Maybe<Array<User>>;
 };
 
@@ -224,6 +245,11 @@ export type QueryLessonArgs = {
 
 export type QueryStepArgs = {
   slug: Scalars['String'];
+};
+
+
+export type QueryUserLessonPositionArgs = {
+  lessonId: Scalars['String'];
 };
 
 export type Question = {
@@ -282,6 +308,17 @@ export type User = {
   role: Role;
   updatedAt: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type UserLessonPosition = {
+  __typename?: 'UserLessonPosition';
+  id: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  lastSlugSeen: Scalars['String'];
+  currentPosition: Scalars['Float'];
+  lessonId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -465,6 +502,34 @@ export type UpdateCodeModuleMutation = (
   ) }
 );
 
+export type UpdateUserLessonCurrentPositionMutationVariables = Exact<{
+  lessonId: Scalars['String'];
+  currentPosition: Scalars['Float'];
+}>;
+
+
+export type UpdateUserLessonCurrentPositionMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserLessonCurrentPosition: (
+    { __typename?: 'UserLessonPosition' }
+    & Pick<UserLessonPosition, 'lessonId' | 'lastSlugSeen' | 'currentPosition'>
+  ) }
+);
+
+export type UpdateUserLessonLastSlugSeenMutationVariables = Exact<{
+  lessonId: Scalars['String'];
+  lastSlugSeen: Scalars['String'];
+}>;
+
+
+export type UpdateUserLessonLastSlugSeenMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserLessonLastSlugSeen: (
+    { __typename?: 'UserLessonPosition' }
+    & Pick<UserLessonPosition, 'lessonId' | 'lastSlugSeen' | 'currentPosition'>
+  ) }
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['String'];
 }>;
@@ -475,6 +540,10 @@ export type CheckpointsQuery = (
   & { checkpoints: Array<(
     { __typename?: 'Checkpoint' }
     & Pick<Checkpoint, 'id' | 'isCompleted' | 'matchRegex' | 'description'>
+    & { step: (
+      { __typename?: 'Step' }
+      & Pick<Step, 'slug'>
+    ) }
   )> }
 );
 
@@ -503,7 +572,7 @@ export type LessonQuery = (
     & Pick<Lesson, 'id' | 'description' | 'thumbnail' | 'title'>
     & { steps?: Maybe<Array<(
       { __typename?: 'Step' }
-      & Pick<Step, 'slug'>
+      & Pick<Step, 'slug' | 'title'>
     )>> }
   )> }
 );
@@ -544,6 +613,19 @@ export type StepQuery = (
       { __typename?: 'Question' }
       & Pick<Question, 'value'>
     )>> }
+  )> }
+);
+
+export type UserLessonPositionQueryVariables = Exact<{
+  lessonId: Scalars['String'];
+}>;
+
+
+export type UserLessonPositionQuery = (
+  { __typename?: 'Query' }
+  & { userLessonPosition?: Maybe<(
+    { __typename?: 'UserLessonPosition' }
+    & Pick<UserLessonPosition, 'id' | 'lastSlugSeen' | 'currentPosition'>
   )> }
 );
 
@@ -929,6 +1011,79 @@ export function useUpdateCodeModuleMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateCodeModuleMutationHookResult = ReturnType<typeof useUpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationResult = Apollo.MutationResult<UpdateCodeModuleMutation>;
 export type UpdateCodeModuleMutationOptions = Apollo.BaseMutationOptions<UpdateCodeModuleMutation, UpdateCodeModuleMutationVariables>;
+export const UpdateUserLessonCurrentPositionDocument = gql`
+    mutation updateUserLessonCurrentPosition($lessonId: String!, $currentPosition: Float!) {
+  updateUserLessonCurrentPosition(
+    lessonId: $lessonId
+    currentPosition: $currentPosition
+  ) {
+    lessonId
+    lastSlugSeen
+    currentPosition
+  }
+}
+    `;
+export type UpdateUserLessonCurrentPositionMutationFn = Apollo.MutationFunction<UpdateUserLessonCurrentPositionMutation, UpdateUserLessonCurrentPositionMutationVariables>;
+
+/**
+ * __useUpdateUserLessonCurrentPositionMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserLessonCurrentPositionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserLessonCurrentPositionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserLessonCurrentPositionMutation, { data, loading, error }] = useUpdateUserLessonCurrentPositionMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *      currentPosition: // value for 'currentPosition'
+ *   },
+ * });
+ */
+export function useUpdateUserLessonCurrentPositionMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserLessonCurrentPositionMutation, UpdateUserLessonCurrentPositionMutationVariables>) {
+        return Apollo.useMutation<UpdateUserLessonCurrentPositionMutation, UpdateUserLessonCurrentPositionMutationVariables>(UpdateUserLessonCurrentPositionDocument, baseOptions);
+      }
+export type UpdateUserLessonCurrentPositionMutationHookResult = ReturnType<typeof useUpdateUserLessonCurrentPositionMutation>;
+export type UpdateUserLessonCurrentPositionMutationResult = Apollo.MutationResult<UpdateUserLessonCurrentPositionMutation>;
+export type UpdateUserLessonCurrentPositionMutationOptions = Apollo.BaseMutationOptions<UpdateUserLessonCurrentPositionMutation, UpdateUserLessonCurrentPositionMutationVariables>;
+export const UpdateUserLessonLastSlugSeenDocument = gql`
+    mutation updateUserLessonLastSlugSeen($lessonId: String!, $lastSlugSeen: String!) {
+  updateUserLessonLastSlugSeen(lessonId: $lessonId, lastSlugSeen: $lastSlugSeen) {
+    lessonId
+    lastSlugSeen
+    currentPosition
+  }
+}
+    `;
+export type UpdateUserLessonLastSlugSeenMutationFn = Apollo.MutationFunction<UpdateUserLessonLastSlugSeenMutation, UpdateUserLessonLastSlugSeenMutationVariables>;
+
+/**
+ * __useUpdateUserLessonLastSlugSeenMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserLessonLastSlugSeenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserLessonLastSlugSeenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserLessonLastSlugSeenMutation, { data, loading, error }] = useUpdateUserLessonLastSlugSeenMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *      lastSlugSeen: // value for 'lastSlugSeen'
+ *   },
+ * });
+ */
+export function useUpdateUserLessonLastSlugSeenMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserLessonLastSlugSeenMutation, UpdateUserLessonLastSlugSeenMutationVariables>) {
+        return Apollo.useMutation<UpdateUserLessonLastSlugSeenMutation, UpdateUserLessonLastSlugSeenMutationVariables>(UpdateUserLessonLastSlugSeenDocument, baseOptions);
+      }
+export type UpdateUserLessonLastSlugSeenMutationHookResult = ReturnType<typeof useUpdateUserLessonLastSlugSeenMutation>;
+export type UpdateUserLessonLastSlugSeenMutationResult = Apollo.MutationResult<UpdateUserLessonLastSlugSeenMutation>;
+export type UpdateUserLessonLastSlugSeenMutationOptions = Apollo.BaseMutationOptions<UpdateUserLessonLastSlugSeenMutation, UpdateUserLessonLastSlugSeenMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: String!) {
   checkpoints(stepId: $stepId) {
@@ -936,6 +1091,9 @@ export const CheckpointsDocument = gql`
     isCompleted
     matchRegex
     description
+    step {
+      slug
+    }
   }
 }
     `;
@@ -1009,6 +1167,7 @@ export const LessonDocument = gql`
     title
     steps {
       slug
+      title
     }
   }
 }
@@ -1148,3 +1307,38 @@ export function useStepLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StepQ
 export type StepQueryHookResult = ReturnType<typeof useStepQuery>;
 export type StepLazyQueryHookResult = ReturnType<typeof useStepLazyQuery>;
 export type StepQueryResult = Apollo.QueryResult<StepQuery, StepQueryVariables>;
+export const UserLessonPositionDocument = gql`
+    query UserLessonPosition($lessonId: String!) {
+  userLessonPosition(lessonId: $lessonId) {
+    id
+    lastSlugSeen
+    currentPosition
+  }
+}
+    `;
+
+/**
+ * __useUserLessonPositionQuery__
+ *
+ * To run a query within a React component, call `useUserLessonPositionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserLessonPositionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserLessonPositionQuery({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useUserLessonPositionQuery(baseOptions: Apollo.QueryHookOptions<UserLessonPositionQuery, UserLessonPositionQueryVariables>) {
+        return Apollo.useQuery<UserLessonPositionQuery, UserLessonPositionQueryVariables>(UserLessonPositionDocument, baseOptions);
+      }
+export function useUserLessonPositionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserLessonPositionQuery, UserLessonPositionQueryVariables>) {
+          return Apollo.useLazyQuery<UserLessonPositionQuery, UserLessonPositionQueryVariables>(UserLessonPositionDocument, baseOptions);
+        }
+export type UserLessonPositionQueryHookResult = ReturnType<typeof useUserLessonPositionQuery>;
+export type UserLessonPositionLazyQueryHookResult = ReturnType<typeof useUserLessonPositionLazyQuery>;
+export type UserLessonPositionQueryResult = Apollo.QueryResult<UserLessonPositionQuery, UserLessonPositionQueryVariables>;

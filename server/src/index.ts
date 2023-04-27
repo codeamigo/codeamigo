@@ -18,16 +18,26 @@ import { Lesson } from './entities/v2/Lesson';
 import { Question } from './entities/v2/Question';
 import { Step } from './entities/v2/Step';
 import { User } from './entities/v2/User';
+import { UserLessonPosition } from './entities/v2/UserLessonPosition';
 import { CheckpointResolver } from './resolvers/v2/checkpoint';
 import { CodeModuleResolver } from './resolvers/v2/codeModule';
 import { LessonResolver } from './resolvers/v2/lesson';
 import { StepResolver } from './resolvers/v2/step';
 import { UserResolver } from './resolvers/v2/user';
+import { UserLessonPositionResolver } from './resolvers/v2/userLessonPosition';
 import { complete, explain } from './utils/openai';
 
 const main = async () => {
   const conn = await createConnection({
-    entities: [Checkpoint, CodeModule, Lesson, Question, Step, User],
+    entities: [
+      Checkpoint,
+      CodeModule,
+      Lesson,
+      Question,
+      Step,
+      User,
+      UserLessonPosition,
+    ],
     logging: true,
     migrations: ['dist/migrations/v2/*.js'],
     type: 'postgres',
@@ -82,6 +92,7 @@ const main = async () => {
         CodeModuleResolver,
         CheckpointResolver,
         UserResolver,
+        UserLessonPositionResolver,
       ],
       validate: false,
     }),

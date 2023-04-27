@@ -4,12 +4,16 @@ import React, { useEffect, useState } from 'react';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import Toggle from '👨‍💻components/Toggle';
-import { Step } from '👨‍💻generated/graphql';
+import {
+  Step,
+  useUpdateUserLessonCurrentPositionMutation,
+} from '👨‍💻generated/graphql';
 
 const StepActions: React.FC<Props> = ({
   disabled,
   isAutoPlayEnabled,
   isCompletionEnabled,
+  lessonId,
   nextLoader,
   setIsAutoPlayEnabled,
   setIsCompletionEnabled,
@@ -19,6 +23,8 @@ const StepActions: React.FC<Props> = ({
   const nextDisabled = isLastStep || disabled;
   const [loaderWidth, setLoaderWidth] = useState(0);
   const router = useRouter();
+  const [updateUserLessonCurrentPosition] =
+    useUpdateUserLessonCurrentPositionMutation();
 
   useEffect(() => {
     setLoaderWidth(0);
@@ -54,6 +60,17 @@ const StepActions: React.FC<Props> = ({
       nextButton?.click();
     }
   }, [loaderWidth]);
+
+  const handleNext = () => {
+    updateUserLessonCurrentPosition({
+      refetchQueries: ['UserLessonPosition'],
+      variables: {
+        currentPosition: (step.position || 0) + 1,
+        lessonId,
+      },
+    });
+    router.push(`/v2/lesson/intro-to-js/step/${step.nextSlug}`);
+  };
 
   return (
     <div>
@@ -106,7 +123,7 @@ const StepActions: React.FC<Props> = ({
               disabled={nextDisabled}
               id="next-button"
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.nextSlug}`);
+                handleNext();
               }}
             >
               <span className="relative z-10">Next</span>
@@ -135,6 +152,7 @@ type Props = {
   disabled: boolean;
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
+  lessonId: string;
   nextLoader: boolean;
   setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
