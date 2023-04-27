@@ -96,7 +96,7 @@ export class UserResolver {
       return null;
     }
 
-    return await User.findOne(req.session.userId);
+    return await User.findOne({ id: req.session.userId });
   }
 
   @Mutation(() => Boolean)
@@ -104,7 +104,7 @@ export class UserResolver {
   async deleteUser(@Ctx() ctx: MyContext): Promise<boolean> {
     try {
       const id = ctx.req.session.userId;
-      const user = await User.findOne(id);
+      const user = await User.findOne({ id });
 
       if (!user) {
         return false;
@@ -284,7 +284,7 @@ export class UserResolver {
     @Arg('options') options: UpdateUserRoleInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne(options.id);
+    const user = await User.findOne({ id: options.id });
     const approver = await User.findOne({ id: req.session.userId });
 
     if (!approver || approver.role !== 'ADMIN') {
@@ -361,7 +361,7 @@ export class UserResolver {
       };
     }
 
-    const user = await User.findOne(userId);
+    const user = await User.findOne({ id: userId });
 
     if (!user) {
       return {
@@ -385,7 +385,7 @@ export class UserResolver {
     @Arg('newPassword') newPassword: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (!user) {
       return {
@@ -414,7 +414,7 @@ export class UserResolver {
     @Arg('newEmail') newEmail: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (!user) {
       return {

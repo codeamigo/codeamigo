@@ -13,7 +13,7 @@ export class CheckpointResolver {
     @Ctx() { req }: MyContext
   ): Promise<Checkpoint | null> {
     const checkpoint = await Checkpoint.findOne(id, { relations: ['user'] });
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (!checkpoint) {
       return null;
@@ -45,7 +45,7 @@ export class CheckpointResolver {
       },
       type,
     });
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (req.session.userId && user) {
       newCheckpoint.user = user;
@@ -72,7 +72,7 @@ export class CheckpointResolver {
       },
     });
 
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (user) {
       const userCheckpoints = await Checkpoint.find({

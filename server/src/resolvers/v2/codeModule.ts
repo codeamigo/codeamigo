@@ -22,7 +22,7 @@ export class CodeModuleResolver {
         id: stepId,
       },
     });
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (req.session.userId && user) {
       newCodeModule.user = user;
@@ -39,8 +39,11 @@ export class CodeModuleResolver {
     @Arg('code') code: string,
     @Ctx() { req }: MyContext
   ): Promise<CodeModule> {
-    const codeModule = await CodeModule.findOne(id, { relations: ['user'] });
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
+    const codeModule = await CodeModule.findOne(id, {
+      relations: ['user'],
+      where: { user: { id: user?.id } },
+    });
 
     if (!codeModule) {
       throw new Error('CodeModule not found');
@@ -49,6 +52,7 @@ export class CodeModuleResolver {
     if (codeModule?.user.id !== user?.id) {
       throw new Error('Not authorized');
     }
+    console.log(user);
 
     codeModule.code = code;
 
@@ -77,7 +81,7 @@ export class CodeModuleResolver {
       return undefined;
     }
 
-    const user = await User.findOne(req.session.userId);
+    const user = await User.findOne({ id: req.session.userId });
 
     if (user) {
       const userCodeModules = await CodeModule.find({
