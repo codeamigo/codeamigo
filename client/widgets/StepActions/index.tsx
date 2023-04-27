@@ -154,7 +154,6 @@ type Props = {
   isCompletionEnabled: boolean;
   lessonId: string;
   nextLoader: boolean;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step;

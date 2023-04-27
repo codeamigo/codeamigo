@@ -12,6 +12,7 @@ import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
@@ -382,7 +383,6 @@ function MonacoEditor({
   lessonId,
   onReady,
   setCurrentCheckpoint,
-  setCurrentStep,
   setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
@@ -405,7 +405,6 @@ function MonacoEditor({
   lessonId: string;
   onReady: () => void;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
-  setCurrentStep: Dispatch<SetStateAction<string>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
   setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
@@ -747,7 +746,6 @@ function MonacoEditor({
         isCompletionEnabled={isCompletionEnabled}
         lessonId={lessonId}
         nextLoader={nextLoader}
-        setCurrentStep={setCurrentStep}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
         step={step}
@@ -807,12 +805,10 @@ function MonacoEditor({
 }
 
 const Markdown = ({
-  currentStep,
   instructions,
   leftPanelHeight,
   setLeftPanelHeight,
 }: {
-  currentStep: string;
   instructions: string;
   leftPanelHeight: {
     editor: string;
@@ -828,10 +824,6 @@ const Markdown = ({
   const [full, setFull] = useState(false);
 
   useEffect(() => {
-    setFull(false);
-  }, [currentStep]);
-
-  useEffect(() => {
     setLeftPanelHeight({
       editor: full ? '0px' : 'calc(100% - 18rem)',
       instructions: full ? '100%' : '18rem',
@@ -843,7 +835,6 @@ const Markdown = ({
       className={`relative overflow-hidden bg-neutral-900 transition-all ${
         full ? 'z-40' : 'z-20'
       }`}
-      key={currentStep}
       style={{ height: `${leftPanelHeight.instructions}` }}
     >
       <ReactMarkdown
@@ -1146,6 +1137,8 @@ const ProgressBar = ({
   title: string;
   userLessonPosition?: UserLessonPositionQuery['userLessonPosition'];
 }) => {
+  const router = useRouter();
+
   if (!steps) return null;
   if (steps?.length === 0) return null;
 
@@ -1154,10 +1147,10 @@ const ProgressBar = ({
       className="flex cursor-pointer items-center gap-2 text-xs font-light"
       onClick={() => {
         modalVar({
-          callback: (step: string) => {
-            setCurrentStep(step);
+          callback: (slug: string) => {
+            router.push(`/v2/lesson/intro-to-js/step/${slug}`);
           },
-          data: { checkpoints, currentStep, steps, title, userLessonPosition },
+          data: { checkpoints, steps, title, userLessonPosition },
           name: 'steps',
           persistent: false,
         });
@@ -1327,7 +1320,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
             <SandpackLayout>
               <SandpackStack className="editor-instructions-container !h-full">
                 <Markdown
-                  currentStep={currentStep}
                   instructions={step?.instructions as string}
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
@@ -1345,7 +1337,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     lessonId={lesson?.id as string}
                     onReady={() => setEditorReady(true)}
                     setCurrentCheckpoint={setCurrentCheckpoint}
-                    setCurrentStep={setCurrentStep}
                     setHoverSelection={setHoverSelection}
                     setIsStepComplete={setIsStepComplete}
                     setLeftPanelHeight={setLeftPanelHeight}

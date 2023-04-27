@@ -10,7 +10,6 @@ import {
 
 type StepsDataType = {
   checkpoints?: CheckpointsQuery['checkpoints'];
-  currentStep: number;
   steps: Pick<Step, 'slug' | 'title'>[];
   title: string;
   userLessonPosition?: UserLessonPositionQuery['userLessonPosition'];
