@@ -8,10 +8,8 @@ query Step($slug: String!) {
     prevSlug
     start
     title
-    checkpoints {
-      description
-      matchRegex
-      isCompleted
+    questions {
+      value
     }
   }
 }

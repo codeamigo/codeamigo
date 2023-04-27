@@ -28,6 +28,7 @@ import {
   CodeModulesQuery,
   LessonDocument,
   LessonQueryVariables,
+  Question,
   Step,
   StepDocument,
   StepQueryVariables,
@@ -893,7 +894,13 @@ const Checkpoints = ({
   );
 };
 
-const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
+const ChatBot = ({
+  hoverSelection,
+  questions,
+}: {
+  hoverSelection: string | null;
+  questions: string[];
+}) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
   const [responses, setResponses] = useState<
@@ -1071,7 +1078,7 @@ const ChatBot = ({ hoverSelection }: { hoverSelection: string | null }) => {
                     />
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    {defaultQuestions.map((question) => {
+                    {[...defaultQuestions, ...questions].map((question) => {
                       return (
                         <pre
                           className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
@@ -1332,7 +1339,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
                 </Button>
                 <SandpackPreview className="!h-0" />
                 <SandpackConsole className="overflow-scroll" />
-                <ChatBot hoverSelection={hoverSelection} />
+                <ChatBot
+                  hoverSelection={hoverSelection}
+                  questions={step?.questions?.map((q) => q.value) || []}
+                />
               </SandpackStack>
             </SandpackLayout>
           </SandpackProvider>

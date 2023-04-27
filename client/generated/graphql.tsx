@@ -540,9 +540,9 @@ export type StepQuery = (
   & { step?: Maybe<(
     { __typename?: 'Step' }
     & Pick<Step, 'id' | 'instructions' | 'position' | 'slug' | 'nextSlug' | 'prevSlug' | 'start' | 'title'>
-    & { checkpoints?: Maybe<Array<(
-      { __typename?: 'Checkpoint' }
-      & Pick<Checkpoint, 'description' | 'matchRegex' | 'isCompleted'>
+    & { questions?: Maybe<Array<(
+      { __typename?: 'Question' }
+      & Pick<Question, 'value'>
     )>> }
   )> }
 );
@@ -1116,10 +1116,8 @@ export const StepDocument = gql`
     prevSlug
     start
     title
-    checkpoints {
-      description
-      matchRegex
-      isCompleted
+    questions {
+      value
     }
   }
 }

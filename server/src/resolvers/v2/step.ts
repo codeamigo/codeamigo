@@ -18,6 +18,7 @@ export class StepResolver {
       .leftJoinAndSelect('Step.lesson', 'lesson')
       .leftJoinAndSelect('Step.codeModules', 'codeModules')
       .leftJoinAndSelect('Step.checkpoints', 'checkpoints')
+      .leftJoinAndSelect('Step.questions', 'questions')
       .addOrderBy('checkpoints.createdAt', 'ASC')
       .getOne();
 
