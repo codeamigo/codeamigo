@@ -64,7 +64,7 @@ const Login: React.FC = () => {
     >
       {({ isSubmitting, values }) => (
         <Form>
-          <div className="mx-auto min-w-[300px] p-6 sm:min-w-[320px] lg:px-4">
+          <div className="mx-auto min-w-[300px] p-4 sm:min-w-[320px]">
             <h1 className="mb-4 flex items-end justify-center text-xl font-semibold text-white">
               Login
             </h1>
