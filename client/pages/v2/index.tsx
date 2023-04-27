@@ -1124,24 +1124,22 @@ const V2 = () => {
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
 
   // HIGH DEMAND
-  // useEffect(() => {
-  //   if (!localStorage.getItem('openaiKey')) {
-  //     modalVar({
-  //       callback: () => null,
-  //       name: 'highDemand',
-  //       persistent: true,
-  //     });
-  //   }
-  // }, []);
   useEffect(() => {
-    if (!isDesktop) {
+    if (!localStorage.getItem('openaiKey')) {
       modalVar({
         callback: () => null,
-        name: 'mobileWarning',
-        persistent: true,
+        name: 'highDemand',
       });
     }
-  }, [isDesktop]);
+  }, []);
+  // useEffect(() => {
+  //   if (!isDesktop) {
+  //     modalVar({
+  //       callback: () => null,
+  //       name: 'mobileWarning',
+  //     });
+  //   }
+  // }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
