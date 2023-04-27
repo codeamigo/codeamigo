@@ -8,8 +8,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
     <main className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col justify-between px-4 sm:px-8 md:max-w-7xl">
       <TopNav />
       <Container>{children}</Container>
-      <footer className="animate-footer-slide-up-fade flex items-end justify-between py-6">
-        <div className="flex flex-col gap-4">
+      <footer className="animate-footer-slide-up-fade flex w-full items-end justify-between py-6">
+        <div className="flex w-full items-center justify-between">
           <div className="flex items-end gap-4">
             <a
               aria-label="GitHub"
@@ -51,6 +51,16 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 ></path>
               </svg>
             </a>
+          </div>
+          <div className="text-xs text-neutral-700">
+            Made with{' '}
+            <span aria-label="heart" role="img">
+              ❤️
+            </span>{' '}
+            in{' '}
+            <span aria-label="new york city" role="img">
+              🗽
+            </span>
           </div>
         </div>
       </footer>
