@@ -140,6 +140,14 @@ const StepActions: React.FC<Props> = ({
                 ></span>
               )}
             </Button>
+            <Button
+              onClick={() =>
+                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+              }
+            >
+              <Icon className="mr-1.5" name="plus-circled" />
+              <span>Join Waitlist</span>
+            </Button>
           </div>
         )}
         <div aria-label="Toggle Code Completion" className="hint hint--left">
