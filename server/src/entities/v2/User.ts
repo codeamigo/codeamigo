@@ -11,6 +11,7 @@ import {
 
 import { Checkpoint } from './Checkpoint';
 import { CodeModule } from './CodeModule';
+import { UserLessonPosition } from './UserLessonPosition';
 
 export enum RoleEnum {
   ADMIN = 'ADMIN',
@@ -72,4 +73,14 @@ export class User extends BaseEntity {
   })
   @Field(() => [CodeModule], { defaultValue: [] })
   codeModules: CodeModule[];
+
+  @OneToMany(
+    () => UserLessonPosition,
+    (userLessonPosition) => userLessonPosition.user,
+    {
+      cascade: true,
+    }
+  )
+  @Field(() => [UserLessonPosition], { defaultValue: [] })
+  userLessonPositions: UserLessonPosition[];
 }

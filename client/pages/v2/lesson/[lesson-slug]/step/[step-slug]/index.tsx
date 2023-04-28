@@ -1268,7 +1268,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, [step?.id]);
 
   useEffect(() => {
-    if (meData?.me?.isAuthenticated) {
+    if (
+      meData?.me?.isAuthenticated &&
+      userLessonPositionData?.userLessonPosition
+    ) {
       updateUserLessonLastSlugSeen({
         variables: {
           lastSlugSeen: step?.slug as string,

@@ -4,9 +4,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import { User } from './User';
 
 @ObjectType()
 @Entity()
@@ -35,7 +38,8 @@ export class UserLessonPosition extends BaseEntity {
   @Column({ type: 'text' })
   lessonId: string;
 
-  @Field(() => String)
-  @Column({ type: 'text' })
-  userId: string;
+  @ManyToOne(() => User, (user) => user.userLessonPositions, {
+    onDelete: 'CASCADE',
+  })
+  user: User;
 }
