@@ -2,7 +2,9 @@ overwrite: true
 schema:
   - 'http://localhost:4000/graphql'
   - './apollo/client/schema.graphql'
-documents: 'graphql/**/*.graphql'
+documents:
+  - 'graphql/v2/**/*.graphql'
+  - 'graphql/**/*.graphql'
 generates:
   generated/graphql.tsx:
     plugins:

@@ -1,0 +1,15 @@
+mutation GitHubLogin($id: Float!, $accessToken: String!, $username: String!) {
+  githubLogin(
+    options: { id: $id, accessToken: $accessToken, username: $username }
+  ) {
+    errors {
+      message
+      field
+    }
+    user {
+      id
+      username
+      createdAt
+    }
+  }
+}

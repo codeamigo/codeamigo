@@ -19,10 +19,10 @@ const TestsPassed: React.FC<Props> = () => {
   return (
     <div className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
       <div className="text-3xl">{emoji}</div>
-      <div className="text-xl font-semibold text-text-primary">
+      <div className="text-xl font-semibold text-white">
         {encouragementTitle}
       </div>
-      <div className="my-4 text-text-primary">{encouragementMessage}</div>
+      <div className="my-4 text-white">{encouragementMessage}</div>
       <Button
         className="mt-5 ml-auto h-12 text-lg"
         onClick={() => {

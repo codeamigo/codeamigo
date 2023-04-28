@@ -1,0 +1,16 @@
+query Step($slug: String!) {
+  step(slug: $slug) {
+    id
+    instructions
+    nextSlug
+    position
+    prevSlug
+    questions {
+      value
+    }
+    slug
+    start
+    template
+    title
+  }
+}

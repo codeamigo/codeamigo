@@ -2,6 +2,9 @@
   "name": "codeamigo-server",
   "version": "1.0.0",
   "description": "",
+  "engines": {
+    "node": "<15.0.0"
+  },
   "main": "index.js",
   "scripts": {
     "build": "tsc",

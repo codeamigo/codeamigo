@@ -5,6 +5,7 @@ extend type User {
 type Modal {
   name: String
   callback: String
+  persistent: Boolean
 }
 
 extend type Query {

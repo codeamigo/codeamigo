@@ -1,0 +1,27 @@
+mutation updateUserLessonCurrentPosition(
+  $lessonId: String!
+  $currentPosition: Float!
+) {
+  updateUserLessonCurrentPosition(
+    lessonId: $lessonId
+    currentPosition: $currentPosition
+  ) {
+    lessonId
+    lastSlugSeen
+    currentPosition
+  }
+}
+
+mutation updateUserLessonLastSlugSeen(
+  $lessonId: String!
+  $lastSlugSeen: String!
+) {
+  updateUserLessonLastSlugSeen(
+    lessonId: $lessonId
+    lastSlugSeen: $lastSlugSeen
+  ) {
+    lessonId
+    lastSlugSeen
+    currentPosition
+  }
+}

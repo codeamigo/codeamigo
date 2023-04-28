@@ -12,21 +12,19 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 
 import { __prod__, SESSION_COOKIE } from './constants';
-import { Checkpoint } from './entities/Checkpoint';
-import { CodeModule } from './entities/CodeModule';
-import { Dependency } from './entities/Dependency';
-import { Lesson } from './entities/Lesson';
-import { Session } from './entities/Session';
-import { Step } from './entities/Step';
-import { Tag } from './entities/Tag';
-import { User } from './entities/User';
-import { CheckpointResolver } from './resolvers/checkpoint';
-import { CodeModuleResolver } from './resolvers/codeModule';
-import { DependencyResolver } from './resolvers/dependency';
-import { LessonResolver } from './resolvers/lesson';
-import { SessionResolver } from './resolvers/session';
-import { StepResolver } from './resolvers/step';
-import { UserResolver } from './resolvers/user';
+import { Checkpoint } from './entities/v2/Checkpoint';
+import { CodeModule } from './entities/v2/CodeModule';
+import { Lesson } from './entities/v2/Lesson';
+import { Question } from './entities/v2/Question';
+import { Step } from './entities/v2/Step';
+import { User } from './entities/v2/User';
+import { UserLessonPosition } from './entities/v2/UserLessonPosition';
+import { CheckpointResolver } from './resolvers/v2/checkpoint';
+import { CodeModuleResolver } from './resolvers/v2/codeModule';
+import { LessonResolver } from './resolvers/v2/lesson';
+import { StepResolver } from './resolvers/v2/step';
+import { UserResolver } from './resolvers/v2/user';
+import { UserLessonPositionResolver } from './resolvers/v2/userLessonPosition';
 import { complete, explain } from './utils/openai';
 
 const main = async () => {
@@ -34,15 +32,14 @@ const main = async () => {
     entities: [
       Checkpoint,
       CodeModule,
-      Dependency,
       Lesson,
-      Session,
+      Question,
       Step,
-      Tag,
       User,
+      UserLessonPosition,
     ],
     logging: true,
-    migrations: ['dist/migrations/*.js'],
+    migrations: ['dist/migrations/v2/*.js'],
     type: 'postgres',
     url: process.env.DATABASE_URL,
   });
@@ -57,7 +54,7 @@ const main = async () => {
       credentials: true,
       origin: [
         process.env.CORS_ORIGIN,
-        'https://codeamigo-git-v2-codeamigo-dev.vercel.app',
+        'https://studio.apollographql.com/sandbox/explorer',
       ],
     })
   );
@@ -87,16 +84,15 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
-    context: ({ req, res }) => ({ redis, req, res }),
+    context: ({ req, res }) => ({ req, res }),
     schema: await buildSchema({
       resolvers: [
-        CheckpointResolver,
-        CodeModuleResolver,
-        DependencyResolver,
         LessonResolver,
-        SessionResolver,
         StepResolver,
+        CodeModuleResolver,
+        CheckpointResolver,
         UserResolver,
+        UserLessonPositionResolver,
       ],
       validate: false,
     }),

@@ -1,3 +1,0 @@
-mutation DeleteCheckpoint($id: Float!) {
-  deleteCheckpoint(id: $id)
-}

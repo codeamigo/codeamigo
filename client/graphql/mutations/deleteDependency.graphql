@@ -1,3 +1,0 @@
-mutation DeleteDependency($id: Float!) {
-  deleteDependency(id: $id)
-}

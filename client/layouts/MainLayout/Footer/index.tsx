@@ -4,7 +4,7 @@ import { Logo } from '👨‍💻components/Logos';
 
 const Footer: React.FC<Props> = () => {
   return (
-    <div className="text-text-primary bg-bg-nav">
+    <div className="text-white bg-bg-nav">
       <div className="py-3 px-2 sm:px-6 lg:px-8 mx-auto w-full max-w-7xl">
         <div className="flex items-center text-lg font-bold">
           <Logo className="mr-1 sm:mr-1.5 w-8 sm:w-12" />{' '}

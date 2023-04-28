@@ -49,11 +49,11 @@ const ChangePassword: React.FC<Props> = () => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form className="p-6 lg:px-4 mx-auto w-96 max-w-lg">
-          <h1 className="flex justify-center mb-4 text-2xl font-semibold text-text-primary">
+        <Form className="mx-auto w-96 max-w-lg p-6 lg:px-4">
+          <h1 className="mb-4 flex justify-center text-2xl font-semibold text-white">
             Change Password
           </h1>
-          <div className="sm:p-6 px-4">
+          <div className="px-4 sm:p-6">
             <div className="grid gap-3">
               <InputField
                 label="New Password"

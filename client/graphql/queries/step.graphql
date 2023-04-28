@@ -1,5 +1,0 @@
-query Step($id: Int!) {
-  step(id: $id) {
-    ...RegularStep
-  }
-}

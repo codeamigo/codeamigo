@@ -1,7 +1,0 @@
-query Students {
-  users {
-    id
-    username
-    createdAt
-  }
-}

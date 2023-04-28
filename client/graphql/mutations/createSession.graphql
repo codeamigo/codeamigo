@@ -1,7 +1,0 @@
-mutation CreateSession($lessonId: Float!, $currentStepId: Float) {
-  createSession(
-    options: { lessonId: $lessonId, currentStepId: $currentStepId }
-  ) {
-    id
-  }
-}

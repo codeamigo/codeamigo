@@ -1,9 +1,0 @@
-mutation GoogleLogin($id: String!, $username: String!, $email: String!) {
-  googleLogin(options: { id: $id, username: $username, email: $email }) {
-    user {
-      id
-      username
-      createdAt
-    }
-  }
-}
