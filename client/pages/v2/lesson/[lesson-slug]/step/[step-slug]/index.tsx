@@ -1386,15 +1386,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
                 )}
               </SandpackStack>
               <SandpackStack className="!h-full">
-                <Button
-                  className="absolute right-2 top-2 z-10"
-                  onClick={() =>
-                    window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-                  }
-                >
-                  <Icon className="mr-1.5" name="plus-circled" />
-                  <span>Join Waitlist</span>
-                </Button>
                 <SandpackPreview
                   className={step?.template === 'static' ? '' : '!h-0'}
                 />
