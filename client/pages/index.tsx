@@ -25,7 +25,7 @@ const Home = (props: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-between sm:shrink-0 lg:flex-row">
-      <div className="w-full max-w-3xl">
+      <div className="mt-10 w-full max-w-3xl sm:mt-0">
         <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#330000] px-2 text-xs font-semibold text-red-500">
           Currently in beta
         </span>
@@ -68,30 +68,9 @@ const Home = (props: Props) => {
           </kbd>{' '}
           to demo.
         </button>
-        <button
-          className="h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-white px-4 text-sm font-semibold text-black transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
-          onClick={() => {
-            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
-          }}
-        >
-          Join Waitlist
-        </button>
-        <br />
-        <button
-          className="mt-3 h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-black px-4 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
-          onClick={() => {
-            router.push('/v2/lesson/hello-codeamigo/step/intro');
-          }}
-          style={{
-            boxShadow:
-              'rgba(5, 162, 194, 0.3) -8px 0px 20px, rgba(112, 225, 200, 0.3) 0px 0px 20px, rgba(255, 178, 36, 0.3) 8px 0px 20px;',
-          }}
-        >
-          Demo
-        </button>
       </div>
       <div className="w-full max-w-3xl sm:w-3/4">
-        <div className="mt-8 grid grid-cols-5 gap-10 lg:mt-0 lg:grid-cols-3 lg:gap-6">
+        <div className="grid grid-cols-2 gap-10 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
             .filter((lesson) => lesson.slug === 'hello-codeamigo')
             .map((lesson) => {
@@ -119,7 +98,7 @@ const Home = (props: Props) => {
               );
             })}
         </div>
-        <div className="mt-8 grid grid-cols-5 gap-10 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-8 grid grid-cols-2 gap-10 lg:grid-cols-3 lg:gap-6">
           {props.lessons
             .filter((lesson) => lesson.slug !== 'hello-codeamigo')
             .map((lesson) => {
