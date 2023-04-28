@@ -20,7 +20,7 @@ const TopNav: React.FC<Props> = () => {
                   className={`flex items-center text-xl font-bold text-white focus:outline-none`}
                   onClick={() => router.push('/')}
                 >
-                  <Logo className="mr-1 w-8 text-xs sm:mr-1.5 sm:w-12 sm:text-lg" />
+                  <Logo className="mr-1 hidden w-8 text-xs sm:mr-1.5 sm:w-12 sm:text-lg lg:block" />
                   <span className="text-base sm:text-lg">codeamigo</span>
                 </button>
               </div>

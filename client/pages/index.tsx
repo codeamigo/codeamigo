@@ -25,7 +25,7 @@ const Home = (props: Props) => {
 
   return (
     <div className="flex w-full flex-col items-center justify-between sm:shrink-0 lg:flex-row">
-      <div className="mt-10 w-full max-w-3xl sm:mt-0">
+      <div className="mt-10 w-full max-w-3xl lg:mt-0">
         <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#330000] px-2 text-xs font-semibold text-red-500">
           Currently in beta
         </span>
@@ -69,8 +69,8 @@ const Home = (props: Props) => {
           to demo.
         </button>
       </div>
-      <div className="w-full max-w-3xl sm:w-3/4">
-        <div className="grid grid-cols-2 gap-10 lg:mt-0 lg:grid-cols-3 lg:gap-6">
+      <div className="w-full max-w-3xl lg:w-3/4">
+        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
             .filter((lesson) => lesson.slug === 'hello-codeamigo')
             .map((lesson) => {

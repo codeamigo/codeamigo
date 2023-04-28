@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export const Logo = ({ ...rest }) => {
   return (
-    <div className="mr-2 flex h-12 w-12 items-center justify-center rounded-full bg-white">
+    <div className="mr-2 hidden h-12 w-12 items-center justify-center rounded-full bg-white ">
       <Image height="32px" src={iconPng} width="32px" />
     </div>
     //     <svg
