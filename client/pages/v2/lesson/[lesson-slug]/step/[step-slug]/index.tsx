@@ -1244,24 +1244,24 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, {});
 
   // HIGH DEMAND
-  // useEffect(() => {
-  //   if (!localStorage.getItem('openaiKey')) {
-  //     modalVar({
-  //       callback: () => null,
-  //       name: 'highDemand',
-  //       persistent: true,
-  //     });
-  //   }
-  // }, []);
   useEffect(() => {
-    if (!isDesktop) {
+    if (!localStorage.getItem('openaiKey')) {
       modalVar({
         callback: () => null,
-        name: 'mobileWarning',
+        name: 'highDemand',
         persistent: true,
       });
     }
-  }, [isDesktop]);
+  }, []);
+  // useEffect(() => {
+  //   if (!isDesktop) {
+  //     modalVar({
+  //       callback: () => null,
+  //       name: 'mobileWarning',
+  //       persistent: true,
+  //     });
+  //   }
+  // }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
