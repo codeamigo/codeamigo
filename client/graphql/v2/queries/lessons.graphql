@@ -1,0 +1,11 @@
+query Lessons {
+  lessons {
+    description
+    thumbnail
+    title
+    slug
+    steps {
+      slug
+    }
+  }
+}

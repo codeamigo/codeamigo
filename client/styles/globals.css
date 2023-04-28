@@ -262,3 +262,26 @@ body,
     transform: rotate(360deg);
   }
 }
+
+.grainy-image {
+  position: relative;
+  z-index: 0;
+  filter: grayscale(100%) contrast(1) brightness(75%);
+}
+
+.grainy-image-parent:hover .grainy-image::before {
+  background-image: none;
+}
+
+.grainy-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-image: url('../assets/grain.webp');
+  opacity: 0.2;
+  z-index: 1;
+}

@@ -6,7 +6,7 @@ import { Lesson } from '../../entities/v2/Lesson';
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(): Promise<Lesson[]> {
-    return Lesson.find();
+    return Lesson.find({ relations: ['steps'] });
   }
 
   @Query(() => Lesson, { nullable: true })

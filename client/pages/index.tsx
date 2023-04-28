@@ -1,17 +1,20 @@
-import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-import * as hal from '../assets/hal.png';
+import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
+import { LessonsDocument, LessonsQuery } from '👨‍💻generated/graphql';
+import { client } from '👨‍💻utils/withApollo';
 
-const Home = () => {
-  // watch for keydown of the 'a' key
+const Home = (props: Props) => {
+  const router = useRouter();
   useEffect(() => {
     const handleKeyDown = (event: any) => {
       if (event.key === 'a') {
         // open a new window
         window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
       } else if (event.key === 'd') {
-        window.open('/v2/lesson/hello-codeamigo/step/intro');
+        router.push(`/v2/lesson/hello-codeamigo/step/intro`);
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -21,7 +24,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex w-full items-center justify-between sm:shrink-0">
+    <div className="flex w-full flex-col items-center justify-between sm:shrink-0 lg:flex-row">
       <div className="w-full max-w-3xl">
         <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#330000] px-2 text-xs font-semibold text-red-500">
           Currently in beta
@@ -56,7 +59,7 @@ const Home = () => {
         <button
           className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
           onClick={() => {
-            window.open('/v2/lesson/hello-codeamigo/step/intro');
+            router.push('/v2/lesson/hello-codeamigo/step/intro');
           }}
         >
           or{' '}
@@ -77,7 +80,7 @@ const Home = () => {
         <button
           className="mt-3 h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-black px-4 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
           onClick={() => {
-            window.open('/v2/lesson/hello-codeamigo/step/intro');
+            router.push('/v2/lesson/hello-codeamigo/step/intro');
           }}
           style={{
             boxShadow:
@@ -87,16 +90,94 @@ const Home = () => {
           Demo
         </button>
       </div>
-      <div
-        className="hidden w-full animate-pulse cursor-pointer items-center justify-center hover:animate-none sm:flex"
-        onClick={() => {
-          window.open('/v2/lesson/hello-codeamigo/step/intro');
-        }}
-      >
-        <Image height={80} src={hal} width={80} />
+      <div className="w-full max-w-3xl sm:w-3/4">
+        <div className="mt-8 grid grid-cols-5 gap-10 lg:mt-0 lg:grid-cols-3 lg:gap-6">
+          {props.lessons
+            .filter((lesson) => lesson.slug === 'hello-codeamigo')
+            .map((lesson) => {
+              return (
+                <div
+                  className="grainy-image-parent group overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"
+                  onClick={() => {
+                    window.open(
+                      `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                    );
+                  }}
+                  role="button"
+                >
+                  <div className="grainy-image transition-all group-hover:grayscale-0">
+                    <img className="w-full" src={lesson.thumbnail!} />
+                  </div>
+                  <div className="px-3 pb-4 pt-2 text-xs">
+                    <pre className="text-white">{lesson.title}</pre>
+                    <Button className="mt-3">
+                      <Icon className="mr-1.5" name="eye" />
+                      <span>Demo</span>
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+        <div className="mt-8 grid grid-cols-5 gap-10 lg:grid-cols-3 lg:gap-6">
+          {props.lessons
+            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
+            .map((lesson) => {
+              return (
+                <div
+                  className="overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"
+                  // onClick={() => {
+                  //   window.open(
+                  //     `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                  //   );
+                  // }}
+                  // role="button"
+                >
+                  <div className="grainy-image transition-all group-hover:grayscale-0">
+                    <img className="w-full" src={lesson.thumbnail!} />
+                  </div>
+                  <div className="px-3 pb-4 pt-2 text-xs">
+                    <pre className="text-white">{lesson.title}</pre>
+                    <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-blue-950 px-2 text-xs font-semibold text-blue-500">
+                      Coming{' '}
+                      {lesson.slug === 'intro-to-js' ? 'May 1st' : 'Soon'}
+                    </span>
+                    <Button
+                      className="mt-3"
+                      onClick={() =>
+                        window.open(
+                          'https://forms.gle/weRYdVmr2LszmQiK6',
+                          '_blank'
+                        )
+                      }
+                    >
+                      <Icon className="mr-1.5" name="plus-circled" />
+                      <span>Join Waitlist</span>
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
       </div>
     </div>
   );
+};
+
+type Props = {
+  lessons: LessonsQuery['lessons'];
+};
+
+export const getServerSideProps = async () => {
+  const lessons = await client.query({
+    query: LessonsDocument,
+  });
+
+  return {
+    props: {
+      lessons: lessons.data.lessons,
+    },
+  };
 };
 
 export default Home;
