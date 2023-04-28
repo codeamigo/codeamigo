@@ -97,17 +97,13 @@ const StepActions: React.FC<Props> = ({
               Prev
             </Button>
             <Button
-              onClick={() =>
-                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-              }
+              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
             >
               <Icon className="mr-1.5" name="plus-circled" />
               <span>Join Waitlist</span>
             </Button>
             <Button
-              onClick={() =>
-                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-              }
+              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
             >
               <Icon className="mr-1.5" name="twitter" />
               <span>Follow us on Twitter</span>
@@ -141,9 +137,7 @@ const StepActions: React.FC<Props> = ({
               )}
             </Button>
             <Button
-              onClick={() =>
-                window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
-              }
+              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
             >
               <Icon className="mr-1.5" name="plus-circled" />
               <span>Join Waitlist</span>

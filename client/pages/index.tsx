@@ -12,7 +12,7 @@ const Home = (props: Props) => {
     const handleKeyDown = (event: any) => {
       if (event.key === 'a') {
         // open a new window
-        window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
+        window.open('https://forms.gle/weRYdVmr2LszmQiK6');
       } else if (event.key === 'd') {
         router.push(`/v2/lesson/hello-codeamigo/step/intro`);
       }
@@ -47,7 +47,7 @@ const Home = (props: Props) => {
         <button
           className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
           onClick={() => {
-            window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
+            window.open('https://forms.gle/weRYdVmr2LszmQiK6');
           }}
         >
           Press{' '}

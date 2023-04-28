@@ -66,7 +66,7 @@ const HighDemand: React.FC<Props> = () => {
             <div className="flex items-center justify-between">
               <Button
                 onClick={() =>
-                  window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+                  window.open('https://forms.gle/weRYdVmr2LszmQiK6')
                 }
                 type="button"
               >

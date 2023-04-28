@@ -30,7 +30,7 @@ const TopNav: React.FC<Props> = () => {
             <div>
               <Button
                 onClick={() =>
-                  window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank')
+                  window.open('https://forms.gle/weRYdVmr2LszmQiK6')
                 }
               >
                 <Icon className="mr-1.5" name="plus-circled" />
