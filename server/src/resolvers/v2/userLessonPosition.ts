@@ -20,7 +20,9 @@ export class UserLessonPositionResolver {
     const userLessonPosition = await UserLessonPosition.findOne({
       where: {
         lessonId: lessonId,
-        userId: req.session.userId,
+        user: {
+          id: req.session.userId,
+        },
       },
     });
 
@@ -48,7 +50,9 @@ export class UserLessonPositionResolver {
     const userLessonPosition = await UserLessonPosition.findOne({
       where: {
         lessonId: lessonId,
-        userId: req.session.userId,
+        user: {
+          id: req.session.userId,
+        },
       },
     });
 
@@ -82,7 +86,7 @@ export class UserLessonPositionResolver {
       currentPosition: 0,
       lastSlugSeen: lesson?.steps[0].slug,
       lessonId,
-      userId: user.id,
+      user,
     });
 
     await userLessonPosition.save();
@@ -105,7 +109,9 @@ export class UserLessonPositionResolver {
     const userLessonPosition = await UserLessonPosition.findOne({
       where: {
         lessonId: lessonId,
-        userId: user.id,
+        user: {
+          id: req.session.userId,
+        },
       },
     });
 

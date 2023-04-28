@@ -13,6 +13,7 @@ const StepActions: React.FC<Props> = ({
   disabled,
   isAutoPlayEnabled,
   isCompletionEnabled,
+  isLoggedIn,
   lessonId,
   lessonSlug,
   nextLoader,
@@ -63,13 +64,16 @@ const StepActions: React.FC<Props> = ({
   }, [loaderWidth]);
 
   const handleNext = () => {
-    updateUserLessonCurrentPosition({
-      refetchQueries: ['UserLessonPosition'],
-      variables: {
-        currentPosition: (step.position || 0) + 1,
-        lessonId,
-      },
-    });
+    if (isLoggedIn) {
+      updateUserLessonCurrentPosition({
+        refetchQueries: ['UserLessonPosition'],
+        variables: {
+          currentPosition: (step.position || 0) + 1,
+          lessonId,
+        },
+      });
+    }
+
     router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
   };
 
@@ -153,6 +157,7 @@ type Props = {
   disabled: boolean;
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
+  isLoggedIn: boolean;
   lessonId: string;
   lessonSlug: string;
   nextLoader: boolean;
