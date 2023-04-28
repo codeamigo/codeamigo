@@ -69,6 +69,16 @@ export class Step extends BaseEntity {
   @Column({ nullable: true })
   title: string;
 
+  @Field(() => StepExecutionTypeEnum, {
+    defaultValue: StepExecutionTypeEnum.sandpack,
+  })
+  @Column({ default: StepExecutionTypeEnum.sandpack, type: 'text' })
+  executionType: keyof typeof StepExecutionTypeEnum;
+
+  @Field(() => String, { defaultValue: null, nullable: true })
+  @Column({ nullable: true })
+  template: string;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.steps, {
     onDelete: 'CASCADE',
   })
