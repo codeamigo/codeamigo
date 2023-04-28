@@ -12,6 +12,7 @@ import Editor from '@monaco-editor/react';
 import { Form, Formik } from 'formik';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
@@ -28,7 +29,6 @@ import {
   CodeModulesQuery,
   LessonDocument,
   LessonQueryVariables,
-  Question,
   Step,
   StepDocument,
   StepQueryVariables,
@@ -36,7 +36,9 @@ import {
   useCodeModulesQuery,
   useCompleteCheckpointMutation,
   useMeQuery,
+  UserLessonPositionQuery,
   useUpdateCodeModuleMutation,
+  useUserLessonPositionQuery,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
@@ -378,9 +380,10 @@ function MonacoEditor({
   hoverSelection,
   isStepComplete,
   leftPanelHeight,
+  lessonId,
+  lessonSlug,
   onReady,
   setCurrentCheckpoint,
-  setCurrentStep,
   setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
@@ -400,9 +403,10 @@ function MonacoEditor({
     editor: string;
     instructions: string;
   };
+  lessonId: string;
+  lessonSlug: string;
   onReady: () => void;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
-  setCurrentStep: Dispatch<SetStateAction<string>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
   setIsStepComplete: Dispatch<SetStateAction<boolean>>;
   setLeftPanelHeight: Dispatch<
@@ -648,7 +652,7 @@ function MonacoEditor({
   const setupStart = () => {
     const match = editorRef.current
       .getModel()
-      .findMatches(step.start, true, false, false, null, true)[0];
+      ?.findMatches(step.start, true, false, false, null, true)[0];
 
     if (!match) return;
     editorRef.current.setPosition(match.range.getEndPosition());
@@ -742,8 +746,9 @@ function MonacoEditor({
         disabled={!isStepComplete}
         isAutoPlayEnabled={isAutoPlayEnabled}
         isCompletionEnabled={isCompletionEnabled}
+        lessonId={lessonId}
+        lessonSlug={lessonSlug}
         nextLoader={nextLoader}
-        setCurrentStep={setCurrentStep}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
         step={step}
@@ -803,12 +808,10 @@ function MonacoEditor({
 }
 
 const Markdown = ({
-  currentStep,
   instructions,
   leftPanelHeight,
   setLeftPanelHeight,
 }: {
-  currentStep: string;
   instructions: string;
   leftPanelHeight: {
     editor: string;
@@ -824,10 +827,6 @@ const Markdown = ({
   const [full, setFull] = useState(false);
 
   useEffect(() => {
-    setFull(false);
-  }, [currentStep]);
-
-  useEffect(() => {
     setLeftPanelHeight({
       editor: full ? '0px' : 'calc(100% - 18rem)',
       instructions: full ? '100%' : '18rem',
@@ -839,7 +838,6 @@ const Markdown = ({
       className={`relative overflow-hidden bg-neutral-900 transition-all ${
         full ? 'z-40' : 'z-20'
       }`}
-      key={currentStep}
       style={{ height: `${leftPanelHeight.instructions}` }}
     >
       <ReactMarkdown
@@ -1126,26 +1124,35 @@ const ChatBot = ({
 };
 
 const ProgressBar = ({
-  currentStep,
-  setCurrentStep,
+  checkpoints,
+  lessonSlug,
   step,
   steps,
+  title,
+  userLessonPosition,
 }: {
+  checkpoints?: CheckpointsQuery['checkpoints'];
   currentStep: string;
-  setCurrentStep: Dispatch<SetStateAction<string>>;
+  lessonSlug: string;
   step: Step;
-  steps?: number;
+  steps?: Pick<Step, 'slug' | 'title'>[];
+  title: string;
+  userLessonPosition?: UserLessonPositionQuery['userLessonPosition'];
 }) => {
-  if (typeof steps === 'undefined') return null;
+  const router = useRouter();
+
+  if (!steps) return null;
+  if (steps?.length === 0) return null;
+
   return (
     <div
       className="flex cursor-pointer items-center gap-2 text-xs font-light"
       onClick={() => {
         modalVar({
-          callback: (step: string) => {
-            setCurrentStep(step);
+          callback: (slug: string) => {
+            router.push(`/v2/lesson/${lessonSlug}/step/${slug}`);
           },
-          data: { currentStep, steps, title: 'Intro to Codeamigo' },
+          data: { checkpoints, steps, title, userLessonPosition },
           name: 'steps',
           persistent: false,
         });
@@ -1154,12 +1161,15 @@ const ProgressBar = ({
       <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
-          style={{ width: `${(((step.position || 0) + 1) / steps) * 100}%` }}
+          style={{
+            width: `${(((step?.position || 0) + 1) / steps.length) * 100}%`,
+          }}
         />
       </div>
       <div className="text-xs text-white">
-        {/* percent completed */}
-        <pre>Step {`${step.position}/${steps} ${step.title}`}</pre>
+        <pre>
+          Step {`${(step?.position || 0) + 1}/${steps.length} ${step?.title}`}
+        </pre>
       </div>
     </div>
   );
@@ -1200,6 +1210,11 @@ const V2Lesson = ({ lesson, step }: Props) => {
       stepId: step?.id as string,
     },
   });
+  const { data: userLessonPositionData } = useUserLessonPositionQuery({
+    variables: {
+      lessonId: lesson?.id as string,
+    },
+  });
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -1233,6 +1248,8 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
+
+    // update last slug seen
   }, [step?.id]);
 
   useEffect(() => {
@@ -1287,10 +1304,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
         {/* top bar */}
         <div className="flex w-full justify-between">
           <ProgressBar
+            checkpoints={checkpointsData?.checkpoints}
             currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
+            lessonSlug={lesson?.slug as string}
             step={step as Step}
-            steps={lesson?.steps?.length}
+            steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
+            title={lesson?.title as string}
+            userLessonPosition={userLessonPositionData?.userLessonPosition}
           />
           <UserMenu />
         </div>
@@ -1302,7 +1322,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
             <SandpackLayout>
               <SandpackStack className="editor-instructions-container !h-full">
                 <Markdown
-                  currentStep={currentStep}
                   instructions={step?.instructions as string}
                   leftPanelHeight={leftPanelHeight}
                   setLeftPanelHeight={setLeftPanelHeight}
@@ -1317,9 +1336,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     hoverSelection={hoverSelection}
                     isStepComplete={isStepComplete}
                     leftPanelHeight={leftPanelHeight}
+                    lessonId={lesson?.id as string}
+                    lessonSlug={lesson?.slug as string}
                     onReady={() => setEditorReady(true)}
                     setCurrentCheckpoint={setCurrentCheckpoint}
-                    setCurrentStep={setCurrentStep}
                     setHoverSelection={setHoverSelection}
                     setIsStepComplete={setIsStepComplete}
                     setLeftPanelHeight={setLeftPanelHeight}

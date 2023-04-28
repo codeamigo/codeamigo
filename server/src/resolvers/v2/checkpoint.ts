@@ -51,9 +51,9 @@ export class CheckpointResolver {
       newCheckpoint.user = user;
     }
 
-    await newCheckpoint.save();
+    const dbCheckpoint = await newCheckpoint.save();
 
-    return newCheckpoint;
+    return dbCheckpoint;
   }
 
   @Query(() => [Checkpoint])
@@ -89,16 +89,19 @@ export class CheckpointResolver {
 
       if (!userCheckpoints.length) {
         const newCheckpoints: Checkpoint[] = [];
-        for (const checkpoint of checkpoints) {
+        for (const c of checkpoints) {
           const newCheckpoint = await this.createCheckpoint(
-            checkpoint.step.id,
-            checkpoint.description,
-            checkpoint.type as CheckpointTypeEnum,
-            checkpoint.matchRegex,
+            c.step.id,
+            c.description,
+            c.type as CheckpointTypeEnum,
+            c.matchRegex,
             ctx
           );
+          const checkpoint = await Checkpoint.findOne(newCheckpoint.id, {
+            relations: ['step', 'user'],
+          });
 
-          newCheckpoints.push(newCheckpoint);
+          newCheckpoints.push(checkpoint!);
         }
 
         return newCheckpoints;

@@ -52,7 +52,6 @@ export class CodeModuleResolver {
     if (codeModule?.user.id !== user?.id) {
       throw new Error('Not authorized');
     }
-    console.log(user);
 
     codeModule.code = code;
 

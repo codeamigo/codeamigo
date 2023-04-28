@@ -4,12 +4,17 @@ import React, { useEffect, useState } from 'react';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import Toggle from '👨‍💻components/Toggle';
-import { Step } from '👨‍💻generated/graphql';
+import {
+  Step,
+  useUpdateUserLessonCurrentPositionMutation,
+} from '👨‍💻generated/graphql';
 
 const StepActions: React.FC<Props> = ({
   disabled,
   isAutoPlayEnabled,
   isCompletionEnabled,
+  lessonId,
+  lessonSlug,
   nextLoader,
   setIsAutoPlayEnabled,
   setIsCompletionEnabled,
@@ -19,6 +24,8 @@ const StepActions: React.FC<Props> = ({
   const nextDisabled = isLastStep || disabled;
   const [loaderWidth, setLoaderWidth] = useState(0);
   const router = useRouter();
+  const [updateUserLessonCurrentPosition] =
+    useUpdateUserLessonCurrentPositionMutation();
 
   useEffect(() => {
     setLoaderWidth(0);
@@ -55,6 +62,17 @@ const StepActions: React.FC<Props> = ({
     }
   }, [loaderWidth]);
 
+  const handleNext = () => {
+    updateUserLessonCurrentPosition({
+      refetchQueries: ['UserLessonPosition'],
+      variables: {
+        currentPosition: (step.position || 0) + 1,
+        lessonId,
+      },
+    });
+    router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between border-b border-neutral-800 bg-black p-2">
@@ -69,7 +87,7 @@ const StepActions: React.FC<Props> = ({
             <Button
               disabled={step.position === 0}
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
               }}
             >
               Prev
@@ -96,7 +114,7 @@ const StepActions: React.FC<Props> = ({
             <Button
               disabled={step.position === 0}
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
               }}
             >
               Prev
@@ -106,7 +124,7 @@ const StepActions: React.FC<Props> = ({
               disabled={nextDisabled}
               id="next-button"
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.nextSlug}`);
+                handleNext();
               }}
             >
               <span className="relative z-10">Next</span>
@@ -135,8 +153,9 @@ type Props = {
   disabled: boolean;
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
+  lessonId: string;
+  lessonSlug: string;
   nextLoader: boolean;
-  setCurrentStep: React.Dispatch<React.SetStateAction<string>>;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step;

@@ -4,8 +4,10 @@ query Lesson($slug: String!) {
     description
     thumbnail
     title
+    slug
     steps {
       slug
+      title
     }
   }
 }
