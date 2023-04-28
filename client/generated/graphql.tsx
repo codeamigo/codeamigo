@@ -285,11 +285,19 @@ export type Step = {
   position?: Maybe<Scalars['Float']>;
   start?: Maybe<Scalars['String']>;
   title?: Maybe<Scalars['String']>;
+  executionType?: Maybe<StepExecutionTypeEnum>;
+  template?: Maybe<Scalars['String']>;
   lesson: Lesson;
   questions?: Maybe<Array<Question>>;
   codeModules?: Maybe<Array<CodeModule>>;
   checkpoints?: Maybe<Array<Checkpoint>>;
 };
+
+export enum StepExecutionTypeEnum {
+  Riju = 'riju',
+  Sandpack = 'sandpack',
+  Stackblitz = 'stackblitz'
+}
 
 export type UpdateUserRoleInput = {
   id: Scalars['String'];
@@ -307,6 +315,7 @@ export type User = {
   profilePic: Scalars['String'];
   role: Role;
   updatedAt: Scalars['String'];
+  userLessonPositions?: Maybe<Array<UserLessonPosition>>;
   username: Scalars['String'];
 };
 
@@ -318,7 +327,6 @@ export type UserLessonPosition = {
   lastSlugSeen: Scalars['String'];
   currentPosition: Scalars['Float'];
   lessonId: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -608,7 +616,7 @@ export type StepQuery = (
   { __typename?: 'Query' }
   & { step?: Maybe<(
     { __typename?: 'Step' }
-    & Pick<Step, 'id' | 'instructions' | 'position' | 'slug' | 'nextSlug' | 'prevSlug' | 'start' | 'title'>
+    & Pick<Step, 'id' | 'instructions' | 'nextSlug' | 'position' | 'prevSlug' | 'slug' | 'start' | 'template' | 'title'>
     & { questions?: Maybe<Array<(
       { __typename?: 'Question' }
       & Pick<Question, 'value'>
@@ -1270,15 +1278,16 @@ export const StepDocument = gql`
   step(slug: $slug) {
     id
     instructions
-    position
-    slug
     nextSlug
+    position
     prevSlug
-    start
-    title
     questions {
       value
     }
+    slug
+    start
+    template
+    title
   }
 }
     `;

@@ -2,6 +2,7 @@ import {
   FileTabs,
   SandpackConsole,
   SandpackLayout,
+  SandpackPredefinedTemplate,
   SandpackPreview,
   SandpackProvider,
   SandpackStack,
@@ -1348,7 +1349,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
           style={{ width: '100%' }}
         >
-          <SandpackProvider files={files} template="vanilla" theme={'dark'}>
+          <SandpackProvider
+            files={files}
+            template={
+              (step?.template as SandpackPredefinedTemplate) || 'static'
+            }
+            theme={'dark'}
+          >
             <SandpackLayout>
               <SandpackStack className="editor-instructions-container !h-full">
                 <Markdown
