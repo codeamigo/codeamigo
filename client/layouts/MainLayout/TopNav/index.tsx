@@ -17,7 +17,7 @@ const TopNav: React.FC<Props> = () => {
             <div className="h-full">
               <div className="flex space-x-4 text-white">
                 <button
-                  className={`text-white flex items-center text-xl font-bold focus:outline-none`}
+                  className={`flex items-center text-xl font-bold text-white focus:outline-none`}
                   onClick={() => router.push('/')}
                 >
                   <Logo className="mr-1 w-8 text-xs sm:mr-1.5 sm:w-12 sm:text-lg" />
@@ -37,7 +37,7 @@ const TopNav: React.FC<Props> = () => {
                 <span>Join Waitlist</span>
               </Button>
             </div>
-            <Link href="/v2">
+            <Link href="/v2/lesson/hello-codeamigo/step/intro">
               <Button>
                 <Icon className="mr-1.5" name="eye" />
                 <span>Demo</span>

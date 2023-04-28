@@ -25,7 +25,6 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import {
-  Checkpoint,
   CheckpointsQuery,
   CodeModulesQuery,
   LessonDocument,
@@ -430,7 +429,7 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
-  const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
+  const [isCompletionEnabled, setIsCompletionEnabled] = useState(true);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
   const isStepCompleteRef = useRef(isStepComplete);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
@@ -1343,7 +1342,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             title={lesson?.title as string}
             userLessonPosition={userLessonPositionData?.userLessonPosition}
           />
-          <UserMenu />
+          {/* <UserMenu /> */}
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
@@ -1396,8 +1395,12 @@ const V2Lesson = ({ lesson, step }: Props) => {
                   <Icon className="mr-1.5" name="plus-circled" />
                   <span>Join Waitlist</span>
                 </Button>
-                <SandpackPreview className="!h-0" />
-                <SandpackConsole className="overflow-scroll" />
+                <SandpackPreview
+                  className={step?.template === 'static' ? '' : '!h-0'}
+                />
+                {step?.template === 'static' ? null : (
+                  <SandpackConsole className="overflow-scroll" />
+                )}
                 <ChatBot
                   hoverSelection={hoverSelection}
                   questions={step?.questions?.map((q) => q.value) || []}

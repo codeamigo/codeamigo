@@ -11,7 +11,7 @@ const Home = () => {
         // open a new window
         window.open('https://forms.gle/weRYdVmr2LszmQiK6', '_blank');
       } else if (event.key === 'd') {
-        window.open('/v2');
+        window.open('/v2/lesson/hello-codeamigo/step/intro');
       }
     };
     document.addEventListener('keydown', handleKeyDown);
@@ -56,7 +56,7 @@ const Home = () => {
         <button
           className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
           onClick={() => {
-            window.open('/v2', '_blank');
+            window.open('/v2/lesson/hello-codeamigo/step/intro');
           }}
         >
           or{' '}
@@ -77,7 +77,7 @@ const Home = () => {
         <button
           className="mt-3 h-10 cursor-pointer select-none items-center justify-center gap-1 rounded-md border bg-black px-4 text-sm font-semibold text-white transition duration-200 ease-in-out hover:bg-white/90 focus:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-white sm:hidden"
           onClick={() => {
-            window.open('/v2');
+            window.open('/v2/lesson/hello-codeamigo/step/intro');
           }}
           style={{
             boxShadow:
@@ -90,7 +90,7 @@ const Home = () => {
       <div
         className="hidden w-full animate-pulse cursor-pointer items-center justify-center hover:animate-none sm:flex"
         onClick={() => {
-          window.open('/v2');
+          window.open('/v2/lesson/hello-codeamigo/step/intro');
         }}
       >
         <Image height={80} src={hal} width={80} />
