@@ -381,6 +381,7 @@ function MonacoEditor({
   isStepComplete,
   leftPanelHeight,
   lessonId,
+  lessonSlug,
   onReady,
   setCurrentCheckpoint,
   setHoverSelection,
@@ -403,6 +404,7 @@ function MonacoEditor({
     instructions: string;
   };
   lessonId: string;
+  lessonSlug: string;
   onReady: () => void;
   setCurrentCheckpoint: Dispatch<SetStateAction<number>>;
   setHoverSelection: Dispatch<SetStateAction<string | null>>;
@@ -745,6 +747,7 @@ function MonacoEditor({
         isAutoPlayEnabled={isAutoPlayEnabled}
         isCompletionEnabled={isCompletionEnabled}
         lessonId={lessonId}
+        lessonSlug={lessonSlug}
         nextLoader={nextLoader}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
@@ -1122,8 +1125,7 @@ const ChatBot = ({
 
 const ProgressBar = ({
   checkpoints,
-  currentStep,
-  setCurrentStep,
+  lessonSlug,
   step,
   steps,
   title,
@@ -1131,7 +1133,7 @@ const ProgressBar = ({
 }: {
   checkpoints?: CheckpointsQuery['checkpoints'];
   currentStep: string;
-  setCurrentStep: Dispatch<SetStateAction<string>>;
+  lessonSlug: string;
   step: Step;
   steps?: Pick<Step, 'slug' | 'title'>[];
   title: string;
@@ -1148,7 +1150,7 @@ const ProgressBar = ({
       onClick={() => {
         modalVar({
           callback: (slug: string) => {
-            router.push(`/v2/lesson/intro-to-js/step/${slug}`);
+            router.push(`/v2/lesson/${lessonSlug}/step/${slug}`);
           },
           data: { checkpoints, steps, title, userLessonPosition },
           name: 'steps',
@@ -1304,7 +1306,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
           <ProgressBar
             checkpoints={checkpointsData?.checkpoints}
             currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
+            lessonSlug={lesson?.slug as string}
             step={step as Step}
             steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
             title={lesson?.title as string}
@@ -1335,6 +1337,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     isStepComplete={isStepComplete}
                     leftPanelHeight={leftPanelHeight}
                     lessonId={lesson?.id as string}
+                    lessonSlug={lesson?.slug as string}
                     onReady={() => setEditorReady(true)}
                     setCurrentCheckpoint={setCurrentCheckpoint}
                     setHoverSelection={setHoverSelection}

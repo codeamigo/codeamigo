@@ -14,6 +14,7 @@ const StepActions: React.FC<Props> = ({
   isAutoPlayEnabled,
   isCompletionEnabled,
   lessonId,
+  lessonSlug,
   nextLoader,
   setIsAutoPlayEnabled,
   setIsCompletionEnabled,
@@ -69,7 +70,7 @@ const StepActions: React.FC<Props> = ({
         lessonId,
       },
     });
-    router.push(`/v2/lesson/intro-to-js/step/${step.nextSlug}`);
+    router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
   };
 
   return (
@@ -86,7 +87,7 @@ const StepActions: React.FC<Props> = ({
             <Button
               disabled={step.position === 0}
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
               }}
             >
               Prev
@@ -113,7 +114,7 @@ const StepActions: React.FC<Props> = ({
             <Button
               disabled={step.position === 0}
               onClick={() => {
-                router.push(`/v2/lesson/intro-to-js/step/${step.prevSlug}`);
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
               }}
             >
               Prev
@@ -153,6 +154,7 @@ type Props = {
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
   lessonId: string;
+  lessonSlug: string;
   nextLoader: boolean;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
