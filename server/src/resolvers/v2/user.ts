@@ -96,6 +96,7 @@ export class UserResolver {
       return null;
     }
 
+    console.log(req.session);
     if (typeof req.session.userId !== 'string') {
       return null;
     }
@@ -113,18 +114,6 @@ export class UserResolver {
       if (!user) {
         return false;
       }
-
-      // First need to delete the users lessons.
-      // const lessonIds = user.lessons.map(({ id }) => id);
-      // const lessons = await Lesson.findByIds(lessonIds);
-
-      // await Promise.all(
-      //   lessons.map(async (lesson) => {
-      //     const { id } = lesson;
-
-      //     return await Lesson.delete(id);
-      //   })
-      // );
 
       await User.delete(id);
       await this.logout(ctx);
