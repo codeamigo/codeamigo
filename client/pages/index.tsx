@@ -54,7 +54,7 @@ const Home = (props: Props) => {
           <kbd className="group-hover:neutral-700 group-focus:neutral-700 inline-flex h-[22px] w-[22px] select-none items-center justify-center rounded bg-neutral-400 text-sm uppercase text-black transition duration-200 ease-in-out group-focus:text-black">
             A
           </kbd>{' '}
-          to request access
+          to request access{' '}
         </button>
         <button
           className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
