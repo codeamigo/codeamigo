@@ -96,11 +96,6 @@ export class UserResolver {
       return null;
     }
 
-    console.log(req.session);
-    if (typeof req.session.userId !== 'string') {
-      return null;
-    }
-
     return await User.findOne({ id: req.session.userId });
   }
 
