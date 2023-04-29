@@ -3,6 +3,7 @@ import { makeVar } from '@apollo/client';
 export type ModalNameType =
   | 'changePassword'
   | 'highDemand'
+  | 'lessonHelp'
   | 'login'
   | 'register'
   | 'registerAfterPreview'

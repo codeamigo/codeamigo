@@ -19,7 +19,7 @@ const Steps: React.FC<Props> = () => {
   const { callback, data } = modalVar() as ModalType;
   const modalData: StepsDataType = data;
   return (
-    <div className="flex flex-col overflow-hidden rounded-md text-sm text-white sm:min-w-[320px]">
+    <div className="flex flex-col overflow-hidden rounded-md text-white sm:min-w-[320px]">
       <div className="bg-black px-2.5 py-1.5 font-bold">{modalData.title}</div>
       {modalData.steps.map((step: Pick<Step, 'slug' | 'title'>, i: number) => {
         const checkpoints = modalData.checkpoints?.filter(
@@ -32,7 +32,7 @@ const Steps: React.FC<Props> = () => {
             checkpoints.every((checkpoint: any) => checkpoint?.isCompleted));
         return (
           <div
-            className={`flex cursor-pointer items-center gap-3 border-b border-neutral-800 px-2.5 py-1.5 text-xs last:border-b-0 ${
+            className={`flex cursor-pointer items-center gap-3 border-b border-neutral-800 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700 ${
               i % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
             }`}
             key={i}
@@ -49,7 +49,7 @@ const Steps: React.FC<Props> = () => {
               }`}
             >
               <Icon
-                className={`text-xxs ${
+                className={`text-sm ${
                   passed ? `text-green-500` : 'text-neutral-500'
                 }`}
                 // @ts-ignore
