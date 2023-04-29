@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import Toggle from '👨‍💻components/Toggle';
@@ -137,10 +138,16 @@ const StepActions: React.FC<Props> = ({
               )}
             </Button>
             <Button
-              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
+              onClick={() =>
+                modalVar({
+                  callback: () => {},
+                  name: 'lessonHelp',
+                  persistent: false,
+                })
+              }
             >
-              <Icon className="mr-1.5" name="plus-circled" />
-              <span>Join Waitlist</span>
+              <Icon className="mr-1.5" name="help-circled" />
+              Get Help
             </Button>
           </div>
         )}

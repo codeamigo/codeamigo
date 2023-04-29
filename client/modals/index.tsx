@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 
 import ChangePassword from '👨‍💻modals/ChangePassword';
 import HighDemand from '👨‍💻modals/HighDemand';
+import LessonHelp from '👨‍💻modals/LessonHelp';
 import Login from '👨‍💻modals/Login';
 import MobileWarning from '👨‍💻modals/MobileWarning';
 import Register from '👨‍💻modals/Register';
@@ -106,6 +107,7 @@ const Modals: React.FC<Props> = () => {
           {data?.modal?.name === 'highDemand' && <HighDemand />}
           {data?.modal?.name === 'mobileWarning' && <MobileWarning />}
           {data?.modal?.name === 'steps' && <Steps />}
+          {data.modal?.name === 'lessonHelp' && <LessonHelp />}
           {/* eslint-enable */}
         </div>
       </div>

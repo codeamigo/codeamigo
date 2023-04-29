@@ -14,6 +14,7 @@
     "@babel/parser": "^7.20.3",
     "@babel/standalone": "^7.12.10",
     "@babel/traverse": "^7.20.1",
+    "@calcom/embed-react": "^1.0.12",
     "@codesandbox/sandpack-react": "^2.6.1",
     "@headlessui/react": "1.4.1",
     "@monaco-editor/react": "4.5.0",

@@ -610,6 +610,26 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@calcom/embed-core@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.npmjs.org/@calcom/embed-core/-/embed-core-1.1.5.tgz#34cd44465c39877006fb842abee50ffcb55f84bc"
+  integrity sha512-iBVpTOemIq5bK5LiNFugnN9eK2CIVpejkylQw+nPBMttA6ypAlMf3SZmW7KsSjaeK9qYDxOoyvEwagsBygtPeA==
+
+"@calcom/embed-react@^1.0.12":
+  version "1.0.12"
+  resolved "https://registry.npmjs.org/@calcom/embed-react/-/embed-react-1.0.12.tgz#7479125ad3b50054df4663bec9c1b95d895b1546"
+  integrity sha512-JQb+WFvD+wMmOZIGSePvh6MHbg36tY2dA0q2LtB8ak2id6isvogrUPh0dSveiFYY0dd/xfPoNaiWwH3B8cmqcw==
+  dependencies:
+    "@calcom/embed-core" "^1.1.5"
+    "@calcom/embed-snippet" "^1.0.7"
+
+"@calcom/embed-snippet@^1.0.7":
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/@calcom/embed-snippet/-/embed-snippet-1.0.7.tgz#3d243537713141a7315915daddaa1d607f8c7043"
+  integrity sha512-OV/O9IvQ5xTVWkIqIPkJmdjA3X9AnpJH1dYEB7IVjy5wOCwpikruHAabEStrR4KVVTNn/jtskhavZgmOwQ5vHQ==
+  dependencies:
+    "@calcom/embed-core" "^1.1.5"
+
 "@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.4.0":
   version "6.4.2"
   resolved "https://registry.npmjs.org/@codemirror/autocomplete/-/autocomplete-6.4.2.tgz#938b25223bd21f97b2a6d85474643355f98b505b"
