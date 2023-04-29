@@ -633,23 +633,23 @@ const ChatBot = ({
 
   const fetchExplain = async (prompt: string, question: string) => {
     try {
-      const oldStream = textStreams.find(
-        (stream) => stream.question === question
-      );
-      if (oldStream) {
-        const oldDiv = document.getElementById(oldStream.question);
-        if (oldDiv && streamedTextsRef.current) {
-          streamedTextsRef.current.scrollTo({
-            behavior: 'smooth',
-            top: oldDiv.offsetTop - (formRef?.current?.offsetHeight || 0) || 0,
-          });
-          oldDiv.classList.add('animate-pulse');
-          setTimeout(() => {
-            oldDiv.classList.remove('animate-pulse');
-          }, 5000);
-        }
-        throw new Error('Already asked this question');
-      }
+      // const oldStream = textStreams.find(
+      //   (stream) => stream.question === question
+      // );
+      // if (oldStream) {
+      //   const oldDiv = document.getElementById(oldStream.question);
+      //   if (oldDiv && streamedTextsRef.current) {
+      //     streamedTextsRef.current.scrollTo({
+      //       behavior: 'smooth',
+      //       top: oldDiv.offsetTop - (formRef?.current?.offsetHeight || 0) || 0,
+      //     });
+      //     oldDiv.classList.add('animate-pulse');
+      //     setTimeout(() => {
+      //       oldDiv.classList.remove('animate-pulse');
+      //     }, 5000);
+      //   }
+      //   throw new Error('Already asked this question');
+      // }
       if (isBusy) throw new Error('Busy');
       setIsBusy(true);
       const response = await fetch(
