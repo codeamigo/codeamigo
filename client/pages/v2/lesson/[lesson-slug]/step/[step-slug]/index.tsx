@@ -269,7 +269,7 @@ function MonacoEditor({
           setNextLoader(true);
         }
       } else {
-        const nextCheckpoint = checkpoints?.findIndex(
+        const nextCheckpoint = newCheckpoints.findIndex(
           (checkpoint) => !checkpoint.isCompleted
         );
         setCurrentCheckpoint(nextCheckpoint);
