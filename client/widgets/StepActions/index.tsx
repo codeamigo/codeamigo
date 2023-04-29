@@ -166,7 +166,6 @@ type Props = {
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCompletionEnabled: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step;
-  steps: number;
 };
 
 export default StepActions;
