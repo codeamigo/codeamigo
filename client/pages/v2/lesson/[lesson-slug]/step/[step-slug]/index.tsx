@@ -236,7 +236,7 @@ function MonacoEditor({
   const testCheckpoint = async (value: string) => {
     const checkpoint = checkpoints?.[currentCheckpoint];
     const test = checkpoint?.matchRegex as string;
-    const regex = new RegExp(test);
+    const regex = new RegExp(test, 'i');
 
     if (regex.test(value) && checkpoint && checkpoint.isCompleted === false) {
       if (isLoggedIn) {
@@ -986,7 +986,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
     const nextCheckpoint = checkpoints?.findIndex((checkpoint) => {
       return !checkpoint.isCompleted;
     });
-    if (nextCheckpoint && nextCheckpoint !== -1) {
+
+    if (nextCheckpoint === undefined) return;
+
+    if (nextCheckpoint >= 0) {
       setCurrentCheckpoint(nextCheckpoint);
     }
   }, [step?.id]);
