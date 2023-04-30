@@ -966,6 +966,9 @@ const V2Lesson = ({ lesson, step }: Props) => {
       if (!meData?.me) {
         modalVar({
           callback: () => null,
+          data: {
+            purchaseRequired: true,
+          },
           name: 'login',
           persistent: true,
         });
@@ -1017,6 +1020,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, [router.query]);
 
   // HIGH DEMAND
+  // TODO: FIX NOT WORKING
   useEffect(() => {
     if (
       userLessonPurchaseData?.userLessonPurchase?.id ||

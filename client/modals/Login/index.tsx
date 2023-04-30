@@ -21,7 +21,7 @@ const Login: React.FC = () => {
   const [login] = useLoginMutation();
   const [forgotPassword, { data: forgotPasswordData, loading }] =
     useForgotPasswordMutation();
-  const { data: modalData } = useModalQuery();
+  const { data: modalData } = modalVar();
 
   useEffect(() => {
     if (forgotPasswordData?.forgotPassword) {
@@ -64,10 +64,16 @@ const Login: React.FC = () => {
     >
       {({ isSubmitting, values }) => (
         <Form>
-          <div className="mx-auto min-w-[300px] p-4 sm:min-w-[320px]">
-            <h1 className="mb-4 flex items-end justify-center text-xl font-semibold text-white">
+          <div className="mx-auto min-w-[300px] max-w-[300px] p-4 sm:min-w-[320px]">
+            <h1 className="mb-2 flex items-end justify-center text-xl font-semibold text-white">
               Login
             </h1>
+            {modalData?.purchaseRequired ? (
+              <div className="mb-4 mt-1 text-center text-xs text-neutral-500">
+                You must purchase this lesson to continue. Please login or
+                create an account.
+              </div>
+            ) : null}
             <div className="w-full">
               <div className="flex w-full flex-col gap-3">
                 <InputField

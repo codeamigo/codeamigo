@@ -18,6 +18,9 @@ const LessonPurchase: React.FC = () => {
     if (!meData?.me) {
       modalVar({
         callback: () => null,
+        data: {
+          purchaseRequired: true,
+        },
         name: 'login',
         persistent: true,
       });
