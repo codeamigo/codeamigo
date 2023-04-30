@@ -75,6 +75,7 @@ function MonacoEditor({
   isStepComplete,
   leftPanelHeight,
   lessonId,
+  lessonPurchased,
   lessonSlug,
   onReady,
   setCheckpoints,
@@ -100,6 +101,7 @@ function MonacoEditor({
     instructions: string;
   };
   lessonId: string;
+  lessonPurchased: boolean;
   lessonSlug: string;
   onReady: () => void;
   setCheckpoints: Dispatch<
@@ -451,6 +453,7 @@ function MonacoEditor({
         isCompletionEnabled={isCompletionEnabled}
         isLoggedIn={isLoggedIn}
         lessonId={lessonId}
+        lessonPurchased={lessonPurchased}
         lessonSlug={lessonSlug}
         nextLoader={nextLoader}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
@@ -953,15 +956,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
     if (userLessonPurchaseLoading) return;
     if (meLoading) return;
 
-    if (!meData?.me) {
-      modalVar({
-        callback: () => null,
-        name: 'login',
-        persistent: true,
-      });
-      return;
-    }
-
     if (
       !userLessonPurchaseData?.userLessonPurchase?.id &&
       router.query.payment !== 'success' &&
@@ -969,6 +963,15 @@ const V2Lesson = ({ lesson, step }: Props) => {
       step?.position &&
       step?.position > 1
     ) {
+      if (!meData?.me) {
+        modalVar({
+          callback: () => null,
+          name: 'login',
+          persistent: true,
+        });
+        return;
+      }
+
       modalVar({
         callback: () => null,
         data: {
@@ -1157,6 +1160,9 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     isStepComplete={isStepComplete}
                     leftPanelHeight={leftPanelHeight}
                     lessonId={lesson?.id as string}
+                    lessonPurchased={
+                      !!userLessonPurchaseData?.userLessonPurchase?.id
+                    }
                     lessonSlug={lesson?.slug as string}
                     onReady={() => setEditorReady(true)}
                     setCheckpoints={setCheckpoints}

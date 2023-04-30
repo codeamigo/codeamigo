@@ -152,6 +152,18 @@ const Login: React.FC = () => {
                   Create one
                 </span>
               </div>
+              <div className="mt-4 flex w-full justify-center text-xs text-neutral-500">
+                <span
+                  className="text-xs text-red-600"
+                  onClick={() => {
+                    modalVar(InitialModalState);
+                    router.push('/');
+                  }}
+                  role="button"
+                >
+                  Exit
+                </span>
+              </div>
             </div>
           </div>
         </Form>

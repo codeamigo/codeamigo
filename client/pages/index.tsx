@@ -78,8 +78,9 @@ const Home = (props: Props) => {
                 <div
                   className="grainy-image-parent group overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"
                   onClick={() => {
-                    // TODO: dont hardcode step
-                    router.push(`/v2/lesson/${lesson.slug}/step/intro`);
+                    router.push(
+                      `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                    );
                   }}
                   role="button"
                 >
