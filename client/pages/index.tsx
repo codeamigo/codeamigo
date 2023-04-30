@@ -74,10 +74,6 @@ const Home = (props: Props) => {
           {props.lessons
             .filter((lesson) => lesson.slug !== 'intro-to-python')
             .map((lesson) => {
-              const firstSlug = lesson.steps?.sort(
-                (a, b) => a.position - b.position
-              )[0];
-
               return (
                 <div
                   className="grainy-image-parent group overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"

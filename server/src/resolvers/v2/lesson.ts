@@ -6,7 +6,10 @@ import { Lesson } from '../../entities/v2/Lesson';
 export class LessonResolver {
   @Query(() => [Lesson])
   async lessons(): Promise<Lesson[]> {
-    return Lesson.find({ relations: ['steps'] });
+    return Lesson.createQueryBuilder()
+      .leftJoinAndSelect('Lesson.steps', 'steps')
+      .orderBy('steps.position', 'ASC')
+      .getMany();
   }
 
   @Query(() => Lesson, { nullable: true })
