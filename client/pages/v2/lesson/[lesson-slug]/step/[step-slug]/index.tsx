@@ -21,7 +21,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
+import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsQuery,
@@ -34,11 +34,13 @@ import {
   useCheckpointsQuery,
   useCodeModulesQuery,
   useCompleteCheckpointMutation,
+  useCreateUserLessonPurchaseMutation,
   useMeQuery,
   UserLessonPositionQuery,
   useUpdateCodeModuleMutation,
   useUpdateUserLessonLastSlugSeenMutation,
   useUserLessonPositionQuery,
+  useUserLessonPurchaseQuery,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
@@ -73,6 +75,7 @@ function MonacoEditor({
   isStepComplete,
   leftPanelHeight,
   lessonId,
+  lessonPurchased,
   lessonSlug,
   onReady,
   setCheckpoints,
@@ -98,6 +101,7 @@ function MonacoEditor({
     instructions: string;
   };
   lessonId: string;
+  lessonPurchased: boolean;
   lessonSlug: string;
   onReady: () => void;
   setCheckpoints: Dispatch<
@@ -449,6 +453,7 @@ function MonacoEditor({
         isCompletionEnabled={isCompletionEnabled}
         isLoggedIn={isLoggedIn}
         lessonId={lessonId}
+        lessonPurchased={lessonPurchased}
         lessonSlug={lessonSlug}
         nextLoader={nextLoader}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
@@ -903,7 +908,9 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [checkpoints, setCheckpoints] =
     useState<CheckpointsQuery['checkpoints']>();
 
-  const { data: meData } = useMeQuery();
+  const router = useRouter();
+
+  const { data: meData, loading: meLoading } = useMeQuery();
   const { data: checkpointsData } = useCheckpointsQuery({
     variables: {
       stepId: step?.id as string,
@@ -919,9 +926,21 @@ const V2Lesson = ({ lesson, step }: Props) => {
       lessonId: lesson?.id as string,
     },
   });
+  const { data: userLessonPurchaseData, loading: userLessonPurchaseLoading } =
+    useUserLessonPurchaseQuery({
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
+      variables: {
+        lessonId: lesson?.id as string,
+      },
+    });
 
   const [updateUserLessonLastSlugSeen] =
     useUpdateUserLessonLastSlugSeenMutation();
+  const [
+    createUserLessonPurchase,
+    { loading: createUserLessonPurchaseLoading },
+  ] = useCreateUserLessonPurchaseMutation();
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -933,8 +952,73 @@ const V2Lesson = ({ lesson, step }: Props) => {
     };
   }, {});
 
+  useEffect(() => {
+    if (userLessonPurchaseLoading) return;
+    if (meLoading) return;
+
+    if (
+      !userLessonPurchaseData?.userLessonPurchase?.id &&
+      router.query.payment !== 'success' &&
+      lesson?.requiresPayment &&
+      step?.position &&
+      step?.position > 1
+    ) {
+      if (!meData?.me) {
+        modalVar({
+          callback: () => null,
+          name: 'login',
+          persistent: true,
+        });
+        return;
+      }
+
+      modalVar({
+        callback: () => null,
+        data: {
+          cancelUrl: window.location.href,
+          lessonId: lesson?.id,
+          successUrl: window.location.href,
+          title: lesson?.title,
+          userId: meData?.me?.id,
+        },
+        name: 'lessonPurchase',
+        persistent: true,
+      });
+    } else {
+      modalVar(InitialModalState);
+    }
+  }, [
+    lesson,
+    step?.id,
+    meLoading,
+    router.query,
+    userLessonPurchaseLoading,
+    createUserLessonPurchaseLoading,
+    userLessonPurchaseData?.userLessonPurchase?.id,
+  ]);
+
+  useEffect(() => {
+    (async () => {
+      if (router.query.payment === 'success' && router.query.session_id) {
+        const stripeSessionId =
+          typeof router.query.session_id === 'string'
+            ? router.query.session_id
+            : router.query.session_id[router.query.session_id.length - 1];
+        await createUserLessonPurchase({
+          refetchQueries: ['UserLessonPurchase'],
+          variables: {
+            lessonId: lesson?.id as string,
+            stripeSessionId,
+          },
+        });
+        router.push(`/v2/lesson/${lesson?.slug}/step/${step?.slug}`);
+      }
+    })();
+  }, [router.query]);
+
   // HIGH DEMAND
   useEffect(() => {
+    if (userLessonPurchaseData?.userLessonPurchase?.id) return;
     if (!localStorage.getItem('openaiKey')) {
       modalVar({
         callback: () => null,
@@ -943,15 +1027,15 @@ const V2Lesson = ({ lesson, step }: Props) => {
       });
     }
   }, []);
-  // useEffect(() => {
-  //   if (!isDesktop) {
-  //     modalVar({
-  //       callback: () => null,
-  //       name: 'mobileWarning',
-  //       persistent: true,
-  //     });
-  //   }
-  // }, [isDesktop]);
+  useEffect(() => {
+    if (!isDesktop && localStorage.getItem('openaiKey')) {
+      modalVar({
+        callback: () => null,
+        name: 'mobileWarning',
+        persistent: true,
+      });
+    }
+  }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
@@ -1027,15 +1111,24 @@ const V2Lesson = ({ lesson, step }: Props) => {
       >
         {/* top bar */}
         <div className="flex w-full justify-between">
-          <ProgressBar
-            checkpoints={checkpoints}
-            lessonSlug={lesson?.slug as string}
-            step={step as Step}
-            steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
-            title={lesson?.title as string}
-            userLessonPosition={userLessonPositionData?.userLessonPosition}
-          />
-          {/* <UserMenu /> */}
+          <div className="flex items-center gap-2">
+            <Icon
+              className="text-neutral-700 transition-colors hover:text-white"
+              name="home"
+              onClick={() => {
+                router.push(`/`);
+              }}
+            />
+            <ProgressBar
+              checkpoints={checkpoints}
+              lessonSlug={lesson?.slug as string}
+              step={step as Step}
+              steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
+              title={lesson?.title as string}
+              userLessonPosition={userLessonPositionData?.userLessonPosition}
+            />
+          </div>
+          <UserMenu />
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
@@ -1067,6 +1160,9 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     isStepComplete={isStepComplete}
                     leftPanelHeight={leftPanelHeight}
                     lessonId={lesson?.id as string}
+                    lessonPurchased={
+                      !!userLessonPurchaseData?.userLessonPurchase?.id
+                    }
                     lessonSlug={lesson?.slug as string}
                     onReady={() => setEditorReady(true)}
                     setCheckpoints={setCheckpoints}

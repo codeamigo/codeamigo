@@ -2,9 +2,12 @@
 import Cal, { getCalApi } from '@calcom/embed-react';
 import React, { useEffect } from 'react';
 
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 
 const LessonHelp: React.FC<Props> = () => {
+  const { data } = modalVar();
+
   useEffect(() => {
     (async function () {
       const cal = await getCalApi();
@@ -18,6 +21,13 @@ const LessonHelp: React.FC<Props> = () => {
   return (
     <div className="flex flex-col overflow-hidden rounded-md text-white sm:min-w-[320px]">
       <div className="bg-black px-2.5 py-1.5 font-bold">Get Help</div>
+      {data.lessonPurchased ? (
+        <div
+          className={`group flex cursor-pointer items-center gap-2 border-b border-neutral-800 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700`}
+        >
+          <Icon className="" name="chat" />- Call or Text (862) 801-5072
+        </div>
+      ) : null}
       <div
         className={`group flex cursor-pointer items-center gap-2 border-b border-neutral-800 bg-neutral-900 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700`}
         data-cal-link="philip-london-8tgg0u/codeamigo-support"

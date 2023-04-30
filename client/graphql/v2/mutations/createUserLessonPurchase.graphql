@@ -1,5 +1,5 @@
-mutation CreateUserLessonPurchase($lessonId: String!) {
-  createUserLessonPurchase(lessonId: $lessonId) {
+mutation CreateUserLessonPurchase($lessonId: String!, $stripeSessionId: String!) {
+  createUserLessonPurchase(lessonId: $lessonId, stripeSessionId: $stripeSessionId) {
     lessonId
   }
 }

@@ -72,14 +72,15 @@ const Home = (props: Props) => {
       <div className="w-full max-w-3xl lg:w-3/4">
         <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug === 'hello-codeamigo')
+            .filter((lesson) => lesson.slug !== 'intro-to-python')
             .map((lesson) => {
               return (
                 <div
                   className="grainy-image-parent group overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"
                   onClick={() => {
-                    // TODO: dont hardcode step
-                    window.open(`/v2/lesson/${lesson.slug}/step/intro`);
+                    router.push(
+                      `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                    );
                   }}
                   role="button"
                 >
@@ -89,8 +90,11 @@ const Home = (props: Props) => {
                   <div className="px-3 pb-4 pt-2 text-xs">
                     <pre className="text-white">{lesson.title}</pre>
                     <Button className="mt-3">
-                      <Icon className="mr-1.5" name="eye" />
-                      <span>Demo</span>
+                      {lesson.slug === 'hello-codeamigo' ? (
+                        <span>Demo</span>
+                      ) : (
+                        <span>Start</span>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -99,7 +103,7 @@ const Home = (props: Props) => {
         </div>
         <div className="mt-8 grid grid-cols-2 gap-10 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
+            .filter((lesson) => lesson.slug === 'intro-to-python')
             .map((lesson) => {
               return (
                 <div

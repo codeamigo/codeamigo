@@ -211,6 +211,7 @@ export type MutationCreateUserLessonPositionArgs = {
 
 
 export type MutationCreateUserLessonPurchaseArgs = {
+  stripeSessionId: Scalars['String'];
   lessonId: Scalars['String'];
 };
 
@@ -422,6 +423,7 @@ export type CompleteCheckpointMutation = (
 
 export type CreateUserLessonPurchaseMutationVariables = Exact<{
   lessonId: Scalars['String'];
+  stripeSessionId: Scalars['String'];
 }>;
 
 
@@ -612,7 +614,7 @@ export type LessonQuery = (
   { __typename?: 'Query' }
   & { lesson?: Maybe<(
     { __typename?: 'Lesson' }
-    & Pick<Lesson, 'id' | 'description' | 'thumbnail' | 'title' | 'slug'>
+    & Pick<Lesson, 'id' | 'description' | 'requiresPayment' | 'thumbnail' | 'title' | 'slug'>
     & { steps?: Maybe<Array<(
       { __typename?: 'Step' }
       & Pick<Step, 'slug' | 'title'>
@@ -826,8 +828,8 @@ export type CompleteCheckpointMutationHookResult = ReturnType<typeof useComplete
 export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
 export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
 export const CreateUserLessonPurchaseDocument = gql`
-    mutation CreateUserLessonPurchase($lessonId: String!) {
-  createUserLessonPurchase(lessonId: $lessonId) {
+    mutation CreateUserLessonPurchase($lessonId: String!, $stripeSessionId: String!) {
+  createUserLessonPurchase(lessonId: $lessonId, stripeSessionId: $stripeSessionId) {
     lessonId
   }
 }
@@ -848,6 +850,7 @@ export type CreateUserLessonPurchaseMutationFn = Apollo.MutationFunction<CreateU
  * const [createUserLessonPurchaseMutation, { data, loading, error }] = useCreateUserLessonPurchaseMutation({
  *   variables: {
  *      lessonId: // value for 'lessonId'
+ *      stripeSessionId: // value for 'stripeSessionId'
  *   },
  * });
  */
@@ -1266,6 +1269,7 @@ export const LessonDocument = gql`
   lesson(slug: $slug) {
     id
     description
+    requiresPayment
     thumbnail
     title
     slug
