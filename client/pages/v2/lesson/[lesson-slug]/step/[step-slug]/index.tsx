@@ -34,11 +34,13 @@ import {
   useCheckpointsQuery,
   useCodeModulesQuery,
   useCompleteCheckpointMutation,
+  useCreateUserLessonPurchaseMutation,
   useMeQuery,
   UserLessonPositionQuery,
   useUpdateCodeModuleMutation,
   useUpdateUserLessonLastSlugSeenMutation,
   useUserLessonPositionQuery,
+  useUserLessonPurchaseQuery,
 } from '👨‍💻generated/graphql';
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
@@ -903,6 +905,8 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [checkpoints, setCheckpoints] =
     useState<CheckpointsQuery['checkpoints']>();
 
+  const router = useRouter();
+
   const { data: meData } = useMeQuery();
   const { data: checkpointsData } = useCheckpointsQuery({
     variables: {
@@ -919,9 +923,15 @@ const V2Lesson = ({ lesson, step }: Props) => {
       lessonId: lesson?.id as string,
     },
   });
+  const { data: userLessonPurchaseData } = useUserLessonPurchaseQuery({
+    variables: {
+      lessonId: lesson?.id as string,
+    },
+  });
 
   const [updateUserLessonLastSlugSeen] =
     useUpdateUserLessonLastSlugSeenMutation();
+  const [createUserLessonPurchase] = useCreateUserLessonPurchaseMutation();
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -933,8 +943,51 @@ const V2Lesson = ({ lesson, step }: Props) => {
     };
   }, {});
 
+  useEffect(() => {
+    if (
+      lesson?.requiresPayment &&
+      !userLessonPurchaseData?.userLessonPurchase?.id &&
+      step?.position &&
+      step?.position > 1
+    ) {
+      modalVar({
+        callback: () => null,
+        data: {
+          cancelUrl: window.location.href,
+          lessonId: lesson?.id,
+          successUrl: window.location.href,
+          title: lesson?.title,
+          userId: meData?.me?.id,
+        },
+        name: 'lessonPurchase',
+        persistent: true,
+      });
+    }
+  }, [lesson, userLessonPurchaseData, step?.id]);
+
+  useEffect(() => {
+    console.log(router.query);
+    debugger;
+    (async () => {
+      if (router.query.payment === 'success' && router.query.session_id) {
+        const stripeSessionId =
+          typeof router.query.session_id === 'string'
+            ? router.query.session_id
+            : router.query.session_id[router.query.session_id.length - 1];
+        await createUserLessonPurchase({
+          variables: {
+            lessonId: lesson?.id as string,
+            stripeSessionId,
+          },
+        });
+        router.push(`/v2/lesson/${lesson?.slug}/step/${step?.slug}`);
+      }
+    })();
+  }, [router.query]);
+
   // HIGH DEMAND
   useEffect(() => {
+    if (userLessonPurchaseData?.userLessonPurchase?.id) return;
     if (!localStorage.getItem('openaiKey')) {
       modalVar({
         callback: () => null,
@@ -943,15 +996,15 @@ const V2Lesson = ({ lesson, step }: Props) => {
       });
     }
   }, []);
-  // useEffect(() => {
-  //   if (!isDesktop) {
-  //     modalVar({
-  //       callback: () => null,
-  //       name: 'mobileWarning',
-  //       persistent: true,
-  //     });
-  //   }
-  // }, [isDesktop]);
+  useEffect(() => {
+    if (!isDesktop && localStorage.getItem('openaiKey')) {
+      modalVar({
+        callback: () => null,
+        name: 'mobileWarning',
+        persistent: true,
+      });
+    }
+  }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
@@ -1027,15 +1080,24 @@ const V2Lesson = ({ lesson, step }: Props) => {
       >
         {/* top bar */}
         <div className="flex w-full justify-between">
-          <ProgressBar
-            checkpoints={checkpoints}
-            lessonSlug={lesson?.slug as string}
-            step={step as Step}
-            steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
-            title={lesson?.title as string}
-            userLessonPosition={userLessonPositionData?.userLessonPosition}
-          />
-          {/* <UserMenu /> */}
+          <div className="flex items-center gap-2">
+            <Icon
+              className="text-neutral-700 transition-colors hover:text-white"
+              name="home"
+              onClick={() => {
+                router.push(`/`);
+              }}
+            />
+            <ProgressBar
+              checkpoints={checkpoints}
+              lessonSlug={lesson?.slug as string}
+              step={step as Step}
+              steps={lesson?.steps as Pick<Step, 'slug' | 'title'>[]}
+              title={lesson?.title as string}
+              userLessonPosition={userLessonPositionData?.userLessonPosition}
+            />
+          </div>
+          <UserMenu />
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"

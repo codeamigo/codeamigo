@@ -58,6 +58,7 @@
     "pg": "^8.5.1",
     "prettier": "^2.2.1",
     "reflect-metadata": "^0.1.13",
+    "stripe": "^12.3.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.29",
     "uuid": "^8.3.2"

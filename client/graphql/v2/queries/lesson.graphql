@@ -2,6 +2,7 @@ query Lesson($slug: String!) {
   lesson(slug: $slug) {
     id
     description
+    requiresPayment
     thumbnail
     title
     slug

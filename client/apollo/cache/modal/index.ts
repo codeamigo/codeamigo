@@ -4,6 +4,7 @@ export type ModalNameType =
   | 'changePassword'
   | 'highDemand'
   | 'lessonHelp'
+  | 'lessonPurchase'
   | 'login'
   | 'register'
   | 'registerAfterPreview'
