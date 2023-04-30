@@ -864,7 +864,7 @@ const ProgressBar = ({
         });
       }}
     >
-      <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
+      <div className="h-2 w-20 rounded-full bg-green-900 p-[2px] sm:w-32">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
           style={{
