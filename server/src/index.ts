@@ -26,6 +26,7 @@ import { LessonResolver } from './resolvers/v2/lesson';
 import { StepResolver } from './resolvers/v2/step';
 import { UserResolver } from './resolvers/v2/user';
 import { UserLessonPositionResolver } from './resolvers/v2/userLessonPosition';
+import { UserLessonPurchaseResolver } from './resolvers/v2/userLessonPurchase';
 import { complete, explain } from './utils/openai';
 
 const main = async () => {
@@ -95,6 +96,7 @@ const main = async () => {
         CheckpointResolver,
         UserResolver,
         UserLessonPositionResolver,
+        UserLessonPurchaseResolver,
       ],
       validate: false,
     }),

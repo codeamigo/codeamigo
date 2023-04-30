@@ -78,6 +78,7 @@ export type Lesson = {
   thumbnail?: Maybe<Scalars['String']>;
   views?: Maybe<Scalars['Float']>;
   likes: Scalars['Float'];
+  requiresPayment?: Maybe<Scalars['Boolean']>;
   users?: Maybe<Array<User>>;
   steps?: Maybe<Array<Step>>;
 };
@@ -114,6 +115,7 @@ export type Mutation = {
   updateUserLessonCurrentPosition: UserLessonPosition;
   updateUserLessonLastSlugSeen: UserLessonPosition;
   createUserLessonPosition: UserLessonPosition;
+  createUserLessonPurchase: UserLessonPurchase;
 };
 
 
@@ -207,6 +209,11 @@ export type MutationCreateUserLessonPositionArgs = {
   lessonId: Scalars['String'];
 };
 
+
+export type MutationCreateUserLessonPurchaseArgs = {
+  lessonId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   checkpoint?: Maybe<Checkpoint>;
@@ -219,6 +226,7 @@ export type Query = {
   step?: Maybe<Step>;
   steps: Array<Step>;
   userLessonPosition?: Maybe<UserLessonPosition>;
+  userLessonPurchase?: Maybe<UserLessonPurchase>;
   users?: Maybe<Array<User>>;
 };
 
@@ -249,6 +257,11 @@ export type QueryStepArgs = {
 
 
 export type QueryUserLessonPositionArgs = {
+  lessonId: Scalars['String'];
+};
+
+
+export type QueryUserLessonPurchaseArgs = {
   lessonId: Scalars['String'];
 };
 
@@ -316,6 +329,7 @@ export type User = {
   role: Role;
   updatedAt: Scalars['String'];
   userLessonPositions?: Maybe<Array<UserLessonPosition>>;
+  userLessonPurchases?: Maybe<Array<UserLessonPurchase>>;
   username: Scalars['String'];
 };
 
@@ -326,6 +340,14 @@ export type UserLessonPosition = {
   updatedAt: Scalars['String'];
   lastSlugSeen: Scalars['String'];
   currentPosition: Scalars['Float'];
+  lessonId: Scalars['String'];
+};
+
+export type UserLessonPurchase = {
+  __typename?: 'UserLessonPurchase';
+  id: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
   lessonId: Scalars['String'];
 };
 
@@ -395,6 +417,19 @@ export type CompleteCheckpointMutation = (
   & { completeCheckpoint: (
     { __typename?: 'Checkpoint' }
     & Pick<Checkpoint, 'id'>
+  ) }
+);
+
+export type CreateUserLessonPurchaseMutationVariables = Exact<{
+  lessonId: Scalars['String'];
+}>;
+
+
+export type CreateUserLessonPurchaseMutation = (
+  { __typename?: 'Mutation' }
+  & { createUserLessonPurchase: (
+    { __typename?: 'UserLessonPurchase' }
+    & Pick<UserLessonPurchase, 'lessonId'>
   ) }
 );
 
@@ -652,6 +687,19 @@ export type UserLessonPositionQuery = (
   )> }
 );
 
+export type UserLessonPurchaseQueryVariables = Exact<{
+  lessonId: Scalars['String'];
+}>;
+
+
+export type UserLessonPurchaseQuery = (
+  { __typename?: 'Query' }
+  & { userLessonPurchase?: Maybe<(
+    { __typename?: 'UserLessonPurchase' }
+    & Pick<UserLessonPurchase, 'id'>
+  )> }
+);
+
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -777,6 +825,38 @@ export function useCompleteCheckpointMutation(baseOptions?: Apollo.MutationHookO
 export type CompleteCheckpointMutationHookResult = ReturnType<typeof useCompleteCheckpointMutation>;
 export type CompleteCheckpointMutationResult = Apollo.MutationResult<CompleteCheckpointMutation>;
 export type CompleteCheckpointMutationOptions = Apollo.BaseMutationOptions<CompleteCheckpointMutation, CompleteCheckpointMutationVariables>;
+export const CreateUserLessonPurchaseDocument = gql`
+    mutation CreateUserLessonPurchase($lessonId: String!) {
+  createUserLessonPurchase(lessonId: $lessonId) {
+    lessonId
+  }
+}
+    `;
+export type CreateUserLessonPurchaseMutationFn = Apollo.MutationFunction<CreateUserLessonPurchaseMutation, CreateUserLessonPurchaseMutationVariables>;
+
+/**
+ * __useCreateUserLessonPurchaseMutation__
+ *
+ * To run a mutation, you first call `useCreateUserLessonPurchaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserLessonPurchaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserLessonPurchaseMutation, { data, loading, error }] = useCreateUserLessonPurchaseMutation({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useCreateUserLessonPurchaseMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserLessonPurchaseMutation, CreateUserLessonPurchaseMutationVariables>) {
+        return Apollo.useMutation<CreateUserLessonPurchaseMutation, CreateUserLessonPurchaseMutationVariables>(CreateUserLessonPurchaseDocument, baseOptions);
+      }
+export type CreateUserLessonPurchaseMutationHookResult = ReturnType<typeof useCreateUserLessonPurchaseMutation>;
+export type CreateUserLessonPurchaseMutationResult = Apollo.MutationResult<CreateUserLessonPurchaseMutation>;
+export type CreateUserLessonPurchaseMutationOptions = Apollo.BaseMutationOptions<CreateUserLessonPurchaseMutation, CreateUserLessonPurchaseMutationVariables>;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($usernameOrEmail: String!) {
   forgotPassword(usernameOrEmail: $usernameOrEmail)
@@ -1405,3 +1485,36 @@ export function useUserLessonPositionLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type UserLessonPositionQueryHookResult = ReturnType<typeof useUserLessonPositionQuery>;
 export type UserLessonPositionLazyQueryHookResult = ReturnType<typeof useUserLessonPositionLazyQuery>;
 export type UserLessonPositionQueryResult = Apollo.QueryResult<UserLessonPositionQuery, UserLessonPositionQueryVariables>;
+export const UserLessonPurchaseDocument = gql`
+    query UserLessonPurchase($lessonId: String!) {
+  userLessonPurchase(lessonId: $lessonId) {
+    id
+  }
+}
+    `;
+
+/**
+ * __useUserLessonPurchaseQuery__
+ *
+ * To run a query within a React component, call `useUserLessonPurchaseQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserLessonPurchaseQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserLessonPurchaseQuery({
+ *   variables: {
+ *      lessonId: // value for 'lessonId'
+ *   },
+ * });
+ */
+export function useUserLessonPurchaseQuery(baseOptions: Apollo.QueryHookOptions<UserLessonPurchaseQuery, UserLessonPurchaseQueryVariables>) {
+        return Apollo.useQuery<UserLessonPurchaseQuery, UserLessonPurchaseQueryVariables>(UserLessonPurchaseDocument, baseOptions);
+      }
+export function useUserLessonPurchaseLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserLessonPurchaseQuery, UserLessonPurchaseQueryVariables>) {
+          return Apollo.useLazyQuery<UserLessonPurchaseQuery, UserLessonPurchaseQueryVariables>(UserLessonPurchaseDocument, baseOptions);
+        }
+export type UserLessonPurchaseQueryHookResult = ReturnType<typeof useUserLessonPurchaseQuery>;
+export type UserLessonPurchaseLazyQueryHookResult = ReturnType<typeof useUserLessonPurchaseLazyQuery>;
+export type UserLessonPurchaseQueryResult = Apollo.QueryResult<UserLessonPurchaseQuery, UserLessonPurchaseQueryVariables>;

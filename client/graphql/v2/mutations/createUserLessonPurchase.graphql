@@ -1,0 +1,5 @@
+mutation CreateUserLessonPurchase($lessonId: String!) {
+  createUserLessonPurchase(lessonId: $lessonId) {
+    lessonId
+  }
+}
