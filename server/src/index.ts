@@ -19,6 +19,7 @@ import { Question } from './entities/v2/Question';
 import { Step } from './entities/v2/Step';
 import { User } from './entities/v2/User';
 import { UserLessonPosition } from './entities/v2/UserLessonPosition';
+import { UserLessonPurchase } from './entities/v2/UserLessonPurchase';
 import { CheckpointResolver } from './resolvers/v2/checkpoint';
 import { CodeModuleResolver } from './resolvers/v2/codeModule';
 import { LessonResolver } from './resolvers/v2/lesson';
@@ -37,6 +38,7 @@ const main = async () => {
       Step,
       User,
       UserLessonPosition,
+      UserLessonPurchase,
     ],
     logging: true,
     migrations: ['dist/migrations/v2/*.js'],
