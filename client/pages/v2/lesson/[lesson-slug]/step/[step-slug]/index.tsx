@@ -1018,7 +1018,12 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   // HIGH DEMAND
   useEffect(() => {
-    if (userLessonPurchaseData?.userLessonPurchase?.id) return;
+    if (
+      userLessonPurchaseData?.userLessonPurchase?.id ||
+      userLessonPurchaseLoading ||
+      createUserLessonPurchaseLoading
+    )
+      return;
     if (!localStorage.getItem('openaiKey')) {
       modalVar({
         callback: () => null,
