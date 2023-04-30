@@ -98,13 +98,19 @@ const StepActions: React.FC<Props> = ({
               Prev
             </Button>
             <Button
-              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
+              onClick={() =>
+                modalVar({
+                  callback: () => {},
+                  name: 'lessonHelp',
+                  persistent: false,
+                })
+              }
             >
-              <Icon className="mr-1.5" name="plus-circled" />
-              <span>Join Waitlist</span>
+              <Icon className="mr-1.5" name="help-circled" />
+              Get Help
             </Button>
             <Button
-              onClick={() => window.open('https://forms.gle/weRYdVmr2LszmQiK6')}
+              onClick={() => window.open('https://twitter.com/codeamigo_dev')}
             >
               <Icon className="mr-1.5" name="twitter" />
               <span>Follow us on Twitter</span>
