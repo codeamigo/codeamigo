@@ -983,21 +983,21 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, [step?.id, checkpoints]);
 
   useEffect(() => {
-    const nextCheckpoint = checkpoints?.findIndex((checkpoint) => {
-      return !checkpoint.isCompleted;
-    });
+    if (!checkpointsData?.checkpoints) return;
+
+    setCheckpoints(checkpointsData.checkpoints);
+
+    const nextCheckpoint = checkpointsData.checkpoints?.findIndex(
+      (checkpoint) => {
+        return !checkpoint.isCompleted;
+      }
+    );
 
     if (nextCheckpoint === undefined) return;
 
     if (nextCheckpoint >= 0) {
       setCurrentCheckpoint(nextCheckpoint);
     }
-  }, [step?.id]);
-
-  useEffect(() => {
-    if (!checkpointsData?.checkpoints) return;
-
-    setCheckpoints(checkpointsData.checkpoints);
   }, [checkpointsData, step?.id]);
 
   useEffect(() => {
