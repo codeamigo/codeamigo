@@ -63,6 +63,9 @@ export class CheckpointResolver {
   ): Promise<Checkpoint[]> {
     const { req } = ctx;
     const checkpoints = await Checkpoint.find({
+      order: {
+        createdAt: 'ASC',
+      },
       relations: ['step', 'user'],
       where: {
         step: {

@@ -21,45 +21,51 @@ const Steps: React.FC<Props> = () => {
   return (
     <div className="flex flex-col overflow-hidden rounded-md text-white sm:min-w-[320px]">
       <div className="bg-black px-2.5 py-1.5 font-bold">{modalData.title}</div>
-      {modalData.steps.map((step: Pick<Step, 'slug' | 'title'>, i: number) => {
-        const checkpoints = modalData.checkpoints?.filter(
-          (checkpoint: any) => checkpoint.step.slug === step.slug
-        );
+      <div className="max-h-[420px] overflow-scroll">
+        {modalData.steps.map(
+          (step: Pick<Step, 'slug' | 'title'>, i: number) => {
+            const checkpoints = modalData.checkpoints?.filter(
+              (checkpoint: any) => checkpoint.step.slug === step.slug
+            );
 
-        const passed =
-          (modalData.userLessonPosition?.currentPosition || 0) > i ||
-          (checkpoints?.length &&
-            checkpoints.every((checkpoint: any) => checkpoint?.isCompleted));
-        return (
-          <div
-            className={`flex cursor-pointer items-center gap-3 border-b border-neutral-800 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700 ${
-              i % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
-            }`}
-            key={i}
-            onClick={() => {
-              callback(step.slug);
-              modalVar(InitialModalState);
-            }}
-          >
-            <div
-              className={`flex h-4 min-h-[1rem] w-4 min-w-[1rem] items-center justify-center rounded-full border ${
-                passed
-                  ? 'border-green-500 bg-green-900'
-                  : 'border-neutral-500 bg-black'
-              }`}
-            >
-              <Icon
-                className={`text-sm ${
-                  passed ? `text-green-500` : 'text-neutral-500'
+            const passed =
+              (modalData.userLessonPosition?.currentPosition || 0) > i ||
+              (checkpoints?.length &&
+                checkpoints.every(
+                  (checkpoint: any) => checkpoint?.isCompleted
+                ));
+            return (
+              <div
+                className={`flex cursor-pointer items-center gap-3 border-b border-neutral-800 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700 ${
+                  i % 2 === 0 ? 'bg-neutral-900' : 'bg-black'
                 }`}
-                // @ts-ignore
-                name={passed ? 'check' : ''}
-              />
-            </div>
-            {i + 1}. {step.title}
-          </div>
-        );
-      })}
+                key={i}
+                onClick={() => {
+                  callback(step.slug);
+                  modalVar(InitialModalState);
+                }}
+              >
+                <div
+                  className={`flex h-4 min-h-[1rem] w-4 min-w-[1rem] items-center justify-center rounded-full border ${
+                    passed
+                      ? 'border-green-500 bg-green-900'
+                      : 'border-neutral-500 bg-black'
+                  }`}
+                >
+                  <Icon
+                    className={`text-sm ${
+                      passed ? `text-green-500` : 'text-neutral-500'
+                    }`}
+                    // @ts-ignore
+                    name={passed ? 'check' : ''}
+                  />
+                </div>
+                {i + 1}. {step.title}
+              </div>
+            );
+          }
+        )}
+      </div>
     </div>
   );
 };
