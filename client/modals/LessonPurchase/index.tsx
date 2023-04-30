@@ -1,6 +1,7 @@
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { ModalType, modalVar } from '👨‍💻apollo/cache/modal';
+import { InitialModalState, ModalType, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import { useMeQuery } from '👨‍💻generated/graphql';
 import { getStripe } from '👨‍💻utils/stripe';
@@ -9,6 +10,8 @@ const LessonPurchase: React.FC = () => {
   const [purchaseLoading, setPurchaseLoading] = useState(false);
   const { data: meData, loading: meLoading } = useMeQuery();
   const { data } = modalVar() as ModalType;
+
+  const router = useRouter();
 
   useEffect(() => {
     if (meLoading) return;
@@ -82,6 +85,18 @@ const LessonPurchase: React.FC = () => {
           <li>💸 60% off the future lesson price</li>
           <li>🤖 AI chatbot assistant</li>
         </ul>
+      </div>
+      <div className="mt-4 flex w-full justify-center text-xs text-neutral-500">
+        <span
+          className="text-xs text-red-600"
+          onClick={() => {
+            modalVar(InitialModalState);
+            router.push('/');
+          }}
+          role="button"
+        >
+          Exit
+        </span>
       </div>
     </div>
   );

@@ -632,7 +632,7 @@ export type LessonsQuery = (
     & Pick<Lesson, 'description' | 'thumbnail' | 'title' | 'slug'>
     & { steps?: Maybe<Array<(
       { __typename?: 'Step' }
-      & Pick<Step, 'slug'>
+      & Pick<Step, 'position' | 'slug'>
     )>> }
   )> }
 );
@@ -1314,6 +1314,7 @@ export const LessonsDocument = gql`
     title
     slug
     steps {
+      position
       slug
     }
   }

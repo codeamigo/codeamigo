@@ -5,6 +5,7 @@ query Lessons {
     title
     slug
     steps {
+      position
       slug
     }
   }
