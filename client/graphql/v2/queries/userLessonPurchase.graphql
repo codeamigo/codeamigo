@@ -1,0 +1,5 @@
+query UserLessonPurchase($lessonId: String!) {
+  userLessonPurchase(lessonId: $lessonId) {
+    id
+  }
+}

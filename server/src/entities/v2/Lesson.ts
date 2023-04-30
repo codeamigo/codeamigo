@@ -52,6 +52,10 @@ export class Lesson extends BaseEntity {
   @Column({ default: 0, type: 'int' })
   likes!: number;
 
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  requiresPayment: boolean;
+
   @ManyToMany(() => User)
   @Field(() => [User], { defaultValue: [] })
   @JoinTable()
