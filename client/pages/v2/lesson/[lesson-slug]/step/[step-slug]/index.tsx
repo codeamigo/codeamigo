@@ -1080,7 +1080,11 @@ const V2Lesson = ({ lesson, step }: Props) => {
               </SandpackStack>
               <SandpackStack className="!h-full">
                 <SandpackPreview
-                  className={step?.template === 'static' ? '' : '!h-0'}
+                  className={
+                    step?.template === 'static' || step?.template === 'node'
+                      ? ''
+                      : '!h-0'
+                  }
                 />
                 {step?.template === 'static' ? null : (
                   <SandpackConsole className="overflow-scroll" />
