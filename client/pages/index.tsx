@@ -70,7 +70,7 @@ const Home = (props: Props) => {
         </button>
       </div>
       <div className="w-full max-w-3xl lg:w-3/4">
-        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
+        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-2 lg:gap-6">
           {props.lessons
             .filter((lesson) => lesson.slug !== 'intro-to-python')
             .map((lesson) => {
