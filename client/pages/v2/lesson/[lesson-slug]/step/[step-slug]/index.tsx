@@ -966,8 +966,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, [lesson, userLessonPurchaseData, step?.id]);
 
   useEffect(() => {
-    console.log(router.query);
-    debugger;
     (async () => {
       if (router.query.payment === 'success' && router.query.session_id) {
         const stripeSessionId =
