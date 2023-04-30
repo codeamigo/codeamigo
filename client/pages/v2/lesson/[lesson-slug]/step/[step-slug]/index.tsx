@@ -923,11 +923,12 @@ const V2Lesson = ({ lesson, step }: Props) => {
       lessonId: lesson?.id as string,
     },
   });
-  const { data: userLessonPurchaseData } = useUserLessonPurchaseQuery({
-    variables: {
-      lessonId: lesson?.id as string,
-    },
-  });
+  const { data: userLessonPurchaseData, loading: userLessonPurchaseLoading } =
+    useUserLessonPurchaseQuery({
+      variables: {
+        lessonId: lesson?.id as string,
+      },
+    });
 
   const [updateUserLessonLastSlugSeen] =
     useUpdateUserLessonLastSlugSeenMutation();
@@ -944,6 +945,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, {});
 
   useEffect(() => {
+    if (userLessonPurchaseLoading) return;
     if (
       lesson?.requiresPayment &&
       !userLessonPurchaseData?.userLessonPurchase?.id &&
@@ -963,7 +965,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
         persistent: true,
       });
     }
-  }, [lesson, userLessonPurchaseData, step?.id]);
+  }, [lesson, step?.id, userLessonPurchaseLoading]);
 
   useEffect(() => {
     (async () => {
