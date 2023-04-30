@@ -17,7 +17,6 @@ export class LessonResolver {
       .where('Lesson.slug = :slug', { slug })
       .leftJoinAndSelect('Lesson.steps', 'steps')
       .orderBy('steps.position', 'ASC')
-      .addOrderBy('steps.createdAt', 'ASC')
       .getOne();
 
     return lesson;
