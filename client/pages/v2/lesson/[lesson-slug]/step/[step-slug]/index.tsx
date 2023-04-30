@@ -21,7 +21,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
 
-import { modalVar } from '👨‍💻apollo/cache/modal';
+import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsQuery,
@@ -907,7 +907,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   const router = useRouter();
 
-  const { data: meData } = useMeQuery();
+  const { data: meData, loading: meLoading } = useMeQuery();
   const { data: checkpointsData } = useCheckpointsQuery({
     variables: {
       stepId: step?.id as string,
@@ -925,6 +925,8 @@ const V2Lesson = ({ lesson, step }: Props) => {
   });
   const { data: userLessonPurchaseData, loading: userLessonPurchaseLoading } =
     useUserLessonPurchaseQuery({
+      fetchPolicy: 'network-only',
+      notifyOnNetworkStatusChange: true,
       variables: {
         lessonId: lesson?.id as string,
       },
@@ -932,7 +934,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   const [updateUserLessonLastSlugSeen] =
     useUpdateUserLessonLastSlugSeenMutation();
-  const [createUserLessonPurchase] = useCreateUserLessonPurchaseMutation();
+  const [
+    createUserLessonPurchase,
+    { loading: createUserLessonPurchaseLoading },
+  ] = useCreateUserLessonPurchaseMutation();
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -946,9 +951,21 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   useEffect(() => {
     if (userLessonPurchaseLoading) return;
+    if (meLoading) return;
+
+    if (!meData?.me) {
+      modalVar({
+        callback: () => null,
+        name: 'login',
+        persistent: true,
+      });
+      return;
+    }
+
     if (
-      lesson?.requiresPayment &&
       !userLessonPurchaseData?.userLessonPurchase?.id &&
+      router.query.payment !== 'success' &&
+      lesson?.requiresPayment &&
       step?.position &&
       step?.position > 1
     ) {
@@ -964,8 +981,18 @@ const V2Lesson = ({ lesson, step }: Props) => {
         name: 'lessonPurchase',
         persistent: true,
       });
+    } else {
+      modalVar(InitialModalState);
     }
-  }, [lesson, step?.id, userLessonPurchaseLoading]);
+  }, [
+    lesson,
+    step?.id,
+    meLoading,
+    router.query,
+    userLessonPurchaseLoading,
+    createUserLessonPurchaseLoading,
+    userLessonPurchaseData?.userLessonPurchase?.id,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -975,6 +1002,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             ? router.query.session_id
             : router.query.session_id[router.query.session_id.length - 1];
         await createUserLessonPurchase({
+          refetchQueries: ['UserLessonPurchase'],
           variables: {
             lessonId: lesson?.id as string,
             stripeSessionId,
