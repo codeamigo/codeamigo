@@ -961,7 +961,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
       router.query.payment !== 'success' &&
       lesson?.requiresPayment &&
       step?.position &&
-      step?.position > 1
+      step?.position > 4
     ) {
       if (!meData?.me) {
         modalVar({
