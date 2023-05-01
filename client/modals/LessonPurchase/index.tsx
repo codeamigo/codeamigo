@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { posthog } from 'posthog-js';
 import React, { useEffect, useState } from 'react';
 
 import { InitialModalState, ModalType, modalVar } from '👨‍💻apollo/cache/modal';
@@ -29,6 +30,10 @@ const LessonPurchase: React.FC = () => {
 
   const handlePurchase = async () => {
     setPurchaseLoading(true);
+    posthog.capture('purchase', {
+      title: data.title,
+      userId: data.userId,
+    });
     const response = await fetch('/api/checkout-sessions', {
       body: JSON.stringify({
         amount: Number(9.99),
