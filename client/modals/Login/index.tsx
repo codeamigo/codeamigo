@@ -74,8 +74,8 @@ const Login: React.FC = () => {
             </h1>
             {modalData?.purchaseRequired ? (
               <div className="mb-4 mt-1 text-center text-xs text-neutral-500">
-                You must purchase this lesson to continue. Please login or
-                create an account.
+                Purchase this lesson to continue. First, please login or create
+                an account.
               </div>
             ) : null}
             <div className="w-full">
