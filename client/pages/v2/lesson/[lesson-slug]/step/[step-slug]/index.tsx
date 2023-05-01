@@ -1020,12 +1020,11 @@ const V2Lesson = ({ lesson, step }: Props) => {
   }, [router.query]);
 
   // HIGH DEMAND
-  // TODO: FIX NOT WORKING
   useEffect(() => {
     if (
       userLessonPurchaseData?.userLessonPurchase?.id ||
       userLessonPurchaseLoading ||
-      createUserLessonPurchaseLoading
+      lesson?.requiresPayment
     )
       return;
     if (!localStorage.getItem('openaiKey')) {
@@ -1035,7 +1034,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
         persistent: true,
       });
     }
-  }, []);
+  }, [
+    userLessonPurchaseData?.userLessonPurchase?.id,
+    userLessonPurchaseLoading,
+  ]);
   useEffect(() => {
     if (!isDesktop && localStorage.getItem('openaiKey')) {
       modalVar({
