@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/client';
+import { posthog } from 'posthog-js';
 import React, { useEffect } from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
@@ -12,7 +13,6 @@ import InputField from '👨‍💻components/Form/InputField';
 import {
   useForgotPasswordMutation,
   useLoginMutation,
-  useModalQuery,
 } from '👨‍💻generated/graphql';
 import { toErrorMap } from '👨‍💻utils/index';
 
@@ -51,6 +51,10 @@ const Login: React.FC = () => {
           refetchQueries: ['Me'],
           variables: values,
         });
+        posthog.capture('login', {
+          method: 'email',
+        });
+
         if (data?.login.errors) {
           setErrors(toErrorMap(data.login.errors));
         }
@@ -118,9 +122,12 @@ const Login: React.FC = () => {
               <div className="flex items-center justify-center gap-8">
                 <button
                   className="flex items-center gap-2"
-                  onClick={() =>
-                    signIn('google', { callbackUrl: router.asPath })
-                  }
+                  onClick={() => {
+                    signIn('google', { callbackUrl: router.asPath });
+                    posthog.capture('login', {
+                      method: 'google',
+                    });
+                  }}
                   type="button"
                 >
                   <span className="h-6 w-6">
@@ -130,9 +137,12 @@ const Login: React.FC = () => {
                 </button>
                 <button
                   className="flex items-center gap-2"
-                  onClick={() =>
-                    signIn('github', { callbackUrl: router.asPath })
-                  }
+                  onClick={() => {
+                    signIn('github', { callbackUrl: router.asPath });
+                    posthog.capture('login', {
+                      method: 'github',
+                    });
+                  }}
                   style={{ padding: '2px' }}
                   type="button"
                 >
