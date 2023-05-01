@@ -65,9 +65,8 @@ const LessonPurchase: React.FC = () => {
       <h1 className="mb-2 flex items-end justify-center text-xl font-semibold text-white">
         Purchase Lesson
       </h1>
-      <div className="text-xs text-neutral-500">
-        To continue please purchase this lesson. We're offering 60% off for a
-        limited time only.
+      <div className="text-center text-xs text-neutral-500">
+        To continue please purchase this lesson. 60% off for waitlist users.
       </div>
       <div className="mt-4 flex justify-center">
         <Button
