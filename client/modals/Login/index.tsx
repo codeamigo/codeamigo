@@ -63,6 +63,7 @@ const Login: React.FC = () => {
           // @ts-ignore
           modalData?.modal?.callback();
           modalVar(InitialModalState);
+          window.location.reload();
         }
       }}
     >
