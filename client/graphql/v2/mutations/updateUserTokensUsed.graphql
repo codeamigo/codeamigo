@@ -1,0 +1,7 @@
+mutation UpdateTokensUsed($tokensUsed: Float!) {
+  updateTokensUsed(tokensUsed: $tokensUsed) {
+    user {
+      ...RegularUser
+    }
+  }
+}

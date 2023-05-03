@@ -101,6 +101,7 @@ export type Mutation = {
   createCheckpoint: Checkpoint;
   createCodeModule: CodeModule;
   updateCodeModule: CodeModule;
+  updateTokensUsed: UserResponse;
   deleteUser: Scalars['Boolean'];
   register: UserResponse;
   login: UserResponse;
@@ -143,6 +144,11 @@ export type MutationCreateCodeModuleArgs = {
 export type MutationUpdateCodeModuleArgs = {
   code: Scalars['String'];
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateTokensUsedArgs = {
+  tokensUsed: Scalars['Float'];
 };
 
 
@@ -328,6 +334,7 @@ export type User = {
   isAuthenticated?: Maybe<Scalars['Boolean']>;
   profilePic: Scalars['String'];
   role: Role;
+  tokensUsed: Scalars['Float'];
   updatedAt: Scalars['String'];
   userLessonPositions?: Maybe<Array<UserLessonPosition>>;
   userLessonPurchases?: Maybe<Array<UserLessonPurchase>>;
@@ -365,7 +372,7 @@ export type RegularErrorFragment = (
 
 export type RegularUserFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'email' | 'role' | 'username' | 'isAuthenticated'>
+  & Pick<User, 'id' | 'email' | 'role' | 'username' | 'tokensUsed' | 'isAuthenticated'>
 );
 
 export type ChangePasswordFromTokenMutationVariables = Exact<{
@@ -575,6 +582,22 @@ export type UpdateUserLessonLastSlugSeenMutation = (
   ) }
 );
 
+export type UpdateTokensUsedMutationVariables = Exact<{
+  tokensUsed: Scalars['Float'];
+}>;
+
+
+export type UpdateTokensUsedMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTokensUsed: (
+    { __typename?: 'UserResponse' }
+    & { user?: Maybe<(
+      { __typename?: 'User' }
+      & RegularUserFragment
+    )> }
+  ) }
+);
+
 export type CheckpointsQueryVariables = Exact<{
   stepId: Scalars['String'];
 }>;
@@ -714,6 +737,7 @@ export const RegularUserFragmentDoc = gql`
   email
   role
   username
+  tokensUsed
   isAuthenticated @client
 }
     `;
@@ -1190,6 +1214,40 @@ export function useUpdateUserLessonLastSlugSeenMutation(baseOptions?: Apollo.Mut
 export type UpdateUserLessonLastSlugSeenMutationHookResult = ReturnType<typeof useUpdateUserLessonLastSlugSeenMutation>;
 export type UpdateUserLessonLastSlugSeenMutationResult = Apollo.MutationResult<UpdateUserLessonLastSlugSeenMutation>;
 export type UpdateUserLessonLastSlugSeenMutationOptions = Apollo.BaseMutationOptions<UpdateUserLessonLastSlugSeenMutation, UpdateUserLessonLastSlugSeenMutationVariables>;
+export const UpdateTokensUsedDocument = gql`
+    mutation UpdateTokensUsed($tokensUsed: Float!) {
+  updateTokensUsed(tokensUsed: $tokensUsed) {
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+export type UpdateTokensUsedMutationFn = Apollo.MutationFunction<UpdateTokensUsedMutation, UpdateTokensUsedMutationVariables>;
+
+/**
+ * __useUpdateTokensUsedMutation__
+ *
+ * To run a mutation, you first call `useUpdateTokensUsedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTokensUsedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTokensUsedMutation, { data, loading, error }] = useUpdateTokensUsedMutation({
+ *   variables: {
+ *      tokensUsed: // value for 'tokensUsed'
+ *   },
+ * });
+ */
+export function useUpdateTokensUsedMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTokensUsedMutation, UpdateTokensUsedMutationVariables>) {
+        return Apollo.useMutation<UpdateTokensUsedMutation, UpdateTokensUsedMutationVariables>(UpdateTokensUsedDocument, baseOptions);
+      }
+export type UpdateTokensUsedMutationHookResult = ReturnType<typeof useUpdateTokensUsedMutation>;
+export type UpdateTokensUsedMutationResult = Apollo.MutationResult<UpdateTokensUsedMutation>;
+export type UpdateTokensUsedMutationOptions = Apollo.BaseMutationOptions<UpdateTokensUsedMutation, UpdateTokensUsedMutationVariables>;
 export const CheckpointsDocument = gql`
     query Checkpoints($stepId: String!) {
   checkpoints(stepId: $stepId) {

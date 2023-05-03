@@ -99,6 +99,31 @@ export class UserResolver {
     return await User.findOne({ id: req.session.userId });
   }
 
+  @Mutation(() => UserResponse)
+  async updateTokensUsed(
+    @Arg('tokensUsed') tokensUsed: number,
+    @Ctx() { req }: MyContext
+  ): Promise<UserResponse> {
+    const user = await User.findOne({ id: req.session.userId });
+
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: 'user',
+            message: 'User not found.',
+          },
+        ],
+      };
+    }
+
+    user.tokensUsed = tokensUsed;
+
+    await user.save();
+
+    return { user };
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deleteUser(@Ctx() ctx: MyContext): Promise<boolean> {

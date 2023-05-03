@@ -38,6 +38,7 @@ import {
   useMeQuery,
   UserLessonPositionQuery,
   useUpdateCodeModuleMutation,
+  useUpdateTokensUsedMutation,
   useUpdateUserLessonLastSlugSeenMutation,
   useUserLessonPositionQuery,
   useUserLessonPurchaseQuery,
@@ -53,7 +54,7 @@ import * as hal from '../../../../../../assets/hal.png';
 
 const URN = 'urn:';
 const MAX_TOKENS_DEMO = 5_000;
-const MAX_TOKENS_USER = 300_000;
+const MAX_TOKENS_USER = 3_000;
 const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
 const defaultLeftPanelHeight = {
@@ -608,12 +609,10 @@ const Checkpoints = ({
 
 const ChatBot = ({
   hoverSelection,
-  isLoggedIn,
   questions,
   setTokensUsed,
 }: {
   hoverSelection: string | null;
-  isLoggedIn: boolean;
   questions: string[];
   setTokensUsed: React.Dispatch<React.SetStateAction<number>>;
 }) => {
@@ -694,10 +693,8 @@ const ChatBot = ({
         textAreaRef.current?.focus();
       }, 10);
 
-      if (!isLoggedIn) {
-        const tokensUsed = explainations.usage.total_tokens;
-        setTokensUsed((prev) => prev + tokensUsed);
-      }
+      const tokensUsed = explainations.usage.total_tokens;
+      setTokensUsed((prev) => prev + tokensUsed);
     } catch (error) {
       console.log(error);
     } finally {
@@ -1004,6 +1001,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
     createUserLessonPurchase,
     { loading: createUserLessonPurchaseLoading },
   ] = useCreateUserLessonPurchaseMutation();
+  const [updateUserTokensUsed] = useUpdateTokensUsedMutation();
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -1155,8 +1153,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   useEffect(() => {
     if (meLoading) return;
-    if (meData?.me?.isAuthenticated) {
-      // use the user's tokens
+    if (meData?.me) {
+      updateUserTokensUsed({
+        refetchQueries: ['Me'],
+        variables: {
+          tokensUsed,
+        },
+      });
       return;
     }
 
@@ -1165,9 +1168,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   useEffect(() => {
     setTokensUsed(
-      parseInt(localStorage.getItem('codeamigo-tokens-used') || '0')
+      parseInt(
+        meData?.me?.tokensUsed.toString() ||
+          localStorage.getItem('codeamigo-tokens-used') ||
+          '0'
+      )
     );
-  }, []);
+  }, [meData]);
 
   return (
     <AnimatePresence>
@@ -1261,7 +1268,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
                 )}
                 <ChatBot
                   hoverSelection={hoverSelection}
-                  isLoggedIn={meData?.me?.isAuthenticated as boolean}
                   questions={step?.questions?.map((q) => q.value) || []}
                   setTokensUsed={setTokensUsed}
                 />
