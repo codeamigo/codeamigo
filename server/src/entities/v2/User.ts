@@ -63,6 +63,10 @@ export class User extends BaseEntity {
   @Column({ nullable: true, type: 'text' })
   password: string;
 
+  @Field()
+  @Column({ default: 0, type: 'int' })
+  tokensUsed: number;
+
   @OneToMany(() => Checkpoint, (checkpoint) => checkpoint.user, {
     cascade: true,
   })
