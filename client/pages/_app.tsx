@@ -24,6 +24,7 @@ Router.events.on('routeChangeStart', () => {
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+import Script from 'next/script';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 
@@ -112,6 +113,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           name="viewport"
         ></meta>
       </Head>
+      <Script src="https://embed.tawk.to/6453b1664247f20fefef555b/1gvjepuc3" />
       <PostHogProvider client={posthog}>
         <AuthProvider>
           <Layout pathname={router.pathname}>
