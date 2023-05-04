@@ -70,9 +70,9 @@ const Home = (props: Props) => {
         </button>
       </div>
       <div className="w-full max-w-3xl lg:w-3/4">
-        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-2 lg:gap-6">
+        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug !== 'intro-to-python')
+            .filter((lesson) => lesson.slug === 'hello-codeamigo')
             .map((lesson) => {
               return (
                 <div
@@ -103,7 +103,7 @@ const Home = (props: Props) => {
         </div>
         <div className="mt-8 grid grid-cols-2 gap-10 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug === 'intro-to-python')
+            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
             .map((lesson) => {
               return (
                 <div
@@ -121,8 +121,7 @@ const Home = (props: Props) => {
                   <div className="px-3 pb-4 pt-2 text-xs">
                     <pre className="text-white">{lesson.title}</pre>
                     <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-blue-950 px-2 text-xs font-semibold text-blue-500">
-                      Coming{' '}
-                      {lesson.slug === 'intro-to-js' ? 'May 1st' : 'Soon'}
+                      Coming Soon
                     </span>
                     <Button
                       className="mt-3"
