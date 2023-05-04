@@ -37,17 +37,7 @@ class LoginInput {
 }
 
 @InputType()
-class GitHubLoginInput {
-  @Field()
-  id: number;
-  @Field()
-  accessToken: string;
-  @Field()
-  username: string;
-}
-
-@InputType()
-class GoogleLoginInput {
+class OAuthLoginInput {
   @Field()
   id: string;
   @Field()
@@ -230,7 +220,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async githubLogin(
-    @Arg('options') options: GitHubLoginInput,
+    @Arg('options') options: OAuthLoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let user = await User.findOne({
@@ -239,7 +229,8 @@ export class UserResolver {
 
     if (!user) {
       user = await User.create({
-        githubId: options.id,
+        email: options.email,
+        githubId: parseInt(options.id),
         username: 'github-' + options.username,
       }).save();
     }
@@ -253,7 +244,7 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async googleLogin(
-    @Arg('options') options: GoogleLoginInput,
+    @Arg('options') options: OAuthLoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     let user = await User.findOne({

@@ -11,7 +11,6 @@ const options: NextAuthOptions = {
   callbacks: {
     async redirect({ url }) {
       redirection = url;
-      console.log(redirection);
       return Promise.resolve(url);
     },
     async signIn({ account, credentials, email, profile }) {
@@ -23,9 +22,11 @@ const options: NextAuthOptions = {
       }
 
       if (account.provider === 'github') {
-        return `/auth/github/${profile.name}/${profile.email}/${
-          account.providerAccountId
-        }/${encodeURIComponent(redirection)}`;
+        return `/auth/github/${
+          'login' in profile ? profile.login : profile.name
+        }/${profile.email}/${account.providerAccountId}/${encodeURIComponent(
+          redirection
+        )}`;
       }
 
       if (account.provider === 'google') {

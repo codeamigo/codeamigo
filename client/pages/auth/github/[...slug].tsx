@@ -10,15 +10,15 @@ const GithubHandler: React.FC<Props> = () => {
   useEffect(() => {
     if (router.query.slug) {
       const doLogin = async () => {
-        const [accessToken, id, username, redirection] = router.query
+        const [username, email, id, redirection] = router.query
           .slug as string[];
 
         await login({
           awaitRefetchQueries: true,
           refetchQueries: ['Me'],
           variables: {
-            accessToken,
-            id: parseInt(id),
+            email,
+            id,
             username,
           },
         });
