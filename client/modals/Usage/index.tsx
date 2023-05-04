@@ -1,11 +1,8 @@
 import { Form, Formik } from 'formik';
-import Image from 'next/image';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
-import InputField from '👨‍💻components/Form/InputField';
-import Icon from '👨‍💻components/Icon';
 import { useMeQuery } from '👨‍💻generated/graphql';
 
 import { MAX_TOKENS_DEMO, MAX_TOKENS_USER } from '../../constants';
@@ -14,7 +11,11 @@ const Usage: React.FC<Props> = () => {
   const { data } = modalVar();
   const { data: meData } = useMeQuery();
 
-  const { max, percentageUsed, tokensUsed, type } = data;
+  const { tokenUsageStatus, tokensUsed } = data;
+
+  const maxTokens = meData?.me ? MAX_TOKENS_USER : MAX_TOKENS_DEMO;
+
+  const percentageUsed = Math.min(100, (tokensUsed / maxTokens) * 100);
 
   return (
     <Formik
@@ -60,18 +61,18 @@ const Usage: React.FC<Props> = () => {
               <pre className="text-xs text-white">{tokensUsed}</pre>
               <div
                 className={`h-2 w-full rounded-full p-[2px] transition-all duration-300 ${
-                  type === 'safe'
+                  tokenUsageStatus === 'safe'
                     ? 'bg-blue-900'
-                    : type === 'warning'
+                    : tokenUsageStatus === 'warning'
                     ? 'bg-yellow-900'
                     : 'bg-red-900'
                 }`}
               >
                 <div
                   className={`h-full rounded-full bg-blue-500 transition-all duration-300 ${
-                    type === 'safe'
+                    tokenUsageStatus === 'safe'
                       ? 'bg-blue-500'
-                      : type === 'warning'
+                      : tokenUsageStatus === 'warning'
                       ? 'bg-yellow-500'
                       : 'bg-red-500'
                   }`}
@@ -80,9 +81,7 @@ const Usage: React.FC<Props> = () => {
                   }}
                 />
               </div>
-              <pre className="text-xs text-white">
-                {meData?.me ? MAX_TOKENS_USER : MAX_TOKENS_DEMO}
-              </pre>
+              <pre className="text-xs text-white">{maxTokens}</pre>
             </div>
             <div className="flex flex-col gap-1 text-xs text-white">
               <pre>Tokens Used: {tokensUsed}</pre>

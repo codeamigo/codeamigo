@@ -75,6 +75,7 @@ function MonacoEditor({
   checkpoints,
   codeModules,
   currentCheckpoint,
+  disabled,
   files,
   hoverSelection,
   isLoggedIn,
@@ -95,6 +96,7 @@ function MonacoEditor({
   checkpoints?: CheckpointsQuery['checkpoints'];
   codeModules?: CodeModulesQuery['codeModules'];
   currentCheckpoint: number;
+  disabled: boolean;
   files: {
     [key: string]: {
       code: string;
@@ -218,6 +220,7 @@ function MonacoEditor({
     const suffix = lines.join('\n').split('[insert]')[1];
 
     try {
+      if (disabled) throw new Error('Disabled');
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/completions`,
         {
@@ -607,13 +610,21 @@ const Checkpoints = ({
 };
 
 const ChatBot = ({
+  disabled,
   hoverSelection,
+  maxTokens,
   questions,
   setTokensUsed,
+  tokenUsageStatus,
+  tokensUsed,
 }: {
+  disabled: boolean;
   hoverSelection: string | null;
+  maxTokens: number | null;
   questions: string[];
   setTokensUsed: React.Dispatch<React.SetStateAction<number | null>>;
+  tokenUsageStatus: TokenUsageStatusType;
+  tokensUsed: number | null;
 }) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
@@ -664,6 +675,7 @@ const ChatBot = ({
       //   }
       //   throw new Error('Already asked this question');
       // }
+      if (disabled) throw new Error('Disabled');
       if (isBusy) throw new Error('Busy');
       setIsBusy(true);
       const response = await fetch(
@@ -758,7 +770,7 @@ const ChatBot = ({
                   <textarea
                     autoFocus
                     className="min-h-[40px] w-full resize-none rounded-md border border-neutral-800 bg-black px-3 py-2 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
-                    disabled={isBusy}
+                    disabled={isBusy || disabled}
                     name="question"
                     onChange={(e) => {
                       setFieldValue('question', e.target.value);
@@ -778,7 +790,9 @@ const ChatBot = ({
                       }
                     }}
                     placeholder={
-                      isDesktop
+                      disabled
+                        ? ''
+                        : isDesktop
                         ? 'Ask me anything, or hover over some code to see what I can do.'
                         : 'Ask me anything.'
                     }
@@ -791,6 +805,23 @@ const ChatBot = ({
                       className="absolute right-3 top-1.5 animate-spin text-lg text-neutral-500"
                       name="cog"
                     />
+                  ) : disabled ? (
+                    <pre
+                      className="absolute left-3 top-2.5 cursor-pointer rounded-md border border-red-500 bg-red-950 px-1 py-0.5 text-xs text-red-500"
+                      onClick={() => {
+                        modalVar({
+                          callback: () => null,
+                          data: {
+                            tokenUsageStatus,
+                            tokensUsed,
+                          },
+                          name: 'usage',
+                          persistent: false,
+                        });
+                      }}
+                    >
+                      Max Tokens Exceeded
+                    </pre>
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
                     {[...defaultQuestions, ...questions].map((question) => {
@@ -840,29 +871,20 @@ const ChatBot = ({
   );
 };
 
-const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
+type TokenUsageStatusType = 'safe' | 'warning' | 'danger';
+
+const Credits = ({
+  maxTokens,
+  tokenUsageStatus,
+  tokensUsed,
+}: {
+  maxTokens: number | null;
+  tokenUsageStatus: TokenUsageStatusType;
+  tokensUsed: number | null;
+}) => {
   if (tokensUsed === null) return null;
-  const { data: meData, loading: meLoading } = useMeQuery();
-  const [type, setType] = useState<'safe' | 'warning' | 'danger'>('safe');
-  const [max, setMax] = useState(MAX_TOKENS_DEMO);
-
-  useEffect(() => {
-    if (meLoading) return;
-
-    if (meData?.me) {
-      setMax(MAX_TOKENS_USER);
-    } else {
-      setMax(MAX_TOKENS_DEMO);
-    }
-
-    let type = 'safe';
-    if (tokensUsed > 0.5 * max) type = 'warning';
-    if (tokensUsed > 0.75 * max) type = 'danger';
-
-    setType(type as 'safe' | 'warning' | 'danger');
-  }, [tokensUsed, meLoading, meData?.me]);
-
-  let percentageUsed = (Math.min(tokensUsed, max) / max) * 100;
+  if (maxTokens === null) return null;
+  let percentageUsed = (Math.min(tokensUsed, maxTokens) / maxTokens) * 100;
 
   return (
     <div
@@ -872,10 +894,8 @@ const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
         modalVar({
           callback: () => null,
           data: {
-            max,
-            percentageUsed,
+            tokenUsageStatus,
             tokensUsed,
-            type,
           },
           name: 'usage',
           persistent: false,
@@ -887,18 +907,18 @@ const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
       </pre>
       <div
         className={`h-2 w-32 rounded-full p-[2px] transition-all duration-300 ${
-          type === 'safe'
+          tokenUsageStatus === 'safe'
             ? 'bg-blue-900'
-            : type === 'warning'
+            : tokenUsageStatus === 'warning'
             ? 'bg-yellow-900'
             : 'bg-red-900'
         }`}
       >
         <div
           className={`h-full rounded-full bg-blue-500 transition-all duration-300 ${
-            type === 'safe'
+            tokenUsageStatus === 'safe'
               ? 'bg-blue-500'
-              : type === 'warning'
+              : tokenUsageStatus === 'warning'
               ? 'bg-yellow-500'
               : 'bg-red-500'
           }`}
@@ -967,6 +987,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
   const [tokensUsed, setTokensUsed] = useState<number | null>(null);
+  const [maxTokens, setMaxTokens] = useState<number | null>(null);
+  const [maxTokensUsed, setMaxTokensUsed] = useState<boolean>(false);
+  const [tokenUsageStatus, setTokenUsageStatus] =
+    useState<TokenUsageStatusType>('safe');
   const [currentCheckpoint, setCurrentCheckpoint] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
@@ -1171,8 +1195,19 @@ const V2Lesson = ({ lesson, step }: Props) => {
       });
     }
 
+    const maxTokens = meData?.me?.isAuthenticated
+      ? MAX_TOKENS_USER
+      : MAX_TOKENS_DEMO;
+
     localStorage.setItem('codeamigo-tokens-used', tokensUsed.toString());
-  }, [tokensUsed]);
+    setMaxTokens(maxTokens);
+    setMaxTokensUsed(tokensUsed >= maxTokens);
+
+    let tokenUsageStatus = 'safe';
+    if (tokensUsed > 0.5 * maxTokens) tokenUsageStatus = 'warning';
+    if (tokensUsed > 0.75 * maxTokens) tokenUsageStatus = 'danger';
+    setTokenUsageStatus(tokenUsageStatus);
+  }, [tokensUsed, meLoading, meData?.me]);
 
   useEffect(() => {
     if (meLoading) return;
@@ -1216,7 +1251,11 @@ const V2Lesson = ({ lesson, step }: Props) => {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Credits tokensUsed={tokensUsed} />
+            <Credits
+              maxTokens={maxTokens}
+              tokenUsageStatus={tokenUsageStatus}
+              tokensUsed={tokensUsed}
+            />
             <UserMenu />
           </div>
         </div>
@@ -1244,6 +1283,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     checkpoints={checkpoints}
                     codeModules={codeModulesData?.codeModules}
                     currentCheckpoint={currentCheckpoint}
+                    disabled={maxTokensUsed}
                     files={files}
                     hoverSelection={hoverSelection}
                     isLoggedIn={meData?.me?.isAuthenticated as boolean}
@@ -1277,9 +1317,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
                   <SandpackConsole className="overflow-scroll" />
                 )}
                 <ChatBot
+                  disabled={maxTokensUsed}
                   hoverSelection={hoverSelection}
+                  maxTokens={maxTokens}
                   questions={step?.questions?.map((q) => q.value) || []}
                   setTokensUsed={setTokensUsed}
+                  tokenUsageStatus={tokenUsageStatus}
+                  tokensUsed={tokensUsed}
                 />
               </SandpackStack>
             </SandpackLayout>
