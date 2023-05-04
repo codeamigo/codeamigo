@@ -132,7 +132,7 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
-  const [isCompletionEnabled, setIsCompletionEnabled] = useState(true);
+  const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
   const isStepCompleteRef = useRef(isStepComplete);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
