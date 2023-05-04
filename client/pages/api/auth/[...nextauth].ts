@@ -39,7 +39,11 @@ const options: NextAuthOptions = {
       return true;
     },
   },
-  debug: true,
+  debug: false,
+  pages: {
+    error: '/auth/error',
+    signIn: '/auth/signin',
+  },
   providers: [
     GoogleProvider({
       authorization: {

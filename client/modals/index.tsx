@@ -5,6 +5,7 @@ import ChangePassword from '👨‍💻modals/ChangePassword';
 import LessonHelp from '👨‍💻modals/LessonHelp';
 import LessonPurchase from '👨‍💻modals/LessonPurchase';
 import Login from '👨‍💻modals/Login';
+import LoginError from '👨‍💻modals/LoginError';
 import MobileWarning from '👨‍💻modals/MobileWarning';
 import Register from '👨‍💻modals/Register';
 import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
@@ -99,6 +100,7 @@ const Modals: React.FC<Props> = () => {
           {/* eslint-disable */}
           {data?.modal?.name === 'changePassword' && <ChangePassword />}
           {data?.modal?.name === 'login' && <Login />}
+          {data?.modal?.name === 'loginError' && <LoginError />}
           {data?.modal?.name === 'register' && <Register />}
           {data?.modal?.name === 'registerAfterPreview' && (
             <RegisterAfterPreview />

@@ -6,6 +6,7 @@ export type ModalNameType =
   | 'lessonHelp'
   | 'lessonPurchase'
   | 'login'
+  | 'loginError'
   | 'register'
   | 'registerAfterPreview'
   | 'resetPasswordSent'
