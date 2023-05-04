@@ -51,10 +51,9 @@ import StepActions from '👨‍💻widgets/StepActions';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 import * as hal from '../../../../../../assets/hal.png';
+import { MAX_TOKENS_DEMO, MAX_TOKENS_USER } from '../../../../../../constants';
 
 const URN = 'urn:';
-const MAX_TOKENS_DEMO = 5_000;
-const MAX_TOKENS_USER = 3_000;
 const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
 const defaultLeftPanelHeight = {
@@ -124,7 +123,7 @@ function MonacoEditor({
       instructions: string;
     }>
   >;
-  setTokensUsed: Dispatch<SetStateAction<number>>;
+  setTokensUsed: Dispatch<SetStateAction<number | null>>;
   step: Step;
 }) {
   const { code, updateCode } = useActiveCode();
@@ -236,7 +235,7 @@ function MonacoEditor({
 
       const completions: OpenAIAPIResponse = await response.json();
       const suggestion = completions.choices?.[0].text;
-      setTokensUsed((prev) => prev + completions.usage.total_tokens);
+      setTokensUsed((prev) => (prev || 0) + completions.usage.total_tokens);
       return suggestion;
     } catch (error) {
       console.log(error);
@@ -614,7 +613,7 @@ const ChatBot = ({
 }: {
   hoverSelection: string | null;
   questions: string[];
-  setTokensUsed: React.Dispatch<React.SetStateAction<number>>;
+  setTokensUsed: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
@@ -694,7 +693,7 @@ const ChatBot = ({
       }, 10);
 
       const tokensUsed = explainations.usage.total_tokens;
-      setTokensUsed((prev) => prev + tokensUsed);
+      setTokensUsed((prev) => (prev || 0) + tokensUsed);
     } catch (error) {
       console.log(error);
     } finally {
@@ -841,7 +840,8 @@ const ChatBot = ({
   );
 };
 
-const Credits = ({ tokensUsed }: { tokensUsed: number }) => {
+const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
+  if (tokensUsed === null) return null;
   const { data: meData, loading: meLoading } = useMeQuery();
   const [type, setType] = useState<'safe' | 'warning' | 'danger'>('safe');
   const [max, setMax] = useState(MAX_TOKENS_DEMO);
@@ -871,7 +871,13 @@ const Credits = ({ tokensUsed }: { tokensUsed: number }) => {
       onClick={() => {
         modalVar({
           callback: () => null,
-          name: 'highDemand',
+          data: {
+            max,
+            percentageUsed,
+            tokensUsed,
+            type,
+          },
+          name: 'usage',
           persistent: false,
         });
       }}
@@ -958,7 +964,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
-  const [tokensUsed, setTokensUsed] = useState<number>(0);
+  const [tokensUsed, setTokensUsed] = useState<number | null>(null);
   const [currentCheckpoint, setCurrentCheckpoint] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
@@ -1022,7 +1028,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
       !userLessonPurchaseData?.userLessonPurchase?.id &&
       router.query.payment !== 'success' &&
       lesson?.requiresPayment &&
-      (step?.position || 0) > -1
+      (step?.position || 0) > 4
     ) {
       if (!meData?.me) {
         modalVar({
@@ -1153,20 +1159,22 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   useEffect(() => {
     if (meLoading) return;
-    if (meData?.me) {
+    if (tokensUsed === null) return;
+    if (meData?.me?.isAuthenticated) {
       updateUserTokensUsed({
         refetchQueries: ['Me'],
         variables: {
           tokensUsed,
         },
       });
-      return;
     }
 
     localStorage.setItem('codeamigo-tokens-used', tokensUsed.toString());
-  }, [tokensUsed, meLoading, meData]);
+  }, [tokensUsed]);
 
   useEffect(() => {
+    if (meLoading) return;
+
     setTokensUsed(
       parseInt(
         meData?.me?.tokensUsed.toString() ||
@@ -1174,7 +1182,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
           '0'
       )
     );
-  }, [meData]);
+  }, [meData?.me, meLoading]);
 
   return (
     <AnimatePresence>
