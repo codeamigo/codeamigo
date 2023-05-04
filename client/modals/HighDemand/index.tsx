@@ -1,5 +1,6 @@
 import { Form, Formik } from 'formik';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
@@ -10,6 +11,8 @@ import Icon from '👨‍💻components/Icon';
 import * as hal from '../../assets/hal.png';
 
 const HighDemand: React.FC<Props> = () => {
+  const router = useRouter();
+
   return (
     <Formik
       initialValues={{ openaiKey: '' }}
@@ -64,15 +67,27 @@ const HighDemand: React.FC<Props> = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <Button
-                onClick={() =>
-                  window.open('https://forms.gle/weRYdVmr2LszmQiK6')
-                }
-                type="button"
-              >
-                <Icon className="mr-1.5" name="plus-circled" />
-                <span>Join Waitlist</span>
-              </Button>
+              <div className="flex items-center gap-2">
+                <span
+                  className="cursor-pointer text-xs text-red-600"
+                  onClick={() => {
+                    modalVar(InitialModalState);
+                    router.push('/');
+                  }}
+                  role="button"
+                >
+                  Exit
+                </span>
+                <Button
+                  onClick={() =>
+                    window.open('https://forms.gle/weRYdVmr2LszmQiK6')
+                  }
+                  type="button"
+                >
+                  <Icon className="mr-1.5" name="plus-circled" />
+                  <span>Join Waitlist</span>
+                </Button>
+              </div>
               <Button
                 disabled={!values.openaiKey || isSubmitting}
                 type="submit"

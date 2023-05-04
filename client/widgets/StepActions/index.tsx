@@ -98,19 +98,31 @@ const StepActions: React.FC<Props> = ({
             >
               Prev
             </Button>
-            <Button
-              onClick={() =>
-                modalVar({
-                  callback: () => {},
-                  data: { lessonPurchased },
-                  name: 'lessonHelp',
-                  persistent: false,
-                })
-              }
-            >
-              <Icon className="mr-1.5" name="help-circled" />
-              Get Help
-            </Button>
+            {lessonSlug === 'hello-codeamigo' ? (
+              <Button
+                onClick={() =>
+                  window.open('https://forms.gle/weRYdVmr2LszmQiK6')
+                }
+                type="button"
+              >
+                <Icon className="mr-1.5" name="plus-circled" />
+                <span>Join Waitlist</span>
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  modalVar({
+                    callback: () => {},
+                    data: { lessonPurchased },
+                    name: 'lessonHelp',
+                    persistent: false,
+                  })
+                }
+              >
+                <Icon className="mr-1.5" name="help-circled" />
+                Get Help
+              </Button>
+            )}
             <Button
               onClick={() => window.open('https://twitter.com/codeamigo_dev')}
             >
@@ -145,21 +157,31 @@ const StepActions: React.FC<Props> = ({
                 ></span>
               )}
             </Button>
-            <Button
-              onClick={() =>
-                modalVar({
-                  callback: () => {},
-                  data: {
-                    lessonPurchased,
-                  },
-                  name: 'lessonHelp',
-                  persistent: false,
-                })
-              }
-            >
-              <Icon className="mr-1.5" name="help-circled" />
-              Get Help
-            </Button>
+            {lessonSlug === 'hello-codeamigo' ? (
+              <Button
+                onClick={() =>
+                  window.open('https://forms.gle/weRYdVmr2LszmQiK6')
+                }
+                type="button"
+              >
+                <Icon className="mr-1.5" name="plus-circled" />
+                <span>Join Waitlist</span>
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  modalVar({
+                    callback: () => {},
+                    data: { lessonPurchased },
+                    name: 'lessonHelp',
+                    persistent: false,
+                  })
+                }
+              >
+                <Icon className="mr-1.5" name="help-circled" />
+                Get Help
+              </Button>
+            )}
           </div>
         )}
         <div aria-label="Toggle Code Completion" className="hint hint--left">
