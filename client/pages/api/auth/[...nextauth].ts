@@ -53,6 +53,7 @@ const options: NextAuthOptions = {
       clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET!,
     }),
   ],
+  secret: process.env.NEXT_AUTH_SECRET!,
 };
 
 // @ts-ignore
