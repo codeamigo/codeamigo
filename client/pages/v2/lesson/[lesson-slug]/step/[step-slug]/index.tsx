@@ -882,7 +882,9 @@ const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
         });
       }}
     >
-      <pre className="text-xs text-white">Usage Limit</pre>
+      <pre className="hidden text-xs text-white sm:inline-block">
+        Usage Limit
+      </pre>
       <div
         className={`h-2 w-32 rounded-full p-[2px] transition-all duration-300 ${
           type === 'safe'
