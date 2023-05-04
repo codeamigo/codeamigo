@@ -55,18 +55,6 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
-export type GitHubLoginInput = {
-  id: Scalars['Float'];
-  accessToken: Scalars['String'];
-  username: Scalars['String'];
-};
-
-export type GoogleLoginInput = {
-  id: Scalars['String'];
-  email: Scalars['String'];
-  username: Scalars['String'];
-};
-
 export type Lesson = {
   __typename?: 'Lesson';
   id: Scalars['String'];
@@ -163,12 +151,12 @@ export type MutationLoginArgs = {
 
 
 export type MutationGithubLoginArgs = {
-  options: GitHubLoginInput;
+  options: OAuthLoginInput;
 };
 
 
 export type MutationGoogleLoginArgs = {
-  options: GoogleLoginInput;
+  options: OAuthLoginInput;
 };
 
 
@@ -219,6 +207,12 @@ export type MutationCreateUserLessonPositionArgs = {
 export type MutationCreateUserLessonPurchaseArgs = {
   stripeSessionId: Scalars['String'];
   lessonId: Scalars['String'];
+};
+
+export type OAuthLoginInput = {
+  id: Scalars['String'];
+  email: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type Query = {
@@ -453,8 +447,8 @@ export type ForgotPasswordMutation = (
 );
 
 export type GitHubLoginMutationVariables = Exact<{
-  id: Scalars['Float'];
-  accessToken: Scalars['String'];
+  id: Scalars['String'];
+  email: Scalars['String'];
   username: Scalars['String'];
 }>;
 
@@ -915,8 +909,8 @@ export type ForgotPasswordMutationHookResult = ReturnType<typeof useForgotPasswo
 export type ForgotPasswordMutationResult = Apollo.MutationResult<ForgotPasswordMutation>;
 export type ForgotPasswordMutationOptions = Apollo.BaseMutationOptions<ForgotPasswordMutation, ForgotPasswordMutationVariables>;
 export const GitHubLoginDocument = gql`
-    mutation GitHubLogin($id: Float!, $accessToken: String!, $username: String!) {
-  githubLogin(options: {id: $id, accessToken: $accessToken, username: $username}) {
+    mutation GitHubLogin($id: String!, $email: String!, $username: String!) {
+  githubLogin(options: {id: $id, email: $email, username: $username}) {
     errors {
       message
       field
@@ -945,7 +939,7 @@ export type GitHubLoginMutationFn = Apollo.MutationFunction<GitHubLoginMutation,
  * const [gitHubLoginMutation, { data, loading, error }] = useGitHubLoginMutation({
  *   variables: {
  *      id: // value for 'id'
- *      accessToken: // value for 'accessToken'
+ *      email: // value for 'email'
  *      username: // value for 'username'
  *   },
  * });
