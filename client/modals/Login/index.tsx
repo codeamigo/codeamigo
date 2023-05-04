@@ -3,7 +3,7 @@ import * as googlePng from 'assets/google.png';
 import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/client';
+import { signIn } from 'next-auth/react';
 import { posthog } from 'posthog-js';
 import React, { useEffect } from 'react';
 

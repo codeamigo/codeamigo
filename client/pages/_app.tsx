@@ -24,6 +24,7 @@ Router.events.on('routeChangeStart', () => {
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+import { SessionProvider } from 'next-auth/react';
 import posthog from 'posthog-js';
 import { PostHogProvider } from 'posthog-js/react';
 
@@ -113,12 +114,14 @@ function MyApp({ Component, pageProps, router }: AppProps) {
         ></meta>
       </Head>
       <PostHogProvider client={posthog}>
-        <AuthProvider>
-          <Layout pathname={router.pathname}>
-            <Component {...pageProps} />
-          </Layout>
-          <Modals />
-        </AuthProvider>
+        <SessionProvider refetchInterval={5 * 60} session={pageProps.session}>
+          <AuthProvider>
+            <Layout pathname={router.pathname}>
+              <Component {...pageProps} />
+            </Layout>
+            <Modals />
+          </AuthProvider>
+        </SessionProvider>
       </PostHogProvider>
     </ApolloProvider>
   );

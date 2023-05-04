@@ -1,80 +1,55 @@
 import { NextApiHandler } from 'next';
-import NextAuth from 'next-auth';
-import Providers from 'next-auth/providers';
+import NextAuth, { NextAuthOptions } from 'next-auth';
+import GitHubProvider from 'next-auth/providers/github';
+import GoogleProvider from 'next-auth/providers/google';
 
 let redirection = '';
 
-// @ts-ignore
-const options = {
+const options: NextAuthOptions = {
   // A database is optional, but required to persist accounts in a database
   //   database: process.env.NEXT_PUBLIC_API_URL,
   callbacks: {
-    async redirect(url: string) {
+    async redirect({ url }) {
       redirection = url;
+      console.log(redirection);
       return Promise.resolve(url);
     },
-    async signIn(_: any, account: any, profile: any) {
+    async signIn({ account, credentials, email, profile }) {
+      if (!account) {
+        return false;
+      }
+      if (!profile) {
+        return false;
+      }
+
       if (account.provider === 'github') {
-        // const mutation = gql`
-        //   mutation GitHubLogin(
-        //     $id: Float!
-        //     $accessToken: String!
-        //     $username: String!
-        //   ) {
-        //     githubLogin(
-        //       options: {
-        //         id: $id
-        //         accessToken: $accessToken
-        //         username: $username
-        //       }
-        //     ) {
-        //       user {
-        //         id
-        //         username
-        //         createdAt
-        //       }
-        //     }
-        //   }
-        // `;
-
-        // const user = await client.mutate({
-        //   mutation,
-        //   variables: {
-        //     accessToken: account.accessToken,
-        //     id: account.id,
-        //     username: profile.login,
-        //   },
-        // });
-
-        // return true;
-        return `/auth/github/${account.accessToken}/${account.id}/${
-          profile.login
+        return `/auth/github/${profile.name}/${profile.email}/${
+          account.providerAccountId
         }/${encodeURIComponent(redirection)}`;
       }
 
       if (account.provider === 'google') {
+        console.log(account);
         return `/auth/google/${profile.name}/${profile.email}/${
-          profile.id
+          account.providerAccountId
         }/${encodeURIComponent(redirection)}`;
       }
 
       return true;
     },
   },
-  debug: false,
+  debug: true,
   providers: [
-    Providers.Google({
-      authorizationUrl:
-        'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
+    GoogleProvider({
+      authorization: {
+        url: 'https://accounts.google.com/o/oauth2/v2/auth?prompt=consent&access_type=offline&response_type=code',
+      },
       clientId: process.env.NEXT_PUBLIC_GOOGLE_ID!,
       clientSecret: process.env.NEXT_PUBLIC_GOOGLE_SECRET!,
-      scope:
-        'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
     }),
-    Providers.GitHub({
+    GitHubProvider({
       clientId: process.env.NEXT_PUBLIC_GITHUB_ID!,
       clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET!,
-      scope: 'user:email',
     }),
   ],
 };
