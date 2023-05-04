@@ -41,7 +41,7 @@ const options: NextAuthOptions = {
   },
   debug: false,
   pages: {
-    error: '/auth/error',
+    error: '/auth/signin',
     signIn: '/auth/signin',
   },
   providers: [
