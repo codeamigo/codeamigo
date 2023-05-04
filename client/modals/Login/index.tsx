@@ -174,7 +174,7 @@ const Login: React.FC = () => {
                   className="text-xs text-red-600"
                   onClick={() => {
                     modalVar(InitialModalState);
-                    router.push('/');
+                    if (modalData?.purchaseRequired) router.push('/');
                   }}
                   role="button"
                 >

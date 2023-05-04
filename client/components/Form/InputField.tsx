@@ -17,7 +17,7 @@ const InputField: React.FC<Props & InputFieldProps> = (props) => {
       <Field
         {...props}
         {...field}
-        className="w-full rounded-md border-neutral-800 bg-black px-3 py-2 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
+        className="w-full rounded-md border-neutral-800 bg-black px-3 py-2 text-sm text-white !outline-0 !ring-0 transition-colors placeholder:text-xs placeholder:text-neutral-400 focus:border-neutral-700 disabled:opacity-50"
         component={props.component || 'input'}
         id={field.name}
         name={field.name}

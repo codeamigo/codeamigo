@@ -135,10 +135,10 @@ const main = async () => {
         req.body.apiKey
       );
 
-      // filter result.data.choices if choice.text is empty and if not unique
       const choices = result.data.choices.filter((choice: any) => choice.text);
+      const usage = result.data.usage;
 
-      res.json(choices);
+      res.json({ choices, usage });
     } catch (e) {
       res.statusCode = 500;
       res.send([]);
@@ -149,10 +149,10 @@ const main = async () => {
     try {
       const result = await explain(req.body.prompt as string, req.body.apiKey);
 
-      // filter result.data.choices if choice.text is empty and if not unique
       const choices = result.data.choices.filter((choice: any) => choice.text);
+      const usage = result.data.usage;
 
-      res.json(choices);
+      res.json({ choices, usage });
     } catch (e) {
       res.statusCode = 500;
       res.send([]);

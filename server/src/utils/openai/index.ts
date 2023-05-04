@@ -1,10 +1,32 @@
 const { Configuration, OpenAIApi } = require('openai');
 
+type Completion = {
+  data: {
+    id: string;
+    object: string;
+    created: number;
+    model: string;
+    choices: [
+      {
+        text: string;
+        index: number;
+        logprobs: any;
+        finish_reason: 'stop';
+      }
+    ];
+    usage: {
+      prompt_tokens: number;
+      completion_tokens: number;
+      total_tokens: number;
+    };
+  };
+};
+
 export const complete = async (
   prompt: string,
   suffix: string,
   apiKey: string
-) => {
+): Promise<Completion> => {
   const configuration = new Configuration({
     apiKey: apiKey || process.env.OPENAI_API_KEY_SECRET,
   });
@@ -25,7 +47,10 @@ export const complete = async (
   return response;
 };
 
-export const explain = async (prompt: string, apiKey: string) => {
+export const explain = async (
+  prompt: string,
+  apiKey: string
+): Promise<Completion> => {
   const configuration = new Configuration({
     apiKey: apiKey || process.env.OPENAI_API_KEY_SECRET,
   });

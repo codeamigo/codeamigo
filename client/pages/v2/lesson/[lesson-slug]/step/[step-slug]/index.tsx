@@ -21,7 +21,7 @@ import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import debounce from 'utils/debounce';
 
-import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
+import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsQuery,
@@ -38,6 +38,7 @@ import {
   useMeQuery,
   UserLessonPositionQuery,
   useUpdateCodeModuleMutation,
+  useUpdateTokensUsedMutation,
   useUpdateUserLessonLastSlugSeenMutation,
   useUserLessonPositionQuery,
   useUserLessonPurchaseQuery,
@@ -50,9 +51,9 @@ import StepActions from '👨‍💻widgets/StepActions';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 import * as hal from '../../../../../../assets/hal.png';
+import { MAX_TOKENS_DEMO, MAX_TOKENS_USER } from '../../../../../../constants';
 
 const URN = 'urn:';
-
 const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
 const defaultLeftPanelHeight = {
@@ -64,6 +65,11 @@ const defaultQuestions = [
   'What is this code doing?',
   "Why isn't my code accepted?",
 ];
+
+type OpenAIAPIResponse = {
+  choices?: { finish_reason: 'length' | 'stop'; text: string }[];
+  usage: { total_tokens: number };
+};
 
 function MonacoEditor({
   checkpoints,
@@ -83,6 +89,7 @@ function MonacoEditor({
   setHoverSelection,
   setIsStepComplete,
   setLeftPanelHeight,
+  setTokensUsed,
   step,
 }: {
   checkpoints?: CheckpointsQuery['checkpoints'];
@@ -116,6 +123,7 @@ function MonacoEditor({
       instructions: string;
     }>
   >;
+  setTokensUsed: Dispatch<SetStateAction<number | null>>;
   step: Step;
 }) {
   const { code, updateCode } = useActiveCode();
@@ -124,7 +132,7 @@ function MonacoEditor({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
-  const [isCompletionEnabled, setIsCompletionEnabled] = useState(true);
+  const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
   const isStepCompleteRef = useRef(isStepComplete);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
@@ -197,15 +205,13 @@ function MonacoEditor({
       line.substring(0, changePos) + '[insert]' + line.substring(changePos);
     lines[lineNumber] = insert;
     const prompt =
-      'Only respond with code that follows the instructions.\n' +
-      'Instructions: ' +
-      step.instructions +
-      '\n' +
+      'Only respond with code that satisfies the regular expression below:\n' +
+      // 'Instructions: ' +
+      // step.instructions +
+      // '\n' +
       `${
         checkpoints?.[currentCheckpoint]?.matchRegex
-          ? '\n' +
-            'Satisfy Regex: ' +
-            checkpoints[currentCheckpoint]?.matchRegex
+          ? '\n' + checkpoints[currentCheckpoint]?.matchRegex
           : ''
       }` +
       lines.join('\n').split('[insert]')[0];
@@ -227,8 +233,9 @@ function MonacoEditor({
         }
       );
 
-      const completions: { text: string }[] = await response.json();
-      const suggestion = completions[0].text;
+      const completions: OpenAIAPIResponse = await response.json();
+      const suggestion = completions.choices?.[0].text;
+      setTokensUsed((prev) => (prev || 0) + completions.usage.total_tokens);
       return suggestion;
     } catch (error) {
       console.log(error);
@@ -602,9 +609,11 @@ const Checkpoints = ({
 const ChatBot = ({
   hoverSelection,
   questions,
+  setTokensUsed,
 }: {
   hoverSelection: string | null;
   questions: string[];
+  setTokensUsed: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const [height, setHeight] = useState(0);
   const { code } = useActiveCode();
@@ -671,12 +680,10 @@ const ChatBot = ({
         }
       );
 
-      const explainations: {
-        finish_reason: 'length' | 'stop';
-        text: string;
-      }[] = await response.json();
-      let value = `${explainations[0].text}`;
-      if (explainations[0].finish_reason === 'length') {
+      const explainations: OpenAIAPIResponse = await response.json();
+      let value =
+        `${explainations.choices?.[0]?.text}` || 'There was an error.';
+      if (explainations.choices?.[0]?.finish_reason === 'length') {
         value += '...';
       }
       setResponses((prev) => [...prev, { question, value }]);
@@ -684,6 +691,9 @@ const ChatBot = ({
       setTimeout(() => {
         textAreaRef.current?.focus();
       }, 10);
+
+      const tokensUsed = explainations.usage.total_tokens;
+      setTokensUsed((prev) => (prev || 0) + tokensUsed);
     } catch (error) {
       console.log(error);
     } finally {
@@ -830,6 +840,75 @@ const ChatBot = ({
   );
 };
 
+const Credits = ({ tokensUsed }: { tokensUsed: number | null }) => {
+  if (tokensUsed === null) return null;
+  const { data: meData, loading: meLoading } = useMeQuery();
+  const [type, setType] = useState<'safe' | 'warning' | 'danger'>('safe');
+  const [max, setMax] = useState(MAX_TOKENS_DEMO);
+
+  useEffect(() => {
+    if (meLoading) return;
+
+    if (meData?.me) {
+      setMax(MAX_TOKENS_USER);
+    } else {
+      setMax(MAX_TOKENS_DEMO);
+    }
+
+    let type = 'safe';
+    if (tokensUsed > 0.5 * max) type = 'warning';
+    if (tokensUsed > 0.75 * max) type = 'danger';
+
+    setType(type as 'safe' | 'warning' | 'danger');
+  }, [tokensUsed, meLoading, meData?.me]);
+
+  let percentageUsed = (Math.min(tokensUsed, max) / max) * 100;
+
+  return (
+    <div
+      aria-label="Token Usage"
+      className="flex cursor-pointer items-center gap-2"
+      onClick={() => {
+        modalVar({
+          callback: () => null,
+          data: {
+            max,
+            percentageUsed,
+            tokensUsed,
+            type,
+          },
+          name: 'usage',
+          persistent: false,
+        });
+      }}
+    >
+      <pre className="text-xs text-white">Usage Limit</pre>
+      <div
+        className={`h-2 w-32 rounded-full p-[2px] transition-all duration-300 ${
+          type === 'safe'
+            ? 'bg-blue-900'
+            : type === 'warning'
+            ? 'bg-yellow-900'
+            : 'bg-red-900'
+        }`}
+      >
+        <div
+          className={`h-full rounded-full bg-blue-500 transition-all duration-300 ${
+            type === 'safe'
+              ? 'bg-blue-500'
+              : type === 'warning'
+              ? 'bg-yellow-500'
+              : 'bg-red-500'
+          }`}
+          style={{
+            width: Math.max(5, percentageUsed) + '%',
+          }}
+        />
+      </div>
+    </div>
+  );
+};
+
 const ProgressBar = ({
   checkpoints,
   lessonSlug,
@@ -864,7 +943,7 @@ const ProgressBar = ({
         });
       }}
     >
-      <div className="h-2 w-20 rounded-full bg-green-900 p-[2px] sm:w-32">
+      <div className="h-2 w-32 rounded-full bg-green-900 p-[2px]">
         <div
           className="h-full rounded-full bg-green-500 transition-all"
           style={{
@@ -872,24 +951,10 @@ const ProgressBar = ({
           }}
         />
       </div>
-      <div className="text-xs text-white">
+      <div className="hidden text-xs text-white sm:block">
         <pre>
           Step {`${(step?.position || 0) + 1}/${steps.length} ${step?.title}`}
         </pre>
-      </div>
-    </div>
-  );
-};
-
-const Credits = () => {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="h-2 w-32 rounded-full bg-blue-900">
-        <div
-          className="h-full rounded-full bg-blue-500 transition-all"
-          // todo: don't hardcode this
-          style={{ width: `33%` }}
-        />
       </div>
     </div>
   );
@@ -899,6 +964,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [ready, setReady] = useState(false);
   const [loaderReady, setLoaderReady] = useState(false);
   const [editorReady, setEditorReady] = useState(false);
+  const [tokensUsed, setTokensUsed] = useState<number | null>(null);
   const [currentCheckpoint, setCurrentCheckpoint] = useState(0);
   const [leftPanelHeight, setLeftPanelHeight] = useState(
     defaultLeftPanelHeight
@@ -941,6 +1007,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
     createUserLessonPurchase,
     { loading: createUserLessonPurchaseLoading },
   ] = useCreateUserLessonPurchaseMutation();
+  const [updateUserTokensUsed] = useUpdateTokensUsedMutation();
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
@@ -952,6 +1019,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
     };
   }, {});
 
+  // First modal
   useEffect(() => {
     if (userLessonPurchaseLoading) return;
     if (meLoading) return;
@@ -960,8 +1028,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
       !userLessonPurchaseData?.userLessonPurchase?.id &&
       router.query.payment !== 'success' &&
       lesson?.requiresPayment &&
-      step?.position &&
-      step?.position > 4
+      (step?.position || 0) > 4
     ) {
       if (!meData?.me) {
         modalVar({
@@ -987,13 +1054,22 @@ const V2Lesson = ({ lesson, step }: Props) => {
         name: 'lessonPurchase',
         persistent: true,
       });
-    } else {
-      modalVar(InitialModalState);
+
+      return;
+    }
+
+    if (!isDesktop) {
+      modalVar({
+        callback: () => null,
+        name: 'mobileWarning',
+        persistent: true,
+      });
     }
   }, [
     lesson,
     step?.id,
     meLoading,
+    isDesktop,
     router.query,
     userLessonPurchaseLoading,
     createUserLessonPurchaseLoading,
@@ -1018,35 +1094,6 @@ const V2Lesson = ({ lesson, step }: Props) => {
       }
     })();
   }, [router.query]);
-
-  // HIGH DEMAND
-  useEffect(() => {
-    if (
-      userLessonPurchaseData?.userLessonPurchase?.id ||
-      userLessonPurchaseLoading ||
-      lesson?.requiresPayment
-    )
-      return;
-    if (!localStorage.getItem('openaiKey')) {
-      modalVar({
-        callback: () => null,
-        name: 'highDemand',
-        persistent: true,
-      });
-    }
-  }, [
-    userLessonPurchaseData?.userLessonPurchase?.id,
-    userLessonPurchaseLoading,
-  ]);
-  useEffect(() => {
-    if (!isDesktop && localStorage.getItem('openaiKey')) {
-      modalVar({
-        callback: () => null,
-        name: 'mobileWarning',
-        persistent: true,
-      });
-    }
-  }, [isDesktop]);
 
   useEffect(() => {
     setLeftPanelHeight(defaultLeftPanelHeight);
@@ -1110,6 +1157,33 @@ const V2Lesson = ({ lesson, step }: Props) => {
     };
   }, [editorReady, loaderReady]);
 
+  useEffect(() => {
+    if (meLoading) return;
+    if (tokensUsed === null) return;
+    if (meData?.me?.isAuthenticated) {
+      updateUserTokensUsed({
+        refetchQueries: ['Me'],
+        variables: {
+          tokensUsed,
+        },
+      });
+    }
+
+    localStorage.setItem('codeamigo-tokens-used', tokensUsed.toString());
+  }, [tokensUsed]);
+
+  useEffect(() => {
+    if (meLoading) return;
+
+    setTokensUsed(
+      parseInt(
+        meData?.me?.tokensUsed.toString() ||
+          localStorage.getItem('codeamigo-tokens-used') ||
+          '0'
+      )
+    );
+  }, [meData?.me, meLoading]);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -1124,7 +1198,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
         <div className="flex w-full justify-between">
           <div className="flex items-center gap-2">
             <Icon
-              className="text-neutral-700 transition-colors hover:text-white"
+              className="text-neutral-600 transition-colors hover:text-white"
               name="home"
               onClick={() => {
                 router.push(`/`);
@@ -1139,7 +1213,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
               userLessonPosition={userLessonPositionData?.userLessonPosition}
             />
           </div>
-          <UserMenu />
+          <div className="flex items-center gap-2">
+            <Credits tokensUsed={tokensUsed} />
+            <UserMenu />
+          </div>
         </div>
         <div
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
@@ -1181,6 +1258,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                     setHoverSelection={setHoverSelection}
                     setIsStepComplete={setIsStepComplete}
                     setLeftPanelHeight={setLeftPanelHeight}
+                    setTokensUsed={setTokensUsed}
                     step={step as Step}
                   />
                 )}
@@ -1199,6 +1277,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                 <ChatBot
                   hoverSelection={hoverSelection}
                   questions={step?.questions?.map((q) => q.value) || []}
+                  setTokensUsed={setTokensUsed}
                 />
               </SandpackStack>
             </SandpackLayout>

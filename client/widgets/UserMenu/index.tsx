@@ -27,7 +27,7 @@ const UserMenu: React.FC<Props> = () => {
 
   return (
     <div
-      className="relative flex cursor-pointer gap-2 text-neutral-700 transition-colors hover:text-white"
+      className="relative flex cursor-pointer gap-2 text-neutral-600 transition-colors hover:text-white"
       onClick={() => {
         if (data?.me?.username) {
           handleLogout();

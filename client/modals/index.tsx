@@ -2,7 +2,6 @@ import { Transition } from '@headlessui/react';
 import React, { useCallback, useEffect } from 'react';
 
 import ChangePassword from '👨‍💻modals/ChangePassword';
-import HighDemand from '👨‍💻modals/HighDemand';
 import LessonHelp from '👨‍💻modals/LessonHelp';
 import LessonPurchase from '👨‍💻modals/LessonPurchase';
 import Login from '👨‍💻modals/Login';
@@ -12,6 +11,7 @@ import RegisterAfterPreview from '👨‍💻modals/RegisterAfterPreview';
 import ResetPasswordSent from '👨‍💻modals/ResetPasswordSent';
 import Steps from '👨‍💻modals/Steps';
 import TestsPassed from '👨‍💻modals/TestsPassed';
+import Usage from '👨‍💻modals/Usage';
 
 import { InitialModalState, modalVar } from '../apollo/cache/modal';
 import { useModalQuery } from '../generated/graphql';
@@ -105,7 +105,7 @@ const Modals: React.FC<Props> = () => {
           )}
           {data?.modal?.name === 'resetPasswordSent' && <ResetPasswordSent />}
           {data?.modal?.name === 'testsPassed' && <TestsPassed />}
-          {data?.modal?.name === 'highDemand' && <HighDemand />}
+          {data?.modal?.name === 'usage' && <Usage />}
           {data?.modal?.name === 'mobileWarning' && <MobileWarning />}
           {data?.modal?.name === 'steps' && <Steps />}
           {data.modal?.name === 'lessonHelp' && <LessonHelp />}

@@ -3,5 +3,6 @@ fragment RegularUser on User {
   email
   role
   username
+  tokensUsed
   isAuthenticated @client
 }

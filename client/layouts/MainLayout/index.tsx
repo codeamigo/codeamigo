@@ -13,7 +13,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           <div className="flex items-end gap-4">
             <a
               aria-label="GitHub"
-              className="text-neutral-700 transition duration-200 ease-in-out hover:text-neutral-800"
+              className="text-neutral-600 transition duration-200 ease-in-out hover:text-neutral-800"
               href="https://github.com/codeamigo"
               target="_blank"
             >
@@ -33,7 +33,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             </a>
             <a
               aria-label="Twitter"
-              className="text-neutral-700 transition duration-200 ease-in-out hover:text-neutral-800"
+              className="text-neutral-600 transition duration-200 ease-in-out hover:text-neutral-800"
               href="https://twitter.com/codeamigo_dev"
               target="_blank"
             >
@@ -52,7 +52,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               </svg>
             </a>
           </div>
-          <div className="text-xs text-neutral-700">
+          <div className="text-xs text-neutral-600">
             Made with{' '}
             <span aria-label="heart" role="img">
               ❤️
