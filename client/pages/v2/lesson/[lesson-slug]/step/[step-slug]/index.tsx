@@ -1203,7 +1203,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
     setMaxTokens(maxTokens);
     setMaxTokensUsed(tokensUsed >= maxTokens);
 
-    let tokenUsageStatus = 'safe';
+    let tokenUsageStatus: TokenUsageStatusType = 'safe';
     if (tokensUsed > 0.5 * maxTokens) tokenUsageStatus = 'warning';
     if (tokensUsed > 0.75 * maxTokens) tokenUsageStatus = 'danger';
     setTokenUsageStatus(tokenUsageStatus);
