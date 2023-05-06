@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
 import { Logo } from '👨‍💻components/Logos';
+import UserMenu from '👨‍💻widgets/UserMenu';
 
 const TopNav: React.FC<Props> = () => {
   const router = useRouter();
@@ -43,6 +44,7 @@ const TopNav: React.FC<Props> = () => {
                 <span>Demo</span>
               </Button>
             </Link>
+            <UserMenu />
           </div>
         </div>
       </div>
