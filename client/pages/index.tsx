@@ -3,11 +3,15 @@ import { useEffect } from 'react';
 
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
-import { LessonsDocument, LessonsQuery } from '👨‍💻generated/graphql';
+import { LessonsDocument, LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
 import { client } from '👨‍💻utils/withApollo';
+
+import { INTRO_TO_JS_WHITELIST } from '../constants';
 
 const Home = (props: Props) => {
   const router = useRouter();
+  const { data: meData } = useMeQuery();
+
   useEffect(() => {
     const handleKeyDown = (event: any) => {
       if (event.key === 'a') {
@@ -105,14 +109,24 @@ const Home = (props: Props) => {
           {props.lessons
             .filter((lesson) => lesson.slug !== 'hello-codeamigo')
             .map((lesson) => {
+              const isWhitelisted =
+                meData?.me?.email &&
+                INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
+                lesson.slug === 'intro-to-js';
+
               return (
                 <div
-                  className="overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50"
-                  // onClick={() => {
-                  //   window.open(
-                  //     `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
-                  //   );
-                  // }}
+                  className={`${
+                    isWhitelisted
+                      ? 'grainy-image-parent group cursor-pointer'
+                      : ''
+                  } overflow-hidden rounded-md border-neutral-400 shadow-lg shadow-neutral-700/50 transition-all hover:shadow-xl hover:shadow-blue-500/50`}
+                  onClick={() => {
+                    if (!isWhitelisted) return;
+                    router.push(
+                      `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                    );
+                  }}
                   // role="button"
                 >
                   <div className="grainy-image transition-all group-hover:grayscale-0">
@@ -120,21 +134,41 @@ const Home = (props: Props) => {
                   </div>
                   <div className="px-3 pb-4 pt-2 text-xs">
                     <pre className="text-white">{lesson.title}</pre>
-                    <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-blue-950 px-2 text-xs font-semibold text-blue-500">
-                      Coming Soon
-                    </span>
-                    <Button
-                      className="mt-3"
-                      onClick={() =>
-                        window.open(
-                          'https://forms.gle/weRYdVmr2LszmQiK6',
-                          '_blank'
-                        )
-                      }
-                    >
-                      <Icon className="mr-1.5" name="plus-circled" />
-                      <span>Join Waitlist</span>
-                    </Button>
+                    {isWhitelisted ? (
+                      <>
+                        <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-green-950 px-2 text-xs font-semibold text-green-500">
+                          Enrolled
+                        </span>
+                        <Button
+                          className="mt-3"
+                          onClick={() =>
+                            router.push(
+                              `/v2/lesson/${lesson.slug}/step/${lesson.steps?.[0].slug}`
+                            )
+                          }
+                        >
+                          <span>Start</span>
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-blue-950 px-2 text-xs font-semibold text-blue-500">
+                          Coming Soon
+                        </span>
+                        <Button
+                          className="mt-3"
+                          onClick={() =>
+                            window.open(
+                              'https://forms.gle/weRYdVmr2LszmQiK6',
+                              '_blank'
+                            )
+                          }
+                        >
+                          <Icon className="mr-1.5" name="plus-circled" />
+                          <span>Join Waitlist</span>
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               );
