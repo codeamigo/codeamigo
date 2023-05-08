@@ -120,39 +120,39 @@ const V2Lesson = ({ lesson, step }: Props) => {
     if (userLessonPurchaseLoading) return;
     if (meLoading) return;
 
-    if (
-      !userLessonPurchaseData?.userLessonPurchase?.id &&
-      router.query.payment !== 'success' &&
-      lesson?.requiresPayment &&
-      (step?.position || 0) > 4
-    ) {
-      if (!meData?.me) {
-        modalVar({
-          callback: () => null,
-          data: {
-            purchaseRequired: true,
-          },
-          name: 'login',
-          persistent: true,
-        });
-        return;
-      }
+    // if (
+    //   !userLessonPurchaseData?.userLessonPurchase?.id &&
+    //   router.query.payment !== 'success' &&
+    //   lesson?.requiresPayment &&
+    //   (step?.position || 0) > 4
+    // ) {
+    //   if (!meData?.me) {
+    //     modalVar({
+    //       callback: () => null,
+    //       data: {
+    //         purchaseRequired: true,
+    //       },
+    //       name: 'login',
+    //       persistent: true,
+    //     });
+    //     return;
+    //   }
 
-      modalVar({
-        callback: () => null,
-        data: {
-          cancelUrl: window.location.href,
-          lessonId: lesson?.id,
-          successUrl: window.location.href,
-          title: lesson?.title,
-          userId: meData?.me?.id,
-        },
-        name: 'lessonPurchase',
-        persistent: true,
-      });
+    //   modalVar({
+    //     callback: () => null,
+    //     data: {
+    //       cancelUrl: window.location.href,
+    //       lessonId: lesson?.id,
+    //       successUrl: window.location.href,
+    //       title: lesson?.title,
+    //       userId: meData?.me?.id,
+    //     },
+    //     name: 'lessonPurchase',
+    //     persistent: true,
+    //   });
 
-      return;
-    }
+    //   return;
+    // }
 
     if (!isDesktop) {
       modalVar({
