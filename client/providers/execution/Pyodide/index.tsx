@@ -1,6 +1,7 @@
-import { SandpackLayout, SandpackStack } from '@codesandbox/sandpack-react';
+import { SandpackStack } from '@codesandbox/sandpack-react';
 import { FCProviderType } from 'providers/execution/types';
-import React from 'react';
+import { loadPyodide } from 'pyodide';
+import React, { useEffect, useState } from 'react';
 
 import { Step } from '👨‍💻generated/graphql';
 import Chatbot from '👨‍💻widgets/Chatbot';
@@ -31,6 +32,41 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   tokenUsageStatus,
   tokensUsed,
 }) => {
+  const [stack, setStack] = useState<string[]>([]);
+  const [pyodide, setPyodide] = useState<any>(null);
+
+  useEffect(() => {
+    (async () => {
+      const pyodide = await loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/',
+        stdout: (text: string) => {
+          setStack((prevStack) => [...prevStack, text]);
+        },
+      });
+      setPyodide(pyodide);
+    })();
+  }, []);
+
+  const runCode = async (code: string) => {
+    if (!pyodide) return;
+
+    try {
+      // TODO: dynamically load packages
+      await pyodide.loadPackage('micropip');
+      const micropip = pyodide.pyimport('micropip');
+      await micropip.install('pypokedex');
+      await micropip.install('pyodide_patch');
+      const result = await pyodide.runPythonAsync(code);
+      setStack((prevStack) => [...prevStack, result]);
+    } catch (error) {
+      try {
+        setStack((prevStack) => [...prevStack, (error as string).toString()]);
+      } catch (error2) {
+        console.error(error2);
+      }
+    }
+  };
+
   return (
     <div className="flex h-full text-xs font-normal">
       <SandpackStack className="editor-instructions-container !h-full">
@@ -66,12 +102,17 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
             step={step as Step}
             updateCode={(code) => {
               files['index.py'].code = code;
+              runCode(code);
             }}
           />
         )}
       </SandpackStack>
       <SandpackStack className="!h-full">
-        <div className="h-full text-white">Pyodide Here</div>
+        <div className="h-full overflow-scroll text-white">
+          {stack.map((s) => {
+            return <pre className="text-white">{s}</pre>;
+          })}
+        </div>
         <Chatbot
           code={files['index.py'].code}
           disabled={maxTokensUsed}
