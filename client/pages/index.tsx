@@ -6,7 +6,7 @@ import Icon from '👨‍💻components/Icon';
 import { LessonsDocument, LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
 import { client } from '👨‍💻utils/withApollo';
 
-import { INTRO_TO_JS_WHITELIST } from '../constants';
+import { INTRO_TO_JS_WHITELIST, INTRO_TO_PYTHON_WHITELIST } from '../constants';
 
 const Home = (props: Props) => {
   const router = useRouter();
@@ -111,8 +111,10 @@ const Home = (props: Props) => {
             .map((lesson) => {
               const isWhitelisted =
                 meData?.me?.email &&
-                INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
-                lesson.slug === 'intro-to-js';
+                ((INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
+                  lesson.slug === 'intro-to-js') ||
+                  (INTRO_TO_PYTHON_WHITELIST.includes(meData.me.email) &&
+                    lesson.slug === 'intro-to-python'));
 
               return (
                 <div

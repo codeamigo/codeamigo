@@ -686,7 +686,7 @@ export type StepQuery = (
   { __typename?: 'Query' }
   & { step?: Maybe<(
     { __typename?: 'Step' }
-    & Pick<Step, 'id' | 'instructions' | 'nextSlug' | 'position' | 'prevSlug' | 'slug' | 'start' | 'template' | 'title'>
+    & Pick<Step, 'executionType' | 'id' | 'instructions' | 'nextSlug' | 'position' | 'prevSlug' | 'slug' | 'start' | 'template' | 'title'>
     & { questions?: Maybe<Array<(
       { __typename?: 'Question' }
       & Pick<Question, 'value'>
@@ -1467,6 +1467,7 @@ export type ModalQueryResult = Apollo.QueryResult<ModalQuery, ModalQueryVariable
 export const StepDocument = gql`
     query Step($slug: String!) {
   step(slug: $slug) {
+    executionType
     id
     instructions
     nextSlug
