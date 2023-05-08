@@ -38,6 +38,7 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   useEffect(() => {
     (async () => {
       const pyodide = await loadPyodide({
+        fullStdLib: true,
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/',
         stdout: (text: string) => {
           setStack((prevStack) => [...prevStack, text]);
@@ -51,11 +52,6 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
     if (!pyodide) return;
 
     try {
-      // TODO: dynamically load packages
-      await pyodide.loadPackage('micropip');
-      const micropip = pyodide.pyimport('micropip');
-      await micropip.install('pypokedex');
-      await micropip.install('pyodide_patch');
       const result = await pyodide.runPythonAsync(code);
       setStack((prevStack) => [...prevStack, result]);
     } catch (error) {
