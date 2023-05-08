@@ -17,6 +17,7 @@ import { Question } from './Question';
 
 export enum StepExecutionTypeEnum {
   riju = 'riju',
+  pyodide = 'pyodide',
   sandpack = 'sandpack',
   stackblitz = 'stackblitz',
 }

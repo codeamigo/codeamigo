@@ -309,6 +309,7 @@ export type Step = {
 
 export enum StepExecutionTypeEnum {
   Riju = 'riju',
+  Pyodide = 'pyodide',
   Sandpack = 'sandpack',
   Stackblitz = 'stackblitz'
 }
