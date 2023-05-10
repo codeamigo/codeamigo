@@ -1,9 +1,12 @@
 import { SandpackStack } from '@codesandbox/sandpack-react';
+import { Console, Encode } from 'console-feed';
+import { Message } from 'console-feed/lib/definitions/Console';
 import { FCProviderType } from 'providers/execution/types';
 import { loadPyodide } from 'pyodide';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Step } from '👨‍💻generated/graphql';
+import debounce from '👨‍💻utils/debounce';
 import Chatbot from '👨‍💻widgets/Chatbot';
 import Instructions from '👨‍💻widgets/Instructions';
 import MonacoEditor from '👨‍💻widgets/MonacoEditor';
@@ -32,8 +35,9 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   tokenUsageStatus,
   tokensUsed,
 }) => {
-  const [stack, setStack] = useState<string[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [pyodide, setPyodide] = useState<any>(null);
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
     (async () => {
@@ -41,27 +45,49 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
         fullStdLib: true,
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/',
         stdout: (text: string) => {
-          setStack((prevStack) => [...prevStack, text]);
+          setLogs((logs) => [
+            {
+              data: [text],
+              method: 'command',
+            },
+            ...logs,
+          ]);
         },
       });
       setPyodide(pyodide);
     })();
   }, []);
 
+  useEffect(() => {
+    if (isFirstRun.current && pyodide) {
+      isFirstRun.current = false;
+      runCode(files['index.py'].code);
+    }
+  }, [pyodide]);
+
   const runCode = async (code: string) => {
     if (!pyodide) return;
 
     try {
-      const result = await pyodide.runPythonAsync(code);
-      setStack((prevStack) => [...prevStack, result]);
+      await pyodide.runPythonAsync(code);
     } catch (error) {
       try {
-        setStack((prevStack) => [...prevStack, (error as string).toString()]);
+        console.log(error);
+        setLogs((prevLogs) => [
+          { data: [{ Error: error }], method: 'error' },
+          ...prevLogs,
+        ]);
       } catch (error2) {
+        setLogs((prevLogs) => [
+          { data: [{ Error: error2 }], method: 'error' },
+          ...prevLogs,
+        ]);
         console.error(error2);
       }
     }
   };
+
+  const runCodeDebounced = debounce(runCode, 1000);
 
   return (
     <div className="flex h-full text-xs font-normal">
@@ -98,16 +124,14 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
             step={step as Step}
             updateCode={(code) => {
               files['index.py'].code = code;
-              runCode(code);
+              runCodeDebounced(code);
             }}
           />
         )}
       </SandpackStack>
       <SandpackStack className="!h-full">
-        <div className="h-full overflow-scroll text-white">
-          {stack.map((s) => {
-            return <pre className="text-white">{s}</pre>;
-          })}
+        <div className="console-feed h-full overflow-scroll text-white">
+          <Console logs={logs} variant="dark" />
         </div>
         <Chatbot
           code={files['index.py'].code}

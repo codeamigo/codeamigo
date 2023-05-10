@@ -2808,10 +2808,10 @@ concat-map@0.0.1:
   resolved "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==
 
-console-feed@^3.2.2:
-  version "3.4.4"
-  resolved "https://registry.npmjs.org/console-feed/-/console-feed-3.4.4.tgz#078b4982dd984c144099e11a6b1c51663a1aa0e8"
-  integrity sha512-gH/8pn7Mzu+mAhj7BweHTLANntAUCQW4ojLtawLGEu+XLOAoMdVusxj2x6NE9Rg4EN8ea9yDeg1Sj6a9KF7ykA==
+console-feed@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.npmjs.org/console-feed/-/console-feed-3.5.0.tgz#0edf7dd1ebd82a24f5727315d0392fbb9a3c2f35"
+  integrity sha512-2N5b37yH0HeaqbBDsHBx0jEy3qvhTGA1dVdGyEM6C1NQhVmIX+ToU6Rt/uo86K0lLs4Lg1orC940YSn+Z3kk5g==
   dependencies:
     "@emotion/core" "^10.0.10"
     "@emotion/styled" "^10.0.12"

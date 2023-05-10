@@ -9,7 +9,7 @@ import {
   useSandpack,
 } from '@codesandbox/sandpack-react';
 import { FCProviderType } from 'providers/execution/types';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Step } from '👨‍💻generated/graphql';
 import Chatbot from '👨‍💻widgets/Chatbot';
@@ -59,6 +59,12 @@ const SandpackExecutionChild: React.FC<FCProviderType> = ({
   const { code, updateCode } = useActiveCode();
   const { sandpack } = useSandpack();
   const { activeFile } = sandpack;
+
+  useEffect(() => {
+    window.onmessage = (event) => {
+      console.log(event);
+    };
+  }, []);
 
   return (
     <SandpackLayout>
