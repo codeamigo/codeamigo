@@ -1,6 +1,5 @@
 import { SandpackStack } from '@codesandbox/sandpack-react';
-import { Console, Encode } from 'console-feed';
-import { Message } from 'console-feed/lib/definitions/Console';
+import { Console } from 'console-feed';
 import { FCProviderType } from 'providers/execution/types';
 import { loadPyodide } from 'pyodide';
 import React, { useEffect, useRef, useState } from 'react';
