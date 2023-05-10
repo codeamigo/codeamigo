@@ -43,3 +43,11 @@ yarn dev
 ```
 
 Visit http://localhost:3000
+
+### Dev/ML Server
+
+```
+cd ml-service
+source setup.sh
+python3 app.py
+```
