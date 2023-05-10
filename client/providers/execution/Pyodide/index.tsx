@@ -37,6 +37,7 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   const [logs, setLogs] = useState<any[]>([]);
   const [pyodide, setPyodide] = useState<any>(null);
   const isFirstRun = useRef(true);
+  const consoleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -44,12 +45,13 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
         fullStdLib: true,
         indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/',
         stdout: (text: string) => {
+          console.log(text);
           setLogs((logs) => [
+            ...logs,
             {
               data: [text],
               method: 'command',
             },
-            ...logs,
           ]);
         },
       });
@@ -71,20 +73,24 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
       await pyodide.runPythonAsync(code);
     } catch (error) {
       try {
-        console.log(error);
         setLogs((prevLogs) => [
-          { data: [{ Error: error }], method: 'error' },
           ...prevLogs,
+          { data: [{ Error: error }], method: 'error' },
         ]);
       } catch (error2) {
         setLogs((prevLogs) => [
-          { data: [{ Error: error2 }], method: 'error' },
           ...prevLogs,
+          { data: [{ Error: error2 }], method: 'error' },
         ]);
-        console.error(error2);
       }
     }
   };
+
+  useEffect(() => {
+    if (consoleRef.current) {
+      consoleRef.current.scrollTop = consoleRef.current.scrollHeight;
+    }
+  }, [logs.length]);
 
   const runCodeDebounced = debounce(runCode, 1000);
 
@@ -129,7 +135,10 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
         )}
       </SandpackStack>
       <SandpackStack className="!h-full">
-        <div className="console-feed h-full overflow-scroll text-white">
+        <div
+          className="console-feed h-full overflow-scroll text-white"
+          ref={consoleRef}
+        >
           <Console logs={logs} variant="dark" />
         </div>
         <Chatbot
