@@ -3,174 +3,193 @@
 ## principles:
 ##  * minimize text
 ##  * keep things interesting
-##  * provide rewards
+##  * provide rewards?
 ##  * prompt student to ask for help when they need it
 
-# intro
-intro = {
-    "instructions": """Why do you want to learn Python? If its because you've heard
-        its the language of AI, then you're in the right place.
-        We're going to take an unusual approach to this lesson
-        by relying on you, the student, to guide your own learning.
-        But you won't be alone -- ask the AI assistant for help
-        whenever you need it. Move through the lesson in a flash,
-        or go as in depth as you'd like, the assistant should have
-        you covered.
-    """,
-    "code:": """
-    from transformers import pipeline
+from abc import abstractmethod
+from dataclasses import dataclass
 
-    feeling = "incredibly excited to be learning Python"
-    classifier = pipeline("sentiment-analysis")
-    prediction = classifier(feeling)
-    print(prediction)
-    """,
-}
-
-lesson1 = {
-    "instruction": """What happened on the previous page? If you don't
-    understand a bit of it, that's just fine. Mature software often hides
-    a lot of the details, which makes things less complicated, but can also
-    seem opaque if you'd like to know what the code is actually doing.
-    We're going to take a few big steps back, and before we start learning
-    anything about how machine learning models work, we're going to dig into 
-    one basic fact about any kind of machine learning model: they only
-    understand numbers. As a starter project, lets take a message that a
-    person would understand and use Python to turn it into a medium that
-    would make sense to a large language model. Run the code to see how a
-    large language model might say 'hello'.
-    """,
-    "code": """import torch
-
-    english_hello = "hello world"
-    machine_hello = torch.rand(len(english_hello)))
-
-    print(machine_hello)
-    """,
-}
-
-lesson1 = {
-    "instruction": """'hello world' or 'incredibly excited to be learning
-    python' are what is called, in computer science terms, strings. A string
-    is a data type representing a sequence of characters. But before I drone on,
-    why don't you ask the AI assistant for some help. For instance, what is a 
-    data type? Can a string only be made up of letters? Ask the assistant as
-    many (or few!) questions as you need to feel you've got a good handle
-    on the material.
-    """,
-    "code": """
-    letter_string = "boop"
-    mixed_string = "100 boops"
-    punctuation_string = "boop's 100"
-    """,
-}
-
-# here's a sentence that we'd like to send to a chatbot:
-sentence = "hello world"
-
-# `sentence` is what is called a `variable`. This is how computer programs
-# can reference the same piece of information more than once. You can think
-# of a variable (`sentence`) as temporarily saving the value ("hello world")
-
-# "hello world" is what is called a string. A string is a representation of
-# characters, often used when representing text.
-
-# lets begin by turning the string data type into a data structure. A
-# data structure is a way programming languages can keep track and organize
-# data
+# QUESTIONS:
+# - should we call it a 'tutor' or 'teacher'
+# - should we give it a persona? an 'amigo' persona?
+# - we'll want to think about the tone too
+# - think more carefully about the theme (cooking vs something else)
+# - we want to do some prompt engineering (simple vs complex answers)
 
 
-sentence_list = sentence.split(" ")
+# TODOS:
+# - insert checkpoints
+# - insert quizzes
 
-print(sentence_list)
+@dataclass
+class Step:
+    order: int
+    name: str
+    code: str
+    instructions: str
+    questions: list[str]
 
-# `split` is what is called a `method` -- that is a function that a certain
-# class is able to execute.
-# NOTE: what is a function? what is a class?
-
-# lets use another built-in function to turn each string in `sentence_list`
-# into a number
-
-word_numbers = []
-for num, word in enumerate(sentence_list):
-    word_numbers.append(num)
-
-print(word_numbers)
-
-# so, we can think of the number `0` as representing `hello`, while `1` represents `world`
-# now what we'd like to do is be able to quickly get the number version of a word originally
-# represented by a string. for this, we can use another data structure called a `dictionary`
-# NOTE: what is a loop? what is `zip`?
-word2num = {}
-for word, num in zip(sentence_list, word_numbers):
-    word2num[word] = num
-
-print(word2num)
-
-# a dictionary organizes data by having keys and values. A key can be plugged into the dictionary
-# to access values. So if we wanted to see which number represents a word, we can
-# use the dictionary to get the numeric value
-
-print(word2num["hello"])
-
-# to make our dictionary converting strings to integers more useful, we want to add
-# as many words as we can. Lets repeat the same thing we did earlier, but with
-# many more words
-
-# the url below contains a list of almost every word in the english language
-# lets download it and add the new words to our dictionary
-
-words_url = "https://raw.githubusercontent.com/dwyl/english-words/master/words.txt"
-
-# we'll use a library (code that someone else already wrote for us!) to retrieve
-# the words from where they're stored on the internet
-
-import httpx
-
-response = httpx.get(words_url)
-
-print(response)
-
-# you should see `<Response [200 OK]>`. This means that we successfully
-# made a web request to the website where the word list is hosted
-
-# when we make an http request to a website, we can get back the data that
-# we asked for by extracting `text` from the http response. lets save that
-# data in a new variable
-
-response_text = response.text
-
-# lets take a quick look at what came back:
-
-print(response_text[30:150], sep="")
-
-# we can see that there is a `\n` between every word. this is called a 'newline character',
-# and whenever a python program sees '\n', it will put the next bit of input on its own line
-print("without newline")
-print("with \n newline")
+    @abstractmethod
+    def get_checkpoints():
+        raise NotImplementedError
 
 
-# now, Python has interpreted the words text as one gigantic string. Lets break the
-# words up so that they are easier to work with one at at a time. How do we break them up?
-# When we wanted to split "hello world" from a string into a list of strings, we saw that
-# 'hello' was separated from 'world' with a space character. now, the words are separated
-# by a newline character, so we can split the string into a list of strings using every time
-# a newline character shows up as the separator:
+class Intro(Step):
+    name = "introduction"
 
-list_of_lots_of_words = response_text.split("\n")
+    code = """
+    prompt = "Write a recipe for a delicious"
+    ingredients = ["chicken", "lemon", "garlic", "olive oil", "salt", "pepper"]
+    generated_recipe = generate_recipe(prompt, ingredients)
+    """
+    instructions = """
+    Welcome to the CodeAmigo introduction to Python. How much do you know about Python?
+    If the answer is 'not a lot', then congratulations -- you've come to the write place.
+    Check out the code in the sandbox on your right. Click the <something> to run it.
+    
+    Oh wow -- looks like we've got an idea for dinner tonight! How did that happen?
+    Lets keep going and find out. 
+    """
+    def __init__(self, order=0, name=name, code=code, instructions=instructions, questions=[]):
+        super().__init__(order, name, code, instructions, questions)
 
-print(list_of_lots_of_words[:10])
 
-# and voila! now we can work with each word one at a time. If you want to look
-# at an item in one particular place of the list, you can access it by indexing the list.
-# You can do that with the following bit of code:
-print(list_of_lots_of_words[110])
+class Strings(Step):
+    name = "Introduction to Variables and Strings"
+    code = """
+    prompt = "Write a recipe for a delicious recipe."
+    """
+    instructions = """
+    Let's begin from the top. On the previous page, you saw that our AI assistant
+    was able to generate a recipe for a meal. How did it know what we wanted? Well,
+    it got that information from "prompt". "prompt" is what's called a variable. A
+    variable is how computers store temporary information while they're executing a program.
+    The format is always <name of the variable> = <some bit of information>. In this case,
+    the information associated with the variable is what's called a 'string'. A string is a
+    way of representing information that a person can read in a way that a computer can also
+    understand.
 
-# TODO:
-#  - add string manipulations
-#  - add something on methods and classes
-#  - more about lists (slices, indexing, appending)
-#  - add something about loops
-#  - add explanation of built-in function
-#  - add explanation of functions
-#  - stuff about http
+    We won't go too much into the details. Instead, we'll show you what variables can do rather
+    than try to explain what they are. That said, you probably have plenty of questions -- and
+    you can put those to your AI assistant.
+    """
+    questions = ["What are strings used for in programming?", "Why is a 'string' called a 'string'"]
+    def __init__(self, order=1, name=name, code=code, instructions=instructions, questions=questions):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class StringUpdating(Step):
+    # TODO: introduce errors? should checkpoint verify that `type(prompt) == str`?
+    name = "Working with Variables and Strings"
+    code = """
+    prompt = "Write a recipe for a delicious recipe."
+    prompt =
+    """
+    instructions = """
+    Right now, the variable 'prompt' references the string 'create a delicious recipe'. But variables
+    can be changed to represent other things. For instance, if we added another line of code on the next
+    line that said: `prompt = "coconut"`, that would change the information saved by the variable. Try
+    this out yourself by changing 'prompt' to something else -- any word or sentence that you feel like.
+    """
+    questions = ["Why would I want to update a variable?"]
+    def __init__(self, order=2, name=name, code=code, instructions=instructions, questions=questions):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class StringPrinting(Step):
+    # TODO: add checkpoints
+    name = "Printing a Variable"
+    code = """
+    prompt = "Write a recipe for a delicious recipe."
+    prompt = <whatever the user added>
+    """
+    instructions = """
+    If you've made it here, then you've successfully updated the variable -- well done! How can
+    we see that `prompt` no longer indicates 'create a delicious recipe'? There's a tool for that:
+    Python has a command, `print`, that will let you see the value associated with a variable. Try
+    it out yourself, you should see whatever you changed `prompt` to be pop up on the console on the
+    right. You should just add `print(<some-variable>)` to the next line, then hit <run button>.
+    """
+    questions = ["What does the `print` statement actually do?", "What is a `console`?", "Why would I want to `print` things?"]
+    def __init__(self, order=3, name=name, code=code, instructions=instructions, questions=questions):
+        super().__init__(order, name, code, instructions, questions)
+
+class StringSlicing(Step):
+    pass
+
+class StringDeleting(Step):
+    pass
+
+class StringSplitting(Step):
+    pass
+
+class StringArithmatic(Step):
+    # TODO: add motivations somewhere - eg. why would i 'want to do' anything with a string?
+    name = "Math and Strings"
+    code = """
+    prompt = <user string>
+    other_string = " and I'm another string"
+
+    print(prompt * 3)
+    print(prompt + other_string)
+
+    """
+    instructions = """
+    There's plenty more that you can do with strings, like some arithmatical operations.
+    Try using the '*' character to multiply `prompt` by `3`. You can also add two strings together.
+    """
+    def __init__(self, order=4, name=name, code=code, instructions=instructions, questions=[]):
+        super().__init__(order, name, code, instructions, questions)
+
+class Errors(Step):
+    # NB: too much text?
+    name = "Introducing Errors"
+    code = """
+    prompt = <user string>
+    
+    print(prompt - 2)
+
+    """
+    instructions = """
+    One thing to keep in mind is that you can't substract or divide strings. If we remember that
+    a 'string' is like a bunch of beads tied together on a string, it makes sense that you would
+    be able to take a pattern of beads that you already have and make it over again a few times
+    (which would be like a multiplication), or that you could add one string of beads with another and
+    tie them together to make a new string -- but try to imagine the same thing with subtraction or
+    division -- it doesn't quite work.
+    
+    If you run the code there, you'll see what's called an error. Over the course of your time
+    as both a student and as a career programmer, you'll be seeing *quite a lot* of these. At
+    first they're alarming and potentially overwhelming, but you'll learn to love them -- they're
+    there to tell you that something is wrong with your code, and are often nice enough to
+    tell you exactly what the problem is. An error message has two main parts:
+        - which kind of error it is
+        - the traceback
+    The kind of error, in this case, a `TypeError` is like a general assessment of what's gone
+    wrong with your code. Here, the 'types' of the things we tried to divide aren't compatible
+    with the operation of divison.
+    The other part of the error is the traceback; this is a detailed, line by line report about
+    what the problem is. Don't pay too much attention to it now, it can often be a lot of text
+    to dig through, but it be very helpful once you're tackling more advanced programming.
+    """
+    questions = ["Why can I multiply a string by can't divide it?"]
+    def __init__(self, order=5, name=name, code=code, instructions=instructions, questions=[]):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class DataTypes(Step):
+    name = "Math and Strings"
+    code = """
+    prompt = <user string>
+    other_string = " and I'm another string"
+
+    print(prompt * 3)
+    print(prompt + other_string)
+
+    """
+    instructions = """
+    You might have raised an eyebrow at the mention of 'types' on the previous page. What is a type?
+    # TODO: finish
+    """
+    def __init__(self, order=4, name=name, code=code, instructions=instructions, questions=[]):
+        super().__init__(order, name, code, instructions, questions)
