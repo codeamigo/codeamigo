@@ -1,7 +1,5 @@
 import { SandpackStack } from '@codesandbox/sandpack-react';
-import { Console } from 'console-feed';
 import { FCProviderType } from 'providers/execution/types';
-import { loadPyodide } from 'pyodide';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { Step } from '👨‍💻generated/graphql';
@@ -10,7 +8,7 @@ import Chatbot from '👨‍💻widgets/Chatbot';
 import Instructions from '👨‍💻widgets/Instructions';
 import MonacoEditor from '👨‍💻widgets/MonacoEditor';
 
-const PyodideExecutionProvider: React.FC<FCProviderType> = ({
+const RijuExecutionProvider: React.FC<FCProviderType> = ({
   checkpoints,
   codeModules,
   currentCheckpoint,
@@ -35,42 +33,20 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   tokensUsed,
 }) => {
   const [logs, setLogs] = useState<any[]>([]);
-  const [pyodide, setPyodide] = useState<any>(null);
-  const isFirstRun = useRef(true);
   const consoleRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    (async () => {
-      const pyodide = await loadPyodide({
-        fullStdLib: true,
-        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/',
-        stdout: (text: string) => {
-          console.log(text);
-          setLogs((logs) => [
-            ...logs,
-            {
-              data: [text],
-              method: 'command',
-            },
-          ]);
-        },
-      });
-      setPyodide(pyodide);
-    })();
-  }, []);
-
-  useEffect(() => {
-    if (isFirstRun.current && pyodide) {
-      isFirstRun.current = false;
-      runCode(files['index.py'].code);
-    }
-  }, [pyodide]);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const runCode = async (code: string) => {
-    if (!pyodide) return;
-
     try {
-      await pyodide.runPythonAsync(code);
+      previewRef.current
+        ?.getElementsByTagName('iframe')[0]
+        .contentWindow?.postMessage(
+          {
+            code,
+            event: 'runCode',
+          },
+          '*'
+        );
     } catch (error) {
       try {
         setLogs((prevLogs) => [
@@ -134,12 +110,9 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
           />
         )}
       </SandpackStack>
-      <SandpackStack className="!h-full">
-        <div
-          className="console-feed h-full overflow-scroll text-white"
-          ref={consoleRef}
-        >
-          <Console logs={logs} variant="dark" />
+      <SandpackStack className="!h-full w-full">
+        <div className="h-full w-full" ref={previewRef}>
+          <iframe className="h-full w-full" src="http://3.88.165.212/python" />
         </div>
         <Chatbot
           code={files['index.py'].code}
@@ -155,4 +128,4 @@ const PyodideExecutionProvider: React.FC<FCProviderType> = ({
   );
 };
 
-export default PyodideExecutionProvider;
+export default RijuExecutionProvider;

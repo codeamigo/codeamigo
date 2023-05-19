@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import PyodideExecutionProvider from 'providers/execution/Pyodide';
+import RijuExecutionProvider from 'providers/execution/Riju';
 import SandpackExecutionProvider from 'providers/execution/Sandpack';
 import React from 'react';
 import { useEffect, useState } from 'react';
@@ -356,7 +356,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
               tokensUsed={tokensUsed}
             />
           ) : step?.executionType === 'pyodide' ? (
-            <PyodideExecutionProvider
+            <RijuExecutionProvider
               checkpoints={checkpoints as CheckpointsQuery['checkpoints']}
               codeModules={
                 codeModulesData?.codeModules as CodeModulesQuery['codeModules']
