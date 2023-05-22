@@ -1,5 +1,6 @@
 query Step($slug: String!) {
   step(slug: $slug) {
+    executionType
     id
     instructions
     nextSlug

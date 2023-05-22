@@ -21,7 +21,7 @@ const LessonHelp: React.FC<Props> = () => {
   return (
     <div className="flex flex-col overflow-hidden rounded-md text-white sm:min-w-[320px]">
       <div className="bg-black px-2.5 py-1.5 font-bold">Get Help</div>
-      {data.lessonPurchased ? (
+      {data.isLessonPurchased ? (
         <div
           className={`group flex cursor-pointer items-center gap-2 border-b border-neutral-800 px-2.5 py-1.5 text-sm last:border-b-0 hover:bg-neutral-700`}
         >

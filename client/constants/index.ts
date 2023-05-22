@@ -6,3 +6,8 @@ export const INTRO_TO_JS_WHITELIST = [
   'philip@codeamigo.dev',
   'heeg.alex@googlemail.com',
 ];
+
+export const INTRO_TO_PYTHON_WHITELIST = [
+  'philip@codeamigo.dev',
+  'james.evers.w@gmail.com',
+];

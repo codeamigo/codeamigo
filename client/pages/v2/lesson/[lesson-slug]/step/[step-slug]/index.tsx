@@ -1,14 +1,8 @@
-import {
-  SandpackConsole,
-  SandpackLayout,
-  SandpackPredefinedTemplate,
-  SandpackPreview,
-  SandpackProvider,
-  SandpackStack,
-} from '@codesandbox/sandpack-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import RijuExecutionProvider from 'providers/execution/Riju';
+import SandpackExecutionProvider from 'providers/execution/Sandpack';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
@@ -18,6 +12,7 @@ import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsQuery,
+  CodeModulesQuery,
   LessonDocument,
   LessonQueryVariables,
   Step,
@@ -35,10 +30,7 @@ import {
 import { LessonQuery } from '👨‍💻generated/graphql';
 import { StepQuery } from '👨‍💻generated/graphql';
 import { client } from '👨‍💻utils/withApollo';
-import Chatbot from '👨‍💻widgets/Chatbot';
 import Credits from '👨‍💻widgets/Credits';
-import Instructions from '👨‍💻widgets/Instructions';
-import MonacoEditor from '👨‍💻widgets/MonacoEditor';
 import ProgressBar from '👨‍💻widgets/ProgressBar';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
@@ -333,70 +325,73 @@ const V2Lesson = ({ lesson, step }: Props) => {
           className="h-full overflow-hidden rounded-lg border border-neutral-800"
           style={{ width: '100%' }}
         >
-          <SandpackProvider
-            files={files}
-            template={
-              (step?.template as SandpackPredefinedTemplate) || 'static'
-            }
-            theme={'dark'}
-          >
-            <SandpackLayout>
-              <SandpackStack className="editor-instructions-container !h-full">
-                <Instructions
-                  instructions={step?.instructions as string}
-                  leftPanelHeight={leftPanelHeight}
-                  setLeftPanelHeight={setLeftPanelHeight}
-                />
-                {/* TODO: is there anyway to prevent this from going to null? */}
-                {loading || !files ? null : (
-                  <MonacoEditor
-                    checkpoints={checkpoints}
-                    codeModules={codeModulesData?.codeModules}
-                    currentCheckpoint={currentCheckpoint}
-                    disabled={maxTokensUsed}
-                    files={files}
-                    hoverSelection={hoverSelection}
-                    isLoggedIn={meData?.me?.isAuthenticated as boolean}
-                    isStepComplete={isStepComplete}
-                    leftPanelHeight={leftPanelHeight}
-                    lessonId={lesson?.id as string}
-                    lessonPurchased={
-                      !!userLessonPurchaseData?.userLessonPurchase?.id
-                    }
-                    lessonSlug={lesson?.slug as string}
-                    onReady={() => setEditorReady(true)}
-                    setCheckpoints={setCheckpoints}
-                    setCurrentCheckpoint={setCurrentCheckpoint}
-                    setHoverSelection={setHoverSelection}
-                    setIsStepComplete={setIsStepComplete}
-                    setLeftPanelHeight={setLeftPanelHeight}
-                    setTokensUsed={setTokensUsed}
-                    step={step as Step}
-                  />
-                )}
-              </SandpackStack>
-              <SandpackStack className="!h-full">
-                <SandpackPreview
-                  className={
-                    step?.template === 'static' || step?.template === 'node'
-                      ? ''
-                      : '!h-0'
-                  }
-                />
-                {step?.template === 'static' ? null : (
-                  <SandpackConsole className="overflow-scroll" />
-                )}
-                <Chatbot
-                  disabled={maxTokensUsed}
-                  hoverSelection={hoverSelection}
-                  questions={step?.questions?.map((q) => q.value) || []}
-                  setTokensUsed={setTokensUsed}
-                  tokenUsageStatus={tokenUsageStatus}
-                  tokensUsed={tokensUsed}
-                />
-              </SandpackStack>
-            </SandpackLayout>
-          </SandpackProvider>
+          {step?.executionType === 'sandpack' ? (
+            <SandpackExecutionProvider
+              checkpoints={checkpoints as CheckpointsQuery['checkpoints']}
+              codeModules={
+                codeModulesData?.codeModules as CodeModulesQuery['codeModules']
+              }
+              currentCheckpoint={currentCheckpoint}
+              files={files as { [key: string]: { code: string } }}
+              hoverSelection={hoverSelection}
+              isLessonPurchased={
+                !!userLessonPurchaseData?.userLessonPurchase?.id
+              }
+              isLoggedIn={meData?.me?.isAuthenticated as boolean}
+              isStepComplete={isStepComplete}
+              leftPanelHeight={leftPanelHeight}
+              lesson={lesson as LessonQuery['lesson']}
+              loading={loading}
+              maxTokensUsed={maxTokensUsed}
+              onReady={() => setEditorReady(true)}
+              setCheckpoints={setCheckpoints}
+              setCurrentCheckpoint={setCurrentCheckpoint}
+              setEditorReady={setEditorReady}
+              setHoverSelection={setHoverSelection}
+              setIsStepComplete={setIsStepComplete}
+              setLeftPanelHeight={setLeftPanelHeight}
+              setTokensUsed={setTokensUsed}
+              step={step as Step}
+              tokenUsageStatus={tokenUsageStatus}
+              tokensUsed={tokensUsed}
+            />
+          ) : step?.executionType === 'pyodide' ? (
+            <RijuExecutionProvider
+              checkpoints={checkpoints as CheckpointsQuery['checkpoints']}
+              codeModules={
+                codeModulesData?.codeModules as CodeModulesQuery['codeModules']
+              }
+              currentCheckpoint={currentCheckpoint}
+              files={
+                {
+                  'index.py': {
+                    code: `# This program prints Hello, world!\n\nprint('Hello, world!')`,
+                  },
+                } as { [key: string]: { code: string } }
+              }
+              hoverSelection={hoverSelection}
+              isLessonPurchased={
+                !!userLessonPurchaseData?.userLessonPurchase?.id
+              }
+              isLoggedIn={meData?.me?.isAuthenticated as boolean}
+              isStepComplete={isStepComplete}
+              leftPanelHeight={leftPanelHeight}
+              lesson={lesson as LessonQuery['lesson']}
+              loading={loading}
+              maxTokensUsed={maxTokensUsed}
+              onReady={() => setEditorReady(true)}
+              setCheckpoints={setCheckpoints}
+              setCurrentCheckpoint={setCurrentCheckpoint}
+              setEditorReady={setEditorReady}
+              setHoverSelection={setHoverSelection}
+              setIsStepComplete={setIsStepComplete}
+              setLeftPanelHeight={setLeftPanelHeight}
+              setTokensUsed={setTokensUsed}
+              step={step as Step}
+              tokenUsageStatus={tokenUsageStatus}
+              tokensUsed={tokensUsed}
+            />
+          ) : null}
         </div>
       </motion.div>
       <motion.div
@@ -440,6 +435,8 @@ export async function getServerSideProps(context: {
     query: StepDocument,
     variables: { slug: stepSlug } as StepQueryVariables,
   });
+
+  console.log(step);
 
   return {
     props: {

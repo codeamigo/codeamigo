@@ -1,4 +1,3 @@
-import { useActiveCode } from '@codesandbox/sandpack-react';
 import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
@@ -17,6 +16,7 @@ const defaultQuestions = [
 ];
 
 const Chatbot: React.FC<Props> = ({
+  code,
   disabled,
   hoverSelection,
   questions,
@@ -25,7 +25,6 @@ const Chatbot: React.FC<Props> = ({
   tokensUsed,
 }: Props) => {
   const [height, setHeight] = useState(0);
-  const { code } = useActiveCode();
   const [responses, setResponses] = useState<
     { question: string; value: string }[]
   >([]);
@@ -270,6 +269,7 @@ const Chatbot: React.FC<Props> = ({
 };
 
 type Props = {
+  code: string;
   disabled: boolean;
   hoverSelection: string | null;
   questions: string[];

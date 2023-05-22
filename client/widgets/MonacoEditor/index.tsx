@@ -1,5 +1,4 @@
 import { FileTabs } from '@codesandbox/sandpack-react';
-import { useActiveCode, useSandpack } from '@codesandbox/sandpack-react';
 import { SandpackStack } from '@codesandbox/sandpack-react';
 import { Editor } from '@monaco-editor/react';
 import React, {
@@ -27,17 +26,19 @@ import StepActions from '👨‍💻widgets/StepActions';
 const URN = 'urn:';
 
 const MonacoEditor = ({
+  activeFile,
   checkpoints,
+  code,
   codeModules,
   currentCheckpoint,
   disabled,
   files,
   hoverSelection,
+  isLessonPurchased,
   isLoggedIn,
   isStepComplete,
   leftPanelHeight,
   lessonId,
-  lessonPurchased,
   lessonSlug,
   onReady,
   setCheckpoints,
@@ -47,10 +48,8 @@ const MonacoEditor = ({
   setLeftPanelHeight,
   setTokensUsed,
   step,
+  updateCode,
 }: Props) => {
-  const { code, updateCode } = useActiveCode();
-  const { sandpack } = useSandpack();
-  const { activeFile } = sandpack;
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
@@ -379,7 +378,7 @@ const MonacoEditor = ({
     extension === 'jpeg';
 
   return (
-    <SandpackStack
+    <div
       className="relative z-30 transition-all"
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
@@ -388,16 +387,16 @@ const MonacoEditor = ({
         disabled={!isStepComplete}
         isAutoPlayEnabled={isAutoPlayEnabled}
         isCompletionEnabled={isCompletionEnabled}
+        isLessonPurchased={isLessonPurchased}
         isLoggedIn={isLoggedIn}
         lessonId={lessonId}
-        lessonPurchased={lessonPurchased}
         lessonSlug={lessonSlug}
         nextLoader={nextLoader}
         setIsAutoPlayEnabled={setIsAutoPlayEnabled}
         setIsCompletionEnabled={setIsCompletionEnabled}
         step={step}
       />
-      <FileTabs />
+      {/* <FileTabs /> */}
       {/* <div
           className={`flex h-full w-full items-center justify-center ${
             isImage ? 'block' : 'hidden'
@@ -447,12 +446,14 @@ const MonacoEditor = ({
         name={full ? 'resize-small' : 'resize-full'}
         onClick={() => setFull(!full)}
       />
-    </SandpackStack>
+    </div>
   );
 };
 
 type Props = {
+  activeFile: string;
   checkpoints?: CheckpointsQuery['checkpoints'];
+  code: string;
   codeModules?: CodeModulesQuery['codeModules'];
   currentCheckpoint: number;
   disabled: boolean;
@@ -462,6 +463,7 @@ type Props = {
     };
   };
   hoverSelection: string | null;
+  isLessonPurchased: boolean;
   isLoggedIn: boolean;
   isStepComplete: boolean;
   leftPanelHeight: {
@@ -469,7 +471,6 @@ type Props = {
     instructions: string;
   };
   lessonId: string;
-  lessonPurchased: boolean;
   lessonSlug: string;
   onReady: () => void;
   setCheckpoints: Dispatch<
@@ -486,6 +487,10 @@ type Props = {
   >;
   setTokensUsed: Dispatch<SetStateAction<number | null>>;
   step: Step;
+  updateCode: (
+    newCode: string,
+    shouldUpdatePreview?: boolean | undefined
+  ) => void;
 };
 
 export default MonacoEditor;
