@@ -3,6 +3,7 @@ import React from 'react';
 
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
 import { useMeQuery } from '👨‍💻generated/graphql';
 
 import { MAX_TOKENS_DEMO, MAX_TOKENS_USER } from '../../constants';
@@ -134,9 +135,25 @@ const Usage: React.FC<Props> = () => {
               ) : (
                 <span />
               )}
-              <Button onClick={() => modalVar(InitialModalState)} type="button">
-                <span>Close</span>
-              </Button>
+              <div className="flex items-center gap-2">
+                {!meData?.me ? (
+                  <Button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('https://forms.gle/weRYdVmr2LszmQiK6');
+                    }}
+                  >
+                    <Icon className="mr-1.5" name="plus-circled" />
+                    <span>Join Waitlist</span>
+                  </Button>
+                ) : null}
+                <Button
+                  onClick={() => modalVar(InitialModalState)}
+                  type="button"
+                >
+                  <span>Close</span>
+                </Button>
+              </div>
             </div>
           </div>
         </Form>
