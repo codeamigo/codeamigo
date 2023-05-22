@@ -285,19 +285,3 @@ body,
   opacity: 0.2;
   z-index: 1;
 }
-
-/*
-console-feed
-*/
-
-.console-feed * {
-  @apply text-sm !important;
-}
-
-div[data-method='error'] ol[role='tree'] li {
-  background: transparent !important;
-}
-
-.css-1wcpu1t, .css-1it6ff0 {
-  height: 22px !important;
-}
