@@ -1,7 +1,7 @@
-const debouncePromise = (fn, ms = 0) => {
-  let timeoutId;
-  const pending = [];
-  return (...args) =>
+const debouncePromise = (fn: any, ms = 0) => {
+  let timeoutId: NodeJS.Timeout;
+  const pending: any[] = [];
+  return (...args: any) =>
     new Promise((res, rej) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
