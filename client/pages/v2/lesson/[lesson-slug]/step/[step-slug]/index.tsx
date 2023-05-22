@@ -355,7 +355,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
               tokenUsageStatus={tokenUsageStatus}
               tokensUsed={tokensUsed}
             />
-          ) : step?.executionType === 'pyodide' ? (
+          ) : step?.executionType === 'riju' ? (
             <RijuExecutionProvider
               checkpoints={checkpoints as CheckpointsQuery['checkpoints']}
               codeModules={
