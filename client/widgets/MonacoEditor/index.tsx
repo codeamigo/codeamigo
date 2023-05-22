@@ -2,7 +2,6 @@ import { FileTabs } from '@codesandbox/sandpack-react';
 import { useActiveCode, useSandpack } from '@codesandbox/sandpack-react';
 import { SandpackStack } from '@codesandbox/sandpack-react';
 import { Editor } from '@monaco-editor/react';
-import debounce from 'debounce';
 import React, {
   Dispatch,
   SetStateAction,
@@ -20,6 +19,7 @@ import {
   useCompleteCheckpointMutation,
   useUpdateCodeModuleMutation,
 } from '👨‍💻generated/graphql';
+import debouncePromise from '👨‍💻utils/debounce';
 import Checkpoints from '👨‍💻widgets/Checkpoints';
 import { getLanguage, getModelExtension } from '👨‍💻widgets/Lesson/Editor/utils';
 import StepActions from '👨‍💻widgets/StepActions';
@@ -59,6 +59,7 @@ const MonacoEditor = ({
   const isStepCompleteRef = useRef(isStepComplete);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
   const isAutoPlayEnabledRef = useRef(isAutoPlayEnabled);
+  const checkpointsRef = useRef(checkpoints);
   const [nextLoader, setNextLoader] = useState(false);
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
@@ -67,6 +68,10 @@ const MonacoEditor = ({
   useEffect(() => {
     isStepCompleteRef.current = isStepComplete;
   }, [isStepComplete]);
+
+  useEffect(() => {
+    checkpointsRef.current = checkpoints;
+  }, [checkpoints]);
 
   useEffect(() => {
     isCompletionEnabledRef.current = isCompletionEnabled;
@@ -132,10 +137,12 @@ const MonacoEditor = ({
       // step.instructions +
       // '\n' +
       `${
-        checkpoints?.[currentCheckpoint]?.matchRegex
-          ? '\n' + checkpoints[currentCheckpoint]?.matchRegex
+        checkpointsRef.current?.[currentCheckpoint]?.matchRegex
+          ? '\n' + checkpointsRef.current[currentCheckpoint]?.matchRegex
           : ''
       }` +
+      '\n\n' +
+      'Code:\n' +
       lines.join('\n').split('[insert]')[0];
     const suffix = lines.join('\n').split('[insert]')[1];
 
@@ -165,7 +172,7 @@ const MonacoEditor = ({
     }
   };
 
-  const debouncedUpdatePrompt = debounce(updatePrompt, 100);
+  const debouncedUpdatePrompt = debouncePromise(updatePrompt, 100);
 
   const testCheckpoint = async (value: string) => {
     const checkpoint = checkpoints?.[currentCheckpoint];
