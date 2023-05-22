@@ -436,8 +436,6 @@ export async function getServerSideProps(context: {
     variables: { slug: stepSlug } as StepQueryVariables,
   });
 
-  console.log(step);
-
   return {
     props: {
       lesson: lesson.data.lesson,
