@@ -112,7 +112,10 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
       </SandpackStack>
       <SandpackStack className="!h-full w-full">
         <div className="h-full w-full" ref={previewRef}>
-          <iframe className="h-full w-full" src="http://3.88.165.212/python" />
+          <iframe
+            className="h-full w-full"
+            src="https://riju.codeamigo.xyz/python"
+          />
         </div>
         <Chatbot
           code={files['index.py'].code}
