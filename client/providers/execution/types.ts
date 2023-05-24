@@ -4,6 +4,8 @@ import {
   CheckpointsQuery,
   CodeModulesQuery,
   LessonQuery,
+  MultipleChoiceQuizQuestion,
+  MultipleChoiceQuizQuestionsQuery,
   Step,
 } from '👨‍💻generated/graphql';
 
