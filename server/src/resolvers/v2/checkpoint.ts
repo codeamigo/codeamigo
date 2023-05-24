@@ -1,5 +1,5 @@
 import { MyContext } from 'src/types';
-import { Arg, Ctx, Int, Mutation, Query, Resolver } from 'type-graphql';
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql';
 
 import { CheckpointTypeEnum } from '../../entities/v2/Checkpoint';
 import { Checkpoint } from '../../entities/v2/Checkpoint';
@@ -114,12 +114,5 @@ export class CheckpointResolver {
     }
 
     return checkpoints;
-  }
-
-  @Query(() => Checkpoint, { nullable: true })
-  checkpoint(
-    @Arg('id', () => Int) id: number
-  ): Promise<Checkpoint | undefined> {
-    return Checkpoint.findOne(id);
   }
 }
