@@ -83,6 +83,28 @@ export type Modal = {
   persistent?: Maybe<Scalars['Boolean']>;
 };
 
+export type MultipleChoiceQuizChoice = {
+  __typename?: 'MultipleChoiceQuizChoice';
+  id: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  value: Scalars['String'];
+  hint: Scalars['String'];
+  question: MultipleChoiceQuizQuestion;
+};
+
+export type MultipleChoiceQuizQuestion = {
+  __typename?: 'MultipleChoiceQuizQuestion';
+  id: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  value: Scalars['String'];
+  isCorrect: Scalars['Boolean'];
+  choices: Array<MultipleChoiceQuizChoice>;
+  user: User;
+  step: Step;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   completeCheckpoint: Checkpoint;
@@ -217,7 +239,6 @@ export type OAuthLoginInput = {
 
 export type Query = {
   __typename?: 'Query';
-  checkpoint?: Maybe<Checkpoint>;
   checkpoints: Array<Checkpoint>;
   codeModules: Array<CodeModule>;
   lesson?: Maybe<Lesson>;
@@ -229,11 +250,6 @@ export type Query = {
   userLessonPosition?: Maybe<UserLessonPosition>;
   userLessonPurchase?: Maybe<UserLessonPurchase>;
   users?: Maybe<Array<User>>;
-};
-
-
-export type QueryCheckpointArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -310,7 +326,8 @@ export type Step = {
 export enum StepExecutionTypeEnum {
   Riju = 'riju',
   Sandpack = 'sandpack',
-  Stackblitz = 'stackblitz'
+  Stackblitz = 'stackblitz',
+  Quiz = 'quiz'
 }
 
 export type UpdateUserRoleInput = {
@@ -326,6 +343,7 @@ export type User = {
   email?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   isAuthenticated?: Maybe<Scalars['Boolean']>;
+  multipleChoiceQuizQuestions?: Maybe<Array<MultipleChoiceQuizQuestion>>;
   profilePic: Scalars['String'];
   role: Role;
   tokensUsed: Scalars['Float'];
