@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import QuizExecutionProvider from 'providers/execution/Quiz';
 import RijuExecutionProvider from 'providers/execution/Riju';
 import SandpackExecutionProvider from 'providers/execution/Sandpack';
 import React from 'react';
@@ -391,6 +392,8 @@ const V2Lesson = ({ lesson, step }: Props) => {
               tokenUsageStatus={tokenUsageStatus}
               tokensUsed={tokensUsed}
             />
+          ) : step?.executionType === 'quiz' ? (
+            <QuizExecutionProvider step={step as Step} />
           ) : null}
         </div>
       </motion.div>
