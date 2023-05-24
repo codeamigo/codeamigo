@@ -400,7 +400,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             ? { opacity: 0, scale: 0 }
             : { opacity: 1, scale: 1 }
         }
-        className="fixed left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
+        className="fixed  left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
         initial={{ opacity: 0.5, scale: 0.5 }}
         style={{ transformOrigin: 'center' }}
         transition={transition}
