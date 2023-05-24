@@ -1,0 +1,11 @@
+query MultipleChoiceQuizQuestions($stepId: String!) {
+  multipleChoiceQuizQuestions(stepId: $stepId) {
+    id
+    isCorrect
+    value
+    choices {
+      value
+      hint
+    }
+  }
+}

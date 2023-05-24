@@ -111,6 +111,8 @@ export type Mutation = {
   createCheckpoint: Checkpoint;
   createCodeModule: CodeModule;
   updateCodeModule: CodeModule;
+  updateMultipleChoiceQuizQuestion: MultipleChoiceQuizQuestion;
+  createMultipleChoiceQuizQuestion: MultipleChoiceQuizQuestion;
   updateTokensUsed: UserResponse;
   deleteUser: Scalars['Boolean'];
   register: UserResponse;
@@ -154,6 +156,17 @@ export type MutationCreateCodeModuleArgs = {
 export type MutationUpdateCodeModuleArgs = {
   code: Scalars['String'];
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateMultipleChoiceQuizQuestionArgs = {
+  isCorrect: Scalars['Boolean'];
+  multipleChoiceQuizQuestionId: Scalars['String'];
+};
+
+
+export type MutationCreateMultipleChoiceQuizQuestionArgs = {
+  questionId: Scalars['String'];
 };
 
 
@@ -245,6 +258,7 @@ export type Query = {
   lessons: Array<Lesson>;
   me?: Maybe<User>;
   modal?: Maybe<Modal>;
+  multipleChoiceQuizQuestions: Array<MultipleChoiceQuizQuestion>;
   step?: Maybe<Step>;
   steps: Array<Step>;
   userLessonPosition?: Maybe<UserLessonPosition>;
@@ -265,6 +279,11 @@ export type QueryCodeModulesArgs = {
 
 export type QueryLessonArgs = {
   slug: Scalars['String'];
+};
+
+
+export type QueryMultipleChoiceQuizQuestionsArgs = {
+  stepId: Scalars['String'];
 };
 
 
@@ -691,6 +710,23 @@ export type ModalQuery = (
   & { modal?: Maybe<(
     { __typename?: 'Modal' }
     & Pick<Modal, 'name' | 'callback' | 'persistent'>
+  )> }
+);
+
+export type MultipleChoiceQuizQuestionsQueryVariables = Exact<{
+  stepId: Scalars['String'];
+}>;
+
+
+export type MultipleChoiceQuizQuestionsQuery = (
+  { __typename?: 'Query' }
+  & { multipleChoiceQuizQuestions: Array<(
+    { __typename?: 'MultipleChoiceQuizQuestion' }
+    & Pick<MultipleChoiceQuizQuestion, 'id' | 'isCorrect' | 'value'>
+    & { choices: Array<(
+      { __typename?: 'MultipleChoiceQuizChoice' }
+      & Pick<MultipleChoiceQuizChoice, 'value' | 'hint'>
+    )> }
   )> }
 );
 
@@ -1481,6 +1517,45 @@ export function useModalLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Moda
 export type ModalQueryHookResult = ReturnType<typeof useModalQuery>;
 export type ModalLazyQueryHookResult = ReturnType<typeof useModalLazyQuery>;
 export type ModalQueryResult = Apollo.QueryResult<ModalQuery, ModalQueryVariables>;
+export const MultipleChoiceQuizQuestionsDocument = gql`
+    query MultipleChoiceQuizQuestions($stepId: String!) {
+  multipleChoiceQuizQuestions(stepId: $stepId) {
+    id
+    isCorrect
+    value
+    choices {
+      value
+      hint
+    }
+  }
+}
+    `;
+
+/**
+ * __useMultipleChoiceQuizQuestionsQuery__
+ *
+ * To run a query within a React component, call `useMultipleChoiceQuizQuestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMultipleChoiceQuizQuestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMultipleChoiceQuizQuestionsQuery({
+ *   variables: {
+ *      stepId: // value for 'stepId'
+ *   },
+ * });
+ */
+export function useMultipleChoiceQuizQuestionsQuery(baseOptions: Apollo.QueryHookOptions<MultipleChoiceQuizQuestionsQuery, MultipleChoiceQuizQuestionsQueryVariables>) {
+        return Apollo.useQuery<MultipleChoiceQuizQuestionsQuery, MultipleChoiceQuizQuestionsQueryVariables>(MultipleChoiceQuizQuestionsDocument, baseOptions);
+      }
+export function useMultipleChoiceQuizQuestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MultipleChoiceQuizQuestionsQuery, MultipleChoiceQuizQuestionsQueryVariables>) {
+          return Apollo.useLazyQuery<MultipleChoiceQuizQuestionsQuery, MultipleChoiceQuizQuestionsQueryVariables>(MultipleChoiceQuizQuestionsDocument, baseOptions);
+        }
+export type MultipleChoiceQuizQuestionsQueryHookResult = ReturnType<typeof useMultipleChoiceQuizQuestionsQuery>;
+export type MultipleChoiceQuizQuestionsLazyQueryHookResult = ReturnType<typeof useMultipleChoiceQuizQuestionsLazyQuery>;
+export type MultipleChoiceQuizQuestionsQueryResult = Apollo.QueryResult<MultipleChoiceQuizQuestionsQuery, MultipleChoiceQuizQuestionsQueryVariables>;
 export const StepDocument = gql`
     query Step($slug: String!) {
   step(slug: $slug) {
