@@ -25,6 +25,7 @@ import { UserLessonPurchase } from './entities/v2/UserLessonPurchase';
 import { CheckpointResolver } from './resolvers/v2/checkpoint';
 import { CodeModuleResolver } from './resolvers/v2/codeModule';
 import { LessonResolver } from './resolvers/v2/lesson';
+import { MultipleChoiceQuizQuestionResolver } from './resolvers/v2/multipleChoiceQuizQuestion';
 import { StepResolver } from './resolvers/v2/step';
 import { UserResolver } from './resolvers/v2/user';
 import { UserLessonPositionResolver } from './resolvers/v2/userLessonPosition';
@@ -101,6 +102,7 @@ const main = async () => {
         UserResolver,
         UserLessonPositionResolver,
         UserLessonPurchaseResolver,
+        MultipleChoiceQuizQuestionResolver,
       ],
       validate: false,
     }),
