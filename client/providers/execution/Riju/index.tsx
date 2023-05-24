@@ -114,7 +114,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
         <div className="h-full w-full" ref={previewRef}>
           <iframe
             className="h-full w-full"
-            src="https://riju.codeamigo.xyz/python"
+            src={`https://riju.codeamigo.xyz/${step.template}`}
           />
         </div>
         <Chatbot
