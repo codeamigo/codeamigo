@@ -189,14 +189,14 @@ class StringSlicing(Step):
     """
     instructions = """
     Python will let you go much further than just getting a single character. Another technique,
-    'slicing', will get the all of the characters up until the position in the string specified.
+    'slicing', will get the all of the characters up until a specified position in the string.
     Here, we're taking every character, starting from '0', until the character in the 20th position.
     Take note that you won't get the 10th character back (remember that Python starts at 0)!
     Try printing `sentence_slice`. Now, if you have a different opinion about pizza toppings,
     the 'opinion' string seems less objectionable.
     """
     questions = [
-        "Why does Python only get the character up until the index I specified?"
+        "Why does Python only get the character up until but not including the index that I specified?"
     ]
 
     def __init__(
@@ -211,6 +211,7 @@ class StringSlicing(Step):
 
 
 class StringDeleting(Step):
+    # TODO: discuss quippiness factor
     name = "Deleting Strings"
     code = """
     opinion = "Pizza goes best with pineapple"
@@ -286,7 +287,12 @@ class StringConcatenation(Step):
     questions = ["What is the difference between addition and concatenation?"]
 
     def __init__(
-        self, order=8, name=name, code=code, instructions=instructions, questions=[]
+        self,
+        order=8,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=questions,
     ):
         super().__init__(order, name, code, instructions, questions)
 
@@ -361,26 +367,180 @@ class Errors(Step):
         super().__init__(order, name, code, instructions, questions)
 
 
-class DataTypes(Step):
+class StringDataTypes(Step):
+    # skipping over explanation of '==' and booleans
+    # does this introduce too much new stuff all at once?
     name = "Math and Strings"
     code = """
-    prompt = <user string>
-    other_string = " and I'm another string"
+    string_one = "I am a string"
+    string_two = "I am also a string"
+    print(type(string_one))
+    print(type(string_two))
 
-    print(prompt * 3)
-    print(prompt + other_string)
 
     """
     instructions = """
-    You might have raised an eyebrow at the mention of 'types' on the previous page. What is a type?
-    # TODO: finish
+    The error that was saw on the last slide was a 'TypeError'. We now have some idea of what an 'error' is,
+    but what about a 'type'? In Python, and programming languages generally, 'types' are just like what they
+    sound like; a category of thing. Python has several important types that you'll use when programming. So
+    far, we've mostly been working with strings. An individual string, like 'I am a string', will have a 'type'
+    of 'str' (which is short for string). Every other string you might make will also be of type 'str'.
+    Try running the code, you should see that the two strings have the same type. Strings are far from the only
+    type that exist in Python. Let's keep going to check out a few others!
     """
 
     def __init__(
-        self, order=4, name=name, code=code, instructions=instructions, questions=[]
+        self,
+        order=11,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=["Why are types important in Python?"],
     ):
         super().__init__(order, name, code, instructions, questions)
 
 
-class StringSplitting(Step):
+class SequenceDataTypes(Step):
+    # how do i refer to them? types? objects? again with an eye towards keeping introduced stuff to a minimum
+    ## also concerned that this introduces too much abstraction -- discuss
+    name = "Introduction to Sequences"
+    code = """
+    opinion = "I'd like a pizza with "
+    toppings = ["pepperoni", "mushrooms", "pineapples"]
+    print(opinion + toppings[0])
+    """
+    instructions = """Remember how we said earlier that a string is called a string because partially
+    because its supposed to represent a bunch of beads tied together on a string? Imagine taking the string and sliding each
+    character off of the string one at a time. Doing this would be treating the beads as a "sequence"; you take
+    the whole thing and do something to each of its parts. This is something that a Python string *can* do, but it
+    isn't the main purpose of a string -- that would be to communicate information.
+    
+    There is, however, a type that has sequencing things as its main job. This is called a `list`.
+    A list in Python is also similar to what a list is in the ordinary sense of the word. That is, a
+    way of keeping track of a bunch of things.
+    In Python, you can create a list by enclosing whatever you want to keep track of in square brackets. Check out
+    the code to see an example of a list that keeps track of a few pizza toppings. You'll note that the list
+    contains three strings. Remember when we did indexing and slicing with strings? You can do the same thing with
+    lists! See how you can index into a `list` by running the code.
+    """
+
+    def __init__(
+        self, order=12, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class ListSlice(Step):
+    name = "Slicing Lists"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapples"]
+    print(toppings[:2])
+    """
+    instructions = """On the last slide, you probably noticed that there's a difference between what happens
+    when you index into a string and what happens what you index into a list. Indexing into a string only gives you
+    the character at that position, but a list will give you back whatever you happen to have in the list at that
+    index. In this case -- its a whole string! The same thing is true of slicing lists; instead of just a character,
+    you'll get everything up until the index that you specified. Try it out if you want to see the list of toppings
+    without including pineapples!
+    """
+
+    def __init__(
+        self, order=13, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class Mutability(Step):
+    # nb: probably needs more by way of explanation, might be confusing
+    name = "Mutable or Immutable?"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapples"]
+    first_two_toppings = toppings[:2]
+    print(first_two_toppings)
+    print(toppings)
+    """
+    instructions = """
+    One thing we should mention is that when you `slice` a `list`, we don't actually make any
+    permanent changes to the `list`. Actually, slicing a list will return a new list entirely,
+    and that new list will return just the things in the list up until the index. So instead of
+    just printing the results of `some list[:some index]`, you can save the result of slicing the
+    original list as a new variable. If you run the code, you'll see that `toppings` is exactly
+    the same as before we took the slice from it. This is because slicing is meant just to serve the purpose
+    of accessing things in the list. There are other operations that will change the list forever!
+    In Python, some types (like lists) are what is called 'mutable'. This means that its okay to
+    change them. Other types (like strings) are 'immutable', meaning that they have to stay the way
+    that they are from the moment that they were created.
+
+    """
+    questions = ["If strings are immutable, why can you concatenate them?"]
+
+    def __init__(
+        self,
+        order=14,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=questions,
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class ListPop(Step):
+    name = "Popping from Lists"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapples"]
+    just_pineapple = toppings.pop()
+    print(toppings)
+    print(just_pineapple)
+    """
+    instructions = """
+    Before we take a look at an operation that will permanently change a list -- we want to give you
+    a round of applause. congratulations on making it this far in the lesson. we're very happy to be
+    learning with you.
+    And now, let's introduce a way to remove pineapples from the list of ingredients....forever!
+    `pop` is what's called a `method`. A `method` is something that a thing, like a list, can do.
+    When a list "pops", it will get rid of whatever item is at the very end of the list. If you pop
+    from a list, you can save the result as a variable, but otherwise, that last item is permanently
+    removed from the list. Think of the list as one of those machines that shoots out tennis balls.
+    Once the machine pops one out, you can catch it or do something else with it, but its out of the
+    definitely no longer in the machine with the other tennis balls.
+    Execute the code, you can see that `pineapples` gets assigned to a new variable `just_pineapple`
+    after being popped out of `toppings`. Now `toppings` only includes `pepperoni` and `mushrooms`!
+    """
+
+    def __init__(
+        self, order=15, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class ListAppend(Step):
+    # add a thing about what kind of stuff you can append?
+    name = "Appending to Lists"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapples"]
+    just_pineapple = toppings.pop()
+    toppings.append(just_pineapple)
+    print(toppings)
+    another_topping = "olives"
+    toppings.append(another_topping)
+    print(toppings)
+    """
+    instructions = """
+    We've jettisoned pineapple from our list of toppings. What if we have second thoughts?
+    Very possibly, there's a reason so many people like it on pizza. What if we wanted to
+    put it back into the ingredients list? Fortunately, we still have pineapple on hand; its
+    saved in the `just_pineapple` variable, and even more luckily, we can take that variable
+    and put it back into `toppings`. How? With the `append` method. `append` is another thing
+    that lists can do. Which makes sense: you take things off of a list, and you can add things
+    on.
+    """
+
+    def __init__(
+        self, order=16, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class ListIter(Step):
     pass
