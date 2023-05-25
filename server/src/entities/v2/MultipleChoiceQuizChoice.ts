@@ -36,7 +36,7 @@ export class MultipleChoiceQuizChoice extends BaseEntity {
 
   @Field(() => String)
   @Column({ nullable: true })
-  hint: boolean;
+  hint: string;
 
   @ManyToOne(
     () => MultipleChoiceQuizQuestion,
