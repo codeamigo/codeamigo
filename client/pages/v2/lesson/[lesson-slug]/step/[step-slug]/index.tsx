@@ -393,7 +393,11 @@ const V2Lesson = ({ lesson, step }: Props) => {
               tokensUsed={tokensUsed}
             />
           ) : step?.executionType === 'quiz' ? (
-            <QuizExecutionProvider step={step as Step} />
+            <QuizExecutionProvider
+              lessonSlug={lesson?.slug as string}
+              setEditorReady={setEditorReady}
+              step={step as Step}
+            />
           ) : null}
         </div>
       </motion.div>
