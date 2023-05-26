@@ -45,6 +45,9 @@ export class MultipleChoiceQuizQuestionResolver {
     const originalMultipleChoiceQuizQuestion = await MultipleChoiceQuizQuestion.findOne(
       {
         id: questionId,
+      },
+      {
+        relations: ['step', 'choices'],
       }
     );
 

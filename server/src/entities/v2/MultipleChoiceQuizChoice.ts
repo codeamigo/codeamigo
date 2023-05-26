@@ -30,7 +30,7 @@ export class MultipleChoiceQuizChoice extends BaseEntity {
   @Column({ nullable: true })
   value: string;
 
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   @Column({ nullable: true })
   isCorrectAnswer: boolean;
 

@@ -89,6 +89,7 @@ export type MultipleChoiceQuizChoice = {
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   value: Scalars['String'];
+  isCorrectAnswer?: Maybe<Scalars['Boolean']>;
   hint: Scalars['String'];
   question: MultipleChoiceQuizQuestion;
 };
@@ -725,7 +726,7 @@ export type MultipleChoiceQuizQuestionsQuery = (
     & Pick<MultipleChoiceQuizQuestion, 'id' | 'isCorrect' | 'value'>
     & { choices: Array<(
       { __typename?: 'MultipleChoiceQuizChoice' }
-      & Pick<MultipleChoiceQuizChoice, 'value' | 'hint'>
+      & Pick<MultipleChoiceQuizChoice, 'value' | 'hint' | 'isCorrectAnswer'>
     )> }
   )> }
 );
@@ -1526,6 +1527,7 @@ export const MultipleChoiceQuizQuestionsDocument = gql`
     choices {
       value
       hint
+      isCorrectAnswer
     }
   }
 }
