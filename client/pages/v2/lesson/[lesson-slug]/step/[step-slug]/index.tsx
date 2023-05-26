@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import QuizExecutionProvider from 'providers/execution/Quiz';
 import RijuExecutionProvider from 'providers/execution/Riju';
 import SandpackExecutionProvider from 'providers/execution/Sandpack';
 import React from 'react';
@@ -391,6 +392,12 @@ const V2Lesson = ({ lesson, step }: Props) => {
               tokenUsageStatus={tokenUsageStatus}
               tokensUsed={tokensUsed}
             />
+          ) : step?.executionType === 'quiz' ? (
+            <QuizExecutionProvider
+              lessonSlug={lesson?.slug as string}
+              setEditorReady={setEditorReady}
+              step={step as Step}
+            />
           ) : null}
         </div>
       </motion.div>
@@ -400,7 +407,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             ? { opacity: 0, scale: 0 }
             : { opacity: 1, scale: 1 }
         }
-        className="fixed left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
+        className="fixed  left-0 top-0 flex h-full w-full animate-pulse items-center justify-center text-white"
         initial={{ opacity: 0.5, scale: 0.5 }}
         style={{ transformOrigin: 'center' }}
         transition={transition}

@@ -15,6 +15,8 @@ import { __prod__, SESSION_COOKIE } from './constants';
 import { Checkpoint } from './entities/v2/Checkpoint';
 import { CodeModule } from './entities/v2/CodeModule';
 import { Lesson } from './entities/v2/Lesson';
+import { MultipleChoiceQuizChoice } from './entities/v2/MultipleChoiceQuizChoice';
+import { MultipleChoiceQuizQuestion } from './entities/v2/MultipleChoiceQuizQuestion';
 import { Question } from './entities/v2/Question';
 import { Step } from './entities/v2/Step';
 import { User } from './entities/v2/User';
@@ -23,6 +25,7 @@ import { UserLessonPurchase } from './entities/v2/UserLessonPurchase';
 import { CheckpointResolver } from './resolvers/v2/checkpoint';
 import { CodeModuleResolver } from './resolvers/v2/codeModule';
 import { LessonResolver } from './resolvers/v2/lesson';
+import { MultipleChoiceQuizQuestionResolver } from './resolvers/v2/multipleChoiceQuizQuestion';
 import { StepResolver } from './resolvers/v2/step';
 import { UserResolver } from './resolvers/v2/user';
 import { UserLessonPositionResolver } from './resolvers/v2/userLessonPosition';
@@ -35,6 +38,8 @@ const main = async () => {
       Checkpoint,
       CodeModule,
       Lesson,
+      MultipleChoiceQuizChoice,
+      MultipleChoiceQuizQuestion,
       Question,
       Step,
       User,
@@ -97,6 +102,7 @@ const main = async () => {
         UserResolver,
         UserLessonPositionResolver,
         UserLessonPurchaseResolver,
+        MultipleChoiceQuizQuestionResolver,
       ],
       validate: false,
     }),

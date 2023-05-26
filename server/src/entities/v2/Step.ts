@@ -19,6 +19,7 @@ export enum StepExecutionTypeEnum {
   riju = 'riju',
   sandpack = 'sandpack',
   stackblitz = 'stackblitz',
+  quiz = 'quiz',
 }
 
 registerEnumType(StepExecutionTypeEnum, {
