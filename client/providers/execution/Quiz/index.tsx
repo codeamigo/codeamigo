@@ -1,12 +1,16 @@
+import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
 import Button from '👨‍💻components/Button';
 import { Step, useMultipleChoiceQuizQuestionsQuery } from '👨‍💻generated/graphql';
 
 const QuizExecutionProvider: React.FC<{
+  lessonSlug: string;
   setEditorReady: React.Dispatch<React.SetStateAction<boolean>>;
   step: Step;
-}> = ({ setEditorReady, step }) => {
+}> = ({ lessonSlug, setEditorReady, step }) => {
+  const router = useRouter();
+
   const [currentQuestionIdx, setCurrentQuestionIdx] = React.useState<number>(0);
   const [userAnswers, setUserAnswers] = React.useState<string[]>([]);
 
@@ -54,65 +58,100 @@ const QuizExecutionProvider: React.FC<{
   const showSummary =
     userAnswers.length ===
     quizQuestions.data?.multipleChoiceQuizQuestions.length;
+  const getIsCorrect = (answer: string, idx: number) => {
+    return quizQuestions.data?.multipleChoiceQuizQuestions[idx].choices.find(
+      (choice) => {
+        return choice.value === answer && choice.isCorrectAnswer;
+      }
+    );
+  };
+  const correctAnswers = userAnswers.filter((answer, idx) =>
+    getIsCorrect(answer, idx)
+  );
+  const incorrectAnswers = userAnswers.filter(
+    (answer, idx) => !getIsCorrect(answer, idx)
+  );
 
   return (
     <div className="flex h-full flex-col justify-between text-white">
       <div className="flex h-full flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
           <div className="mb-2 text-2xl font-bold">
-            {step.isCompleted ? 'tada' : currentQuestion?.value}
+            {showSummary ? 'Summary' : currentQuestion?.value}
           </div>
           {showSummary ? (
             <div>
+              You got {correctAnswers.length} out of {userAnswers.length}{' '}
+              questions correct.
               {userAnswers.map((answer, idx) => {
+                const isCorrect = getIsCorrect(answer, idx);
+                if (!isCorrect) return null;
+
                 return (
                   <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full border border-neutral-800">
-                        {quizQuestions.data?.multipleChoiceQuizQuestions[idx]
-                          .isCorrect
-                          ? '✅'
-                          : '❌'}
-                      </div>
-                      <div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className={'text-green-600'}>
                         {
                           quizQuestions.data?.multipleChoiceQuizQuestions[idx]
                             .value
                         }
                       </div>
                     </div>
-                    <div className="ml-8 text-sm">
-                      {quizQuestions.data?.multipleChoiceQuizQuestions[
-                        idx
-                      ].choices.map((choice) => {
-                        return (
-                          <div className="flex items-center gap-2">
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full border border-neutral-800">
-                              {choice.isCorrectAnswer ? '✅' : '❌'}
-                            </div>
-                            <div>{choice.value}</div>
-                          </div>
-                        );
-                      })}
+                  </div>
+                );
+              })}
+              {incorrectAnswers.length > 0 && (
+                <div className="mt-4">
+                  You need to work on the following questions:
+                </div>
+              )}
+              {userAnswers.map((answer, idx) => {
+                const isCorrect = getIsCorrect(answer, idx);
+                if (isCorrect) return null;
+
+                return (
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2 text-sm">
+                      <div
+                        className={
+                          isCorrect
+                            ? 'text-green-600'
+                            : 'text-red-600 line-through'
+                        }
+                      >
+                        {
+                          quizQuestions.data?.multipleChoiceQuizQuestions[idx]
+                            .value
+                        }
+                      </div>
                     </div>
                   </div>
                 );
               })}
+              {incorrectAnswers.length > 0 && (
+                <div className="mt-4">
+                  <Button>Try Again</Button>
+                </div>
+              )}
             </div>
           ) : (
             <form className="flex flex-col gap-1">
               {currentQuestion?.choices.map((choice) => {
+                const isAnswered = !!currentAnswer;
+                const isCorrectlyAnswered =
+                  currentAnswer === choice.value && choice.isCorrectAnswer;
+                const isIncorrectlyAnswered =
+                  currentAnswer === choice.value && !choice.isCorrectAnswer;
+
                 return (
                   <div>
                     <label
-                      className={`flex cursor-pointer items-center gap-2 rounded-lg border border-t-0 border-neutral-800 p-2 text-sm ${
-                        !!currentAnswer && currentAnswer !== choice.value
+                      className={`flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-800 p-2 text-sm ${
+                        isAnswered
                           ? 'cursor-not-allowed opacity-50'
-                          : currentAnswer === choice.value &&
-                            choice.isCorrectAnswer
+                          : isCorrectlyAnswered
                           ? 'border-green-500 bg-green-950 text-green-600'
-                          : currentAnswer === choice.value &&
-                            !choice.isCorrectAnswer
+                          : isIncorrectlyAnswered
                           ? 'border-red-500 bg-red-950 text-red-600'
                           : 'hover:bg-neutral-800'
                       }`}
@@ -139,31 +178,65 @@ const QuizExecutionProvider: React.FC<{
             </form>
           )}
         </div>
+        <div className="mt-6">
+          {currentAnswer &&
+            quizQuestions.data?.multipleChoiceQuizQuestions[
+              currentQuestionIdx
+            ].choices.find((choice) => {
+              return choice.value === currentAnswer;
+            })?.isCorrectAnswer &&
+            !showSummary && (
+              <div className="flex items-center text-lg">
+                <span>🎉 </span>
+              </div>
+            )}
+        </div>
       </div>
       <div className="flex w-full items-center justify-center gap-4 border-t border-neutral-800 py-3 text-sm font-bold">
-        <Button
-          disabled={currentQuestionIdx === 0}
-          onClick={() => {
-            setCurrentQuestionIdx(currentQuestionIdx - 1);
-          }}
-        >
-          Previous
-        </Button>
-        {currentQuestionIdx + 1} /{' '}
-        {quizQuestions.data?.multipleChoiceQuizQuestions.length}
-        <Button
-          disabled={
-            !quizQuestions.data?.multipleChoiceQuizQuestions.length ||
-            currentQuestionIdx ===
-              quizQuestions.data?.multipleChoiceQuizQuestions.length - 1 ||
-            !currentAnswer
-          }
-          onClick={() => {
-            setCurrentQuestionIdx(currentQuestionIdx + 1);
-          }}
-        >
-          Next
-        </Button>
+        {showSummary ? (
+          <>
+            <Button
+              onClick={() => {
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
+              }}
+            >
+              Back
+            </Button>
+            <Button
+              onClick={() => {
+                router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
+              }}
+            >
+              Continue
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              disabled={currentQuestionIdx === 0}
+              onClick={() => {
+                setCurrentQuestionIdx(currentQuestionIdx - 1);
+              }}
+            >
+              Previous
+            </Button>
+            {currentQuestionIdx + 1} /{' '}
+            {quizQuestions.data?.multipleChoiceQuizQuestions.length}
+            <Button
+              disabled={
+                !quizQuestions.data?.multipleChoiceQuizQuestions.length ||
+                currentQuestionIdx ===
+                  quizQuestions.data?.multipleChoiceQuizQuestions.length - 1 ||
+                !currentAnswer
+              }
+              onClick={() => {
+                setCurrentQuestionIdx(currentQuestionIdx + 1);
+              }}
+            >
+              Next
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

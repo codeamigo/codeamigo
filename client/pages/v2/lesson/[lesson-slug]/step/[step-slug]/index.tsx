@@ -394,6 +394,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
             />
           ) : step?.executionType === 'quiz' ? (
             <QuizExecutionProvider
+              lessonSlug={lesson?.slug as string}
               setEditorReady={setEditorReady}
               step={step as Step}
             />
