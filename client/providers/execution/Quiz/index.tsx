@@ -130,7 +130,14 @@ const QuizExecutionProvider: React.FC<{
               })}
               {incorrectAnswers.length > 0 && (
                 <div className="mt-4">
-                  <Button>Try Again</Button>
+                  <Button
+                    onClick={() => {
+                      setUserAnswers(() => []);
+                      setCurrentQuestionIdx(0);
+                    }}
+                  >
+                    Try Again
+                  </Button>
                 </div>
               )}
             </div>
@@ -147,17 +154,18 @@ const QuizExecutionProvider: React.FC<{
                   <div>
                     <label
                       className={`flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-800 p-2 text-sm ${
-                        isAnswered
-                          ? 'cursor-not-allowed opacity-50'
-                          : isCorrectlyAnswered
+                        isCorrectlyAnswered
                           ? 'border-green-500 bg-green-950 text-green-600'
                           : isIncorrectlyAnswered
                           ? 'border-red-500 bg-red-950 text-red-600'
+                          : isAnswered
+                          ? 'cursor-not-allowed opacity-50'
                           : 'hover:bg-neutral-800'
                       }`}
                     >
                       <input
                         disabled={!!currentAnswer}
+                        key={choice.value}
                         name="answer"
                         onChange={(e) => handleChange(e)}
                         type="radio"
@@ -178,65 +186,72 @@ const QuizExecutionProvider: React.FC<{
             </form>
           )}
         </div>
-        <div className="mt-6">
-          {currentAnswer &&
-            quizQuestions.data?.multipleChoiceQuizQuestions[
-              currentQuestionIdx
-            ].choices.find((choice) => {
-              return choice.value === currentAnswer;
-            })?.isCorrectAnswer &&
-            !showSummary && (
-              <div className="flex items-center text-lg">
-                <span>🎉 </span>
-              </div>
-            )}
-        </div>
       </div>
-      <div className="flex w-full items-center justify-center gap-4 border-t border-neutral-800 py-3 text-sm font-bold">
-        {showSummary ? (
-          <>
-            <Button
-              onClick={() => {
-                router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
-              }}
-            >
-              Back
-            </Button>
-            <Button
-              onClick={() => {
-                router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
-              }}
-            >
-              Continue
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              disabled={currentQuestionIdx === 0}
-              onClick={() => {
-                setCurrentQuestionIdx(currentQuestionIdx - 1);
-              }}
-            >
-              Previous
-            </Button>
-            {currentQuestionIdx + 1} /{' '}
-            {quizQuestions.data?.multipleChoiceQuizQuestions.length}
-            <Button
-              disabled={
-                !quizQuestions.data?.multipleChoiceQuizQuestions.length ||
-                currentQuestionIdx ===
-                  quizQuestions.data?.multipleChoiceQuizQuestions.length - 1 ||
-                !currentAnswer
-              }
-              onClick={() => {
-                setCurrentQuestionIdx(currentQuestionIdx + 1);
-              }}
-            >
-              Next
-            </Button>
-          </>
-        )}
+      <div>
+        <div className="mb-6 w-full text-2xl">
+          {currentAnswer &&
+          quizQuestions.data?.multipleChoiceQuizQuestions[
+            currentQuestionIdx
+          ].choices.find((choice) => {
+            return choice.value === currentAnswer;
+          })?.isCorrectAnswer &&
+          !showSummary ? (
+            <div className="flex items-center justify-center">
+              <span>🎉</span>
+            </div>
+          ) : (
+            <div className="invisible">
+              <span>🎉</span>
+            </div>
+          )}
+        </div>
+        <div className="flex w-full items-center justify-center gap-4 border-t border-neutral-800 py-3 text-sm font-bold">
+          {showSummary ? (
+            <>
+              <Button
+                onClick={() => {
+                  router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
+                }}
+              >
+                Back
+              </Button>
+              <Button
+                onClick={() => {
+                  router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
+                }}
+              >
+                Continue
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                disabled={currentQuestionIdx === 0}
+                onClick={() => {
+                  setCurrentQuestionIdx(currentQuestionIdx - 1);
+                }}
+              >
+                Previous
+              </Button>
+              {currentQuestionIdx + 1} /{' '}
+              {quizQuestions.data?.multipleChoiceQuizQuestions.length}
+              <Button
+                disabled={
+                  !quizQuestions.data?.multipleChoiceQuizQuestions.length ||
+                  currentQuestionIdx ===
+                    quizQuestions.data?.multipleChoiceQuizQuestions.length -
+                      1 ||
+                  !currentAnswer
+                }
+                onClick={() => {
+                  setCurrentQuestionIdx(currentQuestionIdx + 1);
+                }}
+              >
+                Next
+              </Button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
