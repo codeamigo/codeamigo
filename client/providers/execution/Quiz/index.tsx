@@ -209,6 +209,7 @@ const QuizExecutionProvider: React.FC<{
           {showSummary ? (
             <>
               <Button
+                disabled={!step.prevSlug}
                 onClick={() => {
                   router.push(`/v2/lesson/${lessonSlug}/step/${step.prevSlug}`);
                 }}
@@ -216,6 +217,7 @@ const QuizExecutionProvider: React.FC<{
                 Back
               </Button>
               <Button
+                disabled={!step.nextSlug}
                 onClick={() => {
                   router.push(`/v2/lesson/${lessonSlug}/step/${step.nextSlug}`);
                 }}
