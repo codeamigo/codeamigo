@@ -71,7 +71,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
   const runCodeDebounced = debounce(runCode, 1000);
 
   return (
-    <div className="flex h-full text-xs font-normal">
+    <div className="flex h-full flex-col text-xs font-normal sm:flex-row">
       <SandpackStack className="editor-instructions-container !h-full">
         <Instructions
           instructions={step?.instructions as string}
