@@ -45,8 +45,8 @@ class Intro(Step):
     """
     instructions = """
     Welcome to the CodeAmigo introduction to Python. How much do you know about Python?
-    If the answer is 'not a lot', congratulations -- you've come to the write place.
-    Check out the code in the sandbox on your right. Click the <something> to run it.
+    If the answer is 'not a lot', congratulations -- you've come to the right place.
+    Check out the code in the editor below. Click the 'Run' button to run it.
     
     Oh wow -- looks like we've got an idea for dinner tonight! How did that happen?
     Lets keep going and find out. 
@@ -75,7 +75,8 @@ class Strings(Step):
 
     We won't go too much into the details. Instead, we'll show you what variables can do rather
     than try to explain what they are. That said, you probably have plenty of questions -- and
-    you can put those to your AI assistant.
+    you can put those to your AI assistant. Select from some of the questions in the bottom-right hand
+    corner or ask your own question.
     """
     questions = [
         "What are strings used for in programming?",
@@ -98,11 +99,11 @@ class StringUpdating(Step):
     # TODO: introduce errors? should checkpoint verify that `type(prompt) == str`?
     name = "Working with Variables and Strings"
     code = """
-    prompt = "Write a recipe for a delicious recipe."
+    prompt = "Write a delicious recipe."
     prompt =
     """
     instructions = """
-    Right now, the variable 'prompt' references the string 'create a delicious recipe'. But variables
+    Right now, the variable 'prompt' references the string 'Write a delicious recipe.'. But variables
     can be changed to represent other things. For instance, if we added another line of code on the next
     line that said: `prompt = "coconut"`, that would change the information saved by the variable. Try
     this out yourself by changing 'prompt' to something else -- any word or sentence that you feel like.
@@ -124,15 +125,15 @@ class StringPrinting(Step):
     # TODO: add checkpoints
     name = "Printing a Variable"
     code = """
-    prompt = "Write a recipe for a delicious recipe."
-    prompt = <whatever the user added>
+    prompt = "Write a delicious recipe."
+    prompt = "coconut"
     """
     instructions = """
     If you've made it here, then you've successfully updated the variable -- well done! How can
     we see that `prompt` no longer indicates 'create a delicious recipe'? There's a tool for that:
     Python has a command, `print`, that will let you see the value associated with a variable. Try
     it out yourself, you should see whatever you changed `prompt` to be pop up on the console on the
-    right. You should just add `print(<some-variable>)` to the next line, then hit <run button>.
+    right. You should just add `print(<some-variable>)` to the next line, then hit 'Run'.
     """
     questions = [
         "What does the `print` statement actually do?",
@@ -191,7 +192,7 @@ class StringSlicing(Step):
     Python will let you go much further than just getting a single character. Another technique,
     'slicing', will get the all of the characters up until a specified position in the string.
     Here, we're taking every character, starting from '0', until the character in the 20th position.
-    Take note that you won't get the 10th character back (remember that Python starts at 0)!
+    Take note that you won't get the 20th character back (remember that Python starts at 0)!
     Try printing `sentence_slice`. Now, if you have a different opinion about pizza toppings,
     the 'opinion' string seems less objectionable.
     """
@@ -252,7 +253,7 @@ class StringMultiplication(Step):
     Executing the code and see what we get.
     """
     questions = [
-        "Why can't I multiply two strings together but can multiply a string by a number?"
+        "Why can't I multiply 'pineapple' * 'pineapple', but I can multiply 'pineapple' by 3?"
     ]
 
     def __init__(
@@ -310,7 +311,7 @@ class InvalidStringArithmatic(Step):
     -- oh no. What is going on? Take a look at the output on the console. You might not know exactly
     what this is trying to tell you, but seeing the word 'Error' is a sure sign that something has gone
     wrong. More on 'Errors' in a moment.
-    For now, just know that this is telling us that strings can't be subtracted from other strings.
+    If this is your first Error, don't panic! For now, just know that this is telling us that strings can't be subtracted from other strings.
     The same is true of strings and numbers; you can't subtract a number from a
     string.
     
