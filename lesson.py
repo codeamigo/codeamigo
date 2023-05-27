@@ -359,11 +359,16 @@ class Errors(Step):
     of the things we tried to divide aren't compatible with the operation of divison.
     The other part of the error is the traceback. The traceback is a complete train, line by line,
     of every piece of code that ran before the error happened. Don't pay too much attention to the traceback
-    for now, it can often be a lot of text to dig through, but it be very helpful once you're tackling more advanced programming.
+    for now, it can often be a lot of text to dig through, but it will be very helpful once you're tackling more advanced programming.
     """
 
+    questions = [
+        "What other kinds of errors will I encounter? How do I know what they mean?",
+        "What is a traceback?",
+    ]
+
     def __init__(
-        self, order=10, name=name, code=code, instructions=instructions, questions=[]
+        self, order=10, name=name, code=code, instructions=instructions, questions=questions
     ):
         super().__init__(order, name, code, instructions, questions)
 
@@ -411,16 +416,16 @@ class SequenceDataTypes(Step):
     print(opinion + toppings[0])
     """
     instructions = """Remember how we said earlier that a string is called a string because partially
-    because its supposed to represent a bunch of beads tied together on a string? Imagine taking the string and sliding each
+    it's supposed to represent a bunch of beads tied together on a string? Imagine taking the string and sliding each
     character off of the string one at a time. Doing this would be treating the beads as a "sequence"; you take
     the whole thing and do something to each of its parts. This is something that a Python string *can* do, but it
     isn't the main purpose of a string -- that would be to communicate information.
     
-    There is, however, a type that has sequencing things as its main job. This is called a `list`.
+    There is, however, a type that sequences things as its main job. This is called a `list`.
     A list in Python is also similar to what a list is in the ordinary sense of the word. That is, a
     way of keeping track of a bunch of things.
     In Python, you can create a list by enclosing whatever you want to keep track of in square brackets. Check out
-    the code to see an example of a list that keeps track of a few pizza toppings. You'll note that the list
+    the code below to see an example of a list of pizza toppings. You'll note that the list
     contains three strings. Remember when we did indexing and slicing with strings? You can do the same thing with
     lists! See how you can index into a `list` by running the code.
     """
