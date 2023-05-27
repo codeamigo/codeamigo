@@ -6,7 +6,7 @@ import Icon from '👨‍💻components/Icon';
 import { LessonsDocument, LessonsQuery, useMeQuery } from '👨‍💻generated/graphql';
 import { client } from '👨‍💻utils/withApollo';
 
-import { INTRO_TO_JS_WHITELIST } from '../constants';
+import { INTRO_TO_JS_WHITELIST, INTRO_TO_PYTHON_WHITELIST } from '../constants';
 
 const Home = (props: Props) => {
   const router = useRouter();
@@ -43,7 +43,7 @@ const Home = (props: Props) => {
         <p className=" mb-8 mt-4 text-base font-normal text-neutral-600">
           <span className="inline-block max-w-[591px] align-top">
             Codeamigo is an AI powered coding assitant that helps you learn to
-            code like a developer. Today's developers didn't learn C before
+            code like a developer. Today's developers didn't learn binary before
             learning Python, why should you learn how to code without the most
             modern tools?
           </span>
@@ -111,8 +111,10 @@ const Home = (props: Props) => {
             .map((lesson) => {
               const isWhitelisted =
                 meData?.me?.email &&
-                INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
-                lesson.slug === 'intro-to-js';
+                ((INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
+                  lesson.slug === 'intro-to-js') ||
+                  (INTRO_TO_PYTHON_WHITELIST.includes(meData.me.email) &&
+                    lesson.slug === 'intro-to-python'));
 
               return (
                 <div

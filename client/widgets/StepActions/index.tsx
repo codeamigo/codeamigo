@@ -14,9 +14,9 @@ const StepActions: React.FC<Props> = ({
   disabled,
   isAutoPlayEnabled,
   isCompletionEnabled,
+  isLessonPurchased,
   isLoggedIn,
   lessonId,
-  lessonPurchased,
   lessonSlug,
   nextLoader,
   setIsAutoPlayEnabled,
@@ -113,7 +113,7 @@ const StepActions: React.FC<Props> = ({
                 onClick={() =>
                   modalVar({
                     callback: () => {},
-                    data: { lessonPurchased },
+                    data: { isLessonPurchased },
                     name: 'lessonHelp',
                     persistent: false,
                   })
@@ -172,7 +172,7 @@ const StepActions: React.FC<Props> = ({
                 onClick={() =>
                   modalVar({
                     callback: () => {},
-                    data: { lessonPurchased },
+                    data: { isLessonPurchased },
                     name: 'lessonHelp',
                     persistent: false,
                   })
@@ -199,9 +199,9 @@ type Props = {
   disabled: boolean;
   isAutoPlayEnabled: boolean;
   isCompletionEnabled: boolean;
+  isLessonPurchased: boolean;
   isLoggedIn: boolean;
   lessonId: string;
-  lessonPurchased: boolean;
   lessonSlug: string;
   nextLoader: boolean;
   setIsAutoPlayEnabled: React.Dispatch<React.SetStateAction<boolean>>;

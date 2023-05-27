@@ -116,7 +116,7 @@ body,
 }
 
 .v2 .sp-stack {
-  height: 100%;
+  height: 100% !important;
 }
 
 .v2 .sp-layout {

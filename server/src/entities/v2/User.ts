@@ -11,6 +11,7 @@ import {
 
 import { Checkpoint } from './Checkpoint';
 import { CodeModule } from './CodeModule';
+import { MultipleChoiceQuizQuestion } from './MultipleChoiceQuizQuestion';
 import { UserLessonPosition } from './UserLessonPosition';
 import { UserLessonPurchase } from './UserLessonPurchase';
 
@@ -78,6 +79,16 @@ export class User extends BaseEntity {
   })
   @Field(() => [CodeModule], { defaultValue: [] })
   codeModules: CodeModule[];
+
+  @OneToMany(
+    () => MultipleChoiceQuizQuestion,
+    (multipleChoiceQuizQuestion) => multipleChoiceQuizQuestion.user,
+    {
+      cascade: true,
+    }
+  )
+  @Field(() => [MultipleChoiceQuizQuestion], { defaultValue: [] })
+  multipleChoiceQuizQuestions: MultipleChoiceQuizQuestion[];
 
   @OneToMany(
     () => UserLessonPosition,
