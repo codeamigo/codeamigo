@@ -609,15 +609,21 @@ class Functions(Step):
 class FunctionArguments(Step):
     name = "Function Arguments"
     code = """
-    def bake_pizza(toppings, size):
-        pizza = 'Pizza with: '
-        for topping in toppings:
-            pizza += topping + ' '
-        pizza += 'of size ' + size
-        return pizza
+    toppings = ['pineapple', 'pepperoni']
+    size = 'extra large'
+def bake_pizza(toppings, size):
+    pizza = 'Pizza with: '
+    for topping in toppings:
+        pizza += topping + ' '
+    pizza += 'of size ' + size
+    return pizza
+
+    print(bake_pizza(size, toppings))
+    print(bake_pizza(toppings, size))
+
     """
     instructions = """
-    We've created our first function, but where did the argument `toppings` come from? And whas is an argument,
+    We've created our first function, but where did the argument `toppings` come from? And what is an argument,
     anyway? An argument is a value that we pass to a function. In this case, we're passing the list of toppings
     to the function. We can also pass multiple arguments to a function. In this case, we're passing the list of
     toppings, and the size of the pizza. Then, we're adding the size of the pizza to the end of the string.
@@ -628,6 +634,102 @@ class FunctionArguments(Step):
     ]
 
     def __init__(
-        self, order=19, name=name, code=code, instructions=instructions, questions=[]
+        self, order=19, name=name, code=code, instructions=instructions, questions=questions
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class Objects(Step):
+    # this one is very hard to explain simply, probably need to break methods out into another step
+    # TODO: cover attributes
+    name = "Introduction to Objects"
+    code = """
+    class Chef:
+        def __init__(self, name, favorite_food):
+            self.name = name
+            self.favorite_food = favorite_food
+        
+        def cook(self, recipe):
+            print()
+    
+    pizza_chef = Chef(name="georgio", favorite_food="piza")
+    seafood_chef = Chef(name="fisherman bob", favorite_food="clam chowder")
+    our_recipe = "spaghetti"
+    print(pizza_chef.cook(our_recipe))
+    print(seafood_chef.cook(our_recipe))
+    """
+    instructions = """
+    So far, all of the different things we've been working with in Python have just been floating
+    around; variables, types, functions. Prepare to have your mind blown; these are all, in
+    conceptual terms, the same thing. That thing is called an 'object'. Objects are ways of
+    representing some concept 'in general'. By 'in general', we mean that there's no single thing
+    that you can point to as 'the object'. When there is a specific example of a general idea, 
+    you call that an 'instance' of an object.
+    Think about the concept of a chef. 'chef' itself only exists as an idea. We can't go somewhere
+    out in the world and see or touch 'chef', but there are lots of *instances* of chefs out there.
+    We could sneak into the kitchen of a restaurant and see an instance of the general idea of a
+    chef hard at work. We might be asked to leave the restaurant after, but we would have gotten
+    evidence of an instance of a chef.
+    This is slightly weird to wrap your head around, since the biggest difference between something in
+    the real world and a thing that exists in Python is that everything in Python is abstract. So a chef
+    object is an abstraction representing an abstraction, and a chef instance is an abstraction representing
+    one individual thing. If that isn't quite sticking, take a look at the code in the editor.
+    
+    We have an object (the idea of a chef), which we make in Python with `class Chef`. We can
+    create individual chefs, who have their own particular things that make them special, by
+    'instantiating' the class. 'instantiating' basically just means to make an actual thing
+    using the general thing as a guide. When you instantiate a class, you add arguments that
+    will determine what makes your instances of the class special. See how 'Chef' is a class,
+    and then we instantiate two individual chefs, one who likes pizza and one who likes clam
+    chowder? We've written our class so that the object representing a chef always does one thing: cook.
+    But each individual chef cooks what they like best.
+    """
+    def __init__(
+        self, order=20, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class GPTRecipeMaker(Step):
+    # Need to add something to explain why we dont go into how LLMs work; i have a feeling people might have been expecting that
+    # answer is just that it would be insane to try to get into in an intro to programming course
+    name = "Order Up!"
+    code = """
+    import openai
+    from openai import ChatCompletion
+
+    openai.api_key = "<add your API key here>"
+    toppings = ["pepperoni", "mushrooms", "sausage"]
+    recipe_instructions = create_recipe(toppings, size)
+    chat_completion = ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user",
+            "content": recipe_instructions}
+        ])
+    print(chat_completion.choices[0])
+    print(chat_completion.choices[0].message.content)
+    """
+    instructions = """We've come quite a ways from the introduction to variables.
+    You've made it to the very end of our introduction to Python! Consider yourself
+    high-fived. The grand finale awaits; we're going to use OpenAI's Python library
+    to get a prediction from ChatGPT. This lesson is going to use just about every
+    programming concept we've studied so far. Take a look at the code in the editor;
+    at first glance, this code might look more complicated than what we've been doing
+    so far. If you spend a bit more time reading it over, you should see plenty of
+    familiar code; executing a method on a class that takes a string, a list containing
+    a dictionary, and then indexing into the result of the call to the method. And if
+    you don't understand any of these lines -- you know who to ask.
+    
+    There are two things that you shouldn't expect to understand yet:
+        1. how the `create` method works
+        2. how a method can access information somewhere else the internet
+    
+    Part of programming is getting used to feeling confused. But if you stick with it,
+    things will, bit by bit, start to fall into place. If you've made it this far, we
+    expect you'll be back for more!
+    """
+    def __init__(
+        self, order=21, name=name, code=code, instructions=instructions, questions=[]
     ):
         super().__init__(order, name, code, instructions, questions)
