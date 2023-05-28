@@ -501,14 +501,14 @@ class ListPop(Step):
     """
     instructions = """
     Before we take a look at an operation that will permanently change a list -- we want to give you
-    a round of applause. congratulations on making it this far in the lesson. we're very happy to be
+    a round of applause. Congratulations on making it this far in the lesson, we're very happy to be
     learning with you.
-    And now, let's introduce a way to remove pineapples from the list of ingredients....forever!
+    And now, let's introduce a way to remove pineapples from the list of ingredients...forever!
     `pop` is what's called a `method`. A `method` is something that a thing, like a list, can do.
     When a list "pops", it will get rid of whatever item is at the very end of the list. If you pop
     from a list, you can save the result as a variable, but otherwise, that last item is permanently
     removed from the list. Think of the list as one of those machines that shoots out tennis balls.
-    Once the machine pops one out, you can catch it or do something else with it, but its out of the
+    Once the machine pops one out, you can catch it or do something else with it, but its
     definitely no longer in the machine with the other tennis balls.
     Execute the code, you can see that `pineapples` gets assigned to a new variable `just_pineapple`
     after being popped out of `toppings`. Now `toppings` only includes `pepperoni` and `mushrooms`!
@@ -549,4 +549,85 @@ class ListAppend(Step):
 
 
 class ListIter(Step):
-    pass
+    name = "Looping through Pizza Toppings"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapple", "olives"]
+    pizza = 'Pizza with: '
+    for topping in toppings:
+        pizza += topping + ' '
+    print(pizza)
+    """
+    instructions = """
+    We've played around with lists a bit, and we've seen how we can access the things in a list, and how we can
+    change the list itself. Now, let's see how we can use lists to do something interesting. Let's say that we
+    want to make a pizza, and we want to add all of the toppings to it. We could do this by writing a line of
+    code for each topping, but that would be a lot of code. Instead, we can use a `for` loop to loop through
+    the list of toppings, and add each one to the pizza. The `for` loop will go through each item in the list,
+    and assign it to a variable. In this case, we're calling that variable `topping`. Then, we can use that
+    variable to do something with each item in the list. In this case, we're adding it to the string `pizza`.
+    Run the code, and you'll see that we've made a pizza with all of the toppings!
+    """
+    questions = [
+        "How can we modify the code to skip a topping if we don't want it on the pizza?",
+        "What if we want to perform a different action for each topping?",
+        "Can we access the index of each topping while looping through them?",
+    ]
+
+    def __init__(
+        self, order=17, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+class Functions(Step):
+    name = "Functions"
+    code = """
+    def bake_pizza(toppings):
+        pizza = 'Pizza with: '
+        for topping in toppings:
+            pizza += topping + ' '
+        return pizza
+    """
+    instructions = """
+    We've seen how we can use a `for` loop to do something with each item in a list. But what if we want to do
+    that same thing with a different list? We could copy and paste the code, but that would be a lot of code.
+    Instead, we can define a function. A function is a way to define a block of code that we can use over and
+    over again. In this case, we're defining a function called `bake_pizza`. This function takes one argument,
+    which we're calling `toppings`. Then, we're doing the same thing that we did before: looping through the
+    list of toppings, and adding each one to the pizza. But now, we can use this function to bake a pizza with
+    any list of toppings that we want!
+    """
+    questions = [
+        "What if we want to bake a pizza with no toppings?",
+        "What if we want to bake a pizza with only one topping?",
+    ]
+
+    def __init__(
+        self, order=18, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+class FunctionArguments(Step):
+    name = "Function Arguments"
+    code = """
+    def bake_pizza(toppings, size):
+        pizza = 'Pizza with: '
+        for topping in toppings:
+            pizza += topping + ' '
+        pizza += 'of size ' + size
+        return pizza
+    """
+    instructions = """
+    We've created our first function, but where did the argument `toppings` come from? And whas is an argument,
+    anyway? An argument is a value that we pass to a function. In this case, we're passing the list of toppings
+    to the function. We can also pass multiple arguments to a function. In this case, we're passing the list of
+    toppings, and the size of the pizza. Then, we're adding the size of the pizza to the end of the string.
+    """
+    questions = [
+        "How many arguments can we pass to a function?",
+        "Does the order of the arguments matter?",
+    ]
+
+    def __init__(
+        self, order=19, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
