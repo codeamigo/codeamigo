@@ -81,9 +81,9 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
         {/* TODO: is there anyway to prevent this from going to null? */}
         {loading || !files ? null : (
           <MonacoEditor
-            activeFile="index.py"
+            activeFile="/main.py"
             checkpoints={checkpoints}
-            code={files['index.py'].code}
+            code={files['/main.py'].code}
             codeModules={codeModules}
             currentCheckpoint={currentCheckpoint}
             disabled={maxTokensUsed}
@@ -104,7 +104,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
             setTokensUsed={setTokensUsed}
             step={step as Step}
             updateCode={(code) => {
-              files['index.py'].code = code;
+              files['/main.py'].code = code;
               runCodeDebounced(code);
             }}
           />
@@ -118,7 +118,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
           />
         </div>
         <Chatbot
-          code={files['index.py'].code}
+          code={files?.['/main.py'].code}
           disabled={maxTokensUsed}
           hoverSelection={hoverSelection}
           questions={step?.questions?.map((q) => q.value) || []}

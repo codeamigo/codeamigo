@@ -363,13 +363,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
                 codeModulesData?.codeModules as CodeModulesQuery['codeModules']
               }
               currentCheckpoint={currentCheckpoint}
-              files={
-                {
-                  'index.py': {
-                    code: `# This program prints Hello, world!\n\nprint('Hello, world!')`,
-                  },
-                } as { [key: string]: { code: string } }
-              }
+              files={files as { [key: string]: { code: string } }}
               hoverSelection={hoverSelection}
               isLessonPurchased={
                 !!userLessonPurchaseData?.userLessonPurchase?.id
