@@ -36,7 +36,11 @@ import ProgressBar from '👨‍💻widgets/ProgressBar';
 import UserMenu from '👨‍💻widgets/UserMenu';
 
 import * as hal from '../../../../../../assets/hal.png';
-import { MAX_TOKENS_DEMO, MAX_TOKENS_USER } from '../../../../../../constants';
+import {
+  INTRO_TO_PYTHON_WHITELIST,
+  MAX_TOKENS_DEMO,
+  MAX_TOKENS_USER,
+} from '../../../../../../constants';
 
 const transition = { bounce: 0.4, duration: 0.8, type: 'spring' };
 
@@ -112,6 +116,13 @@ const V2Lesson = ({ lesson, step }: Props) => {
   useEffect(() => {
     if (userLessonPurchaseLoading) return;
     if (meLoading) return;
+
+    if (
+      lesson?.slug === 'intro-to-python' &&
+      INTRO_TO_PYTHON_WHITELIST.includes(meData?.me?.email || 'test')
+    ) {
+      return;
+    }
 
     if (
       !userLessonPurchaseData?.userLessonPurchase?.id &&
