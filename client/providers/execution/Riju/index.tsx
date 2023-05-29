@@ -2,6 +2,8 @@ import { SandpackStack } from '@codesandbox/sandpack-react';
 import { FCProviderType } from 'providers/execution/types';
 import React, { useEffect, useRef, useState } from 'react';
 
+import Button from '👨‍💻components/Button';
+import Icon from '👨‍💻components/Icon';
 import { Step } from '👨‍💻generated/graphql';
 import debounce from '👨‍💻utils/debounce';
 import Chatbot from '👨‍💻widgets/Chatbot';
@@ -72,7 +74,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
 
   return (
     <div className="flex h-full flex-col text-xs font-normal sm:flex-row">
-      <SandpackStack className="editor-instructions-container !h-full">
+      <SandpackStack className="editor-instructions-container relative !h-full">
         <Instructions
           instructions={step?.instructions as string}
           leftPanelHeight={leftPanelHeight}
@@ -109,8 +111,17 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
             }}
           />
         )}
+        <Button
+          className="absolute bottom-2 left-2 z-50 flex gap-2"
+          onClick={() => {
+            runCode(files['/main.py'].code);
+          }}
+        >
+          <Icon className="" name="play" />
+          Run Code
+        </Button>
       </SandpackStack>
-      <SandpackStack className="!h-full w-full">
+      <SandpackStack className="!h-full w-full border-neutral-800 sm:border-l">
         <div className="h-full w-full" ref={previewRef}>
           <iframe
             className="h-full w-full"

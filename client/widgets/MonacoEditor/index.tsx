@@ -1,5 +1,4 @@
-import { FileTabs } from '@codesandbox/sandpack-react';
-import { SandpackStack } from '@codesandbox/sandpack-react';
+import { useReactiveVar } from '@apollo/client';
 import { Editor } from '@monaco-editor/react';
 import React, {
   Dispatch,
@@ -10,6 +9,10 @@ import React, {
 } from 'react';
 import { OpenAIAPIResponse } from 'types/openai';
 
+import {
+  isAutoplayEnabledVar,
+  isCodeCompletionEnabledVar,
+} from '👨‍💻apollo/cache/lesson';
 import Icon from '👨‍💻components/Icon';
 import {
   CheckpointsQuery,
@@ -53,13 +56,13 @@ const MonacoEditor = ({
   const editorRef = useRef<any>();
   const monacoRef = useRef<any>();
   const [full, setFull] = useState(false);
-  const [isCompletionEnabled, setIsCompletionEnabled] = useState(false);
-  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+  const [nextLoader, setNextLoader] = useState(false);
   const isStepCompleteRef = useRef(isStepComplete);
+  const checkpointsRef = useRef(checkpoints);
+  const isAutoPlayEnabled = useReactiveVar(isAutoplayEnabledVar);
+  const isCompletionEnabled = useReactiveVar(isCodeCompletionEnabledVar);
   const isCompletionEnabledRef = useRef(isCompletionEnabled);
   const isAutoPlayEnabledRef = useRef(isAutoPlayEnabled);
-  const checkpointsRef = useRef(checkpoints);
-  const [nextLoader, setNextLoader] = useState(false);
 
   const [completeCheckpoint] = useCompleteCheckpointMutation();
   const [updateCodeModule] = useUpdateCodeModuleMutation();
@@ -121,7 +124,6 @@ const MonacoEditor = ({
 
   const updatePrompt = async (value: string | undefined, ev: any) => {
     if (!value || !ev) return;
-    if (isStepCompleteRef.current) return;
     if (!isCompletionEnabledRef.current) return;
     const lines = value.split(/\n/);
     const lineNumber = ev.changes[0].range.startLineNumber - 1;
@@ -303,10 +305,10 @@ const MonacoEditor = ({
   class InlineCompleter {
     async provideInlineCompletions() {
       const range = {
-        endColumn: editorRef.current.getPosition().column,
-        endLineNumber: editorRef.current.getPosition().lineNumber,
-        startColumn: editorRef.current.getPosition().column,
-        startLineNumber: editorRef.current.getPosition().lineNumber,
+        endColumn: editorRef.current.getPosition()?.column,
+        endLineNumber: editorRef.current.getPosition()?.lineNumber,
+        startColumn: editorRef.current.getPosition()?.column,
+        startLineNumber: editorRef.current.getPosition()?.lineNumber,
       };
       const suggestion = await debouncedUpdatePrompt(
         editorRef.current.getValue(),
@@ -392,8 +394,12 @@ const MonacoEditor = ({
         lessonId={lessonId}
         lessonSlug={lessonSlug}
         nextLoader={nextLoader}
-        setIsAutoPlayEnabled={setIsAutoPlayEnabled}
-        setIsCompletionEnabled={setIsCompletionEnabled}
+        setIsAutoPlayEnabled={() => {
+          isAutoplayEnabledVar(!isAutoPlayEnabled);
+        }}
+        setIsCompletionEnabled={() =>
+          isCodeCompletionEnabledVar(!isCompletionEnabled)
+        }
         step={step}
       />
       {/* <FileTabs /> */}
