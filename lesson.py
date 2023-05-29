@@ -590,9 +590,7 @@ class EqualsOperator(Step):
     print(pizza)
     """
     instructions = """
-    Often times when programming, we want to check whether two things are the same. This is where the '==' operator comes in handy. The '==' operator is a way of asking Python whether two things are the same. If they are, it will return 'True', if they aren't, it will return 'False'. Try running the code in the editor. You should see that the two strings are not the same, so the code returns 'False'.
-
-    Change the second string to be the same as the first, and run the code again. You should see that the code returns 'True'. This is because the two strings are the same, so the '==' operator returns 'True'.
+    Often times when programming, we want to check whether two things are the same. This is where the '==' operator comes in handy. In the code below, we're using the '==' operator to check whether the current topping is 'pineapple'. If it is, we're using the 'continue' keyword to skip that topping. Otherwise, we're adding it to the pizza. Run the code, and you'll see that we've made a pizza with all of the toppings except pineapple!
     """
 
     def __init__(
@@ -637,22 +635,21 @@ class Functions(Step):
 class FunctionArguments(Step):
     name = "Function Arguments"
     code = """
-    toppings = ['pineapple', 'pepperoni']
-    size = 'extra large'
+toppings = ['pineapple', 'pepperoni']
+size = 'extra large'
 def bake_pizza(toppings, size):
-    pizza = 'Pizza with: '
-    for topping in toppings:
-        pizza += topping + ' '
-    pizza += 'of size ' + size
-    return pizza
+  pizza = 'Pizza with: '
+  for topping in toppings:
+    pizza += topping + ' '
+  pizza += 'of size ' + size
+  return pizza
 
-    print(bake_pizza(size, toppings))
-    print(bake_pizza(toppings, size))
+print(bake_pizza(toppings, size))
 
     """
     instructions = """
     We've created our first function, but where did the argument `toppings` come from? And what is an argument,
-    anyway? An argument is a value that we pass to a function. In this case, we're passing the list of toppings
+    anyway? No, not that kind of argument! An argument is a value that we pass to a function. In this case, we're passing the list of toppings
     to the function. We can also pass multiple arguments to a function. In this case, we're passing the list of
     toppings, and the size of the pizza. Then, we're adding the size of the pizza to the end of the string.
     """
