@@ -16,7 +16,6 @@ const defaultQuestions = [
   "Why isn't my code accepted?",
 ];
 
-
 const buildHoverPrompt = (contextCode: string, hoverSelection: string) => {
   return `
     You are a teacher helping students
@@ -59,8 +58,7 @@ const buildAssistantBoxPrompt = (contextCode: string, question: string) => {
     ${question}
     \`\`\`
   `;
-}
-
+};
 
 const Chatbot: React.FC<Props> = ({
   checkpoints,
@@ -91,7 +89,7 @@ const Chatbot: React.FC<Props> = ({
     if (isBusy) return;
 
     if (hoverSelection) {
-      var prompt = buildHoverPrompt(code, hoverSelection)
+      var prompt = buildHoverPrompt(code, hoverSelection);
       fetchExplain(prompt, hoverSelection);
     }
   }, [hoverSelection]);
@@ -201,7 +199,7 @@ const Chatbot: React.FC<Props> = ({
               initialValues={{ question: '' }}
               onSubmit={async (values) => {
                 if (!values.question) return;
-                const prompt = buildAssistantBoxPrompt(code, values.question)
+                const prompt = buildAssistantBoxPrompt(code, values.question);
                 await fetchExplain(prompt, values.question);
               }}
             >
