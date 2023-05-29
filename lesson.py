@@ -368,7 +368,12 @@ class Errors(Step):
     ]
 
     def __init__(
-        self, order=10, name=name, code=code, instructions=instructions, questions=questions
+        self,
+        order=10,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=questions,
     ):
         super().__init__(order, name, code, instructions, questions)
 
@@ -578,6 +583,7 @@ class ListIter(Step):
     ):
         super().__init__(order, name, code, instructions, questions)
 
+
 class EqualsOperator(Step):
     name = "The Equals Operator"
     code = """
@@ -595,7 +601,7 @@ class EqualsOperator(Step):
 
     def __init__(
         self,
-        order=12,
+        order=18,
         name=name,
         code=code,
         instructions=instructions,
@@ -628,9 +634,10 @@ class Functions(Step):
     ]
 
     def __init__(
-        self, order=18, name=name, code=code, instructions=instructions, questions=[]
+        self, order=19, name=name, code=code, instructions=instructions, questions=[]
     ):
         super().__init__(order, name, code, instructions, questions)
+
 
 class FunctionArguments(Step):
     name = "Function Arguments"
@@ -659,69 +666,139 @@ print(bake_pizza(toppings, size))
     ]
 
     def __init__(
-        self, order=19, name=name, code=code, instructions=instructions, questions=questions
+        self,
+        order=20,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=questions,
     ):
         super().__init__(order, name, code, instructions, questions)
 
 
-class Objects(Step):
+class Classes(Step):
     # this one is very hard to explain simply, probably need to break methods out into another step
     # TODO: cover attributes
-    name = "Introduction to Objects"
+    name = "Introduction to Classes"
     code = """
-class Chef:
-  def __init__(self, name, favorite_food):
-    self.name = name
-    self.favorite_food = favorite_food
+        class Chef:
+            def __init__(self):
+                self.thing_that_a_chef_says = "Order up!"
     
-  def cook(self, recipe):
-    print(recipe)
-
-pizza_chef = Chef(name="georgio", favorite_food="pizza")
-seafood_chef = Chef(name="fisherman bob", favorite_food="clam chowder")
-our_recipe = "spaghetti"
-pizza_chef.cook(our_recipe)
-seafood_chef.cook(our_recipe)
+        first_chef = Chef()
+        second_chef = Chef()
     """
     instructions = """
     So far, all of the different things we've been working with in Python have just been floating
     around; variables, types, functions. Prepare to have your mind blown; these are all, in
-    conceptual terms, the same thing. That thing is called an 'object'. Objects are ways of
-    representing some concept 'in general'. By 'in general', we mean that there's no single thing
-    that you can point to as 'the object'. When there is a specific example of a general idea, 
-    you call that an 'instance' of an object.
-    Think about the concept of a chef. 'chef' itself only exists as an idea. We can't go somewhere
-    out in the world and see or touch 'chef', but there are lots of *instances* of chefs out there.
-    We could sneak into the kitchen of a restaurant and see an instance of the general idea of a
-    chef hard at work. We might be asked to leave the restaurant after, but we would have gotten
-    evidence of an instance of a chef.
-    This is slightly weird to wrap your head around, since the biggest difference between something in
-    the real world and a thing that exists in Python is that everything in Python is abstract. So a chef
-    object is an abstraction representing an abstraction, and a chef instance is an abstraction representing
-    one individual thing. If that isn't quite sticking, take a look at the code in the editor.
+    conceptual terms, the same thing. That thing is called an 'object'. Objects are the most
+    general term for anything that exists in Python -- if you see it in the code editor, it's
+    an object. An int is an object, a string is an object, a list is an object, and so on.
     
-    We have an object (the idea of a chef), which we make in Python with `class Chef`. We can
-    create individual chefs, who have their own particular things that make them special, by
-    'instantiating' the class. 'instantiating' basically just means to make an actual thing
-    using the general thing as a guide. When you instantiate a class, you add arguments that
-    will determine what makes your instances of the class special. See how 'Chef' is a class,
-    and then we instantiate two individual chefs, one who likes pizza and one who likes clam
-    chowder? We've written our class so that the object representing a chef always does one thing: cook.
-    But each individual chef cooks what they like best.
+    "Where do they come from?" you are surely asking. The truth is, it's complicated. Like someone
+    who is asked by a small child where babies come from, we're going to give you the programming
+    version of 'the stork brings them' for now; objects are made by with 'classes'. A class is an
+    exclusively abstract way of representing something. Think of a recipe that will be used to make
+    a meal: it represents what the meal will be, but you can't bring it out and serve it to someone
+    waiting for their meal. An object, on the other hand, is a specific occurance of the general idea that is represented
+    by the class. So think of a 'class' as a recipe, and an 'object' as a meal made with that recipe.
+
+    For another example, let's walk through the code in the editor. Here, we are making a class (the idea of a chef),
+    which we define in Python with `class Chef`. We can use this to create individual chefs, who have
+    their own particular things that make them special, by 'instantiating' the class. 'Instantiating'
+    is just the verb used for when a class creates an object. You do that by adding the parentheses
+    after the name of the class. Like this, `Chef()`.
     """
+
     def __init__(
-        self, order=20, name=name, code=code, instructions=instructions, questions=[]
+        self,
+        order=21,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=[
+            "What does `__init__` do?",
+            "Why is `self` always the first argument in the functions on this class?",
+            "What is the difference between a class and an object?",
+        ],
     ):
         super().__init__(order, name, code, instructions, questions)
+
+
+class ClassAttributesAndMethods(Step):
+    name = "Class Attributes and Methods"
+    code = """
+        class Chef:
+            def __init__(self, name, favorite_dish):
+                self.name = name
+                self.favorite_dish = favorite_dish
+            
+            def mention_favorite_dish(self):
+                return "My personal favorite is " + self.favorite_dish
+
+        first_chef = Chef("Alfredo", "pasta alfredo")
+        second_chef = Chef("Ben", "eggs benedict")
+
+    """
+    instructions = """
+    In the last slide, we introduced how you can use classes to create objects. You may
+    have felt that the chefs introduced there were somewhat lacking in personality. After
+    all, there was nothing to tell `first_chef` apart from `second_chef`. All things considered,
+    neither of those chefs were Michelin Star material. Fortunately, classes allow you to do a lot
+    to customize each individual object made by that class. The two main ways are:
+        - attributes
+        - methods
+    You can think of an attribute as information about the object. Like a favorite color,
+    or the dish a chef enjoys preparing most. A method is like an action that the object
+    can take. And yes, methods are almost exactly the same as functions. The difference is that
+    methods can't just float around wherever they please. They have to be associated with a class.
+
+    You'll see that we've done a few things to tune up our chef objects. When you instantiate a class,
+    you can add arguments that will determine what makes your instances of the class special.
+    See how now our two chefs now seem to be very different objects? You can see an objects
+    attributes by running `<object-var>.<attribute>`. In this case `first_chef.name` or `second_chef.name`
+    You can execute their methods by running `<object-var>.<method>()`, or `first_chef.mention_favorite_dish()`.
+    Try it out -- the chefs seem eager to make suggestions.
+    """
+
+    def __init__(
+        self,
+        order=22,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=[],
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
+
+class Imports(Step):
+    # TODO
+    name = "Imports"
+    code = """
+    """
+    instructions = """
+    """
+
+    def __init__(
+        self,
+        order=23,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=[],
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
 
 class PrepareForOpenAI(Step):
     name = "Prepare for OpenAI"
     code = """
-import openai
-from openai import ChatCompletion
+    import openai
+    from openai import ChatCompletion
 
-openai.api_key = "<add your API key here>"
-"""
+    openai.api_key = "<add your API key here>"
+    """
     instructions = """
     We're going to be using a library called OpenAI in the next few steps. A library is a collection of code that someone else has written that we can use in our own code. In this case, OpenAI is a library that lets us use the GPT-3 language model.
 
@@ -731,7 +808,7 @@ openai.api_key = "<add your API key here>"
     questions = ["Should I share my API key with other people?"]
 
     def __init__(
-        self, order=21, name=name, code=code, instructions=instructions, questions=[]
+        self, order=24, name=name, code=code, instructions=instructions, questions=[]
     ):
         super().__init__(order, name, code, instructions, questions)
 
@@ -741,25 +818,25 @@ class GPTRecipeMaker(Step):
     # answer is just that it would be insane to try to get into in an intro to programming course
     name = "Order Up!"
     code = """
-import openai
-from openai import ChatCompletion
+    import openai
+    from openai import ChatCompletion
 
-def create_recipe(toppings, size):
-    recipe = "Make a " + size + " pizza with "
-    for topping in toppings:
-        recipe += topping + ", "
-    return recipe
+    def create_recipe(toppings, size):
+        recipe = "Make a " + size + " pizza with "
+        for topping in toppings:
+            recipe += topping + ", "
+        return recipe
 
-openai.api_key = "<add your API key here>"
-toppings = ["pepperoni", "mushrooms", "sausage"]
-recipe_instructions = create_recipe(toppings, size)
-chat_completion = ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user",
-        "content": recipe_instructions}
-    ])
-print(chat_completion.choices[0].message.content)
+    openai.api_key = "<add your API key here>"
+    toppings = ["pepperoni", "mushrooms", "sausage"]
+    recipe_instructions = create_recipe(toppings, size)
+    chat_completion = ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "user",
+            "content": recipe_instructions}
+        ])
+    print(chat_completion.choices[0].message.content)
     """
     instructions = """We've come quite a ways from the introduction to variables.
     You've made it to the very end of our introduction to Python! Consider yourself
@@ -780,7 +857,8 @@ print(chat_completion.choices[0].message.content)
     things will, bit by bit, start to fall into place. If you've made it this far, we
     expect you'll be back for more!
     """
+
     def __init__(
-        self, order=21, name=name, code=code, instructions=instructions, questions=[]
+        self, order=25, name=name, code=code, instructions=instructions, questions=[]
     ):
         super().__init__(order, name, code, instructions, questions)
