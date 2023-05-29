@@ -72,7 +72,7 @@ export const explain = async (
 
     return response;
   } catch (e) {
-    console.log('ERROR', e);
+    console.log('ERROR', e.data.error);
     return {
       data: {
         choices: [
