@@ -669,19 +669,19 @@ class Objects(Step):
     # TODO: cover attributes
     name = "Introduction to Objects"
     code = """
-    class Chef:
-        def __init__(self, name, favorite_food):
-            self.name = name
-            self.favorite_food = favorite_food
-        
-        def cook(self, recipe):
-            print()
+class Chef:
+  def __init__(self, name, favorite_food):
+    self.name = name
+    self.favorite_food = favorite_food
     
-    pizza_chef = Chef(name="georgio", favorite_food="piza")
-    seafood_chef = Chef(name="fisherman bob", favorite_food="clam chowder")
-    our_recipe = "spaghetti"
-    print(pizza_chef.cook(our_recipe))
-    print(seafood_chef.cook(our_recipe))
+  def cook(self, recipe):
+    print(recipe)
+
+pizza_chef = Chef(name="georgio", favorite_food="pizza")
+seafood_chef = Chef(name="fisherman bob", favorite_food="clam chowder")
+our_recipe = "spaghetti"
+pizza_chef.cook(our_recipe)
+seafood_chef.cook(our_recipe)
     """
     instructions = """
     So far, all of the different things we've been working with in Python have just been floating
