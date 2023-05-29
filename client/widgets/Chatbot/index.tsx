@@ -160,7 +160,7 @@ const Chatbot: React.FC<Props> = ({
               initialValues={{ question: '' }}
               onSubmit={async (values) => {
                 if (!values.question) return;
-                const prompt = `${values.question}`;
+                const prompt = `I'm learning how to code. Question: ${values.question}`;
                 await fetchExplain(prompt, values.question);
               }}
             >
