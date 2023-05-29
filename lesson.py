@@ -714,26 +714,52 @@ seafood_chef.cook(our_recipe)
     ):
         super().__init__(order, name, code, instructions, questions)
 
+class PrepareForOpenAI(Step):
+    name = "Prepare for OpenAI"
+    code = """
+import openai
+from openai import ChatCompletion
+
+openai.api_key = "<add your API key here>"
+"""
+    instructions = """
+    We're going to be using a library called OpenAI in the next few steps. A library is a collection of code that someone else has written that we can use in our own code. In this case, OpenAI is a library that lets us use the GPT-3 language model.
+
+    Before we can use the library we need to get an API key. An API key is a way of identifying ourselves to OpenAI so that they know who is using their service. To get an API key, go to https://platform.openai.com/ and sign up for an account. Once you've signed up, go to https://platform.openai.com/account/api-keys and copy your API key. Then, paste it into the code editor in place of the text that says "<add your API key here>".
+    """
+
+    questions = ["Should I share my API key with other people?"]
+
+    def __init__(
+        self, order=21, name=name, code=code, instructions=instructions, questions=[]
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
 
 class GPTRecipeMaker(Step):
     # Need to add something to explain why we dont go into how LLMs work; i have a feeling people might have been expecting that
     # answer is just that it would be insane to try to get into in an intro to programming course
     name = "Order Up!"
     code = """
-    import openai
-    from openai import ChatCompletion
+import openai
+from openai import ChatCompletion
 
-    openai.api_key = "<add your API key here>"
-    toppings = ["pepperoni", "mushrooms", "sausage"]
-    recipe_instructions = create_recipe(toppings, size)
-    chat_completion = ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "user",
-            "content": recipe_instructions}
-        ])
-    print(chat_completion.choices[0])
-    print(chat_completion.choices[0].message.content)
+def create_recipe(toppings, size):
+    recipe = "Make a " + size + " pizza with "
+    for topping in toppings:
+        recipe += topping + ", "
+    return recipe
+
+openai.api_key = "<add your API key here>"
+toppings = ["pepperoni", "mushrooms", "sausage"]
+recipe_instructions = create_recipe(toppings, size)
+chat_completion = ChatCompletion.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {"role": "user",
+        "content": recipe_instructions}
+    ])
+print(chat_completion.choices[0].message.content)
     """
     instructions = """We've come quite a ways from the introduction to variables.
     You've made it to the very end of our introduction to Python! Consider yourself
@@ -747,7 +773,7 @@ class GPTRecipeMaker(Step):
     you don't understand any of these lines -- you know who to ask.
     
     There are two things that you shouldn't expect to understand yet:
-        1. how the `create` method works
+        1. how the `ChatCompletion.create` method works
         2. how a method can access information somewhere else the internet
     
     Part of programming is getting used to feeling confused. But if you stick with it,
