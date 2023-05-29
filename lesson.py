@@ -197,7 +197,7 @@ class StringSlicing(Step):
     the 'opinion' string seems less objectionable.
     """
     questions = [
-        "Why does Python only get the character up until but not including the index that I specified?"
+        "Why does Python only get the character up until, but not including, the index that I specified?"
     ]
 
     def __init__(
@@ -376,7 +376,7 @@ class Errors(Step):
 class StringDataTypes(Step):
     # skipping over explanation of '==' and booleans
     # does this introduce too much new stuff all at once?
-    name = "Math and Strings"
+    name = "Data Types"
     code = """
     string_one = "I am a string"
     string_two = "I am also a string"
@@ -577,6 +577,34 @@ class ListIter(Step):
         self, order=17, name=name, code=code, instructions=instructions, questions=[]
     ):
         super().__init__(order, name, code, instructions, questions)
+
+class EqualsOperator(Step):
+    name = "The Equals Operator"
+    code = """
+    toppings = ["pepperoni", "mushrooms", "pineapple", "olives"]
+    pizza = 'Pizza with: '
+    for topping in toppings:
+        if topping == 'pineapple':
+            continue
+        pizza += topping + ' '
+    print(pizza)
+    """
+    instructions = """
+    Often times when programming, we want to check whether two things are the same. This is where the '==' operator comes in handy. The '==' operator is a way of asking Python whether two things are the same. If they are, it will return 'True', if they aren't, it will return 'False'. Try running the code in the editor. You should see that the two strings are not the same, so the code returns 'False'.
+
+    Change the second string to be the same as the first, and run the code again. You should see that the code returns 'True'. This is because the two strings are the same, so the '==' operator returns 'True'.
+    """
+
+    def __init__(
+        self,
+        order=12,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=["What does the '==' operator do?"],
+    ):
+        super().__init__(order, name, code, instructions, questions)
+
 
 class Functions(Step):
     name = "Functions"
