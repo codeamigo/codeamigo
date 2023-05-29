@@ -71,15 +71,15 @@ const LessonPurchase: React.FC = () => {
         Purchase Lesson
       </h1>
       <div className="text-center text-xs text-neutral-500">
-        To continue please purchase this lesson. 60% off for waitlist users.
+        Continue with a one-time purchase of:
       </div>
       <div className="mt-4 flex justify-center">
         <Button
-          className="flex h-[100px] w-[100px] flex-col items-center justify-center"
+          className="hover:!bg-blue-[#000044] flex h-[100px] w-[100px] flex-col items-center justify-center !border-blue-600 !bg-[#000044] hover:!bg-[#000066]"
           disabled={purchaseLoading}
           onClick={() => handlePurchase()}
         >
-          <span className="mb-2 text-xs text-neutral-500 line-through">
+          <span className="mb-2 text-xs text-blue-400 line-through blur-[1px]">
             $25.00
           </span>
           <span className="text-2xl text-blue-600">$9.99</span>
