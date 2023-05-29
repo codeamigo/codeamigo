@@ -410,7 +410,11 @@ const MonacoEditor = ({
         >
           <img className="w-1/2" src={sandpack.files[activeFile].code} />
         </div> */}
-      <div className={`h-[320px] sm:h-full ${isImage ? 'hidden' : 'block'}`}>
+      <div
+        className={`notranslate h-[320px] sm:h-full ${
+          isImage ? 'hidden' : 'block'
+        }`}
+      >
         <Editor
           defaultValue={code}
           language="javascript"

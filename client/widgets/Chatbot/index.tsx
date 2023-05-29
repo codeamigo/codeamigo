@@ -179,7 +179,7 @@ const Chatbot: React.FC<Props> = ({
 
   return (
     <div
-      className={`flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
+      className={`notranslate flex max-h-[50%] flex-col border-t border-neutral-800 bg-black`}
     >
       <div className="relative h-full overflow-scroll" ref={streamedTextsRef}>
         <div className="sticky top-0 z-10 bg-black px-4 py-2" ref={formRef}>
