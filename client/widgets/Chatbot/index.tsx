@@ -16,6 +16,52 @@ const defaultQuestions = [
   "Why isn't my code accepted?",
 ];
 
+
+const buildHoverPrompt = (contextCode: string, hoverSelection: string) => {
+  return `
+    You are a teacher helping students
+    who have no background in computer
+    science learn how to code. Given a
+    block of code, you'll be asked to
+    explain a snippet of the code block.
+    Explain what the snippet does in the
+    context of the code block as clearly
+    and simply as possible.
+
+    Code Block:
+    \`\`\`
+    ${contextCode}
+    \`\`\`
+    Code Snippet:
+    \`\`\`
+    ${hoverSelection}
+    \`\`\`
+  `;
+};
+
+const buildAssistantBoxPrompt = (contextCode: string, question: string) => {
+  return `
+    You are a teacher helping students
+    who have no background in computer science
+    learn how to code. Given a block of code
+    and a question, answer the question as simply
+    as possible. Assume that the student has no
+    background in computer science. Please answer
+    in 300 characters or less. Reference the code
+    block if the question relates to it.
+
+    Code Block:
+    \`\`\`
+    ${contextCode}
+    \`\`\`
+    Question:
+    \`\`\`
+    ${question}
+    \`\`\`
+  `;
+}
+
+
 const Chatbot: React.FC<Props> = ({
   checkpoints,
   code,
@@ -45,12 +91,7 @@ const Chatbot: React.FC<Props> = ({
     if (isBusy) return;
 
     if (hoverSelection) {
-      const prompt =
-        'Code: ' +
-        code +
-        '### Explain what ' +
-        hoverSelection +
-        ' does in the code above.';
+      var prompt = buildHoverPrompt(code, hoverSelection)
       fetchExplain(prompt, hoverSelection);
     }
   }, [hoverSelection]);
@@ -160,7 +201,7 @@ const Chatbot: React.FC<Props> = ({
               initialValues={{ question: '' }}
               onSubmit={async (values) => {
                 if (!values.question) return;
-                const prompt = `${code} """ ${values.question}`;
+                const prompt = buildAssistantBoxPrompt(code, values.question)
                 await fetchExplain(prompt, values.question);
               }}
             >
