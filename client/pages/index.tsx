@@ -30,8 +30,8 @@ const Home = (props: Props) => {
   return (
     <div className="flex w-full flex-col items-center justify-between sm:shrink-0 lg:flex-row">
       <div className="mt-10 w-full max-w-3xl lg:mt-0">
-        <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#330000] px-2 text-xs font-semibold text-red-500">
-          Currently in beta
+        <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#000044] px-2 text-xs font-semibold text-blue-600">
+          Preview Available
         </span>
         <h1 className=" mt-2 bg-gradient-to-br from-white to-neutral-600 bg-clip-text text-[35px] font-bold leading-[42px] tracking-[-0.64px] text-transparent sm:text-6xl sm:leading-[68px] sm:tracking-[-0.896px]">
           <span className="inline-block max-w-[525px] align-top">
@@ -76,7 +76,11 @@ const Home = (props: Props) => {
       <div className="w-full max-w-3xl lg:w-3/4">
         <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug === 'hello-codeamigo')
+            .filter(
+              (lesson) =>
+                lesson.slug === 'hello-codeamigo' ||
+                lesson.slug === 'intro-to-python'
+            )
             .map((lesson) => {
               return (
                 <div
@@ -107,7 +111,11 @@ const Home = (props: Props) => {
         </div>
         <div className="mt-8 grid grid-cols-2 gap-10 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
+            .filter(
+              (lesson) =>
+                lesson.slug !== 'hello-codeamigo' &&
+                lesson.slug !== 'intro-to-python'
+            )
             .map((lesson) => {
               const isWhitelisted =
                 meData?.me?.email &&
