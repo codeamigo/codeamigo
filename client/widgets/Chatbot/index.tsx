@@ -281,6 +281,7 @@ const Chatbot: React.FC<Props> = ({
                         <pre
                           className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
                           onClick={() => {
+                            if (isBusy) return;
                             setValues({ question });
                             submitForm();
                           }}
