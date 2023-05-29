@@ -131,8 +131,10 @@ const Chatbot: React.FC<Props> = ({
       );
 
       const explainations: OpenAIAPIResponse = await response.json();
-      let value =
-        `${explainations.choices?.[0]?.text}` || 'There was an error.';
+      let value = `${
+        explainations.choices?.[0]?.text ||
+        'There was an error. Please try again.'
+      }`;
       if (explainations.choices?.[0]?.finish_reason === 'length') {
         value += '...';
       }
@@ -142,7 +144,7 @@ const Chatbot: React.FC<Props> = ({
         textAreaRef.current?.focus();
       }, 10);
 
-      const tokensUsed = explainations.usage.total_tokens;
+      const tokensUsed = explainations.usage?.total_tokens || 0;
       setTokensUsed((prev) => (prev || 0) + tokensUsed);
     } catch (error) {
       console.log(error);
