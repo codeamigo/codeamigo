@@ -118,6 +118,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
           />
         </div>
         <Chatbot
+          checkpoints={checkpoints}
           code={files?.['/main.py'].code}
           disabled={maxTokensUsed}
           hoverSelection={hoverSelection}

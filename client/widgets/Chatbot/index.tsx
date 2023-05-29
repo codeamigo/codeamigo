@@ -7,6 +7,7 @@ import { OpenAIAPIResponse } from 'types/openai';
 
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
+import { CheckpointsQuery } from '👨‍💻generated/graphql';
 
 import * as hal from '../../assets/hal.png';
 
@@ -16,6 +17,7 @@ const defaultQuestions = [
 ];
 
 const Chatbot: React.FC<Props> = ({
+  checkpoints,
   code,
   disabled,
   hoverSelection,
@@ -221,7 +223,19 @@ const Chatbot: React.FC<Props> = ({
                     </pre>
                   ) : null}
                   <div className="mt-2 flex flex-wrap items-center gap-2">
-                    {[...defaultQuestions, ...questions].map((question) => {
+                    {[
+                      ...defaultQuestions.filter((q) => {
+                        if (
+                          q === "Why isn't my code accepted?" &&
+                          !checkpoints?.length
+                        ) {
+                          return false;
+                        }
+
+                        return true;
+                      }),
+                      ...questions,
+                    ].map((question) => {
                       return (
                         <pre
                           className="inline-block cursor-pointer rounded-md border border-blue-500 bg-blue-950 px-1 py-0.5 text-xs text-blue-500"
@@ -269,6 +283,7 @@ const Chatbot: React.FC<Props> = ({
 };
 
 type Props = {
+  checkpoints: CheckpointsQuery['checkpoints'];
   code: string;
   disabled: boolean;
   hoverSelection: string | null;

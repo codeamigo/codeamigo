@@ -115,6 +115,7 @@ const SandpackExecutionChild: React.FC<FCProviderType> = ({
           <SandpackConsole className="overflow-scroll" />
         )}
         <Chatbot
+          checkpoints={checkpoints}
           code={code}
           disabled={maxTokensUsed}
           hoverSelection={hoverSelection}
