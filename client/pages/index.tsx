@@ -162,7 +162,7 @@ const Home = (props: Props) => {
                       </>
                     ) : (
                       <>
-                        <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-blue-950 px-2 text-xs font-semibold text-blue-500">
+                        <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-yellow-950 px-2 text-xs font-semibold text-yellow-500">
                           Coming Soon
                         </span>
                         <Button
