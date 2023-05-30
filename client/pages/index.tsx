@@ -74,13 +74,9 @@ const Home = (props: Props) => {
         </button>
       </div>
       <div className="w-full max-w-3xl lg:w-3/4">
-        <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
+        {/* <div className="grid grid-cols-2 gap-10 sm:mt-8 lg:mt-0 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter(
-              (lesson) =>
-                lesson.slug === 'hello-codeamigo' ||
-                lesson.slug === 'intro-to-python'
-            )
+            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
             .map((lesson) => {
               return (
                 <div
@@ -108,21 +104,17 @@ const Home = (props: Props) => {
                 </div>
               );
             })}
-        </div>
+        </div> */}
         <div className="mt-8 grid grid-cols-2 gap-10 lg:grid-cols-3 lg:gap-6">
           {props.lessons
-            .filter(
-              (lesson) =>
-                lesson.slug !== 'hello-codeamigo' &&
-                lesson.slug !== 'intro-to-python'
-            )
+            .filter((lesson) => lesson.slug !== 'hello-codeamigo')
+            .sort((a, _b) => (a.slug === 'intro-to-python' ? -1 : 1))
             .map((lesson) => {
               const isWhitelisted =
-                meData?.me?.email &&
-                ((INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
+                (meData?.me?.email &&
+                  INTRO_TO_JS_WHITELIST.includes(meData?.me?.email) &&
                   lesson.slug === 'intro-to-js') ||
-                  (INTRO_TO_PYTHON_WHITELIST.includes(meData.me.email) &&
-                    lesson.slug === 'intro-to-python'));
+                lesson.slug === 'intro-to-python';
 
               return (
                 <div
@@ -144,10 +136,10 @@ const Home = (props: Props) => {
                   </div>
                   <div className="px-3 pb-4 pt-2 text-xs">
                     <pre className="text-white">{lesson.title}</pre>
-                    {isWhitelisted ? (
+                    {isWhitelisted || lesson.slug === 'intro-to-python' ? (
                       <>
                         <span className="mt-3 inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-green-950 px-2 text-xs font-semibold text-green-500">
-                          Enrolled
+                          Enroll
                         </span>
                         <Button
                           className="mt-3"
