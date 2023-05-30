@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { isMobileWarningAcknowledgedVar } from '👨‍💻apollo/cache/lesson';
 import { InitialModalState, modalVar } from '👨‍💻apollo/cache/modal';
 import Button from '👨‍💻components/Button';
 import Icon from '👨‍💻components/Icon';
@@ -19,7 +20,12 @@ const MobileWarning: React.FC<Props> = () => {
         For the best experience, please consider using a desktop browser.
       </div>
       <div className="mt-4">
-        <Button onClick={() => modalVar(InitialModalState)}>
+        <Button
+          onClick={() => {
+            modalVar(InitialModalState);
+            isMobileWarningAcknowledgedVar(true);
+          }}
+        >
           <span>Continue Anyway</span>
         </Button>
       </div>
