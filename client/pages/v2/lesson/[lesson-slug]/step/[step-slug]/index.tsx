@@ -1,3 +1,4 @@
+import { useReactiveVar } from '@apollo/client';
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { isDesktop } from 'react-device-detect';
 import { TokenUsageStatusType } from 'types';
 
+import { isMobileWarningAcknowledgedVar } from '👨‍💻apollo/cache/lesson';
 import { modalVar } from '👨‍💻apollo/cache/modal';
 import Icon from '👨‍💻components/Icon';
 import {
@@ -66,6 +68,10 @@ const V2Lesson = ({ lesson, step }: Props) => {
   const [hoverSelection, setHoverSelection] = useState<string | null>(null);
   const [checkpoints, setCheckpoints] =
     useState<CheckpointsQuery['checkpoints']>();
+
+  const isMobileWarningAcknowledged = useReactiveVar(
+    isMobileWarningAcknowledgedVar
+  );
 
   const router = useRouter();
 
@@ -158,7 +164,7 @@ const V2Lesson = ({ lesson, step }: Props) => {
       return;
     }
 
-    if (!isDesktop) {
+    if (!isDesktop && !isMobileWarningAcknowledged) {
       modalVar({
         callback: () => null,
         name: 'mobileWarning',
