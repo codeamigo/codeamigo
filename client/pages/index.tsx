@@ -42,7 +42,7 @@ const Home = (props: Props) => {
         </h1>
         <p className=" mb-8 mt-4 text-base font-normal text-neutral-600">
           <span className="inline-block max-w-[591px] align-top">
-            Codeamigo is an AI powered coding assitant that helps you learn to
+            Codeamigo is an AI powered coding assistant that helps you learn to
             code like a developer. Today's developers didn't learn binary before
             learning Python, why should you learn how to code without the most
             modern tools?
