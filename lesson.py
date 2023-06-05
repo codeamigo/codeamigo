@@ -14,12 +14,9 @@ from dataclasses import dataclass
 # - should we give it a persona? an 'amigo' persona?
 # - we'll want to think about the tone too
 # - think more carefully about the theme (cooking vs something else)
-# - we want to do some prompt engineering (simple vs complex answers)
-
-
-# TODOS:
-# - insert checkpoints
-# - insert quizzes
+# - should we do imports?
+# - needs round of edits for explanatory clarity
+# - disclaimer?
 
 
 @dataclass
@@ -36,12 +33,15 @@ class Step:
 
 
 class Intro(Step):
+    # to discuss:
+    # lets not call the variable `prompt`
+    # are recipes too old hat? (i realized that tons of tutorials use them as their example)
     name = "introduction"
 
     code = """
-    prompt = "Write a recipe for a delicious recipe"
+    instruction = "Write a recipe for a delicious meal"
     ingredients = ["chicken", "lemon", "garlic", "olive oil", "salt", "pepper"]
-    generated_recipe = generate_recipe(prompt, ingredients)
+    generated_recipe = generate_recipe(instruction, ingredients)
     """
     instructions = """
     Welcome to the CodeAmigo introduction to Python. How much do you know about Python?
@@ -59,17 +59,23 @@ class Intro(Step):
 
 
 class Strings(Step):
+    # to discuss:
+    #   we probably need some kind of disclaimer to say that we're going to
+    #   rely heavily on chatgpt for some of these explanations
     name = "Introduction to Variables and Strings"
     code = """
     prompt = "Write a recipe for a delicious recipe."
     """
     instructions = """
-    Let's begin from the top. On the previous page, you saw that our AI assistant
+    Let's start from the top. On the previous page, you saw that our AI assistant
     was able to generate a recipe for a meal. How did it know what we wanted? Well,
-    it got that information from "prompt". "prompt" is what's called a variable. A
-    variable is how computers store temporary information while they're executing a program.
-    The format is always <name of the variable> = <some bit of information>. In this case,
-    the information associated with the variable is what's called a 'string'. A string is a
+    it got that information from "instruction". "instruction" is what's called a variable. A
+    variable is how computers store temporary information while they're running a program.
+    You might remember variables from algebra, where you have something like `x = 3`. The
+    concept is the same in programming, except that the variable name doesn't always have to point
+    to a number. In Python, you can create them like this:
+        <name of the variable> = <some information to keep track of>
+    In the code we're using, the information associated with the variable is what's called a 'string'. A string is a
     way of representing information that a person can read in a way that a computer can also
     understand.
 
@@ -96,17 +102,18 @@ class Strings(Step):
 
 
 class StringUpdating(Step):
-    # TODO: introduce errors? should checkpoint verify that `type(prompt) == str`?
+    # to discuss:
+    #   this might introduce errors, should we save for a quiz?
     name = "Working with Variables and Strings"
     code = """
-    prompt = "Write a delicious recipe."
-    prompt =
+    instruction = "Write a delicious recipe."
+    instruction = None
     """
     instructions = """
-    Right now, the variable 'prompt' references the string 'Write a delicious recipe.'. But variables
+    Right now, the variable 'instruction' references the string 'Write a delicious recipe.'. But variables
     can be changed to represent other things. For instance, if we added another line of code on the next
-    line that said: `prompt = "coconut"`, that would change the information saved by the variable. Try
-    this out yourself by changing 'prompt' to something else -- any word or sentence that you feel like.
+    line that said: `instruction = "coconut"`, that would change the information saved by the variable. Try
+    this out yourself by changing 'instruction' to something else -- any word or sentence that you feel like.
     """
     questions = ["Why would I want to update a variable?"]
 
@@ -125,14 +132,14 @@ class StringPrinting(Step):
     # TODO: add checkpoints
     name = "Printing a Variable"
     code = """
-    prompt = "Write a delicious recipe."
-    prompt = "coconut"
+    instruction = "Write a delicious recipe."
+    instruction = "coconut"
     """
     instructions = """
     If you've made it here, then you've successfully updated the variable -- well done! How can
-    we see that `prompt` no longer indicates 'create a delicious recipe'? There's a tool for that:
+    we see that `instruction` no longer indicates 'create a delicious recipe'? There's a tool for that:
     Python has a command, `print`, that will let you see the value associated with a variable. Try
-    it out yourself, you should see whatever you changed `prompt` to be pop up on the console on the
+    it out yourself, you should see whatever you changed `instruction` to be pop up on the console screen on the
     right. You should just add `print(<some-variable>)` to the next line, then hit 'Run'.
     """
     questions = [
@@ -153,19 +160,19 @@ class StringPrinting(Step):
 
 
 class StringIndexing(Step):
-    # NB: the question returns some information about arrays -- we should probably try to prevent that
-    #     prompt: "Can you answer the following question in extremely simple terms? \n Question: ```{question}```"
-    #     works pretty well
     name = "Indexing Into Strings"
     code = """
-    prompt = "<whatever the user added"
-    first_char = prompt[0]
+    instruction = "<whatever the user added>"
+    first_char = instruction[0]
     """
     instructions = """
     Now we can start making things happen with strings. Much like the ingredients of a delicious recipe,
-    there's a lot of slicing and dicing we can do with strings in Python. Lets start by grabbing one
-    character of a string, more formally known as 'indexing' into a string. The code there will take
-    the first letter or number of the string you made earlier and save it as its own variable. Try
+    there's a lot of slicing and dicing we can do with strings in Python. These are called 'string manipulations'.
+    Lets start by writing code to take just one character of a string, more formally known as 'indexing' into a string.
+    You can see in the code editor that we've added `[0]` to the end of our string. When placed at the end of a string,
+    `[]` indicates that we want to get some part of the whole string that we've added it to the end of. The number inside
+    of it indicates which position of the string we'll want to get. So in this case, `instruction[0]` will take the first
+    character of the string. We can take the result and save it as a variable, `first_char = instruction[0]`. Try
     adding another line of code below to print `first_char` to the console.
     """
     questions = ["In Python, why is '0' the first index position instead of '1'?"]
@@ -189,7 +196,7 @@ class StringSlicing(Step):
     string_slice = opinion[:20]
     """
     instructions = """
-    Python will let you go much further than just getting a single character. Another technique,
+    Python will let you do more than just getting a single character. Another technique,
     'slicing', will get the all of the characters up until a specified position in the string.
     Here, we're taking every character, starting from '0', until the character in the 20th position.
     Take note that you won't get the 20th character back (remember that Python starts at 0)!
@@ -221,17 +228,19 @@ class StringDeleting(Step):
     print(string_slice)
     """
     instructions = """
-    What if, on the other hand, there's nothing you love more than pineapple on pizza? In that case,
-    you're happy to let 'opinion' stay just the way it is. In fact, that someone would use Python's
-    slicing capabilities to remove 'pineapple' from the rest of the sentence might make you angry!
-    Possibly, you'd like to make `string_slice` go away forever. While we'd urge you to seek help
-    if you're having these responses, Python does allow you to get rid of variables forever. You can do this
-    by using `del`, which stands for 'delete'. A line of code which places `del` before a variable will
+    Maybe you won't settle for just taking the part of the string without 'pineapple'. Maybe your objections
+    to pairing pizza and pineapple are so strong that you want to get rid of the variable entirely. You can do
+    this by using `del`, which stands for 'delete'. A line of code which places `del` before a variable will
     permanently get rid of that variable. Execute the code. Now try printing `string_slice`. What happened?
     """
 
     def __init__(
-        self, order=6, name=name, code=code, instructions=instructions, questions=[]
+        self,
+        order=6,
+        name=name,
+        code=code,
+        instructions=instructions,
+        questions=["What happens when I delete a variable?"],
     ):
         super().__init__(order, name, code, instructions, questions)
 
@@ -246,10 +255,10 @@ class StringMultiplication(Step):
 
     """
     instructions = """
-    What if you were so excited about pineapple on pizza that you wanted to say it several times?
-    Well, you're still making us nervous, but you can do math with Python. And if you can do math,
-    then you can multiply things -- including strings! The third line of code in the editor includes
-    a new character - '*'. This allows you to multiply strings by numbers, and numbers by other numbers.
+    What if, on the other hand, you were so excited about pineapple on pizza that you wanted to say it several times?
+    We appreciate your enthusiasm and are happy to say that this too can be made easier with the help of Python. Python
+    has the ability to help you do math. And if you can do math, then you can multiply things -- including strings!
+    The third line of code in the editor includes a new character - '*'. This allows you to multiply strings by numbers, and numbers by other numbers.
     Executing the code and see what we get.
     """
     questions = [
@@ -397,7 +406,7 @@ class StringDataTypes(Step):
     far, we've mostly been working with strings. An individual string, like 'I am a string', will have a 'type'
     of 'str' (which is short for string). Every other string you might make will also be of type 'str'.
     Try running the code, you should see that the two strings have the same type. Strings are far from the only
-    type that exist in Python. Let's keep going to check out a few others!
+    type that exist in Python. Let's keep going and check out a few others!
     """
 
     def __init__(
@@ -424,7 +433,7 @@ class SequenceDataTypes(Step):
     it's supposed to represent a bunch of beads tied together on a string? Imagine taking the string and sliding each
     character off of the string one at a time. Doing this would be treating the beads as a "sequence"; you take
     the whole thing and do something to each of its parts. This is something that a Python string *can* do, but it
-    isn't the main purpose of a string -- that would be to communicate information.
+    isn't the main purpose of a string, which is to communicate information.
     
     There is, however, a type that sequences things as its main job. This is called a `list`.
     A list in Python is also similar to what a list is in the ordinary sense of the word. That is, a
@@ -541,7 +550,7 @@ class ListAppend(Step):
     We've jettisoned pineapple from our list of toppings. What if we have second thoughts?
     Very possibly, there's a reason so many people like it on pizza. What if we wanted to
     put it back into the ingredients list? Fortunately, we still have pineapple on hand; its
-    saved in the `just_pineapple` variable, and even more luckily, we can take that variable
+    saved in the `just_pineapple` variable. Even more luckily, we can take that variable
     and put it back into `toppings`. How? With the `append` method. `append` is another thing
     that lists can do. Which makes sense: you take things off of a list, and you can add things
     on.
@@ -773,9 +782,13 @@ class ClassAttributesAndMethods(Step):
 
 
 class Imports(Step):
-    # TODO
+    # TODO will riju allow us to have up multiple files?
     name = "Imports"
     code = """
+    We've written quite a lot of code so far (and you should be proud of that!),
+    And while we obviously love to write code, we don't want to write more than
+    we need to. In many cases, we want to be able to use code that somebody else
+    already wrote and use it for our own purposes.
     """
     instructions = """
     """
