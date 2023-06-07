@@ -85,7 +85,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
           <MonacoEditor
             activeFile="/main.py"
             checkpoints={checkpoints}
-            code={files['/main.py'].code}
+            code={files['/main.py']?.code || ''}
             codeModules={codeModules}
             currentCheckpoint={currentCheckpoint}
             disabled={maxTokensUsed}
@@ -106,7 +106,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
             setTokensUsed={setTokensUsed}
             step={step as Step}
             updateCode={(code) => {
-              files['/main.py'].code = code;
+              files['/main.py'].code = code || '';
               runCodeDebounced(code);
             }}
           />
@@ -114,7 +114,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
         <Button
           className="absolute bottom-2 left-2 z-50 flex gap-2"
           onClick={() => {
-            runCode(files['/main.py'].code);
+            runCode(files['/main.py']?.code || '');
           }}
         >
           <Icon className="" name="play" />
@@ -130,7 +130,7 @@ const RijuExecutionProvider: React.FC<FCProviderType> = ({
         </div>
         <Chatbot
           checkpoints={checkpoints}
-          code={files?.['/main.py'].code}
+          code={files?.['/main.py']?.code || ''}
           disabled={maxTokensUsed}
           hoverSelection={hoverSelection}
           questions={step?.questions?.map((q) => q.value) || []}
