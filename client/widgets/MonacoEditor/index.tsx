@@ -226,7 +226,7 @@ const MonacoEditor = ({
       );
       if (model) return;
       monacoRef.current.editor.createModel(
-        files[mod].code,
+        files[mod].code || '',
         getLanguage(mod || ''),
         monacoRef.current.Uri.parse(`${URN}${mod}`)
       );
@@ -381,7 +381,7 @@ const MonacoEditor = ({
 
   return (
     <div
-      className="relative z-30 transition-all"
+      className="notranslate relative z-30 transition-all"
       style={{ height: `${leftPanelHeight.editor}`, margin: 0 }}
     >
       <Checkpoints checkpoints={checkpoints} />
@@ -410,11 +410,7 @@ const MonacoEditor = ({
         >
           <img className="w-1/2" src={sandpack.files[activeFile].code} />
         </div> */}
-      <div
-        className={`notranslate h-[320px] sm:h-full ${
-          isImage ? 'hidden' : 'block'
-        }`}
-      >
+      <div className={`h-[320px] sm:h-full ${isImage ? 'hidden' : 'block'}`}>
         <Editor
           defaultValue={code}
           language="javascript"

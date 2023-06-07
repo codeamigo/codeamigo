@@ -110,11 +110,12 @@ const V2Lesson = ({ lesson, step }: Props) => {
 
   const files = codeModulesData?.codeModules?.reduce((acc, codeModule) => {
     if (!codeModule.name) return acc;
-    if (!codeModule.code) return acc;
 
     return {
       ...acc,
-      [codeModule.name]: { code: codeModule.code.replace(/\\n/g, '\n') },
+      [codeModule.name]: {
+        code: (codeModule.code || '').replace(/\\n/g, '\n'),
+      },
     };
   }, {});
 
