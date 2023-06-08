@@ -40,7 +40,7 @@ const Home = (props: Props) => {
             Like a Developer
           </span>
         </h1>
-        <p className=" mb-8 mt-4 text-base font-normal text-neutral-600">
+        <p className=" mb-8 mt-4 text-base font-normal text-neutral-500">
           <span className="inline-block max-w-[591px] align-top">
             Codeamigo is an AI powered coding assistant that helps you learn to
             code like a developer. Today's developers didn't learn binary before
@@ -49,7 +49,7 @@ const Home = (props: Props) => {
           </span>
         </p>
         <button
-          className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
+          className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-500 outline-none transition duration-200 ease-in-out hover:text-neutral-500 focus:text-neutral-500 sm:inline-flex"
           onClick={() => {
             window.open('https://forms.gle/weRYdVmr2LszmQiK6');
           }}
@@ -61,7 +61,7 @@ const Home = (props: Props) => {
           to request access{' '}
         </button>
         <button
-          className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-600 outline-none transition duration-200 ease-in-out hover:text-neutral-600 focus:text-neutral-600 sm:inline-flex"
+          className=" group hidden select-none items-center gap-2 text-sm font-semibold text-neutral-500 outline-none transition duration-200 ease-in-out hover:text-neutral-500 focus:text-neutral-500 sm:inline-flex"
           onClick={() => {
             router.push('/v2/lesson/hello-codeamigo/step/intro');
           }}
