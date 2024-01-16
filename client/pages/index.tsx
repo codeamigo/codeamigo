@@ -30,8 +30,15 @@ const Home = (props: Props) => {
   return (
     <div className="flex w-full flex-col items-center justify-between sm:shrink-0 lg:flex-row">
       <div className="mt-10 w-full max-w-3xl lg:mt-0">
-        <span className=" inline-flex h-6 cursor-default select-none items-center whitespace-nowrap rounded bg-[#000044] px-2 text-xs font-semibold text-blue-600">
-          Preview Available
+        <span
+          className="inline-flex h-6 cursor-pointer select-none items-center rounded bg-pink-200 px-2 text-xs font-semibold text-pink-600"
+          onClick={() => {
+            window.open('https://porkybank.io');
+          }}
+        >
+          New Project 🐷 Porkybank:&nbsp;
+          <span className="font-light">Track your daily budget</span>
+          <Icon className="ml-1.5" name="right" />
         </span>
         <h1 className=" mt-2 bg-gradient-to-br from-white to-neutral-600 bg-clip-text text-[35px] font-bold leading-[42px] tracking-[-0.64px] text-transparent sm:text-6xl sm:leading-[68px] sm:tracking-[-0.896px]">
           <span className="inline-block max-w-[525px] align-top">
@@ -41,11 +48,24 @@ const Home = (props: Props) => {
           </span>
         </h1>
         <p className=" mb-8 mt-4 text-base font-normal text-neutral-500">
-          <span className="inline-block max-w-[591px] align-top">
+          <span className="inline-block max-w-[591px] align-top line-through">
             Codeamigo is an AI powered coding assistant that helps you learn to
             code like a developer. Today's developers didn't learn binary before
             learning Python, why should you learn how to code without the most
             modern tools?
+          </span>
+          <span className="inline-block max-w-[591px] align-top">
+            I will no longer be maintaining Codeamigo. I am working on a new
+            project called Porkybank. It's a tool to help you track your daily
+            budget. If you're interested in learning more, please check it out
+            at{' '}
+            <a
+              className="underline"
+              href="https://porkybank.io"
+              target="_blank"
+            >
+              porkybank.io
+            </a>
           </span>
         </p>
         <button
