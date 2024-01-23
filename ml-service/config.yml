@@ -1,0 +1,27 @@
+
+
+openai:
+  base:
+    model_params:
+      temperature: 1
+      max_tokens: 100
+      frequency_penalty: 0
+      model: text-davinci-003
+      n: 1
+      presence_penalty: 0
+      top_p: 1
+langchain:
+  chatbot:
+    params:
+      temperature: 0
+    template: >
+              PythonTeacher is designed to help students learn to code in Python and
+              understand the basics of computer science and practical programming. As
+              a language model, PythonTeacher generates human-like text based on the
+              input that it receives. You'll be helping the student to work through a
+              lesson based on the Python script below:
+
+              Code:
+              ```
+              {lesson_source}
+              ```
